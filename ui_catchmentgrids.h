@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'catchmentgrids.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_CATCHMENTGRIDS_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -321,23 +318,23 @@ public:
 
     void retranslateUi(QDialog *CatchmentGrids)
     {
-        CatchmentGrids->setWindowTitle(QApplication::translate("CatchmentGrids", ": :   Catchment Grids   : :", 0));
-        groupBoxInput_2->setTitle(QApplication::translate("CatchmentGrids", "Output", 0));
-        textLabel1_2->setText(QApplication::translate("CatchmentGrids", "Catchment Grid", 0));
-        pushButtonCatchmentGrids->setText(QApplication::translate("CatchmentGrids", "Browse", 0));
-        checkBoxCatchmentGrids->setText(QApplication::translate("CatchmentGrids", "Load in GIS", 0));
-        groupBoxInput->setTitle(QApplication::translate("CatchmentGrids", "Input", 0));
-        pushButtonLinkGrids->setText(QApplication::translate("CatchmentGrids", "Browse", 0));
-        textLabel1->setText(QApplication::translate("CatchmentGrids", "Link Grid", 0));
-        pushButtonFlowDirGrids->setText(QApplication::translate("CatchmentGrids", "Browse", 0));
-        textLabel1_3->setText(QApplication::translate("CatchmentGrids", "Flow Dir. Grid", 0));
+        CatchmentGrids->setWindowTitle(QApplication::translate("CatchmentGrids", ": :   Catchment Grids   : :", nullptr));
+        groupBoxInput_2->setTitle(QApplication::translate("CatchmentGrids", "Output", nullptr));
+        textLabel1_2->setText(QApplication::translate("CatchmentGrids", "Catchment Grid", nullptr));
+        pushButtonCatchmentGrids->setText(QApplication::translate("CatchmentGrids", "Browse", nullptr));
+        checkBoxCatchmentGrids->setText(QApplication::translate("CatchmentGrids", "Load in GIS", nullptr));
+        groupBoxInput->setTitle(QApplication::translate("CatchmentGrids", "Input", nullptr));
+        pushButtonLinkGrids->setText(QApplication::translate("CatchmentGrids", "Browse", nullptr));
+        textLabel1->setText(QApplication::translate("CatchmentGrids", "Link Grid", nullptr));
+        pushButtonFlowDirGrids->setText(QApplication::translate("CatchmentGrids", "Browse", nullptr));
+        textLabel1_3->setText(QApplication::translate("CatchmentGrids", "Flow Dir. Grid", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("CatchmentGrids", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("CatchmentGrids", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("CatchmentGrids", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("CatchmentGrids", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("CatchmentGrids", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("CatchmentGrids", "Run", nullptr));
     } // retranslateUi
 
 };

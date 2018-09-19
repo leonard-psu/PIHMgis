@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'fillpits.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_FILLPITS_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -307,21 +304,21 @@ public:
 
     void retranslateUi(QDialog *FillPits)
     {
-        FillPits->setWindowTitle(QApplication::translate("FillPits", ": :   Fill Pits   : :", 0));
-        groupBoxInput->setTitle(QApplication::translate("FillPits", "Input", 0));
-        pushButtonDEM->setText(QApplication::translate("FillPits", "Browse", 0));
-        textLabel1->setText(QApplication::translate("FillPits", "DEM Grid", 0));
-        groupBoxOutput->setTitle(QApplication::translate("FillPits", "Output", 0));
-        showPF_DFrame->setText(QApplication::translate("FillPits", "Load in GIS", 0));
-        pushButtonFillPits->setText(QApplication::translate("FillPits", "Browse", 0));
-        textLabel1_2->setText(QApplication::translate("FillPits", "Pit-Filled Grid", 0));
+        FillPits->setWindowTitle(QApplication::translate("FillPits", ": :   Fill Pits   : :", nullptr));
+        groupBoxInput->setTitle(QApplication::translate("FillPits", "Input", nullptr));
+        pushButtonDEM->setText(QApplication::translate("FillPits", "Browse", nullptr));
+        textLabel1->setText(QApplication::translate("FillPits", "DEM Grid", nullptr));
+        groupBoxOutput->setTitle(QApplication::translate("FillPits", "Output", nullptr));
+        showPF_DFrame->setText(QApplication::translate("FillPits", "Load in GIS", nullptr));
+        pushButtonFillPits->setText(QApplication::translate("FillPits", "Browse", nullptr));
+        textLabel1_2->setText(QApplication::translate("FillPits", "Pit-Filled Grid", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("FillPits", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("FillPits", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("FillPits", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("FillPits", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("FillPits", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("FillPits", "Run", nullptr));
     } // retranslateUi
 
 };

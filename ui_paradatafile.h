@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'paradatafile.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,16 +10,13 @@
 #define UI_PARADATAFILE_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -199,9 +196,13 @@ public:
         tab_1 = new QWidget();
         tab_1->setObjectName(QStringLiteral("tab_1"));
         comboBoxRiverMode = new QComboBox(tab_1);
+        comboBoxRiverMode->addItem(QString());
+        comboBoxRiverMode->addItem(QString());
         comboBoxRiverMode->setObjectName(QStringLiteral("comboBoxRiverMode"));
         comboBoxRiverMode->setGeometry(QRect(123, 128, 131, 30));
         comboBoxSubsurfaceMode = new QComboBox(tab_1);
+        comboBoxSubsurfaceMode->addItem(QString());
+        comboBoxSubsurfaceMode->addItem(QString());
         comboBoxSubsurfaceMode->setObjectName(QStringLiteral("comboBoxSubsurfaceMode"));
         comboBoxSubsurfaceMode->setGeometry(QRect(123, 73, 131, 30));
         textLabel3_22 = new QLabel(tab_1);
@@ -211,6 +212,8 @@ public:
         textLabel3_20->setObjectName(QStringLiteral("textLabel3_20"));
         textLabel3_20->setGeometry(QRect(30, 17, 91, 31));
         comboBoxSurfaceMode = new QComboBox(tab_1);
+        comboBoxSurfaceMode->addItem(QString());
+        comboBoxSurfaceMode->addItem(QString());
         comboBoxSurfaceMode->setObjectName(QStringLiteral("comboBoxSurfaceMode"));
         comboBoxSurfaceMode->setGeometry(QRect(123, 17, 131, 30));
         textLabel3_21 = new QLabel(tab_1);
@@ -243,6 +246,9 @@ public:
         textLabel3_25->setObjectName(QStringLiteral("textLabel3_25"));
         textLabel3_25->setGeometry(QRect(321, 17, 91, 31));
         comboBoxInitMode = new QComboBox(tab_1);
+        comboBoxInitMode->addItem(QString());
+        comboBoxInitMode->addItem(QString());
+        comboBoxInitMode->addItem(QString());
         comboBoxInitMode->setObjectName(QStringLiteral("comboBoxInitMode"));
         comboBoxInitMode->setGeometry(QRect(414, 17, 131, 30));
         tabWidget->addTab(tab_1, QString());
@@ -295,8 +301,8 @@ public:
         doubleSpinBoxInitialStep->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         doubleSpinBoxInitialStep->setDecimals(6);
         doubleSpinBoxInitialStep->setMaximum(1);
-        doubleSpinBoxInitialStep->setSingleStep(1e-05);
-        doubleSpinBoxInitialStep->setValue(1e-05);
+        doubleSpinBoxInitialStep->setSingleStep(1e-5);
+        doubleSpinBoxInitialStep->setValue(1e-5);
         line2_4 = new QFrame(tab_2);
         line2_4->setObjectName(QStringLiteral("line2_4"));
         line2_4->setGeometry(QRect(285, 64, 3, 183));
@@ -342,6 +348,8 @@ public:
         textLabel1_10->setObjectName(QStringLiteral("textLabel1_10"));
         textLabel1_10->setGeometry(QRect(27, 73, 131, 31));
         comboBoxGrahmSchmidt = new QComboBox(tab_2);
+        comboBoxGrahmSchmidt->addItem(QString());
+        comboBoxGrahmSchmidt->addItem(QString());
         comboBoxGrahmSchmidt->setObjectName(QStringLiteral("comboBoxGrahmSchmidt"));
         comboBoxGrahmSchmidt->setGeometry(QRect(156, 74, 101, 30));
         spinBoxKrylovDimension = new QSpinBox(tab_2);
@@ -367,6 +375,12 @@ public:
         spinBoxStopTime->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         spinBoxStopTime->setValue(2);
         comboBoxStartStop = new QComboBox(tab_3);
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
         comboBoxStartStop->setObjectName(QStringLiteral("comboBoxStartStop"));
         comboBoxStartStop->setGeometry(QRect(418, 10, 104, 30));
         line1 = new QFrame(tab_3);
@@ -529,6 +543,12 @@ public:
         textLabel3_18->setObjectName(QStringLiteral("textLabel3_18"));
         textLabel3_18->setGeometry(QRect(128, 136, 91, 31));
         comboBoxOutput = new QComboBox(tab_3);
+        comboBoxOutput->addItem(QString());
+        comboBoxOutput->addItem(QString());
+        comboBoxOutput->addItem(QString());
+        comboBoxOutput->addItem(QString());
+        comboBoxOutput->addItem(QString());
+        comboBoxOutput->addItem(QString());
         comboBoxOutput->setObjectName(QStringLiteral("comboBoxOutput"));
         comboBoxOutput->setGeometry(QRect(150, 60, 104, 30));
         textLabel3_19 = new QLabel(tab_3);
@@ -714,113 +734,99 @@ public:
 
     void retranslateUi(QDialog *ParaDataFile)
     {
-        ParaDataFile->setWindowTitle(QApplication::translate("ParaDataFile", ": :   Para Data File   : :", 0));
-        comboBoxRiverMode->clear();
-        comboBoxRiverMode->insertItems(0, QStringList()
-         << QApplication::translate("ParaDataFile", "Kinematic", 0)
-         << QApplication::translate("ParaDataFile", "Diffusion", 0)
-        );
-        comboBoxRiverMode->setCurrentText(QApplication::translate("ParaDataFile", "Diffusion", 0));
-        comboBoxSubsurfaceMode->clear();
-        comboBoxSubsurfaceMode->insertItems(0, QStringList()
-         << QApplication::translate("ParaDataFile", "Shallow", 0)
-         << QApplication::translate("ParaDataFile", "Deep", 0)
-        );
-        comboBoxSubsurfaceMode->setCurrentText(QApplication::translate("ParaDataFile", "Deep", 0));
-        textLabel3_22->setText(QApplication::translate("ParaDataFile", "River", 0));
-        textLabel3_20->setText(QApplication::translate("ParaDataFile", "Surface", 0));
-        comboBoxSurfaceMode->clear();
-        comboBoxSurfaceMode->insertItems(0, QStringList()
-         << QApplication::translate("ParaDataFile", "Kinematic", 0)
-         << QApplication::translate("ParaDataFile", "Diffusion", 0)
-        );
-        comboBoxSurfaceMode->setCurrentText(QApplication::translate("ParaDataFile", "Diffusion", 0));
-        textLabel3_21->setText(QApplication::translate("ParaDataFile", "Subsurface", 0));
+        ParaDataFile->setWindowTitle(QApplication::translate("ParaDataFile", ": :   Para Data File   : :", nullptr));
+        comboBoxRiverMode->setItemText(0, QApplication::translate("ParaDataFile", "Kinematic", nullptr));
+        comboBoxRiverMode->setItemText(1, QApplication::translate("ParaDataFile", "Diffusion", nullptr));
+
+        comboBoxRiverMode->setCurrentText(QApplication::translate("ParaDataFile", "Diffusion", nullptr));
+        comboBoxSubsurfaceMode->setItemText(0, QApplication::translate("ParaDataFile", "Shallow", nullptr));
+        comboBoxSubsurfaceMode->setItemText(1, QApplication::translate("ParaDataFile", "Deep", nullptr));
+
+        comboBoxSubsurfaceMode->setCurrentText(QApplication::translate("ParaDataFile", "Deep", nullptr));
+        textLabel3_22->setText(QApplication::translate("ParaDataFile", "River", nullptr));
+        textLabel3_20->setText(QApplication::translate("ParaDataFile", "Surface", nullptr));
+        comboBoxSurfaceMode->setItemText(0, QApplication::translate("ParaDataFile", "Kinematic", nullptr));
+        comboBoxSurfaceMode->setItemText(1, QApplication::translate("ParaDataFile", "Diffusion", nullptr));
+
+        comboBoxSurfaceMode->setCurrentText(QApplication::translate("ParaDataFile", "Diffusion", nullptr));
+        textLabel3_21->setText(QApplication::translate("ParaDataFile", "Subsurface", nullptr));
         checkBoxVerboseMode->setText(QString());
-        textLabel3_23->setText(QApplication::translate("ParaDataFile", "Verbose Mode", 0));
-        textLabel3_24->setText(QApplication::translate("ParaDataFile", "Debug Mode", 0));
+        textLabel3_23->setText(QApplication::translate("ParaDataFile", "Verbose Mode", nullptr));
+        textLabel3_24->setText(QApplication::translate("ParaDataFile", "Debug Mode", nullptr));
         checkBoxDebugMode->setText(QString());
-        textLabel3_25->setText(QApplication::translate("ParaDataFile", "Initial Mode", 0));
-        comboBoxInitMode->clear();
-        comboBoxInitMode->insertItems(0, QStringList()
-         << QApplication::translate("ParaDataFile", "Relax", 0)
-         << QApplication::translate("ParaDataFile", "Att/Riv", 0)
-         << QApplication::translate("ParaDataFile", "Init File", 0)
-        );
-        comboBoxInitMode->setCurrentText(QApplication::translate("ParaDataFile", "Init File", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("ParaDataFile", " Model Process Parameters", 0));
-        textLabel1_2->setText(QApplication::translate("ParaDataFile", "Absolute Tolerance", 0));
-        textLabel1_3->setText(QApplication::translate("ParaDataFile", "Relative Tolerance", 0));
-        textLabel1_4->setText(QApplication::translate("ParaDataFile", "Solver Type", 0));
-        radioButtonDirectDense->setText(QApplication::translate("ParaDataFile", "Direct Dense", 0));
-        radioButtonIterative->setText(QApplication::translate("ParaDataFile", "Iterative", 0));
-        textLabel1_5->setText(QApplication::translate("ParaDataFile", "Initial Step", 0));
-        textLabel1_7->setText(QApplication::translate("ParaDataFile", "Maximum Step", 0));
-        textLabel1_6->setText(QApplication::translate("ParaDataFile", "ET Step", 0));
+        textLabel3_25->setText(QApplication::translate("ParaDataFile", "Initial Mode", nullptr));
+        comboBoxInitMode->setItemText(0, QApplication::translate("ParaDataFile", "Relax", nullptr));
+        comboBoxInitMode->setItemText(1, QApplication::translate("ParaDataFile", "Att/Riv", nullptr));
+        comboBoxInitMode->setItemText(2, QApplication::translate("ParaDataFile", "Init File", nullptr));
+
+        comboBoxInitMode->setCurrentText(QApplication::translate("ParaDataFile", "Init File", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("ParaDataFile", " Model Process Parameters", nullptr));
+        textLabel1_2->setText(QApplication::translate("ParaDataFile", "Absolute Tolerance", nullptr));
+        textLabel1_3->setText(QApplication::translate("ParaDataFile", "Relative Tolerance", nullptr));
+        textLabel1_4->setText(QApplication::translate("ParaDataFile", "Solver Type", nullptr));
+        radioButtonDirectDense->setText(QApplication::translate("ParaDataFile", "Direct Dense", nullptr));
+        radioButtonIterative->setText(QApplication::translate("ParaDataFile", "Iterative", nullptr));
+        textLabel1_5->setText(QApplication::translate("ParaDataFile", "Initial Step", nullptr));
+        textLabel1_7->setText(QApplication::translate("ParaDataFile", "Maximum Step", nullptr));
+        textLabel1_6->setText(QApplication::translate("ParaDataFile", "ET Step", nullptr));
         textLabel1_8->setText(QApplication::translate("ParaDataFile", "Convergence\n"
-"Threshold", 0));
+"Threshold", nullptr));
         textLabel1_9->setText(QApplication::translate("ParaDataFile", "Krylov\n"
-"Dimension", 0));
-        textLabel1_10->setText(QApplication::translate("ParaDataFile", "Grahm-Schmidt", 0));
-        comboBoxGrahmSchmidt->clear();
-        comboBoxGrahmSchmidt->insertItems(0, QStringList()
-         << QApplication::translate("ParaDataFile", "Modified", 0)
-         << QApplication::translate("ParaDataFile", "Classical", 0)
-        );
-        comboBoxGrahmSchmidt->setCurrentText(QApplication::translate("ParaDataFile", "Modified", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("ParaDataFile", "  Model Solver Parameters  ", 0));
-        textLabel1->setText(QApplication::translate("ParaDataFile", "Start Time", 0));
-        textLabel2->setText(QApplication::translate("ParaDataFile", "Stop Time", 0));
-        comboBoxStartStop->clear();
-        comboBoxStartStop->insertItems(0, QStringList()
-         << QApplication::translate("ParaDataFile", "Minutes", 0)
-         << QApplication::translate("ParaDataFile", "Hours", 0)
-         << QApplication::translate("ParaDataFile", "Days", 0)
-         << QApplication::translate("ParaDataFile", "Weeks", 0)
-         << QApplication::translate("ParaDataFile", "Months", 0)
-         << QApplication::translate("ParaDataFile", "Years", 0)
-        );
-        comboBoxStartStop->setCurrentText(QApplication::translate("ParaDataFile", "Minutes", 0));
-        textLabel3_11->setText(QApplication::translate("ParaDataFile", "Riverbed", 0));
-        textLabel3_12->setText(QApplication::translate("ParaDataFile", "River", 0));
-        textLabel3_13->setText(QApplication::translate("ParaDataFile", "Riv u/d", 0));
-        textLabel3_14->setText(QApplication::translate("ParaDataFile", "Riv S l/r", 0));
-        textLabel3_15->setText(QApplication::translate("ParaDataFile", "Riv B l/r", 0));
-        textLabel3_2->setText(QApplication::translate("ParaDataFile", "Snow", 0));
-        textLabel3->setText(QApplication::translate("ParaDataFile", "Interception", 0));
-        textLabel3_5->setText(QApplication::translate("ParaDataFile", "Groundwater", 0));
-        textLabel3_6->setText(QApplication::translate("ParaDataFile", "Ground Evap", 0));
-        textLabel3_3->setText(QApplication::translate("ParaDataFile", "Surface", 0));
-        textLabel3_9->setText(QApplication::translate("ParaDataFile", "Recharge", 0));
-        textLabel3_10->setText(QApplication::translate("ParaDataFile", "Infiltration", 0));
-        textLabel3_4->setText(QApplication::translate("ParaDataFile", "Soil Moisture", 0));
-        textLabel3_7->setText(QApplication::translate("ParaDataFile", "Canopy Evap", 0));
-        textLabel3_8->setText(QApplication::translate("ParaDataFile", "Transpiration", 0));
-        textLabel3_16->setText(QApplication::translate("ParaDataFile", "Rivbed s", 0));
-        textLabel3_17->setText(QApplication::translate("ParaDataFile", "Rivbed l/r", 0));
-        textLabel3_18->setText(QApplication::translate("ParaDataFile", "Rivbed u/d", 0));
-        comboBoxOutput->clear();
-        comboBoxOutput->insertItems(0, QStringList()
-         << QApplication::translate("ParaDataFile", "Minutes", 0)
-         << QApplication::translate("ParaDataFile", "Hours", 0)
-         << QApplication::translate("ParaDataFile", "Days", 0)
-         << QApplication::translate("ParaDataFile", "Weeks", 0)
-         << QApplication::translate("ParaDataFile", "Months", 0)
-         << QApplication::translate("ParaDataFile", "Years", 0)
-        );
-        comboBoxOutput->setCurrentText(QApplication::translate("ParaDataFile", "Minutes", 0));
-        textLabel3_19->setText(QApplication::translate("ParaDataFile", "Output Intervals in", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("ParaDataFile", " Model Output Parameters", 0));
+"Dimension", nullptr));
+        textLabel1_10->setText(QApplication::translate("ParaDataFile", "Grahm-Schmidt", nullptr));
+        comboBoxGrahmSchmidt->setItemText(0, QApplication::translate("ParaDataFile", "Modified", nullptr));
+        comboBoxGrahmSchmidt->setItemText(1, QApplication::translate("ParaDataFile", "Classical", nullptr));
+
+        comboBoxGrahmSchmidt->setCurrentText(QApplication::translate("ParaDataFile", "Modified", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("ParaDataFile", "  Model Solver Parameters  ", nullptr));
+        textLabel1->setText(QApplication::translate("ParaDataFile", "Start Time", nullptr));
+        textLabel2->setText(QApplication::translate("ParaDataFile", "Stop Time", nullptr));
+        comboBoxStartStop->setItemText(0, QApplication::translate("ParaDataFile", "Minutes", nullptr));
+        comboBoxStartStop->setItemText(1, QApplication::translate("ParaDataFile", "Hours", nullptr));
+        comboBoxStartStop->setItemText(2, QApplication::translate("ParaDataFile", "Days", nullptr));
+        comboBoxStartStop->setItemText(3, QApplication::translate("ParaDataFile", "Weeks", nullptr));
+        comboBoxStartStop->setItemText(4, QApplication::translate("ParaDataFile", "Months", nullptr));
+        comboBoxStartStop->setItemText(5, QApplication::translate("ParaDataFile", "Years", nullptr));
+
+        comboBoxStartStop->setCurrentText(QApplication::translate("ParaDataFile", "Minutes", nullptr));
+        textLabel3_11->setText(QApplication::translate("ParaDataFile", "Riverbed", nullptr));
+        textLabel3_12->setText(QApplication::translate("ParaDataFile", "River", nullptr));
+        textLabel3_13->setText(QApplication::translate("ParaDataFile", "Riv u/d", nullptr));
+        textLabel3_14->setText(QApplication::translate("ParaDataFile", "Riv S l/r", nullptr));
+        textLabel3_15->setText(QApplication::translate("ParaDataFile", "Riv B l/r", nullptr));
+        textLabel3_2->setText(QApplication::translate("ParaDataFile", "Snow", nullptr));
+        textLabel3->setText(QApplication::translate("ParaDataFile", "Interception", nullptr));
+        textLabel3_5->setText(QApplication::translate("ParaDataFile", "Groundwater", nullptr));
+        textLabel3_6->setText(QApplication::translate("ParaDataFile", "Ground Evap", nullptr));
+        textLabel3_3->setText(QApplication::translate("ParaDataFile", "Surface", nullptr));
+        textLabel3_9->setText(QApplication::translate("ParaDataFile", "Recharge", nullptr));
+        textLabel3_10->setText(QApplication::translate("ParaDataFile", "Infiltration", nullptr));
+        textLabel3_4->setText(QApplication::translate("ParaDataFile", "Soil Moisture", nullptr));
+        textLabel3_7->setText(QApplication::translate("ParaDataFile", "Canopy Evap", nullptr));
+        textLabel3_8->setText(QApplication::translate("ParaDataFile", "Transpiration", nullptr));
+        textLabel3_16->setText(QApplication::translate("ParaDataFile", "Rivbed s", nullptr));
+        textLabel3_17->setText(QApplication::translate("ParaDataFile", "Rivbed l/r", nullptr));
+        textLabel3_18->setText(QApplication::translate("ParaDataFile", "Rivbed u/d", nullptr));
+        comboBoxOutput->setItemText(0, QApplication::translate("ParaDataFile", "Minutes", nullptr));
+        comboBoxOutput->setItemText(1, QApplication::translate("ParaDataFile", "Hours", nullptr));
+        comboBoxOutput->setItemText(2, QApplication::translate("ParaDataFile", "Days", nullptr));
+        comboBoxOutput->setItemText(3, QApplication::translate("ParaDataFile", "Weeks", nullptr));
+        comboBoxOutput->setItemText(4, QApplication::translate("ParaDataFile", "Months", nullptr));
+        comboBoxOutput->setItemText(5, QApplication::translate("ParaDataFile", "Years", nullptr));
+
+        comboBoxOutput->setCurrentText(QApplication::translate("ParaDataFile", "Minutes", nullptr));
+        textLabel3_19->setText(QApplication::translate("ParaDataFile", "Output Intervals in", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("ParaDataFile", " Model Output Parameters", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("ParaDataFile", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("ParaDataFile", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("ParaDataFile", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("ParaDataFile", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("ParaDataFile", "Run", 0));
-        groupBoxOutput->setTitle(QApplication::translate("ParaDataFile", "Output", 0));
-        textLabelPara->setText(QApplication::translate("ParaDataFile", "Para Data File", 0));
-        pushButtonParaDataFile->setText(QApplication::translate("ParaDataFile", "Browse", 0));
+        pushButtonRun->setText(QApplication::translate("ParaDataFile", "Run", nullptr));
+        groupBoxOutput->setTitle(QApplication::translate("ParaDataFile", "Output", nullptr));
+        textLabelPara->setText(QApplication::translate("ParaDataFile", "Para Data File", nullptr));
+        pushButtonParaDataFile->setText(QApplication::translate("ParaDataFile", "Browse", nullptr));
     } // retranslateUi
 
 };

@@ -463,7 +463,7 @@
     </font>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>7</number>
    </property>
    <widget class="QWidget" name="PIHMgisToolBox_PIHMgisProject">
     <property name="geometry">
@@ -471,7 +471,7 @@
       <x>0</x>
       <y>0</y>
       <width>765</width>
-      <height>305</height>
+      <height>233</height>
      </rect>
     </property>
     <attribute name="label">
@@ -1123,7 +1123,7 @@ color: rgb(51, 51, 51);</string>
       <x>0</x>
       <y>0</y>
       <width>765</width>
-      <height>305</height>
+      <height>233</height>
      </rect>
     </property>
     <attribute name="label">
@@ -2085,7 +2085,7 @@ color: rgb(71, 71, 71);</string>
       <x>0</x>
       <y>0</y>
       <width>765</width>
-      <height>305</height>
+      <height>233</height>
      </rect>
     </property>
     <attribute name="label">
@@ -2792,7 +2792,7 @@ color: rgb(71, 71, 71);</string>
       <x>0</x>
       <y>0</y>
       <width>765</width>
-      <height>305</height>
+      <height>233</height>
      </rect>
     </property>
     <attribute name="label">
@@ -3294,7 +3294,7 @@ color: rgb(71, 71, 71);</string>
       <x>0</x>
       <y>0</y>
       <width>765</width>
-      <height>305</height>
+      <height>233</height>
      </rect>
     </property>
     <attribute name="label">
@@ -4769,7 +4769,7 @@ color: rgb(71, 71, 71);</string>
       <x>0</x>
       <y>0</y>
       <width>765</width>
-      <height>305</height>
+      <height>233</height>
      </rect>
     </property>
     <attribute name="label">
@@ -5167,7 +5167,7 @@ color: rgb(71, 71, 71);</string>
       <x>0</x>
       <y>0</y>
       <width>765</width>
-      <height>305</height>
+      <height>233</height>
      </rect>
     </property>
     <attribute name="label">
@@ -5807,7 +5807,7 @@ color: rgb(71, 71, 71);</string>
       <x>0</x>
       <y>0</y>
       <width>765</width>
-      <height>305</height>
+      <height>233</height>
      </rect>
     </property>
     <attribute name="label">

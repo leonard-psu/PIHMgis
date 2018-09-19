@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ibcdatafile.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,13 +10,10 @@
 #define UI_IBCDATAFILE_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -270,17 +267,17 @@ public:
 
     void retranslateUi(QDialog *IbcDataFile)
     {
-        IbcDataFile->setWindowTitle(QApplication::translate("IbcDataFile", ": :   Ibc Data File   : :", 0));
+        IbcDataFile->setWindowTitle(QApplication::translate("IbcDataFile", ": :   Ibc Data File   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("IbcDataFile", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("IbcDataFile", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("IbcDataFile", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("IbcDataFile", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("IbcDataFile", "Run", 0));
-        groupBoxOutput->setTitle(QApplication::translate("IbcDataFile", "Output", 0));
-        textLabel2->setText(QApplication::translate("IbcDataFile", "IBC Data File", 0));
-        pushButtonIbcDataFile->setText(QApplication::translate("IbcDataFile", "Browse", 0));
+        pushButtonRun->setText(QApplication::translate("IbcDataFile", "Run", nullptr));
+        groupBoxOutput->setTitle(QApplication::translate("IbcDataFile", "Output", nullptr));
+        textLabel2->setText(QApplication::translate("IbcDataFile", "IBC Data File", nullptr));
+        pushButtonIbcDataFile->setText(QApplication::translate("IbcDataFile", "Browse", nullptr));
     } // retranslateUi
 
 };

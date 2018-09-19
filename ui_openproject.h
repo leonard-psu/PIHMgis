@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'openproject.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,13 +10,10 @@
 #define UI_OPENPROJECT_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -113,14 +110,22 @@ public:
         pushButtonHelp = new QPushButton(groupBox);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setGeometry(QRect(12, 18, 113, 32));
+        QFont font;
+        font.setFamily(QStringLiteral("Arial"));
+        font.setPointSize(12);
+        font.setBold(true);
+        font.setWeight(75);
+        pushButtonHelp->setFont(font);
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBox);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
         pushButtonClose->setGeometry(QRect(312, 18, 113, 32));
+        pushButtonClose->setFont(font);
         pushButtonClose->setAutoDefault(false);
         pushButtonOpen = new QPushButton(groupBox);
         pushButtonOpen->setObjectName(QStringLiteral("pushButtonOpen"));
         pushButtonOpen->setGeometry(QRect(436, 18, 131, 32));
+        pushButtonOpen->setFont(font);
         pushButtonOpen->setAutoDefault(false);
         groupBox_2 = new QGroupBox(OpenProject);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
@@ -128,38 +133,42 @@ public:
         label_3 = new QLabel(groupBox_2);
         label_3->setObjectName(QStringLiteral("label_3"));
         label_3->setGeometry(QRect(15, 113, 141, 31));
+        label_3->setFont(font);
         lineEditFile = new QLineEdit(groupBox_2);
         lineEditFile->setObjectName(QStringLiteral("lineEditFile"));
         lineEditFile->setGeometry(QRect(165, 24, 281, 22));
-        QFont font;
-        font.setBold(true);
-        font.setWeight(75);
-        lineEditFile->setFont(font);
+        QFont font1;
+        font1.setBold(true);
+        font1.setWeight(75);
+        lineEditFile->setFont(font1);
         pushButtonFile = new QPushButton(groupBox_2);
         pushButtonFile->setObjectName(QStringLiteral("pushButtonFile"));
         pushButtonFile->setGeometry(QRect(454, 20, 113, 32));
+        pushButtonFile->setFont(font);
         pushButtonFile->setAutoDefault(false);
-        pushButtonFile->setDefault(false);
         label = new QLabel(groupBox_2);
         label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(15, 60, 131, 51));
+        label->setFont(font);
         lineEditFolder = new QLineEdit(groupBox_2);
         lineEditFolder->setObjectName(QStringLiteral("lineEditFolder"));
         lineEditFolder->setEnabled(false);
         lineEditFolder->setGeometry(QRect(165, 74, 281, 22));
-        lineEditFolder->setFont(font);
+        lineEditFolder->setFont(font1);
         label_4 = new QLabel(groupBox_2);
         label_4->setObjectName(QStringLiteral("label_4"));
         label_4->setGeometry(QRect(15, 30, 101, 17));
+        label_4->setFont(font);
         lineEditFolder2 = new QLineEdit(groupBox_2);
         lineEditFolder2->setObjectName(QStringLiteral("lineEditFolder2"));
         lineEditFolder2->setEnabled(false);
         lineEditFolder2->setGeometry(QRect(165, 118, 281, 22));
-        lineEditFolder2->setFont(font);
+        lineEditFolder2->setFont(font1);
         lineEditFolder2->setReadOnly(true);
         label_2 = new QLabel(OpenProject);
         label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setGeometry(QRect(175, 28, 271, 21));
+        label_2->setGeometry(QRect(175, 28, 311, 21));
+        label_2->setFont(font);
         BorderTop = new QFrame(OpenProject);
         BorderTop->setObjectName(QStringLiteral("BorderTop"));
         BorderTop->setGeometry(QRect(0, -4, 611, 20));
@@ -291,41 +300,44 @@ public:
 
         retranslateUi(OpenProject);
 
+        pushButtonFile->setDefault(false);
+
+
         QMetaObject::connectSlotsByName(OpenProject);
     } // setupUi
 
     void retranslateUi(QDialog *OpenProject)
     {
-        OpenProject->setWindowTitle(QApplication::translate("OpenProject", ": :   OpenProject   : :", 0));
+        OpenProject->setWindowTitle(QApplication::translate("OpenProject", ": :   OpenProject   : :", nullptr));
         groupBox->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("OpenProject", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("OpenProject", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("OpenProject", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("OpenProject", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonOpen->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonOpen->setText(QApplication::translate("OpenProject", " Open Project ", 0));
+        pushButtonOpen->setText(QApplication::translate("OpenProject", " Open Project ", nullptr));
         groupBox_2->setTitle(QString());
 #ifndef QT_NO_TOOLTIP
         label_3->setToolTip(QApplication::translate("OpenProject", "It is recommended that you choose PROJECT FOLDER\n"
-"for the Watershed you want to model", 0));
+"for the Watershed you want to model", nullptr));
 #endif // QT_NO_TOOLTIP
-        label_3->setText(QApplication::translate("OpenProject", "Working Directory", 0));
-        pushButtonFile->setText(QApplication::translate("OpenProject", "Browse...", 0));
+        label_3->setText(QApplication::translate("OpenProject", "Working Directory", nullptr));
+        pushButtonFile->setText(QApplication::translate("OpenProject", "Browse...", nullptr));
 #ifndef QT_NO_TOOLTIP
         label->setToolTip(QApplication::translate("OpenProject", "This will be your HOME Directory for the PIHMgis.\n"
-"Output files & Folders will be created relative to this path.", 0));
+"Output files & Folders will be created relative to this path.", nullptr));
 #endif // QT_NO_TOOLTIP
-        label->setText(QApplication::translate("OpenProject", "Project Folder", 0));
+        label->setText(QApplication::translate("OpenProject", "Project Folder", nullptr));
 #ifndef QT_NO_TOOLTIP
         label_4->setToolTip(QApplication::translate("OpenProject", "This is your new project file that will be created.\n"
-"Choose this file if you need to open the project later.", 0));
+"Choose this file if you need to open the project later.", nullptr));
 #endif // QT_NO_TOOLTIP
-        label_4->setText(QApplication::translate("OpenProject", "Project File", 0));
+        label_4->setText(QApplication::translate("OpenProject", "Project File", nullptr));
         label_2->setText(QApplication::translate("OpenProject", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:18pt;\">Open Existing PIHMgis Project</span></p></body></html>", 0));
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Lucida Grande'; font-size:14pt; font-weight:600;\">Open Existing PIHMgis Project</span></p></body></html>", nullptr));
     } // retranslateUi
 
 };

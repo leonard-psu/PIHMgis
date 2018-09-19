@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'initdatafile.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,13 +10,10 @@
 #define UI_INITDATAFILE_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -397,32 +394,32 @@ public:
 
     void retranslateUi(QDialog *InitDataFile)
     {
-        InitDataFile->setWindowTitle(QApplication::translate("InitDataFile", ": :   Init Data File   : :", 0));
-        groupBoxOutput->setTitle(QApplication::translate("InitDataFile", "Output", 0));
-        textLabel2->setText(QApplication::translate("InitDataFile", "Init Data File", 0));
-        pushButtonInitDataFile->setText(QApplication::translate("InitDataFile", "Browse", 0));
+        InitDataFile->setWindowTitle(QApplication::translate("InitDataFile", ": :   Init Data File   : :", nullptr));
+        groupBoxOutput->setTitle(QApplication::translate("InitDataFile", "Output", nullptr));
+        textLabel2->setText(QApplication::translate("InitDataFile", "Init Data File", nullptr));
+        pushButtonInitDataFile->setText(QApplication::translate("InitDataFile", "Browse", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("InitDataFile", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("InitDataFile", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("InitDataFile", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("InitDataFile", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("InitDataFile", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("InitDataFile", "Run", nullptr));
         groupBoxInput_2->setTitle(QString());
-        pushButtonMeshDataFile->setText(QApplication::translate("InitDataFile", "Browse", 0));
-        textLabel1->setText(QApplication::translate("InitDataFile", "Mesh Data File", 0));
-        textLabel1_4->setText(QApplication::translate("InitDataFile", "Riv Data File", 0));
-        pushButtonRivDataFile->setText(QApplication::translate("InitDataFile", "Browse", 0));
-        groupBoxInput_1->setTitle(QApplication::translate("InitDataFile", "Input", 0));
-        textLabel1_2->setText(QApplication::translate("InitDataFile", "Interception", 0));
-        radioButtonMeters->setText(QApplication::translate("InitDataFile", " * meters", 0));
-        radioButtonPercent->setText(QApplication::translate("InitDataFile", " * percent", 0));
-        textLabel1_5->setText(QApplication::translate("InitDataFile", "Snow", 0));
-        textLabel1_6->setText(QApplication::translate("InitDataFile", "Surface", 0));
-        textLabel1_7->setText(QApplication::translate("InitDataFile", "*Soil Moisture", 0));
-        textLabel1_8->setText(QApplication::translate("InitDataFile", "*Groundwater", 0));
-        textLabel1_9->setText(QApplication::translate("InitDataFile", "*River", 0));
-        textLabel1_10->setText(QApplication::translate("InitDataFile", "*Riverbed", 0));
+        pushButtonMeshDataFile->setText(QApplication::translate("InitDataFile", "Browse", nullptr));
+        textLabel1->setText(QApplication::translate("InitDataFile", "Mesh Data File", nullptr));
+        textLabel1_4->setText(QApplication::translate("InitDataFile", "Riv Data File", nullptr));
+        pushButtonRivDataFile->setText(QApplication::translate("InitDataFile", "Browse", nullptr));
+        groupBoxInput_1->setTitle(QApplication::translate("InitDataFile", "Input", nullptr));
+        textLabel1_2->setText(QApplication::translate("InitDataFile", "Interception", nullptr));
+        radioButtonMeters->setText(QApplication::translate("InitDataFile", " * meters", nullptr));
+        radioButtonPercent->setText(QApplication::translate("InitDataFile", " * percent", nullptr));
+        textLabel1_5->setText(QApplication::translate("InitDataFile", "Snow", nullptr));
+        textLabel1_6->setText(QApplication::translate("InitDataFile", "Surface", nullptr));
+        textLabel1_7->setText(QApplication::translate("InitDataFile", "*Soil Moisture", nullptr));
+        textLabel1_8->setText(QApplication::translate("InitDataFile", "*Groundwater", nullptr));
+        textLabel1_9->setText(QApplication::translate("InitDataFile", "*River", nullptr));
+        textLabel1_10->setText(QApplication::translate("InitDataFile", "*Riverbed", nullptr));
     } // retranslateUi
 
 };

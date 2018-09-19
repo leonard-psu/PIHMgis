@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'closeproject.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,13 +10,10 @@
 #define UI_CLOSEPROJECT_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTextBrowser>
@@ -105,7 +102,13 @@ public:
         CloseProject->setPalette(palette);
         label_2 = new QLabel(CloseProject);
         label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setGeometry(QRect(165, 23, 281, 21));
+        label_2->setGeometry(QRect(150, 20, 281, 31));
+        QFont font;
+        font.setFamily(QStringLiteral("Arial"));
+        font.setPointSize(12);
+        font.setBold(true);
+        font.setWeight(75);
+        label_2->setFont(font);
         label_2->setAlignment(Qt::AlignCenter);
         groupBoxButtons = new QGroupBox(CloseProject);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
@@ -113,15 +116,17 @@ public:
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setGeometry(QRect(12, 18, 113, 32));
+        pushButtonHelp->setFont(font);
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
         pushButtonClose->setGeometry(QRect(310, 18, 113, 32));
+        pushButtonClose->setFont(font);
         pushButtonClose->setAutoDefault(false);
-        pushButtonClose->setDefault(false);
         pushButtonOpen = new QPushButton(groupBoxButtons);
         pushButtonOpen->setObjectName(QStringLiteral("pushButtonOpen"));
         pushButtonOpen->setGeometry(QRect(440, 18, 131, 32));
+        pushButtonOpen->setFont(font);
         pushButtonOpen->setAutoDefault(false);
         groupBox = new QGroupBox(CloseProject);
         groupBox->setObjectName(QStringLiteral("groupBox"));
@@ -129,20 +134,18 @@ public:
         label = new QLabel(groupBox);
         label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(30, 20, 491, 21));
-        QFont font;
-        font.setPointSize(16);
         label->setFont(font);
         label_3 = new QLabel(groupBox);
         label_3->setObjectName(QStringLiteral("label_3"));
         label_3->setGeometry(QRect(30, 60, 411, 20));
+        label_3->setFont(font);
+        textEdit = new QTextEdit(groupBox);
+        textEdit->setObjectName(QStringLiteral("textEdit"));
+        textEdit->setGeometry(QRect(30, 86, 524, 61));
         QFont font1;
         font1.setPointSize(14);
         font1.setBold(true);
         font1.setWeight(75);
-        label_3->setFont(font1);
-        textEdit = new QTextEdit(groupBox);
-        textEdit->setObjectName(QStringLiteral("textEdit"));
-        textEdit->setGeometry(QRect(30, 86, 524, 61));
         textEdit->setFont(font1);
         textEdit->setTextInteractionFlags(Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse);
         BorderTop = new QFrame(CloseProject);
@@ -276,27 +279,30 @@ public:
 
         retranslateUi(CloseProject);
 
+        pushButtonClose->setDefault(false);
+
+
         QMetaObject::connectSlotsByName(CloseProject);
     } // setupUi
 
     void retranslateUi(QDialog *CloseProject)
     {
-        CloseProject->setWindowTitle(QApplication::translate("CloseProject", ": :   Close Project   : :", 0));
+        CloseProject->setWindowTitle(QApplication::translate("CloseProject", ": :   Close Project   : :", nullptr));
         label_2->setText(QApplication::translate("CloseProject", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:18pt;\">Close PIHMgis Project</span></p></body></html>", 0));
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Lucida Grande'; font-size:14pt; font-weight:600;\">Close PIHMgis Project</span></p></body></html>", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("CloseProject", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("CloseProject", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("CloseProject", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("CloseProject", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonOpen->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonOpen->setText(QApplication::translate("CloseProject", "Close Project", 0));
+        pushButtonOpen->setText(QApplication::translate("CloseProject", "Close Project", nullptr));
         groupBox->setTitle(QString());
-        label->setText(QApplication::translate("CloseProject", "Details of the Currently Open PIHMgis Project:", 0));
-        label_3->setText(QApplication::translate("CloseProject", "...", 0));
+        label->setText(QApplication::translate("CloseProject", "Details of the Currently Open PIHMgis Project:", nullptr));
+        label_3->setText(QApplication::translate("CloseProject", "...", nullptr));
     } // retranslateUi
 
 };

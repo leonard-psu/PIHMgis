@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'attdatafile.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_ATTDATAFILE_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -705,80 +702,80 @@ public:
 
     void retranslateUi(QDialog *AttDataFile)
     {
-        AttDataFile->setWindowTitle(QApplication::translate("AttDataFile", ": :   Att Data File   : :", 0));
+        AttDataFile->setWindowTitle(QApplication::translate("AttDataFile", ": :   Att Data File   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("AttDataFile", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("AttDataFile", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("AttDataFile", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("AttDataFile", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("AttDataFile", "Run", 0));
-        textLabelLegends1->setText(QApplication::translate("AttDataFile", "<html><head/><body><p><span style=\" vertical-align:super;\">1 </span>Homogeneous Class</p></body></html>", 0));
-        textLabelLegends2->setText(QApplication::translate("AttDataFile", "<html><head/><body><p><span style=\" vertical-align:super;\">2 </span>Classification Raster Layer</p></body></html>", 0));
-        textLabelLegends3->setText(QApplication::translate("AttDataFile", "<html><head/><body><p><span style=\" vertical-align:super;\">3 </span>Parameter Value / Raster Layer</p></body></html>", 0));
-        pushButtonWindVelocityFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        pushButtonVaporPressureFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        textLabelTemperature->setText(QApplication::translate("AttDataFile", "Temperature", 0));
-        pushButtonPrecipitationFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        pushButtonRelativeHumidityFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        textLabelVaporPressure->setText(QApplication::translate("AttDataFile", "Vapor Pressure", 0));
-        pushButtonSolarRadiationFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        textLabelSolarRadiation->setText(QApplication::translate("AttDataFile", "Solar Radiation", 0));
-        pushButtonTemperatureFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        textLabelRelativeHumidity->setText(QApplication::translate("AttDataFile", "Relative Humidity", 0));
-        textLabelPrecipitation->setText(QApplication::translate("AttDataFile", "Precipitation", 0));
-        textLabelWindVelocity->setText(QApplication::translate("AttDataFile", "Wind Velocity", 0));
+        pushButtonRun->setText(QApplication::translate("AttDataFile", "Run", nullptr));
+        textLabelLegends1->setText(QApplication::translate("AttDataFile", "<html><head/><body><p><span style=\" vertical-align:super;\">1 </span>Homogeneous Class</p></body></html>", nullptr));
+        textLabelLegends2->setText(QApplication::translate("AttDataFile", "<html><head/><body><p><span style=\" vertical-align:super;\">2 </span>Classification Raster Layer</p></body></html>", nullptr));
+        textLabelLegends3->setText(QApplication::translate("AttDataFile", "<html><head/><body><p><span style=\" vertical-align:super;\">3 </span>Parameter Value / Raster Layer</p></body></html>", nullptr));
+        pushButtonWindVelocityFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        pushButtonVaporPressureFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        textLabelTemperature->setText(QApplication::translate("AttDataFile", "Temperature", nullptr));
+        pushButtonPrecipitationFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        pushButtonRelativeHumidityFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        textLabelVaporPressure->setText(QApplication::translate("AttDataFile", "Vapor Pressure", nullptr));
+        pushButtonSolarRadiationFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        textLabelSolarRadiation->setText(QApplication::translate("AttDataFile", "Solar Radiation", nullptr));
+        pushButtonTemperatureFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        textLabelRelativeHumidity->setText(QApplication::translate("AttDataFile", "Relative Humidity", nullptr));
+        textLabelPrecipitation->setText(QApplication::translate("AttDataFile", "Precipitation", nullptr));
+        textLabelWindVelocity->setText(QApplication::translate("AttDataFile", "Wind Velocity", nullptr));
         checkBoxPrecipitation->setText(QString());
         checkBoxTemperature->setText(QString());
         checkBoxRelativeHumidity->setText(QString());
         checkBoxWindVelocity->setText(QString());
         checkBoxSolarRadiation->setText(QString());
         checkBoxVaporPressure->setText(QString());
-        tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("AttDataFile", "  Climate Classifications  ", 0));
-        textLabelGeologyClasses->setText(QApplication::translate("AttDataFile", "Geology Classes", 0));
-        textLabelSoilClasses->setText(QApplication::translate("AttDataFile", "Soil Classes", 0));
-        pushButtonGeologyClassesFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        textLabelLandCoverClasses->setText(QApplication::translate("AttDataFile", "Land Cover Classes", 0));
-        pushButtonLandCoverClassesFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        pushButtonMeltRegionsFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        textLabelMacropores->setText(QApplication::translate("AttDataFile", "Macropores", 0));
-        textLabelMeltRegions->setText(QApplication::translate("AttDataFile", "Melt Regions", 0));
-        pushButtonSoilClassesFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        pushButtonMacroporesFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        textLabelSourcesSinks->setText(QApplication::translate("AttDataFile", "Sources / Sinks", 0));
-        pushButtonSourcesSinksFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("AttDataFile", "  Climate Classifications  ", nullptr));
+        textLabelGeologyClasses->setText(QApplication::translate("AttDataFile", "Geology Classes", nullptr));
+        textLabelSoilClasses->setText(QApplication::translate("AttDataFile", "Soil Classes", nullptr));
+        pushButtonGeologyClassesFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        textLabelLandCoverClasses->setText(QApplication::translate("AttDataFile", "Land Cover Classes", nullptr));
+        pushButtonLandCoverClassesFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        pushButtonMeltRegionsFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        textLabelMacropores->setText(QApplication::translate("AttDataFile", "Macropores", nullptr));
+        textLabelMeltRegions->setText(QApplication::translate("AttDataFile", "Melt Regions", nullptr));
+        pushButtonSoilClassesFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        pushButtonMacroporesFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        textLabelSourcesSinks->setText(QApplication::translate("AttDataFile", "Sources / Sinks", nullptr));
+        pushButtonSourcesSinksFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
         checkBoxSoilClasses->setText(QString());
         checkBoxGeologyClasses->setText(QString());
         checkBoxMacropores->setText(QString());
         checkBoxLandCoverClasses->setText(QString());
         checkBoxMeltRegions->setText(QString());
         checkBoxSourcesSinks->setText(QString());
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("AttDataFile", " Soil, Geology, Land Cover ", 0));
-        textLabelSoilMoisture->setText(QApplication::translate("AttDataFile", "Soil Moisture (m)", 0));
-        textLabelBoundaryCondition->setText(QApplication::translate("AttDataFile", "Boundary Condition", 0));
-        pushButtonSnowCoverFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        textLabelGroundwater->setText(QApplication::translate("AttDataFile", "Groundwater (m)", 0));
-        pushButtonGroundwaterFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        pushButtonBoundaryConditionFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        pushButtonSurfaceStorageFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        pushButtonInterceptionFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        pushButtonSoilMoistureFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        textLabelSnowCover->setText(QApplication::translate("AttDataFile", "Snow Cover (m)", 0));
-        textLabelInterception->setText(QApplication::translate("AttDataFile", "Interception (m)", 0));
-        textLabelSurfaceStorage->setText(QApplication::translate("AttDataFile", "Surface water (m)", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("AttDataFile", " Soil, Geology, Land Cover ", nullptr));
+        textLabelSoilMoisture->setText(QApplication::translate("AttDataFile", "Soil Moisture (m)", nullptr));
+        textLabelBoundaryCondition->setText(QApplication::translate("AttDataFile", "Boundary Condition", nullptr));
+        pushButtonSnowCoverFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        textLabelGroundwater->setText(QApplication::translate("AttDataFile", "Groundwater (m)", nullptr));
+        pushButtonGroundwaterFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        pushButtonBoundaryConditionFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        pushButtonSurfaceStorageFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        pushButtonInterceptionFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        pushButtonSoilMoistureFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        textLabelSnowCover->setText(QApplication::translate("AttDataFile", "Snow Cover (m)", nullptr));
+        textLabelInterception->setText(QApplication::translate("AttDataFile", "Interception (m)", nullptr));
+        textLabelSurfaceStorage->setText(QApplication::translate("AttDataFile", "Surface water (m)", nullptr));
         checkBoxSurfaceStorage->setText(QString());
         checkBoxInterception->setText(QString());
         checkBoxSnowCover->setText(QString());
         checkBoxSoilMoisture->setText(QString());
         checkBoxGroundwater->setText(QString());
         checkBoxBoundaryCondition->setText(QString());
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("AttDataFile", "Initial / Boundary Conditions", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("AttDataFile", "Initial / Boundary Conditions", nullptr));
         groupBoxOutput->setTitle(QString());
-        textLabel1_7->setText(QApplication::translate("AttDataFile", "TIN Shape Layer", 0));
-        pushButtonTINShapeLayerFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
-        groupBoxOutput_2->setTitle(QApplication::translate("AttDataFile", "Output", 0));
-        textLabel1_8->setText(QApplication::translate("AttDataFile", "Att Data File", 0));
-        pushButtonAttDataFile->setText(QApplication::translate("AttDataFile", "Browse", 0));
+        textLabel1_7->setText(QApplication::translate("AttDataFile", "TIN Shape Layer", nullptr));
+        pushButtonTINShapeLayerFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
+        groupBoxOutput_2->setTitle(QApplication::translate("AttDataFile", "Output", nullptr));
+        textLabel1_8->setText(QApplication::translate("AttDataFile", "Att Data File", nullptr));
+        pushButtonAttDataFile->setText(QApplication::translate("AttDataFile", "Browse", nullptr));
     } // retranslateUi
 
 };

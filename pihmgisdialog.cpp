@@ -63,20 +63,20 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
     this->setWindowIcon(QIcon("Icons/PIHMgis000.icns"));
     ui->setupUi(this);
 
-    QDir dir;
-    success = dir.mkpath(QDir::homePath()+"/.PIHMgis/");
-    if(success == true)
-    {
-        qDebug() << "Successfully Created Folder: " << QDir::homePath()+"/.PIHMgis/";
-    }
-    else
-    {
-        qDebug() << "Unable to Create Director: " << QDir::homePath()+"/.PIHMgis/";
-        qDebug() << "Please Check File/Folder Permissions";
-        QMessageBox::critical(this,tr("Critical Error"),tr("Unable to Create Folder in the Home Directory.\nPlease Close & Open PIHMgis After Fixing Permissions!"),QMessageBox::Ok);
-    }
+//    QDir dir;
+//    success = dir.mkpath(QDir::homePath()+"/.PIHMgis/");
+//    if(success == true)
+//    {
+//        qDebug() << "Successfully Created Folder: " << QDir::homePath()+"/.PIHMgis/";
+//    }
+//    else
+//    {
+//        qDebug() << "Unable to Create Director: " << QDir::homePath()+"/.PIHMgis/";
+//        qDebug() << "Please Check File/Folder Permissions";
+//        QMessageBox::critical(this,tr("Critical Error"),tr("Unable to Create Folder in the Home Directory.\nPlease Close & Open PIHMgis After Fixing Permissions!"),QMessageBox::Ok);
+//    }
 
-    ui->PIHMgisToolBox->setCurrentIndex(8-1);
+//    ui->PIHMgisToolBox->setCurrentIndex(8-1);
     //ui->pushButtonWorkFlow1->setDefault(1);
     //ui->pushButtonWorkFlow1->setFocus();
 }
@@ -362,76 +362,76 @@ void PIHMgisDialog::on_pushButtonWorkFlow0_clicked()
     QStringList default_params; default_params << "WORKFLOW1"; set_defaults(default_params);
 }
 
-void PIHMgisDialog::on_pushButtonWorkFlow1_clicked()
-{
-    //??ui->PIHMgisToolBox->setCurrentIndex(1-1);
+//void PIHMgisDialog::on_pushButtonWorkFlow1_clicked()
+//{
+//    //??ui->PIHMgisToolBox->setCurrentIndex(1-1);
 
-    // ** Set Default PushButton
-    // ** TODO: ADD IF & ELSE LOOP TO SELECT DEFAULT BASED ON IF A PROJECT IS OPEN OR NOT? IF OPEN "CLOSE" SHOULD BE DEFAULT.
-    QString ProjectFolder, ProjectFileName;
-    QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
-    if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-    {
-        QStringList default_params; default_params << "WORKFLOW1" << "OPENPRJ" << "IMPORTPRJ" << "NEWPRJ"; set_defaults(default_params);
-        return;
-    }
+//    // ** Set Default PushButton
+//    // ** TODO: ADD IF & ELSE LOOP TO SELECT DEFAULT BASED ON IF A PROJECT IS OPEN OR NOT? IF OPEN "CLOSE" SHOULD BE DEFAULT.
+//    QString ProjectFolder, ProjectFileName;
+//    QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+//    if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+//    {
+//        QStringList default_params; default_params << "WORKFLOW1" << "OPENPRJ" << "IMPORTPRJ" << "NEWPRJ"; set_defaults(default_params);
+//        return;
+//    }
 
-    QTextStream ProjectFileTextStream(&ProjectFile);
-    ProjectFolder   = ProjectFileTextStream.readLine();
-    ProjectFileName = ProjectFileTextStream.readLine();
-    ProjectFile.close();
+//    QTextStream ProjectFileTextStream(&ProjectFile);
+//    ProjectFolder   = ProjectFileTextStream.readLine();
+//    ProjectFileName = ProjectFileTextStream.readLine();
+//    ProjectFile.close();
 
-    if( QFile(ProjectFileName).exists() ) { QStringList default_params; default_params << "WORKFLOW1" << "CLOSEPRJ"; set_defaults(default_params); }
-    else { QStringList default_params; default_params << "WORKFLOW1" << "OPENPRJ" << "IMPORTPRJ" << "NEWPRJ"; set_defaults(default_params); }
-}
+//    if( QFile(ProjectFileName).exists() ) { QStringList default_params; default_params << "WORKFLOW1" << "CLOSEPRJ"; set_defaults(default_params); }
+//    else { QStringList default_params; default_params << "WORKFLOW1" << "OPENPRJ" << "IMPORTPRJ" << "NEWPRJ"; set_defaults(default_params); }
+//}
 
-void PIHMgisDialog::on_pushButtonWorkFlow2_clicked()
-{
-    //??ui->PIHMgisToolBox->setCurrentIndex(2-1);
+//void PIHMgisDialog::on_pushButtonWorkFlow2_clicked()
+//{
+//    //??ui->PIHMgisToolBox->setCurrentIndex(2-1);
 
-    // ** Set Default PushButton
-    QStringList default_params; default_params << "WORKFLOW2" << "FILLPITS"; set_defaults(default_params);
-}
+//    // ** Set Default PushButton
+//    QStringList default_params; default_params << "WORKFLOW2" << "FILLPITS"; set_defaults(default_params);
+//}
 
-void PIHMgisDialog::on_pushButtonWorkFlow3_clicked()
-{
-    //??ui->PIHMgisToolBox->setCurrentIndex(3-1);
+//void PIHMgisDialog::on_pushButtonWorkFlow3_clicked()
+//{
+//    //??ui->PIHMgisToolBox->setCurrentIndex(3-1);
 
-    // ** Set Default PushButton
-    QStringList default_params; default_params << "WORKFLOW3" << "DISSOLVE"; set_defaults(default_params);
-}
+//    // ** Set Default PushButton
+//    QStringList default_params; default_params << "WORKFLOW3" << "DISSOLVE"; set_defaults(default_params);
+//}
 
-void PIHMgisDialog::on_pushButtonWorkFlow4_clicked()
-{
-    //??ui->PIHMgisToolBox->setCurrentIndex(4-1);
+//void PIHMgisDialog::on_pushButtonWorkFlow4_clicked()
+//{
+//    //??ui->PIHMgisToolBox->setCurrentIndex(4-1);
 
-    // ** Set Default PushButton
-    QStringList default_params; default_params << "WORKFLOW4" << "READSHP"; set_defaults(default_params);
-}
+//    // ** Set Default PushButton
+//    QStringList default_params; default_params << "WORKFLOW4" << "READSHP"; set_defaults(default_params);
+//}
 
-void PIHMgisDialog::on_pushButtonWorkFlow5_clicked()
-{
-    //??ui->PIHMgisToolBox->setCurrentIndex(5-1);
+//void PIHMgisDialog::on_pushButtonWorkFlow5_clicked()
+//{
+//    //??ui->PIHMgisToolBox->setCurrentIndex(5-1);
 
-    // ** Set Default PushButton
-    QStringList default_params; default_params << "WORKFLOW5" << "MESH"; set_defaults(default_params);
-}
+//    // ** Set Default PushButton
+//    QStringList default_params; default_params << "WORKFLOW5" << "MESH"; set_defaults(default_params);
+//}
 
-void PIHMgisDialog::on_pushButtonWorkFlow6_clicked()
-{
-    //??ui->PIHMgisToolBox->setCurrentIndex(6-1);
+//void PIHMgisDialog::on_pushButtonWorkFlow6_clicked()
+//{
+//    //??ui->PIHMgisToolBox->setCurrentIndex(6-1);
 
-    // ** Set Default PushButton
-    QStringList default_params; default_params << "WORKFLOW6" << "PIHM"; set_defaults(default_params);
-}
+//    // ** Set Default PushButton
+//    QStringList default_params; default_params << "WORKFLOW6" << "PIHM"; set_defaults(default_params);
+//}
 
-void PIHMgisDialog::on_pushButtonWorkFlow7_clicked()
-{
-    //??ui->PIHMgisToolBox->setCurrentIndex(7-1);
+//void PIHMgisDialog::on_pushButtonWorkFlow7_clicked()
+//{
+//    //??ui->PIHMgisToolBox->setCurrentIndex(7-1);
 
-    // ** Set Default PushButton
-    QStringList default_params; default_params << "WORKFLOW7" << "SPATIALW" << "SPATIALR" << "TIMEW" << "TIMER"; set_defaults(default_params);
-}
+//    // ** Set Default PushButton
+//    QStringList default_params; default_params << "WORKFLOW7" << "SPATIALW" << "SPATIALR" << "TIMEW" << "TIMER"; set_defaults(default_params);
+//}
 
 // **** END   :: PIHMgis Help & Resources Slots **** //
 

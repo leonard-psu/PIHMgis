@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mergevectorlayers.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,9 +10,7 @@
 #define UI_MERGEVECTORLAYERS_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
@@ -336,25 +334,25 @@ public:
 
     void retranslateUi(QDialog *MergeVectorLayers)
     {
-        MergeVectorLayers->setWindowTitle(QApplication::translate("MergeVectorLayers", ": :   Merge Vector Layers   : :", 0));
+        MergeVectorLayers->setWindowTitle(QApplication::translate("MergeVectorLayers", ": :   Merge Vector Layers   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("MergeVectorLayers", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("MergeVectorLayers", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("MergeVectorLayers", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("MergeVectorLayers", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("MergeVectorLayers", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("MergeVectorLayers", "Run", nullptr));
         groupBoxInput->setTitle(QString());
-        pushButtonAdd->setText(QApplication::translate("MergeVectorLayers", "Add", 0));
+        pushButtonAdd->setText(QApplication::translate("MergeVectorLayers", "Add", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("MergeVectorLayers", "Split Line Layers", 0));
-        pushButtonRemove->setText(QApplication::translate("MergeVectorLayers", "Remove", 0));
-        checkBoxMergeLayer->setText(QApplication::translate("MergeVectorLayers", "Load in GIS", 0));
-        pushButtonClear->setText(QApplication::translate("MergeVectorLayers", "Clear", 0));
-        label->setText(QApplication::translate("MergeVectorLayers", "* First Layer Should be River Layer", 0));
+        ___qtablewidgetitem->setText(QApplication::translate("MergeVectorLayers", "Split Line Layers", nullptr));
+        pushButtonRemove->setText(QApplication::translate("MergeVectorLayers", "Remove", nullptr));
+        checkBoxMergeLayer->setText(QApplication::translate("MergeVectorLayers", "Load in GIS", nullptr));
+        pushButtonClear->setText(QApplication::translate("MergeVectorLayers", "Clear", nullptr));
+        label->setText(QApplication::translate("MergeVectorLayers", "* First Layer Should be River Layer", nullptr));
         groupBoxButtons_2->setTitle(QString());
-        pushButtonMergeLayer->setText(QApplication::translate("MergeVectorLayers", "Browse", 0));
-        textLabel1_2->setText(QApplication::translate("MergeVectorLayers", "Merge Vector Layer", 0));
+        pushButtonMergeLayer->setText(QApplication::translate("MergeVectorLayers", "Browse", nullptr));
+        textLabel1_2->setText(QApplication::translate("MergeVectorLayers", "Merge Vector Layer", nullptr));
     } // retranslateUi
 
 };

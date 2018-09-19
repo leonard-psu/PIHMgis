@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'flowgrids.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_FLOWGRIDS_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -325,25 +322,25 @@ public:
 
     void retranslateUi(QDialog *FlowGrids)
     {
-        FlowGrids->setWindowTitle(QApplication::translate("FlowGrids", ": :   Flow Grids   : :", 0));
-        groupBoxInput->setTitle(QApplication::translate("FlowGrids", "Input", 0));
-        pushButtonFillPits->setText(QApplication::translate("FlowGrids", "Browse", 0));
+        FlowGrids->setWindowTitle(QApplication::translate("FlowGrids", ": :   Flow Grids   : :", nullptr));
+        groupBoxInput->setTitle(QApplication::translate("FlowGrids", "Input", nullptr));
+        pushButtonFillPits->setText(QApplication::translate("FlowGrids", "Browse", nullptr));
         textLabel1->setText(QApplication::translate("FlowGrids", "Pit-Filled/\n"
-"DEM Grid", 0));
-        groupBoxInput_2->setTitle(QApplication::translate("FlowGrids", "Output", 0));
-        textLabel1_2->setText(QApplication::translate("FlowGrids", "Flow Dir. Grid", 0));
-        checkBoxFlowDirGrid->setText(QApplication::translate("FlowGrids", "Load in GIS", 0));
-        pushButtonFlowAccGrid->setText(QApplication::translate("FlowGrids", "Browse", 0));
-        textLabel1_2_2->setText(QApplication::translate("FlowGrids", "Flow Acc. Grid", 0));
-        checkBoxFlowAccGrid->setText(QApplication::translate("FlowGrids", "Load in GIS", 0));
-        pushButtonsFlowDirGrid->setText(QApplication::translate("FlowGrids", "Browse", 0));
+"DEM Grid", nullptr));
+        groupBoxInput_2->setTitle(QApplication::translate("FlowGrids", "Output", nullptr));
+        textLabel1_2->setText(QApplication::translate("FlowGrids", "Flow Dir. Grid", nullptr));
+        checkBoxFlowDirGrid->setText(QApplication::translate("FlowGrids", "Load in GIS", nullptr));
+        pushButtonFlowAccGrid->setText(QApplication::translate("FlowGrids", "Browse", nullptr));
+        textLabel1_2_2->setText(QApplication::translate("FlowGrids", "Flow Acc. Grid", nullptr));
+        checkBoxFlowAccGrid->setText(QApplication::translate("FlowGrids", "Load in GIS", nullptr));
+        pushButtonsFlowDirGrid->setText(QApplication::translate("FlowGrids", "Browse", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("FlowGrids", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("FlowGrids", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("FlowGrids", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("FlowGrids", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("FlowGrids", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("FlowGrids", "Run", nullptr));
     } // retranslateUi
 
 };

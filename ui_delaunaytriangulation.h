@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'delaunaytriangulation.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_DELAUNAYTRIANGULATION_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -310,16 +307,16 @@ public:
 
     void retranslateUi(QDialog *DelaunayTriangulation)
     {
-        DelaunayTriangulation->setWindowTitle(QApplication::translate("DelaunayTriangulation", ": :   Delaunay Triangulations   : :", 0));
-        groupBoxOutput->setTitle(QApplication::translate("DelaunayTriangulation", "Options", 0));
+        DelaunayTriangulation->setWindowTitle(QApplication::translate("DelaunayTriangulation", ": :   Delaunay Triangulations   : :", nullptr));
+        groupBoxOutput->setTitle(QApplication::translate("DelaunayTriangulation", "Options", nullptr));
 #ifndef QT_NO_TOOLTIP
-        checkBoxAngle->setToolTip(QApplication::translate("DelaunayTriangulation", "Minimum Angle Quality Constrain", 0));
+        checkBoxAngle->setToolTip(QApplication::translate("DelaunayTriangulation", "Minimum Angle Quality Constrain", nullptr));
 #endif // QT_NO_TOOLTIP
-        checkBoxAngle->setText(QApplication::translate("DelaunayTriangulation", "Angle (degrees)", 0));
+        checkBoxAngle->setText(QApplication::translate("DelaunayTriangulation", "Angle (degrees)", nullptr));
 #ifndef QT_NO_TOOLTIP
-        checkBoxArea->setToolTip(QApplication::translate("DelaunayTriangulation", "Maximum Area Quality Constrain", 0));
+        checkBoxArea->setToolTip(QApplication::translate("DelaunayTriangulation", "Maximum Area Quality Constrain", nullptr));
 #endif // QT_NO_TOOLTIP
-        checkBoxArea->setText(QApplication::translate("DelaunayTriangulation", "Area (sq. meters)", 0));
+        checkBoxArea->setText(QApplication::translate("DelaunayTriangulation", "Area (sq. meters)", nullptr));
 #ifndef QT_NO_TOOLTIP
         checkBoxOthers->setToolTip(QApplication::translate("DelaunayTriangulation", "e  output a list of edges of the triangulation\n"
 "v  output the Voronoi diagram associated with the triangulation\n"
@@ -327,19 +324,19 @@ public:
 "O ignore the holes in the poly file\n"
 "Y prohibit the insertion of Steiner points on mesh boundary\n"
 "YY prohibits the insertion of Steiner point on any segment\n"
-"i  use the incremental algorith rather than divide and conquer", 0));
+"i  use the incremental algorith rather than divide and conquer", nullptr));
 #endif // QT_NO_TOOLTIP
-        checkBoxOthers->setText(QApplication::translate("DelaunayTriangulation", "Other Options", 0));
+        checkBoxOthers->setText(QApplication::translate("DelaunayTriangulation", "Other Options", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("DelaunayTriangulation", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("DelaunayTriangulation", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("DelaunayTriangulation", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("DelaunayTriangulation", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("DelaunayTriangulation", "Run", 0));
-        groupBoxInput->setTitle(QApplication::translate("DelaunayTriangulation", "Input", 0));
-        pushButtonPSLG->setText(QApplication::translate("DelaunayTriangulation", "Browse", 0));
-        textLabel1->setText(QApplication::translate("DelaunayTriangulation", "PSLG (.poly) File", 0));
+        pushButtonRun->setText(QApplication::translate("DelaunayTriangulation", "Run", nullptr));
+        groupBoxInput->setTitle(QApplication::translate("DelaunayTriangulation", "Input", nullptr));
+        pushButtonPSLG->setText(QApplication::translate("DelaunayTriangulation", "Browse", nullptr));
+        textLabel1->setText(QApplication::translate("DelaunayTriangulation", "PSLG (.poly) File", nullptr));
     } // retranslateUi
 
 };

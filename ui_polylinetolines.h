@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'polylinetolines.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,9 +10,7 @@
 #define UI_POLYLINETOLINES_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
@@ -320,23 +318,23 @@ public:
 
     void retranslateUi(QDialog *PolylineToLines)
     {
-        PolylineToLines->setWindowTitle(QApplication::translate("PolylineToLines", ": :   Polyline To Split Lines   : :", 0));
+        PolylineToLines->setWindowTitle(QApplication::translate("PolylineToLines", ": :   Polyline To Split Lines   : :", nullptr));
         groupBoxInput->setTitle(QString());
-        pushButtonAdd->setText(QApplication::translate("PolylineToLines", "Add", 0));
+        pushButtonAdd->setText(QApplication::translate("PolylineToLines", "Add", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("PolylineToLines", "Polyline Layers", 0));
+        ___qtablewidgetitem->setText(QApplication::translate("PolylineToLines", "Polyline Layers", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("PolylineToLines", "Split Line Layers", 0));
-        pushButtonRemove->setText(QApplication::translate("PolylineToLines", "Remove", 0));
-        checkBoxSplitLine->setText(QApplication::translate("PolylineToLines", "Load in GIS", 0));
-        pushButtonClear->setText(QApplication::translate("PolylineToLines", "Clear", 0));
+        ___qtablewidgetitem1->setText(QApplication::translate("PolylineToLines", "Split Line Layers", nullptr));
+        pushButtonRemove->setText(QApplication::translate("PolylineToLines", "Remove", nullptr));
+        checkBoxSplitLine->setText(QApplication::translate("PolylineToLines", "Load in GIS", nullptr));
+        pushButtonClear->setText(QApplication::translate("PolylineToLines", "Clear", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("PolylineToLines", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("PolylineToLines", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("PolylineToLines", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("PolylineToLines", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("PolylineToLines", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("PolylineToLines", "Run", nullptr));
     } // retranslateUi
 
 };

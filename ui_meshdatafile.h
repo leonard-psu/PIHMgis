@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'meshdatafile.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_MESHDATAFILE_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -379,32 +376,32 @@ public:
 
     void retranslateUi(QDialog *MeshDataFile)
     {
-        MeshDataFile->setWindowTitle(QApplication::translate("MeshDataFile", ": :   Mesh Data File   : :", 0));
+        MeshDataFile->setWindowTitle(QApplication::translate("MeshDataFile", ": :   Mesh Data File   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("MeshDataFile", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("MeshDataFile", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("MeshDataFile", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("MeshDataFile", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("MeshDataFile", "Run", 0));
-        groupBoxInput1->setTitle(QApplication::translate("MeshDataFile", "Input", 0));
-        pushButtonElementFile->setText(QApplication::translate("MeshDataFile", "Browse", 0));
-        textLabel1->setText(QApplication::translate("MeshDataFile", "Element File", 0));
-        textLabel1_3->setText(QApplication::translate("MeshDataFile", "Node File", 0));
-        pushButtonNodeFile->setText(QApplication::translate("MeshDataFile", "Browse", 0));
-        textLabel1_4->setText(QApplication::translate("MeshDataFile", "Neighbour File", 0));
-        pushButtonNeighbourFile->setText(QApplication::translate("MeshDataFile", "Browse", 0));
-        textLabel1_5->setText(QApplication::translate("MeshDataFile", "River Shape File", 0));
-        pushButtonRiverFile->setText(QApplication::translate("MeshDataFile", "Browse", 0));
-        groupBoxOutput->setTitle(QApplication::translate("MeshDataFile", "Output", 0));
-        textLabel1_2->setText(QApplication::translate("MeshDataFile", "Mesh Data File", 0));
-        pushButtonMeshDataFile->setText(QApplication::translate("MeshDataFile", "Browse", 0));
-        groupBoxInput2->setTitle(QApplication::translate("MeshDataFile", "Elevation", 0));
-        pushButtonSurfaceElevationFile->setText(QApplication::translate("MeshDataFile", "Browse", 0));
-        textLabel1_6->setText(QApplication::translate("MeshDataFile", "Surface", 0));
+        pushButtonRun->setText(QApplication::translate("MeshDataFile", "Run", nullptr));
+        groupBoxInput1->setTitle(QApplication::translate("MeshDataFile", "Input", nullptr));
+        pushButtonElementFile->setText(QApplication::translate("MeshDataFile", "Browse", nullptr));
+        textLabel1->setText(QApplication::translate("MeshDataFile", "Element File", nullptr));
+        textLabel1_3->setText(QApplication::translate("MeshDataFile", "Node File", nullptr));
+        pushButtonNodeFile->setText(QApplication::translate("MeshDataFile", "Browse", nullptr));
+        textLabel1_4->setText(QApplication::translate("MeshDataFile", "Neighbour File", nullptr));
+        pushButtonNeighbourFile->setText(QApplication::translate("MeshDataFile", "Browse", nullptr));
+        textLabel1_5->setText(QApplication::translate("MeshDataFile", "River Shape File", nullptr));
+        pushButtonRiverFile->setText(QApplication::translate("MeshDataFile", "Browse", nullptr));
+        groupBoxOutput->setTitle(QApplication::translate("MeshDataFile", "Output", nullptr));
+        textLabel1_2->setText(QApplication::translate("MeshDataFile", "Mesh Data File", nullptr));
+        pushButtonMeshDataFile->setText(QApplication::translate("MeshDataFile", "Browse", nullptr));
+        groupBoxInput2->setTitle(QApplication::translate("MeshDataFile", "Elevation", nullptr));
+        pushButtonSurfaceElevationFile->setText(QApplication::translate("MeshDataFile", "Browse", nullptr));
+        textLabel1_6->setText(QApplication::translate("MeshDataFile", "Surface", nullptr));
         textLabelSubsurface->setText(QApplication::translate("MeshDataFile", "Subsurface\n"
-"Thickness (m)", 0));
-        pushButtonSubsurfaceThickness->setText(QApplication::translate("MeshDataFile", "Browse", 0));
+"Thickness (m)", nullptr));
+        pushButtonSubsurfaceThickness->setText(QApplication::translate("MeshDataFile", "Browse", nullptr));
         checkBoxSubsurfaceThickness->setText(QString());
     } // retranslateUi
 

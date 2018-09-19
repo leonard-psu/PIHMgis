@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'importproject.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,13 +10,10 @@
 #define UI_IMPORTPROJECT_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -113,15 +110,22 @@ public:
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setGeometry(QRect(11, 18, 113, 32));
+        QFont font;
+        font.setFamily(QStringLiteral("Arial"));
+        font.setPointSize(12);
+        font.setBold(true);
+        font.setWeight(75);
+        pushButtonHelp->setFont(font);
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
         pushButtonClose->setGeometry(QRect(307, 18, 113, 32));
+        pushButtonClose->setFont(font);
         pushButtonClose->setAutoDefault(false);
-        pushButtonClose->setDefault(false);
         pushButtonImport = new QPushButton(groupBoxButtons);
         pushButtonImport->setObjectName(QStringLiteral("pushButtonImport"));
         pushButtonImport->setGeometry(QRect(441, 18, 131, 32));
+        pushButtonImport->setFont(font);
         pushButtonImport->setAutoDefault(false);
         groupBox = new QGroupBox(ImportProject);
         groupBox->setObjectName(QStringLiteral("groupBox"));
@@ -129,35 +133,38 @@ public:
         lineEdit = new QLineEdit(groupBox);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
         lineEdit->setGeometry(QRect(167, 27, 281, 22));
-        QFont font;
-        font.setBold(true);
-        font.setWeight(75);
-        lineEdit->setFont(font);
+        QFont font1;
+        font1.setBold(true);
+        font1.setWeight(75);
+        lineEdit->setFont(font1);
         label_2 = new QLabel(groupBox);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(20, 28, 111, 17));
+        label_2->setFont(font);
         pushButtonProject = new QPushButton(groupBox);
         pushButtonProject->setObjectName(QStringLiteral("pushButtonProject"));
         pushButtonProject->setGeometry(QRect(460, 24, 113, 32));
+        pushButtonProject->setFont(font);
         pushButtonProject->setAutoDefault(false);
-        pushButtonProject->setDefault(false);
         lineEditOld = new QLineEdit(groupBox);
         lineEditOld->setObjectName(QStringLiteral("lineEditOld"));
         lineEditOld->setGeometry(QRect(167, 70, 281, 22));
-        lineEditOld->setFont(font);
+        lineEditOld->setFont(font1);
         label_3 = new QLabel(groupBox);
         label_3->setObjectName(QStringLiteral("label_3"));
         label_3->setGeometry(QRect(20, 71, 121, 17));
+        label_3->setFont(font);
         lineEditNew = new QLineEdit(groupBox);
         lineEditNew->setObjectName(QStringLiteral("lineEditNew"));
         lineEditNew->setGeometry(QRect(167, 116, 281, 22));
-        lineEditNew->setFont(font);
+        lineEditNew->setFont(font1);
         label_4 = new QLabel(groupBox);
         label_4->setObjectName(QStringLiteral("label_4"));
         label_4->setGeometry(QRect(20, 117, 131, 17));
+        label_4->setFont(font);
         label = new QLabel(ImportProject);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(165, 20, 281, 31));
+        label->setGeometry(QRect(130, 20, 351, 31));
         label->setAlignment(Qt::AlignCenter);
         BorderTop = new QFrame(ImportProject);
         BorderTop->setObjectName(QStringLiteral("BorderTop"));
@@ -290,44 +297,48 @@ public:
 
         retranslateUi(ImportProject);
 
+        pushButtonClose->setDefault(false);
+        pushButtonProject->setDefault(false);
+
+
         QMetaObject::connectSlotsByName(ImportProject);
     } // setupUi
 
     void retranslateUi(QDialog *ImportProject)
     {
-        ImportProject->setWindowTitle(QApplication::translate("ImportProject", ": :   Import Project   : :", 0));
+        ImportProject->setWindowTitle(QApplication::translate("ImportProject", ": :   Import Project   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("ImportProject", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("ImportProject", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("ImportProject", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("ImportProject", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonImport->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonImport->setText(QApplication::translate("ImportProject", " Import Project ", 0));
+        pushButtonImport->setText(QApplication::translate("ImportProject", " Import Project ", nullptr));
         groupBox->setTitle(QString());
 #ifndef QT_NO_TOOLTIP
-        lineEdit->setToolTip(QApplication::translate("ImportProject", "Existing Project is a project that was not created on some other computer or Home directory structure has been altered (by moving or renaming).", 0));
+        lineEdit->setToolTip(QApplication::translate("ImportProject", "Existing Project is a project that was not created on some other computer or Home directory structure has been altered (by moving or renaming).", nullptr));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
-        label_2->setToolTip(QApplication::translate("ImportProject", "Existing Project is a project that was not created on some other computer or Home directory structure has been altered (by moving or renaming).", 0));
+        label_2->setToolTip(QApplication::translate("ImportProject", "Existing Project is a project that was not created on some other computer or Home directory structure has been altered (by moving or renaming).", nullptr));
 #endif // QT_NO_TOOLTIP
-        label_2->setText(QApplication::translate("ImportProject", "Project File", 0));
+        label_2->setText(QApplication::translate("ImportProject", "Project File", nullptr));
 #ifndef QT_NO_TOOLTIP
-        pushButtonProject->setToolTip(QApplication::translate("ImportProject", "Existing Project is a project that was not created on some other computer or Home directory structure has been altered (by moving or renaming).", 0));
+        pushButtonProject->setToolTip(QApplication::translate("ImportProject", "Existing Project is a project that was not created on some other computer or Home directory structure has been altered (by moving or renaming).", nullptr));
 #endif // QT_NO_TOOLTIP
-        pushButtonProject->setText(QApplication::translate("ImportProject", "Browse...", 0));
+        pushButtonProject->setText(QApplication::translate("ImportProject", "Browse...", nullptr));
 #ifndef QT_NO_TOOLTIP
-        label_3->setToolTip(QApplication::translate("ImportProject", "Existing Project is a project that was not created on some other computer.", 0));
+        label_3->setToolTip(QApplication::translate("ImportProject", "Existing Project is a project that was not created on some other computer.", nullptr));
 #endif // QT_NO_TOOLTIP
-        label_3->setText(QApplication::translate("ImportProject", "Old Project Folder", 0));
+        label_3->setText(QApplication::translate("ImportProject", "Old Project Folder", nullptr));
 #ifndef QT_NO_TOOLTIP
-        label_4->setToolTip(QApplication::translate("ImportProject", "Existing Project is a project that was not created on some other computer.", 0));
+        label_4->setToolTip(QApplication::translate("ImportProject", "Existing Project is a project that was not created on some other computer.", nullptr));
 #endif // QT_NO_TOOLTIP
-        label_4->setText(QApplication::translate("ImportProject", "New Project Folder", 0));
+        label_4->setText(QApplication::translate("ImportProject", "New Project Folder", nullptr));
         label->setText(QApplication::translate("ImportProject", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:18pt;\">Import Existing PIHMgis Project</span></p></body></html>", 0));
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Lucida Grande'; font-size:14pt; font-weight:600;\">Import Existing PIHMgis Project</span></p></body></html>", nullptr));
     } // retranslateUi
 
 };

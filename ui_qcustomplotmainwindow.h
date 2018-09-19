@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'qcustomplotmainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -12,8 +12,6 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
@@ -122,10 +120,10 @@ public:
 
     void retranslateUi(QMainWindow *QCustomPlotMainWindow)
     {
-        QCustomPlotMainWindow->setWindowTitle(QApplication::translate("QCustomPlotMainWindow", "MainWindow", 0));
-        actionSave_as_PDF->setText(QApplication::translate("QCustomPlotMainWindow", "Save as PDF", 0));
-        actionSave_as_PDF_2->setText(QApplication::translate("QCustomPlotMainWindow", "Save as PDF", 0));
-        actionSave_as_PDF_3->setText(QApplication::translate("QCustomPlotMainWindow", "Save as PDF", 0));
+        QCustomPlotMainWindow->setWindowTitle(QApplication::translate("QCustomPlotMainWindow", "MainWindow", nullptr));
+        actionSave_as_PDF->setText(QApplication::translate("QCustomPlotMainWindow", "Save as PDF", nullptr));
+        actionSave_as_PDF_2->setText(QApplication::translate("QCustomPlotMainWindow", "Save as PDF", nullptr));
+        actionSave_as_PDF_3->setText(QApplication::translate("QCustomPlotMainWindow", "Save as PDF", nullptr));
     } // retranslateUi
 
 };

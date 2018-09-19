@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'readtopology.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,13 +10,10 @@
 #define UI_READTOPOLOGY_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -293,20 +290,20 @@ public:
 
     void retranslateUi(QDialog *ReadTopology)
     {
-        ReadTopology->setWindowTitle(QApplication::translate("ReadTopology", ": :   Read Topology   : :", 0));
-        groupBoxInput->setTitle(QApplication::translate("ReadTopology", "Input", 0));
-        pushButtonMerge->setText(QApplication::translate("ReadTopology", "Browse", 0));
-        textLabel1->setText(QApplication::translate("ReadTopology", "Merge Vector", 0));
+        ReadTopology->setWindowTitle(QApplication::translate("ReadTopology", ": :   Read Topology   : :", nullptr));
+        groupBoxInput->setTitle(QApplication::translate("ReadTopology", "Input", nullptr));
+        pushButtonMerge->setText(QApplication::translate("ReadTopology", "Browse", nullptr));
+        textLabel1->setText(QApplication::translate("ReadTopology", "Merge Vector", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("ReadTopology", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("ReadTopology", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("ReadTopology", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("ReadTopology", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("ReadTopology", "Run", 0));
-        groupBoxOutput->setTitle(QApplication::translate("ReadTopology", "Output", 0));
-        pushButtonPSLG->setText(QApplication::translate("ReadTopology", "Browse", 0));
-        textLabel1_2->setText(QApplication::translate("ReadTopology", "PSLG (.poly) File", 0));
+        pushButtonRun->setText(QApplication::translate("ReadTopology", "Run", nullptr));
+        groupBoxOutput->setTitle(QApplication::translate("ReadTopology", "Output", nullptr));
+        pushButtonPSLG->setText(QApplication::translate("ReadTopology", "Browse", nullptr));
+        textLabel1_2->setText(QApplication::translate("ReadTopology", "PSLG (.poly) File", nullptr));
     } // retranslateUi
 
 };

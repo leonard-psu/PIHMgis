@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'dissolvepolygons.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,9 +10,7 @@
 #define UI_DISSOLVEPOLYGONS_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
@@ -320,23 +318,23 @@ public:
 
     void retranslateUi(QDialog *DissolvePolygons)
     {
-        DissolvePolygons->setWindowTitle(QApplication::translate("DissolvePolygons", ": :   Dissolve Polygons   : :", 0));
+        DissolvePolygons->setWindowTitle(QApplication::translate("DissolvePolygons", ": :   Dissolve Polygons   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("DissolvePolygons", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("DissolvePolygons", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("DissolvePolygons", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("DissolvePolygons", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("DissolvePolygons", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("DissolvePolygons", "Run", nullptr));
         groupBoxInput->setTitle(QString());
-        pushButtonAdd->setText(QApplication::translate("DissolvePolygons", "Add", 0));
+        pushButtonAdd->setText(QApplication::translate("DissolvePolygons", "Add", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("DissolvePolygons", "Input Layers", 0));
+        ___qtablewidgetitem->setText(QApplication::translate("DissolvePolygons", "Input Layers", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("DissolvePolygons", "Dissolved Layers", 0));
-        pushButtonRemove->setText(QApplication::translate("DissolvePolygons", "Remove", 0));
-        checkBoxDissolvePolygons->setText(QApplication::translate("DissolvePolygons", "Load in GIS", 0));
-        pushButtonClear->setText(QApplication::translate("DissolvePolygons", "Clear", 0));
+        ___qtablewidgetitem1->setText(QApplication::translate("DissolvePolygons", "Dissolved Layers", nullptr));
+        pushButtonRemove->setText(QApplication::translate("DissolvePolygons", "Remove", nullptr));
+        checkBoxDissolvePolygons->setText(QApplication::translate("DissolvePolygons", "Load in GIS", nullptr));
+        pushButtonClear->setText(QApplication::translate("DissolvePolygons", "Clear", nullptr));
     } // retranslateUi
 
 };

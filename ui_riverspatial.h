@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'riverspatial.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_RIVERSPATIAL_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -317,6 +314,12 @@ public:
         spinBoxStopTime->setMaximum(999999999);
         spinBoxStopTime->setValue(2);
         comboBoxStartStop = new QComboBox(groupBoxOutput);
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
         comboBoxStartStop->setObjectName(QStringLiteral("comboBoxStartStop"));
         comboBoxStartStop->setGeometry(QRect(336, 164, 95, 28));
         textLabel2_8 = new QLabel(groupBoxOutput);
@@ -329,6 +332,22 @@ public:
         spinBoxNumBreaks->setMaximum(999999999);
         spinBoxNumBreaks->setValue(1);
         comboBoxPlotVariable = new QComboBox(groupBoxOutput);
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
         comboBoxPlotVariable->setObjectName(QStringLiteral("comboBoxPlotVariable"));
         comboBoxPlotVariable->setGeometry(QRect(142, 118, 221, 28));
 
@@ -342,53 +361,49 @@ public:
 
     void retranslateUi(QDialog *RiverSpatial)
     {
-        RiverSpatial->setWindowTitle(QApplication::translate("RiverSpatial", ": :   River Spatial Analysis   : :", 0));
+        RiverSpatial->setWindowTitle(QApplication::translate("RiverSpatial", ": :   River Spatial Analysis   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("RiverSpatial", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("RiverSpatial", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("RiverSpatial", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("RiverSpatial", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("RiverSpatial", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("RiverSpatial", "Run", nullptr));
         groupBoxOutput->setTitle(QString());
-        textLabel2->setText(QApplication::translate("RiverSpatial", "Output Data Folder", 0));
-        pushButtonOutputDataFolder->setText(QApplication::translate("RiverSpatial", "Browse", 0));
-        textLabel2_2->setText(QApplication::translate("RiverSpatial", "Data Key (ID)", 0));
-        textLabel2_3->setText(QApplication::translate("RiverSpatial", "Plot Variable", 0));
-        textLabel2_5->setText(QApplication::translate("RiverSpatial", "River Shape File", 0));
-        pushButtonRiverShapeFile->setText(QApplication::translate("RiverSpatial", "Browse", 0));
-        textLabel2_6->setText(QApplication::translate("RiverSpatial", "Time Interval", 0));
-        textLabel2_7->setText(QApplication::translate("RiverSpatial", "to", 0));
-        comboBoxStartStop->clear();
-        comboBoxStartStop->insertItems(0, QStringList()
-         << QApplication::translate("RiverSpatial", "Minutes", 0)
-         << QApplication::translate("RiverSpatial", "Hours", 0)
-         << QApplication::translate("RiverSpatial", "Days", 0)
-         << QApplication::translate("RiverSpatial", "Weeks", 0)
-         << QApplication::translate("RiverSpatial", "Months", 0)
-         << QApplication::translate("RiverSpatial", "Years", 0)
-        );
-        comboBoxStartStop->setCurrentText(QApplication::translate("RiverSpatial", "Minutes", 0));
-        textLabel2_8->setText(QApplication::translate("RiverSpatial", "into", 0));
-        comboBoxPlotVariable->clear();
-        comboBoxPlotVariable->insertItems(0, QStringList()
-         << QApplication::translate("RiverSpatial", "River Outflow", 0)
-         << QApplication::translate("RiverSpatial", "River Inflow", 0)
-         << QApplication::translate("RiverSpatial", "River Storage", 0)
-         << QApplication::translate("RiverSpatial", "River Surfaceflow", 0)
-         << QApplication::translate("RiverSpatial", "River Baseflow", 0)
-         << QApplication::translate("RiverSpatial", "River Surfaceflow Left", 0)
-         << QApplication::translate("RiverSpatial", "River Surfaceflow Right", 0)
-         << QApplication::translate("RiverSpatial", "River Baseflow Left", 0)
-         << QApplication::translate("RiverSpatial", "River Baseflow Right", 0)
-         << QApplication::translate("RiverSpatial", "River Seepage to Bed", 0)
-         << QApplication::translate("RiverSpatial", "Riverbed Outflow", 0)
-         << QApplication::translate("RiverSpatial", "Riverbed Inflow", 0)
-         << QApplication::translate("RiverSpatial", "Riverbed Storage", 0)
-         << QApplication::translate("RiverSpatial", "Riverbed Baseflow ", 0)
-         << QApplication::translate("RiverSpatial", "Riverbed Baseflow Left", 0)
-         << QApplication::translate("RiverSpatial", "Riverbed Baseflow Right", 0)
-        );
+        textLabel2->setText(QApplication::translate("RiverSpatial", "Output Data Folder", nullptr));
+        pushButtonOutputDataFolder->setText(QApplication::translate("RiverSpatial", "Browse", nullptr));
+        textLabel2_2->setText(QApplication::translate("RiverSpatial", "Data Key (ID)", nullptr));
+        textLabel2_3->setText(QApplication::translate("RiverSpatial", "Plot Variable", nullptr));
+        textLabel2_5->setText(QApplication::translate("RiverSpatial", "River Shape File", nullptr));
+        pushButtonRiverShapeFile->setText(QApplication::translate("RiverSpatial", "Browse", nullptr));
+        textLabel2_6->setText(QApplication::translate("RiverSpatial", "Time Interval", nullptr));
+        textLabel2_7->setText(QApplication::translate("RiverSpatial", "to", nullptr));
+        comboBoxStartStop->setItemText(0, QApplication::translate("RiverSpatial", "Minutes", nullptr));
+        comboBoxStartStop->setItemText(1, QApplication::translate("RiverSpatial", "Hours", nullptr));
+        comboBoxStartStop->setItemText(2, QApplication::translate("RiverSpatial", "Days", nullptr));
+        comboBoxStartStop->setItemText(3, QApplication::translate("RiverSpatial", "Weeks", nullptr));
+        comboBoxStartStop->setItemText(4, QApplication::translate("RiverSpatial", "Months", nullptr));
+        comboBoxStartStop->setItemText(5, QApplication::translate("RiverSpatial", "Years", nullptr));
+
+        comboBoxStartStop->setCurrentText(QApplication::translate("RiverSpatial", "Minutes", nullptr));
+        textLabel2_8->setText(QApplication::translate("RiverSpatial", "into", nullptr));
+        comboBoxPlotVariable->setItemText(0, QApplication::translate("RiverSpatial", "River Outflow", nullptr));
+        comboBoxPlotVariable->setItemText(1, QApplication::translate("RiverSpatial", "River Inflow", nullptr));
+        comboBoxPlotVariable->setItemText(2, QApplication::translate("RiverSpatial", "River Storage", nullptr));
+        comboBoxPlotVariable->setItemText(3, QApplication::translate("RiverSpatial", "River Surfaceflow", nullptr));
+        comboBoxPlotVariable->setItemText(4, QApplication::translate("RiverSpatial", "River Baseflow", nullptr));
+        comboBoxPlotVariable->setItemText(5, QApplication::translate("RiverSpatial", "River Surfaceflow Left", nullptr));
+        comboBoxPlotVariable->setItemText(6, QApplication::translate("RiverSpatial", "River Surfaceflow Right", nullptr));
+        comboBoxPlotVariable->setItemText(7, QApplication::translate("RiverSpatial", "River Baseflow Left", nullptr));
+        comboBoxPlotVariable->setItemText(8, QApplication::translate("RiverSpatial", "River Baseflow Right", nullptr));
+        comboBoxPlotVariable->setItemText(9, QApplication::translate("RiverSpatial", "River Seepage to Bed", nullptr));
+        comboBoxPlotVariable->setItemText(10, QApplication::translate("RiverSpatial", "Riverbed Outflow", nullptr));
+        comboBoxPlotVariable->setItemText(11, QApplication::translate("RiverSpatial", "Riverbed Inflow", nullptr));
+        comboBoxPlotVariable->setItemText(12, QApplication::translate("RiverSpatial", "Riverbed Storage", nullptr));
+        comboBoxPlotVariable->setItemText(13, QApplication::translate("RiverSpatial", "Riverbed Baseflow ", nullptr));
+        comboBoxPlotVariable->setItemText(14, QApplication::translate("RiverSpatial", "Riverbed Baseflow Left", nullptr));
+        comboBoxPlotVariable->setItemText(15, QApplication::translate("RiverSpatial", "Riverbed Baseflow Right", nullptr));
+
     } // retranslateUi
 
 };

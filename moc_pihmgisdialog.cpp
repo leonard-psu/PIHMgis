@@ -79,13 +79,13 @@ QT_MOC_LITERAL(46, 1968, 56)
     },
     "PIHMgisDialog\0set_defaults\0\0DEFAULT_PARAM\0"
     "on_pushButtonWorkFlow0_clicked\0"
-    "on_pushButtonWorkFlow1_clicked\0"
-    "on_pushButtonWorkFlow2_clicked\0"
-    "on_pushButtonWorkFlow3_clicked\0"
-    "on_pushButtonWorkFlow4_clicked\0"
-    "on_pushButtonWorkFlow5_clicked\0"
-    "on_pushButtonWorkFlow6_clicked\0"
-    "on_pushButtonWorkFlow7_clicked\0"
+//    "on_pushButtonWorkFlow1_clicked\0"
+//    "on_pushButtonWorkFlow2_clicked\0"
+//    "on_pushButtonWorkFlow3_clicked\0"
+//    "on_pushButtonWorkFlow4_clicked\0"
+//    "on_pushButtonWorkFlow5_clicked\0"
+//    "on_pushButtonWorkFlow6_clicked\0"
+//    "on_pushButtonWorkFlow7_clicked\0"
     "on_pushButtonPIHMgisProjectNew_clicked\0"
     "on_pushButtonPIHMgisProjectOpen_clicked\0"
     "on_pushButtonPIHMgisProjectImport_clicked\0"
@@ -239,13 +239,13 @@ void PIHMgisDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         switch (_id) {
         case 0: _t->set_defaults((*reinterpret_cast< QStringList(*)>(_a[1]))); break;
         case 1: _t->on_pushButtonWorkFlow0_clicked(); break;
-        case 2: _t->on_pushButtonWorkFlow1_clicked(); break;
-        case 3: _t->on_pushButtonWorkFlow2_clicked(); break;
-        case 4: _t->on_pushButtonWorkFlow3_clicked(); break;
-        case 5: _t->on_pushButtonWorkFlow4_clicked(); break;
-        case 6: _t->on_pushButtonWorkFlow5_clicked(); break;
-        case 7: _t->on_pushButtonWorkFlow6_clicked(); break;
-        case 8: _t->on_pushButtonWorkFlow7_clicked(); break;
+//        case 2: _t->on_pushButtonWorkFlow1_clicked(); break;
+//        case 3: _t->on_pushButtonWorkFlow2_clicked(); break;
+//        case 4: _t->on_pushButtonWorkFlow3_clicked(); break;
+//        case 5: _t->on_pushButtonWorkFlow4_clicked(); break;
+//        case 6: _t->on_pushButtonWorkFlow5_clicked(); break;
+//        case 7: _t->on_pushButtonWorkFlow6_clicked(); break;
+//        case 8: _t->on_pushButtonWorkFlow7_clicked(); break;
         case 9: _t->on_pushButtonPIHMgisProjectNew_clicked(); break;
         case 10: _t->on_pushButtonPIHMgisProjectOpen_clicked(); break;
         case 11: _t->on_pushButtonPIHMgisProjectImport_clicked(); break;

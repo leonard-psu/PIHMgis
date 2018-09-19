@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'simplifypolylines.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,9 +10,7 @@
 #define UI_SIMPLIFYPOLYLINES_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
@@ -323,25 +321,25 @@ public:
 
     void retranslateUi(QDialog *SimplifyPolylines)
     {
-        SimplifyPolylines->setWindowTitle(QApplication::translate("SimplifyPolylines", ": :   Simplify Polylines   : :", 0));
+        SimplifyPolylines->setWindowTitle(QApplication::translate("SimplifyPolylines", ": :   Simplify Polylines   : :", nullptr));
         groupBoxInput->setTitle(QString());
-        pushButtonAdd->setText(QApplication::translate("SimplifyPolylines", "Add", 0));
+        pushButtonAdd->setText(QApplication::translate("SimplifyPolylines", "Add", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("SimplifyPolylines", "Polyline Layers", 0));
+        ___qtablewidgetitem->setText(QApplication::translate("SimplifyPolylines", "Polyline Layers", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("SimplifyPolylines", "Tol", 0));
+        ___qtablewidgetitem1->setText(QApplication::translate("SimplifyPolylines", "Tol", nullptr));
         QTableWidgetItem *___qtablewidgetitem2 = tableWidget->horizontalHeaderItem(2);
-        ___qtablewidgetitem2->setText(QApplication::translate("SimplifyPolylines", "Simplified Layers", 0));
-        pushButtonRemove->setText(QApplication::translate("SimplifyPolylines", "Remove", 0));
-        checkBoxSimplifyPolylines->setText(QApplication::translate("SimplifyPolylines", "Load in GIS", 0));
-        pushButtonClear->setText(QApplication::translate("SimplifyPolylines", "Clear", 0));
+        ___qtablewidgetitem2->setText(QApplication::translate("SimplifyPolylines", "Simplified Layers", nullptr));
+        pushButtonRemove->setText(QApplication::translate("SimplifyPolylines", "Remove", nullptr));
+        checkBoxSimplifyPolylines->setText(QApplication::translate("SimplifyPolylines", "Load in GIS", nullptr));
+        pushButtonClear->setText(QApplication::translate("SimplifyPolylines", "Clear", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("SimplifyPolylines", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("SimplifyPolylines", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("SimplifyPolylines", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("SimplifyPolylines", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("SimplifyPolylines", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("SimplifyPolylines", "Run", nullptr));
     } // retranslateUi
 
 };

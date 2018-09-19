@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'polygontopolylines.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,9 +10,7 @@
 #define UI_POLYGONTOPOLYLINES_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
@@ -320,23 +318,23 @@ public:
 
     void retranslateUi(QDialog *PolygonToPolylines)
     {
-        PolygonToPolylines->setWindowTitle(QApplication::translate("PolygonToPolylines", ": :   Polygon To Polylines   : :", 0));
+        PolygonToPolylines->setWindowTitle(QApplication::translate("PolygonToPolylines", ": :   Polygon To Polylines   : :", nullptr));
         groupBoxInput->setTitle(QString());
-        pushButtonAdd->setText(QApplication::translate("PolygonToPolylines", "Add", 0));
+        pushButtonAdd->setText(QApplication::translate("PolygonToPolylines", "Add", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("PolygonToPolylines", "Polygon Layers", 0));
+        ___qtablewidgetitem->setText(QApplication::translate("PolygonToPolylines", "Polygon Layers", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("PolygonToPolylines", "Polyline Layers", 0));
-        pushButtonRemove->setText(QApplication::translate("PolygonToPolylines", "Remove", 0));
-        checkBoxDissolvePolygons->setText(QApplication::translate("PolygonToPolylines", "Load in GIS", 0));
-        pushButtonClear->setText(QApplication::translate("PolygonToPolylines", "Clear", 0));
+        ___qtablewidgetitem1->setText(QApplication::translate("PolygonToPolylines", "Polyline Layers", nullptr));
+        pushButtonRemove->setText(QApplication::translate("PolygonToPolylines", "Remove", nullptr));
+        checkBoxDissolvePolygons->setText(QApplication::translate("PolygonToPolylines", "Load in GIS", nullptr));
+        pushButtonClear->setText(QApplication::translate("PolygonToPolylines", "Clear", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("PolygonToPolylines", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("PolygonToPolylines", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("PolygonToPolylines", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("PolygonToPolylines", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("PolygonToPolylines", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("PolygonToPolylines", "Run", nullptr));
     } // retranslateUi
 
 };

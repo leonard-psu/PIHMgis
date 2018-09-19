@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'meshspatial.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_MESHSPATIAL_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -289,6 +286,17 @@ public:
         textLabel2_3->setObjectName(QStringLiteral("textLabel2_3"));
         textLabel2_3->setGeometry(QRect(16, 118, 131, 31));
         comboBoxPlotVariable = new QComboBox(groupBoxOutput);
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
         comboBoxPlotVariable->setObjectName(QStringLiteral("comboBoxPlotVariable"));
         comboBoxPlotVariable->setGeometry(QRect(142, 118, 221, 28));
         textLabel2_5 = new QLabel(groupBoxOutput);
@@ -320,6 +328,12 @@ public:
         spinBoxStopTime->setMaximum(999999999);
         spinBoxStopTime->setValue(2);
         comboBoxStartStop = new QComboBox(groupBoxOutput);
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
+        comboBoxStartStop->addItem(QString());
         comboBoxStartStop->setObjectName(QStringLiteral("comboBoxStartStop"));
         comboBoxStartStop->setGeometry(QRect(336, 164, 95, 28));
         textLabel2_8 = new QLabel(groupBoxOutput);
@@ -342,48 +356,44 @@ public:
 
     void retranslateUi(QDialog *MeshSpatial)
     {
-        MeshSpatial->setWindowTitle(QApplication::translate("MeshSpatial", ": :   Mesh Spatial Analysis   : :", 0));
+        MeshSpatial->setWindowTitle(QApplication::translate("MeshSpatial", ": :   Mesh Spatial Analysis   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("MeshSpatial", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("MeshSpatial", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("MeshSpatial", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("MeshSpatial", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("MeshSpatial", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("MeshSpatial", "Run", nullptr));
         groupBoxOutput->setTitle(QString());
-        textLabel2->setText(QApplication::translate("MeshSpatial", "Output Data Folder", 0));
-        pushButtonOutputDataFolder->setText(QApplication::translate("MeshSpatial", "Browse", 0));
-        textLabel2_2->setText(QApplication::translate("MeshSpatial", "Data Key (ID)", 0));
-        textLabel2_3->setText(QApplication::translate("MeshSpatial", "Plot Variable", 0));
-        comboBoxPlotVariable->clear();
-        comboBoxPlotVariable->insertItems(0, QStringList()
-         << QApplication::translate("MeshSpatial", "Surface Storage", 0)
-         << QApplication::translate("MeshSpatial", "Soil Moisture Storage", 0)
-         << QApplication::translate("MeshSpatial", "Groundwater Storage", 0)
-         << QApplication::translate("MeshSpatial", "Interception Storage", 0)
-         << QApplication::translate("MeshSpatial", "Snowpack Storage", 0)
-         << QApplication::translate("MeshSpatial", "Evapotranspiration", 0)
-         << QApplication::translate("MeshSpatial", "Interception Loss", 0)
-         << QApplication::translate("MeshSpatial", "Transpiration", 0)
-         << QApplication::translate("MeshSpatial", "Evaporation from Ground", 0)
-         << QApplication::translate("MeshSpatial", "Infiltration", 0)
-         << QApplication::translate("MeshSpatial", "Recharge", 0)
-        );
-        textLabel2_5->setText(QApplication::translate("MeshSpatial", "Mesh Shape File", 0));
-        pushButtonMeshShapeFile->setText(QApplication::translate("MeshSpatial", "Browse", 0));
-        textLabel2_6->setText(QApplication::translate("MeshSpatial", "Time Interval", 0));
-        textLabel2_7->setText(QApplication::translate("MeshSpatial", "to", 0));
-        comboBoxStartStop->clear();
-        comboBoxStartStop->insertItems(0, QStringList()
-         << QApplication::translate("MeshSpatial", "Minutes", 0)
-         << QApplication::translate("MeshSpatial", "Hours", 0)
-         << QApplication::translate("MeshSpatial", "Days", 0)
-         << QApplication::translate("MeshSpatial", "Weeks", 0)
-         << QApplication::translate("MeshSpatial", "Months", 0)
-         << QApplication::translate("MeshSpatial", "Years", 0)
-        );
-        comboBoxStartStop->setCurrentText(QApplication::translate("MeshSpatial", "Minutes", 0));
-        textLabel2_8->setText(QApplication::translate("MeshSpatial", "into", 0));
+        textLabel2->setText(QApplication::translate("MeshSpatial", "Output Data Folder", nullptr));
+        pushButtonOutputDataFolder->setText(QApplication::translate("MeshSpatial", "Browse", nullptr));
+        textLabel2_2->setText(QApplication::translate("MeshSpatial", "Data Key (ID)", nullptr));
+        textLabel2_3->setText(QApplication::translate("MeshSpatial", "Plot Variable", nullptr));
+        comboBoxPlotVariable->setItemText(0, QApplication::translate("MeshSpatial", "Surface Storage", nullptr));
+        comboBoxPlotVariable->setItemText(1, QApplication::translate("MeshSpatial", "Soil Moisture Storage", nullptr));
+        comboBoxPlotVariable->setItemText(2, QApplication::translate("MeshSpatial", "Groundwater Storage", nullptr));
+        comboBoxPlotVariable->setItemText(3, QApplication::translate("MeshSpatial", "Interception Storage", nullptr));
+        comboBoxPlotVariable->setItemText(4, QApplication::translate("MeshSpatial", "Snowpack Storage", nullptr));
+        comboBoxPlotVariable->setItemText(5, QApplication::translate("MeshSpatial", "Evapotranspiration", nullptr));
+        comboBoxPlotVariable->setItemText(6, QApplication::translate("MeshSpatial", "Interception Loss", nullptr));
+        comboBoxPlotVariable->setItemText(7, QApplication::translate("MeshSpatial", "Transpiration", nullptr));
+        comboBoxPlotVariable->setItemText(8, QApplication::translate("MeshSpatial", "Evaporation from Ground", nullptr));
+        comboBoxPlotVariable->setItemText(9, QApplication::translate("MeshSpatial", "Infiltration", nullptr));
+        comboBoxPlotVariable->setItemText(10, QApplication::translate("MeshSpatial", "Recharge", nullptr));
+
+        textLabel2_5->setText(QApplication::translate("MeshSpatial", "Mesh Shape File", nullptr));
+        pushButtonMeshShapeFile->setText(QApplication::translate("MeshSpatial", "Browse", nullptr));
+        textLabel2_6->setText(QApplication::translate("MeshSpatial", "Time Interval", nullptr));
+        textLabel2_7->setText(QApplication::translate("MeshSpatial", "to", nullptr));
+        comboBoxStartStop->setItemText(0, QApplication::translate("MeshSpatial", "Minutes", nullptr));
+        comboBoxStartStop->setItemText(1, QApplication::translate("MeshSpatial", "Hours", nullptr));
+        comboBoxStartStop->setItemText(2, QApplication::translate("MeshSpatial", "Days", nullptr));
+        comboBoxStartStop->setItemText(3, QApplication::translate("MeshSpatial", "Weeks", nullptr));
+        comboBoxStartStop->setItemText(4, QApplication::translate("MeshSpatial", "Months", nullptr));
+        comboBoxStartStop->setItemText(5, QApplication::translate("MeshSpatial", "Years", nullptr));
+
+        comboBoxStartStop->setCurrentText(QApplication::translate("MeshSpatial", "Minutes", nullptr));
+        textLabel2_8->setText(QApplication::translate("MeshSpatial", "into", nullptr));
     } // retranslateUi
 
 };

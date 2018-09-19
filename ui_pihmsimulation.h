@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'pihmsimulation.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_PIHMSIMULATION_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QProgressBar>
@@ -295,20 +292,20 @@ public:
 
     void retranslateUi(QDialog *PIHMSimulation)
     {
-        PIHMSimulation->setWindowTitle(QApplication::translate("PIHMSimulation", ": :   PIHM v2.2   : :", 0));
+        PIHMSimulation->setWindowTitle(QApplication::translate("PIHMSimulation", ": :   PIHM v2.2   : :", nullptr));
         groupBoxOutput->setTitle(QString());
-        textLabel2->setText(QApplication::translate("PIHMSimulation", "Input Data Folder", 0));
-        pushButtonInputDataFolder->setText(QApplication::translate("PIHMSimulation", "Browse", 0));
-        textLabel2_2->setText(QApplication::translate("PIHMSimulation", "Data Key (ID)", 0));
-        textLabel3_24->setText(QApplication::translate("PIHMSimulation", "Archive Simulation", 0));
+        textLabel2->setText(QApplication::translate("PIHMSimulation", "Input Data Folder", nullptr));
+        pushButtonInputDataFolder->setText(QApplication::translate("PIHMSimulation", "Browse", nullptr));
+        textLabel2_2->setText(QApplication::translate("PIHMSimulation", "Data Key (ID)", nullptr));
+        textLabel3_24->setText(QApplication::translate("PIHMSimulation", "Archive Simulation", nullptr));
         checkBoxArchive->setText(QString());
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("PIHMSimulation", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("PIHMSimulation", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("PIHMSimulation", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("PIHMSimulation", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("PIHMSimulation", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("PIHMSimulation", "Run", nullptr));
     } // retranslateUi
 
 };

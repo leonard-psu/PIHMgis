@@ -201,7 +201,7 @@ public:
         PIHMgisToolBox->setFont(font1);
         PIHMgisToolBox_PIHMgisProject = new QWidget();
         PIHMgisToolBox_PIHMgisProject->setObjectName(QStringLiteral("PIHMgisToolBox_PIHMgisProject"));
-        PIHMgisToolBox_PIHMgisProject->setGeometry(QRect(0, 0, 765, 305));
+        PIHMgisToolBox_PIHMgisProject->setGeometry(QRect(0, 0, 765, 233));
         pushButtonPIHMgisProjectNew = new QPushButton(PIHMgisToolBox_PIHMgisProject);
         pushButtonPIHMgisProjectNew->setObjectName(QStringLiteral("pushButtonPIHMgisProjectNew"));
         pushButtonPIHMgisProjectNew->setGeometry(QRect(23, 42, 225, 34));
@@ -325,7 +325,7 @@ public:
         PIHMgisToolBox->addItem(PIHMgisToolBox_PIHMgisProject, QStringLiteral("Step [1] : : Load/Create PIHMgis project settings"));
         PIHMgisToolBox_RasterProcessing = new QWidget();
         PIHMgisToolBox_RasterProcessing->setObjectName(QStringLiteral("PIHMgisToolBox_RasterProcessing"));
-        PIHMgisToolBox_RasterProcessing->setGeometry(QRect(0, 0, 765, 305));
+        PIHMgisToolBox_RasterProcessing->setGeometry(QRect(0, 0, 765, 233));
         pushButtonRasterProcessingFillPits = new QPushButton(PIHMgisToolBox_RasterProcessing);
         pushButtonRasterProcessingFillPits->setObjectName(QStringLiteral("pushButtonRasterProcessingFillPits"));
         pushButtonRasterProcessingFillPits->setGeometry(QRect(0, 50, 225, 34));
@@ -485,7 +485,7 @@ public:
         PIHMgisToolBox->addItem(PIHMgisToolBox_RasterProcessing, QStringLiteral("Group Steps [2] : : Raster Processing"));
         PIHMgisToolBox_VectorProcessing = new QWidget();
         PIHMgisToolBox_VectorProcessing->setObjectName(QStringLiteral("PIHMgisToolBox_VectorProcessing"));
-        PIHMgisToolBox_VectorProcessing->setGeometry(QRect(0, 0, 765, 305));
+        PIHMgisToolBox_VectorProcessing->setGeometry(QRect(0, 0, 765, 233));
         pushButtonVectorProcessingDissolvePolygons = new QPushButton(PIHMgisToolBox_VectorProcessing);
         pushButtonVectorProcessingDissolvePolygons->setObjectName(QStringLiteral("pushButtonVectorProcessingDissolvePolygons"));
         pushButtonVectorProcessingDissolvePolygons->setGeometry(QRect(100, 53, 251, 34));
@@ -606,7 +606,7 @@ public:
         PIHMgisToolBox->addItem(PIHMgisToolBox_VectorProcessing, QStringLiteral("Group Steps [3] : : Vector Processing"));
         PIHMgisToolBox_DomainDecomposition = new QWidget();
         PIHMgisToolBox_DomainDecomposition->setObjectName(QStringLiteral("PIHMgisToolBox_DomainDecomposition"));
-        PIHMgisToolBox_DomainDecomposition->setGeometry(QRect(0, 0, 765, 305));
+        PIHMgisToolBox_DomainDecomposition->setGeometry(QRect(0, 0, 765, 233));
         pushButtonDomainDecompositionTINShapeLayer = new QPushButton(PIHMgisToolBox_DomainDecomposition);
         pushButtonDomainDecompositionTINShapeLayer->setObjectName(QStringLiteral("pushButtonDomainDecompositionTINShapeLayer"));
         pushButtonDomainDecompositionTINShapeLayer->setGeometry(QRect(26, 170, 225, 34));
@@ -693,7 +693,7 @@ public:
         PIHMgisToolBox->addItem(PIHMgisToolBox_DomainDecomposition, QStringLiteral("Group Steps [4] : : Domain Decomposition"));
         PIHMgisToolBox_DataModelLoader = new QWidget();
         PIHMgisToolBox_DataModelLoader->setObjectName(QStringLiteral("PIHMgisToolBox_DataModelLoader"));
-        PIHMgisToolBox_DataModelLoader->setGeometry(QRect(0, 0, 765, 305));
+        PIHMgisToolBox_DataModelLoader->setGeometry(QRect(0, 0, 765, 233));
         pushButtonDataModelLoaderMeshDataFile = new QPushButton(PIHMgisToolBox_DataModelLoader);
         pushButtonDataModelLoaderMeshDataFile->setObjectName(QStringLiteral("pushButtonDataModelLoaderMeshDataFile"));
         pushButtonDataModelLoaderMeshDataFile->setGeometry(QRect(270, 50, 225, 34));
@@ -934,7 +934,7 @@ public:
         PIHMgisToolBox->addItem(PIHMgisToolBox_DataModelLoader, QStringLiteral("Group Steps [5] : : Data Model Loader"));
         PIHMgisToolBox_PIHMSimulation = new QWidget();
         PIHMgisToolBox_PIHMSimulation->setObjectName(QStringLiteral("PIHMgisToolBox_PIHMSimulation"));
-        PIHMgisToolBox_PIHMSimulation->setGeometry(QRect(0, 0, 765, 305));
+        PIHMgisToolBox_PIHMSimulation->setGeometry(QRect(0, 0, 765, 233));
         pushButtonPIHMSimulation = new QPushButton(PIHMgisToolBox_PIHMSimulation);
         pushButtonPIHMSimulation->setObjectName(QStringLiteral("pushButtonPIHMSimulation"));
         pushButtonPIHMSimulation->setGeometry(QRect(490, 140, 221, 34));
@@ -1022,7 +1022,7 @@ public:
         PIHMgisToolBox->addItem(PIHMgisToolBox_PIHMSimulation, QStringLiteral("Group Steps [6] : : PIHM Simulation"));
         PIHMgisToolBox_VisualAnalytics = new QWidget();
         PIHMgisToolBox_VisualAnalytics->setObjectName(QStringLiteral("PIHMgisToolBox_VisualAnalytics"));
-        PIHMgisToolBox_VisualAnalytics->setGeometry(QRect(0, 0, 765, 305));
+        PIHMgisToolBox_VisualAnalytics->setGeometry(QRect(0, 0, 765, 233));
         groupBox = new QGroupBox(PIHMgisToolBox_VisualAnalytics);
         groupBox->setObjectName(QStringLiteral("groupBox"));
         groupBox->setGeometry(QRect(50, 57, 661, 61));
@@ -1137,7 +1137,7 @@ public:
         PIHMgisToolBox->addItem(PIHMgisToolBox_VisualAnalytics, QStringLiteral("Optional : : Visual Analytics"));
         PIHMgisToolBox_Help = new QWidget();
         PIHMgisToolBox_Help->setObjectName(QStringLiteral("PIHMgisToolBox_Help"));
-        PIHMgisToolBox_Help->setGeometry(QRect(0, 0, 765, 305));
+        PIHMgisToolBox_Help->setGeometry(QRect(0, 0, 765, 233));
         label_1 = new QLabel(PIHMgisToolBox_Help);
         label_1->setObjectName(QStringLiteral("label_1"));
         label_1->setGeometry(QRect(20, 4, 241, 20));
@@ -1480,7 +1480,7 @@ public:
 
         retranslateUi(PIHMgisDialog);
 
-        PIHMgisToolBox->setCurrentIndex(0);
+        PIHMgisToolBox->setCurrentIndex(7);
         pushButtonPIHMgisProjectNew->setDefault(false);
         pushButtonPIHMgisProjectOpen->setDefault(false);
         pushButtonPIHMgisProjectImport->setDefault(false);

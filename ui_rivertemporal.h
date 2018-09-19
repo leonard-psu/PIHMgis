@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'rivertemporal.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_RIVERTEMPORAL_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -284,6 +281,22 @@ public:
         textLabel2_4->setObjectName(QStringLiteral("textLabel2_4"));
         textLabel2_4->setGeometry(QRect(16, 115, 131, 31));
         comboBoxPlotVariable = new QComboBox(groupBoxOutput);
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
         comboBoxPlotVariable->setObjectName(QStringLiteral("comboBoxPlotVariable"));
         comboBoxPlotVariable->setGeometry(QRect(142, 160, 221, 28));
         lineEditModelSegments = new QLineEdit(groupBoxOutput);
@@ -292,6 +305,11 @@ public:
         lineEditModelSegments->setFont(font);
         lineEditModelSegments->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         comboBoxModelSegments = new QComboBox(groupBoxOutput);
+        comboBoxModelSegments->addItem(QString());
+        comboBoxModelSegments->addItem(QString());
+        comboBoxModelSegments->addItem(QString());
+        comboBoxModelSegments->addItem(QString());
+        comboBoxModelSegments->addItem(QString());
         comboBoxModelSegments->setObjectName(QStringLiteral("comboBoxModelSegments"));
         comboBoxModelSegments->setGeometry(QRect(142, 117, 221, 28));
 
@@ -302,49 +320,45 @@ public:
 
     void retranslateUi(QDialog *RiverTemporal)
     {
-        RiverTemporal->setWindowTitle(QApplication::translate("RiverTemporal", ": :   River Time Series   : :", 0));
+        RiverTemporal->setWindowTitle(QApplication::translate("RiverTemporal", ": :   River Time Series   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("RiverTemporal", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("RiverTemporal", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("RiverTemporal", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("RiverTemporal", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("RiverTemporal", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("RiverTemporal", "Run", nullptr));
         groupBoxOutput->setTitle(QString());
-        textLabel2->setText(QApplication::translate("RiverTemporal", "Output Data Folder", 0));
-        pushButtonOutputDataFolder->setText(QApplication::translate("RiverTemporal", "Browse", 0));
-        textLabel2_2->setText(QApplication::translate("RiverTemporal", "Data Key (ID)", 0));
-        textLabel2_3->setText(QApplication::translate("RiverTemporal", "Plot Variable", 0));
-        textLabel2_4->setText(QApplication::translate("RiverTemporal", "Model Segments", 0));
-        comboBoxPlotVariable->clear();
-        comboBoxPlotVariable->insertItems(0, QStringList()
-         << QApplication::translate("RiverTemporal", "River Outflow", 0)
-         << QApplication::translate("RiverTemporal", "River Inflow", 0)
-         << QApplication::translate("RiverTemporal", "River Storage", 0)
-         << QApplication::translate("RiverTemporal", "River Surfaceflow", 0)
-         << QApplication::translate("RiverTemporal", "River Baseflow", 0)
-         << QApplication::translate("RiverTemporal", "River Surfaceflow Left", 0)
-         << QApplication::translate("RiverTemporal", "River Surfaceflow Right", 0)
-         << QApplication::translate("RiverTemporal", "River Baseflow Left", 0)
-         << QApplication::translate("RiverTemporal", "River Baseflow Right", 0)
-         << QApplication::translate("RiverTemporal", "River Seepage to Bed", 0)
-         << QApplication::translate("RiverTemporal", "Riverbed Outflow", 0)
-         << QApplication::translate("RiverTemporal", "Riverbed Inflow", 0)
-         << QApplication::translate("RiverTemporal", "Riverbed Storage", 0)
-         << QApplication::translate("RiverTemporal", "Riverbed Baseflow ", 0)
-         << QApplication::translate("RiverTemporal", "Riverbed Baseflow Left", 0)
-         << QApplication::translate("RiverTemporal", "Riverbed Baseflow Right", 0)
-        );
-        lineEditModelSegments->setText(QApplication::translate("RiverTemporal", "  1 2 3", 0));
+        textLabel2->setText(QApplication::translate("RiverTemporal", "Output Data Folder", nullptr));
+        pushButtonOutputDataFolder->setText(QApplication::translate("RiverTemporal", "Browse", nullptr));
+        textLabel2_2->setText(QApplication::translate("RiverTemporal", "Data Key (ID)", nullptr));
+        textLabel2_3->setText(QApplication::translate("RiverTemporal", "Plot Variable", nullptr));
+        textLabel2_4->setText(QApplication::translate("RiverTemporal", "Model Segments", nullptr));
+        comboBoxPlotVariable->setItemText(0, QApplication::translate("RiverTemporal", "River Outflow", nullptr));
+        comboBoxPlotVariable->setItemText(1, QApplication::translate("RiverTemporal", "River Inflow", nullptr));
+        comboBoxPlotVariable->setItemText(2, QApplication::translate("RiverTemporal", "River Storage", nullptr));
+        comboBoxPlotVariable->setItemText(3, QApplication::translate("RiverTemporal", "River Surfaceflow", nullptr));
+        comboBoxPlotVariable->setItemText(4, QApplication::translate("RiverTemporal", "River Baseflow", nullptr));
+        comboBoxPlotVariable->setItemText(5, QApplication::translate("RiverTemporal", "River Surfaceflow Left", nullptr));
+        comboBoxPlotVariable->setItemText(6, QApplication::translate("RiverTemporal", "River Surfaceflow Right", nullptr));
+        comboBoxPlotVariable->setItemText(7, QApplication::translate("RiverTemporal", "River Baseflow Left", nullptr));
+        comboBoxPlotVariable->setItemText(8, QApplication::translate("RiverTemporal", "River Baseflow Right", nullptr));
+        comboBoxPlotVariable->setItemText(9, QApplication::translate("RiverTemporal", "River Seepage to Bed", nullptr));
+        comboBoxPlotVariable->setItemText(10, QApplication::translate("RiverTemporal", "Riverbed Outflow", nullptr));
+        comboBoxPlotVariable->setItemText(11, QApplication::translate("RiverTemporal", "Riverbed Inflow", nullptr));
+        comboBoxPlotVariable->setItemText(12, QApplication::translate("RiverTemporal", "Riverbed Storage", nullptr));
+        comboBoxPlotVariable->setItemText(13, QApplication::translate("RiverTemporal", "Riverbed Baseflow ", nullptr));
+        comboBoxPlotVariable->setItemText(14, QApplication::translate("RiverTemporal", "Riverbed Baseflow Left", nullptr));
+        comboBoxPlotVariable->setItemText(15, QApplication::translate("RiverTemporal", "Riverbed Baseflow Right", nullptr));
+
+        lineEditModelSegments->setText(QApplication::translate("RiverTemporal", "  1 2 3", nullptr));
         lineEditModelSegments->setPlaceholderText(QString());
-        comboBoxModelSegments->clear();
-        comboBoxModelSegments->insertItems(0, QStringList()
-         << QApplication::translate("RiverTemporal", "Individual Model Segments", 0)
-         << QApplication::translate("RiverTemporal", "Average of Model Segments", 0)
-         << QApplication::translate("RiverTemporal", "Average All Model Segments", 0)
-         << QApplication::translate("RiverTemporal", "Total of Model Segments", 0)
-         << QApplication::translate("RiverTemporal", "Total All Model Segments", 0)
-        );
+        comboBoxModelSegments->setItemText(0, QApplication::translate("RiverTemporal", "Individual Model Segments", nullptr));
+        comboBoxModelSegments->setItemText(1, QApplication::translate("RiverTemporal", "Average of Model Segments", nullptr));
+        comboBoxModelSegments->setItemText(2, QApplication::translate("RiverTemporal", "Average All Model Segments", nullptr));
+        comboBoxModelSegments->setItemText(3, QApplication::translate("RiverTemporal", "Total of Model Segments", nullptr));
+        comboBoxModelSegments->setItemText(4, QApplication::translate("RiverTemporal", "Total All Model Segments", nullptr));
+
     } // retranslateUi
 
 };

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'geoldatafile.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,13 +10,10 @@
 #define UI_GEOLDATAFILE_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -290,20 +287,20 @@ public:
 
     void retranslateUi(QDialog *GeolDataFile)
     {
-        GeolDataFile->setWindowTitle(QApplication::translate("GeolDataFile", ": :   Geol Data File   : :", 0));
-        groupBoxOutput->setTitle(QApplication::translate("GeolDataFile", "Output", 0));
-        textLabel2->setText(QApplication::translate("GeolDataFile", "Geol Data File", 0));
-        pushButtonGeolDataFile->setText(QApplication::translate("GeolDataFile", "Browse", 0));
-        groupBoxInput->setTitle(QApplication::translate("GeolDataFile", "Input", 0));
-        pushButtonGeolTextureFile->setText(QApplication::translate("GeolDataFile", "Browse", 0));
-        textLabel1->setText(QApplication::translate("GeolDataFile", "Geol Texture", 0));
+        GeolDataFile->setWindowTitle(QApplication::translate("GeolDataFile", ": :   Geol Data File   : :", nullptr));
+        groupBoxOutput->setTitle(QApplication::translate("GeolDataFile", "Output", nullptr));
+        textLabel2->setText(QApplication::translate("GeolDataFile", "Geol Data File", nullptr));
+        pushButtonGeolDataFile->setText(QApplication::translate("GeolDataFile", "Browse", nullptr));
+        groupBoxInput->setTitle(QApplication::translate("GeolDataFile", "Input", nullptr));
+        pushButtonGeolTextureFile->setText(QApplication::translate("GeolDataFile", "Browse", nullptr));
+        textLabel1->setText(QApplication::translate("GeolDataFile", "Geol Texture", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("GeolDataFile", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("GeolDataFile", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("GeolDataFile", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("GeolDataFile", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("GeolDataFile", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("GeolDataFile", "Run", nullptr));
     } // retranslateUi
 
 };

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'rivdatafile.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,13 +10,10 @@
 #define UI_RIVDATAFILE_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -359,31 +356,31 @@ public:
 
     void retranslateUi(QDialog *RivDataFile)
     {
-        RivDataFile->setWindowTitle(QApplication::translate("RivDataFile", ": :   Riv Data File   : :", 0));
+        RivDataFile->setWindowTitle(QApplication::translate("RivDataFile", ": :   Riv Data File   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("RivDataFile", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("RivDataFile", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("RivDataFile", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("RivDataFile", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("RivDataFile", "Run", 0));
-        groupBoxOutput->setTitle(QApplication::translate("RivDataFile", "Output", 0));
-        textLabel1_2->setText(QApplication::translate("RivDataFile", "Riv Data File", 0));
-        pushButtonRivDataFile->setText(QApplication::translate("RivDataFile", "Browse", 0));
-        groupBoxInput1->setTitle(QApplication::translate("RivDataFile", "Input", 0));
-        pushButtonElementFile->setText(QApplication::translate("RivDataFile", "Browse", 0));
-        textLabel1->setText(QApplication::translate("RivDataFile", "Element File", 0));
-        textLabel1_3->setText(QApplication::translate("RivDataFile", "Node File", 0));
-        pushButtonNodeFile->setText(QApplication::translate("RivDataFile", "Browse", 0));
-        textLabel1_4->setText(QApplication::translate("RivDataFile", "Neighbour File", 0));
-        pushButtonNeighbourFile->setText(QApplication::translate("RivDataFile", "Browse", 0));
-        textLabel1_5->setText(QApplication::translate("RivDataFile", "River Shape File", 0));
-        pushButtonRiverFile->setText(QApplication::translate("RivDataFile", "Browse", 0));
-        groupBoxInput2->setTitle(QApplication::translate("RivDataFile", "Outlet(s) Boundary Condition", 0));
-        radioButtonDirichlet->setText(QApplication::translate("RivDataFile", " Dirichlet", 0));
-        radioButtonNeumann->setText(QApplication::translate("RivDataFile", " Neumann", 0));
-        radioButtonZeroDepth->setText(QApplication::translate("RivDataFile", " Zero-depth", 0));
-        radioButtonCriticalDepth->setText(QApplication::translate("RivDataFile", " Critical-depth", 0));
+        pushButtonRun->setText(QApplication::translate("RivDataFile", "Run", nullptr));
+        groupBoxOutput->setTitle(QApplication::translate("RivDataFile", "Output", nullptr));
+        textLabel1_2->setText(QApplication::translate("RivDataFile", "Riv Data File", nullptr));
+        pushButtonRivDataFile->setText(QApplication::translate("RivDataFile", "Browse", nullptr));
+        groupBoxInput1->setTitle(QApplication::translate("RivDataFile", "Input", nullptr));
+        pushButtonElementFile->setText(QApplication::translate("RivDataFile", "Browse", nullptr));
+        textLabel1->setText(QApplication::translate("RivDataFile", "Element File", nullptr));
+        textLabel1_3->setText(QApplication::translate("RivDataFile", "Node File", nullptr));
+        pushButtonNodeFile->setText(QApplication::translate("RivDataFile", "Browse", nullptr));
+        textLabel1_4->setText(QApplication::translate("RivDataFile", "Neighbour File", nullptr));
+        pushButtonNeighbourFile->setText(QApplication::translate("RivDataFile", "Browse", nullptr));
+        textLabel1_5->setText(QApplication::translate("RivDataFile", "River Shape File", nullptr));
+        pushButtonRiverFile->setText(QApplication::translate("RivDataFile", "Browse", nullptr));
+        groupBoxInput2->setTitle(QApplication::translate("RivDataFile", "Outlet(s) Boundary Condition", nullptr));
+        radioButtonDirichlet->setText(QApplication::translate("RivDataFile", " Dirichlet", nullptr));
+        radioButtonNeumann->setText(QApplication::translate("RivDataFile", " Neumann", nullptr));
+        radioButtonZeroDepth->setText(QApplication::translate("RivDataFile", " Zero-depth", nullptr));
+        radioButtonCriticalDepth->setText(QApplication::translate("RivDataFile", " Critical-depth", nullptr));
     } // retranslateUi
 
 };

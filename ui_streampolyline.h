@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'streampolyline.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_STREAMPOLYLINE_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -321,23 +318,23 @@ public:
 
     void retranslateUi(QDialog *StreamPolyline)
     {
-        StreamPolyline->setWindowTitle(QApplication::translate("StreamPolyline", ": :   Stream Polyline   : :", 0));
+        StreamPolyline->setWindowTitle(QApplication::translate("StreamPolyline", ": :   Stream Polyline   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("StreamPolyline", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("StreamPolyline", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("StreamPolyline", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("StreamPolyline", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("StreamPolyline", "Run", 0));
-        groupBoxInput->setTitle(QApplication::translate("StreamPolyline", "Input", 0));
-        pushButtonStreamGrids->setText(QApplication::translate("StreamPolyline", "Browse", 0));
-        textLabel1->setText(QApplication::translate("StreamPolyline", "Stream Grid", 0));
-        pushButtonFlowDirGrids->setText(QApplication::translate("StreamPolyline", "Browse", 0));
-        textLabel1_3->setText(QApplication::translate("StreamPolyline", "Flow Dir. Grid", 0));
-        groupBoxInput_2->setTitle(QApplication::translate("StreamPolyline", "Output", 0));
-        textLabel1_2->setText(QApplication::translate("StreamPolyline", "Stream Polyline", 0));
-        pushButtonStreamPolyline->setText(QApplication::translate("StreamPolyline", "Browse", 0));
-        checkBoxStreamPolyline->setText(QApplication::translate("StreamPolyline", "Load in GIS", 0));
+        pushButtonRun->setText(QApplication::translate("StreamPolyline", "Run", nullptr));
+        groupBoxInput->setTitle(QApplication::translate("StreamPolyline", "Input", nullptr));
+        pushButtonStreamGrids->setText(QApplication::translate("StreamPolyline", "Browse", nullptr));
+        textLabel1->setText(QApplication::translate("StreamPolyline", "Stream Grid", nullptr));
+        pushButtonFlowDirGrids->setText(QApplication::translate("StreamPolyline", "Browse", nullptr));
+        textLabel1_3->setText(QApplication::translate("StreamPolyline", "Flow Dir. Grid", nullptr));
+        groupBoxInput_2->setTitle(QApplication::translate("StreamPolyline", "Output", nullptr));
+        textLabel1_2->setText(QApplication::translate("StreamPolyline", "Stream Polyline", nullptr));
+        pushButtonStreamPolyline->setText(QApplication::translate("StreamPolyline", "Browse", nullptr));
+        checkBoxStreamPolyline->setText(QApplication::translate("StreamPolyline", "Load in GIS", nullptr));
     } // retranslateUi
 
 };

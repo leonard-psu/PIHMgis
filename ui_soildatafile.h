@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'soildatafile.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,13 +10,10 @@
 #define UI_SOILDATAFILE_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -290,20 +287,20 @@ public:
 
     void retranslateUi(QDialog *SoilDataFile)
     {
-        SoilDataFile->setWindowTitle(QApplication::translate("SoilDataFile", ": :   Soil Data File   : :", 0));
+        SoilDataFile->setWindowTitle(QApplication::translate("SoilDataFile", ": :   Soil Data File   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("SoilDataFile", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("SoilDataFile", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("SoilDataFile", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("SoilDataFile", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("SoilDataFile", "Run", 0));
-        groupBoxOutput->setTitle(QApplication::translate("SoilDataFile", "Output", 0));
-        textLabel2->setText(QApplication::translate("SoilDataFile", "Soil Data File", 0));
-        pushButtonSoilDataFile->setText(QApplication::translate("SoilDataFile", "Browse", 0));
-        groupBoxInput->setTitle(QApplication::translate("SoilDataFile", "Input", 0));
-        pushButtonSoilTextureFile->setText(QApplication::translate("SoilDataFile", "Browse", 0));
-        textLabel1->setText(QApplication::translate("SoilDataFile", "Soil Texture", 0));
+        pushButtonRun->setText(QApplication::translate("SoilDataFile", "Run", nullptr));
+        groupBoxOutput->setTitle(QApplication::translate("SoilDataFile", "Output", nullptr));
+        textLabel2->setText(QApplication::translate("SoilDataFile", "Soil Data File", nullptr));
+        pushButtonSoilDataFile->setText(QApplication::translate("SoilDataFile", "Browse", nullptr));
+        groupBoxInput->setTitle(QApplication::translate("SoilDataFile", "Input", nullptr));
+        pushButtonSoilTextureFile->setText(QApplication::translate("SoilDataFile", "Browse", nullptr));
+        textLabel1->setText(QApplication::translate("SoilDataFile", "Soil Texture", nullptr));
     } // retranslateUi
 
 };

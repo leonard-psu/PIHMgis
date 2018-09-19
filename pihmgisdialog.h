@@ -26,19 +26,19 @@ private slots:
 
     void on_pushButtonWorkFlow0_clicked();
 
-    void on_pushButtonWorkFlow1_clicked();
+//    void on_pushButtonWorkFlow1_clicked();
 
-    void on_pushButtonWorkFlow2_clicked();
+//    void on_pushButtonWorkFlow2_clicked();
 
-    void on_pushButtonWorkFlow3_clicked();
+//    void on_pushButtonWorkFlow3_clicked();
 
-    void on_pushButtonWorkFlow4_clicked();
+//    void on_pushButtonWorkFlow4_clicked();
 
-    void on_pushButtonWorkFlow5_clicked();
+//    void on_pushButtonWorkFlow5_clicked();
 
-    void on_pushButtonWorkFlow6_clicked();
+//    void on_pushButtonWorkFlow6_clicked();
 
-    void on_pushButtonWorkFlow7_clicked();
+//    void on_pushButtonWorkFlow7_clicked();
 
     // **** :: PIHMgis Project Management **** //
 
@@ -124,6 +124,10 @@ private slots:
 
     void on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked();
 
+
+    void on_PIHMgisToolBox_Help_windowIconChanged(const QIcon &icon);
+
+    //void on_pushButtonWorkFlow6_clicked();
 
 private:
     Ui::PIHMgisDialog *ui;

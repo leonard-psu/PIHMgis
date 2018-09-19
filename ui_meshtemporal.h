@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'meshtemporal.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_MESHTEMPORAL_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -141,6 +138,17 @@ public:
         textLabel2_4->setObjectName(QStringLiteral("textLabel2_4"));
         textLabel2_4->setGeometry(QRect(16, 115, 131, 31));
         comboBoxPlotVariable = new QComboBox(groupBoxOutput);
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
+        comboBoxPlotVariable->addItem(QString());
         comboBoxPlotVariable->setObjectName(QStringLiteral("comboBoxPlotVariable"));
         comboBoxPlotVariable->setGeometry(QRect(142, 160, 221, 28));
         lineEditModelSegments = new QLineEdit(groupBoxOutput);
@@ -149,6 +157,11 @@ public:
         lineEditModelSegments->setFont(font);
         lineEditModelSegments->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         comboBoxModelSegments = new QComboBox(groupBoxOutput);
+        comboBoxModelSegments->addItem(QString());
+        comboBoxModelSegments->addItem(QString());
+        comboBoxModelSegments->addItem(QString());
+        comboBoxModelSegments->addItem(QString());
+        comboBoxModelSegments->addItem(QString());
         comboBoxModelSegments->setObjectName(QStringLiteral("comboBoxModelSegments"));
         comboBoxModelSegments->setGeometry(QRect(142, 117, 221, 28));
         textBrowserLogs = new QTextBrowser(MeshTemporal);
@@ -302,44 +315,40 @@ public:
 
     void retranslateUi(QDialog *MeshTemporal)
     {
-        MeshTemporal->setWindowTitle(QApplication::translate("MeshTemporal", ": :   Mesh Time Series   : :", 0));
+        MeshTemporal->setWindowTitle(QApplication::translate("MeshTemporal", ": :   Mesh Time Series   : :", nullptr));
         groupBoxOutput->setTitle(QString());
-        textLabel2->setText(QApplication::translate("MeshTemporal", "Output Data Folder", 0));
-        pushButtonOutputDataFolder->setText(QApplication::translate("MeshTemporal", "Browse", 0));
-        textLabel2_2->setText(QApplication::translate("MeshTemporal", "Data Key (ID)", 0));
-        textLabel2_3->setText(QApplication::translate("MeshTemporal", "Plot Variable", 0));
-        textLabel2_4->setText(QApplication::translate("MeshTemporal", "Model Segments", 0));
-        comboBoxPlotVariable->clear();
-        comboBoxPlotVariable->insertItems(0, QStringList()
-         << QApplication::translate("MeshTemporal", "Surface Storage", 0)
-         << QApplication::translate("MeshTemporal", "Soil Moisture Storage", 0)
-         << QApplication::translate("MeshTemporal", "Groundwater Storage", 0)
-         << QApplication::translate("MeshTemporal", "Interception Storage", 0)
-         << QApplication::translate("MeshTemporal", "Snowpack Storage", 0)
-         << QApplication::translate("MeshTemporal", "Evapotranspiration", 0)
-         << QApplication::translate("MeshTemporal", "Interception Loss", 0)
-         << QApplication::translate("MeshTemporal", "Transpiration", 0)
-         << QApplication::translate("MeshTemporal", "Evaporation from Ground", 0)
-         << QApplication::translate("MeshTemporal", "Infiltration", 0)
-         << QApplication::translate("MeshTemporal", "Recharge", 0)
-        );
-        lineEditModelSegments->setText(QApplication::translate("MeshTemporal", "  1 2 3", 0));
+        textLabel2->setText(QApplication::translate("MeshTemporal", "Output Data Folder", nullptr));
+        pushButtonOutputDataFolder->setText(QApplication::translate("MeshTemporal", "Browse", nullptr));
+        textLabel2_2->setText(QApplication::translate("MeshTemporal", "Data Key (ID)", nullptr));
+        textLabel2_3->setText(QApplication::translate("MeshTemporal", "Plot Variable", nullptr));
+        textLabel2_4->setText(QApplication::translate("MeshTemporal", "Model Segments", nullptr));
+        comboBoxPlotVariable->setItemText(0, QApplication::translate("MeshTemporal", "Surface Storage", nullptr));
+        comboBoxPlotVariable->setItemText(1, QApplication::translate("MeshTemporal", "Soil Moisture Storage", nullptr));
+        comboBoxPlotVariable->setItemText(2, QApplication::translate("MeshTemporal", "Groundwater Storage", nullptr));
+        comboBoxPlotVariable->setItemText(3, QApplication::translate("MeshTemporal", "Interception Storage", nullptr));
+        comboBoxPlotVariable->setItemText(4, QApplication::translate("MeshTemporal", "Snowpack Storage", nullptr));
+        comboBoxPlotVariable->setItemText(5, QApplication::translate("MeshTemporal", "Evapotranspiration", nullptr));
+        comboBoxPlotVariable->setItemText(6, QApplication::translate("MeshTemporal", "Interception Loss", nullptr));
+        comboBoxPlotVariable->setItemText(7, QApplication::translate("MeshTemporal", "Transpiration", nullptr));
+        comboBoxPlotVariable->setItemText(8, QApplication::translate("MeshTemporal", "Evaporation from Ground", nullptr));
+        comboBoxPlotVariable->setItemText(9, QApplication::translate("MeshTemporal", "Infiltration", nullptr));
+        comboBoxPlotVariable->setItemText(10, QApplication::translate("MeshTemporal", "Recharge", nullptr));
+
+        lineEditModelSegments->setText(QApplication::translate("MeshTemporal", "  1 2 3", nullptr));
         lineEditModelSegments->setPlaceholderText(QString());
-        comboBoxModelSegments->clear();
-        comboBoxModelSegments->insertItems(0, QStringList()
-         << QApplication::translate("MeshTemporal", "Individual Model Segments", 0)
-         << QApplication::translate("MeshTemporal", "Average of Model Segments", 0)
-         << QApplication::translate("MeshTemporal", "Average All Model Segments", 0)
-         << QApplication::translate("MeshTemporal", "Total of Model Segments", 0)
-         << QApplication::translate("MeshTemporal", "Total All Model Segments", 0)
-        );
+        comboBoxModelSegments->setItemText(0, QApplication::translate("MeshTemporal", "Individual Model Segments", nullptr));
+        comboBoxModelSegments->setItemText(1, QApplication::translate("MeshTemporal", "Average of Model Segments", nullptr));
+        comboBoxModelSegments->setItemText(2, QApplication::translate("MeshTemporal", "Average All Model Segments", nullptr));
+        comboBoxModelSegments->setItemText(3, QApplication::translate("MeshTemporal", "Total of Model Segments", nullptr));
+        comboBoxModelSegments->setItemText(4, QApplication::translate("MeshTemporal", "Total All Model Segments", nullptr));
+
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("MeshTemporal", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("MeshTemporal", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("MeshTemporal", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("MeshTemporal", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("MeshTemporal", "Run", 0));
+        pushButtonRun->setText(QApplication::translate("MeshTemporal", "Run", nullptr));
     } // retranslateUi
 
 };

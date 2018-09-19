@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'calibdatafile.ui'
 **
-** Created by: Qt User Interface Compiler version 5.1.1
+** Created by: Qt User Interface Compiler version 5.11.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,11 @@
 #define UI_CALIBDATAFILE_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -690,54 +687,54 @@ public:
 
     void retranslateUi(QDialog *CalibDataFile)
     {
-        CalibDataFile->setWindowTitle(QApplication::translate("CalibDataFile", ": :   Calib Data File   : :", 0));
+        CalibDataFile->setWindowTitle(QApplication::translate("CalibDataFile", ": :   Calib Data File   : :", nullptr));
         groupBoxButtons->setTitle(QString());
-        pushButtonHelp->setText(QApplication::translate("CalibDataFile", "Help", 0));
-        pushButtonClose->setText(QApplication::translate("CalibDataFile", "Close", 0));
+        pushButtonHelp->setText(QApplication::translate("CalibDataFile", "Help", nullptr));
+        pushButtonClose->setText(QApplication::translate("CalibDataFile", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonRun->setText(QApplication::translate("CalibDataFile", "Run", 0));
-        groupBoxOutput->setTitle(QApplication::translate("CalibDataFile", "Output", 0));
-        textLabelPara->setText(QApplication::translate("CalibDataFile", "Calib Data File", 0));
-        pushButtonCalibDataFile->setText(QApplication::translate("CalibDataFile", "Browse", 0));
-        textLabel1_20->setText(QApplication::translate("CalibDataFile", "Porosity", 0));
-        textLabel1_21->setText(QApplication::translate("CalibDataFile", "MP KsatV", 0));
-        textLabel1_22->setText(QApplication::translate("CalibDataFile", "Ksat V", 0));
-        textLabel1_23->setText(QApplication::translate("CalibDataFile", "Alpha", 0));
-        textLabel1_24->setText(QApplication::translate("CalibDataFile", "Beta", 0));
-        textLabel1_25->setText(QApplication::translate("CalibDataFile", "InfilDepth", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("CalibDataFile", "    Soils    ", 0));
-        textLabel1_6->setText(QApplication::translate("CalibDataFile", "Ksat V", 0));
-        textLabel1_8->setText(QApplication::translate("CalibDataFile", "Ksat H", 0));
-        textLabel1_9->setText(QApplication::translate("CalibDataFile", "MP Ksat H", 0));
-        textLabel1_7->setText(QApplication::translate("CalibDataFile", "MP Depth", 0));
-        textLabel1_10->setText(QApplication::translate("CalibDataFile", "MP fracV", 0));
-        textLabel1_19->setText(QApplication::translate("CalibDataFile", "MP fracH", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("CalibDataFile", "  Geology  ", 0));
-        textLabel1_29->setText(QApplication::translate("CalibDataFile", "Albedo", 0));
-        textLabel1_30->setText(QApplication::translate("CalibDataFile", "RZ Depth", 0));
-        textLabel1_31->setText(QApplication::translate("CalibDataFile", "Veg Frac", 0));
-        textLabel1_32->setText(QApplication::translate("CalibDataFile", "Roughness", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("CalibDataFile", "  Land Cover  ", 0));
-        textLabel1_13->setText(QApplication::translate("CalibDataFile", "Ksat H", 0));
-        textLabel1_14->setText(QApplication::translate("CalibDataFile", "Rough", 0));
-        textLabel1_15->setText(QApplication::translate("CalibDataFile", "Bed Th", 0));
-        textLabel1_16->setText(QApplication::translate("CalibDataFile", "Ksat V", 0));
-        textLabel1_17->setText(QApplication::translate("CalibDataFile", "Depth", 0));
-        textLabel1_18->setText(QApplication::translate("CalibDataFile", "Width", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("CalibDataFile", "    River    ", 0));
-        textLabel1_11->setText(QApplication::translate("CalibDataFile", "Temp", 0));
-        textLabel1_12->setText(QApplication::translate("CalibDataFile", "Precip", 0));
-        textLabel1_26->setText(QApplication::translate("CalibDataFile", "Transp", 0));
+        pushButtonRun->setText(QApplication::translate("CalibDataFile", "Run", nullptr));
+        groupBoxOutput->setTitle(QApplication::translate("CalibDataFile", "Output", nullptr));
+        textLabelPara->setText(QApplication::translate("CalibDataFile", "Calib Data File", nullptr));
+        pushButtonCalibDataFile->setText(QApplication::translate("CalibDataFile", "Browse", nullptr));
+        textLabel1_20->setText(QApplication::translate("CalibDataFile", "Porosity", nullptr));
+        textLabel1_21->setText(QApplication::translate("CalibDataFile", "MP KsatV", nullptr));
+        textLabel1_22->setText(QApplication::translate("CalibDataFile", "Ksat V", nullptr));
+        textLabel1_23->setText(QApplication::translate("CalibDataFile", "Alpha", nullptr));
+        textLabel1_24->setText(QApplication::translate("CalibDataFile", "Beta", nullptr));
+        textLabel1_25->setText(QApplication::translate("CalibDataFile", "InfilDepth", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("CalibDataFile", "    Soils    ", nullptr));
+        textLabel1_6->setText(QApplication::translate("CalibDataFile", "Ksat V", nullptr));
+        textLabel1_8->setText(QApplication::translate("CalibDataFile", "Ksat H", nullptr));
+        textLabel1_9->setText(QApplication::translate("CalibDataFile", "MP Ksat H", nullptr));
+        textLabel1_7->setText(QApplication::translate("CalibDataFile", "MP Depth", nullptr));
+        textLabel1_10->setText(QApplication::translate("CalibDataFile", "MP fracV", nullptr));
+        textLabel1_19->setText(QApplication::translate("CalibDataFile", "MP fracH", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("CalibDataFile", "  Geology  ", nullptr));
+        textLabel1_29->setText(QApplication::translate("CalibDataFile", "Albedo", nullptr));
+        textLabel1_30->setText(QApplication::translate("CalibDataFile", "RZ Depth", nullptr));
+        textLabel1_31->setText(QApplication::translate("CalibDataFile", "Veg Frac", nullptr));
+        textLabel1_32->setText(QApplication::translate("CalibDataFile", "Roughness", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("CalibDataFile", "  Land Cover  ", nullptr));
+        textLabel1_13->setText(QApplication::translate("CalibDataFile", "Ksat H", nullptr));
+        textLabel1_14->setText(QApplication::translate("CalibDataFile", "Rough", nullptr));
+        textLabel1_15->setText(QApplication::translate("CalibDataFile", "Bed Th", nullptr));
+        textLabel1_16->setText(QApplication::translate("CalibDataFile", "Ksat V", nullptr));
+        textLabel1_17->setText(QApplication::translate("CalibDataFile", "Depth", nullptr));
+        textLabel1_18->setText(QApplication::translate("CalibDataFile", "Width", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("CalibDataFile", "    River    ", nullptr));
+        textLabel1_11->setText(QApplication::translate("CalibDataFile", "Temp", nullptr));
+        textLabel1_12->setText(QApplication::translate("CalibDataFile", "Precip", nullptr));
+        textLabel1_26->setText(QApplication::translate("CalibDataFile", "Transp", nullptr));
         textLabel1_27->setText(QApplication::translate("CalibDataFile", "Evap\n"
-"Ground", 0));
+"Ground", nullptr));
         textLabel1_28->setText(QApplication::translate("CalibDataFile", "Evap\n"
-"Canopy", 0));
-        textLabel1_33->setText(QApplication::translate("CalibDataFile", "Melt Fac", 0));
-        textLabel1_34->setText(QApplication::translate("CalibDataFile", "IS Max", 0));
-        textLabel1_35->setText(QApplication::translate("CalibDataFile", "Thru Fall", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_5), QApplication::translate("CalibDataFile", "   Forcings   ", 0));
+"Canopy", nullptr));
+        textLabel1_33->setText(QApplication::translate("CalibDataFile", "Melt Fac", nullptr));
+        textLabel1_34->setText(QApplication::translate("CalibDataFile", "IS Max", nullptr));
+        textLabel1_35->setText(QApplication::translate("CalibDataFile", "Thru Fall", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_5), QApplication::translate("CalibDataFile", "   Forcings   ", nullptr));
     } // retranslateUi
 
 };
