@@ -18,10 +18,5 @@
         <file>Icons/PIHMgis3D.icns</file>
         <file>Icons/Add32.png</file>
     </qresource>
-    <qresource prefix="/misc">
-        <file>Misc/usa.dbf</file>
-        <file>Misc/usa.prj</file>
-        <file>Misc/usa.shp</file>
-        <file>Misc/usa.shx</file>
-    </qresource>
+    <qresource prefix="/misc"/>
 </RCC>

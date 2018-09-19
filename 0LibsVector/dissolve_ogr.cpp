@@ -1,8 +1,18 @@
 #include <assert.h>
 
-#include "GDAL.h"
-#include "cpl_string.h"
+//#include "GDAL.h"
+#include "gdal.h"
+#include "gdal_priv.h"
+
 #include "ogrsf_frmts.h"
+#include "ogr_p.h"
+
+#include "cpl_conv.h"
+#include "cpl_string.h"
+
+#include "ogr_api.h"
+#include "gdal_priv.h"
+
 
 /************************************************************************/
 
@@ -120,11 +130,11 @@ void log_and_exit(const char *fmt, ...)
 /************************************************************************/
 int dissolve_ogr( int argc, char *argv[] )
 {
-	const char *pszUnionAttrib = NULL;
-	const char *pszSrcFilename = NULL;
-	const char *pszDstFilename = NULL;
-	char *pzsDstFormat = NULL;
-	char *pzsDstFormatDefault = "ESRI Shapefile";
+    const char *pszUnionAttrib = nullptr;
+    const char *pszSrcFilename = nullptr;
+    const char *pszDstFilename = nullptr;
+    char *pzsDstFormat = nullptr;
+    const char *pzsDstFormatDefault = "ESRI Shapefile";
 
 	int i;
 	bool bUnpackMultiPolys = false;
@@ -181,15 +191,16 @@ int dissolve_ogr( int argc, char *argv[] )
 	}
 	if ( pzsDstFormat == NULL )
 	{
-		pzsDstFormat = pzsDstFormatDefault;
+        pzsDstFormat = (char*)pzsDstFormatDefault;
 	}
 
 
 /* -------------------------------------------------------------------- */
 /*  Do requested Operations:                                            */
 /* -------------------------------------------------------------------- */
-	OGRDataSource	*poDS;
-	OGRLayer		*poLayer;
+    //OGRDataSource	*poDS;
+
+    OGRLayer		*poLayer;
 	OGRFeature		*poFeature;
 	OGRFeatureDefn  *poFDefn;
 	OGRGeometry		*poGeometry;
@@ -199,7 +210,7 @@ int dissolve_ogr( int argc, char *argv[] )
 //	OGRLayer		*poUnionLayer;
 //	OGRFeature		*poUnionFeature;
 
-	OGRDataSource	*poDSout;
+//	OGRDataSource	*poDSout;
 	OGRLayer		*poLayerOut;
 
 
@@ -218,8 +229,11 @@ int dissolve_ogr( int argc, char *argv[] )
 	/*  Open input, check for requirements:                                  */
 	/*-----------------------------------------------------------------------*/
 	OGRRegisterAll();
-	poDS = OGRSFDriverRegistrar::Open( pszSrcFilename, FALSE );	// we will be updating the dataset
-	if( poDS == NULL )
+
+    //poDS = OGRSFDriverRegistrar::Open( pszSrcFilename, FALSE );	// we will be updating the
+   GDALDataset *poDS = (GDALDataset*) GDALOpenEx(pszSrcFilename, GDAL_OF_READONLY, NULL, NULL, NULL);
+
+    if( poDS == NULL )
 	{
 		return(101);	//can't open dataset
 	}
@@ -294,15 +308,21 @@ int dissolve_ogr( int argc, char *argv[] )
 	/*-----------------------------------------------------------------------*/
 	/*  Create output:                                                       */
 	/*-----------------------------------------------------------------------*/
-	OGRSFDriver *poDriver;
-    poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName( pzsDstFormat );
+    //OGRSFDriver *poDriver;
+    //poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName( pzsDstFormat );
+   GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pzsDstFormat);
+
+
     if( poDriver == NULL )
     {
 //        printf( "%s driver not available.\n", pszDriverName );
         return(101);
     }
 
-	poDSout = poDriver->CreateDataSource( pszDstFilename, NULL );
+
+    //poDSout = poDriver->CreateDataSource( pszDstFilename, NULL );
+    GDALDataset *poDSout = poDriver->Create(pszDstFilename,0,0,0,GDT_Unknown,NULL);
+
     if( poDSout == NULL )
     {
 //        printf( "Creation of output file failed.\n" );
@@ -415,9 +435,10 @@ int dissolve_ogr( int argc, char *argv[] )
 	GDALTermProgress( ((double)nAttrs)/nAttrs, "", NULL);
 //	printf("\n-- Info: .\n" );
 
-	OGRDataSource::DestroyDataSource( poDS );
-	OGRDataSource::DestroyDataSource( poDSout );
-
+    //OGRDataSource::DestroyDataSource( poDS );
+    //OGRDataSource::DestroyDataSource( poDSout );
+    GDALClose(poDS);
+    GDALClose(poDSout);
 
 /* -------------------------------------------------------------------- */
 /*  Exit:                                                               */

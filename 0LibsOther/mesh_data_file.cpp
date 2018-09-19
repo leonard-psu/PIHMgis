@@ -41,14 +41,14 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
 
     GDALAllRegister();
     SurfElev = (GDALDataset *)GDALOpen(qPrintable(SurfaceFilename), GA_ReadOnly);
-    if ( SurfElev == NULL )
+    if ( SurfElev == nullptr )
         return 44;
     getExtent(SurfElev, sRanges);
 
     if( CheckBoxSubSurface == false )
     {
         SubSurfElev = (GDALDataset *)GDALOpen(qPrintable(SubsurfaceFileName), GA_ReadOnly);
-        if ( SubSurfElev == NULL )
+        if ( SubSurfElev == nullptr )
             return 51;
         getExtent(SubSurfElev, bRanges);
     }

@@ -2,8 +2,10 @@
 #include "defineproject.h"
 #include "ui_defineproject.h"
 #include <iostream>
+#include <QFileDialog>
+#include <QMessageBox>
 
-#include "../../pihmLIBS/helpDialog/helpdialog.h"
+//#include "../../pihmLIBS/helpDialog/helpdialog.h"
 
 using namespace std;
 
@@ -56,8 +58,8 @@ void DefineProject::on_pushButtonClose_clicked()
 
 void DefineProject::on_pushButtonHelp_clicked()
 {
-            helpDialog* hlpDlg = new helpDialog(this, "New Project", 1, "helpFiles/newproject.html", "Help :: New Project");
-            hlpDlg->show();
+            //PROBLEM 09_18_18 helpDialog* hlpDlg = new helpDialog(this, "New Project", 1, "helpFiles/newproject.html", "Help :: New Project");
+            //PROBLEM 09_18_18 hlpDlg->show();
 }
 
 /* This is a very elementary implementation of Project management

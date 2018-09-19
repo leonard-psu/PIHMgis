@@ -29,7 +29,7 @@ int recordNum;
 // Segments the rivers 
 int stream_shape(char *rivFile, char *fdrFile, char *rivShpFile, char *rivDbfFile)
 {
-    FILE *fp;
+    //FILE *fp;
     int err, err1, err2, err3;
     int i, j, fdr;
     int mIJ[2];
@@ -39,13 +39,13 @@ int stream_shape(char *rivFile, char *fdrFile, char *rivShpFile, char *rivDbfFil
     int mtemp;
     int mlocnVertices;
 
-    int num = 1;
+    //int num = 1;
 
     shp = SHPCreate(rivShpFile, SHPT_ARC);
-    if (shp == NULL)
+    if (shp == nullptr)
         return 43;
     dbf = DBFCreate(rivDbfFile);
-    if (dbf == NULL)
+    if (dbf == nullptr)
         return 44;
     Att = DBFAddField(dbf, "SegNum", FTInteger, 5, 0);
 
@@ -53,6 +53,7 @@ int stream_shape(char *rivFile, char *fdrFile, char *rivShpFile, char *rivDbfFil
         return 46;
     
     
+    //err1=gridread(fdrFile,(void ***)&dir,RPSHRDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
     err1=gridread(fdrFile,(void ***)&dir,RPSHRDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
     //printf("%d %d %d %d\n",nx, ny, dir[1][2], dir[5][1]);
     err2=gridread(rivFile,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
@@ -80,7 +81,7 @@ int stream_shape(char *rivFile, char *fdrFile, char *rivShpFile, char *rivDbfFil
                            //getchar();
                            if(elev[mIJ[0]][mIJ[1]] != 1 )
                            { // outlet found
-                                printf("Outlet -> %d\t%d\t%d\n",mIJ[0], mIJ[1],elev[mIJ[0]][mIJ[1]]);
+                                printf("Outlet -> %d\t%d\t%f\n",mIJ[0], mIJ[1],elev[mIJ[0]][mIJ[1]]);
                                 //getchar();
                                 
                                 mtemp=findCellShp(elev, dir, i, j, mcell);
@@ -242,7 +243,7 @@ void findIJShp(short **fdr, int i, int j, int *mIJ){
 int findCellShp(float **riv, short **dir, int i, int j, int (*cell)[2]){
      int ii, jj;
      int cellCount=0;
-     int fdr;
+     //int fdr;
      int mIJ[2];
      //printf("i= %d j= %d\n",i,j);
      for(ii=i-1; ii<=i+1; ii++){ //col 

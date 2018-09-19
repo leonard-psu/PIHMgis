@@ -1,7 +1,8 @@
 #ifndef DEFINEPROJECT_H
 #define DEFINEPROJECT_H
 
-#include <QtGui/QDialog>
+//#include <QtGui/QDialog>
+#include <QDialog>
 
 namespace Ui
 {

@@ -1,7 +1,7 @@
 #ifndef CLOSEPROJECT_H
 #define CLOSEPROJECT_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 namespace Ui
 {

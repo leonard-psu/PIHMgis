@@ -349,7 +349,9 @@ void StreamGrids::on_pushButtonRun_clicked()
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
-        int ErrorStr = stream_definition((char *)qPrintable(ui->lineEditFlowAccGrids->text()), "dummy", (char *)qPrintable(ui->lineEditStreamGrids->text()), 1, ui->lineEditThreshold->text().toInt() );
+         const char *dummystr = "dummy";
+         //int ErrorStr = stream_definition((char *)qPrintable(ui->lineEditFlowAccGrids->text()), "dummy", (char *)qPrintable(ui->lineEditStreamGrids->text()), 1, ui->lineEditThreshold->text().toInt() );
+         int ErrorStr = stream_definition((char *)qPrintable(ui->lineEditFlowAccGrids->text()), (char *)dummystr, (char *)qPrintable(ui->lineEditStreamGrids->text()), 1, ui->lineEditThreshold->text().toInt() );
         if( ErrorStr != 0 )
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Stream Grid Processing Failed ... </span>")+tr("<br>"));

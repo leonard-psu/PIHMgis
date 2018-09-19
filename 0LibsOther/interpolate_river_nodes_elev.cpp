@@ -71,13 +71,13 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
     SHPHandle shp = SHPOpen(qPrintable(shpFileName), "rb");
     DBFHandle dbf = DBFOpen(qPrintable(dbfFileName), "rb");
 
-    if ( shp == NULL || dbf == NULL )
+    if ( shp == nullptr || dbf == nullptr )
         return 75;
 
     SHPHandle newshp = SHPCreate(qPrintable(DecompRiverFileNameShp), SHPT_ARC);
     DBFHandle newdbf = DBFCreate(qPrintable(DecompRiverFileNameDbf));
 
-    if ( newshp == NULL || newdbf == NULL )
+    if ( newshp == nullptr || newdbf == nullptr )
         return 81;
 
 	int left = DBFAddField(newdbf, "LeftEle", FTInteger, 10, 0);

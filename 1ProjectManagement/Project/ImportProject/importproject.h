@@ -1,7 +1,7 @@
 #ifndef IMPORTPROJECT_H
 #define IMPORTPROJECT_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 namespace Ui
 {

@@ -49,7 +49,7 @@ int shape_pslg(const char* constFileName, const char* outputFileName, QString *t
 		//SHPInfo* currentHandle = SHPOpen("/root/Desktop/testData/q20.shp","r+");
         cout<<"File: "<<constFileName<<"\n";
 		SHPHandle thisObj = SHPOpen(constFileName,"r+");
-		if(thisObj == NULL)
+        if(thisObj == nullptr)
             return 53;
 
 		int numEntities, shapeType;
@@ -102,7 +102,7 @@ int shape_pslg(const char* constFileName, const char* outputFileName, QString *t
 			}
             else
             {
-				if(thisObjHandle == NULL)
+                if(thisObjHandle == nullptr)
 					cout<<"testNULL\n";
 
 				

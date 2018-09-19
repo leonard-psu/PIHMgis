@@ -409,7 +409,7 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
 
 
     int    NumClasses = 0;
-    double LcClasses[MAXLC];
+    double LcClasses[100]; //MAXLC];
 
     while ( ! ClassFileTextStream.atEnd() )
     {

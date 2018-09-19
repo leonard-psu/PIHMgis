@@ -62,13 +62,13 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
     SHPHandle RiverShpHandle = SHPOpen(qPrintable(RiverShpFileName), "rb");
     DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
 
-    if ( RiverShpHandle == NULL || RiverDbfHandle == NULL )
+    if ( RiverShpHandle == nullptr || RiverDbfHandle == nullptr )
         return 51;
 
     SHPHandle xRiverShpHandle = SHPCreate(qPrintable(xRiverShpFileName), SHPT_ARC);
     DBFHandle xRiverDbfHandle = DBFCreate(qPrintable(xRiverDbfFileName));
 
-    if ( xRiverShpHandle == NULL || xRiverDbfHandle == NULL )
+    if ( xRiverShpHandle == nullptr || xRiverDbfHandle == nullptr )
         return 57;
 
     int LeftEle     = DBFAddField(xRiverDbfHandle, "LeftEle",     FTInteger, 10, 0);
@@ -290,7 +290,7 @@ int AddFID(QString RiverDbfFileName)
 {
 
     DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
-    if ( RiverDbfHandle == NULL )
+    if ( RiverDbfHandle == nullptr )
         return 283;
 
     int TempInt;
@@ -301,7 +301,7 @@ int AddFID(QString RiverDbfFileName)
     TempDbfFileName = QDir::homePath()+"/.PIHMgis/temp.dbf";
     DBFHandle TempDbfHandle = DBFCreate(qPrintable(TempDbfFileName));
 
-    if ( TempDbfHandle == NULL )
+    if ( TempDbfHandle == nullptr )
         return 293;
 
     int width[1], decimals[1];
@@ -372,14 +372,14 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
     SHPHandle RiverShpHandle = SHPOpen( qPrintable(RiverShpFileName), "rb");
     DBFHandle RiverDbfHandle = DBFOpen( qPrintable(RiverDbfFileName), "rb");
 
-    if ( RiverShpHandle == NULL || RiverDbfHandle == NULL )
+    if ( RiverShpHandle == nullptr || RiverDbfHandle == nullptr )
         return 365;
 
     QString TempDbfFileName;
     TempDbfFileName = QDir::homePath()+"/.PIHMgis/temp.dbf";
     DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
 
-    if ( TempDbfHandle == NULL )
+    if ( TempDbfHandle == nullptr )
         return 372;
 
     int TempInt;
@@ -698,7 +698,7 @@ int AddDownSegment(QString RiverDbfFileName, QString BoundaryCondition)
 
     DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
 
-    if ( RiverDbfHandle == NULL )
+    if ( RiverDbfHandle == nullptr )
         return 692;
 
     qDebug() << "Checking Requirent Fields ...";

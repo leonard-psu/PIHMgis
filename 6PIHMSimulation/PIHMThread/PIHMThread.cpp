@@ -4,6 +4,9 @@
 
 #include "6PIHMSimulation/PIHMSrc/PIHM_v2.2/pihm.h"
 
+#include "sundials/sundials_types.h"
+#include "nvector/nvector_serial.h"
+
 
 PIHMThread::PIHMThread(QObject * parent)
 {

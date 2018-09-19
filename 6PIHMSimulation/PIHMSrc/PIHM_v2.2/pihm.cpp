@@ -56,17 +56,21 @@
 #include <time.h>
 
 /* SUNDIAL Header Files */
-#include "sundials_types.h"	/* realtype, integertype, booleantype
-				 * defination */
-#include "cvode.h"		/* CVODE header file                             */
-#include "cvode_spgmr.h"	/* CVSPGMR linear header file                    */
-#include "sundials_smalldense.h"/* use generic DENSE linear solver for
-				 * "small"   */
-#include "nvector_serial.h"	/* contains the definition of type N_Vector      */
-#include "sundials_math.h"	/* contains UnitRoundoff, RSqrt, SQR
+
+#include "sundials/sundials_types.h"
+#include "nvector/nvector_serial.h"
+
+
+#include "cvode/cvode.h"		/* CVODE header file                             */
+#include "cvode/cvode_spgmr.h"	/* CVSPGMR linear header file                    */
+//#include "sundials_smalldense.h"/* use generic DENSE linear solver for
+//				 * "small"   */
+#include "sundials/sundials_math.h"	/* contains UnitRoundoff, RSqrt, SQR
 				 * functions   */
-#include "cvode_dense.h"	/* CVDENSE header file                           */
-#include "sundials_dense.h"	/* generic dense solver header file              */
+#include "cvode/cvode_dense.h"	/* CVDENSE header file                           */
+#include "sundials/sundials_dense.h"	/* generic dense solver header file              */
+
+
 #include "pihm.h"		/* Data Model and Variable Declarations     */
 
 #include "update.h"
@@ -204,12 +208,14 @@ PIHM_v2_2(int argc, char *argv[], QProgressBar* progressBar, QString logFileName
 		printf("CVodeMalloc failed. \n");
 		return (1);
 	}
-	flag = CVodeSetFdata(cvode_mem, mData);
+    //flag = CVodeSetFdata(cvode_mem, mData);
 	flag = CVodeSetInitStep(cvode_mem, cData.InitStep);
 	flag = CVodeSetStabLimDet(cvode_mem, TRUE);
 	flag = CVodeSetMaxStep(cvode_mem, cData.MaxStep);
-	flag = CVodeMalloc(cvode_mem, f, cData.StartTime, CV_Y, CV_SS, cData.reltol, &cData.abstol);
-	flag = CVSpgmr(cvode_mem, PREC_NONE, 0);
+    //flag = CVodeMalloc(cvode_mem, f, cData.StartTime, CV_Y, CV_SS, cData.reltol, &cData.abstol);
+    flag = CVodeInit(cvode_mem, f, cData.StartTime, CV_Y);
+
+    flag = CVSpgmr(cvode_mem, PREC_NONE, 0);
 	//flag = CVSpgmrSetGSType(cvode_mem, MODIFIED_GS);
     printf("Done.\n");
 

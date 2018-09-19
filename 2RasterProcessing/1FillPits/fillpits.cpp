@@ -257,7 +257,10 @@ void FillPits::on_pushButtonRun_clicked()
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
-        int ErrorFill = flood( (char *)qPrintable(ASCFileName), "dummy", (char *)qPrintable(ui->lineEditFillPits->text()) );
+        const char *dummystr = "dummy";
+
+        //int ErrorFill = flood( (char *)qPrintable(ASCFileName), "dummy", (char *)qPrintable(ui->lineEditFillPits->text()) );
+        int ErrorFill = flood( (char *)qPrintable(ASCFileName), (char *)dummystr, (char *)qPrintable(ui->lineEditFillPits->text()) );
         if( ErrorFill != 0 )
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fill Pits Processing Failed ... </span>")+tr("<br>"));

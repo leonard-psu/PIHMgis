@@ -248,7 +248,9 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         ShpFileName = ui->lineEditCatchmentPolygon->text();
         DbfFileName = ShpFileName;
         DbfFileName.replace(QString(".shp"), QString(".dbf"));
-        int ErrorCat = catchment_shape((char *)qPrintable(ui->lineEditCatchmentGrids->text()), "dummy", (char *)qPrintable(ShpFileName), (char *)qPrintable(DbfFileName));
+       // int ErrorCat = catchment_shape((char *)qPrintable(ui->lineEditCatchmentGrids->text()), "dummy", (char *)qPrintable(ShpFileName), (char *)qPrintable(DbfFileName));
+        const char *dummystr = "dummy";
+        int ErrorCat = catchment_shape((char *)qPrintable(ui->lineEditCatchmentGrids->text()),(char *)dummystr, (char *)qPrintable(ShpFileName), (char *)qPrintable(DbfFileName));
         if( ErrorCat != 0 )
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Stream Polyline Processing Failed ... </span>")+tr("<br>"));

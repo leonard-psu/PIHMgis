@@ -42,7 +42,8 @@
 #include "5DataModelLoader/9ParaDataFile/paradatafile.h"
 #include "5DataModelLoader/10CalibDataFile/calibdatafile.h"
 
-#include "6PIHMSimulation/1PIHM_v2.2/PIHMSimulation.h"
+//#include "6PIHMSimulation/1PIHM_v2.2/PIHMSimulation.h"
+#include "6PIHMSimulation/1PIHM_v2.2/pihmsimulation.h"
 
 #include "7VisualAnalytics/1MeshSpatial/meshspatial.h"
 #include "7VisualAnalytics/2MeshTemporal/meshtemporal.h"
@@ -76,8 +77,8 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
     }
 
     ui->PIHMgisToolBox->setCurrentIndex(8-1);
-    ui->pushButtonWorkFlow1->setDefault(1);
-    ui->pushButtonWorkFlow1->setFocus();
+    //ui->pushButtonWorkFlow1->setDefault(1);
+    //ui->pushButtonWorkFlow1->setFocus();
 }
 
 PIHMgisDialog::~PIHMgisDialog()
@@ -237,13 +238,13 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
     for(int i=0; i<DEFAULT_PARAM.size(); i++)
     {
         if (DEFAULT_PARAM.at(i) == "WORKFLOW0") { boolWORKFLOW0 = true; ui->pushButtonWorkFlow0->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW1") { boolWORKFLOW1 = true; ui->pushButtonWorkFlow1->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW2") { boolWORKFLOW2 = true; ui->pushButtonWorkFlow2->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW3") { boolWORKFLOW3 = true; ui->pushButtonWorkFlow3->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW4") { boolWORKFLOW4 = true; ui->pushButtonWorkFlow4->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW5") { boolWORKFLOW5 = true; ui->pushButtonWorkFlow5->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW6") { boolWORKFLOW6 = true; ui->pushButtonWorkFlow6->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW7") { boolWORKFLOW7 = true; ui->pushButtonWorkFlow7->setFocus(); continue; }
+//        if (DEFAULT_PARAM.at(i) == "WORKFLOW1") { boolWORKFLOW1 = true; ui->pushButtonWorkFlow1->setFocus(); continue; }
+//        if (DEFAULT_PARAM.at(i) == "WORKFLOW2") { boolWORKFLOW2 = true; ui->pushButtonWorkFlow2->setFocus(); continue; }
+//        if (DEFAULT_PARAM.at(i) == "WORKFLOW3") { boolWORKFLOW3 = true; ui->pushButtonWorkFlow3->setFocus(); continue; }
+//        if (DEFAULT_PARAM.at(i) == "WORKFLOW4") { boolWORKFLOW4 = true; ui->pushButtonWorkFlow4->setFocus(); continue; }
+//        if (DEFAULT_PARAM.at(i) == "WORKFLOW5") { boolWORKFLOW5 = true; ui->pushButtonWorkFlow5->setFocus(); continue; }
+//        if (DEFAULT_PARAM.at(i) == "WORKFLOW6") { boolWORKFLOW6 = true; ui->pushButtonWorkFlow6->setFocus(); continue; }
+//        if (DEFAULT_PARAM.at(i) == "WORKFLOW7") { boolWORKFLOW7 = true; ui->pushButtonWorkFlow7->setFocus(); continue; }
 
         if (DEFAULT_PARAM.at(i) == "NEWPRJ")    { boolNEWPRJ    = true; ui->pushButtonPIHMgisProjectNew->setFocus();    continue; }
         if (DEFAULT_PARAM.at(i) == "OPENPRJ")   { boolOPENPRJ   = true; ui->pushButtonPIHMgisProjectOpen->setFocus();   continue; }
@@ -289,13 +290,13 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
     }
 
     ui->pushButtonWorkFlow0->setDefault(boolWORKFLOW0);
-    ui->pushButtonWorkFlow1->setDefault(boolWORKFLOW1);
-    ui->pushButtonWorkFlow2->setDefault(boolWORKFLOW2);
-    ui->pushButtonWorkFlow3->setDefault(boolWORKFLOW3);
-    ui->pushButtonWorkFlow4->setDefault(boolWORKFLOW4);
-    ui->pushButtonWorkFlow5->setDefault(boolWORKFLOW5);
-    ui->pushButtonWorkFlow6->setDefault(boolWORKFLOW6);
-    ui->pushButtonWorkFlow7->setDefault(boolWORKFLOW7);
+//    ui->pushButtonWorkFlow1->setDefault(boolWORKFLOW1);
+//    ui->pushButtonWorkFlow2->setDefault(boolWORKFLOW2);
+//    ui->pushButtonWorkFlow3->setDefault(boolWORKFLOW3);
+//    ui->pushButtonWorkFlow4->setDefault(boolWORKFLOW4);
+//    ui->pushButtonWorkFlow5->setDefault(boolWORKFLOW5);
+//    ui->pushButtonWorkFlow6->setDefault(boolWORKFLOW6);
+//    ui->pushButtonWorkFlow7->setDefault(boolWORKFLOW7);
 
     ui->pushButtonPIHMgisProjectNew->setDefault(boolNEWPRJ);
     ui->pushButtonPIHMgisProjectOpen->setDefault(boolOPENPRJ);

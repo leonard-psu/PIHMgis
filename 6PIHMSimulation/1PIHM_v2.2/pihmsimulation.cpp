@@ -384,7 +384,11 @@ void PIHMSimulation::on_pushButtonRun_clicked()
             arguments[0] = (char * ) malloc(400*sizeof(char) );
             arguments[1] = (char * ) malloc(400*sizeof(char) );
 
-            arguments[0] = "2 ";
+            //Problems here
+            const char *dummystr = "2 ";
+            arguments[0] = (char *)dummystr; //"2 ";
+
+
             //arguments[1] = (char *) qPrintable(SimulationFolder+"/"+ui->lineEditDataKey->text());
             sprintf(arguments[1],"%s",qPrintable(SimulationFolder+"/"+ui->lineEditDataKey->text()));
             qDebug() << arguments[1];

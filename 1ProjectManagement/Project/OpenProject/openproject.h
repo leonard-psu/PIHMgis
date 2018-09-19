@@ -1,7 +1,7 @@
 #ifndef OPENPROJECT_H
 #define OPENPROJECT_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 namespace Ui
 {
