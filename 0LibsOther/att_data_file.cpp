@@ -1,12 +1,15 @@
 #include <QString>
 #include <QFile>
 #include <QTextStream>
+#include <QDebug>
 
 #include <gdal.h>
 #include <gdal_priv.h>
 
 #include "./0LibsShape/shapefil.h"
 #include "./0LibsOther/raster_grid_value.h"
+#include "globals.h"
+
 
 #define _GDAL_PRECIPITATION     if ( ! PrecipitationFlag )
 #define _GDAL_TEMPERATURE       if ( ! TemperatureFlag )
@@ -40,112 +43,118 @@ int att_data_file(
         QString TINShapeLayerFileName, QString AttDataFileName
         )
 {
-    QString TINShpFileName, TINDbfFileName;
 
-    TINShpFileName = TINShapeLayerFileName;
-    TINDbfFileName = TINShapeLayerFileName;
-    TINDbfFileName = TINDbfFileName.replace( QString(".shp"), QString(".dbf") );
+    if(print_debug_messages)
+        qDebug() << "INFO: Start att_data_file";
 
-    SHPHandle _ShpHandle = SHPOpen(qPrintable(TINShpFileName), "rb");
-    DBFHandle _DbfHandle = DBFOpen(qPrintable(TINDbfFileName), "rb");
+    try {
 
-    if ( _ShpHandle == nullptr || _DbfHandle == nullptr )
-        return 27;
+        QString TINShpFileName, TINDbfFileName;
 
-    int recordCount = DBFGetRecordCount( _DbfHandle );
+        TINShpFileName = TINShapeLayerFileName;
+        TINDbfFileName = TINShapeLayerFileName;
+        TINDbfFileName = TINDbfFileName.replace( QString(".shp"), QString(".dbf") );
 
-    if ( recordCount < 1 )
-        return 32;
+        SHPHandle _ShpHandle = SHPOpen(qPrintable(TINShpFileName), "rb");
+        DBFHandle _DbfHandle = DBFOpen(qPrintable(TINDbfFileName), "rb");
 
-    SHPObject *_ShpObject;
+        if ( _ShpHandle == nullptr || _DbfHandle == nullptr )
+            return 27;
 
-    QFile AttDataFile(AttDataFileName);
-    if ( ! AttDataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
-        return 39;
-    QTextStream AttDataFileTextStream(&AttDataFile);
+        int recordCount = DBFGetRecordCount( _DbfHandle );
 
+        if ( recordCount < 1 )
+            return 32;
 
-    GDALDataset *GDALPrecipitation, *GDALTemperature,    *GDALRelativeHumidity, *GDALWindVelocity,     *GDALSolarRadiation, *GDALVaporPressure;
-    GDALDataset *GDALSoilClasses,   *GDALGeologyClasses, *GDALMacropores,       *GDALLandCoverClasses, *GDALMeltRegions,    *GDALSourcesSinks;
-    GDALDataset *GDALInterception,  *GDALSnowCover,      *GDALSurfaceStorage,   *GDALSoilMoisture,     *GDALGroundwater,    *GDALBoundaryCondition;
+        SHPObject *_ShpObject;
 
-    double PrecipitationRanges[6], TemperatureRanges[6],    RelativeHumidityRanges[6], WindVelocityRanges[6],     SolarRadiationRanges[6], VaporPressureRanges[6];
-    double SoilClassesRanges[6],   GeologyClassesRanges[6], MacroporesRanges[6],       LandCoverClassesRanges[6], MeltRegionsRanges[6],    SourcesSinksRanges[6];
-    double InterceptionRanges[6],  SnowCoverRanges[6],      SurfaceStorageRanges[6],   SoilMoistureRanges[6],     GroundwaterRanges[6],    BoundaryConditionRanges[6];
+        QFile AttDataFile(AttDataFileName);
+        if ( ! AttDataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+            return 39;
+        QTextStream AttDataFileTextStream(&AttDataFile);
 
 
-    GDALAllRegister();
+        GDALDataset *GDALPrecipitation, *GDALTemperature,    *GDALRelativeHumidity, *GDALWindVelocity,     *GDALSolarRadiation, *GDALVaporPressure;
+        GDALDataset *GDALSoilClasses,   *GDALGeologyClasses, *GDALMacropores,       *GDALLandCoverClasses, *GDALMeltRegions,    *GDALSourcesSinks;
+        GDALDataset *GDALInterception,  *GDALSnowCover,      *GDALSurfaceStorage,   *GDALSoilMoisture,     *GDALGroundwater,    *GDALBoundaryCondition;
 
-    _GDAL_PRECIPITATION     GDALPrecipitation     = (GDALDataset *)GDALOpen(qPrintable(PrecipitationFileName), GA_ReadOnly);
-    _GDAL_TEMPERATURE       GDALTemperature       = (GDALDataset *)GDALOpen(qPrintable(TemperatureFileName), GA_ReadOnly);
-    _GDAL_RELATIVEHUMIDITY  GDALRelativeHumidity  = (GDALDataset *)GDALOpen(qPrintable(RelativeHumidityFileName), GA_ReadOnly);
-    _GDAL_WINDVELOCITY      GDALWindVelocity      = (GDALDataset *)GDALOpen(qPrintable(WindVelocityFileName), GA_ReadOnly);
-    _GDAL_SOLARRADIATION    GDALSolarRadiation    = (GDALDataset *)GDALOpen(qPrintable(SolarRadiationFileName), GA_ReadOnly);
-    _GDAL_VAPORPRESSURE     GDALVaporPressure     = (GDALDataset *)GDALOpen(qPrintable(VaporPressureFileName), GA_ReadOnly);
-
-    _GDAL_SOILCLASSES       GDALSoilClasses       = (GDALDataset *)GDALOpen(qPrintable(SoilClassesFileName), GA_ReadOnly);
-    _GDAL_GEOLOGYCLASSES    GDALGeologyClasses    = (GDALDataset *)GDALOpen(qPrintable(GeologyClassesFileName), GA_ReadOnly);
-    _GDAL_MACROPORES        GDALMacropores        = (GDALDataset *)GDALOpen(qPrintable(MacroporesFileName), GA_ReadOnly);
-    _GDAL_LANDCOVERCLASSES  GDALLandCoverClasses  = (GDALDataset *)GDALOpen(qPrintable(LandCoverClassesFileName), GA_ReadOnly);
-    _GDAL_MELTREGIONS       GDALMeltRegions       = (GDALDataset *)GDALOpen(qPrintable(MeltRegionsFileName), GA_ReadOnly);
-    _GDAL_SOURCESSINKS      GDALSourcesSinks      = (GDALDataset *)GDALOpen(qPrintable(SourcesSinksFileName), GA_ReadOnly);
-
-    _GDAL_INTERCEPTION      GDALInterception      = (GDALDataset *)GDALOpen(qPrintable(InterceptionFileName), GA_ReadOnly);
-    _GDAL_SNOWCOVER         GDALSnowCover         = (GDALDataset *)GDALOpen(qPrintable(SnowCoverFileFileName), GA_ReadOnly);
-    _GDAL_SURFACESTORAGE    GDALSurfaceStorage    = (GDALDataset *)GDALOpen(qPrintable(SurfaceStorageFileName), GA_ReadOnly);
-    _GDAL_SOILMOISTURE      GDALSoilMoisture      = (GDALDataset *)GDALOpen(qPrintable(SoilMoistureFileName), GA_ReadOnly);
-    _GDAL_GROUNDWATER       GDALGroundwater       = (GDALDataset *)GDALOpen(qPrintable(GroundwaterFileName), GA_ReadOnly);
-    _GDAL_BOUNDARYCONDITION GDALBoundaryCondition = (GDALDataset *)GDALOpen(qPrintable(BoundaryConditionFileName), GA_ReadOnly);
-
-    _GDAL_PRECIPITATION         if ( GDALPrecipitation     == nullptr ) return 75;
-    _GDAL_TEMPERATURE           if ( GDALTemperature       == nullptr ) return 76;
-    _GDAL_RELATIVEHUMIDITY      if ( GDALRelativeHumidity  == nullptr ) return 77;
-    _GDAL_WINDVELOCITY          if ( GDALWindVelocity      == nullptr ) return 78;
-    _GDAL_SOLARRADIATION        if ( GDALSolarRadiation    == nullptr ) return 79;
-    _GDAL_VAPORPRESSURE         if ( GDALVaporPressure     == nullptr ) return 80;
-
-    _GDAL_SOILCLASSES           if ( GDALSoilClasses       == nullptr ) return 82;
-    _GDAL_GEOLOGYCLASSES        if ( GDALGeologyClasses    == nullptr ) return 83;
-    _GDAL_MACROPORES            if ( GDALMacropores        == nullptr ) return 84;
-    _GDAL_LANDCOVERCLASSES      if ( GDALLandCoverClasses  == nullptr ) return 85;
-    _GDAL_MELTREGIONS           if ( GDALMeltRegions       == nullptr ) return 86;
-    _GDAL_SOURCESSINKS          if ( GDALSourcesSinks      == nullptr ) return 87;
-
-    _GDAL_INTERCEPTION          if ( GDALInterception      == nullptr ) return 89;
-    _GDAL_SNOWCOVER             if ( GDALSnowCover         == nullptr ) return 90;
-    _GDAL_SURFACESTORAGE        if ( GDALSurfaceStorage    == nullptr ) return 91;
-    _GDAL_SOILMOISTURE          if ( GDALSoilMoisture      == nullptr ) return 92;
-    _GDAL_GROUNDWATER           if ( GDALGroundwater       == nullptr ) return 93;
-    _GDAL_BOUNDARYCONDITION     if ( GDALBoundaryCondition == nullptr ) return 94;
+        double PrecipitationRanges[6], TemperatureRanges[6],    RelativeHumidityRanges[6], WindVelocityRanges[6],     SolarRadiationRanges[6], VaporPressureRanges[6];
+        double SoilClassesRanges[6],   GeologyClassesRanges[6], MacroporesRanges[6],       LandCoverClassesRanges[6], MeltRegionsRanges[6],    SourcesSinksRanges[6];
+        double InterceptionRanges[6],  SnowCoverRanges[6],      SurfaceStorageRanges[6],   SoilMoistureRanges[6],     GroundwaterRanges[6],    BoundaryConditionRanges[6];
 
 
-    _GDAL_PRECIPITATION         getExtent(GDALPrecipitation, PrecipitationRanges);
-    _GDAL_TEMPERATURE           getExtent(GDALTemperature, TemperatureRanges);
-    _GDAL_RELATIVEHUMIDITY      getExtent(GDALRelativeHumidity, RelativeHumidityRanges);
-    _GDAL_WINDVELOCITY          getExtent(GDALWindVelocity, WindVelocityRanges);
-    _GDAL_SOLARRADIATION        getExtent(GDALSolarRadiation, SolarRadiationRanges);
-    _GDAL_VAPORPRESSURE         getExtent(GDALVaporPressure, VaporPressureRanges);
+        GDALAllRegister();
 
-    _GDAL_SOILCLASSES           getExtent(GDALSoilClasses, SoilClassesRanges);
-    _GDAL_GEOLOGYCLASSES        getExtent(GDALGeologyClasses, GeologyClassesRanges);
-    _GDAL_MACROPORES            getExtent(GDALMacropores, MacroporesRanges);
-    _GDAL_LANDCOVERCLASSES      getExtent(GDALLandCoverClasses, LandCoverClassesRanges);
-    _GDAL_MELTREGIONS           getExtent(GDALMeltRegions, MeltRegionsRanges);
-    _GDAL_SOURCESSINKS          getExtent(GDALSourcesSinks, SourcesSinksRanges);
+        _GDAL_PRECIPITATION     GDALPrecipitation     = (GDALDataset *)GDALOpen(qPrintable(PrecipitationFileName), GA_ReadOnly);
+        _GDAL_TEMPERATURE       GDALTemperature       = (GDALDataset *)GDALOpen(qPrintable(TemperatureFileName), GA_ReadOnly);
+        _GDAL_RELATIVEHUMIDITY  GDALRelativeHumidity  = (GDALDataset *)GDALOpen(qPrintable(RelativeHumidityFileName), GA_ReadOnly);
+        _GDAL_WINDVELOCITY      GDALWindVelocity      = (GDALDataset *)GDALOpen(qPrintable(WindVelocityFileName), GA_ReadOnly);
+        _GDAL_SOLARRADIATION    GDALSolarRadiation    = (GDALDataset *)GDALOpen(qPrintable(SolarRadiationFileName), GA_ReadOnly);
+        _GDAL_VAPORPRESSURE     GDALVaporPressure     = (GDALDataset *)GDALOpen(qPrintable(VaporPressureFileName), GA_ReadOnly);
 
-    _GDAL_INTERCEPTION          getExtent(GDALInterception, InterceptionRanges);
-    _GDAL_SNOWCOVER             getExtent(GDALSnowCover, SnowCoverRanges);
-    _GDAL_SURFACESTORAGE        getExtent(GDALSurfaceStorage, SurfaceStorageRanges);
-    _GDAL_SOILMOISTURE          getExtent(GDALSoilMoisture, SoilMoistureRanges);
-    _GDAL_GROUNDWATER           getExtent(GDALGroundwater, GroundwaterRanges);
-    _GDAL_BOUNDARYCONDITION     getExtent(GDALBoundaryCondition, BoundaryConditionRanges);
+        _GDAL_SOILCLASSES       GDALSoilClasses       = (GDALDataset *)GDALOpen(qPrintable(SoilClassesFileName), GA_ReadOnly);
+        _GDAL_GEOLOGYCLASSES    GDALGeologyClasses    = (GDALDataset *)GDALOpen(qPrintable(GeologyClassesFileName), GA_ReadOnly);
+        _GDAL_MACROPORES        GDALMacropores        = (GDALDataset *)GDALOpen(qPrintable(MacroporesFileName), GA_ReadOnly);
+        _GDAL_LANDCOVERCLASSES  GDALLandCoverClasses  = (GDALDataset *)GDALOpen(qPrintable(LandCoverClassesFileName), GA_ReadOnly);
+        _GDAL_MELTREGIONS       GDALMeltRegions       = (GDALDataset *)GDALOpen(qPrintable(MeltRegionsFileName), GA_ReadOnly);
+        _GDAL_SOURCESSINKS      GDALSourcesSinks      = (GDALDataset *)GDALOpen(qPrintable(SourcesSinksFileName), GA_ReadOnly);
 
-    double X, Y;
-    int    GridValueInteger;
-    double GridValueDouble;
+        _GDAL_INTERCEPTION      GDALInterception      = (GDALDataset *)GDALOpen(qPrintable(InterceptionFileName), GA_ReadOnly);
+        _GDAL_SNOWCOVER         GDALSnowCover         = (GDALDataset *)GDALOpen(qPrintable(SnowCoverFileFileName), GA_ReadOnly);
+        _GDAL_SURFACESTORAGE    GDALSurfaceStorage    = (GDALDataset *)GDALOpen(qPrintable(SurfaceStorageFileName), GA_ReadOnly);
+        _GDAL_SOILMOISTURE      GDALSoilMoisture      = (GDALDataset *)GDALOpen(qPrintable(SoilMoistureFileName), GA_ReadOnly);
+        _GDAL_GROUNDWATER       GDALGroundwater       = (GDALDataset *)GDALOpen(qPrintable(GroundwaterFileName), GA_ReadOnly);
+        _GDAL_BOUNDARYCONDITION GDALBoundaryCondition = (GDALDataset *)GDALOpen(qPrintable(BoundaryConditionFileName), GA_ReadOnly);
 
-//    if(CentroidRadioButton->isChecked() == TRUE)
-//    {
+        _GDAL_PRECIPITATION         if ( GDALPrecipitation     == nullptr ) return 75;
+        _GDAL_TEMPERATURE           if ( GDALTemperature       == nullptr ) return 76;
+        _GDAL_RELATIVEHUMIDITY      if ( GDALRelativeHumidity  == nullptr ) return 77;
+        _GDAL_WINDVELOCITY          if ( GDALWindVelocity      == nullptr ) return 78;
+        _GDAL_SOLARRADIATION        if ( GDALSolarRadiation    == nullptr ) return 79;
+        _GDAL_VAPORPRESSURE         if ( GDALVaporPressure     == nullptr ) return 80;
+
+        _GDAL_SOILCLASSES           if ( GDALSoilClasses       == nullptr ) return 82;
+        _GDAL_GEOLOGYCLASSES        if ( GDALGeologyClasses    == nullptr ) return 83;
+        _GDAL_MACROPORES            if ( GDALMacropores        == nullptr ) return 84;
+        _GDAL_LANDCOVERCLASSES      if ( GDALLandCoverClasses  == nullptr ) return 85;
+        _GDAL_MELTREGIONS           if ( GDALMeltRegions       == nullptr ) return 86;
+        _GDAL_SOURCESSINKS          if ( GDALSourcesSinks      == nullptr ) return 87;
+
+        _GDAL_INTERCEPTION          if ( GDALInterception      == nullptr ) return 89;
+        _GDAL_SNOWCOVER             if ( GDALSnowCover         == nullptr ) return 90;
+        _GDAL_SURFACESTORAGE        if ( GDALSurfaceStorage    == nullptr ) return 91;
+        _GDAL_SOILMOISTURE          if ( GDALSoilMoisture      == nullptr ) return 92;
+        _GDAL_GROUNDWATER           if ( GDALGroundwater       == nullptr ) return 93;
+        _GDAL_BOUNDARYCONDITION     if ( GDALBoundaryCondition == nullptr ) return 94;
+
+
+        _GDAL_PRECIPITATION         getExtent(GDALPrecipitation, PrecipitationRanges);
+        _GDAL_TEMPERATURE           getExtent(GDALTemperature, TemperatureRanges);
+        _GDAL_RELATIVEHUMIDITY      getExtent(GDALRelativeHumidity, RelativeHumidityRanges);
+        _GDAL_WINDVELOCITY          getExtent(GDALWindVelocity, WindVelocityRanges);
+        _GDAL_SOLARRADIATION        getExtent(GDALSolarRadiation, SolarRadiationRanges);
+        _GDAL_VAPORPRESSURE         getExtent(GDALVaporPressure, VaporPressureRanges);
+
+        _GDAL_SOILCLASSES           getExtent(GDALSoilClasses, SoilClassesRanges);
+        _GDAL_GEOLOGYCLASSES        getExtent(GDALGeologyClasses, GeologyClassesRanges);
+        _GDAL_MACROPORES            getExtent(GDALMacropores, MacroporesRanges);
+        _GDAL_LANDCOVERCLASSES      getExtent(GDALLandCoverClasses, LandCoverClassesRanges);
+        _GDAL_MELTREGIONS           getExtent(GDALMeltRegions, MeltRegionsRanges);
+        _GDAL_SOURCESSINKS          getExtent(GDALSourcesSinks, SourcesSinksRanges);
+
+        _GDAL_INTERCEPTION          getExtent(GDALInterception, InterceptionRanges);
+        _GDAL_SNOWCOVER             getExtent(GDALSnowCover, SnowCoverRanges);
+        _GDAL_SURFACESTORAGE        getExtent(GDALSurfaceStorage, SurfaceStorageRanges);
+        _GDAL_SOILMOISTURE          getExtent(GDALSoilMoisture, SoilMoistureRanges);
+        _GDAL_GROUNDWATER           getExtent(GDALGroundwater, GroundwaterRanges);
+        _GDAL_BOUNDARYCONDITION     getExtent(GDALBoundaryCondition, BoundaryConditionRanges);
+
+        double X, Y;
+        int    GridValueInteger;
+        double GridValueDouble;
+
+        //    if(CentroidRadioButton->isChecked() == TRUE)
+        //    {
 
         for(int i=0; i<recordCount; i++)
         {
@@ -227,9 +236,17 @@ int att_data_file(
         }
 
 
-//    }
+        //    }
 
-    AttDataFile.close();
+        AttDataFile.close();
+
+    } catch (...) {
+
+        qDebug() << "Error: att_data_file";
+
+        return 32;
+    }
+
 
     return 0;
 }

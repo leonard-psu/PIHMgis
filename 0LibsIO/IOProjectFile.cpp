@@ -1,9 +1,8 @@
-#include "IOProjectFile.h"
-#include "globals.h"
-
 #include <QtGui>
 #include <QString>
 
+#include "IOProjectFile.h"
+#include "globals.h"
 
 QStringList ReadModuleLine(QString ProjectFileName, QString Module)
 {
