@@ -1,5 +1,8 @@
 /* AVCalls.c
-		C functions that mimic ArcView procedure calls */
+        C functions that mimic ArcView procedure calls */
+
+//Potential Cleanup by removing file
+
 
 #include "avexec32.h"
 #include <stdio.h>
@@ -18,50 +21,50 @@ DllExport void SetworkingStatus(void);  */
 /**************************************************/
 void doitnow (void)  /* for testing purposes only */
 {
-char message[] = "This message should be showing up in the window";
-char title[] = "Test Box";
+    //char message[] = "This message should be showing up in the window";
+    //char title[] = "Test Box";
 
-SetWorkingStatus();
+    SetWorkingStatus();
 
 }
 /**************************************************/
 void MsgBoxInfo(char *message, char *title)
 {
-char *retstr;
-char strpassed[200]; /* Better not pass something longer than 200! */
-char str1[] = "MsgBox.Info(\"";
-char str2[] = "\",\"";
-char str3[] = "\")";
+    //char *retstr;
+    char strpassed[1200]; /* Better not pass something longer than 1200! */
+    char str1[] = "MsgBox.Info(\"";
+    char str2[] = "\",\"";
+    char str3[] = "\")";
 
-strcpy(strpassed, str1);
-strcat(strpassed, message);
-strcat(strpassed, str2);
-strcat(strpassed, title);
-strcat(strpassed, str3);
+    strcpy_s(strpassed, str1);
+    strcat_s(strpassed, message);
+    strcat_s(strpassed, str2);
+    strcat_s(strpassed, title);
+    strcat_s(strpassed, str3);
 
-/*retstr = AVExec(strpassed);  */
+    /*retstr = AVExec(strpassed);  */
 }
 /**************************************************/
 void MsgBoxError(char *message, char *title)
 {
-char *retstr;
-char strpassed[200]; /* Better not pass something longer than 200! */
-char str1[] = "MsgBox.Error(\"";
-char str2[] = "\",\"";
-char str3[] = "\")";
+    //char *retstr;
+    char strpassed[1200]; /* Better not pass something longer than 1200! */
+    char str1[] = "MsgBox.Error(\"";
+    char str2[] = "\",\"";
+    char str3[] = "\")";
 
-strcpy(strpassed, str1);
-strcat(strpassed, message);
-strcat(strpassed, str2);
-strcat(strpassed, title);
-strcat(strpassed, str3);
+    strcpy_s(strpassed, str1);
+    strcat_s(strpassed, message);
+    strcat_s(strpassed, str2);
+    strcat_s(strpassed, title);
+    strcat_s(strpassed, str3);
 
-/*  retstr = AVExec(strpassed);  */
+    /*  retstr = AVExec(strpassed);  */
 }
 /**************************************************/
 void SetWorkingStatus(void)
 {
-char *retstr;
+    //char *retstr;
 
-/*  retstr = AVExec("av.SetWorkingStatus");  */
+    /*  retstr = AVExec("av.SetWorkingStatus");  */
 }
