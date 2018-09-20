@@ -63,6 +63,8 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
     this->setWindowIcon(QIcon("Icons/PIHMgis000.icns"));
     ui->setupUi(this);
 
+     qDebug() << "PIHMgisDialog started";
+
 //    QDir dir;
 //    success = dir.mkpath(QDir::homePath()+"/.PIHMgis/");
 //    if(success == true)
@@ -76,9 +78,11 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
 //        QMessageBox::critical(this,tr("Critical Error"),tr("Unable to Create Folder in the Home Directory.\nPlease Close & Open PIHMgis After Fixing Permissions!"),QMessageBox::Ok);
 //    }
 
-//    ui->PIHMgisToolBox->setCurrentIndex(8-1);
+    //ui->PIHMgisToolBox->setCurrentIndex(8-1);
     //ui->pushButtonWorkFlow1->setDefault(1);
     //ui->pushButtonWorkFlow1->setFocus();
+
+
 }
 
 PIHMgisDialog::~PIHMgisDialog()
@@ -447,6 +451,8 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
 
     //??ui->PIHMgisToolBox->setCurrentIndex(8-1);
 
+    qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
+
     NewProject *NewProjectDialog = new NewProject(this);
     NewProjectDialog->show();
 }
@@ -783,7 +789,7 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
 {
     //??QStringList default_params; default_params << "WORKFLOW7" << "SPATIALW" << "SPATIALR" << "TIMEW" << "TIMER"; set_defaults(default_params);
 
-    QApplication *app;
+    //QApplication *app;
     RiverTemporal *RiverTemporalDialog = new RiverTemporal(this);
     RiverTemporalDialog->show();
 }
@@ -792,3 +798,23 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
 
 
 // ************************************************************************** //
+
+void PIHMgisDialog::on_pushButton_clicked()
+{
+    qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
+
+    NewProject *NewProjectDialog = new NewProject(this);
+    NewProjectDialog->show();
+}
+
+
+void PIHMgisDialog::on_pushButton_clicked(bool checked)
+{
+    qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
+}
+
+void PIHMgisDialog::on_pushButton_2_clicked()
+{
+    qDebug() << "on_pushButton_2_clicked";
+
+}

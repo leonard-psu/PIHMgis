@@ -1480,7 +1480,7 @@ public:
 
         retranslateUi(PIHMgisDialog);
 
-        PIHMgisToolBox->setCurrentIndex(7);
+        PIHMgisToolBox->setCurrentIndex(0);
         pushButtonPIHMgisProjectNew->setDefault(false);
         pushButtonPIHMgisProjectOpen->setDefault(false);
         pushButtonPIHMgisProjectImport->setDefault(false);

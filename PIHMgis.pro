@@ -422,7 +422,9 @@ HEADERS  += pihmgisdialog.h \
     ui_soildatafile.h \
     ui_streamgrids.h \
     ui_streampolyline.h \
-    ui_tinshapelayer.h
+    ui_tinshapelayer.h \
+    main.h \
+    globals.h
 
 FORMS    += pihmgisdialog.ui \
     1ProjectManagement/1NewProject/newproject.ui \

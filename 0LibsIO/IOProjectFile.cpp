@@ -1,4 +1,5 @@
 #include "IOProjectFile.h"
+#include "globals.h"
 
 #include <QtGui>
 #include <QString>
@@ -6,21 +7,37 @@
 
 QStringList ReadModuleLine(QString ProjectFileName, QString Module)
 {
-    QFile ProjectFile(ProjectFileName);
-    ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream ProjectFileTextStream(&ProjectFile);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ReadModuleLine";
 
-    QString ProjectFileLineString;
-    QStringList ProjectFileLineStringList;
+    try {
 
-    while ( ! ProjectFileTextStream.atEnd() )
-    {
-        ProjectFileLineString     = ProjectFileTextStream.readLine();
-        ProjectFileLineStringList = ProjectFileLineString.split(",");
+        QFile ProjectFile(ProjectFileName);
+        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        QTextStream ProjectFileTextStream(&ProjectFile);
 
-        if ( ProjectFileLineStringList.at(0) == Module )
-            return ProjectFileLineStringList;
+        QString ProjectFileLineString;
+        QStringList ProjectFileLineStringList;
+
+        while ( ! ProjectFileTextStream.atEnd() )
+        {
+            ProjectFileLineString     = ProjectFileTextStream.readLine();
+            ProjectFileLineStringList = ProjectFileLineString.split(",");
+
+            if ( ProjectFileLineStringList.at(0) == Module )
+                return ProjectFileLineStringList;
+        }
+
+    } catch (...) {
+
+        qDebug() << "Error: ReadModuleLine is returning NullStringList";
+
+        QStringList NullStringList;
+        return NullStringList;
     }
+
+    if(print_debug_messages)
+        qDebug() << "Error: ReadModuleLine is returning NullStringList";
 
     QStringList NullStringList;
     return NullStringList;
@@ -29,230 +46,290 @@ QStringList ReadModuleLine(QString ProjectFileName, QString Module)
 
 bool WriteModuleLine(QString ProjectFileName, QStringList WriteStringList)
 {
-    QString Module;
-    Module = WriteStringList.at(0);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start WriteModuleLine";
 
-    QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
+    try {
 
-    QFile::remove(TempProjectFileName);
-    if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
-    {
-        qDebug() << "ERROR: Unable to Copy Project File to Temporary Project File";
+        QString Module;
+        Module = WriteStringList.at(0);
+
+        QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
+
+        QFile::remove(TempProjectFileName);
+        if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
+        {
+            qDebug() << "ERROR: Unable to Copy Project File to Temporary Project File";
+            return false;
+        }
+
+        QFile ProjectFile(ProjectFileName);
+        ProjectFile.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream ProjectFileTextStream(&ProjectFile);
+
+        QFile TempProjectFile(TempProjectFileName);
+        TempProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        QTextStream TempProjectFileTextStream(&TempProjectFile);
+
+        QString ProjectFileLineString;
+        QStringList ProjectFileLineStringList;
+
+        while ( ! TempProjectFileTextStream.atEnd() )
+        {
+            ProjectFileLineString     = TempProjectFileTextStream.readLine();
+            ProjectFileLineStringList = ProjectFileLineString.split(",");
+
+            if ( ProjectFileLineStringList.at(0) == Module )
+            {
+                ProjectFileTextStream << "#" << ProjectFileLineString << endl;
+                break;
+            }
+
+            ProjectFileTextStream << ProjectFileLineString << endl;
+        }
+
+        for (int i=0 ; i<WriteStringList.size(); i++)
+            ProjectFileTextStream << WriteStringList.at(i) << ",";
+        ProjectFileTextStream << endl;
+
+        while ( ! TempProjectFileTextStream.atEnd() )
+            ProjectFileTextStream << TempProjectFileTextStream.readLine() << endl;
+
+        QFile::remove(TempProjectFileName);
+        return true;
+
+    } catch (...) {
+
+        qDebug() << "Error: WriteModuleLine is returning NullStringList";
         return false;
     }
 
-    QFile ProjectFile(ProjectFileName);
-    ProjectFile.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream ProjectFileTextStream(&ProjectFile);
-
-    QFile TempProjectFile(TempProjectFileName);
-    TempProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream TempProjectFileTextStream(&TempProjectFile);
-
-    QString ProjectFileLineString;
-    QStringList ProjectFileLineStringList;
-
-    while ( ! TempProjectFileTextStream.atEnd() )
-    {
-        ProjectFileLineString     = TempProjectFileTextStream.readLine();
-        ProjectFileLineStringList = ProjectFileLineString.split(",");
-
-        if ( ProjectFileLineStringList.at(0) == Module )
-        {
-            ProjectFileTextStream << "#" << ProjectFileLineString << endl;
-            break;
-        }
-
-        ProjectFileTextStream << ProjectFileLineString << endl;
-    }
-
-    for (int i=0 ; i<WriteStringList.size(); i++)
-        ProjectFileTextStream << WriteStringList.at(i) << ",";
-    ProjectFileTextStream << endl;
-
-    while ( ! TempProjectFileTextStream.atEnd() )
-        ProjectFileTextStream << TempProjectFileTextStream.readLine() << endl;
-
-    QFile::remove(TempProjectFileName);
-    return true;
 }
 
 
 bool DeleteModuleLine(QString ProjectFileName, QString Module)
 {
-    QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
+    if(print_debug_messages)
+        qDebug() << "INFO: Start DeleteModuleLine";
 
-    QFile::remove(TempProjectFileName);
-    if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
-    {
-        qDebug() << "ERROR: Unable to Copy Project File to Temporary Project File";
+    try {
+
+        QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
+
+        QFile::remove(TempProjectFileName);
+        if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
+        {
+            qDebug() << "ERROR: Unable to Copy Project File to Temporary Project File";
+            return false;
+        }
+
+        QFile ProjectFile(ProjectFileName);
+        ProjectFile.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream ProjectFileTextStream(&ProjectFile);
+
+        QFile TempProjectFile(TempProjectFileName);
+        TempProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        QTextStream TempProjectFileTextStream(&TempProjectFile);
+
+        QString ProjectFileLineString;
+        QStringList ProjectFileLineStringList;
+
+        while ( ! TempProjectFileTextStream.atEnd() )
+        {
+            ProjectFileLineString     = TempProjectFileTextStream.readLine();
+            ProjectFileLineStringList = ProjectFileLineString.split(",");
+
+            if ( ProjectFileLineStringList.at(0) == Module )
+                continue;
+
+            ProjectFileTextStream << ProjectFileLineString << endl;
+        }
+
+        QFile::remove(TempProjectFileName);
+        return true;
+
+    } catch (...) {
+
+        qDebug() << "Error: DeleteModuleLine is returning false";
         return false;
     }
-
-    QFile ProjectFile(ProjectFileName);
-    ProjectFile.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream ProjectFileTextStream(&ProjectFile);
-
-    QFile TempProjectFile(TempProjectFileName);
-    TempProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream TempProjectFileTextStream(&TempProjectFile);
-
-    QString ProjectFileLineString;
-    QStringList ProjectFileLineStringList;
-
-    while ( ! TempProjectFileTextStream.atEnd() )
-    {
-        ProjectFileLineString     = TempProjectFileTextStream.readLine();
-        ProjectFileLineStringList = ProjectFileLineString.split(",");
-
-        if ( ProjectFileLineStringList.at(0) == Module )
-            continue;
-
-        ProjectFileTextStream << ProjectFileLineString << endl;
-    }
-
-    QFile::remove(TempProjectFileName);
-    return true;
 }
 
 
 bool CheckFileAccess (QString FileName, QString AccessMode)
 {
-    QFile File;
-    File.setFileName(FileName);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start CheckFileAccess";
 
-    if ( AccessMode == "ReadOnly" )
-    {
-        if ( ! File.open(QIODevice::ReadOnly | QIODevice::Text) )
-            return false;
+    try {
+
+        QFile File;
+        File.setFileName(FileName);
+
+        if ( AccessMode == "ReadOnly" )
+        {
+            if ( ! File.open(QIODevice::ReadOnly | QIODevice::Text) )
+                return false;
+        }
+
+        if ( AccessMode == "WriteOnly" )
+        {
+            if ( ! File.open(QIODevice::WriteOnly | QIODevice::Text) )
+                return false;
+        }
+
+        if ( AccessMode == "ReadWrite" )
+        {
+            if ( ! File.open(QIODevice::ReadWrite | QIODevice::Text) )
+                return false;
+        }
+
+        File.close();
+
+        return true;
+
+    } catch (...) {
+
+        qDebug() << "Error: CheckFileAccess is returning false";
+        return false;
     }
 
-    if ( AccessMode == "WriteOnly" )
-    {
-        if ( ! File.open(QIODevice::WriteOnly | QIODevice::Text) )
-            return false;
-    }
-
-    if ( AccessMode == "ReadWrite" )
-    {
-        if ( ! File.open(QIODevice::ReadWrite | QIODevice::Text) )
-            return false;
-    }
-
-    File.close();
-
-    return true;
 }
 
 
 QString readLineNumber(QString ProjectFileName, int LineNumber)
 {
-	QString TempString;
-	QFile ProjectFile(ProjectFileName);
-	ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-	QTextStream ProjectFileTextStream(&ProjectFile);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start readLineNumber";
 
-	for (int i=0; i<LineNumber; i++)
-		TempString = ProjectFileTextStream.readLine();
+    try {
+        QString TempString;
+        QFile ProjectFile(ProjectFileName);
+        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        QTextStream ProjectFileTextStream(&ProjectFile);
 
-	ProjectFile.close();
+        for (int i=0; i<LineNumber; i++)
+            TempString = ProjectFileTextStream.readLine();
 
-	return TempString;
+        ProjectFile.close();
+
+        return TempString;
+
+    } catch (...) {
+
+        QString TempString;
+        qDebug() << "Error: readLineNumber is returning empty string";
+        return TempString;
+    }
 }
 
 
 bool writeLineNumber(QString ProjectFileName, int LineNumber, QString WriteString)
 {
-	bool success = false;
-	
-	int lineCount=0;
-	QString TempString;
+    if(print_debug_messages)
+        qDebug() << "INFO: Start writeLineNumber";
 
-	QFile ProjectFile(ProjectFileName);
-	ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    bool success = false;
+
+    try {
+
+
+        int lineCount=0;
+        QString TempString;
+
+        QFile ProjectFile(ProjectFileName);
+        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream ProjectFileTextStream(&ProjectFile);
-	
-    QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
 
-	QFile TempProjectFile(TempProjectFileName);
-	if ( ! TempProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) )
-		return success;
+        QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
 
-	QTextStream TempProjectFileTextStream(&TempProjectFile);
+        QFile TempProjectFile(TempProjectFileName);
+        if ( ! TempProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+            return success;
 
-	while ( ! ProjectFileTextStream.atEnd() )
-	{
-		if(lineCount != 0)
-		{
-			TempString=ProjectFileTextStream.readLine();
-			TempProjectFileTextStream <<"\n"<< TempString;
-			lineCount++;
-		}
-		else
-		{
-			TempString=ProjectFileTextStream.readLine();
-                        TempProjectFileTextStream << TempString;
-			lineCount++;
-		}
-	}
-	lineCount = 0;
-	ProjectFile.close();
-	TempProjectFile.close();
+        QTextStream TempProjectFileTextStream(&TempProjectFile);
 
-
-	//QFile inData2(QDir::homeDir()+"/.PIHMgis/TempProjectFile.txt");
-	TempProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-
-	//QFile outData2(ProjectFileName);
-	if ( ! ProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) )
-		return success;
+        while ( ! ProjectFileTextStream.atEnd() )
+        {
+            if(lineCount != 0)
+            {
+                TempString=ProjectFileTextStream.readLine();
+                TempProjectFileTextStream <<"\n"<< TempString;
+                lineCount++;
+            }
+            else
+            {
+                TempString=ProjectFileTextStream.readLine();
+                TempProjectFileTextStream << TempString;
+                lineCount++;
+            }
+        }
+        lineCount = 0;
+        ProjectFile.close();
+        TempProjectFile.close();
 
 
-	while ( ! TempProjectFileTextStream.atEnd() )
-	{
-		lineCount++;
-		if(lineCount == LineNumber)
-		{
-			if(lineCount != 1)
-			{
-				TempString=TempProjectFileTextStream.readLine();
-				ProjectFileTextStream <<"\n"<<WriteString;
-			}
-			else
-			{
-				TempString=TempProjectFileTextStream.readLine();
-				ProjectFileTextStream <<WriteString;
-			}
-		}
-		else
-		{
-			if(lineCount != 1)
-			{
-				TempString=TempProjectFileTextStream.readLine();
-				ProjectFileTextStream <<"\n"<<TempString;
-			}
-			else
-			{
-				TempString=TempProjectFileTextStream.readLine();
-				ProjectFileTextStream <<TempString;
-			}
-		}
-	}
-	qDebug() << lineCount;
+        //QFile inData2(QDir::homeDir()+"/.PIHMgis/TempProjectFile.txt");
+        TempProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
 
-	if(lineCount < LineNumber)
-	{
-		for(int i=lineCount; i<LineNumber; i++)
-		{
-			ProjectFileTextStream <<"\n";
-		}
-		ProjectFileTextStream <<WriteString;
-	}
+        //QFile outData2(ProjectFileName);
+        if ( ! ProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+            return success;
 
-    TempProjectFile.close();
-    ProjectFile.close();
 
-// TODO remove TempProjectFileName
+        while ( ! TempProjectFileTextStream.atEnd() )
+        {
+            lineCount++;
+            if(lineCount == LineNumber)
+            {
+                if(lineCount != 1)
+                {
+                    TempString=TempProjectFileTextStream.readLine();
+                    ProjectFileTextStream <<"\n"<<WriteString;
+                }
+                else
+                {
+                    TempString=TempProjectFileTextStream.readLine();
+                    ProjectFileTextStream <<WriteString;
+                }
+            }
+            else
+            {
+                if(lineCount != 1)
+                {
+                    TempString=TempProjectFileTextStream.readLine();
+                    ProjectFileTextStream <<"\n"<<TempString;
+                }
+                else
+                {
+                    TempString=TempProjectFileTextStream.readLine();
+                    ProjectFileTextStream <<TempString;
+                }
+            }
+        }
+        qDebug() << lineCount;
 
-	success = true;
+        if(lineCount < LineNumber)
+        {
+            for(int i=lineCount; i<LineNumber; i++)
+            {
+                ProjectFileTextStream <<"\n";
+            }
+            ProjectFileTextStream <<WriteString;
+        }
+
+        TempProjectFile.close();
+        ProjectFile.close();
+
+        // TODO remove TempProjectFileName
+
+        success = true;
+    } catch (...) {
+
+        qDebug() << "Error: writeLineNumber is set to false";
+        success = false;
+    }
+
+    return success;
+
 }

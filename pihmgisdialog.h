@@ -129,6 +129,12 @@ private slots:
 
     //void on_pushButtonWorkFlow6_clicked();
 
+    void on_pushButton_clicked();
+
+    void on_pushButton_clicked(bool checked);
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::PIHMgisDialog *ui;
 };
