@@ -40,7 +40,7 @@ int IsEqualPoint( Point p1, Point p2 )
     if(print_debug_messages)
         qDebug() << "INFO: Start IsEqualPoint";
 
-    float epsilon = 0.000001f;
+    //float epsilon = 0.000001f;
     bool is_x_Equal = fabs(p1.x - p2.x) <= epsilon;
     bool is_y_Equal = fabs(p1.y - p2.y) <= epsilon;
 
