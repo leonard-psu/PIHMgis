@@ -1,39 +1,42 @@
-/*	lsmcom.c 
-		Common information to all lsm functions including gloabal variables */
+/*	lsmcom.c  Common information to all lsm functions including global variables */
+
+//David G Tarboton
+//Utah State University
+
 
 /*	Includes */
 #include "lsm.h"
 
 /*  Global Variables  **************************************************/
 
-short **dir;      /* flood, setdir */
-short **apool;    /* flood */
-float **elev;     /* flood, setdir */
-float **slope;		/* setdir */
-float **ang;      /* setdir, area */
-float **sca;			/* area */
+short **dir;                /* flood, setdir */
+short **apool;              /* flood */
+float **elev;               /* flood, setdir */
+float **slope;              /* setdir */
+float **ang;                /* setdir, area */
+float **sca;                /* area */
 
-short *ipool, *jpool, *tmp;		/* flood */ 
-short *dn, *is, *js;					/* setdir, flood */
+short *ipool, *jpool, *tmp;	/* flood */
+short *dn, *is, *js;		/* setdir, flood */
 
-								/* area */
+/* area */
 
-int nx, ny;										/* flood, setdir, area */
-int npool, pooln, pstack;			/* flood */
-int nis, istack;							/* flood, setdir */
-int filetype;									/* flood */
+int nx, ny;					/* flood, setdir, area */
+int npool, pooln, pstack;	/* flood */
+int nis, istack;			/* flood, setdir */
+int filetype;				/* flood */
 
 /*  i1,n1 are the x range when tiling
     i2,n2 are the y range when tiling
     These are global so as to avoid duplication in recursive routines  */
 int i1,i2,n1,n2;			/* flood, setdir */
 
-char annot[MAXLN],units[MAXLN];			/* flood, setdir */
+char annot[MAXLN],units[MAXLN];	/* flood, setdir */
 
-float dx, dy;							/* flood, setdir, area */
-float emin, et;						/* flood, setdir */
+float dx, dy;					/* flood, setdir, area */
+float emin, et;					/* flood, setdir */
 float utme,utmn,skew;			/* setdir */
-float aref[10];						/* area */
+float aref[10];					/* area */
 float ndv;						/* area, setdir */
 
 int nf;				/* flood, setdir */
