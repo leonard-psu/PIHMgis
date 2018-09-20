@@ -2,13 +2,12 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
-#include <Qdir>
-
-
+#include <QDir>
 #include <qmath.h>
 
 #include "riv_data_file.h"
 #include "./0LibsShape/shapefil.h"
+#include "globals.h"
 
 #define PI                      3.14159265359
 #define distPt(p1, p2)          fabs(p1.x-p2.x)+fabs(p1.y-p2.y)
@@ -18,6 +17,9 @@
 
 double SLOPE(Point p1, Point p2)
 {
+    if(print_debug_messages)
+        qDebug() << "INFO: Start SLOPE";
+
     double delX = p2.x - p1.x;
     double delY = delX==0?p2.y - p1.y + 0.0000001:p2.y - p1.y;
 
@@ -35,7 +37,15 @@ double SLOPE(Point p1, Point p2)
 
 int IsEqualPoint( Point p1, Point p2 )
 {
-    if( p1.x == p2.x && p1.y == p2.y )
+    if(print_debug_messages)
+        qDebug() << "INFO: Start IsEqualPoint";
+
+    float epsilon = 0.000001f;
+    bool is_x_Equal = fabs(p1.x - p2.x) <= epsilon;
+    bool is_y_Equal = fabs(p1.y - p2.y) <= epsilon;
+
+    //if( p1.x == p2.x && p1.y == p2.y )
+    if(is_x_Equal && is_y_Equal)
         return 1;
     else
         return 0;
@@ -44,172 +54,178 @@ int IsEqualPoint( Point p1, Point p2 )
 
 int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString EleFileName, QString NodeFileName, QString NeighFileName, QString xRiverShpFileName, QString xRiverDbfFileName)
 {
-    QFile EleFile(EleFileName);
-    if ( ! EleFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        return 34;
-    QTextStream EleFileTextStream(&EleFile);
 
-    QFile NodeFile(NodeFileName);
-    if ( ! NodeFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        return 39;
-    QTextStream NodeFileTextStream(&NodeFile);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start RiverFromTIN";
 
-    QFile NeighFile(NeighFileName);
-    if ( ! NeighFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        return 44;
-    QTextStream NeighFileTextStream(&NeighFile);
+    try {
 
-    SHPHandle RiverShpHandle = SHPOpen(qPrintable(RiverShpFileName), "rb");
-    DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
+        QFile EleFile(EleFileName);
+        if ( ! EleFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+            return 34;
+        QTextStream EleFileTextStream(&EleFile);
 
-    if ( RiverShpHandle == nullptr || RiverDbfHandle == nullptr )
-        return 51;
+        QFile NodeFile(NodeFileName);
+        if ( ! NodeFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+            return 39;
+        QTextStream NodeFileTextStream(&NodeFile);
 
-    SHPHandle xRiverShpHandle = SHPCreate(qPrintable(xRiverShpFileName), SHPT_ARC);
-    DBFHandle xRiverDbfHandle = DBFCreate(qPrintable(xRiverDbfFileName));
+        QFile NeighFile(NeighFileName);
+        if ( ! NeighFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+            return 44;
+        QTextStream NeighFileTextStream(&NeighFile);
 
-    if ( xRiverShpHandle == nullptr || xRiverDbfHandle == nullptr )
-        return 57;
+        SHPHandle RiverShpHandle = SHPOpen(qPrintable(RiverShpFileName), "rb");
+        DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
 
-    int LeftEle     = DBFAddField(xRiverDbfHandle, "LeftEle",     FTInteger, 10, 0);
-    int RightEle    = DBFAddField(xRiverDbfHandle, "RightEle",    FTInteger, 10, 0);
-    int FrmEleNode = DBFAddField(xRiverDbfHandle, "FrmEleNode", FTInteger, 10, 0);
-    int ToEleNode   = DBFAddField(xRiverDbfHandle, "ToEleNode",   FTInteger, 10, 0);
+        if ( RiverShpHandle == nullptr || RiverDbfHandle == nullptr )
+            return 51;
 
-    int TempInt;
+        SHPHandle xRiverShpHandle = SHPCreate(qPrintable(xRiverShpFileName), SHPT_ARC);
+        DBFHandle xRiverDbfHandle = DBFCreate(qPrintable(xRiverDbfFileName));
 
-    int NumNode;
-    NodeFileTextStream >> NumNode;
+        if ( xRiverShpHandle == nullptr || xRiverDbfHandle == nullptr )
+            return 57;
 
-    Point* node = new Point[NumNode+1];
+        int LeftEle     = DBFAddField(xRiverDbfHandle, "LeftEle",     FTInteger, 10, 0);
+        int RightEle    = DBFAddField(xRiverDbfHandle, "RightEle",    FTInteger, 10, 0);
+        int FrmEleNode = DBFAddField(xRiverDbfHandle, "FrmEleNode", FTInteger, 10, 0);
+        int ToEleNode   = DBFAddField(xRiverDbfHandle, "ToEleNode",   FTInteger, 10, 0);
 
-    NodeFileTextStream >> TempInt; NodeFileTextStream >> TempInt; NodeFileTextStream >> TempInt;
+        int TempInt;
 
-    for(int i=1; i<=NumNode; i++)
-    {
-        NodeFileTextStream >> TempInt;
-        NodeFileTextStream >> node[i].x;
-        NodeFileTextStream >> node[i].y;
-        NodeFileTextStream >> TempInt;
-    }
+        int NumNode;
+        NodeFileTextStream >> NumNode;
 
-    int NumEle;
-    EleFileTextStream >> NumEle;
+        Point* node = new Point[NumNode+1];
 
-    int** element = new int*[NumEle+1];
+        NodeFileTextStream >> TempInt; NodeFileTextStream >> TempInt; NodeFileTextStream >> TempInt;
 
-    EleFileTextStream >> TempInt; EleFileTextStream >> TempInt;
+        for(int i=1; i<=NumNode; i++)
+        {
+            NodeFileTextStream >> TempInt;
+            NodeFileTextStream >> node[i].x;
+            NodeFileTextStream >> node[i].y;
+            NodeFileTextStream >> TempInt;
+        }
 
-    for(int i=1; i<=NumEle; i++)
-    {
-        element[i] = new int[3];
+        int NumEle;
+        EleFileTextStream >> NumEle;
 
-        EleFileTextStream >> TempInt;
-        EleFileTextStream >> element[i][0];
-        EleFileTextStream >> element[i][1];
-        EleFileTextStream >> element[i][2];
-    }
+        int** element = new int*[NumEle+1];
 
-    int NumNeigh;
-    NeighFileTextStream >> NumNeigh;
+        EleFileTextStream >> TempInt; EleFileTextStream >> TempInt;
 
-    int** neighbour = new int*[NumNeigh+1];
+        for(int i=1; i<=NumEle; i++)
+        {
+            element[i] = new int[3];
 
-    NeighFileTextStream >> TempInt;
+            EleFileTextStream >> TempInt;
+            EleFileTextStream >> element[i][0];
+            EleFileTextStream >> element[i][1];
+            EleFileTextStream >> element[i][2];
+        }
 
-    for(int i=1; i<=NumNeigh; i++)
-    {
-        neighbour[i] = new int[3];
+        int NumNeigh;
+        NeighFileTextStream >> NumNeigh;
+
+        int** neighbour = new int*[NumNeigh+1];
 
         NeighFileTextStream >> TempInt;
-        NeighFileTextStream >> neighbour[i][0];
-        NeighFileTextStream >> neighbour[i][1];
-        NeighFileTextStream >> neighbour[i][2];
-    }
 
-
-    //int** neighNode = new int*[NumNode];
-    int** nodeInEle      = new int*[NumNode+1]; //tells you : this (node present in which elements)
-    int*  nodeInEleCount = new int[NumNode+1];
-
-    for(int i=1; i<=NumNode; i++)
-    {
-        nodeInEle[i] = new int[20];
-        nodeInEleCount[i] = 0;
-    }
-
-    for(int i=1; i<=NumEle; i++)
-    {
-        //cout<<i;
-        for(int j=0; j<3; j++)
+        for(int i=1; i<=NumNeigh; i++)
         {
-            nodeInEle[element[i][j]][nodeInEleCount[element[i][j]]++] = i;
+            neighbour[i] = new int[3];
+
+            NeighFileTextStream >> TempInt;
+            NeighFileTextStream >> neighbour[i][0];
+            NeighFileTextStream >> neighbour[i][1];
+            NeighFileTextStream >> neighbour[i][2];
         }
-    }
 
 
-    //for(int i=0; i<nodeInEleCount[1]; i++)
-    //    cout<<nodeInEle[1][i]<<" ";
-    //cout<<"\n";
+        //int** neighNode = new int*[NumNode];
+        int** nodeInEle      = new int*[NumNode+1]; //tells you : this (node present in which elements)
+        int*  nodeInEleCount = new int[NumNode+1];
 
-
-    int** neighNode     = new int*[NumNode+1]; //tells you which nodes are neighbours to i-th node
-    int* neighNodeCount = new int[NumNode+1];
-
-    for(int i=1; i<=NumNode; i++)
-    {
-        neighNode[i] = new int[100];
-        neighNodeCount[i] = 0;
-    }
-
-    for(int i=1; i<=NumNode; i++)
-    {
-        for(int j=0; j<nodeInEleCount[i]; j++)
+        for(int i=1; i<=NumNode; i++)
         {
-            for(int k=0; k<3; k++)
+            nodeInEle[i] = new int[20];
+            nodeInEleCount[i] = 0;
+        }
+
+        for(int i=1; i<=NumEle; i++)
+        {
+            //cout<<i;
+            for(int j=0; j<3; j++)
             {
-                if( i != element[nodeInEle[i][j]][k] )
-                    neighNode[i][neighNodeCount[i]++] = element[nodeInEle[i][j]][k];
+                nodeInEle[element[i][j]][nodeInEleCount[element[i][j]]++] = i;
             }
         }
-    }
 
-    //for(int i=0; i<neighNodeCount[1]; i++)
-    //    cout<<neighNode[1][i]<<" ";
-    //cout<<"\n";
 
-    //cout<<"dd ="<<distPt(node[8], node[3702])<<"\n";
+        //for(int i=0; i<nodeInEleCount[1]; i++)
+        //    cout<<nodeInEle[1][i]<<" ";
+        //cout<<"\n";
 
-    int FromTo[2];
-    int LeftRight[2];
 
-    int recordCount = DBFGetRecordCount(RiverDbfHandle);
-    int record = 0;
-    double X[2], Y[2], Z[2];
-    Z[0] = 0.0; Z[1] = 0.0;
-    Point pt1, pt2;
-    int numPt;
-    double oldDist, slope;
+        int** neighNode     = new int*[NumNode+1]; //tells you which nodes are neighbours to i-th node
+        int* neighNodeCount = new int[NumNode+1];
 
-    for(int i=0; i<recordCount; i++)
-    {
-        SHPObject* shpObj = SHPReadObject(RiverShpHandle, i);
-        pt1.x = shpObj->padfX[0];
-        pt1.y = shpObj->padfY[0];
-        pt2.x = shpObj->padfX[shpObj->nVertices-1];
-        pt2.y = shpObj->padfY[shpObj->nVertices-1];
-        slope = SLOPE(pt1, pt2);
-        Point pt;
-        int j;
-
-        for(j=1; j<=NumNode; j++)
+        for(int i=1; i<=NumNode; i++)
         {
-            if(distPt(pt1, node[j]) < 0.001)
-                break;
+            neighNode[i] = new int[100];
+            neighNodeCount[i] = 0;
         }
-        numPt = j;
 
-        /*
+        for(int i=1; i<=NumNode; i++)
+        {
+            for(int j=0; j<nodeInEleCount[i]; j++)
+            {
+                for(int k=0; k<3; k++)
+                {
+                    if( i != element[nodeInEle[i][j]][k] )
+                        neighNode[i][neighNodeCount[i]++] = element[nodeInEle[i][j]][k];
+                }
+            }
+        }
+
+        //for(int i=0; i<neighNodeCount[1]; i++)
+        //    cout<<neighNode[1][i]<<" ";
+        //cout<<"\n";
+
+        //cout<<"dd ="<<distPt(node[8], node[3702])<<"\n";
+
+        int FromTo[2];
+        int LeftRight[2];
+
+        int recordCount = DBFGetRecordCount(RiverDbfHandle);
+        int record = 0;
+        double X[2], Y[2], Z[2];
+        Z[0] = 0.0; Z[1] = 0.0;
+        Point pt1, pt2;
+        int numPt;
+        double oldDist, slope;
+
+        for(int i=0; i<recordCount; i++)
+        {
+            SHPObject* shpObj = SHPReadObject(RiverShpHandle, i);
+            pt1.x = shpObj->padfX[0];
+            pt1.y = shpObj->padfY[0];
+            pt2.x = shpObj->padfX[shpObj->nVertices-1];
+            pt2.y = shpObj->padfY[shpObj->nVertices-1];
+            slope = SLOPE(pt1, pt2);
+            Point pt;
+            int j;
+
+            for(j=1; j<=NumNode; j++)
+            {
+                if(distPt(pt1, node[j]) < 0.001)
+                    break;
+            }
+            numPt = j;
+
+            /*
         /////////////////
         for(j=1; j<=numNode; j++){
             if(distPt(pt2, node[j])<0.001)
@@ -219,67 +235,71 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         //cout<<"slope= "<<slope<<"\n";
         ///////////////////
         */
-        oldDist = distPt(node[numPt], pt2);
-        //dist = oldDist+1;
+            oldDist = distPt(node[numPt], pt2);
+            //dist = oldDist+1;
 
-        //cout<<"\npt1= "<<numPt<<" ("<<pt1.x<<","<<pt1.y<<") "<<"\n";
-        while(distPt(pt2, node[numPt]) > 0.001)
-        {
-            /*
+            //cout<<"\npt1= "<<numPt<<" ("<<pt1.x<<","<<pt1.y<<") "<<"\n";
+            while(distPt(pt2, node[numPt]) > 0.001)
+            {
+                /*
             cout<<"\n"<<numPt<<"\n";
             for(int ii=0; ii<neighNodeCount[numPt]; ii++)
                 cout<<neighNode[numPt][ii]<<" ";
             cout<<"\n";
             */
-            int j, k, l;
-            for(j=0; j<neighNodeCount[numPt]; j++)
-            {
-                //cout<<"x= "<<node[numPt].x<<" y= "<<node[numPt].y<<"\n";
-                //cout<<"x= "<<node[neighNode[numPt][j]].x<<" y= "<<node[neighNode[numPt][j]].y<<"\n";
-                //cout<<"slope2= "<<SLOPE(node[numPt], node[neighNode[numPt][j]])<<"\n";
-                //cout<<"del slope= "<<slope-SLOPE(node[numPt], node[neighNode[numPt][j]])<<"\n";
-                //cout<<"="<<oldDist<<"\n";
-                //cout<<"="<<distPt(node[neighNode[numPt][j]], pt2)<<"\n";
-                if(fabs(slope-SLOPE(node[numPt], node[neighNode[numPt][j]])) < 0.001)
-                    //if(oldDist>distPt(node[neighNode[numPt][j]], pt2))
-                        break;
-            }
-            //cout<<numPt<<" "<<neighNode[numPt][j]<<"\n"; getchar(); getchar();
-
-            X[0] = node[numPt].x;
-            Y[0] = node[numPt].y;
-            X[1] = node[neighNode[numPt][j]].x;
-            Y[1] = node[neighNode[numPt][j]].y;
-            FromTo[0]=numPt;
-            FromTo[1]=neighNode[numPt][j];
-            int m =0;
-            for(k=0; k<nodeInEleCount[numPt]; k++)
-            {
-                for(l=0; l<nodeInEleCount[neighNode[numPt][j]]; l++)
+                int j, k, l;
+                for(j=0; j<neighNodeCount[numPt]; j++)
                 {
-                    if(nodeInEle[numPt][k] == nodeInEle[neighNode[numPt][j]][l])
-                        LeftRight[m++] = nodeInEle[numPt][k];
+                    //cout<<"x= "<<node[numPt].x<<" y= "<<node[numPt].y<<"\n";
+                    //cout<<"x= "<<node[neighNode[numPt][j]].x<<" y= "<<node[neighNode[numPt][j]].y<<"\n";
+                    //cout<<"slope2= "<<SLOPE(node[numPt], node[neighNode[numPt][j]])<<"\n";
+                    //cout<<"del slope= "<<slope-SLOPE(node[numPt], node[neighNode[numPt][j]])<<"\n";
+                    //cout<<"="<<oldDist<<"\n";
+                    //cout<<"="<<distPt(node[neighNode[numPt][j]], pt2)<<"\n";
+                    if(fabs(slope-SLOPE(node[numPt], node[neighNode[numPt][j]])) < 0.001)
+                        //if(oldDist>distPt(node[neighNode[numPt][j]], pt2))
+                        break;
                 }
+                //cout<<numPt<<" "<<neighNode[numPt][j]<<"\n"; getchar(); getchar();
+
+                X[0] = node[numPt].x;
+                Y[0] = node[numPt].y;
+                X[1] = node[neighNode[numPt][j]].x;
+                Y[1] = node[neighNode[numPt][j]].y;
+                FromTo[0]=numPt;
+                FromTo[1]=neighNode[numPt][j];
+                int m =0;
+                for(k=0; k<nodeInEleCount[numPt]; k++)
+                {
+                    for(l=0; l<nodeInEleCount[neighNode[numPt][j]]; l++)
+                    {
+                        if(nodeInEle[numPt][k] == nodeInEle[neighNode[numPt][j]][l])
+                            LeftRight[m++] = nodeInEle[numPt][k];
+                    }
+                }
+                SHPObject* newobj = SHPCreateSimpleObject(SHPT_ARC, 2, X, Y, Z);
+                SHPWriteObject(xRiverShpHandle, -1, newobj);
+                DBFWriteIntegerAttribute(xRiverDbfHandle, record, LeftEle,  LeftRight[0]);
+                DBFWriteIntegerAttribute(xRiverDbfHandle, record, RightEle, LeftRight[1]);
+                DBFWriteIntegerAttribute(xRiverDbfHandle, record, FrmEleNode, FromTo[0]);
+                DBFWriteIntegerAttribute(xRiverDbfHandle, record, ToEleNode,   FromTo[1]);
+                record++;
+
+                numPt = neighNode[numPt][j];
+                //cout<<numPt<<" "; //getchar(); getchar();
+                oldDist = distPt(node[numPt], pt2);
             }
-            SHPObject* newobj = SHPCreateSimpleObject(SHPT_ARC, 2, X, Y, Z);
-            SHPWriteObject(xRiverShpHandle, -1, newobj);
-            DBFWriteIntegerAttribute(xRiverDbfHandle, record, LeftEle,  LeftRight[0]);
-            DBFWriteIntegerAttribute(xRiverDbfHandle, record, RightEle, LeftRight[1]);
-            DBFWriteIntegerAttribute(xRiverDbfHandle, record, FrmEleNode, FromTo[0]);
-            DBFWriteIntegerAttribute(xRiverDbfHandle, record, ToEleNode,   FromTo[1]);
-            record++;
-
-            numPt = neighNode[numPt][j];
-            //cout<<numPt<<" "; //getchar(); getchar();
-            oldDist = distPt(node[numPt], pt2);
+            //cout<<"\nend\n";//getchar(); getchar();
         }
-        //cout<<"\nend\n";//getchar(); getchar();
-    }
 
-    SHPClose(RiverShpHandle);
-    DBFClose(RiverDbfHandle);
-    SHPClose(xRiverShpHandle);
-    DBFClose(xRiverDbfHandle);
+        SHPClose(RiverShpHandle);
+        DBFClose(RiverDbfHandle);
+        SHPClose(xRiverShpHandle);
+        DBFClose(xRiverDbfHandle);
+
+    } catch (...) {
+        qDebug() << "Error: RiverFromTIN is returning zero w/o checking";
+    }
 
     return 0;
 
@@ -288,80 +308,89 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
 
 int AddFID(QString RiverDbfFileName)
 {
+    if(print_debug_messages)
+        qDebug() << "INFO: Start AddFID";
 
-    DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
-    if ( RiverDbfHandle == nullptr )
-        return 283;
+    try {
 
-    int TempInt;
-    int fieldCount  = DBFGetFieldCount(RiverDbfHandle);
-    int recordCount = DBFGetRecordCount(RiverDbfHandle);
+        DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
+        if ( RiverDbfHandle == nullptr )
+            return 283;
 
-    QString TempDbfFileName;
-    TempDbfFileName = QDir::homePath()+"/.PIHMgis/temp.dbf";
-    DBFHandle TempDbfHandle = DBFCreate(qPrintable(TempDbfFileName));
+        int TempInt;
+        int fieldCount  = DBFGetFieldCount(RiverDbfHandle);
+        int recordCount = DBFGetRecordCount(RiverDbfHandle);
 
-    if ( TempDbfHandle == nullptr )
-        return 293;
+        QString TempDbfFileName;
+        TempDbfFileName = QDir::homePath()+"/.PIHMgis/temp.dbf";
+        DBFHandle TempDbfHandle = DBFCreate(qPrintable(TempDbfFileName));
 
-    int width[1], decimals[1];
-    char fieldName[20];
-    DBFFieldType fieldType;
+        if ( TempDbfHandle == nullptr )
+            return 293;
 
-    int RivIDField;
+        int width[1], decimals[1];
+        char fieldName[20];
+        DBFFieldType fieldType;
 
-    qDebug() << "Adding RivID Field ...";
+        int RivIDField;
 
-    RivIDField = DBFAddField(TempDbfHandle, "RivID", FTInteger, 6, 0);
+        qDebug() << "Adding RivID Field ...";
 
-    qDebug() << "Adding Existing Fields ...";
+        RivIDField = DBFAddField(TempDbfHandle, "RivID", FTInteger, 6, 0);
 
-    for (int i=0; i<fieldCount; i++)
-    {
-        fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
-        TempInt = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
-    }
+        qDebug() << "Adding Existing Fields ...";
 
-
-    qDebug() << "Copying Existing Records ...";
-    int iValue;
-    double fValue;
-    const char * cValue;
-    for (int i=0; i<recordCount; i++)
-    {
-        for (int j=0; j<fieldCount; j++)
+        for (int i=0; i<fieldCount; i++)
         {
-            fieldType = DBFGetFieldInfo(RiverDbfHandle, j, fieldName, width, decimals);
-            if(fieldType == FTString)
-            {
-                cValue = DBFReadStringAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteStringAttribute(TempDbfHandle, i, j+1, cValue);
-            }
-            else if(fieldType == FTInteger)
-            {
-                iValue = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j+1, iValue);
-            }
-            else if(fieldType == FTDouble)
-            {
-                fValue = DBFReadDoubleAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteDoubleAttribute(TempDbfHandle, i, j+1, fValue);
-            }
+            fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
+            TempInt = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
         }
-        TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, 0, i+1);
+
+
+        qDebug() << "Copying Existing Records ...";
+        int iValue;
+        double fValue;
+        const char * cValue;
+        for (int i=0; i<recordCount; i++)
+        {
+            for (int j=0; j<fieldCount; j++)
+            {
+                fieldType = DBFGetFieldInfo(RiverDbfHandle, j, fieldName, width, decimals);
+                if(fieldType == FTString)
+                {
+                    cValue = DBFReadStringAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteStringAttribute(TempDbfHandle, i, j+1, cValue);
+                }
+                else if(fieldType == FTInteger)
+                {
+                    iValue = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j+1, iValue);
+                }
+                else if(fieldType == FTDouble)
+                {
+                    fValue = DBFReadDoubleAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteDoubleAttribute(TempDbfHandle, i, j+1, fValue);
+                }
+            }
+            TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, 0, i+1);
+        }
+        DBFClose(RiverDbfHandle);
+        DBFClose(TempDbfHandle);
+
+
+
+        qDebug() << "Finalizing DBF File ...";
+
+        QFile::remove(RiverDbfFileName);
+
+        QFile::copy(TempDbfFileName, RiverDbfFileName);
+
+        QFile::remove(TempDbfFileName);
+
+
+    } catch (...) {
+        qDebug() << "Error: AddFID is returning w/o checking";
     }
-    DBFClose(RiverDbfHandle);
-    DBFClose(TempDbfHandle);
-
-
-
-    qDebug() << "Finalizing DBF File ...";
-
-    QFile::remove(RiverDbfFileName);
-
-    QFile::copy(TempDbfFileName, RiverDbfFileName);
-
-    QFile::remove(TempDbfFileName);
 
     return 0;
 }
@@ -369,322 +398,337 @@ int AddFID(QString RiverDbfFileName)
 
 int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
 {
-    SHPHandle RiverShpHandle = SHPOpen( qPrintable(RiverShpFileName), "rb");
-    DBFHandle RiverDbfHandle = DBFOpen( qPrintable(RiverDbfFileName), "rb");
+    if(print_debug_messages)
+        qDebug() << "INFO: Start AddToFromNode";
 
-    if ( RiverShpHandle == nullptr || RiverDbfHandle == nullptr )
-        return 365;
+    try {
 
-    QString TempDbfFileName;
-    TempDbfFileName = QDir::homePath()+"/.PIHMgis/temp.dbf";
-    DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
+        SHPHandle RiverShpHandle = SHPOpen( qPrintable(RiverShpFileName), "rb");
+        DBFHandle RiverDbfHandle = DBFOpen( qPrintable(RiverDbfFileName), "rb");
 
-    if ( TempDbfHandle == nullptr )
-        return 372;
+        if ( RiverShpHandle == nullptr || RiverDbfHandle == nullptr )
+            return 365;
 
-    int TempInt;
+        QString TempDbfFileName;
+        TempDbfFileName = QDir::homePath()+"/.PIHMgis/temp.dbf";
+        DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
 
-    int fieldCount  = DBFGetFieldCount(RiverDbfHandle);
-    int recordCount = DBFGetRecordCount(RiverDbfHandle);
+        if ( TempDbfHandle == nullptr )
+            return 372;
 
-    // ** Copy Existing Record
-    qDebug() << "Copying Existing Records ...";
+        int TempInt;
 
-    int width[1], decimals[1];
-    char fieldName[20];
-    DBFFieldType fieldType;
+        int fieldCount  = DBFGetFieldCount(RiverDbfHandle);
+        int recordCount = DBFGetRecordCount(RiverDbfHandle);
 
-    for (int i=0; i<fieldCount; i++)
-    {
-        fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
-        TempInt   = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
-        //cout<<temp<<"\n";
-    }
+        // ** Copy Existing Record
+        qDebug() << "Copying Existing Records ...";
 
-    int fromField = DBFAddField(TempDbfHandle, "FromNode", FTInteger, 6, 0); //cout<<"fromField= "<<fromField<<"\n";
-    int toField   = DBFAddField(TempDbfHandle, "ToNode",   FTInteger, 6, 0); //cout<<"toField= "<<toField<<"\n";
+        int width[1], decimals[1];
+        char fieldName[20];
+        DBFFieldType fieldType;
 
-    if ( fromField < 0 || toField < 0 )
-        return 397;
-
-    //temp = DBFAddField(TempDbfHandle, "FID", FTInteger, 6, 0);
-
-    int iValue;
-    double fValue;
-    const char * cValue;
-    for (int i=0; i<recordCount; i++)
-    {
-        for (int j=0; j<fieldCount; j++)
+        for (int i=0; i<fieldCount; i++)
         {
-            fieldType = DBFGetFieldInfo(RiverDbfHandle, j, fieldName, width, decimals);
-            if(fieldType == FTString)
-            {
-                cValue  = DBFReadStringAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteStringAttribute(TempDbfHandle, i, j, cValue);
-            }
-            else if(fieldType == FTInteger)
-            {
-                iValue  = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j, iValue);
-            }
-            else if(fieldType == FTDouble)
-            {
-                fValue  = DBFReadDoubleAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteDoubleAttribute(TempDbfHandle, i, j, fValue);
-            }
-
-            if ( TempInt == false )
-                return 426;
+            fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
+            TempInt   = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
+            //cout<<temp<<"\n";
         }
-        //temp = DBFWriteIntegerAttribute(TempDbfHandle, i, fieldCount, i+1);
-    }
 
+        int fromField = DBFAddField(TempDbfHandle, "FromNode", FTInteger, 6, 0); //cout<<"fromField= "<<fromField<<"\n";
+        int toField   = DBFAddField(TempDbfHandle, "ToNode",   FTInteger, 6, 0); //cout<<"toField= "<<toField<<"\n";
 
-    qDebug() << "Computing FromNode and ToNode ...";
+        if ( fromField < 0 || toField < 0 )
+            return 397;
 
-    Point *nodes = new Point[recordCount*2];
-    int ptCount = 0;
+        //temp = DBFAddField(TempDbfHandle, "FID", FTInteger, 6, 0);
 
-    for(int i=0; i<recordCount; i++)
-    {
-        SHPObject *obj = SHPReadObject(RiverShpHandle, i);
-        Point TempPoint;
-        for (int k=0; k<2; k++)
+        int iValue;
+        double fValue;
+        const char * cValue;
+        for (int i=0; i<recordCount; i++)
         {
-            TempPoint.x = obj->padfX[k];
-            TempPoint.y = obj->padfY[k];
-            int j = ptCount-1;
-            while( IsEqualPoint(TempPoint, nodes[j]) != 1 && j >= 0 )
-                j--;
-            if(j == -1)
+            for (int j=0; j<fieldCount; j++)
             {
-                nodes[ptCount].x=obj->padfX[k];
-                nodes[ptCount].y=obj->padfY[k];
-                ptCount++;
+                fieldType = DBFGetFieldInfo(RiverDbfHandle, j, fieldName, width, decimals);
+                if(fieldType == FTString)
+                {
+                    cValue  = DBFReadStringAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteStringAttribute(TempDbfHandle, i, j, cValue);
+                }
+                else if(fieldType == FTInteger)
+                {
+                    iValue  = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j, iValue);
+                }
+                else if(fieldType == FTDouble)
+                {
+                    fValue  = DBFReadDoubleAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteDoubleAttribute(TempDbfHandle, i, j, fValue);
+                }
 
-                if(k == 0)
-                    TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,fromField,ptCount);
-                else
-                    TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,toField,ptCount);
+                if ( TempInt == false )
+                    return 426;
             }
-            else
-            {
-                if(k == 0)
-                    TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,fromField,j+1);
-                else
-                    TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,toField,j+1);
-            }
-
-            if ( TempInt == false )
-                return 426;
+            //temp = DBFWriteIntegerAttribute(TempDbfHandle, i, fieldCount, i+1);
         }
+
+
+        qDebug() << "Computing FromNode and ToNode ...";
+
+        Point *nodes = new Point[recordCount*2];
+        int ptCount = 0;
+
+        for(int i=0; i<recordCount; i++)
+        {
+            SHPObject *obj = SHPReadObject(RiverShpHandle, i);
+            Point TempPoint;
+            for (int k=0; k<2; k++)
+            {
+                TempPoint.x = obj->padfX[k];
+                TempPoint.y = obj->padfY[k];
+                int j = ptCount-1;
+                while( IsEqualPoint(TempPoint, nodes[j]) != 1 && j >= 0 )
+                    j--;
+                if(j == -1)
+                {
+                    nodes[ptCount].x=obj->padfX[k];
+                    nodes[ptCount].y=obj->padfY[k];
+                    ptCount++;
+
+                    if(k == 0)
+                        TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,fromField,ptCount);
+                    else
+                        TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,toField,ptCount);
+                }
+                else
+                {
+                    if(k == 0)
+                        TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,fromField,j+1);
+                    else
+                        TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,toField,j+1);
+                }
+
+                if ( TempInt == false )
+                    return 426;
+            }
+        }
+
+        SHPClose(RiverShpHandle);
+        DBFClose(RiverDbfHandle);
+        DBFClose(TempDbfHandle);
+
+
+        qDebug() << "Finalizing DBF File ...";
+
+        QFile::remove(RiverDbfFileName);
+
+        QFile::copy(TempDbfFileName, RiverDbfFileName);
+
+        QFile::remove(TempDbfFileName);
+
+    } catch (...) {
+        qDebug() << "Error: AddToFromNode is returning w/o checking";
     }
-
-    SHPClose(RiverShpHandle);
-    DBFClose(RiverDbfHandle);
-    DBFClose(TempDbfHandle);
-
-
-    qDebug() << "Finalizing DBF File ...";
-
-    QFile::remove(RiverDbfFileName);
-
-    QFile::copy(TempDbfFileName, RiverDbfFileName);
-
-    QFile::remove(TempDbfFileName);
 
     return 0;
 
 }
 
-
-
 int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
 {
-    SHPHandle RiverShpHandle = SHPOpen(qPrintable(RiverShpFileName), "rb");
-    DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
+    if(print_debug_messages)
+        qDebug() << "INFO: Start AddStrahlerStreamOrder";
 
-    qDebug() << "Checking Required Fields ... ";
-
-    int fromField = DBFGetFieldIndex(RiverDbfHandle, "FromNode");
-    if (fromField == -1)
-    {
-        qDebug() << "Error: FromNode field does *not* exist";
-        return 513;
-    }
-
-    int toField = DBFGetFieldIndex(RiverDbfHandle, "ToNode");
-    if (toField == -1)
-    {
-        qDebug() << "Error: ToNode field does *not* exist";
-        return 520;
-    }
+    try {
 
 
-    QString TempDbfFileName;
-    TempDbfFileName = QDir::homePath()+"/.PIHMgis/temp.dbf";
-    DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
+        SHPHandle RiverShpHandle = SHPOpen(qPrintable(RiverShpFileName), "rb");
+        DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
 
-    int TempInt;
+        qDebug() << "Checking Required Fields ... ";
 
-    int fieldCount  = DBFGetFieldCount(RiverDbfHandle);
-    int recordCount = DBFGetRecordCount(RiverDbfHandle);
-
-
-    // ** Copy Existing Record
-    qDebug() << "Copying Existing Records ...";
-
-    int width[1], decimals[1];
-    char fieldName[20];
-    DBFFieldType fieldType;
-
-    for (int i=0; i<fieldCount; i++)
-    {
-        fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
-        TempInt   = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
-    }
-
-
-    int StrahlerStreamOrder = DBFAddField(TempDbfHandle, "StrOrder", FTInteger, 6, 0);
-    //cout<<"StrahlerStreamOrder= "<<StrahlerStreamOrder<<"\n";
-
-    //temp = DBFAddField(newdbf, "FID", FTInteger, 6, 0);
-
-
-    int iValue;
-    double fValue;
-    const char * cValue;
-    for (int i=0; i<recordCount; i++)
-    {
-        for (int j=0; j<fieldCount; j++)
+        int fromField = DBFGetFieldIndex(RiverDbfHandle, "FromNode");
+        if (fromField == -1)
         {
-            fieldType = DBFGetFieldInfo(RiverDbfHandle, j, fieldName, width, decimals);
-            if(fieldType == FTString)
-            {
-                cValue = DBFReadStringAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteStringAttribute(TempDbfHandle, i, j, cValue);
-            }
-            else if(fieldType == FTInteger)
-            {
-                iValue = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j, iValue);
-            }
-            else if(fieldType == FTDouble)
-            {
-                fValue = DBFReadDoubleAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteDoubleAttribute(TempDbfHandle, i, j, fValue);
-            }
+            qDebug() << "Error: FromNode field does *not* exist";
+            return 513;
         }
-        //temp = DBFWriteIntegerAttribute(newdbf, i, fieldCount, i+1);
-    }
+
+        int toField = DBFGetFieldIndex(RiverDbfHandle, "ToNode");
+        if (toField == -1)
+        {
+            qDebug() << "Error: ToNode field does *not* exist";
+            return 520;
+        }
+
+
+        QString TempDbfFileName;
+        TempDbfFileName = QDir::homePath()+"/.PIHMgis/temp.dbf";
+        DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
+
+        int TempInt;
+
+        int fieldCount  = DBFGetFieldCount(RiverDbfHandle);
+        int recordCount = DBFGetRecordCount(RiverDbfHandle);
+
+
+        // ** Copy Existing Record
+        qDebug() << "Copying Existing Records ...";
+
+        int width[1], decimals[1];
+        char fieldName[20];
+        DBFFieldType fieldType;
+
+        for (int i=0; i<fieldCount; i++)
+        {
+            fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
+            TempInt   = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
+        }
+
+
+        int StrahlerStreamOrder = DBFAddField(TempDbfHandle, "StrOrder", FTInteger, 6, 0);
+        //cout<<"StrahlerStreamOrder= "<<StrahlerStreamOrder<<"\n";
+
+        //temp = DBFAddField(newdbf, "FID", FTInteger, 6, 0);
+
+
+        int iValue;
+        double fValue;
+        const char * cValue;
+        for (int i=0; i<recordCount; i++)
+        {
+            for (int j=0; j<fieldCount; j++)
+            {
+                fieldType = DBFGetFieldInfo(RiverDbfHandle, j, fieldName, width, decimals);
+                if(fieldType == FTString)
+                {
+                    cValue = DBFReadStringAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteStringAttribute(TempDbfHandle, i, j, cValue);
+                }
+                else if(fieldType == FTInteger)
+                {
+                    iValue = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j, iValue);
+                }
+                else if(fieldType == FTDouble)
+                {
+                    fValue = DBFReadDoubleAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteDoubleAttribute(TempDbfHandle, i, j, fValue);
+                }
+            }
+            //temp = DBFWriteIntegerAttribute(newdbf, i, fieldCount, i+1);
+        }
 
 
 
-    qDebug() << "Computing Strahler Stream Order ...";
+        qDebug() << "Computing Strahler Stream Order ...";
 
-    int (*toArray)[5] = new int[2*recordCount][5];
-    int *count = new int [2*recordCount];
+        int (*toArray)[5] = new int[2*recordCount][5];
+        int *count = new int [2*recordCount];
 
-    for (int i=0; i<2*recordCount; i++)
-        count[i]=0;
-    //count[2*recordCount]={0};
-
-    for(int i=0; i<recordCount; i++)
-    {
-        TempInt = DBFReadIntegerAttribute(RiverDbfHandle, i, toField);
-        //cout<<"temp = "<<temp<<"\n";
-        //cout<<"count= "<<count[temp]<<"\n";
-        if( DBFReadIntegerAttribute(RiverDbfHandle,toArray[TempInt][count[TempInt]-1],fromField) != DBFReadIntegerAttribute(RiverDbfHandle,i,fromField))
-            toArray[TempInt][count[TempInt]++]=i;
-    }
-
-    for(int i=recordCount-1; i>=0; i--)
-    {
-        TempInt = DBFReadIntegerAttribute(RiverDbfHandle, i, toField);
-        //cout<<"temp = "<<temp<<"\n";
-        //cout<<"count= "<<count[temp]<<"\n";
-        if( DBFReadIntegerAttribute(RiverDbfHandle,toArray[TempInt][count[TempInt]-1],fromField) != DBFReadIntegerAttribute(RiverDbfHandle,i,fromField))
-            toArray[TempInt][count[TempInt]++]=i;
-    }
-
-    int UPDATE = 1;
-    int loopCount = 0;
-    int max1, max2, from, to, so;
-
-    while(UPDATE == 1)
-    {
-        UPDATE = 0;
-        loopCount++;
-        //cout<<"loop Count= "<<loopCount<<"\n";
+        for (int i=0; i<2*recordCount; i++)
+            count[i]=0;
+        //count[2*recordCount]={0};
 
         for(int i=0; i<recordCount; i++)
         {
-            int TempInt = DBFReadIntegerAttribute(TempDbfHandle, i, fromField);
-            if(count[TempInt] == 0)
+            TempInt = DBFReadIntegerAttribute(RiverDbfHandle, i, toField);
+            //cout<<"temp = "<<temp<<"\n";
+            //cout<<"count= "<<count[temp]<<"\n";
+            if( DBFReadIntegerAttribute(RiverDbfHandle,toArray[TempInt][count[TempInt]-1],fromField) != DBFReadIntegerAttribute(RiverDbfHandle,i,fromField))
+                toArray[TempInt][count[TempInt]++]=i;
+        }
+
+        for(int i=recordCount-1; i>=0; i--)
+        {
+            TempInt = DBFReadIntegerAttribute(RiverDbfHandle, i, toField);
+            //cout<<"temp = "<<temp<<"\n";
+            //cout<<"count= "<<count[temp]<<"\n";
+            if( DBFReadIntegerAttribute(RiverDbfHandle,toArray[TempInt][count[TempInt]-1],fromField) != DBFReadIntegerAttribute(RiverDbfHandle,i,fromField))
+                toArray[TempInt][count[TempInt]++]=i;
+        }
+
+        int UPDATE = 1;
+        int loopCount = 0;
+        int max1, max2, from, to, so;
+
+        while(UPDATE == 1)
+        {
+            UPDATE = 0;
+            loopCount++;
+            //cout<<"loop Count= "<<loopCount<<"\n";
+
+            for(int i=0; i<recordCount; i++)
             {
-                //
-                //cout <<"i= "<<i<<" SO =1\n";getchar();
-                DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, 1);
-                //cout<<"Wrote = "<<DBFReadIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder)<<"\n";
-            }
-            else if(count[TempInt] == 1)
-            {
-                TempInt = DBFReadIntegerAttribute(TempDbfHandle, i, fromField);
-                //cout<<temp<<"\t";
-                TempInt = toArray[TempInt][0];
-                //cout<<temp<<"\n";//getchar();
-                //cout <<"i= "<<i<<" SO= "<<DBFReadIntegerAttribute(TempDbfHandle, temp, StrahlerStreamOrder);getchar();
-                if(DBFReadIntegerAttribute(TempDbfHandle, TempInt, StrahlerStreamOrder) != DBFReadIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder))
-                    UPDATE = 1;
-                DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, DBFReadIntegerAttribute(TempDbfHandle, TempInt, StrahlerStreamOrder));
-            }
-            else
-            {
-                from = DBFReadIntegerAttribute(TempDbfHandle, i, fromField);
-                max1=0; max2=0;
-                //cout<<"i = "<<i<<"\n";
-                for(int j=0; j<count[TempInt]; j++)
+                int TempInt = DBFReadIntegerAttribute(TempDbfHandle, i, fromField);
+                if(count[TempInt] == 0)
                 {
-                    to = toArray[from][j]; //cout<<"  to = "<<to<<"\t";
-                    so = DBFReadIntegerAttribute(TempDbfHandle, to, StrahlerStreamOrder);// cout<<"  so = "<<so<<"\n";
-                    if(so >= max1)
-                    {
-                        max2=max1;
-                        max1=so;
-                    }
+                    //
+                    //cout <<"i= "<<i<<" SO =1\n";getchar();
+                    DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, 1);
+                    //cout<<"Wrote = "<<DBFReadIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder)<<"\n";
                 }
-                if(max1 == max2)
+                else if(count[TempInt] == 1)
                 {
-                    if(DBFReadIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder) != max1+1)
+                    TempInt = DBFReadIntegerAttribute(TempDbfHandle, i, fromField);
+                    //cout<<temp<<"\t";
+                    TempInt = toArray[TempInt][0];
+                    //cout<<temp<<"\n";//getchar();
+                    //cout <<"i= "<<i<<" SO= "<<DBFReadIntegerAttribute(TempDbfHandle, temp, StrahlerStreamOrder);getchar();
+                    if(DBFReadIntegerAttribute(TempDbfHandle, TempInt, StrahlerStreamOrder) != DBFReadIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder))
                         UPDATE = 1;
-                    DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, max1+1);
+                    DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, DBFReadIntegerAttribute(TempDbfHandle, TempInt, StrahlerStreamOrder));
                 }
                 else
                 {
-                    if(DBFReadIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder) != max1)
-                        UPDATE = 1;
-                    DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, max1);
+                    from = DBFReadIntegerAttribute(TempDbfHandle, i, fromField);
+                    max1=0; max2=0;
+                    //cout<<"i = "<<i<<"\n";
+                    for(int j=0; j<count[TempInt]; j++)
+                    {
+                        to = toArray[from][j]; //cout<<"  to = "<<to<<"\t";
+                        so = DBFReadIntegerAttribute(TempDbfHandle, to, StrahlerStreamOrder);// cout<<"  so = "<<so<<"\n";
+                        if(so >= max1)
+                        {
+                            max2=max1;
+                            max1=so;
+                        }
+                    }
+                    if(max1 == max2)
+                    {
+                        if(DBFReadIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder) != max1+1)
+                            UPDATE = 1;
+                        DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, max1+1);
+                    }
+                    else
+                    {
+                        if(DBFReadIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder) != max1)
+                            UPDATE = 1;
+                        DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, max1);
+                    }
                 }
+
+                //if(DBFReadIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder) != DBFReadIntegerAttribute(TempDbfHandle, i, DBFGetFieldIndex(TempDbfHandle, "SO_VALUE"))){
+                //{getchar();getchar();}
             }
-
-            //if(DBFReadIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder) != DBFReadIntegerAttribute(TempDbfHandle, i, DBFGetFieldIndex(TempDbfHandle, "SO_VALUE"))){
-            //{getchar();getchar();}
         }
+
+        SHPClose(RiverShpHandle);
+        DBFClose(RiverDbfHandle);
+        DBFClose(TempDbfHandle);
+
+        qDebug() << "Finalizing DBF File ...";
+
+        QFile::remove(RiverDbfFileName);
+
+        QFile::copy(TempDbfFileName, RiverDbfFileName);
+
+        QFile::remove(TempDbfFileName);
+
+    } catch (...) {
+        qDebug() << "Error: AddStrahlerStreamOrder is returning w/o checking";
     }
-
-    SHPClose(RiverShpHandle);
-    DBFClose(RiverDbfHandle);
-    DBFClose(TempDbfHandle);
-
-
-
-    qDebug() << "Finalizing DBF File ...";
-
-    QFile::remove(RiverDbfFileName);
-
-    QFile::copy(TempDbfFileName, RiverDbfFileName);
-
-    QFile::remove(TempDbfFileName);
 
     return 0;
 
@@ -694,135 +738,142 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
 
 int AddDownSegment(QString RiverDbfFileName, QString BoundaryCondition)
 {
-    int TempInt;
+    if(print_debug_messages)
+        qDebug() << "INFO: Start AddDownSegment";
 
-    DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
+    try {
 
-    if ( RiverDbfHandle == nullptr )
-        return 692;
+        int TempInt;
 
-    qDebug() << "Checking Requirent Fields ...";
+        DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
 
-    int RivID     = DBFGetFieldIndex(RiverDbfHandle, "RivID");
-    if( RivID == -1)
-    {
-        qDebug() << "Error: RivID field does *not* exist";
-        return 695;
-    }
+        if ( RiverDbfHandle == nullptr )
+            return 692;
 
-    int FROM_NODE = DBFGetFieldIndex(RiverDbfHandle, "FromNode");
-    if( FROM_NODE == -1)
-    {
-        qDebug() << "Error: FromNode field does *not* exist";
-        return 704;
-    }
+        qDebug() << "Checking Requirent Fields ...";
 
-    int TO_NODE   = DBFGetFieldIndex(RiverDbfHandle, "ToNode");
-    if( TO_NODE == -1)
-    {
-        qDebug() << "Error: ToNode field does *not* exist";
-        return 711;
-    }
-
-
-    QString TempDbfFileName;
-    TempDbfFileName = QDir::homePath()+"/.PIHMgis/temp.dbf";
-    DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
-
-    if ( TempDbfHandle == NULL )
-        return 723;
-
-    int fieldCount  = DBFGetFieldCount(RiverDbfHandle);
-    int recordCount = DBFGetRecordCount(RiverDbfHandle);
-
-
-    qDebug() << "Copying Existing Records ...";
-
-    int width[1], decimals[1];
-    char fieldName[20];
-    DBFFieldType fieldType;
-
-    for (int i=0; i<fieldCount; i++)
-    {
-        fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
-        TempInt   = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
-    }
-
-    int DownSegmt = DBFAddField(TempDbfHandle, "DownSegmt", FTInteger, 6, 0);
-
-    if ( DownSegmt < 0 )
-        return 744;
-
-
-
-    int iValue;
-    double fValue;
-    const char * cValue;
-    for (int i=0; i<recordCount; i++)
-    {
-        for (int j=0; j<fieldCount; j++)
+        int RivID     = DBFGetFieldIndex(RiverDbfHandle, "RivID");
+        if( RivID == -1)
         {
-            fieldType = DBFGetFieldInfo(RiverDbfHandle, j, fieldName, width, decimals);
-            if(fieldType == FTString)
+            qDebug() << "Error: RivID field does *not* exist";
+            return 695;
+        }
+
+        int FROM_NODE = DBFGetFieldIndex(RiverDbfHandle, "FromNode");
+        if( FROM_NODE == -1)
+        {
+            qDebug() << "Error: FromNode field does *not* exist";
+            return 704;
+        }
+
+        int TO_NODE   = DBFGetFieldIndex(RiverDbfHandle, "ToNode");
+        if( TO_NODE == -1)
+        {
+            qDebug() << "Error: ToNode field does *not* exist";
+            return 711;
+        }
+
+
+        QString TempDbfFileName;
+        TempDbfFileName = QDir::homePath()+"/.PIHMgis/temp.dbf";
+        DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
+
+        if ( TempDbfHandle == NULL )
+            return 723;
+
+        int fieldCount  = DBFGetFieldCount(RiverDbfHandle);
+        int recordCount = DBFGetRecordCount(RiverDbfHandle);
+
+
+        qDebug() << "Copying Existing Records ...";
+
+        int width[1], decimals[1];
+        char fieldName[20];
+        DBFFieldType fieldType;
+
+        for (int i=0; i<fieldCount; i++)
+        {
+            fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
+            TempInt   = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
+        }
+
+        int DownSegmt = DBFAddField(TempDbfHandle, "DownSegmt", FTInteger, 6, 0);
+
+        if ( DownSegmt < 0 )
+            return 744;
+
+        int iValue;
+        double fValue;
+        const char * cValue;
+        for (int i=0; i<recordCount; i++)
+        {
+            for (int j=0; j<fieldCount; j++)
             {
-                cValue = DBFReadStringAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteStringAttribute(TempDbfHandle, i, j, cValue);
+                fieldType = DBFGetFieldInfo(RiverDbfHandle, j, fieldName, width, decimals);
+                if(fieldType == FTString)
+                {
+                    cValue = DBFReadStringAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteStringAttribute(TempDbfHandle, i, j, cValue);
+                }
+                else if(fieldType == FTInteger)
+                {
+                    iValue = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j, iValue);
+                }
+                else if(fieldType == FTDouble)
+                {
+                    fValue = DBFReadDoubleAttribute(RiverDbfHandle, i, j);
+                    TempInt = DBFWriteDoubleAttribute(TempDbfHandle, i, j, fValue);
+                }
             }
-            else if(fieldType == FTInteger)
+            //temp = DBFWriteIntegerAttribute(newdbf, i, fieldCount, i+1);
+        }
+
+
+        //cout<<"field number= "<<TempInt<<"\n";
+
+        qDebug() << "Computing Down Segments Records ...";
+
+        int j;
+        for(int i=0; i<recordCount; i++)
+        {
+            //cout<<"\n"<<"i = "<<i<<"\n";
+            j=0;
+            while((DBFReadIntegerAttribute(RiverDbfHandle,i,TO_NODE) != DBFReadIntegerAttribute(RiverDbfHandle,j,FROM_NODE) && j<recordCount))
             {
-                iValue = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j, iValue);
+                //cout<<j<<" "<<DBFReadIntegerAttribute(dbf,i,TNode)<<" "<<DBFReadIntegerAttribute(dbf,j,FNode)<<"\n";
+                j++;
+                //cout<<"done\n";
             }
-            else if(fieldType == FTDouble)
+            if(j<recordCount)
             {
-                fValue = DBFReadDoubleAttribute(RiverDbfHandle, i, j);
-                TempInt = DBFWriteDoubleAttribute(TempDbfHandle, i, j, fValue);
+                //cout<<"here "<<fieldCount <<" " <<DBFReadIntegerAttribute(dbf, j, IDIndex)<<"\n";
+                TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, fieldCount, DBFReadIntegerAttribute(RiverDbfHandle, j, RivID));
+                //cout<<"After push\n";
+            }
+            else
+            {
+                int BC = BoundaryCondition.toInt();
+                TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, fieldCount, BC);
             }
         }
-        //temp = DBFWriteIntegerAttribute(newdbf, i, fieldCount, i+1);
+
+        DBFClose(RiverDbfHandle);
+        DBFClose(TempDbfHandle);
+        //cout<<"here2";
+
+
+        qDebug() << "Finalizing DBF File ...";
+
+        QFile::remove(RiverDbfFileName);
+
+        QFile::copy(TempDbfFileName, RiverDbfFileName);
+
+        QFile::remove(TempDbfFileName);
+
+    } catch (...) {
+        qDebug() << "Error: AddDownSegment is returning w/o checking";
     }
-
-
-    //cout<<"field number= "<<TempInt<<"\n";
-
-    qDebug() << "Computing Down Segments Records ...";
-
-    int j;
-    for(int i=0; i<recordCount; i++)
-    {
-        //cout<<"\n"<<"i = "<<i<<"\n";
-        j=0;
-        while((DBFReadIntegerAttribute(RiverDbfHandle,i,TO_NODE) != DBFReadIntegerAttribute(RiverDbfHandle,j,FROM_NODE) && j<recordCount))
-        {
-            //cout<<j<<" "<<DBFReadIntegerAttribute(dbf,i,TNode)<<" "<<DBFReadIntegerAttribute(dbf,j,FNode)<<"\n";
-            j++;
-            //cout<<"done\n";
-        }
-        if(j<recordCount)
-        {
-            //cout<<"here "<<fieldCount <<" " <<DBFReadIntegerAttribute(dbf, j, IDIndex)<<"\n";
-            TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, fieldCount, DBFReadIntegerAttribute(RiverDbfHandle, j, RivID));
-            //cout<<"After push\n";
-        }
-        else
-        {
-            int BC = BoundaryCondition.toInt();
-            TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, fieldCount, BC);
-        }
-    }
-
-    DBFClose(RiverDbfHandle);
-    DBFClose(TempDbfHandle);
-    //cout<<"here2";
-
-
-    qDebug() << "Finalizing DBF File ...";
-
-    QFile::remove(RiverDbfFileName);
-
-    QFile::copy(TempDbfFileName, RiverDbfFileName);
-
-    QFile::remove(TempDbfFileName);
 
     return 0;
 
@@ -832,123 +883,131 @@ int AddDownSegment(QString RiverDbfFileName, QString BoundaryCondition)
 
 int Riv_File( QString RiverDbfFileName, QString RivDataFileName )
 {
-    DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
+    if(print_debug_messages)
+        qDebug() << "INFO: Start Riv_File";
 
-    if ( RiverDbfHandle == NULL )
-        return 827;
+    try {
+        DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
 
-    qDebug() << "Checking Requirent Fields ...";
+        if ( RiverDbfHandle == NULL )
+            return 827;
 
-    int RivID     = DBFGetFieldIndex(RiverDbfHandle, "RivID");
-    if( RivID == -1)
-    {
-        qDebug() << "Error: RivID field does *not* exist";
-        return 835;
+        qDebug() << "Checking Requirent Fields ...";
+
+        int RivID     = DBFGetFieldIndex(RiverDbfHandle, "RivID");
+        if( RivID == -1)
+        {
+            qDebug() << "Error: RivID field does *not* exist";
+            return 835;
+        }
+
+        int LeftEle     = DBFGetFieldIndex(RiverDbfHandle, "LeftEle");
+        if( LeftEle == -1)
+        {
+            qDebug() << "Error: LeftEle field does *not* exist";
+            return 842;
+        }
+
+        int RightEle     = DBFGetFieldIndex(RiverDbfHandle, "RightEle");
+        if( RightEle == -1)
+        {
+            qDebug() << "Error: RightEle field does *not* exist";
+            return 849;
+        }
+
+        int FrmEleNode     = DBFGetFieldIndex(RiverDbfHandle, "FrmEleNode");
+        if( FrmEleNode == -1)
+        {
+            qDebug() << "Error: FrmEleNode field does *not* exist";
+            return 856;
+        }
+
+        int ToEleNode     = DBFGetFieldIndex(RiverDbfHandle, "ToEleNode");
+        if( ToEleNode == -1)
+        {
+            qDebug() << "Error: ToEleNode field does *not* exist";
+            return 863;
+        }
+
+        int DownSegmt     = DBFGetFieldIndex(RiverDbfHandle, "DownSegmt");
+        if( DownSegmt == -1)
+        {
+            qDebug() << "Error: DownSegmt field does *not* exist";
+            return 870;
+        }
+
+        int StrOrder     = DBFGetFieldIndex(RiverDbfHandle, "StrOrder");
+        if( StrOrder == -1)
+        {
+            qDebug() << "Error: StrOrder field does *not* exist";
+            return 877;
+        }
+
+        QFile RivDataFile(RivDataFileName);
+        if ( ! RivDataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+            return 882;
+        QTextStream RivDataFileTextStream(&RivDataFile);
+
+        int NumRivSeg = DBFGetRecordCount( RiverDbfHandle );
+        RivDataFileTextStream << NumRivSeg << "\n";
+
+        int Order;
+        int maxOrder = -1;
+
+        for (int c=0; c<NumRivSeg; c++)
+        {
+            RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, RivID)      <<"\t";
+            RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, FrmEleNode) <<"\t";
+            RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, ToEleNode)  <<"\t";
+            RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, DownSegmt)  <<"\t";
+            RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, LeftEle)    <<"\t";
+            RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, RightEle)   <<"\t";
+            Order = DBFReadIntegerAttribute(RiverDbfHandle, c, StrOrder);
+            RivDataFileTextStream << Order <<"\t"; //Shape
+            RivDataFileTextStream << Order <<"\t"; //Material
+            RivDataFileTextStream << Order <<"\t"; //IC
+            RivDataFileTextStream << "0"   <<"\t"; //BC
+            RivDataFileTextStream << "0"   <<"\n"; //Res
+
+            if(maxOrder < Order)
+                maxOrder = Order;
+        }
+
+        RivDataFileTextStream << "Shape\t" << maxOrder << "\n";
+        for(int c=1; c<=maxOrder; c++)
+        {
+            RivDataFileTextStream << c << "\t" << //index
+                                     0.5*c << "\t" << //depth
+                                     "1"   << "\t" << //interpOrder
+                                     2.0*c << "\n"; //width
+        }
+
+        RivDataFileTextStream << "Material\t" << maxOrder << "\n";
+        for(int c=1; c<=maxOrder; c++)
+        {
+            RivDataFileTextStream<< c << "\t" <<    //index
+                                    "4.63E-07" << "\t" <<               //n
+                                    "0.6"      << "\t" <<               //cwr
+                                    "0.1"      << "\t" <<               //Kh
+                                    "1.0"      << "\t" <<               //Kv
+                                    "1"        << "\n";                 //BedDepth
+        }
+
+        RivDataFileTextStream << "IC\t" << maxOrder << "\n";
+        for(int c=1; c<=maxOrder; c++)
+        {
+            RivDataFileTextStream << c << "\t" <<   //index
+                                     0.25*c << "\n";                     //rivIC
+        }
+
+        RivDataFileTextStream<<"BC\t"      <<"0"     <<"\n";
+        RivDataFileTextStream<<"RES\t"     <<"0"     <<"\n";
+
+        RivDataFile.close();
+
+    } catch (...) {
+        qDebug() << "Error: Riv_File is returning w/o checking";
     }
-
-    int LeftEle     = DBFGetFieldIndex(RiverDbfHandle, "LeftEle");
-    if( LeftEle == -1)
-    {
-        qDebug() << "Error: LeftEle field does *not* exist";
-        return 842;
-    }
-
-    int RightEle     = DBFGetFieldIndex(RiverDbfHandle, "RightEle");
-    if( RightEle == -1)
-    {
-        qDebug() << "Error: RightEle field does *not* exist";
-        return 849;
-    }
-
-    int FrmEleNode     = DBFGetFieldIndex(RiverDbfHandle, "FrmEleNode");
-    if( FrmEleNode == -1)
-    {
-        qDebug() << "Error: FrmEleNode field does *not* exist";
-        return 856;
-    }
-
-    int ToEleNode     = DBFGetFieldIndex(RiverDbfHandle, "ToEleNode");
-    if( ToEleNode == -1)
-    {
-        qDebug() << "Error: ToEleNode field does *not* exist";
-        return 863;
-    }
-
-    int DownSegmt     = DBFGetFieldIndex(RiverDbfHandle, "DownSegmt");
-    if( DownSegmt == -1)
-    {
-        qDebug() << "Error: DownSegmt field does *not* exist";
-        return 870;
-    }
-
-    int StrOrder     = DBFGetFieldIndex(RiverDbfHandle, "StrOrder");
-    if( StrOrder == -1)
-    {
-        qDebug() << "Error: StrOrder field does *not* exist";
-        return 877;
-    }
-
-    QFile RivDataFile(RivDataFileName);
-    if ( ! RivDataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
-        return 882;
-    QTextStream RivDataFileTextStream(&RivDataFile);
-
-    int NumRivSeg = DBFGetRecordCount( RiverDbfHandle );
-    RivDataFileTextStream << NumRivSeg << "\n";
-
-    int Order;
-    int maxOrder = -1;
-
-    for (int c=0; c<NumRivSeg; c++)
-    {
-        RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, RivID)      <<"\t";
-        RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, FrmEleNode) <<"\t";
-        RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, ToEleNode)  <<"\t";
-        RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, DownSegmt)  <<"\t";
-        RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, LeftEle)    <<"\t";
-        RivDataFileTextStream << DBFReadIntegerAttribute(RiverDbfHandle, c, RightEle)   <<"\t";
-        Order = DBFReadIntegerAttribute(RiverDbfHandle, c, StrOrder);
-        RivDataFileTextStream << Order <<"\t"; //Shape
-        RivDataFileTextStream << Order <<"\t"; //Material
-        RivDataFileTextStream << Order <<"\t"; //IC
-        RivDataFileTextStream << "0"   <<"\t"; //BC
-        RivDataFileTextStream << "0"   <<"\n"; //Res
-
-        if(maxOrder < Order)
-            maxOrder = Order;
-    }
-
-    RivDataFileTextStream << "Shape\t" << maxOrder << "\n";
-    for(int c=1; c<=maxOrder; c++)
-    {
-        RivDataFileTextStream << c << "\t" << //index
-            0.5*c << "\t" << //depth
-            "1"   << "\t" << //interpOrder
-            2.0*c << "\n"; //width
-    }
-
-    RivDataFileTextStream << "Material\t" << maxOrder << "\n";
-    for(int c=1; c<=maxOrder; c++)
-    {
-        RivDataFileTextStream<< c << "\t" <<    //index
-            "4.63E-07" << "\t" <<               //n
-            "0.6"      << "\t" <<               //cwr
-            "0.1"      << "\t" <<               //Kh
-            "1.0"      << "\t" <<               //Kv
-            "1"        << "\n";                 //BedDepth
-    }
-
-    RivDataFileTextStream << "IC\t" << maxOrder << "\n";
-    for(int c=1; c<=maxOrder; c++)
-    {
-        RivDataFileTextStream << c << "\t" <<   //index
-            0.25*c << "\n";                     //rivIC
-    }
-
-    RivDataFileTextStream<<"BC\t"      <<"0"     <<"\n";
-    RivDataFileTextStream<<"RES\t"     <<"0"     <<"\n";
-
-    RivDataFile.close();
 
     return 0;
 
@@ -963,67 +1022,75 @@ int riv_data_file( QString EleFileName, QString NodeFileName, QString NeighFileN
                    )
 {
 
-    int ReturnFlag;
+    if(print_debug_messages)
+        qDebug() << "INFO: Start riv_data_file";
 
-    qDebug() << "Extracting River Data From TINs ...";
-    ReturnFlag = RiverFromTIN( RiverShpFileName, RiverDbfFileName, EleFileName, NodeFileName, NeighFileName, xRiverShpFileName, xRiverDbfFileName);
-
-    if ( ReturnFlag != 0 )
-        return ReturnFlag;
-    else
-        qDebug() << "Extracting River Data From TINs ... Complete";
+    try {
 
 
-    // ** River IDs
-    qDebug() << "Adding River IDs ...";
-    ReturnFlag = AddFID( xRiverDbfFileName );
+        int ReturnFlag;
 
-    if ( ReturnFlag != 0 )
-        return ReturnFlag;
-    else
-        qDebug() << "Adding River IDs ... Complete";
+        qDebug() << "Extracting River Data From TINs ...";
+        ReturnFlag = RiverFromTIN( RiverShpFileName, RiverDbfFileName, EleFileName, NodeFileName, NeighFileName, xRiverShpFileName, xRiverDbfFileName);
 
-
-    // ** River FromNode and ToNode
-    qDebug() << "Processing River FromNode & ToNodes ...";
-    ReturnFlag = AddToFromNode( xRiverShpFileName, xRiverDbfFileName );
-
-    if ( ReturnFlag != 0 )
-        return ReturnFlag;
-    else
-        qDebug() << "Processing River FromNode & ToNodes ... Complete";
+        if ( ReturnFlag != 0 )
+            return ReturnFlag;
+        else
+            qDebug() << "Extracting River Data From TINs ... Complete";
 
 
-    // ** Strahler Stream Order
-    qDebug() << "Processing Strahler Stream Order ...";
-    ReturnFlag = AddStrahlerStreamOrder( xRiverShpFileName, xRiverDbfFileName );
+        // ** River IDs
+        qDebug() << "Adding River IDs ...";
+        ReturnFlag = AddFID( xRiverDbfFileName );
 
-    if ( ReturnFlag != 0 )
-        return ReturnFlag;
-    else
-        qDebug() << "Processing Strahler Stream Order ... Complete";
-
-
-    // ** Down Segment
-    qDebug() << "Processing Down Segment ...";
-    ReturnFlag = AddDownSegment(xRiverDbfFileName, BoundaryCondition );
-
-    if ( ReturnFlag != 0 )
-        return ReturnFlag;
-    else
-        qDebug() << "Processing Down Segment ... Complete";
+        if ( ReturnFlag != 0 )
+            return ReturnFlag;
+        else
+            qDebug() << "Adding River IDs ... Complete";
 
 
-    // ** Riv File
-    qDebug() << "Processing Riv File ...";
-    ReturnFlag = Riv_File( xRiverDbfFileName, RivDataFileName );
+        // ** River FromNode and ToNode
+        qDebug() << "Processing River FromNode & ToNodes ...";
+        ReturnFlag = AddToFromNode( xRiverShpFileName, xRiverDbfFileName );
 
-    if ( ReturnFlag != 0 )
-        return ReturnFlag;
-    else
-        qDebug() << "Processing Riv File ... Complete";
+        if ( ReturnFlag != 0 )
+            return ReturnFlag;
+        else
+            qDebug() << "Processing River FromNode & ToNodes ... Complete";
 
 
+        // ** Strahler Stream Order
+        qDebug() << "Processing Strahler Stream Order ...";
+        ReturnFlag = AddStrahlerStreamOrder( xRiverShpFileName, xRiverDbfFileName );
+
+        if ( ReturnFlag != 0 )
+            return ReturnFlag;
+        else
+            qDebug() << "Processing Strahler Stream Order ... Complete";
+
+
+        // ** Down Segment
+        qDebug() << "Processing Down Segment ...";
+        ReturnFlag = AddDownSegment(xRiverDbfFileName, BoundaryCondition );
+
+        if ( ReturnFlag != 0 )
+            return ReturnFlag;
+        else
+            qDebug() << "Processing Down Segment ... Complete";
+
+
+        // ** Riv File
+        qDebug() << "Processing Riv File ...";
+        ReturnFlag = Riv_File( xRiverDbfFileName, RivDataFileName );
+
+        if ( ReturnFlag != 0 )
+            return ReturnFlag;
+        else
+            qDebug() << "Processing Riv File ... Complete";
+
+    } catch (...) {
+        qDebug() << "Error: riv_data_file is returning w/o checking";
+    }
 
     return 0;
 }
