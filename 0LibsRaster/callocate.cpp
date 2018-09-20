@@ -44,13 +44,13 @@
 
 
 char *CAllocate1 (int	number ,
-                    int	size )
+                  int	size )
 
 {
-	return (char *)calloc(number, size);
+    return (char *)calloc(number, size);
 }
 
-	
+
 /*
 *-------------------------------------------------------------------
 *
@@ -84,42 +84,42 @@ char **CAllocate2 (int	nrows ,
                    int	size )
 
 {
-char	*data;
-char	**rows;
-char	**ptr;
-int	len;
-int	cur;
-int	i;
+    char	*data;
+    char	**rows;
+    char	**ptr;
+    int	len;
+    int	cur;
+    int	i;
 
-	if ((data = (char *)calloc (nrows*ncols, size)) == NULL) {
-		return (NULL);
-	}
+    if ((data = (char *)calloc (nrows*ncols, size)) == NULL) {
+        return (NULL);
+    }
 
-	if ((rows = (char **)calloc (nrows, sizeof(char **))) == NULL) {
-		free ((char *)data);
-		return (NULL);
-	}
+    if ((rows = (char **)calloc (nrows, sizeof(char **))) == NULL) {
+        free ((char *)data);
+        return (NULL);
+    }
 
-	ptr = rows;
-	len = ncols*size;
-	cur = 0;
+    ptr = rows;
+    len = ncols*size;
+    cur = 0;
 
-	for (i=0; i<nrows; i++)
-	{
-		*ptr++ = (char *) &(data[cur]);
-		cur += len;
-	}
+    for (i=0; i<nrows; i++)
+    {
+        *ptr++ = (char *) &(data[cur]);
+        cur += len;
+    }
 
-	return (char **)rows ;
+    return (char **)rows ;
 
-	/*
-	Note :
-	-----------------------------------------------
-	The GRIDIO libraries REQUIRE that
-	the underlying data array for a two dimensional
-	buffer is 1-Dimensional CONTIGUOS, as above
-	-----------------------------------------------
-	*/
+    /*
+    Note :
+    -----------------------------------------------
+    The GRIDIO libraries REQUIRE that
+    the underlying data array for a two dimensional
+    buffer is 1-Dimensional CONTIGUOS, as above
+    -----------------------------------------------
+    */
 }
 
 /*
@@ -148,7 +148,7 @@ int	i;
 
 void CFree1 (char	*ptr)
 {
-	free(ptr);
+    free(ptr);
 }
 
 
@@ -178,17 +178,17 @@ void CFree1 (char	*ptr)
 */
 
 void CFree2 (char  	**ptr,
-	int	nrows)
+             int	nrows)
 {
-	char	*h;
-	int	i;
+    char	*h;
+    int	i;
 
-	for (i = 1, h = ptr[0]; i < nrows; i++) {
-		if (h > ptr[i]) {
-			h = ptr[i];
-		}
-	}
+    for (i = 1, h = ptr[0]; i < nrows; i++) {
+        if (h > ptr[i]) {
+            h = ptr[i];
+        }
+    }
 
-	free(h); free((char *)ptr);
+    free(h); free((char *)ptr);
 }
 
