@@ -133,14 +133,14 @@ SOURCES += main.cpp\
     1ProjectManagement/2OpenProject/openproject.cpp \
     1ProjectManagement/3ImportProject/importproject.cpp \
     1ProjectManagement/4CloseProject/closeproject.cpp \
-    1ProjectManagement/Project/CloseProject/closeproject.cpp \
-    1ProjectManagement/Project/CloseProject/main.cpp \
-    1ProjectManagement/Project/DefineProject/defineproject.cpp \
-    1ProjectManagement/Project/DefineProject/main.cpp \
-    1ProjectManagement/Project/ImportProject/importproject.cpp \
-    1ProjectManagement/Project/ImportProject/main.cpp \
-    1ProjectManagement/Project/OpenProject/main.cpp \
-    1ProjectManagement/Project/OpenProject/openproject.cpp \
+    #1ProjectManagement/Project/CloseProject/closeproject.cpp \
+    #1ProjectManagement/Project/CloseProject/main.cpp \
+    #1ProjectManagement/Project/DefineProject/defineproject.cpp \
+    #1ProjectManagement/Project/DefineProject/main.cpp \
+    #1ProjectManagement/Project/ImportProject/importproject.cpp \
+    #1ProjectManagement/Project/ImportProject/main.cpp \
+    #1ProjectManagement/Project/OpenProject/main.cpp \
+    #1ProjectManagement/Project/OpenProject/openproject.cpp \
     2RasterProcessing/1FillPits/fillpits.cpp \
     2RasterProcessing/2FlowGrids/flowgrids.cpp \
     2RasterProcessing/3StreamGrids/streamgrids.cpp \
@@ -338,11 +338,11 @@ HEADERS  += pihmgisdialog.h \
     1ProjectManagement/2OpenProject/openproject.h \
     1ProjectManagement/3ImportProject/importproject.h \
     1ProjectManagement/4CloseProject/closeproject.h \
-    1ProjectManagement/Project/CloseProject/closeproject.h \
-    1ProjectManagement/Project/DefineProject/defineproject.h \
-    1ProjectManagement/Project/DefineProject/ui_defineproject.h \  #ADDED
-    1ProjectManagement/Project/ImportProject/importproject.h \
-    1ProjectManagement/Project/OpenProject/openproject.h \
+#    1ProjectManagement/Project/CloseProject/closeproject.h \
+#    1ProjectManagement/Project/DefineProject/defineproject.h \
+#    1ProjectManagement/Project/DefineProject/ui_defineproject.h \  #ADDED
+#    1ProjectManagement/Project/ImportProject/importproject.h \
+#    1ProjectManagement/Project/OpenProject/openproject.h \
     2RasterProcessing/1FillPits/fillpits.h \
     2RasterProcessing/2FlowGrids/flowgrids.h \
     2RasterProcessing/3StreamGrids/streamgrids.h \

@@ -125,7 +125,7 @@ private slots:
     void on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked();
 
 
-    void on_PIHMgisToolBox_Help_windowIconChanged(const QIcon &icon);
+    //void on_PIHMgisToolBox_Help_windowIconChanged(const QIcon &icon);
 
     //void on_pushButtonWorkFlow6_clicked();
 
