@@ -89,13 +89,13 @@ void ReadTopology::pushButtonSetFocus()
         ui->pushButtonPSLG->setDefault(false);
         ui->pushButtonRun->setDefault(false);
 
-        if (ui->lineEditMerge->text() == NULL)
+        if (ui->lineEditMerge->text() == nullptr)
         {
             ui->pushButtonMerge->setDefault(true);
             ui->pushButtonMerge->setFocus();
             return;
         }
-        if (ui->lineEditPSLG->text() == NULL)
+        if (ui->lineEditPSLG->text() == nullptr)
         {
             ui->pushButtonPSLG->setDefault(true);
             ui->pushButtonPSLG->setFocus();
@@ -138,7 +138,7 @@ void ReadTopology::on_pushButtonMerge_clicked()
         qDebug() << ProjectFolder;
 
         QString MergeVectorFileName = QFileDialog::getOpenFileName(this, "Choose Merge Vector File", ProjectFolder+tr("/3DomainDecomposition"), "Vector Shape File(*.shp *.SHP)");
-        if ( MergeVectorFileName != NULL)
+        if ( MergeVectorFileName != nullptr)
         {
             ui->lineEditMerge->setStyleSheet("color: black;");
             ui->lineEditMerge->setText(MergeVectorFileName);
@@ -187,7 +187,7 @@ void ReadTopology::on_pushButtonPSLG_clicked()
 
         QString PSLGFileName = QFileDialog::getSaveFileName(this, "Choose Planar Straight Line Graph", ProjectFolder+"/3DomainDecomposition","PSLG File(*.poly)");
         QString tempString = PSLGFileName;
-        if ( PSLGFileName != NULL)
+        if ( PSLGFileName != nullptr)
         {
             ui->lineEditPSLG->setStyleSheet("color: black;");
 
@@ -235,7 +235,7 @@ void ReadTopology::on_pushButtonRun_clicked()
         int runFlag = 1;
         QFile IOTestFile;
 
-        if( ui->lineEditMerge->text() == NULL )
+        if( ui->lineEditMerge->text() == nullptr )
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Merge Vector Split Line Input File Missing </span>")+tr("<br>"));
             runFlag = 0;
@@ -253,7 +253,7 @@ void ReadTopology::on_pushButtonRun_clicked()
         ui->textBrowserLogs->repaint();
 
 
-        if( ui->lineEditPSLG->text() == NULL )
+        if( ui->lineEditPSLG->text() == nullptr )
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: PSLG Output File Missing </span>")+tr("<br>"));
             runFlag = 0;

@@ -265,7 +265,7 @@ void MergeVectorLayers::on_pushButtonMergeLayer_clicked()
 
         QString MergeVectorFileName = QFileDialog::getSaveFileName(this, "Choose Merge Layer", ProjectFolder+"/2VectorProcessing","Merge Vector File(*.shp)");
         QString tempString = MergeVectorFileName;
-        if ( MergeVectorFileName != NULL)
+        if ( MergeVectorFileName != nullptr)
         {
             ui->lineEditMergeLayer->setStyleSheet("color: black;");
 
@@ -478,11 +478,11 @@ void MergeVectorLayers::on_pushButtonHelp_clicked()
         qDebug() << "INFO: Start MergeVectorLayers::on_pushButtonHelp_clicked()";
 
     try {
-        LogsString = tr("");
-        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Merge_Vector_Layers")) )
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+//        LogsString = tr("");
+//        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Merge_Vector_Layers")) )
+//            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
+//        ui->textBrowserLogs->setHtml(LogsString);
+//        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: MergeVectorLayers::on_pushButtonHelp_clicked() is returning w/o checking";
     }
