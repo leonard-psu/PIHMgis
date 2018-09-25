@@ -536,7 +536,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
 
 
         NTIMESTEPS = 999999999;
-        if( ui->lineEditOutputDataFolder->text() == NULL || ui->lineEditDataKey->text() == NULL )
+        if( ui->lineEditOutputDataFolder->text() == nullptr || ui->lineEditDataKey->text() == nullptr )
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Input Folder and/or Data Key Input(s) Missing </span>")+tr("<br>"));
             runFlag = 0;

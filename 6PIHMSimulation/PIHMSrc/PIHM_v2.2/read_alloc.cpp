@@ -60,7 +60,7 @@ void read_alloc(char *filename, Model_Data DS, Control_Data *CS)
   	strcpy(fn[0], filename);
   	riv_file =  fopen(strcat(fn[0], ".riv"), "r");
     free(fn[0]);
-  	if(riv_file == NULL)
+    if(riv_file == nullptr)
   		{
  //   		printf("\n  Fatal Error: %s.riv is in use or does not exist!\n", filename);
     		exit(1);
@@ -145,7 +145,7 @@ void read_alloc(char *filename, Model_Data DS, Control_Data *CS)
   	strcpy(fn[1], filename);
   	mesh_file = fopen(strcat(fn[1], ".mesh"), "r");
 	free(fn[1]);
-  	if(mesh_file == NULL)
+    if(mesh_file == nullptr)
   		{
     		printf("\n  Fatal Error: %s.mesh is in use or does not exist!\n", filename);
     		exit(1);
@@ -184,7 +184,7 @@ void read_alloc(char *filename, Model_Data DS, Control_Data *CS)
   	strcpy(fn[2], filename);
   	att_file = fopen(strcat(fn[2], ".att"), "r");
 	free(fn[2]);
-  	if(att_file == NULL)
+    if(att_file == nullptr)
   		{
     		printf("\n  Fatal Error: %s.att is in use or does not exist!\n", filename);
     		exit(1);
@@ -219,7 +219,7 @@ void read_alloc(char *filename, Model_Data DS, Control_Data *CS)
   	strcpy(fn[3], filename);
   	soil_file = fopen(strcat(fn[3], ".soil"), "r");
 	free(fn[3]);
-  	if(soil_file == NULL)
+    if(soil_file == nullptr)
   		{
     		printf("\n  Fatal Error: %s.soil is in use or does not exist!\n", filename);
     		exit(1);
@@ -248,7 +248,7 @@ void read_alloc(char *filename, Model_Data DS, Control_Data *CS)
         strcpy(fn[4], filename);
         geol_file = fopen(strcat(fn[4], ".geol"), "r");
 		free(fn[4]);
-        if(geol_file == NULL)
+        if(geol_file == nullptr)
                 {
                 printf("\n  Fatal Error: %s.geol is in use or does not exist!\n", filename);
                 exit(1);
@@ -308,7 +308,7 @@ void read_alloc(char *filename, Model_Data DS, Control_Data *CS)
   	strcpy(fn[6], filename);
   	forc_file = fopen(strcat(fn[6], ".forc"), "r");
     free(fn[6]);
-  	if(forc_file == NULL)
+    if(forc_file == nullptr)
   	{
     	printf("\n  Fatal Error: %s.forc is in use or does not exist!\n", filename);
     	exit(1);
@@ -532,7 +532,7 @@ void read_alloc(char *filename, Model_Data DS, Control_Data *CS)
   	strcpy(fn[7], filename);
   	ibc_file =  fopen(strcat(fn[7], ".ibc"), "r");
     free(fn[7]);
-  	if(ibc_file == NULL)
+    if(ibc_file == nullptr)
   		{
     		printf("\n  Fatal Error: %s.ibc is in use or does not exist!\n", filename);
     		exit(1);
@@ -595,7 +595,7 @@ void read_alloc(char *filename, Model_Data DS, Control_Data *CS)
   	strcpy(fn[8], filename);
   	para_file = fopen(strcat(fn[8], ".para"), "r");  
     free(fn[8]);
-  	if(para_file == NULL)
+    if(para_file == nullptr)
   		{
     		printf("\n  Fatal Error: %s.para is in use or does not exist!\n", filename);
     		exit(1);
@@ -682,7 +682,7 @@ void read_alloc(char *filename, Model_Data DS, Control_Data *CS)
         strcpy(fn[9], filename);
         global_calib = fopen(strcat(fn[9], ".calib"), "r");
 		free(fn[9]);
-        if(global_calib == NULL)
+        if(global_calib == nullptr)
                 {
                 printf("\n  Fatal Error: %s.calib is in use or does not exist!\n", filename);
                 exit(1);

@@ -116,7 +116,7 @@ PIHM_v2_2(int argc, char *argv[], QProgressBar* progressBar, QString logFileName
 	/* Project Input Name */
 	if (argc != 2) {
 		iproj = fopen("projectName.txt", "r");
-		if (iproj == NULL) {
+        if (iproj == nullptr) {
 			printf("\t\nUsage ./pihm project_name");
 			printf("\t\n         OR              ");
 			printf("\t\nUsage ./pihm, and have a file in the current directory named projectName.txt with the project name in it");
@@ -204,7 +204,7 @@ PIHM_v2_2(int argc, char *argv[], QProgressBar* progressBar, QString logFileName
     printf("\nInitializing CVODE ... ");
 	/* allocate memory for solver */
 	cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
-	if (cvode_mem == NULL) {
+    if (cvode_mem == nullptr) {
 		printf("CVodeMalloc failed. \n");
 		return (1);
 	}

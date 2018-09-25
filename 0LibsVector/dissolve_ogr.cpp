@@ -27,8 +27,8 @@ t_attribute *attributeNew()
 {
     t_attribute *attribute;
     attribute = (t_attribute *) malloc(sizeof(t_attribute));
-    attribute->value = NULL;
-    attribute->next = NULL;
+    attribute->value = nullptr;
+    attribute->next = nullptr;
 
     return(attribute);
 }
@@ -36,11 +36,11 @@ t_attribute *attributeNew()
 void attributeInsert(t_attribute **head, const char* newValue )
 {
     t_attribute *curr;
-    t_attribute *prev=NULL;
-    t_attribute *item=NULL;
+    t_attribute *prev=nullptr;
+    t_attribute *item=nullptr;
 
     curr = *head;
-    while(curr != NULL)
+    while(curr != nullptr)
     {
         if( strcmp( curr->value , newValue) >= 0 )
             break;
@@ -52,7 +52,7 @@ void attributeInsert(t_attribute **head, const char* newValue )
     {
         item = attributeNew();
         item->value = newValue;
-        if(prev == NULL)
+        if(prev == nullptr)
         {
             item->next = *head;	// new top
             *head = item;		// link to old top
@@ -69,7 +69,7 @@ void attributePrint( t_attribute *head)
 {
     t_attribute *curr;
     curr =head;
-    while(curr != NULL)
+    while(curr != nullptr)
     {
         printf("%s\n",curr->value );
         curr = curr->next;
@@ -81,7 +81,7 @@ int attributeCount( t_attribute *head)
     int i=0;
     t_attribute *curr;
     curr =head;
-    while(curr != NULL)
+    while(curr != nullptr)
     {
         i++;
         curr = curr->next;
@@ -168,11 +168,11 @@ int dissolve_ogr( int argc, char *argv[] )
         else if( EQUAL(argv[i],"-of") && i < argc-1 )
             pzsDstFormat = argv[++i];
 
-        else if( pszSrcFilename == NULL )
+        else if( pszSrcFilename == nullptr )
         {
             pszSrcFilename = argv[i];
         }
-        else if( pszDstFilename == NULL )
+        else if( pszDstFilename == nullptr )
         {
             pszDstFilename = argv[i];
         }
@@ -180,18 +180,18 @@ int dissolve_ogr( int argc, char *argv[] )
             Usage();
     }
 
-    if( pszSrcFilename == NULL )
+    if( pszSrcFilename == nullptr )
     {
         CPLError( CE_Failure, CPLE_AppDefined, "An input DataSet is required." );
         return(1);
     }
 
-    if( pszDstFilename == NULL )
+    if( pszDstFilename == nullptr )
     {
         CPLError( CE_Failure, CPLE_AppDefined, "An output DataSet is required." );
         return(2);
     }
-    if ( pzsDstFormat == NULL )
+    if ( pzsDstFormat == nullptr )
     {
         pzsDstFormat = (char*)pzsDstFormatDefault;
     }
@@ -216,14 +216,14 @@ int dissolve_ogr( int argc, char *argv[] )
     OGRLayer		*poLayerOut;
 
 
-    char *pszGeom=NULL;
+    char *pszGeom=nullptr;
 
     long nLayers = 0;
     long nFeatures = 0;
     long iField = 0;
 
-    const char *pzOverlapLocation=NULL;
-    const char *pzSidLocation=NULL;
+    const char *pzOverlapLocation=nullptr;
+    const char *pzSidLocation=nullptr;
 
     bool bFoundAttrib = FALSE;
 
@@ -233,9 +233,9 @@ int dissolve_ogr( int argc, char *argv[] )
     OGRRegisterAll();
 
     //poDS = OGRSFDriverRegistrar::Open( pszSrcFilename, FALSE );	// we will be updating the
-    GDALDataset *poDS = (GDALDataset*) GDALOpenEx(pszSrcFilename, GDAL_OF_READONLY, NULL, NULL, NULL);
+    GDALDataset *poDS = (GDALDataset*) GDALOpenEx(pszSrcFilename, GDAL_OF_READONLY, nullptr, nullptr, nullptr);
 
-    if( poDS == NULL )
+    if( poDS == nullptr )
     {
         return(101);	//can't open dataset
     }
@@ -251,11 +251,11 @@ int dissolve_ogr( int argc, char *argv[] )
 
     nFeatures = poLayer->GetFeatureCount();
 
-    if ( (poFeature = poLayer->GetNextFeature()) != NULL )
+    if ( (poFeature = poLayer->GetNextFeature()) != nullptr )
     {
         //--- Check Geometry type: ---//
         poGeometry = poFeature->GetGeometryRef();
-        if( poGeometry != NULL )
+        if( poGeometry != nullptr )
         {
             poGeomType = poGeometry->getGeometryType();	// TBD: check if polgon
             if ( poGeomType != wkbMultiPolygon && poGeomType != wkbPolygon )
@@ -295,9 +295,9 @@ int dissolve_ogr( int argc, char *argv[] )
     poLayer->ResetReading();
     i = 0;
     const char *pszAttrValue;
-    t_attribute *attrList=NULL;
+    t_attribute *attrList=nullptr;
 
-    while( (poFeature = poLayer->GetNextFeature()) != NULL )
+    while( (poFeature = poLayer->GetNextFeature()) != nullptr )
     {
         //		i++;
         //		GDALTermProgress( ((double)i)/nFeatures, "", NULL);
@@ -315,7 +315,7 @@ int dissolve_ogr( int argc, char *argv[] )
     GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pzsDstFormat);
 
 
-    if( poDriver == NULL )
+    if( poDriver == nullptr )
     {
         //        printf( "%s driver not available.\n", pszDriverName );
         return(101);
@@ -323,16 +323,16 @@ int dissolve_ogr( int argc, char *argv[] )
 
 
     //poDSout = poDriver->CreateDataSource( pszDstFilename, NULL );
-    GDALDataset *poDSout = poDriver->Create(pszDstFilename,0,0,0,GDT_Unknown,NULL);
+    GDALDataset *poDSout = poDriver->Create(pszDstFilename,0,0,0,GDT_Unknown,nullptr);
 
-    if( poDSout == NULL )
+    if( poDSout == nullptr )
     {
         //        printf( "Creation of output file failed.\n" );
         return(102);
     }
 
-    poLayerOut = poDSout->CreateLayer( "new_layer", NULL, poGeomType, NULL );
-    if( poLayerOut == NULL )
+    poLayerOut = poDSout->CreateLayer( "new_layer", NULL, poGeomType, nullptr );
+    if( poLayerOut == nullptr )
     {
         //        printf( "Layer creation failed.\n" );
         return(103);
@@ -364,7 +364,7 @@ int dissolve_ogr( int argc, char *argv[] )
     {
         i++;
         if (!bVerbose )
-            GDALTermProgress( ((double)i)/nAttrs, "", NULL);
+            GDALTermProgress( ((double)i)/nAttrs, "", nullptr);
         else
             printf("%d/%d. '%s'\n",i,nAttrs,curr->value);
         //	    poLayer->ResetReading();
@@ -372,15 +372,15 @@ int dissolve_ogr( int argc, char *argv[] )
         poLayer->SetAttributeFilter( pszQuery );
         poLayer->ResetReading();
         int nFeatures = poLayer->GetFeatureCount();
-        OGRGeometry *poGeometryOut=NULL;
+        OGRGeometry *poGeometryOut=nullptr;
         //		poCollection->empty();
         int k=0;
         while ( (poFeature = poLayer->GetNextFeature()) )
         {
             k++;
             if (bVerbose )
-                GDALTermProgress( ((double)k)/nFeatures, "", NULL);
-            OGRGeometry *poGeometryTemp=NULL;
+                GDALTermProgress( ((double)k)/nFeatures, "", nullptr);
+            OGRGeometry *poGeometryTemp=nullptr;
             poGeometryTemp = poFeature->GetGeometryRef();
             if (poGeometryTemp)
             {
@@ -405,16 +405,16 @@ int dissolve_ogr( int argc, char *argv[] )
         // force to a collection of polygons
         //poCollection->addGeometry( poGeometryOut );
         if (bVerbose )
-            GDALTermProgress( ((double)nFeatures)/nFeatures, "", NULL);
+            GDALTermProgress( ((double)nFeatures)/nFeatures, "", nullptr);
         if (poGeometryOut)
         {
-            char * pszTemp=NULL;
+            char * pszTemp=nullptr;
             //			poGeometryOut->exportToWkt(&pszTemp);
 
             if ( poGeometryOut->getGeometryType() == wkbMultiPolygon )	//it's a collection
             {
                 int nPolys = ((OGRGeometryCollection *)poGeometryOut)->getNumGeometries();
-                OGRGeometry *poGeometryTemp=NULL;
+                OGRGeometry *poGeometryTemp=nullptr;
                 for (int j=0;j<nPolys;j++ )
                 {
                     poGeometryTemp = ((OGRGeometryCollection *)poGeometryOut)->getGeometryRef(j);
@@ -434,7 +434,7 @@ int dissolve_ogr( int argc, char *argv[] )
         }
         curr = curr->next;
     }
-    GDALTermProgress( ((double)nAttrs)/nAttrs, "", NULL);
+    GDALTermProgress( ((double)nAttrs)/nAttrs, "", nullptr);
     //	printf("\n-- Info: .\n" );
 
     //OGRDataSource::DestroyDataSource( poDS );

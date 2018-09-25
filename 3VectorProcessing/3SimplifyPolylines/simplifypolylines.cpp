@@ -330,7 +330,7 @@ void SimplifyPolylines::on_pushButtonRun_clicked()
                 }
                 LogsString.append(ui->tableWidget->item(i,0)->text() + " ... <br>");
 
-                if ( ui->tableWidget->item(i,0)->text() != NULL && ui->tableWidget->item(i,1)->text().toInt() <= 0 )
+                if ( ui->tableWidget->item(i,0)->text() != nullptr && ui->tableWidget->item(i,1)->text().toInt() <= 0 )
                 {
                     LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Invalid Simplification Tolerance ... </span>")+tr("<br>"));
                     runFlag = 0;

@@ -422,7 +422,7 @@ initialize(char *filename, Model_Data DS, Control_Data * CS, N_Vector CV_Y)
 		init_file = fopen(strcat(fn, ".init"), "r");
         printf("\n 11) reading %s.init ... ", filename);
 		free(fn);
-		if (init_file == NULL) {
+        if (init_file == nullptr) {
 			printf("\n  Fatal Error: %s.init is in use or does not exist!\n", filename);
 			exit(1);
 		} else {
