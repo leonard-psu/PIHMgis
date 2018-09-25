@@ -1900,7 +1900,7 @@ color: rgb(71, 71, 71);</string>
     <widget class="QPushButton" name="pushButtonRasterProcessingCatchmentPolygon">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>200</x>
        <y>130</y>
        <width>301</width>
        <height>34</height>
@@ -2057,9 +2057,9 @@ color: rgb(71, 71, 71);</string>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>170</y>
-       <width>671</width>
+       <x>0</x>
+       <y>160</y>
+       <width>751</width>
        <height>71</height>
       </rect>
      </property>
@@ -2094,9 +2094,9 @@ color: rgb(71, 71, 71);</string>
     <widget class="QPushButton" name="pushButtonVectorProcessingDissolvePolygons">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>53</y>
-       <width>251</width>
+       <x>0</x>
+       <y>50</y>
+       <width>281</width>
        <height>34</height>
       </rect>
      </property>
@@ -2194,7 +2194,7 @@ color: rgb(71, 71, 71);</string>
      <property name="font">
       <font>
        <family>Arial</family>
-       <pointsize>12</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2207,7 +2207,7 @@ color: rgb(71, 71, 71);</string>
       <locale language="English" country="UnitedStates"/>
      </property>
      <property name="text">
-      <string>(1) DISSOLVE POLYGONS</string>
+      <string>START &gt;&gt; (1) DISSOLVE POLYGONS</string>
      </property>
      <property name="autoDefault">
       <bool>false</bool>
@@ -2222,7 +2222,7 @@ color: rgb(71, 71, 71);</string>
     <widget class="QPushButton" name="pushButtonVectorProcessingPolygonToPolylines">
      <property name="geometry">
       <rect>
-       <x>410</x>
+       <x>290</x>
        <y>50</y>
        <width>251</width>
        <height>34</height>
@@ -2322,7 +2322,7 @@ color: rgb(71, 71, 71);</string>
      <property name="font">
       <font>
        <family>Arial</family>
-       <pointsize>12</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2350,8 +2350,8 @@ color: rgb(71, 71, 71);</string>
     <widget class="QPushButton" name="pushButtonVectorProcessingPolylineToLines">
      <property name="geometry">
       <rect>
-       <x>410</x>
-       <y>108</y>
+       <x>110</x>
+       <y>90</y>
        <width>251</width>
        <height>34</height>
       </rect>
@@ -2450,7 +2450,7 @@ color: rgb(71, 71, 71);</string>
      <property name="font">
       <font>
        <family>Arial</family>
-       <pointsize>12</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2478,9 +2478,9 @@ color: rgb(71, 71, 71);</string>
     <widget class="QPushButton" name="pushButtonVectorProcessingSimplifyPolylines">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>108</y>
-       <width>251</width>
+       <x>550</x>
+       <y>50</y>
+       <width>211</width>
        <height>34</height>
       </rect>
      </property>
@@ -2578,7 +2578,7 @@ color: rgb(71, 71, 71);</string>
      <property name="font">
       <font>
        <family>Arial</family>
-       <pointsize>12</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2606,9 +2606,9 @@ color: rgb(71, 71, 71);</string>
     <widget class="QPushButton" name="pushButtonVectorProcessingMergeVectorLayers">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>163</y>
-       <width>251</width>
+       <x>370</x>
+       <y>90</y>
+       <width>331</width>
        <height>34</height>
       </rect>
      </property>
@@ -2706,7 +2706,7 @@ color: rgb(71, 71, 71);</string>
      <property name="font">
       <font>
        <family>Arial</family>
-       <pointsize>12</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2719,7 +2719,7 @@ color: rgb(71, 71, 71);</string>
       <locale language="English" country="UnitedStates"/>
      </property>
      <property name="text">
-      <string>(5) MERGE VECTOR LAYERS</string>
+      <string>END &gt;&gt; (5) MERGE VECTOR LAYERS</string>
      </property>
      <property name="autoDefault">
       <bool>false</bool>
@@ -2764,8 +2764,8 @@ color: rgb(71, 71, 71);</string>
     <widget class="QLabel" name="label_16">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>220</y>
+       <x>50</x>
+       <y>130</y>
        <width>671</width>
        <height>71</height>
       </rect>
@@ -2801,8 +2801,8 @@ color: rgb(71, 71, 71);</string>
     <widget class="QPushButton" name="pushButtonDomainDecompositionTINShapeLayer">
      <property name="geometry">
       <rect>
-       <x>26</x>
-       <y>170</y>
+       <x>40</x>
+       <y>110</y>
        <width>225</width>
        <height>34</height>
       </rect>
@@ -2929,8 +2929,8 @@ color: rgb(71, 71, 71);</string>
     <widget class="QPushButton" name="pushButtonDomainDecompositionReadTopology">
      <property name="geometry">
       <rect>
-       <x>26</x>
-       <y>46</y>
+       <x>40</x>
+       <y>30</y>
        <width>225</width>
        <height>34</height>
       </rect>
@@ -3057,8 +3057,8 @@ color: rgb(71, 71, 71);</string>
     <widget class="QPushButton" name="pushButtonDomainDecompositionTriangulation">
      <property name="geometry">
       <rect>
-       <x>26</x>
-       <y>108</y>
+       <x>40</x>
+       <y>70</y>
        <width>225</width>
        <height>34</height>
       </rect>
@@ -3185,8 +3185,8 @@ color: rgb(71, 71, 71);</string>
     <widget class="QLabel" name="label_40">
      <property name="geometry">
       <rect>
-       <x>290</x>
-       <y>52</y>
+       <x>270</x>
+       <y>30</y>
        <width>451</width>
        <height>41</height>
       </rect>
@@ -3212,8 +3212,8 @@ color: rgb(71, 71, 71);</string>
     <widget class="QLabel" name="label_41">
      <property name="geometry">
       <rect>
-       <x>290</x>
-       <y>113</y>
+       <x>270</x>
+       <y>80</y>
        <width>381</width>
        <height>20</height>
       </rect>
@@ -3236,8 +3236,8 @@ color: rgb(71, 71, 71);</string>
     <widget class="QLabel" name="label_42">
      <property name="geometry">
       <rect>
-       <x>290</x>
-       <y>175</y>
+       <x>270</x>
+       <y>120</y>
        <width>411</width>
        <height>20</height>
       </rect>
@@ -4938,6 +4938,11 @@ color: rgb(71, 71, 71);</string>
         <height>20</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Transpiration</string>
       </property>
@@ -4956,6 +4961,11 @@ color: rgb(71, 71, 71);</string>
         <width>131</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Overland Flow</string>
@@ -4976,6 +4986,13 @@ color: rgb(71, 71, 71);</string>
         <height>20</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
       <property name="text">
        <string>Interception</string>
       </property>
@@ -4995,6 +5012,11 @@ color: rgb(71, 71, 71);</string>
         <height>20</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Evaporation</string>
       </property>
@@ -5013,6 +5035,11 @@ color: rgb(71, 71, 71);</string>
         <width>151</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Sub-surface Flow</string>
@@ -5051,6 +5078,11 @@ color: rgb(71, 71, 71);</string>
         <height>20</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Organic Carbon</string>
       </property>
@@ -5063,6 +5095,11 @@ color: rgb(71, 71, 71);</string>
         <width>131</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Phosphorous</string>
@@ -5077,6 +5114,11 @@ color: rgb(71, 71, 71);</string>
         <height>20</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Sediment</string>
       </property>
@@ -5090,6 +5132,11 @@ color: rgb(71, 71, 71);</string>
         <height>20</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Nitrogen</string>
       </property>
@@ -5102,6 +5149,11 @@ color: rgb(71, 71, 71);</string>
         <width>151</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Age of Water</string>
