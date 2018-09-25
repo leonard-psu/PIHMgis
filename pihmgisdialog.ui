@@ -444,7 +444,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>: :   PIHMgis version 3.5   : :</string>
+   <string>PIHMgis version 3.5</string>
   </property>
   <widget class="QToolBox" name="PIHMgisToolBox">
    <property name="geometry">
@@ -480,9 +480,9 @@
     <widget class="QPushButton" name="pushButtonPIHMgisProjectNew">
      <property name="geometry">
       <rect>
-       <x>23</x>
-       <y>42</y>
-       <width>225</width>
+       <x>20</x>
+       <y>40</y>
+       <width>111</width>
        <height>34</height>
       </rect>
      </property>
@@ -608,9 +608,9 @@ color: rgb(71, 71, 71);</string>
     <widget class="QLabel" name="PIHMgisProjectLableNew">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>46</y>
-       <width>371</width>
+       <x>140</x>
+       <y>50</y>
+       <width>161</width>
        <height>20</height>
       </rect>
      </property>
@@ -626,15 +626,15 @@ color: rgb(71, 71, 71);</string>
       <string notr="true">color: rgb(204, 51, 0);</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#330099;&quot;&gt;Start a New PIHMgis Project&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#330099;&quot;&gt;Start a New Project&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButtonPIHMgisProjectOpen">
      <property name="geometry">
       <rect>
-       <x>23</x>
-       <y>87</y>
-       <width>225</width>
+       <x>20</x>
+       <y>80</y>
+       <width>111</width>
        <height>34</height>
       </rect>
      </property>
@@ -760,9 +760,9 @@ color: rgb(71, 71, 71);</string>
     <widget class="QLabel" name="PIHMgisProjectLableOpen">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>91</y>
-       <width>371</width>
+       <x>140</x>
+       <y>90</y>
+       <width>201</width>
        <height>20</height>
       </rect>
      </property>
@@ -778,15 +778,15 @@ color: rgb(71, 71, 71);</string>
       <string notr="true">color: rgb(204, 51, 0);</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#330099;&quot;&gt;Open an Existing PIHMgis Project&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#330099;&quot;&gt;Open an Existing  Project&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButtonPIHMgisProjectImport">
      <property name="geometry">
       <rect>
-       <x>23</x>
-       <y>132</y>
-       <width>225</width>
+       <x>20</x>
+       <y>120</y>
+       <width>111</width>
        <height>34</height>
       </rect>
      </property>
@@ -912,8 +912,8 @@ color: rgb(71, 71, 71);</string>
     <widget class="QLabel" name="PIHMgisProjectLableImport">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>136</y>
+       <x>140</x>
+       <y>130</y>
        <width>461</width>
        <height>20</height>
       </rect>
@@ -930,15 +930,15 @@ color: rgb(71, 71, 71);</string>
       <string notr="true">color: rgb(204, 51, 0);</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#330099;&quot;&gt;Import an Existing PIHMgis Project Created Elsewhere&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#330099;&quot;&gt;Import an Existing Project Created Elsewhere&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButtonPIHMgisProjectClose">
      <property name="geometry">
       <rect>
-       <x>23</x>
-       <y>177</y>
-       <width>225</width>
+       <x>20</x>
+       <y>160</y>
+       <width>111</width>
        <height>34</height>
       </rect>
      </property>
@@ -1064,8 +1064,8 @@ color: rgb(71, 71, 71);</string>
     <widget class="QLabel" name="PIHMgisProjectLableClose">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>182</y>
+       <x>140</x>
+       <y>170</y>
        <width>371</width>
        <height>20</height>
       </rect>
@@ -1083,7 +1083,7 @@ color: rgb(71, 71, 71);</string>
 color: rgb(51, 51, 51);</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#330099;&quot;&gt;Close the Currently Open PIHMgis Project&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#330099;&quot;&gt;Close the Current Project&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_8">
@@ -1114,6 +1114,24 @@ color: rgb(51, 51, 51);</string>
      </property>
      <property name="openExternalLinks">
       <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_home_workspace">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>210</y>
+       <width>721</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Current Workspace</string>
      </property>
     </widget>
    </widget>

@@ -53,7 +53,8 @@ bool WriteModuleLine(QString ProjectFileName, QStringList WriteStringList)
         QString Module;
         Module = WriteStringList.at(0);
 
-        QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
+        //QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
+        QString TempProjectFileName = user_pihmgis_root_folder + "/.PIHMgis/TempProjectFile.txt";
 
         QFile::remove(TempProjectFileName);
         if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
@@ -113,7 +114,8 @@ bool DeleteModuleLine(QString ProjectFileName, QString Module)
 
     try {
 
-        QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
+        //QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
+        QString TempProjectFileName = user_pihmgis_root_folder + "/.PIHMgis/TempProjectFile.txt";
 
         QFile::remove(TempProjectFileName);
         if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
@@ -240,7 +242,8 @@ bool writeLineNumber(QString ProjectFileName, int LineNumber, QString WriteStrin
         ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream ProjectFileTextStream(&ProjectFile);
 
-        QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
+        //QString TempProjectFileName = QDir::homePath()+"/.PIHMgis/TempProjectFile.txt";
+        QString TempProjectFileName = user_pihmgis_root_folder + "/.PIHMgis/TempProjectFile.txt";
 
         QFile TempProjectFile(TempProjectFileName);
         if ( ! TempProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) )

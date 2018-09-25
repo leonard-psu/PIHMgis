@@ -1,12 +1,12 @@
-#include "pihmgisdialog.h"
-#include "ui_pihmgisdialog.h"
-
 #include <QDir>
 #include <QDebug>
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QThread>
+
+#include "pihmgisdialog.h"
+#include "ui_pihmgisdialog.h"
 
 #include "1ProjectManagement/1NewProject/newproject.h"
 #include "1ProjectManagement/2OpenProject/openproject.h"
@@ -50,44 +50,60 @@
 #include "7VisualAnalytics/3RiverSpatial/riverspatial.h"
 #include "7VisualAnalytics/4RiverTemporal/rivertemporal.h"
 
+#include "globals.h"
+
+QString user_pihmgis_root_folder = QDir::homePath();
 
 PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PIHMgisDialog)
 {
-    QStringList args;
-    args.append(QString("file://")+":/misc/Misc/usa.shp");
-    args.append(QString("file://")+"/Users/bhattgopal/Developments/PIHMgis/PIHMgis_v3.0/PIHMgis/Misc/usa.shp");
-    bool success;
-    //success = QDesktopServices::openUrl(QUrl(args.value(1)));
-    this->setWindowIcon(QIcon("Icons/PIHMgis000.icns"));
-    ui->setupUi(this);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog";
 
-     qDebug() << "PIHMgisDialog started";
+    try {
 
-//    QDir dir;
-//    success = dir.mkpath(QDir::homePath()+"/.PIHMgis/");
-//    if(success == true)
-//    {
-//        qDebug() << "Successfully Created Folder: " << QDir::homePath()+"/.PIHMgis/";
-//    }
-//    else
-//    {
-//        qDebug() << "Unable to Create Director: " << QDir::homePath()+"/.PIHMgis/";
-//        qDebug() << "Please Check File/Folder Permissions";
-//        QMessageBox::critical(this,tr("Critical Error"),tr("Unable to Create Folder in the Home Directory.\nPlease Close & Open PIHMgis After Fixing Permissions!"),QMessageBox::Ok);
-//    }
+        this->setWindowIcon(QIcon("Icons/PIHMgis000.icns"));
+        ui->setupUi(this);
 
-    //ui->PIHMgisToolBox->setCurrentIndex(8-1);
-    //ui->pushButtonWorkFlow1->setDefault(1);
-    //ui->pushButtonWorkFlow1->setFocus();
 
+        qDebug() << "PIHMgisDialog started";
+
+        ui->label_home_workspace->setText("Current workspace: " + user_pihmgis_root_folder);
+
+
+        //    QDir dir;
+        //    success = dir.mkpath(QDir::homePath()+"/.PIHMgis/");
+        //    if(success == true)
+        //    {
+        //        qDebug() << "Successfully Created Folder: " << QDir::homePath()+"/.PIHMgis/";
+        //    }
+        //    else
+        //    {
+        //        qDebug() << "Unable to Create Director: " << QDir::homePath()+"/.PIHMgis/";
+        //        qDebug() << "Please Check File/Folder Permissions";
+        //        QMessageBox::critical(this,tr("Critical Error"),tr("Unable to Create Folder in the Home Directory.\nPlease Close & Open PIHMgis After Fixing Permissions!"),QMessageBox::Ok);
+        //    }
+
+        //ui->PIHMgisToolBox->setCurrentIndex(8-1);
+        //ui->pushButtonWorkFlow1->setDefault(1);
+        //ui->pushButtonWorkFlow1->setFocus();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog is returning w/o checking";
+    }
 
 }
 
 PIHMgisDialog::~PIHMgisDialog()
 {
-    delete ui;
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ~PIHMgisDialog";
+
+    try {
+        delete ui;
+    } catch (...) {
+        qDebug() << "Error: ~PIHMgisDialog is returning w/o checking";
+    }
 }
 
 
@@ -220,140 +236,148 @@ PIHMgisDialog::~PIHMgisDialog()
 
 void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
 {
-    bool boolWORKFLOW0, boolWORKFLOW1, boolWORKFLOW2, boolWORKFLOW3, boolWORKFLOW4, boolWORKFLOW5, boolWORKFLOW6, boolWORKFLOW7;
-    bool boolNEWPRJ, boolOPENPRJ, boolIMPORTPRJ, boolCLOSEPRJ;
-    bool boolFILLPITS, boolFLOWGRIDS, boolSTRGRIDS, boolLINKGRIDS, boolCATGRIDS, boolSTRPOLY, boolCATPOLY;
-    bool boolDISSOLVE, boolPOLYGON, boolSIMPLIFY, boolPOLYLINE, boolMERGE;
-    bool boolREADSHP, boolTRIANGLE, boolTINSHP;
-    bool boolMESH, boolATTX, boolSOIL, boolRIVX, boolGEOL, boolLCXX, boolPARA, boolINIT, boolIBCX, boolCALI, boolFORC;
-    bool boolPIHM;
-    bool boolSPATIALW, boolSPATIALR, boolTIMEW, boolTIMER;
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::set_defaults";
 
-    boolWORKFLOW0 = boolWORKFLOW1 = boolWORKFLOW2 = boolWORKFLOW3 = boolWORKFLOW4 = boolWORKFLOW5 = boolWORKFLOW6 = boolWORKFLOW7 = false;
-    boolNEWPRJ = boolOPENPRJ = boolIMPORTPRJ = boolCLOSEPRJ = false;
-    boolFILLPITS = boolFLOWGRIDS = boolSTRGRIDS = boolLINKGRIDS = boolCATGRIDS = boolSTRPOLY = boolCATPOLY = false;
-    boolDISSOLVE = boolPOLYGON = boolSIMPLIFY = boolPOLYLINE = boolMERGE = false;
-    boolREADSHP = boolTRIANGLE = boolTINSHP = false;
-    boolMESH = boolATTX = boolSOIL = boolRIVX = boolGEOL = boolLCXX = boolPARA = boolINIT = boolIBCX = boolCALI = boolFORC = false;
-    boolPIHM = false;
-    boolSPATIALW = boolSPATIALR = boolTIMEW = boolTIMER = false;
+    try {
+        bool boolWORKFLOW0, boolWORKFLOW1, boolWORKFLOW2, boolWORKFLOW3, boolWORKFLOW4, boolWORKFLOW5, boolWORKFLOW6, boolWORKFLOW7;
+        bool boolNEWPRJ, boolOPENPRJ, boolIMPORTPRJ, boolCLOSEPRJ;
+        bool boolFILLPITS, boolFLOWGRIDS, boolSTRGRIDS, boolLINKGRIDS, boolCATGRIDS, boolSTRPOLY, boolCATPOLY;
+        bool boolDISSOLVE, boolPOLYGON, boolSIMPLIFY, boolPOLYLINE, boolMERGE;
+        bool boolREADSHP, boolTRIANGLE, boolTINSHP;
+        bool boolMESH, boolATTX, boolSOIL, boolRIVX, boolGEOL, boolLCXX, boolPARA, boolINIT, boolIBCX, boolCALI, boolFORC;
+        bool boolPIHM;
+        bool boolSPATIALW, boolSPATIALR, boolTIMEW, boolTIMER;
 
-    qDebug() << "Function set_defaults: " << DEFAULT_PARAM;
-    for(int i=0; i<DEFAULT_PARAM.size(); i++)
-    {
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW0") { boolWORKFLOW0 = true; ui->pushButtonWorkFlow0->setFocus(); continue; }
-//        if (DEFAULT_PARAM.at(i) == "WORKFLOW1") { boolWORKFLOW1 = true; ui->pushButtonWorkFlow1->setFocus(); continue; }
-//        if (DEFAULT_PARAM.at(i) == "WORKFLOW2") { boolWORKFLOW2 = true; ui->pushButtonWorkFlow2->setFocus(); continue; }
-//        if (DEFAULT_PARAM.at(i) == "WORKFLOW3") { boolWORKFLOW3 = true; ui->pushButtonWorkFlow3->setFocus(); continue; }
-//        if (DEFAULT_PARAM.at(i) == "WORKFLOW4") { boolWORKFLOW4 = true; ui->pushButtonWorkFlow4->setFocus(); continue; }
-//        if (DEFAULT_PARAM.at(i) == "WORKFLOW5") { boolWORKFLOW5 = true; ui->pushButtonWorkFlow5->setFocus(); continue; }
-//        if (DEFAULT_PARAM.at(i) == "WORKFLOW6") { boolWORKFLOW6 = true; ui->pushButtonWorkFlow6->setFocus(); continue; }
-//        if (DEFAULT_PARAM.at(i) == "WORKFLOW7") { boolWORKFLOW7 = true; ui->pushButtonWorkFlow7->setFocus(); continue; }
+        boolWORKFLOW0 = boolWORKFLOW1 = boolWORKFLOW2 = boolWORKFLOW3 = boolWORKFLOW4 = boolWORKFLOW5 = boolWORKFLOW6 = boolWORKFLOW7 = false;
+        boolNEWPRJ = boolOPENPRJ = boolIMPORTPRJ = boolCLOSEPRJ = false;
+        boolFILLPITS = boolFLOWGRIDS = boolSTRGRIDS = boolLINKGRIDS = boolCATGRIDS = boolSTRPOLY = boolCATPOLY = false;
+        boolDISSOLVE = boolPOLYGON = boolSIMPLIFY = boolPOLYLINE = boolMERGE = false;
+        boolREADSHP = boolTRIANGLE = boolTINSHP = false;
+        boolMESH = boolATTX = boolSOIL = boolRIVX = boolGEOL = boolLCXX = boolPARA = boolINIT = boolIBCX = boolCALI = boolFORC = false;
+        boolPIHM = false;
+        boolSPATIALW = boolSPATIALR = boolTIMEW = boolTIMER = false;
 
-        if (DEFAULT_PARAM.at(i) == "NEWPRJ")    { boolNEWPRJ    = true; ui->pushButtonPIHMgisProjectNew->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "OPENPRJ")   { boolOPENPRJ   = true; ui->pushButtonPIHMgisProjectOpen->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "IMPORTPRJ") { boolIMPORTPRJ = true; ui->pushButtonPIHMgisProjectImport->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "CLOSEPRJ")  { boolCLOSEPRJ  = true; ui->pushButtonPIHMgisProjectClose->setFocus();  continue; }
-
-        if (DEFAULT_PARAM.at(i) == "FILLPITS")  { boolFILLPITS  = true; ui->pushButtonRasterProcessingFillPits->setFocus();         continue; }
-        if (DEFAULT_PARAM.at(i) == "FLOWGRIDS") { boolFLOWGRIDS = true; ui->pushButtonRasterProcessingFlowGrids->setFocus();        continue; }
-        if (DEFAULT_PARAM.at(i) == "STRGRIDS")  { boolSTRGRIDS  = true; ui->pushButtonRasterProcessingStreamGrids->setFocus();      continue; }
-        if (DEFAULT_PARAM.at(i) == "LINKGRIDS") { boolLINKGRIDS = true; ui->pushButtonRasterProcessingLinkGrids->setFocus();        continue; }
-        if (DEFAULT_PARAM.at(i) == "CATGRIDS")  { boolCATGRIDS  = true; ui->pushButtonRasterProcessingCatchmentGrids->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "STRPOLY")   { boolSTRPOLY   = true; ui->pushButtonRasterProcessingStreamPolyline->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "CATPOLY")   { boolCATPOLY   = true; ui->pushButtonRasterProcessingCatchmentPolygon->setFocus(); continue; }
-
-        if (DEFAULT_PARAM.at(i) == "DISSOLVE")  { boolDISSOLVE = true; ui->pushButtonVectorProcessingDissolvePolygons->setFocus();      continue; }
-        if (DEFAULT_PARAM.at(i) == "POLYGON")   { boolPOLYGON  = true; ui->pushButtonVectorProcessingPolygonToPolylines->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "SIMPLIFY")  { boolSIMPLIFY = true; ui->pushButtonVectorProcessingSimplifyPolylines->setFocus();     continue; }
-        if (DEFAULT_PARAM.at(i) == "POLYLINE")  { boolPOLYLINE = true; ui->pushButtonVectorProcessingPolylineToLines->setFocus();       continue; }
-        if (DEFAULT_PARAM.at(i) == "MERGE")     { boolMERGE    = true; ui->pushButtonVectorProcessingMergeVectorLayers->setFocus();     continue; }
-
-        if (DEFAULT_PARAM.at(i) == "READSHP")   { boolREADSHP  = true; ui->pushButtonDomainDecompositionReadTopology->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "TRIANGLE")  { boolTRIANGLE = true; ui->pushButtonDomainDecompositionTriangulation->setFocus();  continue; }
-        if (DEFAULT_PARAM.at(i) == "TINSHP")    { boolTINSHP   = true; ui->pushButtonDomainDecompositionTINShapeLayer->setFocus();  continue; }
-
-        if (DEFAULT_PARAM.at(i) == "MESH")  { boolMESH = true; ui->pushButtonDataModelLoaderMeshDataFile->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "ATTX")  { boolATTX = true; ui->pushButtonDataModelLoaderAttDataFile->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "RIVX")  { boolRIVX = true; ui->pushButtonDataModelLoaderRivDataFile->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "SOIL")  { boolSOIL = true; ui->pushButtonDataModelLoaderSoilDataFile->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "GEOL")  { boolGEOL = true; ui->pushButtonDataModelLoaderGeolDataFile->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "LCXX")  { boolLCXX = true; ui->pushButtonDataModelLoaderLcDataFile->setFocus();     continue; }
-        if (DEFAULT_PARAM.at(i) == "INIT")  { boolINIT = true; ui->pushButtonDataModelLoaderInitDataFile->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "IBCX")  { boolIBCX = true; ui->pushButtonDataModelLoaderIbcDataFile->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "PARA")  { boolPARA = true; ui->pushButtonDataModelLoaderParamDataFile->setFocus();  continue; }
-        if (DEFAULT_PARAM.at(i) == "CALI")  { boolCALI = true; ui->pushButtonDataModelLoaderCalibDataFile->setFocus();  continue; }
-        if (DEFAULT_PARAM.at(i) == "FORC")  { boolFORC = true; ui->pushButtonDataModelLoaderForcDataFile->setFocus();   continue; }
-
-        if (DEFAULT_PARAM.at(i) == "PIHM")  { boolPIHM = true; ui->pushButtonPIHMSimulation->setFocus();    continue; }
-
-        if (DEFAULT_PARAM.at(i) == "SPATIALW")  { boolSPATIALW = true; ui->pushButtonVisualAnalyticsSpatialWatershed->setFocus();       continue; }
-        if (DEFAULT_PARAM.at(i) == "SPATIALR")  { boolSPATIALR = true; ui->pushButtonVisualAnalyticsSpatialRiverNetwork->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "TIMEW")     { boolTIMEW    = true; ui->pushButtonVisualAnalyticsTemporalWatershed->setFocus();      continue; }
-        if (DEFAULT_PARAM.at(i) == "TIMER")     { boolTIMER    = true; ui->pushButtonVisualAnalyticsTemporalRiverNetwork->setFocus();   continue; }
-    }
-
-    ui->pushButtonWorkFlow0->setDefault(boolWORKFLOW0);
-//    ui->pushButtonWorkFlow1->setDefault(boolWORKFLOW1);
-//    ui->pushButtonWorkFlow2->setDefault(boolWORKFLOW2);
-//    ui->pushButtonWorkFlow3->setDefault(boolWORKFLOW3);
-//    ui->pushButtonWorkFlow4->setDefault(boolWORKFLOW4);
-//    ui->pushButtonWorkFlow5->setDefault(boolWORKFLOW5);
-//    ui->pushButtonWorkFlow6->setDefault(boolWORKFLOW6);
-//    ui->pushButtonWorkFlow7->setDefault(boolWORKFLOW7);
-
-    ui->pushButtonPIHMgisProjectNew->setDefault(boolNEWPRJ);
-    ui->pushButtonPIHMgisProjectOpen->setDefault(boolOPENPRJ);
-    ui->pushButtonPIHMgisProjectImport->setDefault(boolIMPORTPRJ);
-    ui->pushButtonPIHMgisProjectClose->setDefault(boolCLOSEPRJ);
-
-    ui->pushButtonRasterProcessingFillPits->setDefault(boolFILLPITS);
-    ui->pushButtonRasterProcessingFlowGrids->setDefault(boolFLOWGRIDS);
-    ui->pushButtonRasterProcessingStreamGrids->setDefault(boolSTRGRIDS);
-    ui->pushButtonRasterProcessingLinkGrids->setDefault(boolLINKGRIDS);
-    ui->pushButtonRasterProcessingCatchmentGrids->setDefault(boolCATGRIDS);
-    ui->pushButtonRasterProcessingStreamPolyline->setDefault(boolSTRPOLY);
-    ui->pushButtonRasterProcessingCatchmentPolygon->setDefault(boolCATPOLY);
-
-    ui->pushButtonVectorProcessingDissolvePolygons->setDefault(boolDISSOLVE);
-    ui->pushButtonVectorProcessingPolygonToPolylines->setDefault(boolPOLYGON);
-    ui->pushButtonVectorProcessingSimplifyPolylines->setDefault(boolSIMPLIFY);
-    ui->pushButtonVectorProcessingPolylineToLines->setDefault(boolPOLYLINE);
-    ui->pushButtonVectorProcessingMergeVectorLayers->setDefault(boolMERGE);
-
-    ui->pushButtonDomainDecompositionReadTopology->setDefault(boolREADSHP);
-    ui->pushButtonDomainDecompositionTriangulation->setDefault(boolTRIANGLE);
-    ui->pushButtonDomainDecompositionTINShapeLayer->setDefault(boolTINSHP);
-
-    ui->pushButtonDataModelLoaderMeshDataFile->setDefault(boolMESH);
-    ui->pushButtonDataModelLoaderAttDataFile->setDefault(boolATTX);
-    ui->pushButtonDataModelLoaderRivDataFile->setDefault(boolRIVX);
-    ui->pushButtonDataModelLoaderSoilDataFile->setDefault(boolSOIL);
-    ui->pushButtonDataModelLoaderGeolDataFile->setDefault(boolGEOL);
-    ui->pushButtonDataModelLoaderLcDataFile->setDefault(boolLCXX);
-    ui->pushButtonDataModelLoaderInitDataFile->setDefault(boolINIT);
-    ui->pushButtonDataModelLoaderIbcDataFile->setDefault(boolIBCX);
-    ui->pushButtonDataModelLoaderParamDataFile->setDefault(boolPARA);
-    ui->pushButtonDataModelLoaderCalibDataFile->setDefault(boolCALI);
-    ui->pushButtonDataModelLoaderForcDataFile->setDefault(boolFORC);
-
-    ui->pushButtonPIHMSimulation->setDefault(boolPIHM);
-
-    ui->pushButtonVisualAnalyticsSpatialWatershed->setDefault(boolSPATIALW);
-    ui->pushButtonVisualAnalyticsSpatialRiverNetwork->setDefault(boolSPATIALR);
-    ui->pushButtonVisualAnalyticsTemporalWatershed->setDefault(boolTIMEW);
-    ui->pushButtonVisualAnalyticsTemporalRiverNetwork->setDefault(boolTIMER);
-
-    int toolset;
-    for (int i=0; i<DEFAULT_PARAM.length(); i++)
-    {
-        if( DEFAULT_PARAM.at(i).contains("WORKFLOW") )
+        qDebug() << "Function set_defaults: " << DEFAULT_PARAM;
+        for(int i=0; i<DEFAULT_PARAM.size(); i++)
         {
-            toolset = DEFAULT_PARAM.at(i).right(1).toInt();
+            if (DEFAULT_PARAM.at(i) == "WORKFLOW0") { boolWORKFLOW0 = true; ui->pushButtonWorkFlow0->setFocus(); continue; }
+            //        if (DEFAULT_PARAM.at(i) == "WORKFLOW1") { boolWORKFLOW1 = true; ui->pushButtonWorkFlow1->setFocus(); continue; }
+            //        if (DEFAULT_PARAM.at(i) == "WORKFLOW2") { boolWORKFLOW2 = true; ui->pushButtonWorkFlow2->setFocus(); continue; }
+            //        if (DEFAULT_PARAM.at(i) == "WORKFLOW3") { boolWORKFLOW3 = true; ui->pushButtonWorkFlow3->setFocus(); continue; }
+            //        if (DEFAULT_PARAM.at(i) == "WORKFLOW4") { boolWORKFLOW4 = true; ui->pushButtonWorkFlow4->setFocus(); continue; }
+            //        if (DEFAULT_PARAM.at(i) == "WORKFLOW5") { boolWORKFLOW5 = true; ui->pushButtonWorkFlow5->setFocus(); continue; }
+            //        if (DEFAULT_PARAM.at(i) == "WORKFLOW6") { boolWORKFLOW6 = true; ui->pushButtonWorkFlow6->setFocus(); continue; }
+            //        if (DEFAULT_PARAM.at(i) == "WORKFLOW7") { boolWORKFLOW7 = true; ui->pushButtonWorkFlow7->setFocus(); continue; }
+
+            if (DEFAULT_PARAM.at(i) == "NEWPRJ")    { boolNEWPRJ    = true; ui->pushButtonPIHMgisProjectNew->setFocus();    continue; }
+            if (DEFAULT_PARAM.at(i) == "OPENPRJ")   { boolOPENPRJ   = true; ui->pushButtonPIHMgisProjectOpen->setFocus();   continue; }
+            if (DEFAULT_PARAM.at(i) == "IMPORTPRJ") { boolIMPORTPRJ = true; ui->pushButtonPIHMgisProjectImport->setFocus(); continue; }
+            if (DEFAULT_PARAM.at(i) == "CLOSEPRJ")  { boolCLOSEPRJ  = true; ui->pushButtonPIHMgisProjectClose->setFocus();  continue; }
+
+            if (DEFAULT_PARAM.at(i) == "FILLPITS")  { boolFILLPITS  = true; ui->pushButtonRasterProcessingFillPits->setFocus();         continue; }
+            if (DEFAULT_PARAM.at(i) == "FLOWGRIDS") { boolFLOWGRIDS = true; ui->pushButtonRasterProcessingFlowGrids->setFocus();        continue; }
+            if (DEFAULT_PARAM.at(i) == "STRGRIDS")  { boolSTRGRIDS  = true; ui->pushButtonRasterProcessingStreamGrids->setFocus();      continue; }
+            if (DEFAULT_PARAM.at(i) == "LINKGRIDS") { boolLINKGRIDS = true; ui->pushButtonRasterProcessingLinkGrids->setFocus();        continue; }
+            if (DEFAULT_PARAM.at(i) == "CATGRIDS")  { boolCATGRIDS  = true; ui->pushButtonRasterProcessingCatchmentGrids->setFocus();   continue; }
+            if (DEFAULT_PARAM.at(i) == "STRPOLY")   { boolSTRPOLY   = true; ui->pushButtonRasterProcessingStreamPolyline->setFocus();   continue; }
+            if (DEFAULT_PARAM.at(i) == "CATPOLY")   { boolCATPOLY   = true; ui->pushButtonRasterProcessingCatchmentPolygon->setFocus(); continue; }
+
+            if (DEFAULT_PARAM.at(i) == "DISSOLVE")  { boolDISSOLVE = true; ui->pushButtonVectorProcessingDissolvePolygons->setFocus();      continue; }
+            if (DEFAULT_PARAM.at(i) == "POLYGON")   { boolPOLYGON  = true; ui->pushButtonVectorProcessingPolygonToPolylines->setFocus();    continue; }
+            if (DEFAULT_PARAM.at(i) == "SIMPLIFY")  { boolSIMPLIFY = true; ui->pushButtonVectorProcessingSimplifyPolylines->setFocus();     continue; }
+            if (DEFAULT_PARAM.at(i) == "POLYLINE")  { boolPOLYLINE = true; ui->pushButtonVectorProcessingPolylineToLines->setFocus();       continue; }
+            if (DEFAULT_PARAM.at(i) == "MERGE")     { boolMERGE    = true; ui->pushButtonVectorProcessingMergeVectorLayers->setFocus();     continue; }
+
+            if (DEFAULT_PARAM.at(i) == "READSHP")   { boolREADSHP  = true; ui->pushButtonDomainDecompositionReadTopology->setFocus();   continue; }
+            if (DEFAULT_PARAM.at(i) == "TRIANGLE")  { boolTRIANGLE = true; ui->pushButtonDomainDecompositionTriangulation->setFocus();  continue; }
+            if (DEFAULT_PARAM.at(i) == "TINSHP")    { boolTINSHP   = true; ui->pushButtonDomainDecompositionTINShapeLayer->setFocus();  continue; }
+
+            if (DEFAULT_PARAM.at(i) == "MESH")  { boolMESH = true; ui->pushButtonDataModelLoaderMeshDataFile->setFocus();   continue; }
+            if (DEFAULT_PARAM.at(i) == "ATTX")  { boolATTX = true; ui->pushButtonDataModelLoaderAttDataFile->setFocus();    continue; }
+            if (DEFAULT_PARAM.at(i) == "RIVX")  { boolRIVX = true; ui->pushButtonDataModelLoaderRivDataFile->setFocus();    continue; }
+            if (DEFAULT_PARAM.at(i) == "SOIL")  { boolSOIL = true; ui->pushButtonDataModelLoaderSoilDataFile->setFocus();   continue; }
+            if (DEFAULT_PARAM.at(i) == "GEOL")  { boolGEOL = true; ui->pushButtonDataModelLoaderGeolDataFile->setFocus();   continue; }
+            if (DEFAULT_PARAM.at(i) == "LCXX")  { boolLCXX = true; ui->pushButtonDataModelLoaderLcDataFile->setFocus();     continue; }
+            if (DEFAULT_PARAM.at(i) == "INIT")  { boolINIT = true; ui->pushButtonDataModelLoaderInitDataFile->setFocus();   continue; }
+            if (DEFAULT_PARAM.at(i) == "IBCX")  { boolIBCX = true; ui->pushButtonDataModelLoaderIbcDataFile->setFocus();    continue; }
+            if (DEFAULT_PARAM.at(i) == "PARA")  { boolPARA = true; ui->pushButtonDataModelLoaderParamDataFile->setFocus();  continue; }
+            if (DEFAULT_PARAM.at(i) == "CALI")  { boolCALI = true; ui->pushButtonDataModelLoaderCalibDataFile->setFocus();  continue; }
+            if (DEFAULT_PARAM.at(i) == "FORC")  { boolFORC = true; ui->pushButtonDataModelLoaderForcDataFile->setFocus();   continue; }
+
+            if (DEFAULT_PARAM.at(i) == "PIHM")  { boolPIHM = true; ui->pushButtonPIHMSimulation->setFocus();    continue; }
+
+            if (DEFAULT_PARAM.at(i) == "SPATIALW")  { boolSPATIALW = true; ui->pushButtonVisualAnalyticsSpatialWatershed->setFocus();       continue; }
+            if (DEFAULT_PARAM.at(i) == "SPATIALR")  { boolSPATIALR = true; ui->pushButtonVisualAnalyticsSpatialRiverNetwork->setFocus();    continue; }
+            if (DEFAULT_PARAM.at(i) == "TIMEW")     { boolTIMEW    = true; ui->pushButtonVisualAnalyticsTemporalWatershed->setFocus();      continue; }
+            if (DEFAULT_PARAM.at(i) == "TIMER")     { boolTIMER    = true; ui->pushButtonVisualAnalyticsTemporalRiverNetwork->setFocus();   continue; }
         }
+
+        ui->pushButtonWorkFlow0->setDefault(boolWORKFLOW0);
+        //    ui->pushButtonWorkFlow1->setDefault(boolWORKFLOW1);
+        //    ui->pushButtonWorkFlow2->setDefault(boolWORKFLOW2);
+        //    ui->pushButtonWorkFlow3->setDefault(boolWORKFLOW3);
+        //    ui->pushButtonWorkFlow4->setDefault(boolWORKFLOW4);
+        //    ui->pushButtonWorkFlow5->setDefault(boolWORKFLOW5);
+        //    ui->pushButtonWorkFlow6->setDefault(boolWORKFLOW6);
+        //    ui->pushButtonWorkFlow7->setDefault(boolWORKFLOW7);
+
+        ui->pushButtonPIHMgisProjectNew->setDefault(boolNEWPRJ);
+        ui->pushButtonPIHMgisProjectOpen->setDefault(boolOPENPRJ);
+        ui->pushButtonPIHMgisProjectImport->setDefault(boolIMPORTPRJ);
+        ui->pushButtonPIHMgisProjectClose->setDefault(boolCLOSEPRJ);
+
+        ui->pushButtonRasterProcessingFillPits->setDefault(boolFILLPITS);
+        ui->pushButtonRasterProcessingFlowGrids->setDefault(boolFLOWGRIDS);
+        ui->pushButtonRasterProcessingStreamGrids->setDefault(boolSTRGRIDS);
+        ui->pushButtonRasterProcessingLinkGrids->setDefault(boolLINKGRIDS);
+        ui->pushButtonRasterProcessingCatchmentGrids->setDefault(boolCATGRIDS);
+        ui->pushButtonRasterProcessingStreamPolyline->setDefault(boolSTRPOLY);
+        ui->pushButtonRasterProcessingCatchmentPolygon->setDefault(boolCATPOLY);
+
+        ui->pushButtonVectorProcessingDissolvePolygons->setDefault(boolDISSOLVE);
+        ui->pushButtonVectorProcessingPolygonToPolylines->setDefault(boolPOLYGON);
+        ui->pushButtonVectorProcessingSimplifyPolylines->setDefault(boolSIMPLIFY);
+        ui->pushButtonVectorProcessingPolylineToLines->setDefault(boolPOLYLINE);
+        ui->pushButtonVectorProcessingMergeVectorLayers->setDefault(boolMERGE);
+
+        ui->pushButtonDomainDecompositionReadTopology->setDefault(boolREADSHP);
+        ui->pushButtonDomainDecompositionTriangulation->setDefault(boolTRIANGLE);
+        ui->pushButtonDomainDecompositionTINShapeLayer->setDefault(boolTINSHP);
+
+        ui->pushButtonDataModelLoaderMeshDataFile->setDefault(boolMESH);
+        ui->pushButtonDataModelLoaderAttDataFile->setDefault(boolATTX);
+        ui->pushButtonDataModelLoaderRivDataFile->setDefault(boolRIVX);
+        ui->pushButtonDataModelLoaderSoilDataFile->setDefault(boolSOIL);
+        ui->pushButtonDataModelLoaderGeolDataFile->setDefault(boolGEOL);
+        ui->pushButtonDataModelLoaderLcDataFile->setDefault(boolLCXX);
+        ui->pushButtonDataModelLoaderInitDataFile->setDefault(boolINIT);
+        ui->pushButtonDataModelLoaderIbcDataFile->setDefault(boolIBCX);
+        ui->pushButtonDataModelLoaderParamDataFile->setDefault(boolPARA);
+        ui->pushButtonDataModelLoaderCalibDataFile->setDefault(boolCALI);
+        ui->pushButtonDataModelLoaderForcDataFile->setDefault(boolFORC);
+
+        ui->pushButtonPIHMSimulation->setDefault(boolPIHM);
+
+        ui->pushButtonVisualAnalyticsSpatialWatershed->setDefault(boolSPATIALW);
+        ui->pushButtonVisualAnalyticsSpatialRiverNetwork->setDefault(boolSPATIALR);
+        ui->pushButtonVisualAnalyticsTemporalWatershed->setDefault(boolTIMEW);
+        ui->pushButtonVisualAnalyticsTemporalRiverNetwork->setDefault(boolTIMER);
+
+        int toolset;
+        for (int i=0; i<DEFAULT_PARAM.length(); i++)
+        {
+            if( DEFAULT_PARAM.at(i).contains("WORKFLOW") )
+            {
+                toolset = DEFAULT_PARAM.at(i).right(1).toInt();
+            }
+        }
+        qDebug() << "Toolset ID = " << toolset << "\n";
+        ui->PIHMgisToolBox->setCurrentIndex(toolset-1);
+
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::set_defaults is returning w/o checking";
     }
-    qDebug() << "Toolset ID = " << toolset << "\n";
-    ui->PIHMgisToolBox->setCurrentIndex(toolset-1);
 }
 
 // ************************************************************************** //
@@ -362,129 +386,71 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
 
 void PIHMgisDialog::on_pushButtonWorkFlow0_clicked()
 {
-    bool success = QDesktopServices::openUrl(QUrl("http://www.pihm.psu.edu"));
-    QStringList default_params; default_params << "WORKFLOW1"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonWorkFlow0_clicked";
+
+    try {
+        bool success = QDesktopServices::openUrl(QUrl("http://www.pihm.psu.edu"));
+        QStringList default_params; default_params << "WORKFLOW1"; set_defaults(default_params);
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonWorkFlow0_clicked is returning w/o checking";
+    }
 }
-
-//void PIHMgisDialog::on_pushButtonWorkFlow1_clicked()
-//{
-//    //??ui->PIHMgisToolBox->setCurrentIndex(1-1);
-
-//    // ** Set Default PushButton
-//    // ** TODO: ADD IF & ELSE LOOP TO SELECT DEFAULT BASED ON IF A PROJECT IS OPEN OR NOT? IF OPEN "CLOSE" SHOULD BE DEFAULT.
-//    QString ProjectFolder, ProjectFileName;
-//    QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
-//    if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-//    {
-//        QStringList default_params; default_params << "WORKFLOW1" << "OPENPRJ" << "IMPORTPRJ" << "NEWPRJ"; set_defaults(default_params);
-//        return;
-//    }
-
-//    QTextStream ProjectFileTextStream(&ProjectFile);
-//    ProjectFolder   = ProjectFileTextStream.readLine();
-//    ProjectFileName = ProjectFileTextStream.readLine();
-//    ProjectFile.close();
-
-//    if( QFile(ProjectFileName).exists() ) { QStringList default_params; default_params << "WORKFLOW1" << "CLOSEPRJ"; set_defaults(default_params); }
-//    else { QStringList default_params; default_params << "WORKFLOW1" << "OPENPRJ" << "IMPORTPRJ" << "NEWPRJ"; set_defaults(default_params); }
-//}
-
-//void PIHMgisDialog::on_pushButtonWorkFlow2_clicked()
-//{
-//    //??ui->PIHMgisToolBox->setCurrentIndex(2-1);
-
-//    // ** Set Default PushButton
-//    QStringList default_params; default_params << "WORKFLOW2" << "FILLPITS"; set_defaults(default_params);
-//}
-
-//void PIHMgisDialog::on_pushButtonWorkFlow3_clicked()
-//{
-//    //??ui->PIHMgisToolBox->setCurrentIndex(3-1);
-
-//    // ** Set Default PushButton
-//    QStringList default_params; default_params << "WORKFLOW3" << "DISSOLVE"; set_defaults(default_params);
-//}
-
-//void PIHMgisDialog::on_pushButtonWorkFlow4_clicked()
-//{
-//    //??ui->PIHMgisToolBox->setCurrentIndex(4-1);
-
-//    // ** Set Default PushButton
-//    QStringList default_params; default_params << "WORKFLOW4" << "READSHP"; set_defaults(default_params);
-//}
-
-//void PIHMgisDialog::on_pushButtonWorkFlow5_clicked()
-//{
-//    //??ui->PIHMgisToolBox->setCurrentIndex(5-1);
-
-//    // ** Set Default PushButton
-//    QStringList default_params; default_params << "WORKFLOW5" << "MESH"; set_defaults(default_params);
-//}
-
-//void PIHMgisDialog::on_pushButtonWorkFlow6_clicked()
-//{
-//    //??ui->PIHMgisToolBox->setCurrentIndex(6-1);
-
-//    // ** Set Default PushButton
-//    QStringList default_params; default_params << "WORKFLOW6" << "PIHM"; set_defaults(default_params);
-//}
-
-//void PIHMgisDialog::on_pushButtonWorkFlow7_clicked()
-//{
-//    //??ui->PIHMgisToolBox->setCurrentIndex(7-1);
-
-//    // ** Set Default PushButton
-//    QStringList default_params; default_params << "WORKFLOW7" << "SPATIALW" << "SPATIALR" << "TIMEW" << "TIMER"; set_defaults(default_params);
-//}
-
-// **** END   :: PIHMgis Help & Resources Slots **** //
-
-
-// ************************************************************************** //
-
 
 // **** START :: PIHMgis Project Management **** //
 
 void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
 {
-    //??QStringList default_params; default_params << "FILLPITS" << "WORKFLOW2"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked";
 
-    //??ui->PIHMgisToolBox->setCurrentIndex(8-1);
+    try {
+        qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
 
-    qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
-
-    NewProject *NewProjectDialog = new NewProject(this);
-    NewProjectDialog->show();
+        NewProject *NewProjectDialog = new NewProject(this);
+        NewProjectDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked()
 {
-    //??QStringList default_params; default_params << "FILLPITS" << "WORKFLOW2"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked";
 
-    //??ui->PIHMgisToolBox->setCurrentIndex(8-1);
-
-    OpenProject *OpenProjectDialog = new OpenProject(this);
-    OpenProjectDialog->show();
+    try {
+        OpenProject *OpenProjectDialog = new OpenProject(this);
+        OpenProjectDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked()
 {
-    //??QStringList default_params; default_params << "FILLPITS" << "WORKFLOW2"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked";
 
-    //??ui->PIHMgisToolBox->setCurrentIndex(8-1);
-
-    ImportProject *ImportProjectDialog = new ImportProject(this);
-    ImportProjectDialog->show();
+    try {
+        ImportProject *ImportProjectDialog = new ImportProject(this);
+        ImportProjectDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW1"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked";
 
-    //??ui->PIHMgisToolBox->setCurrentIndex(8-1);
-
-    CloseProject *CloseProjectDialog = new CloseProject(this);
-    CloseProjectDialog->show();
+    try {
+        CloseProject *CloseProjectDialog = new CloseProject(this);
+        CloseProjectDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked is returning w/o checking";
+    }
 }
 
 // **** END   :: PIHMgis Project Management Slots **** //
@@ -497,61 +463,93 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked()
 
 void PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW2" << "FLOWGRIDS"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked";
 
-    FillPits *FillPitsDialog = new FillPits(this);
-    FillPitsDialog->show();
+    try {
+        FillPits *FillPitsDialog = new FillPits(this);
+        FillPitsDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonRasterProcessingFlowGrids_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW2" << "STRGRIDS"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingFlowGrids_clicked";
 
-    FlowGrids *FlowGridsDialog = new FlowGrids(this);
-    FlowGridsDialog->show();
+    try {
+        FlowGrids *FlowGridsDialog = new FlowGrids(this);
+        FlowGridsDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingFlowGrids_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW2" << "LINKGRIDS"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked";
 
-    StreamGrids *StreamGridsDialog = new StreamGrids(this);
-    StreamGridsDialog->show();
+    try {
+        StreamGrids *StreamGridsDialog = new StreamGrids(this);
+        StreamGridsDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonRasterProcessingLinkGrids_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW2" << "CATGRIDS"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingLinkGrids_clicked";
 
-    LinkGrids *LinkGridsDialog = new LinkGrids(this);
-    LinkGridsDialog->show();
+    try {
+        LinkGrids *LinkGridsDialog = new LinkGrids(this);
+        LinkGridsDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingLinkGrids_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonRasterProcessingCatchmentGrids_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW2" << "STRPOLY"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingCatchmentGrids_clicked";
 
-    CatchmentGrids *CatchmentGridsDialog = new CatchmentGrids(this);
-    CatchmentGridsDialog->show();
+    try {
+        CatchmentGrids *CatchmentGridsDialog = new CatchmentGrids(this);
+        CatchmentGridsDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingCatchmentGrids_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonRasterProcessingStreamPolyline_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW2" << "CATPOLY"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingStreamPolyline_clicked";
 
-    StreamPolyline *StreamPolylineDialog = new StreamPolyline(this);
-    StreamPolylineDialog->show();
+    try {
+        StreamPolyline *StreamPolylineDialog = new StreamPolyline(this);
+        StreamPolylineDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingStreamPolyline_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonRasterProcessingCatchmentPolygon_clicked()
 {
-    //??QStringList default_params; default_params << "DISSOLVE" << "WORKFLOW3"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingCatchmentPolygon_clicked";
 
-    CatchmentPolygon *CatchmentPolygonDialog = new CatchmentPolygon(this);
-    CatchmentPolygonDialog->show();
-
-    //ui->pushButtonVectorProcessingDissolvePolygons->setDefault(1);
-    //ui->PIHMgisToolBox->setCurrentIndex(8-1);
+    try {
+        CatchmentPolygon *CatchmentPolygonDialog = new CatchmentPolygon(this);
+        CatchmentPolygonDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingCatchmentPolygon_clicked is returning w/o checking";
+    }
 }
 
 // **** END   :: Raster Processing Slots **** //
@@ -564,44 +562,68 @@ void PIHMgisDialog::on_pushButtonRasterProcessingCatchmentPolygon_clicked()
 
 void PIHMgisDialog::on_pushButtonVectorProcessingDissolvePolygons_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW3" << "POLYGON"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingDissolvePolygons_clicked";
 
-    DissolvePolygons *DissolvePolygonsDialog = new DissolvePolygons(this);
-    DissolvePolygonsDialog->show();
+    try {
+        DissolvePolygons *DissolvePolygonsDialog = new DissolvePolygons(this);
+        DissolvePolygonsDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingDissolvePolygons_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonVectorProcessingPolygonToPolylines_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW3" << "SIMPLIFY"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingPolygonToPolylines_clicked";
 
-    PolygonToPolylines *PolygonToPolylinesDialog = new PolygonToPolylines(this);
-    PolygonToPolylinesDialog->show();
+    try {
+        PolygonToPolylines *PolygonToPolylinesDialog = new PolygonToPolylines(this);
+        PolygonToPolylinesDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingPolygonToPolylines_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW3" << "POLYLINE"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked";
 
-    SimplifyPolylines *SimplifyPolylinesDialog = new SimplifyPolylines(this);
-    SimplifyPolylinesDialog->show();
+    try {
+        SimplifyPolylines *SimplifyPolylinesDialog = new SimplifyPolylines(this);
+        SimplifyPolylinesDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW3" << "MERGE"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked";
 
-    PolylineToLines *PolylineToLinesDialog = new PolylineToLines(this);
-    PolylineToLinesDialog->show();
+    try {
+        PolylineToLines *PolylineToLinesDialog = new PolylineToLines(this);
+        PolylineToLinesDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonVectorProcessingMergeVectorLayers_clicked()
 {
-    //??QStringList default_params; default_params << "READSHP" << "WORKFLOW4"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingMergeVectorLayers_clicked";
 
-    MergeVectorLayers *MergeVectorLayersDialog = new MergeVectorLayers(this);
-    MergeVectorLayersDialog->show();
+    try {
+        MergeVectorLayers *MergeVectorLayersDialog = new MergeVectorLayers(this);
+        MergeVectorLayersDialog->show();
 
-    //??ui->PIHMgisToolBox->setCurrentIndex(8-1);
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingMergeVectorLayers_clicked is returning w/o checking";
+    }
 }
 
 // **** END   :: Vector Processing Slots **** //
@@ -614,28 +636,41 @@ void PIHMgisDialog::on_pushButtonVectorProcessingMergeVectorLayers_clicked()
 
 void PIHMgisDialog::on_pushButtonDomainDecompositionReadTopology_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW4" << "TRIANGLE"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDomainDecompositionReadTopology_clicked";
 
-    ReadTopology *ReadTopologyDialog = new ReadTopology(this);
-    ReadTopologyDialog->show();
+    try {
+        ReadTopology *ReadTopologyDialog = new ReadTopology(this);
+        ReadTopologyDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDomainDecompositionReadTopology_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW4" << "TINSHP"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked";
 
-    DelaunayTriangulation *DelaunayTriangulationDialog = new DelaunayTriangulation(this);
-    DelaunayTriangulationDialog->show();
+    try {
+        DelaunayTriangulation *DelaunayTriangulationDialog = new DelaunayTriangulation(this);
+        DelaunayTriangulationDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked()
 {
-    //??QStringList default_params; default_params << "MESH" << "WORKFLOW5"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked";
 
-    TINShapeLayer *TINShapeLayerDialog = new TINShapeLayer(this);
-    TINShapeLayerDialog->show();
-
-    //??ui->PIHMgisToolBox->setCurrentIndex(8-1);
+    try {
+        TINShapeLayer *TINShapeLayerDialog = new TINShapeLayer(this);
+        TINShapeLayerDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked is returning w/o checking";
+    }
 }
 
 // **** END   :: Domain Decomposition Slots **** //
@@ -648,91 +683,146 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked()
 
 void PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW5" << "ATTX"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked";
 
-    MeshDataFile *MeshDataFileDialog = new MeshDataFile(this);
-    MeshDataFileDialog->show();
-
+    try {
+        MeshDataFile *MeshDataFileDialog = new MeshDataFile(this);
+        MeshDataFileDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked0 is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW5" << "RIVX"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked";
 
-    AttDataFile *AttDataFileDialog = new AttDataFile(this);
-    AttDataFileDialog->show();
+    try {
+        AttDataFile *AttDataFileDialog = new AttDataFile(this);
+        AttDataFileDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW5" << "SOIL"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked";
 
-    RivDataFile *RivDataFileDialog = new RivDataFile(this);
-    RivDataFileDialog->show();
+    try {
+        RivDataFile *RivDataFileDialog = new RivDataFile(this);
+        RivDataFileDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW5" << "GEOL"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked";
 
-    SoilDataFile *SoilDataFileDialog = new SoilDataFile(this);
-    SoilDataFileDialog->show();
+    try {
+        SoilDataFile *SoilDataFileDialog = new SoilDataFile(this);
+        SoilDataFileDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW5" << "LCXX"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked";
 
-    GeolDataFile *GeolDataFileDialog = new GeolDataFile(this);
-    GeolDataFileDialog->show();
+    try {
+        GeolDataFile *GeolDataFileDialog = new GeolDataFile(this);
+        GeolDataFileDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW5" << "INIT"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked";
 
-    LcDataFile *LcDataFileDialog = new LcDataFile(this);
-    LcDataFileDialog->show();
+    try {
+        LcDataFile *LcDataFileDialog = new LcDataFile(this);
+        LcDataFileDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW5" << "IBCX"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked";
 
-    InitDataFile *InitDataFileDialog = new InitDataFile(this);
-    InitDataFileDialog->show();
+    try {
+        InitDataFile *InitDataFileDialog = new InitDataFile(this);
+        InitDataFileDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW5" << "PARA"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked";
 
-    IbcDataFile *IbcDataFileDialog = new IbcDataFile(this);
-    IbcDataFileDialog->show();
+    try {
+        IbcDataFile *IbcDataFileDialog = new IbcDataFile(this);
+        IbcDataFileDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDataModelLoaderParamDataFile_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW5" << "CALI"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderParamDataFile_clicked";
 
-    ParaDataFile *ParaDataFileDialog = new ParaDataFile(this);
-    ParaDataFileDialog->show();
+    try {
+        ParaDataFile *ParaDataFileDialog = new ParaDataFile(this);
+        ParaDataFileDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderParamDataFile_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDataModelLoaderCalibDataFile_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW5" << "FORC"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderCalibDataFile_clicked";
 
-    CalibDataFile *CalibDataFileDialog = new CalibDataFile(this);
-    CalibDataFileDialog->show();
+    try {
+        CalibDataFile *CalibDataFileDialog = new CalibDataFile(this);
+        CalibDataFileDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderCalibDataFile_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonDataModelLoaderForcDataFile_clicked()
 {
-    QStringList default_params; default_params << "WORKFLOW6" << "WORKFLOW8"; set_defaults(default_params);
-    bool success = QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#forc_Data_File"));
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderForcDataFile_clicked";
 
-    //??ui->PIHMgisToolBox->setCurrentIndex(8-1);
+    try {
+        QStringList default_params; default_params << "WORKFLOW6" << "WORKFLOW8"; set_defaults(default_params);
+        bool success = QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#forc_Data_File"));
+
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderForcDataFile_clicked is returning w/o checking";
+    }
 }
 
 // **** END   :: Data Model Loader Slots **** //
@@ -745,13 +835,17 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderForcDataFile_clicked()
 
 void PIHMgisDialog::on_pushButtonPIHMSimulation_clicked()
 {
-    //??QStringList default_params; default_params << "SPATIALW" << "SPATIALR" << "TIMEW" << "TIMER" << "WORKFLOW7"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMSimulation_clicked";
 
-    PIHMSimulation *PIHMSimulationDialog = new PIHMSimulation(this);
-    PIHMSimulationDialog->ModelVersion = ui->comboBoxPIHMVersion->currentText();
-    PIHMSimulationDialog->show();
+    try {
+        PIHMSimulation *PIHMSimulationDialog = new PIHMSimulation(this);
+        PIHMSimulationDialog->ModelVersion = ui->comboBoxPIHMVersion->currentText();
+        PIHMSimulationDialog->show();
 
-    //??ui->PIHMgisToolBox->setCurrentIndex(8-1);
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMSimulation_clicked is returning w/o checking";
+    }
 }
 
 // **** END   :: PIHM Simulation Slots **** //
@@ -764,34 +858,54 @@ void PIHMgisDialog::on_pushButtonPIHMSimulation_clicked()
 
 void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW7" << "SPATIALR" << "TIMEW" << "TIMER" << "SPATIALW"; set_defaults(default_params);
-    MeshSpatial *MeshSpatialDialog = new MeshSpatial(this);
-    MeshSpatialDialog->show();
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked";
+
+    try {
+        MeshSpatial *MeshSpatialDialog = new MeshSpatial(this);
+        MeshSpatialDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalWatershed_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW7" << "TIMER" << "SPATIALW" << "SPATIALR" << "TIMEW"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalWatershed_clicked";
 
-    QApplication *app;
-    MeshTemporal *MeshTemporalDialog = new MeshTemporal(this);
-    MeshTemporalDialog->show();
+    try {
+        MeshTemporal *MeshTemporalDialog = new MeshTemporal(this);
+        MeshTemporalDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalWatershed_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW7" << "TIMEW" << "TIMER" << "SPATIALW" << "SPATIALR"; set_defaults(default_params);
-    RiverSpatial *RiverSpatialDialog = new RiverSpatial(this);
-    RiverSpatialDialog->show();
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked";
+
+    try {
+        RiverSpatial *RiverSpatialDialog = new RiverSpatial(this);
+        RiverSpatialDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
 {
-    //??QStringList default_params; default_params << "WORKFLOW7" << "SPATIALW" << "SPATIALR" << "TIMEW" << "TIMER"; set_defaults(default_params);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked";
 
-    //QApplication *app;
-    RiverTemporal *RiverTemporalDialog = new RiverTemporal(this);
-    RiverTemporalDialog->show();
+    try {
+        RiverTemporal *RiverTemporalDialog = new RiverTemporal(this);
+        RiverTemporalDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked is returning w/o checking";
+    }
 }
 
 // **** END   :: Visual Analytics Slots **** //
@@ -801,20 +915,41 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
 
 void PIHMgisDialog::on_pushButton_clicked()
 {
-    qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_clicked";
 
-    NewProject *NewProjectDialog = new NewProject(this);
-    NewProjectDialog->show();
+    try {
+        qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
+
+        NewProject *NewProjectDialog = new NewProject(this);
+        NewProjectDialog->show();
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButton_clicked is returning w/o checking";
+    }
 }
 
 
 void PIHMgisDialog::on_pushButton_clicked(bool checked)
 {
-    qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_clicked";
+
+    try {
+        qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButton_clicked is returning w/o checking";
+    }
 }
 
 void PIHMgisDialog::on_pushButton_2_clicked()
 {
-    qDebug() << "on_pushButton_2_clicked";
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_2_clicked";
+
+    try {
+        qDebug() << "on_pushButton_2_clicked";
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButton_2_clicked is returning w/o checking";
+    }
 
 }

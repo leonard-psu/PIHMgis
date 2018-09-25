@@ -11503,11 +11503,10 @@ release\main.obj: main.cpp main.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qguiapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qinputmethod.h
 
-release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QWidget \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgetsglobal.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiglobal.h \
+release\pihmgisdialog.obj: pihmgisdialog.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qchar.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qconfig-bootstrapped.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qconfig.h \
@@ -11529,23 +11528,21 @@ release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmutex.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnumeric.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qversiontagging.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtgui-config.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgets-config.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qchar.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qbytearray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrefcount.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qarraydata.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringliteral.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringview.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringbuilder.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiodevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlist.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiterator.h \
@@ -11561,32 +11558,49 @@ release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvarlengtharray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontainerfwd.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject_impl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qshareddata.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qhash.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmap.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qtextstream.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlocale.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvariant.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvector.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qset.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontiguouscache.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMessageBox \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmessagebox.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgetsglobal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiglobal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtgui-config.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgets-config.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmargins.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpaintdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrect.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsize.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpalette.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcolor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qrgb.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qrgba64.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qbrush.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvector.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qmatrix.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpolygon.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qregion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdatastream.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiodevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qline.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtransform.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpainterpath.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qimage.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpixelformat.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpixmap.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qshareddata.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qhash.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfont.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontmetrics.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontinfo.h \
@@ -11594,19 +11608,18 @@ release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcursor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qkeysequence.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qevent.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvariant.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmap.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qtextstream.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlocale.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qset.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontiguouscache.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurlquery.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QDesktopServices \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qdesktopservices.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstandardpaths.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QUrl \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h \
+		pihmgisdialog.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QWidget \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		ui_pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QLocale \
@@ -11651,19 +11664,6 @@ release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qpushbutton.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QToolBox \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtoolbox.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMessageBox \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmessagebox.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QDesktopServices \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qdesktopservices.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstandardpaths.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QUrl \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h \
 		1ProjectManagement/1NewProject/newproject.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDate \
@@ -11703,7 +11703,8 @@ release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
 		7VisualAnalytics/1MeshSpatial/meshspatial.h \
 		7VisualAnalytics/2MeshTemporal/meshtemporal.h \
 		7VisualAnalytics/3RiverSpatial/riverspatial.h \
-		7VisualAnalytics/4RiverTemporal/rivertemporal.h
+		7VisualAnalytics/4RiverTemporal/rivertemporal.h \
+		globals.h
 
 release\newproject.obj: 1ProjectManagement\1NewProject\newproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -12058,7 +12059,8 @@ release\newproject.obj: 1ProjectManagement\1NewProject\newproject.cpp G:\Qt\5.11
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextbrowser.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\openproject.obj: 1ProjectManagement\2OpenProject\openproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -12412,7 +12414,8 @@ release\openproject.obj: 1ProjectManagement\2OpenProject\openproject.cpp G:\Qt\5
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextbrowser.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\importproject.obj: 1ProjectManagement\3ImportProject\importproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -12766,7 +12769,8 @@ release\importproject.obj: 1ProjectManagement\3ImportProject\importproject.cpp G
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextbrowser.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\closeproject.obj: 1ProjectManagement\4CloseProject\closeproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -13119,7 +13123,8 @@ release\closeproject.obj: 1ProjectManagement\4CloseProject\closeproject.cpp G:\Q
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QTextEdit \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\fillpits.obj: 2RasterProcessing\1FillPits\fillpits.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -13479,7 +13484,8 @@ release\fillpits.obj: 2RasterProcessing\1FillPits\fillpits.cpp G:\Qt\5.11.1\msvc
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/ADFFiletoASCFile.h \
 		0LibsRaster/flood.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\IOProjectFile.obj: 0LibsIO\IOProjectFile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -13801,7 +13807,9 @@ release\IOProjectFile.obj: 0LibsIO\IOProjectFile.cpp G:\Qt\5.11.1\msvc2017_64\in
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsIO/IOProjectFile.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug
 
 release\ADFFiletoASCFile.obj: 0LibsRaster\ADFFiletoASCFile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
@@ -13896,7 +13904,10 @@ release\ADFFiletoASCFile.obj: 0LibsRaster\ADFFiletoASCFile.cpp G:\Qt\5.11.1\msvc
 		..\gdal-2.3.1\ogr\ogr_spatialref.h \
 		..\gdal-2.3.1\ogr\ogr_srs_api.h \
 		0LibsRaster/ADFFiletoASCFile.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\flood.obj: 0LibsRaster\flood.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -13965,7 +13976,12 @@ release\flood.obj: 0LibsRaster\flood.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\gridio.obj: 0LibsRaster\gridio.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -14033,7 +14049,12 @@ release\gridio.obj: 0LibsRaster\gridio.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCo
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\gridio_null.obj: 0LibsRaster\gridio_null.cpp 0LibsRaster/gioapi.h
 
@@ -14404,7 +14425,8 @@ release\flowgrids.obj: 2RasterProcessing\2FlowGrids\flowgrids.cpp G:\Qt\5.11.1\m
 		0LibsRaster/ADFFiletoASCFile.h \
 		0LibsRaster/setdir.h \
 		0LibsRaster/aread8.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\setdir.obj: 0LibsRaster\setdir.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -14473,7 +14495,12 @@ release\setdir.obj: 0LibsRaster\setdir.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCo
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\aread8.obj: 0LibsRaster\aread8.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -14542,7 +14569,12 @@ release\aread8.obj: 0LibsRaster\aread8.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCo
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\streamgrids.obj: 2RasterProcessing\3StreamGrids\streamgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -14901,7 +14933,8 @@ release\streamgrids.obj: 2RasterProcessing\3StreamGrids\streamgrids.cpp G:\Qt\5.
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/stream_definition.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\stream_definition.obj: 0LibsRaster\stream_definition.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -14970,7 +15003,12 @@ release\stream_definition.obj: 0LibsRaster\stream_definition.cpp G:\Qt\5.11.1\ms
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\linkgrids.obj: 2RasterProcessing\4LinkGrids\linkgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -15329,7 +15367,8 @@ release\linkgrids.obj: 2RasterProcessing\4LinkGrids\linkgrids.cpp G:\Qt\5.11.1\m
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/stream_links.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\stream_links.obj: 0LibsRaster\stream_links.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -15398,7 +15437,12 @@ release\stream_links.obj: 0LibsRaster\stream_links.cpp G:\Qt\5.11.1\msvc2017_64\
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\catchmentgrids.obj: 2RasterProcessing\5CatchmentGrids\catchmentgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -15757,7 +15801,8 @@ release\catchmentgrids.obj: 2RasterProcessing\5CatchmentGrids\catchmentgrids.cpp
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/catchment.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\catchment.obj: 0LibsRaster\catchment.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -15826,7 +15871,12 @@ release\catchment.obj: 0LibsRaster\catchment.cpp G:\Qt\5.11.1\msvc2017_64\includ
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\streampolyline.obj: 2RasterProcessing\6StreamPolyline\streampolyline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -16185,7 +16235,8 @@ release\streampolyline.obj: 2RasterProcessing\6StreamPolyline\streampolyline.cpp
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/stream_shape.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\shpopen.obj: 0LibsShape\shpopen.c 0LibsShape/shapefil.h
 
@@ -16259,7 +16310,12 @@ release\stream_shape.obj: 0LibsRaster\stream_shape.cpp G:\Qt\5.11.1\msvc2017_64\
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\catchmentpolygon.obj: 2RasterProcessing\7CatchmentPolygon\catchmentpolygon.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -16618,7 +16674,8 @@ release\catchmentpolygon.obj: 2RasterProcessing\7CatchmentPolygon\catchmentpolyg
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/catchment_shape.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\catchment_shape.obj: 0LibsRaster\catchment_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
@@ -17065,7 +17122,8 @@ release\dissolvepolygons.obj: 3VectorProcessing\1DissolvePolygons\dissolvepolygo
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/dissolve.h \
 		0LibsVector/dissolve_ogr.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\dissolve.obj: 0LibsVector\dissolve.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -17133,7 +17191,12 @@ release\dissolve.obj: 0LibsVector\dissolve.cpp G:\Qt\5.11.1\msvc2017_64\include\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsVector/dissolve.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\polygontopolylines.obj: 3VectorProcessing\2PolygonToPolylines\polygontopolylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -17504,7 +17567,8 @@ release\polygontopolylines.obj: 3VectorProcessing\2PolygonToPolylines\polygontop
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/polygon_polylines.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -17572,7 +17636,12 @@ release\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt\5.11.1\ms
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsVector/polygon_polylines.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\simplifypolylines.obj: 3VectorProcessing\3SimplifyPolylines\simplifypolylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -17942,7 +18011,8 @@ release\simplifypolylines.obj: 3VectorProcessing\3SimplifyPolylines\simplifypoly
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/simplify_shape.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -18011,7 +18081,12 @@ release\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt\5.11.1\msvc2017
 		0LibsVector/simplify_polyline.h \
 		0LibsVector/simplify_shape.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\simplify_polyline.obj: 0LibsVector\simplify_polyline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -18078,7 +18153,12 @@ release\simplify_polyline.obj: 0LibsVector\simplify_polyline.cpp G:\Qt\5.11.1\ms
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsVector/simplify_polyline.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\polylinetolines.obj: 3VectorProcessing\4PolylineToLines\polylinetolines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -18448,7 +18528,8 @@ release\polylinetolines.obj: 3VectorProcessing\4PolylineToLines\polylinetolines.
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/polyline_splitline.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\polyline_splitline.obj: 0LibsVector\polyline_splitline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -18515,7 +18596,12 @@ release\polyline_splitline.obj: 0LibsVector\polyline_splitline.cpp G:\Qt\5.11.1\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\dissolve_ogr.obj: 0LibsVector\dissolve_ogr.cpp ..\gdal-2.3.1\gcore\gdal.h \
 		..\gdal-2.3.1\gcore\gdal_version.h \
@@ -18915,7 +19001,8 @@ release\mergevectorlayers.obj: 3VectorProcessing\5MergeVectorLayers\mergevectorl
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/merge_lines.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\merge_lines.obj: 0LibsVector\merge_lines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -18982,7 +19069,12 @@ release\merge_lines.obj: 0LibsVector\merge_lines.cpp G:\Qt\5.11.1\msvc2017_64\in
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\readtopology.obj: 4DomainDecomposition\1ReadTopology\readtopology.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -19339,7 +19431,8 @@ release\readtopology.obj: 4DomainDecomposition\1ReadTopology\readtopology.cpp G:
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/shape_pslg.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\shape_pslg.obj: 0LibsOther\shape_pslg.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -19407,7 +19500,12 @@ release\shape_pslg.obj: 0LibsOther\shape_pslg.cpp G:\Qt\5.11.1\msvc2017_64\inclu
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\delaunaytriangulation.obj: 4DomainDecomposition\2DelaunayTriangulation\delaunaytriangulation.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -19766,7 +19864,8 @@ release\delaunaytriangulation.obj: 4DomainDecomposition\2DelaunayTriangulation\d
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/triangle_shewchuk.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\tinshapelayer.obj: 4DomainDecomposition\3TINShapeLayer\tinshapelayer.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -20125,7 +20224,8 @@ release\tinshapelayer.obj: 4DomainDecomposition\3TINShapeLayer\tinshapelayer.cpp
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/tin_shape.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\triangle_shewchuk.obj: 0LibsOther\triangle_shewchuk.cpp 0LibsOther/triangle_shewchuk.h
 
@@ -20196,7 +20296,12 @@ release\tin_shape.obj: 0LibsVector\tin_shape.cpp G:\Qt\5.11.1\msvc2017_64\includ
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\meshdatafile.obj: 5DataModelLoader\1MeshDataFile\meshdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -20556,7 +20661,8 @@ release\meshdatafile.obj: 5DataModelLoader\1MeshDataFile\meshdatafile.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/mesh_data_file.h \
 		0LibsOther/interpolate_river_nodes_elev.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\mesh_data_file.obj: 0LibsOther\mesh_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -20651,7 +20757,10 @@ release\mesh_data_file.obj: 0LibsOther\mesh_data_file.cpp G:\Qt\5.11.1\msvc2017_
 		..\gdal-2.3.1\port\cpl_json.h \
 		..\gdal-2.3.1\ogr\ogr_spatialref.h \
 		..\gdal-2.3.1\ogr\ogr_srs_api.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\raster_grid_value.obj: 0LibsOther\raster_grid_value.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -20741,7 +20850,12 @@ release\raster_grid_value.obj: 0LibsOther\raster_grid_value.cpp G:\Qt\5.11.1\msv
 		..\gdal-2.3.1\port\cpl_json.h \
 		..\gdal-2.3.1\ogr\ogr_spatialref.h \
 		..\gdal-2.3.1\ogr\ogr_srs_api.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\interpolate_river_nodes_elev.obj: 0LibsOther\interpolate_river_nodes_elev.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QFile \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
@@ -20814,7 +20928,10 @@ release\interpolate_river_nodes_elev.obj: 0LibsOther\interpolate_river_nodes_ele
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		0LibsOther/interpolate_river_nodes_elev.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\attdatafile.obj: 5DataModelLoader\2AttDataFile\attdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -21176,7 +21293,8 @@ release\attdatafile.obj: 5DataModelLoader\2AttDataFile\attdatafile.cpp G:\Qt\5.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/att_data_file.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\att_data_file.obj: 0LibsOther\att_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -21272,7 +21390,10 @@ release\att_data_file.obj: 0LibsOther\att_data_file.cpp G:\Qt\5.11.1\msvc2017_64
 		..\gdal-2.3.1\ogr\ogr_srs_api.h \
 		0LibsShape/shapefil.h \
 		0LibsOther/raster_grid_value.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\rivdatafile.obj: 5DataModelLoader\3RivDataFile\rivdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -21631,7 +21752,8 @@ release\rivdatafile.obj: 5DataModelLoader\3RivDataFile\rivdatafile.cpp G:\Qt\5.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/riv_data_file.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\riv_data_file.obj: 0LibsOther\riv_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -22065,7 +22187,8 @@ release\soildatafile.obj: 5DataModelLoader\4SoilDataFile\soildatafile.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/pedo_transfer_functions.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\geoldatafile.obj: 5DataModelLoader\5GeolDataFile\geoldatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -22422,7 +22545,8 @@ release\geoldatafile.obj: 5DataModelLoader\5GeolDataFile\geoldatafile.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/pedo_transfer_functions.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\pedo_transfer_functions.obj: 0LibsOther\pedo_transfer_functions.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -22494,7 +22618,10 @@ release\pedo_transfer_functions.obj: 0LibsOther\pedo_transfer_functions.cpp G:\Q
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmath.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\lcdatafile.obj: 5DataModelLoader\6LcDataFile\lcdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -22851,7 +22978,8 @@ release\lcdatafile.obj: 5DataModelLoader\6LcDataFile\lcdatafile.cpp G:\Qt\5.11.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/pedo_transfer_functions.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\initdatafile.obj: 5DataModelLoader\7InitDataFile\initdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -23209,7 +23337,8 @@ release\initdatafile.obj: 5DataModelLoader\7InitDataFile\initdatafile.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvalidator.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\ibcdatafile.obj: 5DataModelLoader\8IbcDataFile\ibcdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -23565,7 +23694,8 @@ release\ibcdatafile.obj: 5DataModelLoader\8IbcDataFile\ibcdatafile.cpp G:\Qt\5.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvalidator.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\paradatafile.obj: 5DataModelLoader\9ParaDataFile\paradatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -23941,7 +24071,8 @@ release\paradatafile.obj: 5DataModelLoader\9ParaDataFile\paradatafile.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtexttable.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\calibdatafile.obj: 5DataModelLoader\10CalibDataFile\calibdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -24303,7 +24434,8 @@ release\calibdatafile.obj: 5DataModelLoader\10CalibDataFile\calibdatafile.cpp G:
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtexttable.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\PIHMThread.obj: 6PIHMSimulation\PIHMThread\PIHMThread.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -24420,7 +24552,10 @@ release\PIHMThread.obj: 6PIHMSimulation\PIHMThread\PIHMThread.cpp G:\Qt\5.11.1\m
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
 		6PIHMSimulation/PIHMSrc/PIHM_v2.2/pihm.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\pihmsimulation.obj: 6PIHMSimulation\1PIHM_v2.2\pihmsimulation.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -26159,11 +26294,13 @@ release\PIHMThreadProgress.obj: 6PIHMSimulation\PIHMThread\PIHMThreadProgress.cp
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug
 
-release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7VisualAnalytics/4RiverTemporal/rivertemporal.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgetsglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qglobal.h \
@@ -26189,22 +26326,20 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qversiontagging.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtgui-config.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgets-config.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcoreapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qchar.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qbytearray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrefcount.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qarraydata.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringliteral.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringview.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringbuilder.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlist.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiterator.h \
@@ -26220,11 +26355,17 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvarlengtharray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontainerfwd.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject_impl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qeventloop.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsize.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcursor.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmargins.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpaintdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrect.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsize.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpalette.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcolor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qrgb.h \
@@ -26250,7 +26391,6 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontmetrics.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qsizepolicy.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcursor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qkeysequence.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qevent.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvariant.h \
@@ -26266,15 +26406,17 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
-		ui_rivertemporal.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QVariant \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcoreapplication.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qeventloop.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qguiapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qinputmethod.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmainwindow.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qicon.h \
+		7VisualAnalytics/4RiverTemporal/rivertemporal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+		ui_rivertemporal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QVariant \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QComboBox \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qcombobox.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractitemdelegate.h \
@@ -26282,12 +26424,10 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractspinbox.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvalidator.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qregularexpression.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qicon.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qslider.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractslider.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qstyle.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabbar.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qrubberband.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qframe.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qabstractitemmodel.h \
@@ -26310,8 +26450,6 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtextdocument.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmainwindow.h \
 		7VisualAnalytics/QCustomPlot/qcustomplot.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QPointer \
@@ -26663,7 +26801,9 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qtprintsupportversion.h \
 		7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.h \
-		0LibsIO/IOProjectFile.h
+		0LibsIO/IOProjectFile.h \
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\qcustomplot.obj: 7VisualAnalytics\QCustomPlot\qcustomplot.cpp 7VisualAnalytics/QCustomPlot/qcustomplot.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
@@ -27652,9 +27792,8 @@ release\qcustomplotmainwindow.obj: 7VisualAnalytics\QCustomPlotMainWindow\qcusto
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qtprintsupportversion.h
 
-release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7VisualAnalytics/2MeshTemporal/meshtemporal.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgetsglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qglobal.h \
@@ -27680,22 +27819,20 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qversiontagging.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtgui-config.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgets-config.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcoreapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qchar.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qbytearray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrefcount.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qarraydata.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringliteral.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringview.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringbuilder.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlist.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiterator.h \
@@ -27711,11 +27848,17 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvarlengtharray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontainerfwd.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject_impl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qeventloop.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsize.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcursor.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmargins.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpaintdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrect.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsize.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpalette.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcolor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qrgb.h \
@@ -27741,7 +27884,6 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontmetrics.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qsizepolicy.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcursor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qkeysequence.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qevent.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvariant.h \
@@ -27757,15 +27899,17 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
-		ui_meshtemporal.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QVariant \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcoreapplication.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qeventloop.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qguiapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qinputmethod.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmainwindow.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qicon.h \
+		7VisualAnalytics/2MeshTemporal/meshtemporal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+		ui_meshtemporal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QVariant \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QComboBox \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qcombobox.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractitemdelegate.h \
@@ -27773,12 +27917,10 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractspinbox.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvalidator.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qregularexpression.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qicon.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qslider.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractslider.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qstyle.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabbar.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qrubberband.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qframe.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qabstractitemmodel.h \
@@ -27801,8 +27943,6 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtextdocument.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmainwindow.h \
 		7VisualAnalytics/QCustomPlot/qcustomplot.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QPointer \
@@ -28154,7 +28294,9 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qtprintsupportversion.h \
 		7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.h \
-		0LibsIO/IOProjectFile.h
+		0LibsIO/IOProjectFile.h \
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\meshspatial.obj: 7VisualAnalytics\1MeshSpatial\meshspatial.cpp 7VisualAnalytics/1MeshSpatial/meshspatial.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -28660,11 +28802,12 @@ release\meshspatial.obj: 7VisualAnalytics\1MeshSpatial\meshspatial.cpp 7VisualAn
 		7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
 		0LibsIO/IOProjectFile.h \
-		0LibsShape/shapefil.h
+		0LibsShape/shapefil.h \
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
-release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7VisualAnalytics/3RiverSpatial/riverspatial.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgetsglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qglobal.h \
@@ -28690,22 +28833,24 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qversiontagging.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtgui-config.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgets-config.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qchar.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qbytearray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrefcount.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qarraydata.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringliteral.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringview.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringbuilder.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiodevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlist.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiterator.h \
@@ -28721,6 +28866,14 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvarlengtharray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontainerfwd.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject_impl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qshareddata.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qhash.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurlquery.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmargins.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpaintdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrect.h \
@@ -28736,7 +28889,6 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpolygon.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qregion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdatastream.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiodevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qline.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtransform.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpainterpath.h \
@@ -28744,8 +28896,6 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpixelformat.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpixmap.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qshareddata.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qhash.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfont.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontmetrics.h \
@@ -28761,12 +28911,11 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlocale.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qset.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontiguouscache.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurl.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurlquery.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
+		7VisualAnalytics/3RiverSpatial/riverspatial.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
 		ui_riverspatial.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QVariant \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
@@ -28813,10 +28962,6 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtextdocument.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		0LibsIO/IOProjectFile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -29024,7 +29169,9 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtexttable.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		0LibsShape/shapefil.h
+		0LibsShape/shapefil.h \
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\IOProjectFile.obj: 0LibsIO\IOProjectFile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -29346,7 +29493,9 @@ release\IOProjectFile.obj: 0LibsIO\IOProjectFile.cpp G:\Qt\5.11.1\msvc2017_64\in
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsIO/IOProjectFile.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug
 
 release\att_data_file.obj: 0LibsOther\att_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -29442,7 +29591,10 @@ release\att_data_file.obj: 0LibsOther\att_data_file.cpp G:\Qt\5.11.1\msvc2017_64
 		..\gdal-2.3.1\ogr\ogr_srs_api.h \
 		0LibsShape/shapefil.h \
 		0LibsOther/raster_grid_value.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\interpolate_river_nodes_elev.obj: 0LibsOther\interpolate_river_nodes_elev.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QFile \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
@@ -29515,7 +29667,10 @@ release\interpolate_river_nodes_elev.obj: 0LibsOther\interpolate_river_nodes_ele
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		0LibsOther/interpolate_river_nodes_elev.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\mesh_data_file.obj: 0LibsOther\mesh_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -29610,7 +29765,10 @@ release\mesh_data_file.obj: 0LibsOther\mesh_data_file.cpp G:\Qt\5.11.1\msvc2017_
 		..\gdal-2.3.1\port\cpl_json.h \
 		..\gdal-2.3.1\ogr\ogr_spatialref.h \
 		..\gdal-2.3.1\ogr\ogr_srs_api.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\pedo_transfer_functions.obj: 0LibsOther\pedo_transfer_functions.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -29682,7 +29840,10 @@ release\pedo_transfer_functions.obj: 0LibsOther\pedo_transfer_functions.cpp G:\Q
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmath.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\raster_grid_value.obj: 0LibsOther\raster_grid_value.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -29772,7 +29933,12 @@ release\raster_grid_value.obj: 0LibsOther\raster_grid_value.cpp G:\Qt\5.11.1\msv
 		..\gdal-2.3.1\port\cpl_json.h \
 		..\gdal-2.3.1\ogr\ogr_spatialref.h \
 		..\gdal-2.3.1\ogr\ogr_srs_api.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\riv_data_file.obj: 0LibsOther\riv_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -29917,7 +30083,12 @@ release\shape_pslg.obj: 0LibsOther\shape_pslg.cpp G:\Qt\5.11.1\msvc2017_64\inclu
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\triangle_shewchuk.obj: 0LibsOther\triangle_shewchuk.cpp 0LibsOther/triangle_shewchuk.h
 
@@ -30014,7 +30185,10 @@ release\ADFFiletoASCFile.obj: 0LibsRaster\ADFFiletoASCFile.cpp G:\Qt\5.11.1\msvc
 		..\gdal-2.3.1\ogr\ogr_spatialref.h \
 		..\gdal-2.3.1\ogr\ogr_srs_api.h \
 		0LibsRaster/ADFFiletoASCFile.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\aread8.obj: 0LibsRaster\aread8.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30083,7 +30257,12 @@ release\aread8.obj: 0LibsRaster\aread8.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCo
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\avcalls_null.obj: 0LibsRaster\avcalls_null.cpp 0LibsRaster/avexec32.h
 
@@ -30156,7 +30335,12 @@ release\catchment.obj: 0LibsRaster\catchment.cpp G:\Qt\5.11.1\msvc2017_64\includ
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\catchment_shape.obj: 0LibsRaster\catchment_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
@@ -30301,7 +30485,12 @@ release\flood.obj: 0LibsRaster\flood.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\gridio.obj: 0LibsRaster\gridio.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30369,7 +30558,12 @@ release\gridio.obj: 0LibsRaster\gridio.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCo
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\gridio_null.obj: 0LibsRaster\gridio_null.cpp 0LibsRaster/gioapi.h
 
@@ -30444,7 +30638,12 @@ release\setdir.obj: 0LibsRaster\setdir.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCo
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\stream_definition.obj: 0LibsRaster\stream_definition.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30513,7 +30712,12 @@ release\stream_definition.obj: 0LibsRaster\stream_definition.cpp G:\Qt\5.11.1\ms
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\stream_links.obj: 0LibsRaster\stream_links.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30582,7 +30786,12 @@ release\stream_links.obj: 0LibsRaster\stream_links.cpp G:\Qt\5.11.1\msvc2017_64\
 		0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\stream_shape.obj: 0LibsRaster\stream_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30652,7 +30861,12 @@ release\stream_shape.obj: 0LibsRaster\stream_shape.cpp G:\Qt\5.11.1\msvc2017_64\
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\dissolve.obj: 0LibsVector\dissolve.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30720,7 +30934,12 @@ release\dissolve.obj: 0LibsVector\dissolve.cpp G:\Qt\5.11.1\msvc2017_64\include\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsVector/dissolve.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\dissolve_ogr.obj: 0LibsVector\dissolve_ogr.cpp ..\gdal-2.3.1\gcore\gdal.h \
 		..\gdal-2.3.1\gcore\gdal_version.h \
@@ -30813,7 +31032,12 @@ release\merge_lines.obj: 0LibsVector\merge_lines.cpp G:\Qt\5.11.1\msvc2017_64\in
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30881,7 +31105,12 @@ release\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt\5.11.1\ms
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsVector/polygon_polylines.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\polyline_splitline.obj: 0LibsVector\polyline_splitline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30948,7 +31177,12 @@ release\polyline_splitline.obj: 0LibsVector\polyline_splitline.cpp G:\Qt\5.11.1\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\simplify_polyline.obj: 0LibsVector\simplify_polyline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -31015,7 +31249,12 @@ release\simplify_polyline.obj: 0LibsVector\simplify_polyline.cpp G:\Qt\5.11.1\ms
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsVector/simplify_polyline.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -31084,7 +31323,12 @@ release\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt\5.11.1\msvc2017
 		0LibsVector/simplify_polyline.h \
 		0LibsVector/simplify_shape.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\tin_shape.obj: 0LibsVector\tin_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -31153,7 +31397,12 @@ release\tin_shape.obj: 0LibsVector\tin_shape.cpp G:\Qt\5.11.1\msvc2017_64\includ
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
 
 release\newproject.obj: 1ProjectManagement\1NewProject\newproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -31508,7 +31757,8 @@ release\newproject.obj: 1ProjectManagement\1NewProject\newproject.cpp G:\Qt\5.11
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextbrowser.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\openproject.obj: 1ProjectManagement\2OpenProject\openproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -31862,7 +32112,8 @@ release\openproject.obj: 1ProjectManagement\2OpenProject\openproject.cpp G:\Qt\5
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextbrowser.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\importproject.obj: 1ProjectManagement\3ImportProject\importproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -32216,7 +32467,8 @@ release\importproject.obj: 1ProjectManagement\3ImportProject\importproject.cpp G
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextbrowser.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\closeproject.obj: 1ProjectManagement\4CloseProject\closeproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -32569,7 +32821,8 @@ release\closeproject.obj: 1ProjectManagement\4CloseProject\closeproject.cpp G:\Q
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QTextEdit \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\fillpits.obj: 2RasterProcessing\1FillPits\fillpits.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -32929,7 +33182,8 @@ release\fillpits.obj: 2RasterProcessing\1FillPits\fillpits.cpp G:\Qt\5.11.1\msvc
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/ADFFiletoASCFile.h \
 		0LibsRaster/flood.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\flowgrids.obj: 2RasterProcessing\2FlowGrids\flowgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -33290,7 +33544,8 @@ release\flowgrids.obj: 2RasterProcessing\2FlowGrids\flowgrids.cpp G:\Qt\5.11.1\m
 		0LibsRaster/ADFFiletoASCFile.h \
 		0LibsRaster/setdir.h \
 		0LibsRaster/aread8.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\streamgrids.obj: 2RasterProcessing\3StreamGrids\streamgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -33649,7 +33904,8 @@ release\streamgrids.obj: 2RasterProcessing\3StreamGrids\streamgrids.cpp G:\Qt\5.
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/stream_definition.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\linkgrids.obj: 2RasterProcessing\4LinkGrids\linkgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -34008,7 +34264,8 @@ release\linkgrids.obj: 2RasterProcessing\4LinkGrids\linkgrids.cpp G:\Qt\5.11.1\m
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/stream_links.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\catchmentgrids.obj: 2RasterProcessing\5CatchmentGrids\catchmentgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -34367,7 +34624,8 @@ release\catchmentgrids.obj: 2RasterProcessing\5CatchmentGrids\catchmentgrids.cpp
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/catchment.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\streampolyline.obj: 2RasterProcessing\6StreamPolyline\streampolyline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -34726,7 +34984,8 @@ release\streampolyline.obj: 2RasterProcessing\6StreamPolyline\streampolyline.cpp
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/stream_shape.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\catchmentpolygon.obj: 2RasterProcessing\7CatchmentPolygon\catchmentpolygon.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -35085,7 +35344,8 @@ release\catchmentpolygon.obj: 2RasterProcessing\7CatchmentPolygon\catchmentpolyg
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsRaster/catchment_shape.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\dissolvepolygons.obj: 3VectorProcessing\1DissolvePolygons\dissolvepolygons.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -35456,7 +35716,8 @@ release\dissolvepolygons.obj: 3VectorProcessing\1DissolvePolygons\dissolvepolygo
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/dissolve.h \
 		0LibsVector/dissolve_ogr.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\polygontopolylines.obj: 3VectorProcessing\2PolygonToPolylines\polygontopolylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -35827,7 +36088,8 @@ release\polygontopolylines.obj: 3VectorProcessing\2PolygonToPolylines\polygontop
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/polygon_polylines.h \
 		0LibsShape/shapefil.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\simplifypolylines.obj: 3VectorProcessing\3SimplifyPolylines\simplifypolylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -36197,7 +36459,8 @@ release\simplifypolylines.obj: 3VectorProcessing\3SimplifyPolylines\simplifypoly
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/simplify_shape.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\polylinetolines.obj: 3VectorProcessing\4PolylineToLines\polylinetolines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -36567,7 +36830,8 @@ release\polylinetolines.obj: 3VectorProcessing\4PolylineToLines\polylinetolines.
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/polyline_splitline.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\mergevectorlayers.obj: 3VectorProcessing\5MergeVectorLayers\mergevectorlayers.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -36941,7 +37205,8 @@ release\mergevectorlayers.obj: 3VectorProcessing\5MergeVectorLayers\mergevectorl
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/merge_lines.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\readtopology.obj: 4DomainDecomposition\1ReadTopology\readtopology.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -37298,7 +37563,8 @@ release\readtopology.obj: 4DomainDecomposition\1ReadTopology\readtopology.cpp G:
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/shape_pslg.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\delaunaytriangulation.obj: 4DomainDecomposition\2DelaunayTriangulation\delaunaytriangulation.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -37657,7 +37923,8 @@ release\delaunaytriangulation.obj: 4DomainDecomposition\2DelaunayTriangulation\d
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/triangle_shewchuk.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\tinshapelayer.obj: 4DomainDecomposition\3TINShapeLayer\tinshapelayer.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -38016,7 +38283,8 @@ release\tinshapelayer.obj: 4DomainDecomposition\3TINShapeLayer\tinshapelayer.cpp
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsVector/tin_shape.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\calibdatafile.obj: 5DataModelLoader\10CalibDataFile\calibdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -38378,7 +38646,8 @@ release\calibdatafile.obj: 5DataModelLoader\10CalibDataFile\calibdatafile.cpp G:
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtexttable.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\meshdatafile.obj: 5DataModelLoader\1MeshDataFile\meshdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -38738,7 +39007,8 @@ release\meshdatafile.obj: 5DataModelLoader\1MeshDataFile\meshdatafile.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/mesh_data_file.h \
 		0LibsOther/interpolate_river_nodes_elev.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\attdatafile.obj: 5DataModelLoader\2AttDataFile\attdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -39100,7 +39370,8 @@ release\attdatafile.obj: 5DataModelLoader\2AttDataFile\attdatafile.cpp G:\Qt\5.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/att_data_file.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\rivdatafile.obj: 5DataModelLoader\3RivDataFile\rivdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -39459,7 +39730,8 @@ release\rivdatafile.obj: 5DataModelLoader\3RivDataFile\rivdatafile.cpp G:\Qt\5.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/riv_data_file.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\soildatafile.obj: 5DataModelLoader\4SoilDataFile\soildatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -39816,7 +40088,8 @@ release\soildatafile.obj: 5DataModelLoader\4SoilDataFile\soildatafile.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/pedo_transfer_functions.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\geoldatafile.obj: 5DataModelLoader\5GeolDataFile\geoldatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -40173,7 +40446,8 @@ release\geoldatafile.obj: 5DataModelLoader\5GeolDataFile\geoldatafile.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/pedo_transfer_functions.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\lcdatafile.obj: 5DataModelLoader\6LcDataFile\lcdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -40530,7 +40804,8 @@ release\lcdatafile.obj: 5DataModelLoader\6LcDataFile\lcdatafile.cpp G:\Qt\5.11.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		0LibsOther/pedo_transfer_functions.h \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\initdatafile.obj: 5DataModelLoader\7InitDataFile\initdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -40888,7 +41163,8 @@ release\initdatafile.obj: 5DataModelLoader\7InitDataFile\initdatafile.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvalidator.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\ibcdatafile.obj: 5DataModelLoader\8IbcDataFile\ibcdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -41244,7 +41520,8 @@ release\ibcdatafile.obj: 5DataModelLoader\8IbcDataFile\ibcdatafile.cpp G:\Qt\5.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvalidator.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\paradatafile.obj: 5DataModelLoader\9ParaDataFile\paradatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -41620,7 +41897,8 @@ release\paradatafile.obj: 5DataModelLoader\9ParaDataFile\paradatafile.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtexttable.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\pihmsimulation.obj: 6PIHMSimulation\1PIHM_v2.2\pihmsimulation.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -43146,7 +43424,10 @@ release\PIHMThread.obj: 6PIHMSimulation\PIHMThread\PIHMThread.cpp G:\Qt\5.11.1\m
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
 		6PIHMSimulation/PIHMSrc/PIHM_v2.2/pihm.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		globals.h
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\PIHMThreadProgress.obj: 6PIHMSimulation\PIHMThread\PIHMThreadProgress.cpp 6PIHMSimulation/PIHMThread/PIHMThreadProgress.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QProgressBar \
@@ -43476,7 +43757,10 @@ release\PIHMThreadProgress.obj: 6PIHMSimulation\PIHMThread\PIHMThreadProgress.cp
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug
 
 release\meshspatial.obj: 7VisualAnalytics\1MeshSpatial\meshspatial.cpp 7VisualAnalytics/1MeshSpatial/meshspatial.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -43982,11 +44266,12 @@ release\meshspatial.obj: 7VisualAnalytics\1MeshSpatial\meshspatial.cpp 7VisualAn
 		7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
 		0LibsIO/IOProjectFile.h \
-		0LibsShape/shapefil.h
+		0LibsShape/shapefil.h \
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
-release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7VisualAnalytics/2MeshTemporal/meshtemporal.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgetsglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qglobal.h \
@@ -44012,22 +44297,20 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qversiontagging.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtgui-config.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgets-config.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcoreapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qchar.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qbytearray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrefcount.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qarraydata.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringliteral.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringview.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringbuilder.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlist.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiterator.h \
@@ -44043,11 +44326,17 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvarlengtharray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontainerfwd.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject_impl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qeventloop.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsize.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcursor.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmargins.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpaintdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrect.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsize.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpalette.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcolor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qrgb.h \
@@ -44073,7 +44362,6 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontmetrics.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qsizepolicy.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcursor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qkeysequence.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qevent.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvariant.h \
@@ -44089,15 +44377,17 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
-		ui_meshtemporal.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QVariant \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcoreapplication.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qeventloop.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qguiapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qinputmethod.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmainwindow.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qicon.h \
+		7VisualAnalytics/2MeshTemporal/meshtemporal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+		ui_meshtemporal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QVariant \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QComboBox \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qcombobox.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractitemdelegate.h \
@@ -44105,12 +44395,10 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractspinbox.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvalidator.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qregularexpression.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qicon.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qslider.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractslider.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qstyle.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabbar.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qrubberband.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qframe.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qabstractitemmodel.h \
@@ -44133,8 +44421,6 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtextdocument.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmainwindow.h \
 		7VisualAnalytics/QCustomPlot/qcustomplot.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QPointer \
@@ -44486,11 +44772,12 @@ release\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qtprintsupportversion.h \
 		7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.h \
-		0LibsIO/IOProjectFile.h
+		0LibsIO/IOProjectFile.h \
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
-release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7VisualAnalytics/3RiverSpatial/riverspatial.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgetsglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qglobal.h \
@@ -44516,22 +44803,24 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qversiontagging.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtgui-config.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgets-config.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qchar.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qbytearray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrefcount.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qarraydata.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringliteral.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringview.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringbuilder.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiodevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlist.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiterator.h \
@@ -44547,6 +44836,14 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvarlengtharray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontainerfwd.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject_impl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qshareddata.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qhash.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurlquery.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmargins.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpaintdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrect.h \
@@ -44562,7 +44859,6 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpolygon.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qregion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdatastream.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiodevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qline.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtransform.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpainterpath.h \
@@ -44570,8 +44866,6 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpixelformat.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpixmap.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qshareddata.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qhash.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfont.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontmetrics.h \
@@ -44587,12 +44881,11 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlocale.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qset.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontiguouscache.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurl.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurlquery.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
+		7VisualAnalytics/3RiverSpatial/riverspatial.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
 		ui_riverspatial.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QVariant \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
@@ -44639,10 +44932,6 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtextdocument.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		0LibsIO/IOProjectFile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -44850,11 +45139,12 @@ release\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp 7Visua
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtexttable.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
-		0LibsShape/shapefil.h
+		0LibsShape/shapefil.h \
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
-release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7VisualAnalytics/4RiverTemporal/rivertemporal.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgetsglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qglobal.h \
@@ -44880,22 +45170,20 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qversiontagging.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtgui-config.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgets-config.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcoreapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qchar.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qbytearray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrefcount.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qarraydata.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringliteral.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringview.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringbuilder.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlist.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiterator.h \
@@ -44911,11 +45199,17 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvarlengtharray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontainerfwd.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject_impl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qeventloop.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsize.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcursor.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmargins.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpaintdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrect.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsize.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpalette.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcolor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qrgb.h \
@@ -44941,7 +45235,6 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontmetrics.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qsizepolicy.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcursor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qkeysequence.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qevent.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvariant.h \
@@ -44957,15 +45250,17 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
-		ui_rivertemporal.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QVariant \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcoreapplication.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qeventloop.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qguiapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qinputmethod.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmainwindow.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qicon.h \
+		7VisualAnalytics/4RiverTemporal/rivertemporal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+		ui_rivertemporal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QVariant \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QComboBox \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qcombobox.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractitemdelegate.h \
@@ -44973,12 +45268,10 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractspinbox.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvalidator.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qregularexpression.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qicon.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qslider.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractslider.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qstyle.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabbar.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qrubberband.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qframe.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qabstractitemmodel.h \
@@ -45001,8 +45294,6 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtextedit.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtextdocument.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmainwindow.h \
 		7VisualAnalytics/QCustomPlot/qcustomplot.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QPointer \
@@ -45354,7 +45645,9 @@ release\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp 7Vi
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qtprintsupportversion.h \
 		7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.h \
-		0LibsIO/IOProjectFile.h
+		0LibsIO/IOProjectFile.h \
+		globals.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
 
 release\qcustomplot.obj: 7VisualAnalytics\QCustomPlot\qcustomplot.cpp 7VisualAnalytics/QCustomPlot/qcustomplot.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
@@ -50773,11 +51066,10 @@ release\moc_tinshapelayer.obj: moc_tinshapelayer.cpp 4DomainDecomposition/3TINSh
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
 
-release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QWidget \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgetsglobal.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiglobal.h \
+release\pihmgisdialog.obj: pihmgisdialog.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qchar.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qconfig-bootstrapped.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qconfig.h \
@@ -50799,23 +51091,21 @@ release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmutex.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnumeric.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qversiontagging.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtgui-config.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgets-config.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qchar.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qbytearray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrefcount.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnamespace.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qarraydata.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringliteral.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringview.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstringbuilder.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiodevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobjectdefs_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlist.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qalgorithms.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiterator.h \
@@ -50831,32 +51121,49 @@ release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvarlengtharray.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontainerfwd.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject_impl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qshareddata.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qhash.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmap.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qtextstream.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlocale.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvariant.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvector.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qset.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontiguouscache.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMessageBox \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmessagebox.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgetsglobal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiglobal.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtgui-config.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtwidgets-config.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qwidget.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qwindowdefs_win.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmargins.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpaintdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qrect.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsize.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qpoint.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpalette.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcolor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qrgb.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qrgba64.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qbrush.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvector.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qmatrix.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpolygon.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qregion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdatastream.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qiodevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qline.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtransform.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpainterpath.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qimage.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpixelformat.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpixmap.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qshareddata.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qhash.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfont.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontmetrics.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qfontinfo.h \
@@ -50864,19 +51171,18 @@ release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qcursor.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qkeysequence.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qevent.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qvariant.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmap.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qtextstream.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qlocale.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qset.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcontiguouscache.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurl.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qurlquery.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QDesktopServices \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qdesktopservices.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstandardpaths.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QUrl \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h \
+		pihmgisdialog.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QWidget \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		ui_pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QLocale \
@@ -50921,19 +51227,6 @@ release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qpushbutton.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QToolBox \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtoolbox.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMessageBox \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qmessagebox.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdialog.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QDesktopServices \
-		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qdesktopservices.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstandardpaths.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QUrl \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h \
 		1ProjectManagement/1NewProject/newproject.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDate \
@@ -50973,7 +51266,8 @@ release\pihmgisdialog.obj: pihmgisdialog.cpp pihmgisdialog.h \
 		7VisualAnalytics/1MeshSpatial/meshspatial.h \
 		7VisualAnalytics/2MeshTemporal/meshtemporal.h \
 		7VisualAnalytics/3RiverSpatial/riverspatial.h \
-		7VisualAnalytics/4RiverTemporal/rivertemporal.h
+		7VisualAnalytics/4RiverTemporal/rivertemporal.h \
+		globals.h
 
 release\qrc_Icons.obj: qrc_Icons.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\qglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qconfig-bootstrapped.h \
