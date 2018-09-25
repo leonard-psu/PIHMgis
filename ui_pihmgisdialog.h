@@ -1589,7 +1589,8 @@ public:
         checkBoxNitrogen->setText(QApplication::translate("PIHMgisDialog", "Nitrogen", nullptr));
         checkBoxAge->setText(QApplication::translate("PIHMgisDialog", "Age of Water", nullptr));
         comboBoxPIHMVersion->setItemText(0, QApplication::translate("PIHMgisDialog", "PIHM v2.2", nullptr));
-        comboBoxPIHMVersion->setItemText(1, QApplication::translate("PIHMgisDialog", "PIHM v3.0", nullptr));
+        //comboBoxPIHMVersion->setItemText(1, QApplication::translate("PIHMgisDialog", "PIHM v3.0", nullptr));
+        comboBoxPIHMVersion->setItemText(1, QApplication::translate("PIHMgisDialog", "PIHM v2.2", nullptr));
 
         label_13->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">PIHM Simulation tool provides ability to perform concurrent executions of multiple instances of<br/>PIHM simulations.</span></p></body></html>", nullptr));
         PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_PIHMSimulation), QApplication::translate("PIHMgisDialog", "Group Steps [6] : : PIHM Simulation", nullptr));
