@@ -24,10 +24,10 @@ CatchmentPolygon::CatchmentPolygon(QWidget *parent) :
         ui->setupUi(this);
 
         // ** Start: Fill Form If Module Has Been Run Previously
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
@@ -126,10 +126,10 @@ void CatchmentPolygon::on_pushButtonCatchmentGrids_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -181,10 +181,10 @@ void CatchmentPolygon::on_pushButtonCatchmentPolygon_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -232,7 +232,7 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         ui->textBrowserLogs->repaint();
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream ProjectFileTextStream(&ProjectFile);
         ProjectFolder   = ProjectFileTextStream.readLine();

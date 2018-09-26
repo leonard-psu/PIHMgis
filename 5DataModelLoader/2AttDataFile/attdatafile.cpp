@@ -23,10 +23,10 @@ AttDataFile::AttDataFile(QWidget *parent) :
         ui->setupUi(this);
 
         // ** Start: Set Defaults
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
@@ -383,10 +383,10 @@ void AttDataFile::on_pushButtonPrecipitationFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -430,10 +430,10 @@ void AttDataFile::on_pushButtonTemperatureFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -476,10 +476,10 @@ void AttDataFile::on_pushButtonRelativeHumidityFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -522,10 +522,10 @@ void AttDataFile::on_pushButtonWindVelocityFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -568,10 +568,10 @@ void AttDataFile::on_pushButtonSolarRadiationFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -614,10 +614,10 @@ void AttDataFile::on_pushButtonVaporPressureFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -660,10 +660,10 @@ void AttDataFile::on_pushButtonSoilClassesFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -706,10 +706,10 @@ void AttDataFile::on_pushButtonGeologyClassesFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -752,10 +752,10 @@ void AttDataFile::on_pushButtonMacroporesFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -798,10 +798,10 @@ void AttDataFile::on_pushButtonLandCoverClassesFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -844,10 +844,10 @@ void AttDataFile::on_pushButtonMeltRegionsFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -890,10 +890,10 @@ void AttDataFile::on_pushButtonSourcesSinksFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -936,10 +936,10 @@ void AttDataFile::on_pushButtonInterceptionFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -982,10 +982,10 @@ void AttDataFile::on_pushButtonSnowCoverFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -1028,10 +1028,10 @@ void AttDataFile::on_pushButtonSurfaceStorageFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -1074,10 +1074,10 @@ void AttDataFile::on_pushButtonSoilMoistureFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -1120,10 +1120,10 @@ void AttDataFile::on_pushButtonGroundwaterFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -1166,10 +1166,10 @@ void AttDataFile::on_pushButtonBoundaryConditionFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -1214,10 +1214,10 @@ void AttDataFile::on_pushButtonTINShapeLayerFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -1260,10 +1260,10 @@ void AttDataFile::on_pushButtonAttDataFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -2075,7 +2075,7 @@ void AttDataFile::on_pushButtonRun_clicked()
         ui->textBrowserLogs->repaint();
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream ProjectFileTextStream(&ProjectFile);
         ProjectFolder   = ProjectFileTextStream.readLine();

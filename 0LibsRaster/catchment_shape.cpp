@@ -69,7 +69,6 @@ int catchment_shape(char *catFile, char *nodeFile, char *shpFile, char *dbfFile)
             return 59;
         }
 
-        //TempString = QDir::homePath()+"/.PIHMgis/temp.shp";
         TempString = user_pihmgis_root_folder + "/.PIHMgis/temp.shp";
 
         SHPHandle tempshp = SHPCreate(qPrintable(TempString), SHPT_ARC);

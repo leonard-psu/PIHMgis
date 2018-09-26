@@ -43,10 +43,10 @@ void ImportProject::on_pushButtonProject_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile OpenProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile OpenProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if ( ! OpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            ProjectFolder = QDir::homePath();
+            ProjectFolder = user_pihmgis_root_folder;
         }
         else
         {
@@ -129,7 +129,7 @@ void ImportProject::on_pushButtonImport_clicked()
             QTextStream ProjectFileTextStream(&ProjectFile);
 
             QString TempStr;
-            QString TempImportFileName = QDir::homePath()+"/.PIHMgis/TempImportFile.txt";
+            QString TempImportFileName = user_pihmgis_root_folder +"/.PIHMgis/TempImportFile.txt";
             QFile TempImportFile(TempImportFileName);
 
             qDebug() << "Open Temporary Import File: " << TempImportFileName;
@@ -169,13 +169,13 @@ void ImportProject::on_pushButtonImport_clicked()
             ProjectFile.close();
 
 
-            QFile OpenProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
-            qDebug() << "Open Project File: " << QDir::homePath()+"/.PIHMgis/OpenProject.txt";
+            QFile OpenProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+            qDebug() << "Open Project File: " << user_pihmgis_root_folder +"/.PIHMgis/OpenProject.txt";
             if ( ! OpenProjectFile.open(QIODevice::WriteOnly | QIODevice::Text))
             {
                 qDebug() << "Error: Unable to Open File!";
                 //QMessageBox::critical(this,tr("Import Project"),tr("Error: Unable to Create Project File"),QMessageBox::Ok);
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Create Project File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Create Project File: </span>")+ user_pihmgis_root_folder +"/.PIHMgis/OpenProject.txt"+tr("<br>"));
                 ui->textBrowserLogs->setHtml(LogsString);
                 ui->textBrowserLogs->repaint();
                 return;

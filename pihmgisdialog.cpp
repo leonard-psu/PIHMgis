@@ -52,7 +52,7 @@
 
 #include "globals.h"
 
-QString user_pihmgis_root_folder = QDir::homePath();
+QString user_pihmgis_root_folder = QDir::homePath(); //Default for now, need to customize based on OS
 
 PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
     QWidget(parent),

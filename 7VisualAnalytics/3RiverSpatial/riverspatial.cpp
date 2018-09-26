@@ -21,10 +21,10 @@ RiverSpatial::RiverSpatial(QWidget *parent) :
         ui->setupUi(this);
 
         // ** Start: Set Defaults
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
@@ -131,10 +131,10 @@ void RiverSpatial::on_pushButtonOutputDataFolder_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -354,10 +354,10 @@ void RiverSpatial::on_comboBoxStartStop_currentIndexChanged(int index)
 
     try {
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -415,10 +415,10 @@ void RiverSpatial::on_pushButtonRiverShapeFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -459,7 +459,7 @@ void RiverSpatial::on_pushButtonRun_clicked()
         ui->textBrowserLogs->repaint();
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream ProjectFileTextStream(&ProjectFile);
         ProjectFolder   = ProjectFileTextStream.readLine();

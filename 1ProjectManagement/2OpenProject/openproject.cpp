@@ -46,11 +46,11 @@ void OpenProject::on_pushButtonFile_clicked()
 
         QString ProjectFolder, ProjectFileName;
 
-        QFile OpenProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile OpenProjectFile(user_pihmgis_root_folder + "/.PIHMgis/OpenProject.txt");
 
         if (! OpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            ProjectFolder = QDir::homePath();
+            ProjectFolder = user_pihmgis_root_folder;
             qDebug() << "IF ProjectFolder = " << ProjectFolder;
         }
         else
@@ -110,7 +110,7 @@ void OpenProject::on_pushButtonOpen_clicked()
 
         if(ui->lineEditFile->text() != nullptr)
         {
-            QFile OpenProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+            QFile OpenProjectFile(user_pihmgis_root_folder + "/.PIHMgis/OpenProject.txt");
             QTextStream OpenProjectFileTextStream(&OpenProjectFile);
 
             if( OpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
@@ -124,7 +124,7 @@ void OpenProject::on_pushButtonOpen_clicked()
 
             if( !OpenProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) )
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write to Current Project File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write to Current Project File: </span>") + user_pihmgis_root_folder + "/.PIHMgis/OpenProject.txt"+tr("<br>"));
                 ui->textBrowserLogs->setHtml(LogsString);
                 ui->textBrowserLogs->repaint();
                 //QMessageBox::critical(this,tr("Open Project"),tr("Error: Unable to Create Open Project."),QMessageBox::Ok);

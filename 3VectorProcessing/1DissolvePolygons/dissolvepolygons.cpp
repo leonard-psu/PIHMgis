@@ -25,10 +25,10 @@ DissolvePolygons::DissolvePolygons(QWidget *parent) :
         ui->setupUi(this);
 
         // ** Start: Fill Form If Module Has Been Run Previously
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
@@ -149,10 +149,10 @@ void DissolvePolygons::on_pushButtonAdd_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+QDir::homePath()+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -247,7 +247,7 @@ void DissolvePolygons::on_pushButtonRun_clicked()
         ui->textBrowserLogs->repaint();
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(QDir::homePath()+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
         ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream ProjectFileTextStream(&ProjectFile);
         ProjectFolder   = ProjectFileTextStream.readLine();
@@ -334,7 +334,7 @@ void DissolvePolygons::on_pushButtonRun_clicked()
                 sprintf(my_argv[1],"%s",qPrintable("-a") );
                 sprintf(my_argv[2],"%s",qPrintable("Watershed") );
                 sprintf(my_argv[3],"%s",qPrintable(InpShpFileName) );
-                sprintf(my_argv[4],"%s",qPrintable(QDir::homePath()+"/.PIHMgis") );
+                sprintf(my_argv[4],"%s",qPrintable(user_pihmgis_root_folder+"/.PIHMgis") );
 
                 //strcpy( my_argv[0], "dummy" );
                 //strcpy( my_argv[1], qPrintable(InpShpFileName) );
@@ -343,9 +343,9 @@ void DissolvePolygons::on_pushButtonRun_clicked()
                 qDebug() << "my_argv";
                 qDebug() <<  my_argv[0] << my_argv[1] << my_argv[2] << my_argv[3] << my_argv[4];
 
-                QFile::remove( QDir::homePath()+"/.PIHMgis/new_layer.shp" );
-                QFile::remove( QDir::homePath()+"/.PIHMgis/new_layer.shx" );
-                QFile::remove( QDir::homePath()+"/.PIHMgis/new_layer.dbf" );
+                QFile::remove( user_pihmgis_root_folder+"/.PIHMgis/new_layer.shp" );
+                QFile::remove( user_pihmgis_root_folder+"/.PIHMgis/new_layer.shx" );
+                QFile::remove( user_pihmgis_root_folder+"/.PIHMgis/new_layer.dbf" );
 
                 int ErrorDis = dissolve_ogr(my_argc, my_argv);
 
@@ -353,9 +353,9 @@ void DissolvePolygons::on_pushButtonRun_clicked()
                 QFile::remove( OutShxFileName );
                 QFile::remove( OutDbfFileName );
 
-                QFile::copy( QDir::homePath()+"/.PIHMgis/new_layer.shp", OutShpFileName );
-                QFile::copy( QDir::homePath()+"/.PIHMgis/new_layer.shx", OutShxFileName );
-                QFile::copy( QDir::homePath()+"/.PIHMgis/new_layer.dbf", OutDbfFileName );
+                QFile::copy( user_pihmgis_root_folder+"/.PIHMgis/new_layer.shp", OutShpFileName );
+                QFile::copy( user_pihmgis_root_folder+"/.PIHMgis/new_layer.shx", OutShxFileName );
+                QFile::copy( user_pihmgis_root_folder+"/.PIHMgis/new_layer.dbf", OutDbfFileName );
 
                 // *** DISSOLVE METHOD 2 : FINISH
 
