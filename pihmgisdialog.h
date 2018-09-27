@@ -135,6 +135,11 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_pushButton_PickWorkspace_clicked();
+
+    void update_current_label();
+    //void on_pushButton_PickWorkspace_clicked(bool checked);
+
 private:
     Ui::PIHMgisDialog *ui;
 };

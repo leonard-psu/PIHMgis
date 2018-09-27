@@ -29,15 +29,18 @@ class Ui_PIHMgisDialog
 public:
     QToolBox *PIHMgisToolBox;
     QWidget *PIHMgisToolBox_PIHMgisProject;
+    QLabel *label_8;
+    QGroupBox *groupBox_5;
     QPushButton *pushButtonPIHMgisProjectNew;
+    QPushButton *pushButtonPIHMgisProjectClose;
     QLabel *PIHMgisProjectLableNew;
+    QLabel *PIHMgisProjectLableClose;
+    QPushButton *pushButtonPIHMgisProjectImport;
     QPushButton *pushButtonPIHMgisProjectOpen;
     QLabel *PIHMgisProjectLableOpen;
-    QPushButton *pushButtonPIHMgisProjectImport;
     QLabel *PIHMgisProjectLableImport;
-    QPushButton *pushButtonPIHMgisProjectClose;
-    QLabel *PIHMgisProjectLableClose;
-    QLabel *label_8;
+    QGroupBox *groupBox_6;
+    QPushButton *pushButton_PickWorkspace;
     QLabel *label_home_workspace;
     QWidget *PIHMgisToolBox_RasterProcessing;
     QPushButton *pushButtonRasterProcessingFillPits;
@@ -203,9 +206,31 @@ public:
         PIHMgisToolBox_PIHMgisProject = new QWidget();
         PIHMgisToolBox_PIHMgisProject->setObjectName(QStringLiteral("PIHMgisToolBox_PIHMgisProject"));
         PIHMgisToolBox_PIHMgisProject->setGeometry(QRect(0, 0, 765, 233));
-        pushButtonPIHMgisProjectNew = new QPushButton(PIHMgisToolBox_PIHMgisProject);
+        label_8 = new QLabel(PIHMgisToolBox_PIHMgisProject);
+        label_8->setObjectName(QStringLiteral("label_8"));
+        label_8->setGeometry(QRect(20, 0, 691, 41));
+        QFont font2;
+        font2.setFamily(QStringLiteral("Arial"));
+        font2.setPointSize(10);
+        font2.setBold(false);
+        font2.setWeight(50);
+        label_8->setFont(font2);
+        label_8->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
+        label_8->setWordWrap(true);
+        label_8->setOpenExternalLinks(true);
+        groupBox_5 = new QGroupBox(PIHMgisToolBox_PIHMgisProject);
+        groupBox_5->setObjectName(QStringLiteral("groupBox_5"));
+        groupBox_5->setGeometry(QRect(220, 40, 541, 101));
+        QFont font3;
+        font3.setFamily(QStringLiteral("Arial"));
+        font3.setPointSize(10);
+        font3.setBold(true);
+        font3.setItalic(true);
+        font3.setWeight(75);
+        groupBox_5->setFont(font3);
+        pushButtonPIHMgisProjectNew = new QPushButton(groupBox_5);
         pushButtonPIHMgisProjectNew->setObjectName(QStringLiteral("pushButtonPIHMgisProjectNew"));
-        pushButtonPIHMgisProjectNew->setGeometry(QRect(20, 40, 111, 34));
+        pushButtonPIHMgisProjectNew->setGeometry(QRect(10, 20, 111, 34));
         QPalette palette1;
         QBrush brush5(QColor(71, 71, 71, 255));
         brush5.setStyle(Qt::SolidPattern);
@@ -219,25 +244,20 @@ public:
         palette1.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette1.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonPIHMgisProjectNew->setPalette(palette1);
-        QFont font2;
-        font2.setFamily(QStringLiteral("Arial"));
-        font2.setPointSize(12);
-        font2.setBold(true);
-        font2.setWeight(75);
-        pushButtonPIHMgisProjectNew->setFont(font2);
+        QFont font4;
+        font4.setFamily(QStringLiteral("Arial"));
+        font4.setPointSize(12);
+        font4.setBold(true);
+        font4.setWeight(75);
+        pushButtonPIHMgisProjectNew->setFont(font4);
         pushButtonPIHMgisProjectNew->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonPIHMgisProjectNew->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
         pushButtonPIHMgisProjectNew->setAutoDefault(false);
         pushButtonPIHMgisProjectNew->setFlat(false);
-        PIHMgisProjectLableNew = new QLabel(PIHMgisToolBox_PIHMgisProject);
-        PIHMgisProjectLableNew->setObjectName(QStringLiteral("PIHMgisProjectLableNew"));
-        PIHMgisProjectLableNew->setGeometry(QRect(140, 50, 161, 20));
-        PIHMgisProjectLableNew->setFont(font2);
-        PIHMgisProjectLableNew->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
-        pushButtonPIHMgisProjectOpen = new QPushButton(PIHMgisToolBox_PIHMgisProject);
-        pushButtonPIHMgisProjectOpen->setObjectName(QStringLiteral("pushButtonPIHMgisProjectOpen"));
-        pushButtonPIHMgisProjectOpen->setGeometry(QRect(20, 80, 111, 34));
+        pushButtonPIHMgisProjectClose = new QPushButton(groupBox_5);
+        pushButtonPIHMgisProjectClose->setObjectName(QStringLiteral("pushButtonPIHMgisProjectClose"));
+        pushButtonPIHMgisProjectClose->setGeometry(QRect(10, 60, 111, 34));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush5);
         palette2.setBrush(QPalette::Active, QPalette::Text, brush5);
@@ -248,21 +268,27 @@ public:
         palette2.setBrush(QPalette::Disabled, QPalette::WindowText, brush5);
         palette2.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette2.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
-        pushButtonPIHMgisProjectOpen->setPalette(palette2);
-        pushButtonPIHMgisProjectOpen->setFont(font2);
-        pushButtonPIHMgisProjectOpen->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
+        pushButtonPIHMgisProjectClose->setPalette(palette2);
+        pushButtonPIHMgisProjectClose->setFont(font4);
+        pushButtonPIHMgisProjectClose->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
-        pushButtonPIHMgisProjectOpen->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
-        pushButtonPIHMgisProjectOpen->setAutoDefault(false);
-        pushButtonPIHMgisProjectOpen->setFlat(false);
-        PIHMgisProjectLableOpen = new QLabel(PIHMgisToolBox_PIHMgisProject);
-        PIHMgisProjectLableOpen->setObjectName(QStringLiteral("PIHMgisProjectLableOpen"));
-        PIHMgisProjectLableOpen->setGeometry(QRect(140, 90, 201, 20));
-        PIHMgisProjectLableOpen->setFont(font2);
-        PIHMgisProjectLableOpen->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
-        pushButtonPIHMgisProjectImport = new QPushButton(PIHMgisToolBox_PIHMgisProject);
+        pushButtonPIHMgisProjectClose->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
+        pushButtonPIHMgisProjectClose->setAutoDefault(false);
+        pushButtonPIHMgisProjectClose->setFlat(false);
+        PIHMgisProjectLableNew = new QLabel(groupBox_5);
+        PIHMgisProjectLableNew->setObjectName(QStringLiteral("PIHMgisProjectLableNew"));
+        PIHMgisProjectLableNew->setGeometry(QRect(130, 30, 161, 20));
+        PIHMgisProjectLableNew->setFont(font4);
+        PIHMgisProjectLableNew->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
+        PIHMgisProjectLableClose = new QLabel(groupBox_5);
+        PIHMgisProjectLableClose->setObjectName(QStringLiteral("PIHMgisProjectLableClose"));
+        PIHMgisProjectLableClose->setGeometry(QRect(130, 70, 111, 20));
+        PIHMgisProjectLableClose->setFont(font4);
+        PIHMgisProjectLableClose->setStyleSheet(QLatin1String("color: rgb(204, 51, 0);\n"
+"color: rgb(51, 51, 51);"));
+        pushButtonPIHMgisProjectImport = new QPushButton(groupBox_5);
         pushButtonPIHMgisProjectImport->setObjectName(QStringLiteral("pushButtonPIHMgisProjectImport"));
-        pushButtonPIHMgisProjectImport->setGeometry(QRect(20, 120, 111, 34));
+        pushButtonPIHMgisProjectImport->setGeometry(QRect(300, 60, 111, 34));
         QPalette palette3;
         palette3.setBrush(QPalette::Active, QPalette::WindowText, brush5);
         palette3.setBrush(QPalette::Active, QPalette::Text, brush5);
@@ -274,20 +300,15 @@ public:
         palette3.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette3.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonPIHMgisProjectImport->setPalette(palette3);
-        pushButtonPIHMgisProjectImport->setFont(font2);
+        pushButtonPIHMgisProjectImport->setFont(font4);
         pushButtonPIHMgisProjectImport->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonPIHMgisProjectImport->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
         pushButtonPIHMgisProjectImport->setAutoDefault(false);
         pushButtonPIHMgisProjectImport->setFlat(false);
-        PIHMgisProjectLableImport = new QLabel(PIHMgisToolBox_PIHMgisProject);
-        PIHMgisProjectLableImport->setObjectName(QStringLiteral("PIHMgisProjectLableImport"));
-        PIHMgisProjectLableImport->setGeometry(QRect(140, 130, 461, 20));
-        PIHMgisProjectLableImport->setFont(font2);
-        PIHMgisProjectLableImport->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
-        pushButtonPIHMgisProjectClose = new QPushButton(PIHMgisToolBox_PIHMgisProject);
-        pushButtonPIHMgisProjectClose->setObjectName(QStringLiteral("pushButtonPIHMgisProjectClose"));
-        pushButtonPIHMgisProjectClose->setGeometry(QRect(20, 160, 111, 34));
+        pushButtonPIHMgisProjectOpen = new QPushButton(groupBox_5);
+        pushButtonPIHMgisProjectOpen->setObjectName(QStringLiteral("pushButtonPIHMgisProjectOpen"));
+        pushButtonPIHMgisProjectOpen->setGeometry(QRect(300, 20, 111, 34));
         QPalette palette4;
         palette4.setBrush(QPalette::Active, QPalette::WindowText, brush5);
         palette4.setBrush(QPalette::Active, QPalette::Text, brush5);
@@ -298,38 +319,50 @@ public:
         palette4.setBrush(QPalette::Disabled, QPalette::WindowText, brush5);
         palette4.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette4.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
-        pushButtonPIHMgisProjectClose->setPalette(palette4);
-        pushButtonPIHMgisProjectClose->setFont(font2);
-        pushButtonPIHMgisProjectClose->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
+        pushButtonPIHMgisProjectOpen->setPalette(palette4);
+        pushButtonPIHMgisProjectOpen->setFont(font4);
+        pushButtonPIHMgisProjectOpen->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
-        pushButtonPIHMgisProjectClose->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
-        pushButtonPIHMgisProjectClose->setAutoDefault(false);
-        pushButtonPIHMgisProjectClose->setFlat(false);
-        PIHMgisProjectLableClose = new QLabel(PIHMgisToolBox_PIHMgisProject);
-        PIHMgisProjectLableClose->setObjectName(QStringLiteral("PIHMgisProjectLableClose"));
-        PIHMgisProjectLableClose->setGeometry(QRect(140, 170, 371, 20));
-        PIHMgisProjectLableClose->setFont(font2);
-        PIHMgisProjectLableClose->setStyleSheet(QLatin1String("color: rgb(204, 51, 0);\n"
-"color: rgb(51, 51, 51);"));
-        label_8 = new QLabel(PIHMgisToolBox_PIHMgisProject);
-        label_8->setObjectName(QStringLiteral("label_8"));
-        label_8->setGeometry(QRect(20, 0, 691, 41));
-        QFont font3;
-        font3.setFamily(QStringLiteral("Arial"));
-        font3.setPointSize(10);
-        font3.setBold(false);
-        font3.setWeight(50);
-        label_8->setFont(font3);
-        label_8->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
-        label_8->setWordWrap(true);
-        label_8->setOpenExternalLinks(true);
+        pushButtonPIHMgisProjectOpen->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
+        pushButtonPIHMgisProjectOpen->setAutoDefault(false);
+        pushButtonPIHMgisProjectOpen->setFlat(false);
+        PIHMgisProjectLableOpen = new QLabel(groupBox_5);
+        PIHMgisProjectLableOpen->setObjectName(QStringLiteral("PIHMgisProjectLableOpen"));
+        PIHMgisProjectLableOpen->setGeometry(QRect(420, 30, 111, 20));
+        PIHMgisProjectLableOpen->setFont(font4);
+        PIHMgisProjectLableOpen->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
+        PIHMgisProjectLableImport = new QLabel(groupBox_5);
+        PIHMgisProjectLableImport->setObjectName(QStringLiteral("PIHMgisProjectLableImport"));
+        PIHMgisProjectLableImport->setGeometry(QRect(420, 70, 121, 20));
+        PIHMgisProjectLableImport->setFont(font4);
+        PIHMgisProjectLableImport->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
+        groupBox_6 = new QGroupBox(PIHMgisToolBox_PIHMgisProject);
+        groupBox_6->setObjectName(QStringLiteral("groupBox_6"));
+        groupBox_6->setGeometry(QRect(10, 40, 201, 101));
+        groupBox_6->setFont(font3);
+        pushButton_PickWorkspace = new QPushButton(groupBox_6);
+        pushButton_PickWorkspace->setObjectName(QStringLiteral("pushButton_PickWorkspace"));
+        pushButton_PickWorkspace->setGeometry(QRect(30, 30, 141, 51));
+        QFont font5;
+        font5.setFamily(QStringLiteral("Arial"));
+        font5.setPointSize(20);
+        font5.setBold(true);
+        font5.setItalic(false);
+        font5.setWeight(75);
+        pushButton_PickWorkspace->setFont(font5);
+        pushButton_PickWorkspace->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
+"color: rgb(71, 71, 71);"));
         label_home_workspace = new QLabel(PIHMgisToolBox_PIHMgisProject);
         label_home_workspace->setObjectName(QStringLiteral("label_home_workspace"));
-        label_home_workspace->setGeometry(QRect(30, 210, 721, 16));
-        QFont font4;
-        font4.setPointSize(10);
-        label_home_workspace->setFont(font4);
+        label_home_workspace->setGeometry(QRect(10, 150, 591, 20));
+        QFont font6;
+        font6.setPointSize(10);
+        label_home_workspace->setFont(font6);
         PIHMgisToolBox->addItem(PIHMgisToolBox_PIHMgisProject, QStringLiteral("Step [1] : : Load/Create PIHMgis project settings"));
+        groupBox_6->raise();
+        groupBox_5->raise();
+        label_8->raise();
+        label_home_workspace->raise();
         PIHMgisToolBox_RasterProcessing = new QWidget();
         PIHMgisToolBox_RasterProcessing->setObjectName(QStringLiteral("PIHMgisToolBox_RasterProcessing"));
         PIHMgisToolBox_RasterProcessing->setGeometry(QRect(0, 0, 765, 233));
@@ -347,7 +380,7 @@ public:
         palette5.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette5.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonRasterProcessingFillPits->setPalette(palette5);
-        pushButtonRasterProcessingFillPits->setFont(font2);
+        pushButtonRasterProcessingFillPits->setFont(font4);
         pushButtonRasterProcessingFillPits->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonRasterProcessingFillPits->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -367,7 +400,7 @@ public:
         palette6.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette6.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonRasterProcessingFlowGrids->setPalette(palette6);
-        pushButtonRasterProcessingFlowGrids->setFont(font2);
+        pushButtonRasterProcessingFlowGrids->setFont(font4);
         pushButtonRasterProcessingFlowGrids->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonRasterProcessingFlowGrids->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -387,7 +420,7 @@ public:
         palette7.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette7.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonRasterProcessingStreamGrids->setPalette(palette7);
-        pushButtonRasterProcessingStreamGrids->setFont(font2);
+        pushButtonRasterProcessingStreamGrids->setFont(font4);
         pushButtonRasterProcessingStreamGrids->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonRasterProcessingStreamGrids->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -407,7 +440,7 @@ public:
         palette8.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette8.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonRasterProcessingLinkGrids->setPalette(palette8);
-        pushButtonRasterProcessingLinkGrids->setFont(font2);
+        pushButtonRasterProcessingLinkGrids->setFont(font4);
         pushButtonRasterProcessingLinkGrids->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonRasterProcessingLinkGrids->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -427,7 +460,7 @@ public:
         palette9.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette9.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonRasterProcessingCatchmentGrids->setPalette(palette9);
-        pushButtonRasterProcessingCatchmentGrids->setFont(font2);
+        pushButtonRasterProcessingCatchmentGrids->setFont(font4);
         pushButtonRasterProcessingCatchmentGrids->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonRasterProcessingCatchmentGrids->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -447,7 +480,7 @@ public:
         palette10.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette10.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonRasterProcessingStreamPolyline->setPalette(palette10);
-        pushButtonRasterProcessingStreamPolyline->setFont(font2);
+        pushButtonRasterProcessingStreamPolyline->setFont(font4);
         pushButtonRasterProcessingStreamPolyline->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonRasterProcessingStreamPolyline->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -467,7 +500,7 @@ public:
         palette11.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette11.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonRasterProcessingCatchmentPolygon->setPalette(palette11);
-        pushButtonRasterProcessingCatchmentPolygon->setFont(font2);
+        pushButtonRasterProcessingCatchmentPolygon->setFont(font4);
         pushButtonRasterProcessingCatchmentPolygon->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonRasterProcessingCatchmentPolygon->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -476,20 +509,20 @@ public:
         label_9 = new QLabel(PIHMgisToolBox_RasterProcessing);
         label_9->setObjectName(QStringLiteral("label_9"));
         label_9->setGeometry(QRect(0, 0, 761, 41));
-        QFont font5;
-        font5.setPointSize(14);
-        font5.setBold(false);
-        font5.setWeight(50);
-        label_9->setFont(font5);
+        QFont font7;
+        font7.setPointSize(14);
+        font7.setBold(false);
+        font7.setWeight(50);
+        label_9->setFont(font7);
         label_9->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_9->setWordWrap(true);
         label_9->setOpenExternalLinks(true);
         label = new QLabel(PIHMgisToolBox_RasterProcessing);
         label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(0, 160, 751, 71));
-        label->setFont(font2);
+        label->setFont(font4);
         label->setWordWrap(true);
-        PIHMgisToolBox->addItem(PIHMgisToolBox_RasterProcessing, QStringLiteral("Group Steps [2] : : Raster Processing"));
+        PIHMgisToolBox->addItem(PIHMgisToolBox_RasterProcessing, QStringLiteral("Group [2] : : Raster Processing"));
         PIHMgisToolBox_VectorProcessing = new QWidget();
         PIHMgisToolBox_VectorProcessing->setObjectName(QStringLiteral("PIHMgisToolBox_VectorProcessing"));
         PIHMgisToolBox_VectorProcessing->setGeometry(QRect(0, 0, 765, 233));
@@ -507,12 +540,12 @@ public:
         palette12.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette12.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonVectorProcessingDissolvePolygons->setPalette(palette12);
-        QFont font6;
-        font6.setFamily(QStringLiteral("Arial"));
-        font6.setPointSize(11);
-        font6.setBold(true);
-        font6.setWeight(75);
-        pushButtonVectorProcessingDissolvePolygons->setFont(font6);
+        QFont font8;
+        font8.setFamily(QStringLiteral("Arial"));
+        font8.setPointSize(11);
+        font8.setBold(true);
+        font8.setWeight(75);
+        pushButtonVectorProcessingDissolvePolygons->setFont(font8);
         pushButtonVectorProcessingDissolvePolygons->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonVectorProcessingDissolvePolygons->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -532,7 +565,7 @@ public:
         palette13.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette13.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonVectorProcessingPolygonToPolylines->setPalette(palette13);
-        pushButtonVectorProcessingPolygonToPolylines->setFont(font6);
+        pushButtonVectorProcessingPolygonToPolylines->setFont(font8);
         pushButtonVectorProcessingPolygonToPolylines->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonVectorProcessingPolygonToPolylines->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -552,7 +585,7 @@ public:
         palette14.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette14.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonVectorProcessingPolylineToLines->setPalette(palette14);
-        pushButtonVectorProcessingPolylineToLines->setFont(font6);
+        pushButtonVectorProcessingPolylineToLines->setFont(font8);
         pushButtonVectorProcessingPolylineToLines->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonVectorProcessingPolylineToLines->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -572,7 +605,7 @@ public:
         palette15.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette15.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonVectorProcessingSimplifyPolylines->setPalette(palette15);
-        pushButtonVectorProcessingSimplifyPolylines->setFont(font6);
+        pushButtonVectorProcessingSimplifyPolylines->setFont(font8);
         pushButtonVectorProcessingSimplifyPolylines->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonVectorProcessingSimplifyPolylines->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -592,7 +625,7 @@ public:
         palette16.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette16.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonVectorProcessingMergeVectorLayers->setPalette(palette16);
-        pushButtonVectorProcessingMergeVectorLayers->setFont(font6);
+        pushButtonVectorProcessingMergeVectorLayers->setFont(font8);
         pushButtonVectorProcessingMergeVectorLayers->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonVectorProcessingMergeVectorLayers->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -601,21 +634,21 @@ public:
         label_10 = new QLabel(PIHMgisToolBox_VectorProcessing);
         label_10->setObjectName(QStringLiteral("label_10"));
         label_10->setGeometry(QRect(30, -10, 691, 71));
-        QFont font7;
-        font7.setFamily(QStringLiteral("Arial"));
-        font7.setPointSize(14);
-        font7.setBold(false);
-        font7.setWeight(50);
-        label_10->setFont(font7);
+        QFont font9;
+        font9.setFamily(QStringLiteral("Arial"));
+        font9.setPointSize(14);
+        font9.setBold(false);
+        font9.setWeight(50);
+        label_10->setFont(font9);
         label_10->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_10->setWordWrap(true);
         label_10->setOpenExternalLinks(true);
         label_16 = new QLabel(PIHMgisToolBox_VectorProcessing);
         label_16->setObjectName(QStringLiteral("label_16"));
         label_16->setGeometry(QRect(50, 130, 671, 71));
-        label_16->setFont(font2);
+        label_16->setFont(font4);
         label_16->setWordWrap(true);
-        PIHMgisToolBox->addItem(PIHMgisToolBox_VectorProcessing, QStringLiteral("Group Steps [3] : : Vector Processing"));
+        PIHMgisToolBox->addItem(PIHMgisToolBox_VectorProcessing, QStringLiteral("Group [3] : : Vector Processing"));
         PIHMgisToolBox_DomainDecomposition = new QWidget();
         PIHMgisToolBox_DomainDecomposition->setObjectName(QStringLiteral("PIHMgisToolBox_DomainDecomposition"));
         PIHMgisToolBox_DomainDecomposition->setGeometry(QRect(0, 0, 765, 233));
@@ -633,7 +666,7 @@ public:
         palette17.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette17.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDomainDecompositionTINShapeLayer->setPalette(palette17);
-        pushButtonDomainDecompositionTINShapeLayer->setFont(font2);
+        pushButtonDomainDecompositionTINShapeLayer->setFont(font4);
         pushButtonDomainDecompositionTINShapeLayer->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDomainDecompositionTINShapeLayer->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -653,7 +686,7 @@ public:
         palette18.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette18.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDomainDecompositionReadTopology->setPalette(palette18);
-        pushButtonDomainDecompositionReadTopology->setFont(font2);
+        pushButtonDomainDecompositionReadTopology->setFont(font4);
         pushButtonDomainDecompositionReadTopology->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDomainDecompositionReadTopology->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -673,7 +706,7 @@ public:
         palette19.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette19.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDomainDecompositionTriangulation->setPalette(palette19);
-        pushButtonDomainDecompositionTriangulation->setFont(font2);
+        pushButtonDomainDecompositionTriangulation->setFont(font4);
         pushButtonDomainDecompositionTriangulation->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDomainDecompositionTriangulation->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -682,27 +715,27 @@ public:
         label_40 = new QLabel(PIHMgisToolBox_DomainDecomposition);
         label_40->setObjectName(QStringLiteral("label_40"));
         label_40->setGeometry(QRect(270, 30, 451, 41));
-        label_40->setFont(font2);
+        label_40->setFont(font4);
         label_40->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_40->setWordWrap(true);
         label_41 = new QLabel(PIHMgisToolBox_DomainDecomposition);
         label_41->setObjectName(QStringLiteral("label_41"));
         label_41->setGeometry(QRect(270, 80, 381, 20));
-        label_41->setFont(font2);
+        label_41->setFont(font4);
         label_41->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_42 = new QLabel(PIHMgisToolBox_DomainDecomposition);
         label_42->setObjectName(QStringLiteral("label_42"));
         label_42->setGeometry(QRect(270, 120, 411, 20));
-        label_42->setFont(font2);
+        label_42->setFont(font4);
         label_42->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_11 = new QLabel(PIHMgisToolBox_DomainDecomposition);
         label_11->setObjectName(QStringLiteral("label_11"));
         label_11->setGeometry(QRect(20, -6, 731, 41));
-        label_11->setFont(font7);
+        label_11->setFont(font9);
         label_11->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_11->setWordWrap(true);
         label_11->setOpenExternalLinks(true);
-        PIHMgisToolBox->addItem(PIHMgisToolBox_DomainDecomposition, QStringLiteral("Group Steps [4] : : Domain Decomposition"));
+        PIHMgisToolBox->addItem(PIHMgisToolBox_DomainDecomposition, QStringLiteral("Group [4] : : Domain Decomposition"));
         PIHMgisToolBox_DataModelLoader = new QWidget();
         PIHMgisToolBox_DataModelLoader->setObjectName(QStringLiteral("PIHMgisToolBox_DataModelLoader"));
         PIHMgisToolBox_DataModelLoader->setGeometry(QRect(0, 0, 765, 233));
@@ -720,7 +753,7 @@ public:
         palette20.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette20.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDataModelLoaderMeshDataFile->setPalette(palette20);
-        pushButtonDataModelLoaderMeshDataFile->setFont(font2);
+        pushButtonDataModelLoaderMeshDataFile->setFont(font4);
         pushButtonDataModelLoaderMeshDataFile->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDataModelLoaderMeshDataFile->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -740,7 +773,7 @@ public:
         palette21.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette21.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDataModelLoaderLcDataFile->setPalette(palette21);
-        pushButtonDataModelLoaderLcDataFile->setFont(font2);
+        pushButtonDataModelLoaderLcDataFile->setFont(font4);
         pushButtonDataModelLoaderLcDataFile->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDataModelLoaderLcDataFile->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -760,7 +793,7 @@ public:
         palette22.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette22.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDataModelLoaderInitDataFile->setPalette(palette22);
-        pushButtonDataModelLoaderInitDataFile->setFont(font2);
+        pushButtonDataModelLoaderInitDataFile->setFont(font4);
         pushButtonDataModelLoaderInitDataFile->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDataModelLoaderInitDataFile->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -780,7 +813,7 @@ public:
         palette23.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette23.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDataModelLoaderCalibDataFile->setPalette(palette23);
-        pushButtonDataModelLoaderCalibDataFile->setFont(font2);
+        pushButtonDataModelLoaderCalibDataFile->setFont(font4);
         pushButtonDataModelLoaderCalibDataFile->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDataModelLoaderCalibDataFile->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -800,7 +833,7 @@ public:
         palette24.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette24.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDataModelLoaderAttDataFile->setPalette(palette24);
-        pushButtonDataModelLoaderAttDataFile->setFont(font2);
+        pushButtonDataModelLoaderAttDataFile->setFont(font4);
         pushButtonDataModelLoaderAttDataFile->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDataModelLoaderAttDataFile->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -820,7 +853,7 @@ public:
         palette25.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette25.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDataModelLoaderRivDataFile->setPalette(palette25);
-        pushButtonDataModelLoaderRivDataFile->setFont(font2);
+        pushButtonDataModelLoaderRivDataFile->setFont(font4);
         pushButtonDataModelLoaderRivDataFile->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDataModelLoaderRivDataFile->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -840,7 +873,7 @@ public:
         palette26.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette26.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDataModelLoaderGeolDataFile->setPalette(palette26);
-        pushButtonDataModelLoaderGeolDataFile->setFont(font2);
+        pushButtonDataModelLoaderGeolDataFile->setFont(font4);
         pushButtonDataModelLoaderGeolDataFile->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDataModelLoaderGeolDataFile->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -860,7 +893,7 @@ public:
         palette27.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette27.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDataModelLoaderSoilDataFile->setPalette(palette27);
-        pushButtonDataModelLoaderSoilDataFile->setFont(font2);
+        pushButtonDataModelLoaderSoilDataFile->setFont(font4);
         pushButtonDataModelLoaderSoilDataFile->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDataModelLoaderSoilDataFile->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -880,7 +913,7 @@ public:
         palette28.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette28.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDataModelLoaderIbcDataFile->setPalette(palette28);
-        pushButtonDataModelLoaderIbcDataFile->setFont(font2);
+        pushButtonDataModelLoaderIbcDataFile->setFont(font4);
         pushButtonDataModelLoaderIbcDataFile->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDataModelLoaderIbcDataFile->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -900,7 +933,7 @@ public:
         palette29.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette29.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDataModelLoaderParamDataFile->setPalette(palette29);
-        pushButtonDataModelLoaderParamDataFile->setFont(font2);
+        pushButtonDataModelLoaderParamDataFile->setFont(font4);
         pushButtonDataModelLoaderParamDataFile->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDataModelLoaderParamDataFile->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -909,12 +942,12 @@ public:
         label_22 = new QLabel(PIHMgisToolBox_DataModelLoader);
         label_22->setObjectName(QStringLiteral("label_22"));
         label_22->setGeometry(QRect(20, 60, 231, 20));
-        QFont font8;
-        font8.setFamily(QStringLiteral("Arial"));
-        font8.setPointSize(14);
-        font8.setBold(true);
-        font8.setWeight(75);
-        label_22->setFont(font8);
+        QFont font10;
+        font10.setFamily(QStringLiteral("Arial"));
+        font10.setPointSize(14);
+        font10.setBold(true);
+        font10.setWeight(75);
+        label_22->setFont(font10);
         label_22->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         pushButtonDataModelLoaderForcDataFile = new QPushButton(PIHMgisToolBox_DataModelLoader);
         pushButtonDataModelLoaderForcDataFile->setObjectName(QStringLiteral("pushButtonDataModelLoaderForcDataFile"));
@@ -930,7 +963,7 @@ public:
         palette30.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette30.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonDataModelLoaderForcDataFile->setPalette(palette30);
-        pushButtonDataModelLoaderForcDataFile->setFont(font2);
+        pushButtonDataModelLoaderForcDataFile->setFont(font4);
         pushButtonDataModelLoaderForcDataFile->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonDataModelLoaderForcDataFile->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -939,11 +972,11 @@ public:
         label_12 = new QLabel(PIHMgisToolBox_DataModelLoader);
         label_12->setObjectName(QStringLiteral("label_12"));
         label_12->setGeometry(QRect(20, -10, 741, 71));
-        label_12->setFont(font7);
+        label_12->setFont(font9);
         label_12->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_12->setWordWrap(true);
         label_12->setOpenExternalLinks(true);
-        PIHMgisToolBox->addItem(PIHMgisToolBox_DataModelLoader, QStringLiteral("Group Steps [5] : : Data Model Loader"));
+        PIHMgisToolBox->addItem(PIHMgisToolBox_DataModelLoader, QStringLiteral("Group [5] : : Data Model Loader"));
         PIHMgisToolBox_PIHMSimulation = new QWidget();
         PIHMgisToolBox_PIHMSimulation->setObjectName(QStringLiteral("PIHMgisToolBox_PIHMSimulation"));
         PIHMgisToolBox_PIHMSimulation->setGeometry(QRect(0, 0, 765, 233));
@@ -961,7 +994,7 @@ public:
         palette31.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette31.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonPIHMSimulation->setPalette(palette31);
-        pushButtonPIHMSimulation->setFont(font2);
+        pushButtonPIHMSimulation->setFont(font4);
         pushButtonPIHMSimulation->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonPIHMSimulation->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -971,90 +1004,90 @@ public:
         groupBox_3 = new QGroupBox(PIHMgisToolBox_PIHMSimulation);
         groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
         groupBox_3->setGeometry(QRect(40, 50, 201, 178));
-        QFont font9;
-        font9.setFamily(QStringLiteral("Arial"));
-        groupBox_3->setFont(font9);
+        QFont font11;
+        font11.setFamily(QStringLiteral("Arial"));
+        groupBox_3->setFont(font11);
         checkBoxITranspiration = new QCheckBox(groupBox_3);
         checkBoxITranspiration->setObjectName(QStringLiteral("checkBoxITranspiration"));
         checkBoxITranspiration->setEnabled(false);
         checkBoxITranspiration->setGeometry(QRect(20, 116, 151, 20));
-        QFont font10;
-        font10.setPointSize(11);
-        checkBoxITranspiration->setFont(font10);
+        QFont font12;
+        font12.setPointSize(11);
+        checkBoxITranspiration->setFont(font12);
         checkBoxITranspiration->setChecked(true);
         checkBoxOverlandFlow = new QCheckBox(groupBox_3);
         checkBoxOverlandFlow->setObjectName(QStringLiteral("checkBoxOverlandFlow"));
         checkBoxOverlandFlow->setEnabled(false);
         checkBoxOverlandFlow->setGeometry(QRect(20, 86, 131, 20));
-        checkBoxOverlandFlow->setFont(font10);
+        checkBoxOverlandFlow->setFont(font12);
         checkBoxOverlandFlow->setChecked(true);
         checkBoxInterception = new QCheckBox(groupBox_3);
         checkBoxInterception->setObjectName(QStringLiteral("checkBoxInterception"));
         checkBoxInterception->setEnabled(false);
         checkBoxInterception->setGeometry(QRect(20, 28, 131, 20));
-        QFont font11;
-        font11.setPointSize(11);
-        font11.setBold(true);
-        font11.setWeight(75);
-        checkBoxInterception->setFont(font11);
+        QFont font13;
+        font13.setPointSize(11);
+        font13.setBold(true);
+        font13.setWeight(75);
+        checkBoxInterception->setFont(font13);
         checkBoxInterception->setChecked(true);
         checkBoxEvaporation = new QCheckBox(groupBox_3);
         checkBoxEvaporation->setObjectName(QStringLiteral("checkBoxEvaporation"));
         checkBoxEvaporation->setEnabled(false);
         checkBoxEvaporation->setGeometry(QRect(20, 56, 161, 20));
-        checkBoxEvaporation->setFont(font10);
+        checkBoxEvaporation->setFont(font12);
         checkBoxEvaporation->setChecked(true);
         checkBoxISubSurface = new QCheckBox(groupBox_3);
         checkBoxISubSurface->setObjectName(QStringLiteral("checkBoxISubSurface"));
         checkBoxISubSurface->setEnabled(false);
         checkBoxISubSurface->setGeometry(QRect(20, 146, 151, 20));
-        checkBoxISubSurface->setFont(font10);
+        checkBoxISubSurface->setFont(font12);
         checkBoxISubSurface->setChecked(true);
         groupBox_4 = new QGroupBox(PIHMgisToolBox_PIHMSimulation);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
         groupBox_4->setEnabled(false);
         groupBox_4->setGeometry(QRect(270, 50, 201, 178));
-        groupBox_4->setFont(font9);
+        groupBox_4->setFont(font11);
         checkBoxOrganicCarbon = new QCheckBox(groupBox_4);
         checkBoxOrganicCarbon->setObjectName(QStringLiteral("checkBoxOrganicCarbon"));
         checkBoxOrganicCarbon->setGeometry(QRect(20, 146, 151, 20));
-        checkBoxOrganicCarbon->setFont(font10);
+        checkBoxOrganicCarbon->setFont(font12);
         checkBoxPhosphorous = new QCheckBox(groupBox_4);
         checkBoxPhosphorous->setObjectName(QStringLiteral("checkBoxPhosphorous"));
         checkBoxPhosphorous->setGeometry(QRect(20, 116, 131, 20));
-        checkBoxPhosphorous->setFont(font10);
+        checkBoxPhosphorous->setFont(font12);
         checkBoxSediment = new QCheckBox(groupBox_4);
         checkBoxSediment->setObjectName(QStringLiteral("checkBoxSediment"));
         checkBoxSediment->setGeometry(QRect(20, 56, 131, 20));
-        checkBoxSediment->setFont(font10);
+        checkBoxSediment->setFont(font12);
         checkBoxNitrogen = new QCheckBox(groupBox_4);
         checkBoxNitrogen->setObjectName(QStringLiteral("checkBoxNitrogen"));
         checkBoxNitrogen->setGeometry(QRect(20, 85, 161, 20));
-        checkBoxNitrogen->setFont(font10);
+        checkBoxNitrogen->setFont(font12);
         checkBoxAge = new QCheckBox(groupBox_4);
         checkBoxAge->setObjectName(QStringLiteral("checkBoxAge"));
         checkBoxAge->setGeometry(QRect(20, 28, 151, 20));
-        checkBoxAge->setFont(font10);
+        checkBoxAge->setFont(font12);
         comboBoxPIHMVersion = new QComboBox(PIHMgisToolBox_PIHMSimulation);
         comboBoxPIHMVersion->addItem(QString());
         comboBoxPIHMVersion->addItem(QString());
         comboBoxPIHMVersion->setObjectName(QStringLiteral("comboBoxPIHMVersion"));
         comboBoxPIHMVersion->setGeometry(QRect(493, 80, 215, 29));
-        comboBoxPIHMVersion->setFont(font9);
+        comboBoxPIHMVersion->setFont(font11);
         label_13 = new QLabel(PIHMgisToolBox_PIHMSimulation);
         label_13->setObjectName(QStringLiteral("label_13"));
         label_13->setGeometry(QRect(20, -6, 691, 51));
-        label_13->setFont(font7);
+        label_13->setFont(font9);
         label_13->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_13->setOpenExternalLinks(true);
-        PIHMgisToolBox->addItem(PIHMgisToolBox_PIHMSimulation, QStringLiteral("Group Steps [6] : : PIHM Simulation"));
+        PIHMgisToolBox->addItem(PIHMgisToolBox_PIHMSimulation, QStringLiteral("Group [6] : : PIHM Simulation"));
         PIHMgisToolBox_VisualAnalytics = new QWidget();
         PIHMgisToolBox_VisualAnalytics->setObjectName(QStringLiteral("PIHMgisToolBox_VisualAnalytics"));
         PIHMgisToolBox_VisualAnalytics->setGeometry(QRect(0, 0, 765, 233));
         groupBox = new QGroupBox(PIHMgisToolBox_VisualAnalytics);
         groupBox->setObjectName(QStringLiteral("groupBox"));
         groupBox->setGeometry(QRect(50, 57, 661, 61));
-        groupBox->setFont(font9);
+        groupBox->setFont(font11);
         pushButtonVisualAnalyticsTemporalWatershed = new QPushButton(groupBox);
         pushButtonVisualAnalyticsTemporalWatershed->setObjectName(QStringLiteral("pushButtonVisualAnalyticsTemporalWatershed"));
         pushButtonVisualAnalyticsTemporalWatershed->setGeometry(QRect(420, 14, 225, 34));
@@ -1069,12 +1102,12 @@ public:
         palette32.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette32.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonVisualAnalyticsTemporalWatershed->setPalette(palette32);
-        QFont font12;
-        font12.setFamily(QStringLiteral("Arial"));
-        font12.setPointSize(10);
-        font12.setBold(true);
-        font12.setWeight(75);
-        pushButtonVisualAnalyticsTemporalWatershed->setFont(font12);
+        QFont font14;
+        font14.setFamily(QStringLiteral("Arial"));
+        font14.setPointSize(10);
+        font14.setBold(true);
+        font14.setWeight(75);
+        pushButtonVisualAnalyticsTemporalWatershed->setFont(font14);
         pushButtonVisualAnalyticsTemporalWatershed->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonVisualAnalyticsTemporalWatershed->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -1094,7 +1127,7 @@ public:
         palette33.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette33.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonVisualAnalyticsSpatialWatershed->setPalette(palette33);
-        pushButtonVisualAnalyticsSpatialWatershed->setFont(font12);
+        pushButtonVisualAnalyticsSpatialWatershed->setFont(font14);
         pushButtonVisualAnalyticsSpatialWatershed->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonVisualAnalyticsSpatialWatershed->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -1108,7 +1141,7 @@ public:
         groupBox_2 = new QGroupBox(PIHMgisToolBox_VisualAnalytics);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
         groupBox_2->setGeometry(QRect(50, 137, 661, 61));
-        groupBox_2->setFont(font9);
+        groupBox_2->setFont(font11);
         groupBox_2->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
         label_39 = new QLabel(groupBox_2);
         label_39->setObjectName(QStringLiteral("label_39"));
@@ -1129,7 +1162,7 @@ public:
         palette34.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette34.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonVisualAnalyticsSpatialRiverNetwork->setPalette(palette34);
-        pushButtonVisualAnalyticsSpatialRiverNetwork->setFont(font12);
+        pushButtonVisualAnalyticsSpatialRiverNetwork->setFont(font14);
         pushButtonVisualAnalyticsSpatialRiverNetwork->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonVisualAnalyticsSpatialRiverNetwork->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -1149,7 +1182,7 @@ public:
         palette35.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette35.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonVisualAnalyticsTemporalRiverNetwork->setPalette(palette35);
-        pushButtonVisualAnalyticsTemporalRiverNetwork->setFont(font12);
+        pushButtonVisualAnalyticsTemporalRiverNetwork->setFont(font14);
         pushButtonVisualAnalyticsTemporalRiverNetwork->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonVisualAnalyticsTemporalRiverNetwork->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -1158,7 +1191,7 @@ public:
         label_14 = new QLabel(PIHMgisToolBox_VisualAnalytics);
         label_14->setObjectName(QStringLiteral("label_14"));
         label_14->setGeometry(QRect(20, 0, 691, 51));
-        label_14->setFont(font7);
+        label_14->setFont(font9);
         label_14->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_14->setWordWrap(true);
         label_14->setOpenExternalLinks(true);
@@ -1169,47 +1202,47 @@ public:
         label_1 = new QLabel(PIHMgisToolBox_Help);
         label_1->setObjectName(QStringLiteral("label_1"));
         label_1->setGeometry(QRect(20, 4, 241, 20));
-        label_1->setFont(font8);
+        label_1->setFont(font10);
         label_1->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_2 = new QLabel(PIHMgisToolBox_Help);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(30, 90, 271, 20));
-        label_2->setFont(font5);
+        label_2->setFont(font7);
         label_2->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_2->setOpenExternalLinks(true);
         label_3 = new QLabel(PIHMgisToolBox_Help);
         label_3->setObjectName(QStringLiteral("label_3"));
         label_3->setGeometry(QRect(30, 150, 131, 20));
-        label_3->setFont(font5);
+        label_3->setFont(font7);
         label_3->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_4 = new QLabel(PIHMgisToolBox_Help);
         label_4->setObjectName(QStringLiteral("label_4"));
         label_4->setGeometry(QRect(160, 150, 311, 20));
-        label_4->setFont(font5);
+        label_4->setFont(font7);
         label_4->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_4->setOpenExternalLinks(true);
         label_5 = new QLabel(PIHMgisToolBox_Help);
         label_5->setObjectName(QStringLiteral("label_5"));
         label_5->setGeometry(QRect(160, 170, 171, 20));
-        label_5->setFont(font5);
+        label_5->setFont(font7);
         label_5->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_5->setOpenExternalLinks(true);
         label_6 = new QLabel(PIHMgisToolBox_Help);
         label_6->setObjectName(QStringLiteral("label_6"));
         label_6->setGeometry(QRect(10, 269, 411, 21));
-        label_6->setFont(font5);
+        label_6->setFont(font7);
         label_6->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_6->setOpenExternalLinks(true);
         label_7 = new QLabel(PIHMgisToolBox_Help);
         label_7->setObjectName(QStringLiteral("label_7"));
         label_7->setGeometry(QRect(30, 200, 631, 31));
-        label_7->setFont(font5);
+        label_7->setFont(font7);
         label_7->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_7->setOpenExternalLinks(true);
         label_33 = new QLabel(PIHMgisToolBox_Help);
         label_33->setObjectName(QStringLiteral("label_33"));
         label_33->setGeometry(QRect(310, 90, 151, 20));
-        label_33->setFont(font5);
+        label_33->setFont(font7);
         label_33->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_33->setOpenExternalLinks(true);
         pushButtonWorkFlow0 = new QPushButton(PIHMgisToolBox_Help);
@@ -1226,7 +1259,7 @@ public:
         palette36.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette36.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
         pushButtonWorkFlow0->setPalette(palette36);
-        pushButtonWorkFlow0->setFont(font2);
+        pushButtonWorkFlow0->setFont(font4);
         pushButtonWorkFlow0->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
         pushButtonWorkFlow0->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -1235,7 +1268,7 @@ public:
         label_43 = new QLabel(PIHMgisToolBox_Help);
         label_43->setObjectName(QStringLiteral("label_43"));
         label_43->setGeometry(QRect(340, 170, 101, 20));
-        label_43->setFont(font5);
+        label_43->setFont(font7);
         label_43->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         label_15 = new QLabel(PIHMgisToolBox_Help);
         label_15->setObjectName(QStringLiteral("label_15"));
@@ -1369,7 +1402,7 @@ public:
         frame = new QFrame(PIHMgisDialog);
         frame->setObjectName(QStringLiteral("frame"));
         frame->setGeometry(QRect(15, 14, 811, 587));
-        frame->setFont(font9);
+        frame->setFont(font11);
         frame->setStyleSheet(QStringLiteral("color: rgb(51, 51, 51);"));
         frame->setFrameShape(QFrame::Box);
         frame->setFrameShadow(QFrame::Plain);
@@ -1494,12 +1527,12 @@ public:
         PIHMgisLabel->setGeometry(QRect(90, 10, 641, 26));
         PIHMgisLabel->setMinimumSize(QSize(641, 26));
         PIHMgisLabel->setMaximumSize(QSize(641, 26));
-        QFont font13;
-        font13.setFamily(QStringLiteral("Arial"));
-        font13.setPointSize(13);
-        font13.setBold(true);
-        font13.setWeight(75);
-        PIHMgisLabel->setFont(font13);
+        QFont font15;
+        font15.setFamily(QStringLiteral("Arial"));
+        font15.setPointSize(13);
+        font15.setBold(true);
+        font15.setWeight(75);
+        PIHMgisLabel->setFont(font15);
         PIHMgisLabel->setAlignment(Qt::AlignCenter);
         frame->raise();
         PIHMgisToolBox->raise();
@@ -1510,9 +1543,9 @@ public:
 
         PIHMgisToolBox->setCurrentIndex(0);
         pushButtonPIHMgisProjectNew->setDefault(false);
-        pushButtonPIHMgisProjectOpen->setDefault(false);
-        pushButtonPIHMgisProjectImport->setDefault(false);
         pushButtonPIHMgisProjectClose->setDefault(false);
+        pushButtonPIHMgisProjectImport->setDefault(false);
+        pushButtonPIHMgisProjectOpen->setDefault(false);
         pushButtonRasterProcessingFillPits->setDefault(false);
         pushButtonRasterProcessingFlowGrids->setDefault(false);
         pushButtonRasterProcessingStreamGrids->setDefault(false);
@@ -1553,15 +1586,18 @@ public:
     void retranslateUi(QWidget *PIHMgisDialog)
     {
         PIHMgisDialog->setWindowTitle(QApplication::translate("PIHMgisDialog", "PIHMgis version 3.5", nullptr));
-        pushButtonPIHMgisProjectNew->setText(QApplication::translate("PIHMgisDialog", "NEW ", nullptr));
-        PIHMgisProjectLableNew->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Start a New Project</span></p></body></html>", nullptr));
-        pushButtonPIHMgisProjectOpen->setText(QApplication::translate("PIHMgisDialog", "OPEN", nullptr));
-        PIHMgisProjectLableOpen->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Open an Existing  Project</span></p></body></html>", nullptr));
-        pushButtonPIHMgisProjectImport->setText(QApplication::translate("PIHMgisDialog", "IMPORT", nullptr));
-        PIHMgisProjectLableImport->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Import an Existing Project Created Elsewhere</span></p></body></html>", nullptr));
-        pushButtonPIHMgisProjectClose->setText(QApplication::translate("PIHMgisDialog", "CLOSE", nullptr));
-        PIHMgisProjectLableClose->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Close the Current Project</span></p></body></html>", nullptr));
         label_8->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">Project management handles input/output options from grouped steps [2-6]. Each group has multiple sub-steps. </span></p></body></html>", nullptr));
+        groupBox_5->setTitle(QApplication::translate("PIHMgisDialog", "PIHMgis Project", nullptr));
+        pushButtonPIHMgisProjectNew->setText(QApplication::translate("PIHMgisDialog", "NEW ", nullptr));
+        pushButtonPIHMgisProjectClose->setText(QApplication::translate("PIHMgisDialog", "CLOSE", nullptr));
+        PIHMgisProjectLableNew->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Start a New Project</span></p></body></html>", nullptr));
+        PIHMgisProjectLableClose->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Close Project</span></p></body></html>", nullptr));
+        pushButtonPIHMgisProjectImport->setText(QApplication::translate("PIHMgisDialog", "IMPORT", nullptr));
+        pushButtonPIHMgisProjectOpen->setText(QApplication::translate("PIHMgisDialog", "OPEN", nullptr));
+        PIHMgisProjectLableOpen->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Open Project</span></p></body></html>", nullptr));
+        PIHMgisProjectLableImport->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Import Project</span></p></body></html>", nullptr));
+        groupBox_6->setTitle(QApplication::translate("PIHMgisDialog", "PIHMgis workspace", nullptr));
+        pushButton_PickWorkspace->setText(QApplication::translate("PIHMgisDialog", "Pick", nullptr));
         label_home_workspace->setText(QApplication::translate("PIHMgisDialog", "Current Workspace", nullptr));
         PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_PIHMgisProject), QApplication::translate("PIHMgisDialog", "Step [1] : : Load/Create PIHMgis project settings", nullptr));
         pushButtonRasterProcessingFillPits->setText(QApplication::translate("PIHMgisDialog", "Start >> (1) FILL PITS", nullptr));
@@ -1573,7 +1609,7 @@ public:
         pushButtonRasterProcessingCatchmentPolygon->setText(QApplication::translate("PIHMgisDialog", "End >> (7) CATCHMENT POLYGON", nullptr));
         label_9->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">Raster Processing tools are used to delineate stream network and watershed geometry from raster topographic datasets.</span></p></body></html>", nullptr));
         label->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p>Please note: You must follow these steps [1-7] in sequential order. If you go back to an earlier step, you must redo the remaining steps. For example, you went through steps 1 to 7, then you decide to redo flow grids (Step 2), you must redo Steps 3 to 7. </p></body></html>", nullptr));
-        PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_RasterProcessing), QApplication::translate("PIHMgisDialog", "Group Steps [2] : : Raster Processing", nullptr));
+        PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_RasterProcessing), QApplication::translate("PIHMgisDialog", "Group [2] : : Raster Processing", nullptr));
         pushButtonVectorProcessingDissolvePolygons->setText(QApplication::translate("PIHMgisDialog", "START >> (1) DISSOLVE POLYGONS", nullptr));
         pushButtonVectorProcessingPolygonToPolylines->setText(QApplication::translate("PIHMgisDialog", "(2) POLYGON TO POLYLINES", nullptr));
         pushButtonVectorProcessingPolylineToLines->setText(QApplication::translate("PIHMgisDialog", "(4) POLYLINE TO LINES", nullptr));
@@ -1581,7 +1617,7 @@ public:
         pushButtonVectorProcessingMergeVectorLayers->setText(QApplication::translate("PIHMgisDialog", "END >> (5) MERGE VECTOR LAYERS", nullptr));
         label_10->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">Vector Processing tools aid in fine-tuning GIS layers and combining as constraining layer for domain decomposition.</span></p></body></html>", nullptr));
         label_16->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p>Please note: You must follow these steps [1-5] in sequential order. If you go back to an earlier step, you must redo the remaining steps. For example, you went through steps 1 to 5, then you decide to redo simpligy polylines (Step 3), you must redo Steps 4 and 5. </p></body></html>", nullptr));
-        PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_VectorProcessing), QApplication::translate("PIHMgisDialog", "Group Steps [3] : : Vector Processing", nullptr));
+        PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_VectorProcessing), QApplication::translate("PIHMgisDialog", "Group [3] : : Vector Processing", nullptr));
         pushButtonDomainDecompositionTINShapeLayer->setText(QApplication::translate("PIHMgisDialog", "(3) TIN SHAPE LAYER", nullptr));
         pushButtonDomainDecompositionReadTopology->setText(QApplication::translate("PIHMgisDialog", "(1) READ TOPOLOGY", nullptr));
         pushButtonDomainDecompositionTriangulation->setText(QApplication::translate("PIHMgisDialog", "(2) TRIANGULATION", nullptr));
@@ -1589,7 +1625,7 @@ public:
         label_41->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Generate Quality Triangles using PSLG Data File</span></p></body></html>", nullptr));
         label_42->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Create Triangular Irregular Network (TIN) Shapefile</span></p></body></html>", nullptr));
         label_11->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">Domain Decomposition tools use constraining layer to produce quality triangular mesh network.</span></p></body></html>", nullptr));
-        PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_DomainDecomposition), QApplication::translate("PIHMgisDialog", "Group Steps [4] : : Domain Decomposition", nullptr));
+        PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_DomainDecomposition), QApplication::translate("PIHMgisDialog", "Group [4] : : Domain Decomposition", nullptr));
         pushButtonDataModelLoaderMeshDataFile->setText(QApplication::translate("PIHMgisDialog", "(1) MESH DATA FILE", nullptr));
         pushButtonDataModelLoaderLcDataFile->setText(QApplication::translate("PIHMgisDialog", "(6) LC DATA FILE", nullptr));
         pushButtonDataModelLoaderInitDataFile->setText(QApplication::translate("PIHMgisDialog", "(7) INIT DATA FILE", nullptr));
@@ -1603,7 +1639,7 @@ public:
         label_22->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">PIHM Input Files:</span></p></body></html>", nullptr));
         pushButtonDataModelLoaderForcDataFile->setText(QApplication::translate("PIHMgisDialog", "(11) FORC DATA FILE", nullptr));
         label_12->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">Data Model Loader tools perform automated assignment of topology and for mapping spatio-temporal watershed and climatological properties to mesh elements and river reaches. </span></p></body></html>", nullptr));
-        PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_DataModelLoader), QApplication::translate("PIHMgisDialog", "Group Steps [5] : : Data Model Loader", nullptr));
+        PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_DataModelLoader), QApplication::translate("PIHMgisDialog", "Group [5] : : Data Model Loader", nullptr));
         pushButtonPIHMSimulation->setText(QApplication::translate("PIHMgisDialog", "PIHM SIMULATION", nullptr));
         groupBox_3->setTitle(QApplication::translate("PIHMgisDialog", "Hydologic Processes", nullptr));
         checkBoxITranspiration->setText(QApplication::translate("PIHMgisDialog", "Transpiration", nullptr));
@@ -1621,7 +1657,7 @@ public:
         comboBoxPIHMVersion->setItemText(1, QApplication::translate("PIHMgisDialog", "PIHM v3.0", nullptr));
 
         label_13->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">PIHM Simulation tool provides ability to perform concurrent executions of multiple instances of<br/>PIHM simulations.</span></p></body></html>", nullptr));
-        PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_PIHMSimulation), QApplication::translate("PIHMgisDialog", "Group Steps [6] : : PIHM Simulation", nullptr));
+        PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_PIHMSimulation), QApplication::translate("PIHMgisDialog", "Group [6] : : PIHM Simulation", nullptr));
         groupBox->setTitle(QString());
         pushButtonVisualAnalyticsTemporalWatershed->setText(QApplication::translate("PIHMgisDialog", "TEMPORAL: MESH ELEMENTS", nullptr));
         pushButtonVisualAnalyticsSpatialWatershed->setText(QApplication::translate("PIHMgisDialog", "SPATIAL: MESH ELEMENTS", nullptr));
@@ -1644,7 +1680,7 @@ public:
         label_43->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><a href=\"http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Test_Datasets\"><span style=\" text-decoration: underline; color:#330099;\">(c) more...</span></a></p></body></html>", nullptr));
         label_15->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Funding to port PIHMGIS to windows provided by: CZO Grant XXXX</span></p></body></html>", nullptr));
         PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_Help), QApplication::translate("PIHMgisDialog", "Help && Other Resources", nullptr));
-        PIHMgisLabel->setText(QApplication::translate("PIHMgisDialog", "Windows PIHMgis: Penn State Integrated Hydrologic Modeling System (PIHM)", nullptr));
+        PIHMgisLabel->setText(QApplication::translate("PIHMgisDialog", "PIHMgis: Penn State Integrated Hydrologic Modeling System (PIHM)", nullptr));
     } // retranslateUi
 
 };

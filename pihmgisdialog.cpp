@@ -4,6 +4,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QThread>
+#include <QFileDialog>
 
 #include "pihmgisdialog.h"
 #include "ui_pihmgisdialog.h"
@@ -69,8 +70,10 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
 
         qDebug() << "PIHMgisDialog started";
 
-        ui->label_home_workspace->setText("Current workspace: " + user_pihmgis_root_folder);
+        update_current_label();
 
+
+        //        connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(this->on_pushButton_clicked()));
 
         //    QDir dir;
         //    success = dir.mkpath(QDir::homePath()+"/.PIHMgis/");
@@ -92,6 +95,18 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
         qDebug() << "Error: PIHMgisDialog is returning w/o checking";
     }
 
+}
+
+void PIHMgisDialog::update_current_label()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start update_current_label";
+
+    try {
+        ui->label_home_workspace->setText("Current workspace: " + user_pihmgis_root_folder);
+    } catch (...) {
+        qDebug() << "Error: update_current_label is returning w/o checking";
+    }
 }
 
 PIHMgisDialog::~PIHMgisDialog()
@@ -248,6 +263,7 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
         bool boolMESH, boolATTX, boolSOIL, boolRIVX, boolGEOL, boolLCXX, boolPARA, boolINIT, boolIBCX, boolCALI, boolFORC;
         bool boolPIHM;
         bool boolSPATIALW, boolSPATIALR, boolTIMEW, boolTIMER;
+        bool bool_PICK_location = false;
 
         boolWORKFLOW0 = boolWORKFLOW1 = boolWORKFLOW2 = boolWORKFLOW3 = boolWORKFLOW4 = boolWORKFLOW5 = boolWORKFLOW6 = boolWORKFLOW7 = false;
         boolNEWPRJ = boolOPENPRJ = boolIMPORTPRJ = boolCLOSEPRJ = false;
@@ -270,7 +286,10 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
             //        if (DEFAULT_PARAM.at(i) == "WORKFLOW6") { boolWORKFLOW6 = true; ui->pushButtonWorkFlow6->setFocus(); continue; }
             //        if (DEFAULT_PARAM.at(i) == "WORKFLOW7") { boolWORKFLOW7 = true; ui->pushButtonWorkFlow7->setFocus(); continue; }
 
-            if (DEFAULT_PARAM.at(i) == "NEWPRJ")    { boolNEWPRJ    = true; ui->pushButtonPIHMgisProjectNew->setFocus();    continue; }
+            if (DEFAULT_PARAM.at(i) == "PICKPRJ")    { bool_PICK_location    = true; ui->pushButton_PickWorkspace->setFocus();    continue; }
+            //if (DEFAULT_PARAM.at(i) == "WORKFLOW7")    { boolWORKFLOW7    = true; ui->pushButton_PickWorkspace->setFocus();    continue; }
+
+            if (DEFAULT_PARAM.at(i) == "NEWPRJ")    {  qDebug() << "Function NEWPRJ"; boolNEWPRJ    = true; ui->pushButtonPIHMgisProjectNew->setFocus();    continue; }
             if (DEFAULT_PARAM.at(i) == "OPENPRJ")   { boolOPENPRJ   = true; ui->pushButtonPIHMgisProjectOpen->setFocus();   continue; }
             if (DEFAULT_PARAM.at(i) == "IMPORTPRJ") { boolIMPORTPRJ = true; ui->pushButtonPIHMgisProjectImport->setFocus(); continue; }
             if (DEFAULT_PARAM.at(i) == "CLOSEPRJ")  { boolCLOSEPRJ  = true; ui->pushButtonPIHMgisProjectClose->setFocus();  continue; }
@@ -313,7 +332,7 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
             if (DEFAULT_PARAM.at(i) == "TIMER")     { boolTIMER    = true; ui->pushButtonVisualAnalyticsTemporalRiverNetwork->setFocus();   continue; }
         }
 
-        ui->pushButtonWorkFlow0->setDefault(boolWORKFLOW0);
+        //ui->pushButton_PickWorkspace->setDefault(boolWORKFLOW7); //bool_PICK_location);
         //    ui->pushButtonWorkFlow1->setDefault(boolWORKFLOW1);
         //    ui->pushButtonWorkFlow2->setDefault(boolWORKFLOW2);
         //    ui->pushButtonWorkFlow3->setDefault(boolWORKFLOW3);
@@ -321,6 +340,8 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
         //    ui->pushButtonWorkFlow5->setDefault(boolWORKFLOW5);
         //    ui->pushButtonWorkFlow6->setDefault(boolWORKFLOW6);
         //    ui->pushButtonWorkFlow7->setDefault(boolWORKFLOW7);
+
+        ui->pushButton_PickWorkspace->setDefault(bool_PICK_location);
 
         ui->pushButtonPIHMgisProjectNew->setDefault(boolNEWPRJ);
         ui->pushButtonPIHMgisProjectOpen->setDefault(boolOPENPRJ);
@@ -915,8 +936,8 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
 
 void PIHMgisDialog::on_pushButton_clicked()
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_clicked";
+    //if(print_debug_messages)
+    qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_clicked";
 
     try {
         qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
@@ -931,8 +952,8 @@ void PIHMgisDialog::on_pushButton_clicked()
 
 void PIHMgisDialog::on_pushButton_clicked(bool checked)
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_clicked";
+    //if(print_debug_messages)
+    qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_clicked";
 
     try {
         qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
@@ -953,3 +974,41 @@ void PIHMgisDialog::on_pushButton_2_clicked()
     }
 
 }
+
+void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_PickWorkspace_clicked";
+
+    try {
+
+        QString ProjectHome = QFileDialog::getExistingDirectory(this, "Specify Home Folder", user_pihmgis_root_folder, 0);
+        qDebug() << "ProjectHome = " << ProjectHome;
+
+        if(ProjectHome.length() > 0 )
+        {
+            user_pihmgis_root_folder = ProjectHome;
+        }
+
+        update_current_label();
+
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
+    }
+
+}
+
+//void PIHMgisDialog::on_pushButton_PickWorkspace_clicked(bool checked)
+//{
+//    //if(print_debug_messages)
+//        qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_PickWorkspace_clicked";
+
+//    try {
+
+//        QString ProjectHome = QFileDialog::getExistingDirectory(this, "Specify Home Folder", user_pihmgis_root_folder, 0);
+//        qDebug() << "ProjectHome = " << ProjectHome;
+
+//    } catch (...) {
+//        qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
+//    }
+//}

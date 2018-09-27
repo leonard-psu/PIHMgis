@@ -37,7 +37,7 @@ QT_MOC_LITERAL(4, 42, 30),
 QT_MOC_LITERAL(5, 73, 30),
 QT_MOC_LITERAL(6, 104, 30),
 QT_MOC_LITERAL(7, 135, 30),
-QT_MOC_LITERAL(8, 166, 30),
+QT_MOC_LITERAL(8, 200, 30),
 QT_MOC_LITERAL(9, 197, 30),
 QT_MOC_LITERAL(10, 228, 30),
 QT_MOC_LITERAL(11, 259, 30),
@@ -245,7 +245,9 @@ void PIHMgisDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
 //        case 5: _t->on_pushButtonWorkFlow4_clicked(); break;
 //        case 6: _t->on_pushButtonWorkFlow5_clicked(); break;
 //        case 7: _t->on_pushButtonWorkFlow6_clicked(); break;
-//        case 8: _t->on_pushButtonWorkFlow7_clicked(); break;
+        case 8: _t->on_pushButton_PickWorkspace_clicked(); break;
+
+
         case 9: _t->on_pushButtonPIHMgisProjectNew_clicked(); break;
         case 10: _t->on_pushButtonPIHMgisProjectOpen_clicked(); break;
         case 11: _t->on_pushButtonPIHMgisProjectImport_clicked(); break;
