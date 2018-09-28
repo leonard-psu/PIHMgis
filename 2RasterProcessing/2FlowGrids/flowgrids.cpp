@@ -365,50 +365,6 @@ void FlowGrids::on_pushButtonsFlowDirGrid_clicked()
             pushButtonSetFocus();
         }
 
-
-
-        /*
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
-
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-        QString FlowDirFileName = QFileDialog::getSaveFileName(this, "Choose Flow Dir Grid", ProjectFolder+"/1RasterProcessing","Flow Dir Grid File(*.asc)");
-        QString tempString = FlowDirFileName;
-        if ( FlowDirFileName != nullptr)
-        {
-            ui->lineEditFlowDirGrids->setStyleSheet("color: black;");
-
-            if( ! (tempString.toLower()).endsWith(".asc") )
-            {
-                tempString.append(".asc");
-                FlowDirFileName = tempString;
-            }
-            ui->lineEditFlowDirGrids->setText(FlowDirFileName);
-
-            pushButtonSetFocus();
-        }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        */
-
     } catch (...) {
         qDebug() << "Error: FlowGrids::on_pushButtonsFlowDirGrid_clicked is returning w/o checking";
     }
@@ -433,48 +389,6 @@ void FlowGrids::on_pushButtonFlowAccGrid_clicked()
 
             pushButtonSetFocus();
         }
-
-        /*
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
-
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-        QString FlowAccFileName = QFileDialog::getSaveFileName(this, "Choose Flow Acc Grid", ProjectFolder+"/1RasterProcessing","Flwo Acc Grid File(*.asc)");
-        QString tempString = FlowAccFileName;
-        if ( FlowAccFileName != nullptr)
-        {
-            ui->lineEditFlowAccGrids->setStyleSheet("color: black;");
-
-            if( ! (tempString.toLower()).endsWith(".asc") )
-            {
-                tempString.append(".asc");
-                FlowAccFileName = tempString;
-            }
-            ui->lineEditFlowAccGrids->setText(FlowAccFileName);
-
-            pushButtonSetFocus();
-        }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-*/
 
     } catch (...) {
         qDebug() << "Error: FlowGrids::on_pushButtonFlowAccGrid_clicked is returning w/o checking";
@@ -683,179 +597,6 @@ void FlowGrids::on_pushButtonRun_clicked()
         ui->pushButtonClose->setDefault(true);
         ui->pushButtonClose->setFocus();
 
-
-        /*
-
-        LogsString = tr("");
-        LogsString.append(tr("Flow Grids Processing Started ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-
-        LogsString.append(tr("Verifying Data Files ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        int runFlag = 1;
-        QFile IOTestFile;
-
-        if( ui->lineEditFillPits->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fill Pits Input File Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditFillPits->text(), "ReadOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditFillPits->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditFillPits->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        if( ui->lineEditFlowDirGrids->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Flow Dir Output File Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditFlowDirGrids->text(), "WriteOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->lineEditFlowDirGrids->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditFlowDirGrids->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        if( ui->lineEditFlowAccGrids->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Flow Acc Output File Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditFlowAccGrids->text(), "WriteOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->lineEditFlowAccGrids->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditFlowAccGrids->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        if(runFlag == 1)
-        {
-
-            QString FillPitsFileName = ui->lineEditFillPits->text();
-
-            QString ASCFileName = FillPitsFileName;
-
-            if((FillPitsFileName.toLower()).endsWith(".adf"))
-            {
-                ASCFileName.truncate(ASCFileName.length()-3);
-                ASCFileName.append("asc");
-
-                LogsString.append("Converting Arc Binary File to ASC File ... <br>");
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                ADFFiletoASCFile(FillPitsFileName, ASCFileName);
-            }
-
-            int DEMResolution = 0;
-            QFile ASCFile(ASCFileName);
-            ASCFile.open(QIODevice::ReadOnly | QIODevice::Text);
-            QTextStream ASCFileTextStream(&ASCFile);
-
-            QString TempString;
-            ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;
-            ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;
-            ASCFileTextStream>>TempString;
-
-            ASCFileTextStream >> DEMResolution;
-            qDebug() << "DEM Resolution (Integer) = "<<DEMResolution<<"\n";
-            ASCFile.close();
-
-            LogsString.append("Running Flow Dir Grids ... <br>");
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
-            QString SlopeFileName = ui->lineEditFlowDirGrids->text();
-            SlopeFileName.truncate(SlopeFileName.length()-4);
-            SlopeFileName.append("Slope.asc");
-            qDebug() << "Slope File Name: " << SlopeFileName;
-
-            //int ErrorFDir = setdird8( (char *)qPrintable(ASCFileName), (char *)qPrintable(ui->lineEditFlowDirGrids->text()), "dummy" );
-            int ErrorFDir = setdird8( (char *)qPrintable(ASCFileName), (char *)qPrintable(ui->lineEditFlowDirGrids->text()), (char *)qPrintable(SlopeFileName) );
-            if( ErrorFDir != 0 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Flow Direction Processing Failed ... </span>")+tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorFDir)+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
-            }
-
-            LogsString.append("Running Flow Acc Grids ... <br>");
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
-            int ErrorAcc = aread8( (char *)qPrintable(ui->lineEditFlowDirGrids->text()), (char *)qPrintable(ui->lineEditFlowAccGrids->text()), 0.0, 0.0, 1 );
-            if( ErrorAcc != 0 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Flow Accumulation Processing Failed ... </span>")+tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorAcc)+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
-            }
-
-
-            ProjectIOStringList << "FlowGrids" << ui->lineEditFillPits->text() << ui->lineEditFlowDirGrids->text() << ui->lineEditFlowAccGrids->text() << QString::number(DEMResolution);
-            WriteModuleLine(ProjectFileName, ProjectIOStringList);
-            ProjectIOStringList.clear();
-
-            if( ui->checkBoxFlowDirGrid->isChecked() == 1 || ui->checkBoxFlowAccGrid->isChecked() == 1 )
-            {
-                LogsString.append("Loading Data in GIS ... <br>");
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-
-            if(ui->checkBoxFlowDirGrid->isChecked() == 1)
-            {
-                if ( ! QDesktopServices::openUrl(QUrl("file://"+ui->lineEditFlowDirGrids->text())) )
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load ASC File in GIS ... </span>")+ui->lineEditFlowDirGrids->text()+tr("<br>"));
-            }
-            if(ui->checkBoxFlowAccGrid->isChecked() == 1)
-            {
-                if ( ! QDesktopServices::openUrl(QUrl("file://"+ui->lineEditFlowAccGrids->text())) )
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load ASC File in GIS ... </span>")+ui->lineEditFlowAccGrids->text()+tr("<br>"));
-            }
-
-            LogsString.append(tr("<br><b>Flow Grids Processing Completed.</b>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
-            ui->pushButtonRun->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
-        }
-*/
-
     } catch (...) {
         qDebug() << "Error: FlowGrids::on_pushButtonRun_clicked is returning w/o checking";
     }
@@ -873,8 +614,8 @@ void FlowGrids::on_pushButtonClose_clicked()
         qDebug() << "INFO: Start FlowGrids::on_pushButtonClose_clicked()";
 
     try{
-//        QStringList default_params; default_params << "WORKFLOW2" << "STRGRIDS";
-//        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //        QStringList default_params; default_params << "WORKFLOW2" << "STRGRIDS";
+        //        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
 
     } catch (...) {
