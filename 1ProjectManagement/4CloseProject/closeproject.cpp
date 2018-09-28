@@ -21,7 +21,7 @@ CloseProject::CloseProject(QWidget *parent)
         ui->setupUi(this);
 
         QString ProjectFolder, ProjectFileName;
-        QFile OpenProjectFile(user_pihmgis_root_folder +"/.PIHMgis/OpenProject.txt");
+        QFile OpenProjectFile(user_pihmgis_root_folder +user_pihmgis_project_folder + "/OpenProject.txt");
         OpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream OpenProjectFileTextStream(&OpenProjectFile);
         ProjectFolder  = OpenProjectFileTextStream.readLine();
@@ -82,22 +82,22 @@ void CloseProject::on_pushButtonOpen_clicked()
         LogsString = tr("");
         bool success;
         QString ProjectFolder, ProjectFileName;
-        QFile OpenProjectFile(user_pihmgis_root_folder +"/.PIHMgis/OpenProject.txt");
+        QFile OpenProjectFile(user_pihmgis_root_folder +user_pihmgis_project_folder + "/OpenProject.txt");
         OpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream OpenProjectFileTextStream(&OpenProjectFile);
         ProjectFolder  = OpenProjectFileTextStream.readLine();
         ProjectFileName = OpenProjectFileTextStream.readLine();
         OpenProjectFile.close();
 
-        success = QFile::remove(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        success = QFile::remove(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
 
-        qDebug() << "Delete File: " << user_pihmgis_root_folder + "/.PIHMgis/OpenProject.txt";
+        qDebug() << "Delete File: " << user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt";
         if (success == false)
         {
             qDebug() << "ERROR: Unable to Delete Project File!";
             //QMessageBox::critical(this,tr("Close Project"),tr("Error: Unable to Delete Project File"),QMessageBox::Ok);
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Close Project: </span>")+tr("<br>"));
-            LogsString.append(tr("Need Write Access to File: ")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+            LogsString.append(tr("Need Write Access to File: ")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;

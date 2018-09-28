@@ -322,7 +322,7 @@ int AddFID(QString RiverDbfFileName)
         int recordCount = DBFGetRecordCount(RiverDbfHandle);
 
         QString TempDbfFileName;
-        TempDbfFileName = user_pihmgis_root_folder + "/.PIHMgis/temp.dbf";
+        TempDbfFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + "/temp.dbf";
 
 
         DBFHandle TempDbfHandle = DBFCreate(qPrintable(TempDbfFileName));
@@ -412,7 +412,7 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
             return 365;
 
         QString TempDbfFileName;
-        TempDbfFileName = user_pihmgis_root_folder + "/.PIHMgis/temp.dbf";
+        TempDbfFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + "/temp.dbf";
 
 
         DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
@@ -568,7 +568,7 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
 
 
         QString TempDbfFileName;
-        TempDbfFileName = user_pihmgis_root_folder + "/.PIHMgis/temp.dbf";
+        TempDbfFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + "/temp.dbf";
 
         DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
 
@@ -780,7 +780,7 @@ int AddDownSegment(QString RiverDbfFileName, QString BoundaryCondition)
 
 
         QString TempDbfFileName;
-        TempDbfFileName = user_pihmgis_root_folder + "/.PIHMgis/temp.dbf";
+        TempDbfFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + "/temp.dbf";
 
 
         DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );

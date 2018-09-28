@@ -431,26 +431,37 @@
     </disabled>
    </palette>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>12</pointsize>
+    <weight>75</weight>
+    <bold>true</bold>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>: :   Import Project   : :</string>
+   <string>Import Project</string>
   </property>
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
      <x>16</x>
-     <y>242</y>
+     <y>252</y>
      <width>581</width>
-     <height>61</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>11</x>
-      <y>18</y>
+      <y>10</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -474,7 +485,7 @@
     <property name="geometry">
      <rect>
       <x>307</x>
-      <y>18</y>
+      <y>10</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -501,7 +512,7 @@
     <property name="geometry">
      <rect>
       <x>441</x>
-      <y>18</y>
+      <y>10</y>
       <width>131</width>
       <height>32</height>
      </rect>
@@ -531,7 +542,7 @@
      <x>15</x>
      <y>64</y>
      <width>581</width>
-     <height>161</height>
+     <height>171</height>
     </rect>
    </property>
    <property name="title">
@@ -540,8 +551,8 @@
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
-      <x>167</x>
-      <y>27</y>
+      <x>170</x>
+      <y>30</y>
       <width>281</width>
       <height>22</height>
      </rect>
@@ -559,8 +570,8 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>28</y>
+      <x>40</x>
+      <y>30</y>
       <width>111</width>
       <height>17</height>
      </rect>
@@ -568,7 +579,7 @@
     <property name="font">
      <font>
       <family>Arial</family>
-      <pointsize>12</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -577,7 +588,7 @@
      <string>Existing Project is a project that was not created on some other computer or Home directory structure has been altered (by moving or renaming).</string>
     </property>
     <property name="text">
-     <string>Project File</string>
+     <string>Old Project File</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonProject">
@@ -613,8 +624,8 @@
    <widget class="QLineEdit" name="lineEditOld">
     <property name="geometry">
      <rect>
-      <x>167</x>
-      <y>70</y>
+      <x>170</x>
+      <y>60</y>
       <width>281</width>
       <height>22</height>
      </rect>
@@ -625,12 +636,15 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>71</y>
+      <y>60</y>
       <width>121</width>
       <height>17</height>
      </rect>
@@ -638,7 +652,7 @@
     <property name="font">
      <font>
       <family>Arial</family>
-      <pointsize>12</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -653,8 +667,8 @@
    <widget class="QLineEdit" name="lineEditNew">
     <property name="geometry">
      <rect>
-      <x>167</x>
-      <y>116</y>
+      <x>170</x>
+      <y>90</y>
       <width>281</width>
       <height>22</height>
      </rect>
@@ -665,12 +679,15 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>117</y>
+      <y>90</y>
       <width>131</width>
       <height>17</height>
      </rect>
@@ -678,7 +695,7 @@
     <property name="font">
      <font>
       <family>Arial</family>
-      <pointsize>12</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -687,7 +704,63 @@
      <string>Existing Project is a project that was not created on some other computer.</string>
     </property>
     <property name="text">
-     <string>New Project Folder</string>
+     <string>Current Workspace</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>120</y>
+      <width>111</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="toolTip">
+     <string>Existing Project is a project that was not created on some other computer or Home directory structure has been altered (by moving or renaming).</string>
+    </property>
+    <property name="text">
+     <string>New Project File</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="new_lineEdit_ProjectFile">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>120</y>
+      <width>281</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="toolTip">
+     <string>Existing Project is a project that was not created on some other computer or Home directory structure has been altered (by moving or renaming).</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>150</y>
+      <width>531</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Note: Import does not copy the datasets into your new workspace</string>
     </property>
    </widget>
   </widget>
@@ -1140,6 +1213,12 @@ p, li { white-space: pre-wrap; }
       </colorrole>
      </disabled>
     </palette>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(0, 51, 153);</string>

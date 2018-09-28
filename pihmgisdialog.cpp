@@ -54,6 +54,27 @@
 #include "globals.h"
 
 QString user_pihmgis_root_folder = QDir::homePath(); //Default for now, need to customize based on OS
+QString user_pihmgis_project_folder = "/.PIHMgis";   //Default for now, need to customize
+
+//QString global_string_FillPits = QString("");
+//QString global_string_FlowGrids = QString("");
+//QString global_string_StreamGrids = QString("");
+//QString global_string_LinkGrids = QString("");
+//QString global_string_CatchmentGrids = QString("");
+//QString global_string_StreamPolyline = QString("");
+//QString global_string_StreamRasterVector = QString("");
+//QString global_string_CatchmentPolygon = QString("");
+//QString global_string_CatchmentRasterVector = QString("");
+//QString global_string_DissolvePolygons = QString("");
+//QString global_string_PolygonToPolylines = QString("");
+//QString global_string_SimplifyPolylines = QString("");
+//QString global_string_PolylineToLines = QString("");
+//QString global_string_MergeVectorLayers = QString("");
+//QString global_string_MergeVectorDomainDecomposition = QString("");
+//QString global_string_ReadTopology = QString("");
+//QString global_string_DelaunayTriangulation = QString("");
+//QString global_string_TINShapeLayer = QString("");
+
 
 PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
     QWidget(parent),
@@ -277,7 +298,7 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
         qDebug() << "Function set_defaults: " << DEFAULT_PARAM;
         for(int i=0; i<DEFAULT_PARAM.size(); i++)
         {
-            if (DEFAULT_PARAM.at(i) == "WORKFLOW0") { boolWORKFLOW0 = true; ui->pushButtonWorkFlow0->setFocus(); continue; }
+            //if (DEFAULT_PARAM.at(i) == "WORKFLOW0") { boolWORKFLOW0 = true; ui->pushButtonWorkFlow0->setFocus(); continue; }
             //        if (DEFAULT_PARAM.at(i) == "WORKFLOW1") { boolWORKFLOW1 = true; ui->pushButtonWorkFlow1->setFocus(); continue; }
             //        if (DEFAULT_PARAM.at(i) == "WORKFLOW2") { boolWORKFLOW2 = true; ui->pushButtonWorkFlow2->setFocus(); continue; }
             //        if (DEFAULT_PARAM.at(i) == "WORKFLOW3") { boolWORKFLOW3 = true; ui->pushButtonWorkFlow3->setFocus(); continue; }
@@ -455,7 +476,10 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked()
 
     try {
         ImportProject *ImportProjectDialog = new ImportProject(this);
-        ImportProjectDialog->show();
+        ImportProjectDialog->setModal(true);
+        ImportProjectDialog->exec();
+
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked is returning w/o checking";
     }
@@ -488,8 +512,14 @@ void PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked";
 
     try {
-        FillPits *FillPitsDialog = new FillPits(this);
-        FillPitsDialog->show();
+
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+
+        FillPits *FillPitsDialog = new FillPits(this, filename_open_project);
+        FillPitsDialog->setModal(true);
+        FillPitsDialog->exec();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked is returning w/o checking";
     }
@@ -988,6 +1018,94 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
         if(ProjectHome.length() > 0 )
         {
             user_pihmgis_root_folder = ProjectHome;
+
+            QString make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder;
+            QDir dir(make_folder);
+
+            if (!dir.exists()) {
+                dir.mkpath(make_folder);
+                qDebug() << "Creating folder = " << make_folder;
+            }
+            else
+            {
+                qDebug() << "Project Folder already exists = " << make_folder;
+            }
+
+
+            //Need to create default folders for pihmgis
+            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/1RasterProcessing";
+            QDir dir_1RasterProcessing(make_folder);
+
+            if (!dir_1RasterProcessing.exists()) {
+                dir_1RasterProcessing.mkpath(make_folder);
+                qDebug() << "Creating 1RasterProcessing folder = " << make_folder;
+            }
+            else
+            {
+                qDebug() << "1RasterProcessing Folder already exists = " << make_folder;
+            }
+
+            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/2VectorProcessing";
+            QDir dir_2VectorProcessing(make_folder);
+
+            if (!dir_2VectorProcessing.exists()) {
+                dir_2VectorProcessing.mkpath(make_folder);
+                qDebug() << "Creating 2VectorProcessing folder = " << make_folder;
+            }
+            else
+            {
+                qDebug() << "2VectorProcessing Folder already exists = " << make_folder;
+            }
+
+
+            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/3DomainDecomposition";
+            QDir dir_3DomainDecomposition(make_folder);
+
+            if (!dir_3DomainDecomposition.exists()) {
+                dir_3DomainDecomposition.mkpath(make_folder);
+                qDebug() << "Creating 3DomainDecomposition folder = " << make_folder;
+            }
+            else
+            {
+                qDebug() << "3DomainDecomposition Folder already exists = " << make_folder;
+            }
+
+            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/4DataModelLoader";
+            QDir dir_4DataModelLoader(make_folder);
+
+            if (!dir_4DataModelLoader.exists()) {
+                dir_4DataModelLoader.mkpath(make_folder);
+                qDebug() << "Creating 4DataModelLoader folder = " << make_folder;
+            }
+            else
+            {
+                qDebug() << "4DataModelLoader Folder already exists = " << make_folder;
+            }
+
+            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/5PIHMSimulation";
+            QDir dir_5PIHMSimulation(make_folder);
+
+            if (!dir_5PIHMSimulation.exists()) {
+                dir_5PIHMSimulation.mkpath(make_folder);
+                qDebug() << "Creating 5PIHMSimulation folder = " << make_folder;
+            }
+            else
+            {
+                qDebug() << "5PIHMSimulation Folder already exists = " << make_folder;
+            }
+
+            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/6VisualAnalytics";
+            QDir dir_6VisualAnalytics(make_folder);
+
+            if (!dir_6VisualAnalytics.exists()) {
+                dir_6VisualAnalytics.mkpath(make_folder);
+                qDebug() << "Creating 6VisualAnalytics folder = " << make_folder;
+            }
+            else
+            {
+                qDebug() << "6VisualAnalytics Folder already exists = " << make_folder;
+            }
+
         }
 
         update_current_label();
@@ -998,17 +1116,29 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 
 }
 
-//void PIHMgisDialog::on_pushButton_PickWorkspace_clicked(bool checked)
-//{
-//    //if(print_debug_messages)
-//        qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_PickWorkspace_clicked";
+bool fileExists(QString path) {
 
-//    try {
+    QFileInfo check_file(path);
 
-//        QString ProjectHome = QFileDialog::getExistingDirectory(this, "Specify Home Folder", user_pihmgis_root_folder, 0);
-//        qDebug() << "ProjectHome = " << ProjectHome;
+    // check if file exists and if yes: Is it really a file and no directory?
+    if (check_file.exists() && check_file.isFile()) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
-//    } catch (...) {
-//        qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
-//    }
-//}
+qint64 file_Size(QString path){
+
+    QFileInfo check_file(path);
+
+    // check if file exists and if yes: Is it really a file and no directory?
+    if (check_file.exists() && check_file.isFile())
+    {
+        return check_file.size();
+    } else {
+        return -1;
+    }
+}
+
+

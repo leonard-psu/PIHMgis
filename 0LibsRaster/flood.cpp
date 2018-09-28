@@ -319,8 +319,8 @@ int setdf(float mval)
 
 int vdn(int n)
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start vdn";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start vdn";
 
     int ip,k,imin = 0;
     float ed = 0;
@@ -364,8 +364,8 @@ int vdn(int n)
 
 void set(int i,int j,float *fact,float mval)
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start set";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start set";
 
     try {
 
@@ -504,8 +504,8 @@ float max2(float e1,float e2)
 
 int addstack(int i, int j)
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start addstack";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start addstack";
 
     try {
         /*  Routine to add entry to is, js stack, enlarging if necessary   */

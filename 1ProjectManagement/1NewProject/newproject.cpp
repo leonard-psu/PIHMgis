@@ -53,7 +53,7 @@ void NewProject::on_pushButtonFile_clicked()
             ui->lineEditFile->setText(ProjectHome);
 
             ui->lineEditFolder->setText(ProjectHome+"/"+folder);
-            ui->lineEditFile2->setText(ProjectHome+"/"+folder+"/"+folder+".pihmgis");
+            ui->lineEditFile2->setText(ProjectHome+"/"+folder+"/" + folder+ user_pihmgis_project_folder);
             //ui->lineEditFolder->setText(str.left(str.lastIndexOf("/",-1)+1));//polyStr.right(polyStr.length()-polyStr.lastIndexOf("/",-1));
 
             ui->pushButtonFile->setDefault(false);
@@ -181,14 +181,14 @@ void NewProject::on_pushButtonCreate_clicked()
             ProjectFileTextStream<<ui->lineEditFolder->text()<<"\n";
             ProjectFileTextStream<<ui->lineEditFile2->text()<<"\n";
 
-            // ** Crete Open Project File in .PIHMgis Folder
-            QFile OpenProjectFile(user_pihmgis_root_folder + "/.PIHMgis/OpenProject.txt");
-            qDebug() << "Open Project File = " <<qPrintable(user_pihmgis_root_folder + "/.PIHMgis/OpenProject.txt") << "\n";
+            // ** Create Open Project File in .PIHMgis (replaced with user defined folder name) Folder
+            QFile OpenProjectFile(user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt");
+            qDebug() << "Open Project File = " <<qPrintable(user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt") << "\n";
             if (! OpenProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) )
             {
                 qDebug() << "Error: Unable To Open File";
                 //QMessageBox::critical(this,tr("New Project"),tr("Error: Unable to Create Project File"),QMessageBox::Ok);
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Create File: </span>") + user_pihmgis_root_folder + "/.PIHMgis/OpenProject.txt"+tr("<br>"));
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Create File: </span>") + user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
                 ui->textBrowserLogs->setHtml(LogsString);
                 ui->textBrowserLogs->repaint();
                 return;

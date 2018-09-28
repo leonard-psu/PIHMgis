@@ -12,7 +12,12 @@
 #include "0LibsRaster/flood.h"
 #include "globals.h"
 
-FillPits::FillPits(QWidget *parent) :
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// FillPits Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+FillPits::FillPits(QWidget *parent, QString filename) :
     QDialog(parent),
     ui(new Ui::FillPits)
 {
@@ -21,32 +26,49 @@ FillPits::FillPits(QWidget *parent) :
 
 
     try {
+
         ui->setupUi(this);
 
-        // ** Start: Fill Form If Module Has Been Run Previously
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        filename_open_project = filename;
+        bool found_file = false;
+
+        if(print_debug_messages)
+            qDebug() << "INFO: filename -> " << filename_open_project;
+
+        QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open project file: </span>") + filename_open_project +tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFileTextStream.readLine();
-        QString ProjectFileName = ProjectFileTextStream.readLine();
+        else
+        {
+            found_file = true;
+        }
+
         ProjectFile.close();
 
-        QStringList ModuleStringList = ReadModuleLine(ProjectFileName,tr("FillPits"));
-
-        if ( ModuleStringList.length() > 0 )
+        if(found_file)
         {
-            ui->lineEditDEM->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditFillPits->setStyleSheet("color: rgb(0, 180, 0);");
+            QStringList ModuleStringList = ReadModuleLine(filename, tr("FillPits"));
 
-            ui->lineEditDEM->setText(ModuleStringList.at(1));
-            ui->lineEditFillPits->setText(ModuleStringList.at(2));
+            if ( ModuleStringList.length() > 0 )
+            {
+                QString dem = ModuleStringList.at(1);
+                QString fillpits = ModuleStringList.at(2);
+
+                bool dem_check = Check_DEM_Input(dem);
+                bool fill_check = Check_Fillpit_Output(fillpits, true);
+
+                if(dem_check && fill_check)
+                {
+                    LogsString.append(tr("<span style=\"color:#FF0000\">INFO: Both input and output already exist. </span>") +tr("<br>"));
+                    ui->textBrowserLogs->setHtml(LogsString);
+                    ui->textBrowserLogs->repaint();
+                }
+            }
         }
-        // ** End: Fill Form If Module Has Been Run Previously
 
         pushButtonSetFocus();
 
@@ -55,8 +77,15 @@ FillPits::FillPits(QWidget *parent) :
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// FillPits Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 FillPits::~FillPits()
 {
+    if(print_debug_messages)
+        qDebug() << "INFO: ~FillPits()";
+
     try {
         delete ui;
     } catch (...) {
@@ -64,6 +93,92 @@ FillPits::~FillPits()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if DEM input file exists (returns true) or does not (returns false)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool FillPits::Check_DEM_Input(QString dem )
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_DEM_Input()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(dem) )
+        {
+            ui->lineEditDEM->setStyleSheet("color: black;");
+            ui->lineEditDEM->setText(dem);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditDEM->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditDEM->setText(dem);
+
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: DEM input does not exist: </span>") + dem +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            result = false;
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: Check_DEM_Input is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if Pitfilled DEM output file exists (returns true) or does not (returns false)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool FillPits::Check_Fillpit_Output(QString fillpits, bool message )
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_Fillpit_Output()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(fillpits) )
+        {
+
+            ui->lineEditFillPits->setStyleSheet("color: black;");
+            ui->lineEditFillPits->setText(fillpits);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditFillPits->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditFillPits->setText(fillpits);
+
+            if(message)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: fillpits output does not exist: </span>") + fillpits +tr(" You will need to redo this step.<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
+
+            result = false;
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_Fillpit_Output is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to focus button selection (needed for users w/o mouse)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FillPits::pushButtonSetFocus()
 {
     if(print_debug_messages)
@@ -96,6 +211,29 @@ void FillPits::pushButtonSetFocus()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void FillPits::Clear_Log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start FillPits::Clear_Log()";
+
+    try {
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+    } catch (...) {
+        qDebug() << "Error: FillPits::Clear_Log() is returning w/o checking";
+    }
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Clicked Event for DEM
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FillPits::on_pushButtonDEM_clicked()
 {
 
@@ -103,107 +241,56 @@ void FillPits::on_pushButtonDEM_clicked()
         qDebug() << "INFO: Start FillPits::on_pushButtonDEM_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-        QString DEMFileName = QFileDialog::getOpenFileName(this, "Choose DEM File", ProjectFolder+tr("/.."), "DEM Grid File(*.adf *.asc *.ASC)");
+        QString DEMFileName = QFileDialog::getOpenFileName(this, "Choose DEM File", user_pihmgis_root_folder +tr("/.."), "DEM Grid File(*.adf *.asc *.ASC)");
 
         if ( DEMFileName != nullptr)
         {
-            ui->lineEditDEM->setStyleSheet("color: black;");
-
-            ui->lineEditDEM->setText(DEMFileName);
-
-            if( ui->lineEditFillPits->text() == nullptr )
-            {
-                ui->lineEditFillPits->setStyleSheet("color: black;");
-                ui->lineEditFillPits->setText(ProjectFolder+"/1RasterProcessing/FillPits.asc");
-            }
+            Check_DEM_Input(DEMFileName);
+            Check_Fillpit_Output(ui->lineEditFillPits->text(), true);
 
             pushButtonSetFocus();
         }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        else
+        {
+            qDebug() << "ProjectFolder: Invalid DEMFileName";
+        }
 
     } catch (...) {
         qDebug() << "Error: FillPits::on_pushButtonDEM_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Clicked Event for Fill pits file
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FillPits::on_pushButtonFillPits_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start FillPits::on_pushButtonFillPits_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
+        Clear_Log();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
-
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-        QString FillPitFileName = QFileDialog::getSaveFileName(this, "Choose Fill Pit Grid", ProjectFolder+"/1RasterProcessing","Fill Pit Grid File(*.asc)");
-        QString tempString = FillPitFileName;
-
+        QString FillPitFileName = QFileDialog::getSaveFileName(this, "Choose Fill Pit Grid", user_pihmgis_root_folder+"/1RasterProcessing","Fill Pit Grid File(*.asc)");
         if ( FillPitFileName != nullptr)
         {
-            ui->lineEditFillPits->setStyleSheet("color: black;");
-
-            if( ! (tempString.toLower()).endsWith(".asc") )
-            {
-                tempString.append(".asc");
-                FillPitFileName = tempString;
-            }
-            ui->lineEditFillPits->setText(FillPitFileName);
-
+            Check_DEM_Input(ui->lineEditDEM->text());
+            Check_DEM_Input(FillPitFileName);
             pushButtonSetFocus();
         }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: FillPits::on_pushButtonFillPits_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Here the DEM input is filled using flood function
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FillPits::on_pushButtonRun_clicked()
 {
     if(print_debug_messages)
@@ -211,138 +298,144 @@ void FillPits::on_pushButtonRun_clicked()
 
     try {
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check input
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString filename_dem = ui->lineEditDEM->text();
+        QString filename_fill =  ui->lineEditFillPits->text();
+
+        bool dem_check = Check_DEM_Input(filename_dem);
+        if(!dem_check)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: DEM input does not exist: </span>") + filename_dem +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Does output already exist?
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        bool fill_check = Check_Fillpit_Output(filename_fill, true);
+        if(fill_check)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Fillpit output already exists: </span>") + filename_fill +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+
+        if ( ! CheckFileAccess(ui->lineEditFillPits->text(), "WriteOnly") )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->lineEditFillPits->text()+tr("<br>"));
+            return;
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Convert Binary to Ascii
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString DEMFileName = filename_dem;
+        QString ASCFileName = DEMFileName;
+
+        if((DEMFileName.toLower()).endsWith(".adf"))
+        {
+            ASCFileName.truncate(ASCFileName.length()-3);
+            ASCFileName.append("asc");
+
+            LogsString.append("Converting Arc Binary File to ASC File ... <br>");
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            ADFFiletoASCFile(DEMFileName, ASCFileName);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get DEM Resolution needed as well
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        int DEMResolution = 0;
+        QFile ASCFile(ASCFileName);
+        ASCFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        QTextStream ASCFileTextStream(&ASCFile);
+
+        QString TempString;
+        ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;
+        ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;
+        ASCFileTextStream>>TempString;
+
+        ASCFileTextStream >> DEMResolution;
+        qDebug() << "DEM Resolution (Integer) = "<<DEMResolution<<"\n";
+        ASCFile.close();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Run pit fill
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        LogsString.append("Running Fill Pits ... <br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        const char *dummystr = "dummy";
+
+        int ErrorFill = flood( (char *)qPrintable(ASCFileName), (char *)dummystr, (char *)qPrintable(filename_fill) );
+        if( ErrorFill != 0 )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fill Pits Processing Failed ... </span>")+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorFill)+tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QStringList ProjectIOStringList;
+        ProjectIOStringList << "FillPits" << filename_dem << filename_fill << QString::number(DEMResolution);
+        WriteModuleLine(filename_open_project, ProjectIOStringList);
+        ProjectIOStringList.clear();
+
         LogsString = tr("");
-        LogsString.append(tr("Fill Pits Processing Started ... <br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-
-        LogsString.append(tr("Verifying Data Files ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        int runFlag = 1;
-        QFile IOTestFile;
-
-        if( ui->lineEditDEM->text() == nullptr )
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check output file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        fill_check = Check_Fillpit_Output(filename_fill, false);
+        if(!fill_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: DEM Input File Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditDEM->text(), "ReadOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditDEM->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditDEM->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        if( ui->lineEditFillPits->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fill Pit Output File Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditFillPits->text(), "WriteOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->lineEditFillPits->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditFillPits->text() + " ... <br>");
-        }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if(runFlag == 1)
-        {
-            QString DEMFileName = ui->lineEditDEM->text();
-
-            QString ASCFileName = DEMFileName;
-
-            if((DEMFileName.toLower()).endsWith(".adf"))
-            {
-                ASCFileName.truncate(ASCFileName.length()-3);
-                ASCFileName.append("asc");
-
-                LogsString.append("Converting Arc Binary File to ASC File ... <br>");
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                ADFFiletoASCFile(DEMFileName, ASCFileName);
-            }
-
-            int DEMResolution = 0;
-            QFile ASCFile(ASCFileName);
-            ASCFile.open(QIODevice::ReadOnly | QIODevice::Text);
-            QTextStream ASCFileTextStream(&ASCFile);
-
-            QString TempString;
-            ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;
-            ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;
-            ASCFileTextStream>>TempString;
-
-            ASCFileTextStream >> DEMResolution;
-            qDebug() << "DEM Resolution (Integer) = "<<DEMResolution<<"\n";
-            ASCFile.close();
-
-            LogsString.append("Running Fill Pits ... <br>");
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Fillpit failed, file does not exist: </span>") + filename_fill +tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
-
-            const char *dummystr = "dummy";
-
-            //int ErrorFill = flood( (char *)qPrintable(ASCFileName), "dummy", (char *)qPrintable(ui->lineEditFillPits->text()) );
-            int ErrorFill = flood( (char *)qPrintable(ASCFileName), (char *)dummystr, (char *)qPrintable(ui->lineEditFillPits->text()) );
-            if( ErrorFill != 0 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fill Pits Processing Failed ... </span>")+tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorFill)+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
-            }
-
-
-            ProjectIOStringList << "FillPits" << ui->lineEditDEM->text() << ui->lineEditFillPits->text() << QString::number(DEMResolution);
-            WriteModuleLine(ProjectFileName, ProjectIOStringList);
-            ProjectIOStringList.clear();
-
-            if( ui->showPF_DFrame->isChecked() == 1 )
-            {
-                LogsString.append("Loading Data in GIS ... <br>");
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-
-            if(ui->showPF_DFrame->isChecked() == 1)
-            {
-                if ( ! QDesktopServices::openUrl(QUrl("file://"+ASCFileName)) )
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load ASC File in GIS ... </span>")+ASCFileName+tr("<br>"));
-                if ( ! QDesktopServices::openUrl(QUrl("file://"+ui->lineEditFillPits->text())) )
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load ASC File in GIS ... </span>")+ui->lineEditFillPits->text()+tr("<br>"));
-            }
-
-            LogsString.append(tr("<br><b>Fill Pits Processing Completed.</b>")+tr("<br>"));
+            return;
+        }
+        qint64 size = file_Size(filename_fill);
+        if( size < 1)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Fillpit failed, invalid file size: </span>") + size +tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
-
-            ui->pushButtonRun->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
+            return;
         }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Message box
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        LogsString.append(tr("<br><b>Fill Pits Processing Completed.</b>")+tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        ui->pushButtonRun->setDefault(false);
+        ui->pushButtonClose->setDefault(true);
+        ui->pushButtonClose->setFocus();
+
 
     } catch (...) {
         qDebug() << "Error: FillPits::on_pushButtonRun_clicked() is returning w/o checking";
@@ -350,6 +443,10 @@ void FillPits::on_pushButtonRun_clicked()
 
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close button event
+// TODO, Decide on keeping button next highlights or not
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FillPits::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
@@ -357,8 +454,8 @@ void FillPits::on_pushButtonClose_clicked()
 
     try {
 
-        QStringList default_params; default_params << "WORKFLOW2" << "FLOWGRIDS";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //        QStringList default_params; default_params << "WORKFLOW2" << "FLOWGRIDS";
+        //        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
 
     } catch (...) {
@@ -366,6 +463,10 @@ void FillPits::on_pushButtonClose_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FillPits::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)
@@ -374,10 +475,10 @@ void FillPits::on_pushButtonHelp_clicked()
     try {
 
         LogsString = tr("");
-//        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Fill_Pits")) )
-//            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
-//        ui->textBrowserLogs->setHtml(LogsString);
-//        ui->textBrowserLogs->repaint();
+        //        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Fill_Pits")) )
+        //            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
+        //        ui->textBrowserLogs->setHtml(LogsString);
+        //        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: FillPits::on_pushButtonHelp_clicked() is returning w/o checking";

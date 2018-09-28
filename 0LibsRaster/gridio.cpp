@@ -53,8 +53,8 @@ int nameadd(char *full,char *arg,char *suff)
 
 int readline(FILE *fp,char *fline)
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start readline";
+   // if(print_debug_messages)
+   //     qDebug() << "INFO: Start readline";
 
     try {
         int i = 0, ch;

@@ -69,7 +69,7 @@ int catchment_shape(char *catFile, char *nodeFile, char *shpFile, char *dbfFile)
             return 59;
         }
 
-        TempString = user_pihmgis_root_folder + "/.PIHMgis/temp.shp";
+        TempString = user_pihmgis_root_folder + user_pihmgis_project_folder + "/temp.shp";
 
         SHPHandle tempshp = SHPCreate(qPrintable(TempString), SHPT_ARC);
         TempString.replace(".shp",".dbf");

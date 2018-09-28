@@ -17,6 +17,26 @@ public:
     ~ImportProject();
     QString LogsString;
 
+//    QString string_FillPits;
+//    QString string_FlowGrids;
+//    QString string_StreamGrids;
+//    QString string_LinkGrids;
+//    QString string_CatchmentGrids;
+//    QString string_StreamPolyline;
+//    QString string_StreamRasterVector;
+//    QString string_CatchmentPolygon;
+//    QString string_CatchmentRasterVector;
+//    QString string_DissolvePolygons;
+//    QString string_PolygonToPolylines;
+//    QString string_SimplifyPolylines;
+//    QString string_PolylineToLines;
+//    QString string_MergeVectorLayers;
+//    QString string_MergeVectorDomainDecomposition;
+//    QString string_ReadTopology;
+//    QString string_DelaunayTriangulation;
+//    QString string_TINShapeLayer;
+
+
 private:
     Ui::ImportProject *ui;
 

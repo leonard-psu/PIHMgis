@@ -12,10 +12,10 @@ class FillPits : public QDialog
     Q_OBJECT
 
 public:
-    explicit FillPits(QWidget *parent = 0);
+    explicit FillPits(QWidget *parent = 0, QString filename_open_project = "");
     ~FillPits();
     QString LogsString;
-    QStringList ProjectIOStringList;
+
 
 private slots:
     void on_pushButtonDEM_clicked();
@@ -30,8 +30,14 @@ private slots:
 
     void pushButtonSetFocus();
 
+    bool Check_DEM_Input(QString dem);
+    bool Check_Fillpit_Output(QString fillpits, bool message );
+    void Clear_Log();
+
+
 private:
     Ui::FillPits *ui;
+    QString filename_open_project;
 };
 
 #endif // FILLPITS_H

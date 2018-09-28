@@ -26,10 +26,10 @@ StreamGrids::StreamGrids(QWidget *parent) :
 
 
         // ** Start: Fill Form If Module Has Been Run Previously
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
@@ -125,10 +125,10 @@ void StreamGrids::on_lineEditThreshold_textChanged()
 
     try {
 
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
@@ -156,10 +156,10 @@ void StreamGrids::on_pushButtonFlowAccGrids_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
         if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -211,10 +211,10 @@ void StreamGrids::on_pushButtonStreamGrids_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -275,7 +275,7 @@ void StreamGrids::on_pushButtonSuggestMe_clicked()
         }
         if ( ! FlowAccFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -349,7 +349,7 @@ void StreamGrids::on_pushButtonRun_clicked()
         ui->textBrowserLogs->repaint();
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
         ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream ProjectFileTextStream(&ProjectFile);
         ProjectFolder   = ProjectFileTextStream.readLine();

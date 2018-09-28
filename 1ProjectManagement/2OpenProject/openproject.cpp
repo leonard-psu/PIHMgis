@@ -46,7 +46,7 @@ void OpenProject::on_pushButtonFile_clicked()
 
         QString ProjectFolder, ProjectFileName;
 
-        QFile OpenProjectFile(user_pihmgis_root_folder + "/.PIHMgis/OpenProject.txt");
+        QFile OpenProjectFile(user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt");
 
         if (! OpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
@@ -91,8 +91,8 @@ void OpenProject::on_pushButtonClose_clicked()
         qDebug() << "INFO: Start OpenProject::on_pushButtonClose_clicked()";
 
     try {
-        QStringList default_params; default_params << "WORKFLOW2";// << "WORKFLOW8";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //QStringList default_params; default_params << "WORKFLOW2";// << "WORKFLOW8";
+        //QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
 
     } catch (...) {
@@ -110,25 +110,35 @@ void OpenProject::on_pushButtonOpen_clicked()
 
         if(ui->lineEditFile->text() != nullptr)
         {
-            QFile OpenProjectFile(user_pihmgis_root_folder + "/.PIHMgis/OpenProject.txt");
-            QTextStream OpenProjectFileTextStream(&OpenProjectFile);
+            QString path(user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt");
+            bool fileExists = QFileInfo::exists(path) && QFileInfo(path).isFile();
 
-            if( OpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+            if(fileExists)
             {
-                OpenProjectFileTextStream.readLine();
-                LogsString.append(tr("Closing Project: ")+OpenProjectFileTextStream.readLine()+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-            OpenProjectFile.close();
+                QFile OpenProjectFile(user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt");
+                QTextStream OpenProjectFileTextStream(&OpenProjectFile);
 
-            if( !OpenProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write to Current Project File: </span>") + user_pihmgis_root_folder + "/.PIHMgis/OpenProject.txt"+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                //QMessageBox::critical(this,tr("Open Project"),tr("Error: Unable to Create Open Project."),QMessageBox::Ok);
-                return;
+                if( OpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+                {
+                    OpenProjectFileTextStream.readLine();
+                    LogsString.append(tr("Closing Project: ")+OpenProjectFileTextStream.readLine()+tr("<br>"));
+                    ui->textBrowserLogs->setHtml(LogsString);
+                    ui->textBrowserLogs->repaint();
+                }
+                OpenProjectFile.close();
+
+                if( !OpenProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+                {
+                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write to Current Project File: </span>") + user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
+                    ui->textBrowserLogs->setHtml(LogsString);
+                    ui->textBrowserLogs->repaint();
+                    //QMessageBox::critical(this,tr("Open Project"),tr("Error: Unable to Create Open Project."),QMessageBox::Ok);
+                    return;
+                }
+
+                OpenProjectFileTextStream<<ui->lineEditFolder->text()<<"\n";
+                OpenProjectFileTextStream<<ui->lineEditFile->text()<<"\n";
+                OpenProjectFile.close();
             }
 
             QFile ProjectFile(ui->lineEditFile->text());
@@ -159,10 +169,10 @@ void OpenProject::on_pushButtonOpen_clicked()
                 return;
             }
 
-            //QTextStream OpenProjectFileTextStream(&OpenProjectFile);
-            OpenProjectFileTextStream<<ui->lineEditFolder->text()<<"\n";
-            OpenProjectFileTextStream<<ui->lineEditFile->text()<<"\n";
-            OpenProjectFile.close();
+//            //QTextStream OpenProjectFileTextStream(&OpenProjectFile);
+//            OpenProjectFileTextStream<<ui->lineEditFolder->text()<<"\n";
+//            OpenProjectFileTextStream<<ui->lineEditFile->text()<<"\n";
+//            OpenProjectFile.close();
 
             LogsString.append(tr("<b>Existing Project Opened Successfully.")+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
@@ -185,13 +195,13 @@ void OpenProject::on_pushButtonHelp_clicked()
         qDebug() << "INFO: Start OpenProject::on_pushButtonHelp_clicked()";
 
     try {
-        LogsString = tr("");
+        //LogsString = tr("");
 
-//        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Open_Project")) )
-//            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
+        //        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Open_Project")) )
+        //            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
 
-//        ui->textBrowserLogs->setHtml(LogsString);
-//        ui->textBrowserLogs->repaint();
+        //        ui->textBrowserLogs->setHtml(LogsString);
+        //        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: OpenProject::on_pushButtonHelp_clicked()";

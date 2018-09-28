@@ -22,10 +22,10 @@ InitDataFile::InitDataFile(QWidget *parent) :
         ui->setupUi(this);
 
         // ** Start: Set Defaults
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
@@ -240,10 +240,10 @@ void InitDataFile::on_pushButtonMeshDataFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -285,10 +285,10 @@ void InitDataFile::on_pushButtonRivDataFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -330,10 +330,10 @@ void InitDataFile::on_pushButtonInitDataFile_clicked()
         LogsString = tr("");
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -670,7 +670,7 @@ void InitDataFile::on_pushButtonRun_clicked()
         ui->textBrowserLogs->repaint();
 
         QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+"/.PIHMgis/OpenProject.txt");
+        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
         ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream ProjectFileTextStream(&ProjectFile);
         ProjectFolder   = ProjectFileTextStream.readLine();

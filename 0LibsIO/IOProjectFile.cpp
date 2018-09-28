@@ -11,6 +11,9 @@ QStringList ReadModuleLine(QString ProjectFileName, QString Module)
 
     try {
 
+        qDebug() << "ProjectFileName " << ProjectFileName;
+
+
         QFile ProjectFile(ProjectFileName);
         ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream ProjectFileTextStream(&ProjectFile);
@@ -22,6 +25,7 @@ QStringList ReadModuleLine(QString ProjectFileName, QString Module)
         {
             ProjectFileLineString     = ProjectFileTextStream.readLine();
             ProjectFileLineStringList = ProjectFileLineString.split(",");
+            qDebug() << "ProjectFileLineString " << ProjectFileLineString;
 
             if ( ProjectFileLineStringList.at(0) == Module )
                 return ProjectFileLineStringList;
@@ -53,7 +57,7 @@ bool WriteModuleLine(QString ProjectFileName, QStringList WriteStringList)
         QString Module;
         Module = WriteStringList.at(0);
 
-        QString TempProjectFileName = user_pihmgis_root_folder + "/.PIHMgis/TempProjectFile.txt";
+        QString TempProjectFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + "/TempProjectFile.txt";
 
         QFile::remove(TempProjectFileName);
         if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
@@ -113,7 +117,7 @@ bool DeleteModuleLine(QString ProjectFileName, QString Module)
 
     try {
 
-        QString TempProjectFileName = user_pihmgis_root_folder + "/.PIHMgis/TempProjectFile.txt";
+        QString TempProjectFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + "/TempProjectFile.txt";
 
         QFile::remove(TempProjectFileName);
         if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
@@ -198,8 +202,8 @@ bool CheckFileAccess (QString FileName, QString AccessMode)
 
 QString readLineNumber(QString ProjectFileName, int LineNumber)
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start readLineNumber";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start readLineNumber";
 
     try {
         QString TempString;
@@ -240,7 +244,7 @@ bool writeLineNumber(QString ProjectFileName, int LineNumber, QString WriteStrin
         ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream ProjectFileTextStream(&ProjectFile);
 
-        QString TempProjectFileName = user_pihmgis_root_folder + "/.PIHMgis/TempProjectFile.txt";
+        QString TempProjectFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + "/TempProjectFile.txt";
 
         QFile TempProjectFile(TempProjectFileName);
         if ( ! TempProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) )
@@ -268,7 +272,7 @@ bool writeLineNumber(QString ProjectFileName, int LineNumber, QString WriteStrin
         TempProjectFile.close();
 
 
-        //QFile inData2(QDir::homeDir()+"/.PIHMgis/TempProjectFile.txt");
+        //QFile inData2(QDir::homeDir()+user_pihmgis_project_folder + "/TempProjectFile.txt");
         TempProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
 
         //QFile outData2(ProjectFileName);
