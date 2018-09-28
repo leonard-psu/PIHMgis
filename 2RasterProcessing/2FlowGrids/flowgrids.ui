@@ -425,8 +425,14 @@
     </disabled>
    </palette>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>: :   Flow Grids   : :</string>
+   <string>Flow Grids</string>
   </property>
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
@@ -893,7 +899,7 @@
      <x>15</x>
      <y>17</y>
      <width>581</width>
-     <height>100</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="title">
@@ -902,9 +908,9 @@
    <widget class="QLineEdit" name="lineEditFillPits">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>14</x>
       <y>44</y>
-      <width>325</width>
+      <width>561</width>
       <height>29</height>
      </rect>
     </property>
@@ -919,8 +925,8 @@
    <widget class="QPushButton" name="pushButtonFillPits">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>43</y>
+      <x>480</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -941,15 +947,20 @@
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>22</x>
-      <y>43</y>
-      <width>104</width>
+      <x>180</x>
+      <y>10</y>
+      <width>221</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
-     <string>Pit-Filled/
-DEM Grid</string>
+     <string>Pit-Filled DEM Grid (From Step #1)</string>
     </property>
    </widget>
   </widget>
@@ -1403,9 +1414,9 @@ DEM Grid</string>
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>125</y>
+     <y>95</y>
      <width>581</width>
-     <height>171</height>
+     <height>201</height>
     </rect>
    </property>
    <property name="title">
@@ -1414,22 +1425,31 @@ DEM Grid</string>
    <widget class="QLabel" name="textLabel1_2">
     <property name="geometry">
      <rect>
-      <x>22</x>
-      <y>34</y>
-      <width>90</width>
+      <x>230</x>
+      <y>10</y>
+      <width>111</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Flow Dir. Grid</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBoxFlowDirGrid">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>382</x>
-      <y>67</y>
-      <width>75</width>
+      <x>480</x>
+      <y>80</y>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>
@@ -1448,14 +1468,14 @@ DEM Grid</string>
      <string>Load in GIS</string>
     </property>
     <property name="checked">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonFlowAccGrid">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>107</y>
+      <x>480</x>
+      <y>110</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1470,9 +1490,9 @@ DEM Grid</string>
    <widget class="QLineEdit" name="lineEditFlowAccGrids">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>110</y>
-      <width>325</width>
+      <x>10</x>
+      <y>150</y>
+      <width>561</width>
       <height>29</height>
      </rect>
     </property>
@@ -1487,11 +1507,17 @@ DEM Grid</string>
    <widget class="QLabel" name="textLabel1_2_2">
     <property name="geometry">
      <rect>
-      <x>22</x>
-      <y>108</y>
-      <width>90</width>
+      <x>230</x>
+      <y>110</y>
+      <width>111</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Flow Acc. Grid</string>
@@ -1500,9 +1526,9 @@ DEM Grid</string>
    <widget class="QLineEdit" name="lineEditFlowDirGrids">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>35</y>
-      <width>325</width>
+      <x>14</x>
+      <y>48</y>
+      <width>561</width>
       <height>29</height>
      </rect>
     </property>
@@ -1515,11 +1541,14 @@ DEM Grid</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBoxFlowAccGrid">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>382</x>
-      <y>141</y>
-      <width>75</width>
+      <x>490</x>
+      <y>180</y>
+      <width>91</width>
       <height>21</height>
      </rect>
     </property>
@@ -1538,14 +1567,14 @@ DEM Grid</string>
      <string>Load in GIS</string>
     </property>
     <property name="checked">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonsFlowDirGrid">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>34</y>
+      <x>480</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1571,6 +1600,9 @@ DEM Grid</string>
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>16</x>
@@ -1578,6 +1610,12 @@ DEM Grid</string>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -1595,6 +1633,12 @@ DEM Grid</string>
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Close</string>
     </property>
@@ -1610,6 +1654,12 @@ DEM Grid</string>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string/>

@@ -97,8 +97,8 @@ ERROR1:
 /* function to compute area recursively */
 void darea(int i, int j)
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start darea";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start darea";
 
     int in,jn,k,con=0;
     /* con is a flag that signifies possible contaminatin of area

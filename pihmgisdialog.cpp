@@ -531,7 +531,11 @@ void PIHMgisDialog::on_pushButtonRasterProcessingFlowGrids_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingFlowGrids_clicked";
 
     try {
-        FlowGrids *FlowGridsDialog = new FlowGrids(this);
+
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        FlowGrids *FlowGridsDialog = new FlowGrids(this, filename_open_project);
+        FlowGridsDialog->setModal(true);
         FlowGridsDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingFlowGrids_clicked is returning w/o checking";

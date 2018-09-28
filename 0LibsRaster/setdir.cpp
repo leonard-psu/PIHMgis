@@ -477,8 +477,8 @@ void flatrout(int n,int *sloc, short *s,int **spos,int iter,float *elev1,float *
 
 void incfall(int n, float *elev1, short *s1,int **spos,  int iter, int *sloc)
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start incfall";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start incfall";
 
     try {
         /* This routine implements drainage towards lower areas - stage 1 */

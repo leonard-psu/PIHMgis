@@ -31,7 +31,9 @@ private slots:
     void pushButtonSetFocus();
 
     bool Check_DEM_Input(QString dem);
+
     bool Check_Fillpit_Output(QString fillpits, bool message );
+
     void Clear_Log();
 
 

@@ -51,7 +51,7 @@ FillPits::FillPits(QWidget *parent, QString filename) :
 
         if(found_file)
         {
-            QStringList ModuleStringList = ReadModuleLine(filename, tr("FillPits"));
+            QStringList ModuleStringList = ReadModuleLine(filename_open_project, tr("FillPits"));
 
             if ( ModuleStringList.length() > 0 )
             {
@@ -255,7 +255,7 @@ void FillPits::on_pushButtonDEM_clicked()
         }
         else
         {
-            qDebug() << "ProjectFolder: Invalid DEMFileName";
+            qDebug() << "on_pushButtonDEM_clicked: Invalid DEMFileName";
         }
 
     } catch (...) {
@@ -279,8 +279,12 @@ void FillPits::on_pushButtonFillPits_clicked()
         if ( FillPitFileName != nullptr)
         {
             Check_DEM_Input(ui->lineEditDEM->text());
-            Check_DEM_Input(FillPitFileName);
+            Check_Fillpit_Output(FillPitFileName, false);
             pushButtonSetFocus();
+        }
+        else
+        {
+            qDebug() << "on_pushButtonFillPits_clicked: Invalid FillPitFileName";
         }
 
     } catch (...) {
@@ -330,9 +334,9 @@ void FillPits::on_pushButtonRun_clicked()
             return;
         }
 
-        if ( ! CheckFileAccess(ui->lineEditFillPits->text(), "WriteOnly") )
+        if ( ! CheckFileAccess(filename_fill, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->lineEditFillPits->text()+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + filename_fill + tr("<br>"));
             return;
         }
 
@@ -400,9 +404,7 @@ void FillPits::on_pushButtonRun_clicked()
         WriteModuleLine(filename_open_project, ProjectIOStringList);
         ProjectIOStringList.clear();
 
-        LogsString = tr("");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Clear_Log();
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check output file
