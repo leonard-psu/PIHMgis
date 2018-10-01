@@ -12,11 +12,11 @@ class LinkGrids : public QDialog
     Q_OBJECT
 
 public:
-    explicit LinkGrids(QWidget *parent = 0);
+    explicit LinkGrids(QWidget *parent = 0, QString filename_open_project = "");
     ~LinkGrids();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
+   // QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonStreamGrids_clicked();
@@ -33,8 +33,20 @@ private slots:
 
     void pushButtonSetFocus();
 
+    void Clear_Log();
+
+    bool Check_StreamGrids_Input(QString file);
+
+    bool Check_FlowDirGrids_Input(QString file);
+
+    bool Check_LinkGrids_Output(QString file, bool message);
+
+
+
 private:
     Ui::LinkGrids *ui;
+    QString filename_open_project;
+
 };
 
 #endif // LINKGRIDS_H

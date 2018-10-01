@@ -68,6 +68,14 @@ StreamGrids::StreamGrids(QWidget *parent, QString filename) :
 
                 ui->lineEditStreamGrids->setText(StreamGrids);
                 //ui->lineEditThreshold->setText(""); //Why blank it, as threshold is used in name?
+
+                bool streamgrids_check = Check_StreamGrids_Output(StreamGrids, true);
+                if(streamgrids_check)
+                {
+                    LogsString.append(tr("<span style=\"color:#FF0000\">WARNING: Output already exist. </span>") +tr("<br>"));
+                    ui->textBrowserLogs->setHtml(LogsString);
+                    ui->textBrowserLogs->repaint();
+                }
             }
 
             ModuleStringList = ReadModuleLine(filename_open_project,tr("StreamGrids"));
@@ -81,9 +89,9 @@ StreamGrids::StreamGrids(QWidget *parent, QString filename) :
                 bool streamgrids_check = Check_StreamGrids_Output(StreamGrids, true);
                 bool threshold_check = Check_Threshold_Input(Threshold);
 
-                if(flowacc_check && streamgrids_check)
+                if(streamgrids_check)
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">INFO: Both input and output already exist. </span>") +tr("<br>"));
+                    LogsString.append(tr("<span style=\"color:#FF0000\">WARNING: Output already exist. </span>") +tr("<br>"));
                     ui->textBrowserLogs->setHtml(LogsString);
                     ui->textBrowserLogs->repaint();
                 }
@@ -538,7 +546,7 @@ void StreamGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Does output already exist?
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool streamgrids_check = Check_StreamGrids_Output(StreamGrids, true);
+        bool streamgrids_check = Check_StreamGrids_Output(StreamGrids, false);
         if(streamgrids_check)
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Stream Grid Output already exists </span>")+tr("<br>"));
@@ -616,6 +624,7 @@ void StreamGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
         LogsString.append(tr("<br><b>Flow Grids Processing Completed.</b>")+tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();

@@ -88,9 +88,9 @@ FlowGrids::FlowGrids(QWidget *parent, QString filename) :
                 bool flow_check = Check_FlowDir_Output(flowdir, true);
                 bool acc_check = Check_FlowAcc_Output(flowacc, true);
 
-                if(flow_check && acc_check)
+                if(acc_check)
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">INFO: Both input and output already exist. </span>") +tr("<br>"));
+                    LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Output already exist. </span>") +tr("<br>"));
                     ui->textBrowserLogs->setHtml(LogsString);
                     ui->textBrowserLogs->repaint();
                 }

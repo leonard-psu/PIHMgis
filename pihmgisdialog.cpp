@@ -534,6 +534,7 @@ void PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked()
         StreamGrids *StreamGridsDialog = new StreamGrids(this, filename_open_project);
         StreamGridsDialog->setModal(true);
         StreamGridsDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked is returning w/o checking";
     }
@@ -545,8 +546,12 @@ void PIHMgisDialog::on_pushButtonRasterProcessingLinkGrids_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingLinkGrids_clicked";
 
     try {
-        LinkGrids *LinkGridsDialog = new LinkGrids(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        LinkGrids *LinkGridsDialog = new LinkGrids(this, filename_open_project);
+        LinkGridsDialog->setModal(true);
         LinkGridsDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingLinkGrids_clicked is returning w/o checking";
     }
