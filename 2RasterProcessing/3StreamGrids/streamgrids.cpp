@@ -165,7 +165,7 @@ bool StreamGrids::Check_Threshold_Input(QString Threshold)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Helper Function to assist if StreamGrids input file exists (returns true) or does not (returns false)
+// Helper Function to assist if StreamGrids OUTPUT file exists (returns true) or does not (returns false)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool StreamGrids::Check_StreamGrids_Output(QString file, bool message)
 {
@@ -401,7 +401,7 @@ void StreamGrids::on_pushButtonStreamGrids_clicked()
                 StreamGridsFileName = tempString;
             }
 
-            Check_StreamGrids_Output(tempString, true);
+            Check_StreamGrids_Output(StreamGridsFileName, true);
 
             pushButtonSetFocus();
         }

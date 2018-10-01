@@ -563,8 +563,12 @@ void PIHMgisDialog::on_pushButtonRasterProcessingCatchmentGrids_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingCatchmentGrids_clicked";
 
     try {
-        CatchmentGrids *CatchmentGridsDialog = new CatchmentGrids(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        CatchmentGrids *CatchmentGridsDialog = new CatchmentGrids(this, filename_open_project);
+        CatchmentGridsDialog->setModal(true);
         CatchmentGridsDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingCatchmentGrids_clicked is returning w/o checking";
     }

@@ -57,8 +57,8 @@ int catchment(char *segFile, char *fdrFile, char *catFile){
 
 int trace(float **seg, short int **fdr, float **cat, int i, int j){
 
-    if(print_debug_messages)
-        qDebug() << "INFO: Start trace";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start trace";
 
     try {
 
@@ -92,8 +92,8 @@ int trace(float **seg, short int **fdr, float **cat, int i, int j){
 
 void findIJCat(short **fdr, int i, int j, int *mIJ){
 
-    if(print_debug_messages)
-        qDebug() << "INFO: Start findIJCat";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start findIJCat";
 
     try {
 

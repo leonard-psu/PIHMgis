@@ -12,11 +12,11 @@ class CatchmentGrids : public QDialog
     Q_OBJECT
 
 public:
-    explicit CatchmentGrids(QWidget *parent = 0);
+    explicit CatchmentGrids(QWidget *parent = 0, QString filename_open_project = "");
     ~CatchmentGrids();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
+    //QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonLinkGrids_clicked();
@@ -33,8 +33,19 @@ private slots:
 
     void pushButtonSetFocus();
 
+    void Clear_Log();
+
+    bool Check_LinkGrids_Input(QString file);
+
+    bool Check_FlowDirGrids_Input(QString file);
+
+    bool Check_CatchmentGrids_Output(QString file, bool message);
+
+
 private:
     Ui::CatchmentGrids *ui;
+    QString filename_open_project;
+
 };
 
 #endif // CATCHMENTGRIDS_H
