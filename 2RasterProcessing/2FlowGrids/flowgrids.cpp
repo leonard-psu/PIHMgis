@@ -65,7 +65,7 @@ FlowGrids::FlowGrids(QWidget *parent, QString filename) :
                 QString flowdir = filename_open_project+"/1RasterProcessing/FlowDir.asc";
                 QString flowacc = filename_open_project+"/1RasterProcessing/FlowAcc.asc";
 
-                bool fill_check = Check_Fillpit_Intput(fillpits);
+                bool fill_check = Check_Fillpit_Input(fillpits);
                 if(!fill_check)
                 {
                     LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fillpit input does not exist. </span>") +tr("<br>"));
@@ -124,7 +124,7 @@ FlowGrids::~FlowGrids()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if DEM input file exists (returns true) or does not (returns false)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool FlowGrids::Check_Fillpit_Intput(QString file )
+bool FlowGrids::Check_Fillpit_Input(QString file )
 {
     if(print_debug_messages)
         qDebug() << "INFO: Check_Fillpit_Intput()";
@@ -326,7 +326,7 @@ void FlowGrids::on_pushButtonFillPits_clicked()
         QString FillPitsFileName = QFileDialog::getOpenFileName(this, "Choose DEM File", user_pihmgis_root_folder + tr("/.."), "DEM Grid File(*.adf *.asc *.ASC)");
         if ( FillPitsFileName != nullptr)
         {
-            Check_Fillpit_Intput(FillPitsFileName);
+            Check_Fillpit_Input(FillPitsFileName);
             Check_FlowDir_Output(ui->lineEditFlowDirGrids->text(), true);
             Check_FlowAcc_Output(ui->lineEditFlowAccGrids->text(), true);
 
@@ -341,7 +341,6 @@ void FlowGrids::on_pushButtonFillPits_clicked()
         qDebug() << "Error: FlowGrids::on_pushButtonFillPits_clicked is returning w/o checking";
     }
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Browse Button Clicked Event for FlowDir file
@@ -358,7 +357,7 @@ void FlowGrids::on_pushButtonsFlowDirGrid_clicked()
         QString FlowDirFileName = QFileDialog::getSaveFileName(this, "Choose Flow Dir Grid", user_pihmgis_root_folder + "/1RasterProcessing","Flow Dir Grid File(*.asc)");
         if ( FlowDirFileName != nullptr)
         {
-            Check_Fillpit_Intput(ui->lineEditFillPits->text());
+            Check_Fillpit_Input(ui->lineEditFillPits->text());
             Check_FlowDir_Output(FlowDirFileName, false);
             Check_FlowAcc_Output(ui->lineEditFlowAccGrids->text(), false);
 
@@ -370,6 +369,9 @@ void FlowGrids::on_pushButtonsFlowDirGrid_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Clicked Event for FlowGrids file
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FlowGrids::on_pushButtonFlowAccGrid_clicked()
 {
 
@@ -383,11 +385,15 @@ void FlowGrids::on_pushButtonFlowAccGrid_clicked()
         QString FlowAccFileName = QFileDialog::getSaveFileName(this, "Choose Flow Acc Grid", user_pihmgis_root_folder + "/1RasterProcessing","Flwo Acc Grid File(*.asc)");
         if ( FlowAccFileName != nullptr)
         {
-            Check_Fillpit_Intput(ui->lineEditFillPits->text());
+            Check_Fillpit_Input(ui->lineEditFillPits->text());
             Check_FlowDir_Output(ui->lineEditFlowDirGrids->text(), false);
             Check_FlowAcc_Output(FlowAccFileName, false);
 
             pushButtonSetFocus();
+        }
+        else
+        {
+            qDebug() << "on_pushButtonFlowAccGrid_clicked: Invalid FlowAccFileName";
         }
 
     } catch (...) {
@@ -395,6 +401,9 @@ void FlowGrids::on_pushButtonFlowAccGrid_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run Button Clicked Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FlowGrids::on_pushButtonRun_clicked()
 {
 
@@ -415,7 +424,7 @@ void FlowGrids::on_pushButtonRun_clicked()
         QString filename_flow =  ui->lineEditFlowDirGrids->text();
         QString filename_acc =  ui->lineEditFlowAccGrids->text();
 
-        bool fill_check = Check_Fillpit_Intput(filename_fill);
+        bool fill_check = Check_Fillpit_Input(filename_fill);
         if(!fill_check)
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">Error: Fill Pits Input File Missing: </span>") + filename_fill +tr("<br>"));
@@ -442,7 +451,6 @@ void FlowGrids::on_pushButtonRun_clicked()
             return;
         }
 
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Does output filename_acc already exist?
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -460,7 +468,6 @@ void FlowGrids::on_pushButtonRun_clicked()
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + filename_acc + tr("<br>"));
             return;
         }
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Convert Binary to Ascii
@@ -544,7 +551,6 @@ void FlowGrids::on_pushButtonRun_clicked()
 
         Clear_Log();
 
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check output filename_flow
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -564,7 +570,6 @@ void FlowGrids::on_pushButtonRun_clicked()
             ui->textBrowserLogs->repaint();
             return;
         }
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check output filename_acc

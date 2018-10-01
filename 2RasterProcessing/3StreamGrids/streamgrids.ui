@@ -426,7 +426,7 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>: :   Stream Grids   : :</string>
+   <string>Stream Grids</string>
   </property>
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
@@ -891,10 +891,16 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>125</y>
+     <y>105</y>
      <width>581</width>
-     <height>171</height>
+     <height>191</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="title">
     <string>Output</string>
@@ -902,11 +908,19 @@
    <widget class="QLabel" name="textLabel1_2">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>45</y>
-      <width>90</width>
+      <x>240</x>
+      <y>10</y>
+      <width>101</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Stream Grid</string>
@@ -915,19 +929,19 @@
    <widget class="QLabel" name="textLabel1_2_2_2">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>134</y>
-      <width>60</width>
+      <x>240</x>
+      <y>150</y>
+      <width>91</width>
       <height>20</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Sans Serif</family>
-      <pointsize>8</pointsize>
-      <weight>50</weight>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
       <italic>false</italic>
-      <bold>false</bold>
+      <bold>true</bold>
       <underline>false</underline>
       <strikeout>false</strikeout>
      </font>
@@ -939,11 +953,18 @@
    <widget class="QLabel" name="textLabel1_2_2">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>112</y>
+      <x>240</x>
+      <y>120</y>
       <width>90</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Threshold</string>
@@ -952,8 +973,8 @@
    <widget class="QPushButton" name="pushButtonSuggestMe">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>112</y>
+      <x>460</x>
+      <y>130</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -965,9 +986,9 @@
    <widget class="QLineEdit" name="lineEditThreshold">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>113</y>
-      <width>90</width>
+      <x>335</x>
+      <y>131</y>
+      <width>121</width>
       <height>29</height>
      </rect>
     </property>
@@ -985,8 +1006,8 @@
    <widget class="QPushButton" name="pushButtonStreamGrids">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>45</y>
+      <x>480</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1001,9 +1022,9 @@
    <widget class="QLineEdit" name="lineEditStreamGrids">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>4</x>
       <y>46</y>
-      <width>325</width>
+      <width>571</width>
       <height>29</height>
      </rect>
     </property>
@@ -1016,11 +1037,14 @@
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBoxStreamGrids">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>382</x>
+      <x>490</x>
       <y>80</y>
-      <width>75</width>
+      <width>91</width>
       <height>21</height>
      </rect>
     </property>
@@ -1039,7 +1063,7 @@
      <string>Load in GIS</string>
     </property>
     <property name="checked">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
@@ -1049,8 +1073,14 @@
      <x>15</x>
      <y>17</y>
      <width>581</width>
-     <height>100</height>
+     <height>81</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="title">
     <string>Input</string>
@@ -1058,11 +1088,19 @@
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>43</y>
-      <width>95</width>
+      <x>230</x>
+      <y>10</y>
+      <width>121</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Flow Acc. Grid</string>
@@ -1071,9 +1109,9 @@
    <widget class="QLineEdit" name="lineEditFlowAccGrids">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>4</x>
       <y>44</y>
-      <width>325</width>
+      <width>571</width>
       <height>29</height>
      </rect>
     </property>
@@ -1088,8 +1126,8 @@
    <widget class="QPushButton" name="pushButtonFlowAccGrids">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>43</y>
+      <x>480</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1121,6 +1159,9 @@
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>16</x>
@@ -1128,6 +1169,14 @@
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -1145,6 +1194,14 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Close</string>
     </property>
@@ -1160,6 +1217,14 @@
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string/>
@@ -1601,6 +1666,14 @@
       </colorrole>
      </disabled>
     </palette>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(0, 51, 153);</string>

@@ -56,25 +56,6 @@
 QString user_pihmgis_root_folder = QDir::homePath(); //Default for now, need to customize based on OS
 QString user_pihmgis_project_folder = "/.PIHMgis";   //Default for now, need to customize
 
-//QString global_string_FillPits = QString("");
-//QString global_string_FlowGrids = QString("");
-//QString global_string_StreamGrids = QString("");
-//QString global_string_LinkGrids = QString("");
-//QString global_string_CatchmentGrids = QString("");
-//QString global_string_StreamPolyline = QString("");
-//QString global_string_StreamRasterVector = QString("");
-//QString global_string_CatchmentPolygon = QString("");
-//QString global_string_CatchmentRasterVector = QString("");
-//QString global_string_DissolvePolygons = QString("");
-//QString global_string_PolygonToPolylines = QString("");
-//QString global_string_SimplifyPolylines = QString("");
-//QString global_string_PolylineToLines = QString("");
-//QString global_string_MergeVectorLayers = QString("");
-//QString global_string_MergeVectorDomainDecomposition = QString("");
-//QString global_string_ReadTopology = QString("");
-//QString global_string_DelaunayTriangulation = QString("");
-//QString global_string_TINShapeLayer = QString("");
-
 
 PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
     QWidget(parent),
@@ -548,7 +529,10 @@ void PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked";
 
     try {
-        StreamGrids *StreamGridsDialog = new StreamGrids(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        StreamGrids *StreamGridsDialog = new StreamGrids(this, filename_open_project);
+        StreamGridsDialog->setModal(true);
         StreamGridsDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked is returning w/o checking";
@@ -1037,7 +1021,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 
 
             //Need to create default folders for pihmgis
-            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/1RasterProcessing";
+            make_folder = user_pihmgis_root_folder +  + "/1RasterProcessing";
             QDir dir_1RasterProcessing(make_folder);
 
             if (!dir_1RasterProcessing.exists()) {
@@ -1049,7 +1033,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                 qDebug() << "1RasterProcessing Folder already exists = " << make_folder;
             }
 
-            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/2VectorProcessing";
+            make_folder = user_pihmgis_root_folder + "/2VectorProcessing";
             QDir dir_2VectorProcessing(make_folder);
 
             if (!dir_2VectorProcessing.exists()) {
@@ -1062,7 +1046,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
             }
 
 
-            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/3DomainDecomposition";
+            make_folder = user_pihmgis_root_folder + "/3DomainDecomposition";
             QDir dir_3DomainDecomposition(make_folder);
 
             if (!dir_3DomainDecomposition.exists()) {
@@ -1074,7 +1058,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                 qDebug() << "3DomainDecomposition Folder already exists = " << make_folder;
             }
 
-            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/4DataModelLoader";
+            make_folder = user_pihmgis_root_folder + "/4DataModelLoader";
             QDir dir_4DataModelLoader(make_folder);
 
             if (!dir_4DataModelLoader.exists()) {
@@ -1086,7 +1070,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                 qDebug() << "4DataModelLoader Folder already exists = " << make_folder;
             }
 
-            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/5PIHMSimulation";
+            make_folder = user_pihmgis_root_folder + "/5PIHMSimulation";
             QDir dir_5PIHMSimulation(make_folder);
 
             if (!dir_5PIHMSimulation.exists()) {
@@ -1098,7 +1082,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                 qDebug() << "5PIHMSimulation Folder already exists = " << make_folder;
             }
 
-            make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder + "/6VisualAnalytics";
+            make_folder = user_pihmgis_root_folder + "/6VisualAnalytics";
             QDir dir_6VisualAnalytics(make_folder);
 
             if (!dir_6VisualAnalytics.exists()) {

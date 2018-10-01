@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_FlowGrids_t {
     QByteArrayData data[15];
-    char stringdata0[291];
+    char stringdata0[290];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -40,12 +40,12 @@ QT_MOC_LITERAL(5, 108, 24), // "on_pushButtonRun_clicked"
 QT_MOC_LITERAL(6, 133, 26), // "on_pushButtonClose_clicked"
 QT_MOC_LITERAL(7, 160, 25), // "on_pushButtonHelp_clicked"
 QT_MOC_LITERAL(8, 186, 18), // "pushButtonSetFocus"
-QT_MOC_LITERAL(9, 205, 20), // "Check_Fillpit_Intput"
-QT_MOC_LITERAL(10, 226, 4), // "file"
-QT_MOC_LITERAL(11, 231, 20), // "Check_FlowDir_Output"
-QT_MOC_LITERAL(12, 252, 7), // "message"
-QT_MOC_LITERAL(13, 260, 20), // "Check_FlowAcc_Output"
-QT_MOC_LITERAL(14, 281, 9) // "Clear_Log"
+QT_MOC_LITERAL(9, 205, 19), // "Check_Fillpit_Input"
+QT_MOC_LITERAL(10, 225, 4), // "file"
+QT_MOC_LITERAL(11, 230, 20), // "Check_FlowDir_Output"
+QT_MOC_LITERAL(12, 251, 7), // "message"
+QT_MOC_LITERAL(13, 259, 20), // "Check_FlowAcc_Output"
+QT_MOC_LITERAL(14, 280, 9) // "Clear_Log"
 
     },
     "FlowGrids\0on_pushButtonFillPits_clicked\0"
@@ -54,9 +54,8 @@ QT_MOC_LITERAL(14, 281, 9) // "Clear_Log"
     "on_pushButtonRun_clicked\0"
     "on_pushButtonClose_clicked\0"
     "on_pushButtonHelp_clicked\0pushButtonSetFocus\0"
-    "Check_Fillpit_Intput\0file\0"
-    "Check_FlowDir_Output\0message\0"
-    "Check_FlowAcc_Output\0Clear_Log"
+    "Check_Fillpit_Input\0file\0Check_FlowDir_Output\0"
+    "message\0Check_FlowAcc_Output\0Clear_Log"
 };
 #undef QT_MOC_LITERAL
 
@@ -115,7 +114,7 @@ void FlowGrids::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 4: _t->on_pushButtonClose_clicked(); break;
         case 5: _t->on_pushButtonHelp_clicked(); break;
         case 6: _t->pushButtonSetFocus(); break;
-        case 7: { bool _r = _t->Check_Fillpit_Intput((*reinterpret_cast< QString(*)>(_a[1])));
+        case 7: { bool _r = _t->Check_Fillpit_Input((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
         case 8: { bool _r = _t->Check_FlowDir_Output((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;

@@ -34,7 +34,7 @@ private slots:
     void pushButtonSetFocus();
 
 
-    bool Check_Fillpit_Intput(QString file);
+    bool Check_Fillpit_Input(QString file);
 
     bool Check_FlowDir_Output(QString file, bool message );
 

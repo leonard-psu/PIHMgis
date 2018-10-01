@@ -12,11 +12,11 @@ class StreamGrids : public QDialog
     Q_OBJECT
 
 public:
-    explicit StreamGrids(QWidget *parent = 0);
+    explicit StreamGrids(QWidget *parent = 0, QString filename_open_project = "");
     ~StreamGrids();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
+    // QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonFlowAccGrids_clicked();
@@ -35,8 +35,18 @@ private slots:
 
     void pushButtonSetFocus();
 
+    void Clear_Log();
+
+    bool Check_FlowAccGrids_Input(QString file);
+
+    bool Check_StreamGrids_Output(QString file, bool message);
+
+    bool Check_Threshold_Input(QString threshold);
+
 private:
     Ui::StreamGrids *ui;
+    QString filename_open_project;
+
 };
 
 #endif // STREAMGRIDS_H

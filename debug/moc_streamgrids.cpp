@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_StreamGrids_t {
-    QByteArrayData data[10];
-    char stringdata0[241];
+    QByteArrayData data[17];
+    char stringdata0[346];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -40,7 +40,14 @@ QT_MOC_LITERAL(5, 111, 24), // "on_pushButtonRun_clicked"
 QT_MOC_LITERAL(6, 136, 26), // "on_pushButtonClose_clicked"
 QT_MOC_LITERAL(7, 163, 25), // "on_pushButtonHelp_clicked"
 QT_MOC_LITERAL(8, 189, 32), // "on_lineEditThreshold_textChanged"
-QT_MOC_LITERAL(9, 222, 18) // "pushButtonSetFocus"
+QT_MOC_LITERAL(9, 222, 18), // "pushButtonSetFocus"
+QT_MOC_LITERAL(10, 241, 9), // "Clear_Log"
+QT_MOC_LITERAL(11, 251, 24), // "Check_FlowAccGrids_Input"
+QT_MOC_LITERAL(12, 276, 4), // "file"
+QT_MOC_LITERAL(13, 281, 24), // "Check_StreamGrids_Output"
+QT_MOC_LITERAL(14, 306, 7), // "message"
+QT_MOC_LITERAL(15, 314, 21), // "Check_Threshold_Input"
+QT_MOC_LITERAL(16, 336, 9) // "threshold"
 
     },
     "StreamGrids\0on_pushButtonFlowAccGrids_clicked\0"
@@ -50,7 +57,10 @@ QT_MOC_LITERAL(9, 222, 18) // "pushButtonSetFocus"
     "on_pushButtonClose_clicked\0"
     "on_pushButtonHelp_clicked\0"
     "on_lineEditThreshold_textChanged\0"
-    "pushButtonSetFocus"
+    "pushButtonSetFocus\0Clear_Log\0"
+    "Check_FlowAccGrids_Input\0file\0"
+    "Check_StreamGrids_Output\0message\0"
+    "Check_Threshold_Input\0threshold"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,7 +70,7 @@ static const uint qt_meta_data_StreamGrids[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -68,14 +78,18 @@ static const uint qt_meta_data_StreamGrids[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   54,    2, 0x08 /* Private */,
-       3,    0,   55,    2, 0x08 /* Private */,
-       4,    0,   56,    2, 0x08 /* Private */,
-       5,    0,   57,    2, 0x08 /* Private */,
-       6,    0,   58,    2, 0x08 /* Private */,
-       7,    0,   59,    2, 0x08 /* Private */,
-       8,    0,   60,    2, 0x08 /* Private */,
-       9,    0,   61,    2, 0x08 /* Private */,
+       1,    0,   74,    2, 0x08 /* Private */,
+       3,    0,   75,    2, 0x08 /* Private */,
+       4,    0,   76,    2, 0x08 /* Private */,
+       5,    0,   77,    2, 0x08 /* Private */,
+       6,    0,   78,    2, 0x08 /* Private */,
+       7,    0,   79,    2, 0x08 /* Private */,
+       8,    0,   80,    2, 0x08 /* Private */,
+       9,    0,   81,    2, 0x08 /* Private */,
+      10,    0,   82,    2, 0x08 /* Private */,
+      11,    1,   83,    2, 0x08 /* Private */,
+      13,    2,   86,    2, 0x08 /* Private */,
+      15,    1,   91,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -86,6 +100,10 @@ static const uint qt_meta_data_StreamGrids[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Bool, QMetaType::QString,   12,
+    QMetaType::Bool, QMetaType::QString, QMetaType::Bool,   12,   14,
+    QMetaType::Bool, QMetaType::QString,   16,
 
        0        // eod
 };
@@ -104,10 +122,16 @@ void StreamGrids::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 5: _t->on_pushButtonHelp_clicked(); break;
         case 6: _t->on_lineEditThreshold_textChanged(); break;
         case 7: _t->pushButtonSetFocus(); break;
+        case 8: _t->Clear_Log(); break;
+        case 9: { bool _r = _t->Check_FlowAccGrids_Input((*reinterpret_cast< QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
+        case 10: { bool _r = _t->Check_StreamGrids_Output((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
+        case 11: { bool _r = _t->Check_Threshold_Input((*reinterpret_cast< QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
 QT_INIT_METAOBJECT const QMetaObject StreamGrids::staticMetaObject = {
@@ -135,13 +159,13 @@ int StreamGrids::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 12)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 8;
+        _id -= 12;
     }
     return _id;
 }
