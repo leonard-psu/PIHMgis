@@ -11,7 +11,12 @@
 #include "0LibsRaster/stream_shape.h"
 #include "globals.h"
 
-StreamPolyline::StreamPolyline(QWidget *parent) :
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// StreamPolyline Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+StreamPolyline::StreamPolyline(QWidget *parent, QString filename) :
     QDialog(parent),
     ui(new Ui::StreamPolyline)
 {
@@ -21,48 +26,80 @@ StreamPolyline::StreamPolyline(QWidget *parent) :
     try {
         ui->setupUi(this);
 
-        // ** Start: Fill Form If Module Has Been Run Previously
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
+        filename_open_project = filename;
+        bool found_file = false;
+
+        QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        QString ProjectFolder   = ProjectFileTextStream.readLine();
-        QString ProjectFileName = ProjectFileTextStream.readLine();
+        else
+        {
+            found_file = true;
+        }
         ProjectFile.close();
 
-        QStringList ModuleStringList;
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("StreamGrids"));
-        if ( ModuleStringList.length() > 0  )
+        if(found_file)
         {
-            ui->lineEditStreamGrids->setText(ModuleStringList.at(2));
-            ui->lineEditStreamPolyline->setText(ProjectFolder+"/1RasterProcessing/Stream"+ModuleStringList.at(3)+".shp");
+            QString StreamGrids_filename;
+            QString FlowDirGrids_filename;
+            QString StreamPolyline_filename;
+
+            QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("StreamGrids"));
+
+            if ( ModuleStringList.length() > 0  )
+            {
+                StreamGrids_filename = ModuleStringList.at(2);
+                //Suggest name
+                StreamPolyline_filename = filename_open_project+"/1RasterProcessing/Stream"+ModuleStringList.at(3)+".shp";
+            }
+
+            ModuleStringList = ReadModuleLine(filename_open_project,tr("FlowGrids"));
+
+            if ( ModuleStringList.length() > 0  )
+            {
+                FlowDirGrids_filename = ModuleStringList.at(2);
+            }
+
+            ModuleStringList = ReadModuleLine(filename_open_project,tr("StreamPolyline"));
+
+            if ( ModuleStringList.length() > 0  )
+            {
+                StreamGrids_filename = ModuleStringList.at(1);
+                FlowDirGrids_filename = ModuleStringList.at(2);
+                StreamPolyline_filename = ModuleStringList.at(3);
+            }
+
+            bool StreamGrids_check = Check_StreamGrids_Input(StreamGrids_filename);
+            if(!StreamGrids_check)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids input does not exist. </span>") +tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
+            bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGrids_filename);
+            if(!FlowDirGrids_check)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrid input does not exist. </span>") +tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
+            bool StreamPolyline_check = Check_StreamPolyline_Output(StreamPolyline_filename, true);
+            if(StreamPolyline_check)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: StreamPolyline output already exists. </span>") +tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
         }
 
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("FlowGrids"));
-        if ( ModuleStringList.length() > 0  )
-        {
-            ui->lineEditFlowDirGrids->setText(ModuleStringList.at(2));
-        }
 
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("StreamPolyline"));
-
-        if ( ModuleStringList.length() > 0 )
-        {
-            ui->lineEditStreamGrids->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditFlowDirGrids->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditStreamPolyline->setStyleSheet("color: rgb(0, 180, 0);");
-
-            ui->lineEditStreamGrids->setText(ModuleStringList.at(1));
-            ui->lineEditFlowDirGrids->setText(ModuleStringList.at(2));
-            ui->lineEditStreamPolyline->setText(ModuleStringList.at(3));
-
-        }
-        // ** End: Fill Form If Module Has Been Run Previously
         pushButtonSetFocus();
 
     } catch (...) {
@@ -70,6 +107,10 @@ StreamPolyline::StreamPolyline(QWidget *parent) :
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// StreamPolyline Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 StreamPolyline::~StreamPolyline()
 {
     if(print_debug_messages)
@@ -82,6 +123,9 @@ StreamPolyline::~StreamPolyline()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to focus button selection (needed for users w/o mouse)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void StreamPolyline::pushButtonSetFocus()
 {
     if(print_debug_messages)
@@ -122,6 +166,146 @@ void StreamPolyline::pushButtonSetFocus()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void StreamPolyline::Clear_Log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start StreamPolyline::Clear_Log()";
+
+    try {
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+    } catch (...) {
+        qDebug() << "Error: StreamPolyline::Clear_Log() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if input file exists (returns true) or does not (returns false)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool StreamPolyline::Check_StreamGrids_Input(QString file)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_StreamGrids_Input()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            ui->lineEditStreamGrids->setStyleSheet("color: black;");
+            ui->lineEditStreamGrids->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditStreamGrids->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditStreamGrids->setText(file);
+
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids input does not exist: </span>") + file +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            result = false;
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: Check_StreamGrids_Input is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if input file exists (returns true) or does not (returns false)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool StreamPolyline::Check_FlowDirGrids_Input(QString file)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_FlowDirGrids_Input()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            ui->lineEditFlowDirGrids->setStyleSheet("color: black;");
+            ui->lineEditFlowDirGrids->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditFlowDirGrids->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditFlowDirGrids->setText(file);
+
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrids input does not exist: </span>") + file +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            result = false;
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: Check_FlowDirGrids_Input is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if StreamPolyline OUTPUT file exists (returns true) or does not (returns false)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool StreamPolyline::Check_StreamPolyline_Output(QString file, bool message)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_StreamPolyline_Output()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            ui->lineEditStreamPolyline->setStyleSheet("color: black;");
+            ui->lineEditStreamPolyline->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditStreamPolyline->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditStreamPolyline->setText(file);
+
+            if(message)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: StreamPolyline output does not exist: </span>") + file +tr(" You will need to redo this step.<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+            result = false;
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: Check_StreamPolyline_Output is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Clicked Event for StreamGrids (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void StreamPolyline::on_pushButtonStreamGrids_clicked()
 {
     if(print_debug_messages)
@@ -129,101 +313,61 @@ void StreamPolyline::on_pushButtonStreamGrids_clicked()
 
     try {
 
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
+        Clear_Log();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-        QString StreamGridFileName = QFileDialog::getOpenFileName(this, "Choose Stream Grid File", ProjectFolder+tr("/1RasterProcessing"), "Stream Grid File(*.asc *.ASC)");
+        QString StreamGridFileName = QFileDialog::getOpenFileName(this, "Choose Stream Grid File", user_pihmgis_root_folder +tr("/1RasterProcessing"), "Stream Grid File(*.asc *.ASC)");
         if ( StreamGridFileName != nullptr)
         {
-            ui->lineEditStreamGrids->setStyleSheet("color: black;");
-
-            ui->lineEditStreamGrids->setText(StreamGridFileName);
-
-            if( ui->lineEditStreamPolyline->text() == nullptr )
+            bool StreamGrids_check = Check_StreamGrids_Input(StreamGridFileName);
+            if(!StreamGrids_check)
             {
-                QStringList ModuleStringList = ReadModuleLine(ProjectFileName,tr("StreamGrids"));
-                if ( ModuleStringList.length() > 0  )
-                {
-                    ui->lineEditStreamPolyline->setStyleSheet("color: black;");
-                    ui->lineEditStreamPolyline->setText(ProjectFolder+"/1RasterProcessing/Stream"+ModuleStringList.at(3)+".shp");
-                }
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids input does not exist. </span>") +tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
             }
+
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: StreamPolyline::on_pushButtonStreamGrids_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Clicked Event for FlowDirGrids (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void StreamPolyline::on_pushButtonFlowDirGrids_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start StreamPolyline::on_pushButtonFlowDirGrids_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
+        Clear_Log();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        QString FlowDirGridFileName = QFileDialog::getOpenFileName(this, "Choose Flow Dir Grid File", user_pihmgis_root_folder+tr("/1RasterProcessing"), "Flow Dir Grid File(*.asc *.ASC)");
+        if ( FlowDirGridFileName != nullptr)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-        QString FlowDirGridFileName = QFileDialog::getOpenFileName(this, "Choose Flow Dir Grid File", ProjectFolder+tr("/1RasterProcessing"), "Flow Dir Grid File(*.asc *.ASC)");
-        if ( FlowDirGridFileName != NULL)
-        {
-            ui->lineEditFlowDirGrids->setStyleSheet("color: black;");
-
-            ui->lineEditFlowDirGrids->setText(FlowDirGridFileName);
+            bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGridFileName);
+            if(!FlowDirGrids_check)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrids input does not exist. </span>") +tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
 
             pushButtonSetFocus();
         }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: StreamPolyline::on_pushButtonFlowDirGrids_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Clicked Event for StreamPolyline (OUTPUT) file
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void StreamPolyline::on_pushButtonStreamPolyline_clicked()
 {
     if(print_debug_messages)
@@ -231,214 +375,220 @@ void StreamPolyline::on_pushButtonStreamPolyline_clicked()
 
     try {
 
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
+        Clear_Log();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        QString StreamPolylineFileName = QFileDialog::getSaveFileName(this, "Choose Stream Polyline", user_pihmgis_root_folder +"/1RasterProcessing","Stream Polyline File(*.shp)");
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-        QString StreamPolylineFileName = QFileDialog::getSaveFileName(this, "Choose Stream Polyline", ProjectFolder+"/1RasterProcessing","Stream Polyline File(*.shp)");
-        QString tempString = StreamPolylineFileName;
         if ( StreamPolylineFileName != nullptr)
         {
-            ui->lineEditStreamPolyline->setStyleSheet("color: black;");
-
+            QString tempString = StreamPolylineFileName;
             if( ! (tempString.toLower()).endsWith(".shp") )
             {
                 tempString.append(".shp");
                 StreamPolylineFileName = tempString;
             }
-            ui->lineEditStreamPolyline->setText(StreamPolylineFileName);
+
+            Check_StreamPolyline_Output(StreamPolylineFileName, true);
 
             pushButtonSetFocus();
+
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: StreamPolyline::on_pushButtonStreamPolyline_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run Button Clicked Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void StreamPolyline::on_pushButtonRun_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start StreamPolyline::on_pushButtonRun_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Stream Polyline Processing Started ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check inputs
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString StreamGrids_filename = ui->lineEditStreamGrids->text();
+        QString FlowDirGrids_filename = ui->lineEditFlowDirGrids->text();
+        QString StreamPolyline_filename =  ui->lineEditStreamPolyline->text();
 
-        LogsString.append(tr("Verifying Data Files ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        int runFlag = 1;
-        QFile IOTestFile;
-
-        if( ui->lineEditStreamGrids->text() == nullptr )
+        bool StreamGridsCheck = Check_StreamGrids_Input(StreamGrids_filename);
+        if(!StreamGridsCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Stream Grid Input File Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditStreamGrids->text(), "ReadOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditStreamGrids->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditStreamGrids->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        if( ui->lineEditFlowDirGrids->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Flow Dir Grid Input File Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditFlowDirGrids->text(), "ReadOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditFlowDirGrids->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditFlowDirGrids->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        if( ui->lineEditStreamPolyline->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Stream Polyline Output File Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditStreamPolyline->text(), "WriteOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->lineEditStreamPolyline->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditStreamPolyline->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        if(runFlag == 1)
-        {
-
-            LogsString.append("Running Stream Polyline ... <br>");
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids Input File Missing </span>")+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
+            return;
+        }
 
-            QString ShpFileName, DbfFileName;
-            ShpFileName = ui->lineEditStreamPolyline->text();
-            DbfFileName = ShpFileName;
-            DbfFileName.replace(QString(".shp"), QString(".dbf"));
-            int ErrorStr = stream_shape((char *)qPrintable(ui->lineEditStreamGrids->text()), (char *)qPrintable(ui->lineEditFlowDirGrids->text()), (char *)qPrintable(ShpFileName), (char *)qPrintable(DbfFileName));
-            if( ErrorStr != 0 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Stream Polyline Processing Failed ... </span>")+tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorStr)+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
-            }
-
-
-            ProjectIOStringList << "StreamPolyline" << ui->lineEditStreamGrids->text() << ui->lineEditFlowDirGrids->text() << ui->lineEditStreamPolyline->text();
-
-            WriteModuleLine(ProjectFileName, ProjectIOStringList);
-            ProjectIOStringList.clear();
-
-            QString StreamFileNameInRaster = ui->lineEditStreamPolyline->text();
-            QString StreamFileNameInVector = StreamFileNameInRaster;
-            StreamFileNameInVector.replace("1RasterProcessing","2VectorProcessing");
-
-            ProjectIOStringList << "StreamRasterVector" << StreamFileNameInRaster << StreamFileNameInVector;
-            WriteModuleLine(ProjectFileName, ProjectIOStringList);
-            ProjectIOStringList.clear();
-
-            QFile::remove(StreamFileNameInVector);
-            QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
-
-            StreamFileNameInRaster.replace(".shp",".shx");
-            StreamFileNameInVector.replace(".shp",".shx");
-            QFile::remove(StreamFileNameInVector);
-            QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
-
-            StreamFileNameInRaster.replace(".shx",".dbf");
-            StreamFileNameInVector.replace(".shx",".dbf");
-            QFile::remove(StreamFileNameInVector);
-            QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
-
-            StreamFileNameInVector.replace(".dbf",".shp");
-
-            if( ui->checkBoxStreamPolyline->isChecked() == 1 )
-            {
-                LogsString.append("Loading Data in GIS ... <br>");
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-
-            if(ui->checkBoxStreamPolyline->isChecked() == 1)
-            {
-                if ( ! QDesktopServices::openUrl(QUrl("file://"+StreamFileNameInVector)) )
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load SHP File in GIS ... </span>")+StreamFileNameInVector+tr("<br>"));
-            }
-
-            LogsString.append(tr("<br><b>Stream Polyline Processing Completed.</b>")+tr("<br>"));
+        bool FlowDirGridsCheck = Check_FlowDirGrids_Input(FlowDirGrids_filename);
+        if(!FlowDirGridsCheck)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrids Input File Missing </span>")+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
-
-            ui->pushButtonRun->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
+            return;
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Does output already exist?
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        bool StreamPolylineCheck = Check_StreamPolyline_Output(StreamPolyline_filename, false);
+        if(StreamPolylineCheck)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: StreamPolyline Output already exists </span>")+tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check file access
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if ( ! CheckFileAccess(StreamGrids_filename, "ReadOnly") )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + StreamGrids_filename + tr("<br>"));
+            return;
+        }
+        if ( ! CheckFileAccess(FlowDirGrids_filename, "ReadOnly") )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + FlowDirGrids_filename + tr("<br>"));
+            return;
+        }
+
+        if ( ! CheckFileAccess(StreamPolyline_filename, "WriteOnly") )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + StreamPolyline_filename + tr("<br>"));
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Run Stream Polyline
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        LogsString.append("Running Stream Polyline ... <br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        QString ShpFileName, DbfFileName;
+        ShpFileName = StreamPolyline_filename;
+        DbfFileName = ShpFileName;
+        DbfFileName.replace(QString(".shp"), QString(".dbf"));
+        int ErrorStr = stream_shape((char *)qPrintable(
+                                        StreamGrids_filename),
+                                    (char *)qPrintable(FlowDirGrids_filename),
+                                    (char *)qPrintable(ShpFileName), (char *)qPrintable(DbfFileName));
+        if( ErrorStr != 0 )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Stream Polyline Processing Failed ... </span>")+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorStr)+tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QStringList ProjectIOStringList;
+        ProjectIOStringList << "StreamPolyline" << StreamGrids_filename << FlowDirGrids_filename << StreamPolyline_filename;
+        WriteModuleLine(filename_open_project, ProjectIOStringList);
+        ProjectIOStringList.clear();
+
+        Clear_Log();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check output filenames
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        StreamPolylineCheck = Check_StreamPolyline_Output(StreamPolyline_filename, false);
+        if(!StreamPolylineCheck)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: StreamPolyline failed, file does not exist: </span>") + StreamPolyline_filename +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+
+        qint64 size = file_Size(StreamPolyline_filename);
+        if( size < 1)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: StreamPolyline failed, invalid file size: </span>") + size +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        QString StreamFileNameInRaster = StreamPolyline_filename;
+        QString StreamFileNameInVector = StreamFileNameInRaster;
+        StreamFileNameInVector.replace("1RasterProcessing","2VectorProcessing");  //TODO
+
+        ProjectIOStringList << "StreamRasterVector" << StreamFileNameInRaster << StreamFileNameInVector;
+        WriteModuleLine(filename_open_project, ProjectIOStringList);
+        ProjectIOStringList.clear();
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Shapefile renaming
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QFile::remove(StreamFileNameInVector);
+        QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
+
+        StreamFileNameInRaster.replace(".shp",".shx");
+        StreamFileNameInVector.replace(".shp",".shx");
+        QFile::remove(StreamFileNameInVector);
+        QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
+
+        StreamFileNameInRaster.replace(".shx",".dbf");
+        StreamFileNameInVector.replace(".shx",".dbf");
+        QFile::remove(StreamFileNameInVector);
+        QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
+
+        StreamFileNameInVector.replace(".dbf",".shp");
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Message box
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+
+        LogsString.append(tr("<br><b>Stream Polyline Processing Completed.</b>")+tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        ui->pushButtonRun->setDefault(false);
+        ui->pushButtonClose->setDefault(true);
+        ui->pushButtonClose->setFocus();
+
 
     } catch (...) {
         qDebug() << "Error: StreamPolyline::on_pushButtonRun_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close button event
+// TODO, Decide on keeping button next highlights or not
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void StreamPolyline::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start StreamPolyline::on_pushButtonClose_clicked()";
 
     try {
-        QStringList default_params; default_params << "WORKFLOW2" << "CATPOLY";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //QStringList default_params; default_params << "WORKFLOW2" << "CATPOLY";
+        //QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
     } catch (...) {
         qDebug() << "Error: StreamPolyline::on_pushButtonClose_clicked() is returning w/o checking";
@@ -446,6 +596,10 @@ void StreamPolyline::on_pushButtonClose_clicked()
 }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void StreamPolyline::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)

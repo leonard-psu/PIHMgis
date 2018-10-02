@@ -249,8 +249,8 @@ int streamGenShp(float **riv, short **fdr, int i, int j)
 // Finds down-stream cell index 
 void findIJShp(short **fdr, int i, int j, int *mIJ)
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start findIJShp";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start findIJShp";
 
     try {
         // i => column : j => row
@@ -281,8 +281,8 @@ void findIJShp(short **fdr, int i, int j, int *mIJ)
 // Finds ALL the up-stream/draining cells index 
 int findCellShp(float **riv, short **dir, int i, int j, int (*cell)[2])
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start findCellShp";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start findCellShp";
 
     try {
         int ii, jj = -1;

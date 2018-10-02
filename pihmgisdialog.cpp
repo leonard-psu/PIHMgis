@@ -580,7 +580,10 @@ void PIHMgisDialog::on_pushButtonRasterProcessingStreamPolyline_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingStreamPolyline_clicked";
 
     try {
-        StreamPolyline *StreamPolylineDialog = new StreamPolyline(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        StreamPolyline *StreamPolylineDialog = new StreamPolyline(this, filename_open_project);
+        StreamPolylineDialog->setModal(true);
         StreamPolylineDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingStreamPolyline_clicked is returning w/o checking";
