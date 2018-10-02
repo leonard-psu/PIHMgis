@@ -38,7 +38,7 @@ private slots:
 
 //    void on_pushButtonWorkFlow6_clicked();
 
-//    void on_pushButtonWorkFlow7_clicked();
+    void on_pushButtonWorkFlow7_clicked();
 
     // **** :: PIHMgis Project Management **** //
 
@@ -139,6 +139,8 @@ private slots:
 
     void update_current_label();
     //void on_pushButton_PickWorkspace_clicked(bool checked);
+
+    void on_pushButton_PickWorkspace_clicked(bool checked);
 
 private:
     Ui::PIHMgisDialog *ui;

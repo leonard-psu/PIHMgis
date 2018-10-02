@@ -69,6 +69,7 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
         this->setWindowIcon(QIcon("Icons/PIHMgis000.icns"));
         ui->setupUi(this);
 
+        //QObject::connect(ui->pushButton_PickWorkspace,SIGNAL(clicked()),this,SLOT(on_pushButton_PickWorkspace_clicked()));
 
         qDebug() << "PIHMgisDialog started";
 
@@ -1145,3 +1146,16 @@ qint64 file_Size(QString path){
 }
 
 
+
+void PIHMgisDialog::on_pushButtonWorkFlow7_clicked()
+{
+    qDebug() << "Error: PIHMgisDialog::on_pushButtonWorkFlow7_clicked is returning w/o checking";
+
+}
+
+
+void PIHMgisDialog::on_pushButton_PickWorkspace_clicked(bool checked)
+{
+    qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
+
+}
