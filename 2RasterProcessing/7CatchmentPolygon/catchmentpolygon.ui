@@ -425,8 +425,16 @@
     </disabled>
    </palette>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>10</pointsize>
+    <weight>75</weight>
+    <bold>true</bold>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>: :   Catchment Polygon   : :</string>
+   <string>Catchment Polygon</string>
   </property>
   <widget class="Line" name="BorderBottom">
    <property name="geometry">
@@ -878,9 +886,9 @@
    <property name="geometry">
     <rect>
      <x>16</x>
-     <y>128</y>
+     <y>117</y>
      <width>581</width>
-     <height>100</height>
+     <height>111</height>
     </rect>
    </property>
    <property name="title">
@@ -889,8 +897,8 @@
    <widget class="QLabel" name="textLabel1_2">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>39</y>
+      <x>220</x>
+      <y>10</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -902,8 +910,8 @@
    <widget class="QPushButton" name="pushButtonCatchmentPolygon">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>39</y>
+      <x>480</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -918,9 +926,9 @@
    <widget class="QLineEdit" name="lineEditCatchmentPolygon">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>40</y>
-      <width>325</width>
+      <x>10</x>
+      <y>50</y>
+      <width>561</width>
       <height>29</height>
      </rect>
     </property>
@@ -933,11 +941,14 @@
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBoxCatchmentPolygon">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>397</x>
-      <y>74</y>
-      <width>75</width>
+      <x>490</x>
+      <y>90</y>
+      <width>91</width>
       <height>21</height>
      </rect>
     </property>
@@ -955,8 +966,11 @@
     <property name="text">
      <string>Load in GIS</string>
     </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
     <property name="checked">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
@@ -1432,6 +1446,9 @@
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -1498,8 +1515,8 @@
    <widget class="QPushButton" name="pushButtonCatchmentGrids">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>44</y>
+      <x>480</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1520,8 +1537,8 @@
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>44</y>
+      <x>230</x>
+      <y>10</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -1533,9 +1550,9 @@
    <widget class="QLineEdit" name="lineEditCatchmentGrids">
     <property name="geometry">
      <rect>
-      <x>145</x>
+      <x>9</x>
       <y>45</y>
-      <width>325</width>
+      <width>561</width>
       <height>29</height>
      </rect>
     </property>

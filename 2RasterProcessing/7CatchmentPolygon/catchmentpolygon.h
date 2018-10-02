@@ -12,11 +12,11 @@ class CatchmentPolygon : public QDialog
     Q_OBJECT
 
 public:
-    explicit CatchmentPolygon(QWidget *parent = 0);
+    explicit CatchmentPolygon(QWidget *parent = 0, QString filename_open_project = "");
     ~CatchmentPolygon();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
+    //QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonCatchmentGrids_clicked();
@@ -31,8 +31,17 @@ private slots:
 
     void pushButtonSetFocus();
 
+    void Clear_Log();
+
+    bool Check_CatchmentGrids_Input(QString file);
+
+    bool Check_CatchmentPolygon_Output(QString file, bool message);
+
+
 private:
     Ui::CatchmentPolygon *ui;
+    QString filename_open_project;
+
 };
 
 #endif // CATCHMENTPOLYGON_H
