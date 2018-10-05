@@ -662,7 +662,10 @@ void PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked";
 
     try {
-        SimplifyPolylines *SimplifyPolylinesDialog = new SimplifyPolylines(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        SimplifyPolylines *SimplifyPolylinesDialog = new SimplifyPolylines(this, filename_open_project);
+        SimplifyPolylinesDialog->setModal(true);
         SimplifyPolylinesDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked is returning w/o checking";

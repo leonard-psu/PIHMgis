@@ -426,7 +426,7 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>: :   Simplify Polylines   : :</string>
+   <string>Simplify Polylines</string>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
@@ -452,6 +452,14 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Add</string>
     </property>
@@ -476,7 +484,8 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -496,6 +505,9 @@
     <property name="lineWidth">
      <number>1</number>
     </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOn</enum>
+    </property>
     <property name="editTriggers">
      <set>QAbstractItemView::CurrentChanged|QAbstractItemView::SelectedClicked</set>
     </property>
@@ -514,20 +526,24 @@
     <property name="columnCount">
      <number>3</number>
     </property>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderStretchLastSection">
+     <bool>false</bool>
+    </attribute>
     <column>
      <property name="text">
       <string>Polyline Layers</string>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <italic>false</italic>
        <bold>true</bold>
       </font>
-     </property>
-     <property name="textAlignment">
-      <set>AlignHCenter|AlignVCenter|AlignCenter</set>
      </property>
     </column>
     <column>
@@ -536,13 +552,11 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
-     </property>
-     <property name="textAlignment">
-      <set>AlignHCenter|AlignVCenter|AlignCenter</set>
      </property>
     </column>
     <column>
@@ -551,13 +565,11 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
-     </property>
-     <property name="textAlignment">
-      <set>AlignHCenter|AlignVCenter|AlignCenter</set>
      </property>
     </column>
    </widget>
@@ -570,6 +582,14 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Remove</string>
     </property>
@@ -578,18 +598,21 @@
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBoxSimplifyPolylines">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>520</x>
       <y>150</y>
-      <width>91</width>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Sans Serif</family>
-      <pointsize>12</pointsize>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
@@ -600,8 +623,11 @@
     <property name="text">
      <string>Load in GIS</string>
     </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
     <property name="checked">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonClear">
@@ -612,6 +638,14 @@
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Clear</string>
@@ -634,6 +668,9 @@
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -641,6 +678,14 @@
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -658,6 +703,14 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Close</string>
     </property>
@@ -673,6 +726,14 @@
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string/>
@@ -1114,6 +1175,12 @@
       </colorrole>
      </disabled>
     </palette>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(0, 51, 153);</string>

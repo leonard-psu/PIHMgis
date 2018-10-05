@@ -1390,7 +1390,8 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1440,14 +1441,15 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <italic>false</italic>
        <bold>true</bold>
       </font>
      </property>
      <property name="textAlignment">
-      <set>AlignCenter</set>
+      <set>AlignLeading|AlignVCenter</set>
      </property>
     </column>
     <column>
@@ -1456,13 +1458,14 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="textAlignment">
-      <set>AlignCenter</set>
+      <set>AlignLeading|AlignVCenter</set>
      </property>
     </column>
    </widget>

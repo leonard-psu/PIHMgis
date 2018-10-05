@@ -237,6 +237,8 @@ bool PolygonToPolylines::Load_Project_Settings()
             }
         }
 
+        ui->tableWidget->resizeColumnsToContents();
+
         pushButtonSetFocus();
     } catch (...) {
         qDebug() << "Error: PolygonToPolylines::Load_Project_Settings is returning w/o checking";

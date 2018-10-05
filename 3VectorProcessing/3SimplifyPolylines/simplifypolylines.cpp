@@ -11,7 +11,12 @@
 #include "0LibsVector/simplify_shape.h"
 #include "globals.h"
 
-SimplifyPolylines::SimplifyPolylines(QWidget *parent) :
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SimplifyPolylines Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+SimplifyPolylines::SimplifyPolylines(QWidget *parent, QString filename) :
     QDialog(parent),
     ui(new Ui::SimplifyPolylines)
 {
@@ -22,128 +27,36 @@ SimplifyPolylines::SimplifyPolylines(QWidget *parent) :
 
         ui->setupUi(this);
 
-        ui->tableWidget->blockSignals(true);
+        filename_open_project = filename;
+        bool found_file = false;
 
-        ui->tableWidget->setColumnWidth(0,215);
-        ui->tableWidget->setColumnWidth(1,50);
-        ui->tableWidget->setColumnWidth(2,215);
-
-        // ** Start: Fill Form If Module Has Been Run Previously
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
+        QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        QString ProjectFolder   = ProjectFileTextStream.readLine();
-        QString ProjectFileName = ProjectFileTextStream.readLine();
+        else
+        {
+            found_file = true;
+        }
         ProjectFile.close();
 
-        QString InpPolygonFileName, OutPolylineFileName;
-
-        QStringList ModuleStringList;
-
-        QTableWidgetItem *NewTableItem;
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("FlowGrids"));
-        if ( ModuleStringList.length() > 0  )
+        if(found_file)
         {
-            DEMResolution = ModuleStringList.at(4).toInt();
-            qDebug() << "DEM Resolution = " << DEMResolution;
+            Load_Project_Settings();
         }
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("StreamRasterVector"));
-        if ( ModuleStringList.length() > 0  )
-        {
-            ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-
-            NewTableItem = new QTableWidgetItem(ModuleStringList.at(2));
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,NewTableItem);
-
-            NewTableItem = new QTableWidgetItem(QString::number(DEMResolution));
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,1,NewTableItem);
-
-            OutPolylineFileName = ModuleStringList.at(2);
-            OutPolylineFileName.replace(QString(".shp"),QString("_sln")+QString::number(DEMResolution)+QString(".shp"));
-
-            NewTableItem = new QTableWidgetItem(OutPolylineFileName);
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,2,NewTableItem);
-
-            OutPolylineFileName = "";
-        }
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("PolygonToPolylines"));
-        if ( ModuleStringList.length() > 0  )
-        {
-            for (int i=1; i+1<ModuleStringList.length(); i=i+2)
-            {
-                ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-
-                NewTableItem = new QTableWidgetItem(ModuleStringList.at(i+1));
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,NewTableItem);
-
-                NewTableItem = new QTableWidgetItem(QString::number(2*DEMResolution));
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,1,NewTableItem);
-
-                OutPolylineFileName = ModuleStringList.at(i+1);
-                OutPolylineFileName.replace(QString(".shp"),QString("_sln")+QString::number(2*DEMResolution)+QString(".shp"));
-
-                NewTableItem = new QTableWidgetItem(OutPolylineFileName);
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,2,NewTableItem);
-
-                OutPolylineFileName = "";
-            }
-        }
-
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("SimplifyPolylines"));
-        if ( ModuleStringList.length() > 0 )
-        {
-            //ui->tableWidget->clear();
-            while( ui->tableWidget->rowCount() )
-                ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
-            ui->tableWidget->setRowCount(0);
-            //ui->tableWidget->setStyleSheet("color: rgb(0, 180, 0);");
-
-            qDebug() << "Length = " << ModuleStringList.length();
-            for (int i=1; i+1<ModuleStringList.length(); i=i+3)
-            {
-                ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-
-                NewTableItem = new QTableWidgetItem(ModuleStringList.at(i));
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,NewTableItem);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextColor(QColor(0, 180, 0));
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextAlignment(Qt::AlignRight);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextAlignment(Qt::AlignVCenter);
-
-                NewTableItem = new QTableWidgetItem(ModuleStringList.at(i+1));
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,2,NewTableItem);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,2)->setTextColor(QColor(0, 180, 0));
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,2)->setTextAlignment(Qt::AlignRight);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,2)->setTextAlignment(Qt::AlignVCenter);
-
-                NewTableItem = new QTableWidgetItem(ModuleStringList.at(i+2));
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,1,NewTableItem);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextColor(QColor(0, 180, 0));
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextAlignment(Qt::AlignRight);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextAlignment(Qt::AlignVCenter);
-
-                //qDebug() << i << " " << InpPolygonFileName << " <> " << OutPolygonFileName << "\n";
-            }
-
-        }
-
-        pushButtonSetFocus();
-
-        ui->tableWidget->blockSignals(false);
 
     } catch (...) {
         qDebug() << "Error: SimplifyPolylines is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SimplifyPolylines Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 SimplifyPolylines::~SimplifyPolylines()
 {
     if(print_debug_messages)
@@ -156,6 +69,212 @@ SimplifyPolylines::~SimplifyPolylines()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool SimplifyPolylines::Load_Project_Settings()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start SimplifyPolylines::Load_Project_Settings";
+
+    try {
+        ui->tableWidget->blockSignals(true);
+
+        QString InpPolygonFileName, OutPolylineFileName;
+        QTableWidgetItem *NewTableItem;
+
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("FlowGrids"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            DEMResolution = ModuleStringList.at(4).toInt();
+            qDebug() << "DEM Resolution = " << DEMResolution;
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("StreamRasterVector"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+
+            int rowlen = ui->tableWidget->rowCount()-1;
+            if(rowlen >= 0)
+            {
+                QString file1 = ModuleStringList.at(2);
+                OutPolylineFileName = file1;
+                OutPolylineFileName.replace(QString(".shp"), QString("_sln") + QString::number(DEMResolution) + QString(".shp"));
+
+                bool file1_check = Check_File_Valid(file1);
+                bool file2_check = Check_File_Valid(OutPolylineFileName);
+
+                qDebug() << file1 << " " << file1_check;
+                qDebug() << OutPolylineFileName << " " << file2_check;
+
+
+                NewTableItem = new QTableWidgetItem(file1);
+                ui->tableWidget->setItem(rowlen,0,NewTableItem);
+                if(file1_check)
+                {
+                    ui->tableWidget->item(rowlen,0)->setTextColor(Qt::black);
+                }
+                else
+                {
+                    LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
+                    ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
+                }
+
+                NewTableItem = new QTableWidgetItem(QString::number(DEMResolution));
+                ui->tableWidget->setItem(rowlen,1,NewTableItem);
+
+                NewTableItem = new QTableWidgetItem(OutPolylineFileName);
+                ui->tableWidget->setItem(rowlen,2,NewTableItem);
+                if(!file2_check)
+                {
+                    ui->tableWidget->item(rowlen,2)->setTextColor(Qt::black);
+                }
+                else
+                {
+                    LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + OutPolylineFileName + tr(" output already exists. </span>") +tr("<br>"));
+                    ui->tableWidget->item(rowlen,2)->setTextColor(Qt::red);
+                }
+            }
+
+            OutPolylineFileName = "";
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("PolygonToPolylines"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            for (int i=1; i+1<ModuleStringList.length(); i=i+2)
+            {
+                ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+
+                QString file1 = ModuleStringList.at(i);
+                OutPolylineFileName = ModuleStringList.at(i+1);
+                OutPolylineFileName.replace(QString(".shp"),QString("_sln")+QString::number(2*DEMResolution)+QString(".shp"));
+
+                bool file1_check = Check_File_Valid(file1);
+                bool file2_check = Check_File_Valid(OutPolylineFileName);
+
+                int rowlen = ui->tableWidget->rowCount()-1;
+                if(rowlen >= 0)
+                {
+                    NewTableItem = new QTableWidgetItem(file1);
+                    ui->tableWidget->setItem(rowlen,0,NewTableItem);
+                    if(file1_check)
+                    {
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::black);
+                    }
+                    else
+                    {
+                        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
+                    }
+
+                    NewTableItem = new QTableWidgetItem(QString::number(2*DEMResolution));
+                    ui->tableWidget->setItem(rowlen,1,NewTableItem);
+
+                    NewTableItem = new QTableWidgetItem(OutPolylineFileName);
+                    ui->tableWidget->setItem(rowlen,2,NewTableItem);
+
+                    if(!file2_check)
+                    {
+                        ui->tableWidget->item(rowlen,2)->setTextColor(Qt::black);
+                    }
+                    else
+                    {
+                        LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + OutPolylineFileName + tr(" output already exists. </span>") +tr("<br>"));
+                        ui->tableWidget->item(rowlen,2)->setTextColor(Qt::red);
+                    }
+
+                    OutPolylineFileName = "";
+                }
+            }
+        }
+
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("SimplifyPolylines"));
+        if ( ModuleStringList.length() > 0 )
+        {
+            while( ui->tableWidget->rowCount() )
+                ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+
+            ui->tableWidget->setRowCount(0);
+            qDebug() << "Length = " << ModuleStringList.length();
+
+            for (int i=1; i+1<ModuleStringList.length(); i=i+3)
+            {
+                ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+
+                int rowlen = ui->tableWidget->rowCount()-1;
+                if(rowlen >= 0)
+                {
+                    QString file1 = ModuleStringList.at(i);
+                    QString file2 = ModuleStringList.at(i+1);
+                    qDebug() << "file1 = " << file1;
+                    qDebug() << "file2 = " << file2;
+
+                    bool file1_check = Check_File_Valid(file1);
+                    bool file2_check = Check_File_Valid(file2);
+
+                    qDebug() << file1 << " " << file1_check;
+                    qDebug() << OutPolylineFileName << " " << file2_check;
+
+                    NewTableItem = new QTableWidgetItem(file1);
+                    ui->tableWidget->setItem(rowlen,0,NewTableItem);
+                    if(file1_check)
+                    {
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::black);
+                    }
+                    else
+                    {
+                        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file2 + tr(" input does not exist. </span>") +tr("<br>"));
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
+                    }
+                    ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignRight);
+                    ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignVCenter);
+
+                    NewTableItem = new QTableWidgetItem(file2);
+                    ui->tableWidget->setItem(rowlen,2,NewTableItem);
+                    if(file2_check)
+                    {
+                        LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + file2 + tr(" output already exists. </span>") +tr("<br>"));
+                        ui->tableWidget->item(rowlen,2)->setTextColor(Qt::red);
+                    }
+                    else
+                    {
+                        LogsString.append(tr("<span style=\"color:#FF0000\">INFO: ") + file2 + tr(" does not exist. </span>") +tr("<br>"));
+                        ui->tableWidget->item(rowlen,2)->setTextColor(Qt::black);
+                    }
+                    ui->tableWidget->item(rowlen,2)->setTextAlignment(Qt::AlignRight);
+                    ui->tableWidget->item(rowlen,2)->setTextAlignment(Qt::AlignVCenter);
+
+                    NewTableItem = new QTableWidgetItem(ModuleStringList.at(i+2));
+                    ui->tableWidget->setItem(rowlen,1,NewTableItem);
+                    ui->tableWidget->item(rowlen,1)->setTextColor(QColor(0, 180, 0));
+                    ui->tableWidget->item(rowlen,1)->setTextAlignment(Qt::AlignRight);
+                    ui->tableWidget->item(rowlen,1)->setTextAlignment(Qt::AlignVCenter);
+                }
+                //qDebug() << i << " " << InpPolygonFileName << " <> " << OutPolygonFileName << "\n";
+            }
+
+        }
+
+        ui->tableWidget->resizeColumnsToContents();
+        ui->tableWidget->blockSignals(false);
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        pushButtonSetFocus();
+    } catch (...) {
+        qDebug() << "Error: SimplifyPolylines::Load_Project_Settings is returning w/o checking";
+        return false;
+    }
+
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to focus button selection (needed for users w/o mouse)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void SimplifyPolylines::pushButtonSetFocus()
 {
     if(print_debug_messages)
@@ -180,64 +299,131 @@ void SimplifyPolylines::pushButtonSetFocus()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if input file exists (returns true) or does not (returns false)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool SimplifyPolylines::Check_File_Valid(QString file)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_File_Valid()";
+
+    bool result = false;
+
+    try {
+
+        if( fileExists(file) )
+        {
+            result = true;
+
+            qint64 size = file_Size(file);
+            qDebug() << "size " << size;
+
+            if( size < 1)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, file : </span>") + file +tr("<br>"));
+                LogsString.append(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, invalid file size: </span>") + size +tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+                result = false;
+            }
+
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_File_Valid is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void SimplifyPolylines::Clear_Log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start SimplifyPolylines::Clear_Log()";
+
+    try {
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+    } catch (...) {
+        qDebug() << "Error: SimplifyPolylines::Clear_Log() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Add Button Clicked Event  (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void SimplifyPolylines::on_pushButtonAdd_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start SimplifyPolylines::on_pushButtonAdd_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
+        Clear_Log();
 
         QTableWidgetItem *NewTableItem;
-        QString TempString;
-        QStringList InputPolygonsFileNames = QFileDialog::getOpenFileNames(this, "Choose Shape Files", ProjectFolder+tr("/.."), "Shape File(*.shp *.SHP)");
+        QStringList InputPolygonsFileNames = QFileDialog::getOpenFileNames(this, "Choose Shape Files", user_pihmgis_root_folder + tr("/.."), "Shape File(*.shp *.SHP)");
+
         if ( InputPolygonsFileNames.length() > 0)
         {
-            //ui->lineEditInputPolygons->setStyleSheet("color: black;");
-
             for (int i=0; i<InputPolygonsFileNames.length(); i++)
             {
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
-                TempString = InputPolygonsFileNames.at(i);
+                QString file1 = InputPolygonsFileNames.at(i);
+                QString file2 = file1.replace(QString(".shp"),QString("_sln")+QString::number(2*DEMResolution)+QString(".shp"));
+                bool file1_check = Check_File_Valid(file1);
+                bool file2_check = Check_File_Valid(file2);
 
-                NewTableItem = new QTableWidgetItem(TempString);
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,NewTableItem);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextColor(QColor(0,0,0));
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextAlignment(Qt::AlignRight);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextAlignment(Qt::AlignVCenter);
+                int rowlen = ui->tableWidget->rowCount()-1;
+                if(file1.length() > 0 )
+                {
+                    NewTableItem = new QTableWidgetItem(file1);
+                    ui->tableWidget->setItem(rowlen,0,NewTableItem);
+                    if(file1_check)
+                    {
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::black);
+                    }
+                    else
+                    {
+                        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file2 + tr(" input does not exist. </span>") +tr("<br>"));
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
+                    }
 
-                NewTableItem = new QTableWidgetItem(TempString.replace(QString(".shp"),QString("_sln")+QString::number(2*DEMResolution)+QString(".shp")));
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,2,NewTableItem);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,2)->setTextColor(QColor(0,0,0));
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,2)->setTextAlignment(Qt::AlignRight);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,2)->setTextAlignment(Qt::AlignVCenter);
+                    ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignRight);
+                    ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignVCenter);
+                }
+
+                if(file2.length() > 0 )
+                {
+                    NewTableItem = new QTableWidgetItem(file2);
+                    ui->tableWidget->setItem(rowlen,2,NewTableItem);
+                    if(file2_check)
+                    {
+                        LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + file2 + tr(" output already exists. </span>") +tr("<br>"));
+                        ui->tableWidget->item(rowlen,2)->setTextColor(Qt::red);
+                    }
+                    else
+                    {
+                        LogsString.append(tr("<span style=\"color:#FF0000\">INFO: ") + file2 + tr(" does not exist. </span>") +tr("<br>"));
+                        ui->tableWidget->item(rowlen,2)->setTextColor(Qt::black);
+                    }
+                    ui->tableWidget->item(rowlen,2)->setTextAlignment(Qt::AlignRight);
+                    ui->tableWidget->item(rowlen,2)->setTextAlignment(Qt::AlignVCenter);
+                }
 
                 NewTableItem = new QTableWidgetItem(QString::number(2*DEMResolution));
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,1,NewTableItem);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextColor(QColor(0,0,0));
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextAlignment(Qt::AlignRight);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextAlignment(Qt::AlignVCenter);
+                ui->tableWidget->setItem(rowlen,1,NewTableItem);
+                ui->tableWidget->item(rowlen,1)->setTextColor(QColor(0,0,0));
+                ui->tableWidget->item(rowlen,1)->setTextAlignment(Qt::AlignRight);
+                ui->tableWidget->item(rowlen,1)->setTextAlignment(Qt::AlignVCenter);
             }
 
             pushButtonSetFocus();
@@ -251,14 +437,17 @@ void SimplifyPolylines::on_pushButtonAdd_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Remove Button Clicked Event  (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void SimplifyPolylines::on_pushButtonRemove_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start SimplifyPolylines::on_pushButtonRemove_clicked()";
 
     try {
-        ui->tableWidget->removeRow(ui->tableWidget->currentRow());
 
+        ui->tableWidget->removeRow(ui->tableWidget->currentRow());
         qDebug() << "Row Count = " << ui->tableWidget->rowCount();
 
         pushButtonSetFocus();
@@ -268,6 +457,9 @@ void SimplifyPolylines::on_pushButtonRemove_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Clear Button Clicked Event  (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void SimplifyPolylines::on_pushButtonClear_clicked()
 {
     if(print_debug_messages)
@@ -276,7 +468,7 @@ void SimplifyPolylines::on_pushButtonClear_clicked()
     try {
         while( ui->tableWidget->rowCount() )
             ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
-        //ui->tableWidget->setRowCount(0);
+
         qDebug() << "Row Count = " << ui->tableWidget->rowCount();
 
         pushButtonSetFocus();
@@ -285,160 +477,178 @@ void SimplifyPolylines::on_pushButtonClear_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run Button Clicked Event  (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void SimplifyPolylines::on_pushButtonRun_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start SimplifyPolylines::on_pushButtonRun_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Simplify Polylines Processing Started ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
 
-
-        LogsString.append(tr("Verifying Data Files ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        int runFlag = 1;
-        QFile IOTestFile;
-
-        QString InputPolylinesFileName;
-        QStringList InputPolylinesFileNameList;
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check inputs
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if( ui->tableWidget->rowCount() == 0 )
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Polyline Input File(s) Missing </span>")+tr("<br>"));
-            runFlag = 0;
+            return;
         }
-        else
+
+        bool failure_found = false;
+
+        for (int i=0; i<ui->tableWidget->rowCount(); i++)
         {
-            for (int i=0; i<ui->tableWidget->rowCount(); i++)
+            QString file1 = ui->tableWidget->item(i,0)->text();
+            QString file2 = ui->tableWidget->item(i,2)->text(); //Note 2 index not 1
+
+            bool file1_check = Check_File_Valid(file1);
+            bool file2_check = Check_File_Valid(file2);
+
+            if(file1_check)
             {
-                if ( ! CheckFileAccess(ui->tableWidget->item(i,0)->text(), "ReadOnly") )
+                if ( ! CheckFileAccess(file1, "ReadOnly") )
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->tableWidget->item(i,0)->text()+tr("<br>"));
-                    runFlag = 0;
+                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + file1 +tr("<br>"));
+                    failure_found = true;
                 }
-                LogsString.append(ui->tableWidget->item(i,0)->text() + " ... <br>");
+            }
+            else
+            {
+                failure_found = true;
+            }
 
-                if ( ui->tableWidget->item(i,0)->text() != nullptr && ui->tableWidget->item(i,1)->text().toInt() <= 0 )
+            if(file2_check)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Polyline Output File already exists </span>")+ file2 + tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+                failure_found = true;
+            }
+            else
+            {
+                if ( ! CheckFolderAccessFromFilePath(file2, "WriteOnly") )
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Invalid Simplification Tolerance ... </span>")+tr("<br>"));
-                    runFlag = 0;
+                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + file2 +tr("<br>"));
+                    ui->textBrowserLogs->setHtml(LogsString);
+                    ui->textBrowserLogs->repaint();
+                    failure_found = true;
                 }
-
-                if ( ! CheckFileAccess(ui->tableWidget->item(i,2)->text(), "WriteOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->tableWidget->item(i,1)->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->tableWidget->item(i,2)->text() + " ... <br>");
             }
         }
+
+        if(failure_found)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Polyline Input and Output File issues </span>")+ tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Run SimplifyPolylines
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        LogsString.append("Running Simplify Polylines ... <br>");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
-        if(runFlag == 1)
+        QStringList ProjectIOStringList;
+        ProjectIOStringList << "SimplifyPolylines";
+
+        for (int i=0; i<ui->tableWidget->rowCount(); i++)
         {
-
-            ProjectIOStringList << "SimplifyPolylines";
-
-            LogsString.append("Running Simplify Polylines ... <br>");
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
             QString InpShpFileName, InpDbfFileName;
             QString OutShpFileName, OutDbfFileName;
             int Tolerance;
 
-            for (int i=0; i<ui->tableWidget->rowCount(); i++)
+            QString InputPolylinesFileName;
+            QStringList InputPolylinesFileNameList;
+
+            InpShpFileName = ui->tableWidget->item(i,0)->text();
+            InpDbfFileName = InpShpFileName;
+            InpDbfFileName.replace(QString(".shp"), QString(".dbf"));
+
+            Tolerance = ui->tableWidget->item(i,1)->text().toInt();
+
+            OutShpFileName = ui->tableWidget->item(i,2)->text();
+            OutDbfFileName = OutShpFileName;
+            OutDbfFileName.replace(QString(".shp"), QString(".dbf"));
+
+            qDebug() << InpShpFileName << " # " << InpDbfFileName;
+            qDebug() << Tolerance;
+            qDebug() << OutShpFileName << " # " << OutDbfFileName;
+
+            int ErrorSln = simplify_shape((char *)qPrintable(InpShpFileName), (char *)qPrintable(InpDbfFileName), (char *)qPrintable(OutShpFileName), (char *)qPrintable(OutDbfFileName), Tolerance);
+            if ( ErrorSln == 1 || ErrorSln == 5 || ErrorSln == 8 )
             {
-                InpShpFileName = ui->tableWidget->item(i,0)->text();
-                InpDbfFileName = InpShpFileName;
-                InpDbfFileName.replace(QString(".shp"), QString(".dbf"));
-
-                Tolerance = ui->tableWidget->item(i,1)->text().toInt();
-
-                OutShpFileName = ui->tableWidget->item(i,2)->text();
-                OutDbfFileName = OutShpFileName;
-                OutDbfFileName.replace(QString(".shp"), QString(".dbf"));
-
-                qDebug() << InpShpFileName << " # " << InpDbfFileName;
-                qDebug() << Tolerance;
-                qDebug() << OutShpFileName << " # " << OutDbfFileName;
-
-                int ErrorSln = simplify_shape((char *)qPrintable(InpShpFileName), (char *)qPrintable(InpDbfFileName), (char *)qPrintable(OutShpFileName), (char *)qPrintable(OutDbfFileName), Tolerance);
-                if ( ErrorSln == 1 || ErrorSln == 5 || ErrorSln == 8 )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Skipping Non-Polyline Layer ... </span>")+InpShpFileName+tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                }
-                else if ( ErrorSln != 0 )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Simplify Polyline Processing Failed ... </span>")+tr("<br>"));
-                    LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorSln)+tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                    return;
-                }
-                else
-                {
-                    LogsString.append(tr("<span><b>Processing ... </span>")+InpShpFileName+tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-
-                    ProjectIOStringList << InpShpFileName << OutShpFileName << QString::number(Tolerance);
-
-                    if( ui->checkBoxSimplifyPolylines->isChecked() == 1 )
-                    {
-                        LogsString.append("Loading Data in GIS ... <br>");
-                        ui->textBrowserLogs->setHtml(LogsString);
-                        ui->textBrowserLogs->repaint();
-                    }
-
-                    if(ui->checkBoxSimplifyPolylines->isChecked() == 1)
-                    {
-                        if ( ! QDesktopServices::openUrl(QUrl("file://"+OutShpFileName)) )
-                            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load SHP File in GIS ... </span>")+OutShpFileName+tr("<br>"));
-                    }
-                }
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Skipping Non-Polyline Layer ... </span>")+InpShpFileName+tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
             }
+            else if ( ErrorSln != 0 )
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Simplify Polyline Processing Failed ... </span>")+tr("<br>"));
+                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorSln)+tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+                return;
+            }
+            else
+            {
+                LogsString.append(tr("<span><b>Processing ... </span>")+InpShpFileName+tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
 
-            if ( ProjectIOStringList.length() > 2)
-                WriteModuleLine(ProjectFileName, ProjectIOStringList);
-            ProjectIOStringList.clear();
-
-
-            LogsString.append(tr("<br><b>Simplify Polylines Processing Completed.</b>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
-            ui->pushButtonRun->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
+                ProjectIOStringList << InpShpFileName << OutShpFileName << QString::number(Tolerance);
+            }
         }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if ( ProjectIOStringList.length() > 2)
+            WriteModuleLine(filename_open_project, ProjectIOStringList);
+
+        ProjectIOStringList.clear();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Message box
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+
+        LogsString.append(tr("<br><b>Simplify Polylines Processing Completed.</b>")+tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        ui->pushButtonRun->setDefault(false);
+        ui->pushButtonClose->setDefault(true);
+        ui->pushButtonClose->setFocus();
+
 
     } catch (...) {
         qDebug() << "Error: SimplifyPolylines::on_pushButtonRun_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TableWidget cellChange Event
+// NOTE: In Load project settings, block signals are disabled before and restored.
+// TODO: This code has not been tested.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void SimplifyPolylines::on_tableWidget_cellChanged(int row, int column)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start SimplifyPolylines::on_tableWidget_cellChanged()";
 
     try {
+
         if ( column == 1 )
         {
             qDebug() << QString::number(row) << " " << QString::number(column);
@@ -446,7 +656,6 @@ void SimplifyPolylines::on_tableWidget_cellChanged(int row, int column)
             ui->tableWidget->item(row,column  )->setTextColor(QColor(0,0,0));
             ui->tableWidget->item(row,column-1)->setTextColor(QColor(0,0,0));
             ui->tableWidget->item(row,column+1)->setTextColor(QColor(0,0,0));
-
 
             QString PolylineFileName = ui->tableWidget->item(row, column-1)->text();
             QString Tolerance        = ui->tableWidget->item(row, column)->text();
@@ -456,25 +665,34 @@ void SimplifyPolylines::on_tableWidget_cellChanged(int row, int column)
             QTableWidgetItem *NewTableItem = new QTableWidgetItem(PolylineFileName);
             ui->tableWidget->setItem(row,2,NewTableItem);
         }
+
     } catch (...) {
         qDebug() << "Error: SimplifyPolylines::on_tableWidget_cellChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close button event
+// TODO, Decide on keeping button next highlights or not
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void SimplifyPolylines::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start SimplifyPolylines::on_pushButtonClose_clicked()";
 
     try {
-        QStringList default_params; default_params << "WORKFLOW3" << "POLYLINE";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //QStringList default_params; default_params << "WORKFLOW3" << "POLYLINE";
+        //QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
     } catch (...) {
         qDebug() << "Error: SimplifyPolylines::on_pushButtonClose_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void SimplifyPolylines::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)

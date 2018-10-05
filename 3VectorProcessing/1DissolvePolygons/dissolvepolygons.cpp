@@ -223,6 +223,8 @@ bool DissolvePolygons::Load_Project_Settings()
             }
         }
 
+        ui->tableWidget->resizeColumnsToContents();
+
         pushButtonSetFocus();
 
     } catch (...) {

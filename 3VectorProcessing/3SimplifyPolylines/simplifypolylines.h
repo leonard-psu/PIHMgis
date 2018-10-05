@@ -12,11 +12,11 @@ class SimplifyPolylines : public QDialog
     Q_OBJECT
 
 public:
-    explicit SimplifyPolylines(QWidget *parent = 0);
+    explicit SimplifyPolylines(QWidget *parent = 0, QString filename_open_project = "");
     ~SimplifyPolylines();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
+    //QStringList ProjectIOStringList;
     int DEMResolution;
 
 public slots:
@@ -38,8 +38,17 @@ private slots:
 
     void on_tableWidget_cellChanged(int row, int column);
 
+    void Clear_Log();
+
+    bool Load_Project_Settings();
+
+    bool Check_File_Valid(QString file);
+
+
 private:
     Ui::SimplifyPolylines *ui;
+    QString filename_open_project;
+
 };
 
 #endif // SIMPLIFYPOLYLINES_H

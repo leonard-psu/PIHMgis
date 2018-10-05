@@ -250,20 +250,22 @@ public:
         if (tableWidget->columnCount() < 2)
             tableWidget->setColumnCount(2);
         QFont font2;
-        font2.setPointSize(14);
+        font2.setFamily(QStringLiteral("Arial"));
+        font2.setPointSize(10);
         font2.setBold(true);
         font2.setItalic(false);
         font2.setWeight(75);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        __qtablewidgetitem->setTextAlignment(Qt::AlignCenter);
+        __qtablewidgetitem->setTextAlignment(Qt::AlignLeading|Qt::AlignVCenter);
         __qtablewidgetitem->setFont(font2);
         tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QFont font3;
-        font3.setPointSize(14);
+        font3.setFamily(QStringLiteral("Arial"));
+        font3.setPointSize(10);
         font3.setBold(true);
         font3.setWeight(75);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        __qtablewidgetitem1->setTextAlignment(Qt::AlignCenter);
+        __qtablewidgetitem1->setTextAlignment(Qt::AlignLeading|Qt::AlignVCenter);
         __qtablewidgetitem1->setFont(font3);
         tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
