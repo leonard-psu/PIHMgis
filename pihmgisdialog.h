@@ -24,7 +24,7 @@ private slots:
 
     // **** :: PIHMgis Help & Resources Slots **** //
 
-    void on_pushButtonWorkFlow0_clicked();
+//    void on_pushButtonWorkFlow0_clicked();
 
 //    void on_pushButtonWorkFlow1_clicked();
 
@@ -38,7 +38,7 @@ private slots:
 
 //    void on_pushButtonWorkFlow6_clicked();
 
-    void on_pushButtonWorkFlow7_clicked();
+ //   void on_pushButtonWorkFlow7_clicked();
 
     // **** :: PIHMgis Project Management **** //
 
@@ -129,11 +129,11 @@ private slots:
 
     //void on_pushButtonWorkFlow6_clicked();
 
-    void on_pushButton_clicked();
+    //void on_pushButton_clicked();
 
-    void on_pushButton_clicked(bool checked);
+    //void on_pushButton_clicked(bool checked);
 
-    void on_pushButton_2_clicked();
+    //void on_pushButton_2_clicked();
 
     void on_pushButton_PickWorkspace_clicked();
 

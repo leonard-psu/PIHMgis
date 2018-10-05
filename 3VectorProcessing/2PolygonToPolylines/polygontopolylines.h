@@ -12,11 +12,11 @@ class PolygonToPolylines : public QDialog
     Q_OBJECT
 
 public:
-    explicit PolygonToPolylines(QWidget *parent = 0);
+    explicit PolygonToPolylines(QWidget *parent = 0, QString filename_open_project = "");
     ~PolygonToPolylines();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
+    //QStringList ProjectIOStringList;
 
 private slots:
 
@@ -34,8 +34,17 @@ private slots:
 
     void pushButtonSetFocus();
 
+    void Clear_Log();
+
+    bool Check_File_Valid(QString file);
+
+    bool Load_Project_Settings();
+
+
 private:
     Ui::PolygonToPolylines *ui;
+    QString filename_open_project;
+
 };
 
 #endif // POLYGONTOPOLYLINES_H

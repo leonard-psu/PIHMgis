@@ -9,6 +9,8 @@ bool        WriteModuleLine(QString ProjectFileName, QStringList WriteStringList
 bool        DeleteModuleLine(QString ProjectFileName, QString Module);
 
 bool        CheckFileAccess (QString FileName, QString AccessMode);
+bool        CheckFolderAccess (QString folder, QString AccessMode);
+bool        CheckFolderAccessFromFilePath(QString folder, QString AccessMode);
 
 QString readLineNumber (QString ProjectFileName, int LineNumber);
 bool    writeLineNumber(QString ProjectFileName, int LineNumber, QString WriteString);

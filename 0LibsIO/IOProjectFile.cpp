@@ -158,6 +158,117 @@ bool DeleteModuleLine(QString ProjectFileName, QString Module)
     }
 }
 
+bool CheckFolderAccess (QString folderName, QString AccessMode)
+{
+    bool result = false;
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Start CheckFolderAccess";
+
+    try {
+
+#if (defined (_WIN32) || defined (_WIN64))
+        //http://doc.qt.io/archives/qt-4.8/qfile.html#platform-specific-issues
+
+        if(folderName.contains(QDir::homePath()))
+            return true;
+#endif
+        QFileInfo my_dir(folderName);
+        qDebug() << "isReadable " <<  my_dir.isReadable();
+        qDebug() << "isWritable " <<  my_dir.isWritable();
+
+        if ( AccessMode == "ReadOnly" )
+        {
+            if(my_dir.isDir() && my_dir.isReadable())
+                result = true;
+        }
+
+        if ( AccessMode == "WriteOnly" )
+        {
+            if(my_dir.isDir() && my_dir.isWritable())
+                result = true;
+        }
+
+        if ( AccessMode == "ReadWrite" )
+        {
+            if(my_dir.isDir())
+                if(my_dir.isReadable())
+                    if(my_dir.isWritable())
+                        result = true;
+
+        }
+
+        qDebug() << "folderName " << folderName << " " << result;
+
+
+    } catch (...) {
+
+        qDebug() << "Error: CheckFolderAccess is returning false";
+        return false;
+    }
+
+    return result;
+}
+
+bool CheckFolderAccessFromFilePath(QString filenameandpath, QString AccessMode)
+{
+    bool result = false;
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Start CheckFolderAccessFromFilePath";
+
+    try {
+
+#if (defined (_WIN32) || defined (_WIN64))
+        //http://doc.qt.io/archives/qt-4.8/qfile.html#platform-specific-issues
+
+        if(filenameandpath.contains(QDir::homePath()))
+            return true;
+
+#endif
+
+
+        QFileInfo fi(filenameandpath);
+        QString folderName = fi.dir().canonicalPath();
+
+        QFileInfo my_dir(folderName);
+        qDebug() << "isReadable " <<  my_dir.isReadable();
+        qDebug() << "isWritable " <<  my_dir.isWritable();
+
+        if ( AccessMode == "ReadOnly" )
+        {
+            if(my_dir.isDir() && my_dir.isReadable())
+                result = true;
+        }
+
+        if ( AccessMode == "WriteOnly" )
+        {
+            if(my_dir.isDir() && my_dir.isWritable())
+                result = true;
+        }
+
+        if ( AccessMode == "ReadWrite" )
+        {
+            if(my_dir.isDir())
+                if(my_dir.isReadable())
+                    if(my_dir.isWritable())
+                        result = true;
+
+        }
+
+        qDebug() << "folderName " << folderName << " " << result;
+
+
+    } catch (...) {
+
+        qDebug() << "Error: CheckFolderAccessFromFilePath is returning false";
+        return false;
+    }
+
+    return result;
+}
+
+
 
 bool CheckFileAccess (QString FileName, QString AccessMode)
 {

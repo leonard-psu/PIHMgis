@@ -6,6 +6,9 @@
 #include <QThread>
 #include <QFileDialog>
 
+#include <QException>
+#include <iostream>
+
 #include "pihmgisdialog.h"
 #include "ui_pihmgisdialog.h"
 
@@ -408,18 +411,18 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
 
 // **** START :: PIHMgis Help & Resources Slots **** //
 
-void PIHMgisDialog::on_pushButtonWorkFlow0_clicked()
-{
-    if(print_debug_messages)
-        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonWorkFlow0_clicked";
+//void PIHMgisDialog::on_pushButtonWorkFlow0_clicked()
+//{
+//    if(print_debug_messages)
+//        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonWorkFlow0_clicked";
 
-    try {
-        bool success = QDesktopServices::openUrl(QUrl("http://www.pihm.psu.edu"));
-        QStringList default_params; default_params << "WORKFLOW1"; set_defaults(default_params);
-    } catch (...) {
-        qDebug() << "Error: PIHMgisDialog::on_pushButtonWorkFlow0_clicked is returning w/o checking";
-    }
-}
+//    try {
+//        bool success = QDesktopServices::openUrl(QUrl("http://www.pihm.psu.edu"));
+//        QStringList default_params; default_params << "WORKFLOW1"; set_defaults(default_params);
+//    } catch (...) {
+//        qDebug() << "Error: PIHMgisDialog::on_pushButtonWorkFlow0_clicked is returning w/o checking";
+//    }
+//}
 
 // **** START :: PIHMgis Project Management **** //
 
@@ -621,9 +624,17 @@ void PIHMgisDialog::on_pushButtonVectorProcessingDissolvePolygons_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingDissolvePolygons_clicked";
 
     try {
-        DissolvePolygons *DissolvePolygonsDialog = new DissolvePolygons(this);
+
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        DissolvePolygons *DissolvePolygonsDialog = new DissolvePolygons(this, filename_open_project);
+        DissolvePolygonsDialog->setModal(true);
         DissolvePolygonsDialog->show();
-    } catch (...) {
+
+
+        //delete DissolvePolygonsDialog;
+
+    } catch (QException ex) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingDissolvePolygons_clicked is returning w/o checking";
     }
 }
@@ -634,8 +645,12 @@ void PIHMgisDialog::on_pushButtonVectorProcessingPolygonToPolylines_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingPolygonToPolylines_clicked";
 
     try {
-        PolygonToPolylines *PolygonToPolylinesDialog = new PolygonToPolylines(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        PolygonToPolylines *PolygonToPolylinesDialog = new PolygonToPolylines(this, filename_open_project);
+        PolygonToPolylinesDialog->setModal(true);
         PolygonToPolylinesDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingPolygonToPolylines_clicked is returning w/o checking";
     }
@@ -968,46 +983,22 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
 
 // ************************************************************************** //
 
-void PIHMgisDialog::on_pushButton_clicked()
-{
-    //if(print_debug_messages)
-    qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_clicked";
+//void PIHMgisDialog::on_pushButton_clicked()
+//{
+//    //if(print_debug_messages)
+//    qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_clicked";
 
-    try {
-        qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
+//    try {
+//        qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
 
-        NewProject *NewProjectDialog = new NewProject(this);
-        NewProjectDialog->show();
-    } catch (...) {
-        qDebug() << "Error: PIHMgisDialog::on_pushButton_clicked is returning w/o checking";
-    }
-}
+//        NewProject *NewProjectDialog = new NewProject(this);
+//        NewProjectDialog->show();
+//    } catch (...) {
+//        qDebug() << "Error: PIHMgisDialog::on_pushButton_clicked is returning w/o checking";
+//    }
+//}
 
 
-void PIHMgisDialog::on_pushButton_clicked(bool checked)
-{
-    //if(print_debug_messages)
-    qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_clicked";
-
-    try {
-        qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
-    } catch (...) {
-        qDebug() << "Error: PIHMgisDialog::on_pushButton_clicked is returning w/o checking";
-    }
-}
-
-void PIHMgisDialog::on_pushButton_2_clicked()
-{
-    if(print_debug_messages)
-        qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_2_clicked";
-
-    try {
-        qDebug() << "on_pushButton_2_clicked";
-    } catch (...) {
-        qDebug() << "Error: PIHMgisDialog::on_pushButton_2_clicked is returning w/o checking";
-    }
-
-}
 
 void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 {
@@ -1147,11 +1138,11 @@ qint64 file_Size(QString path){
 
 
 
-void PIHMgisDialog::on_pushButtonWorkFlow7_clicked()
-{
-    qDebug() << "Error: PIHMgisDialog::on_pushButtonWorkFlow7_clicked is returning w/o checking";
+//void PIHMgisDialog::on_pushButtonWorkFlow7_clicked()
+//{
+//    qDebug() << "Error: PIHMgisDialog::on_pushButtonWorkFlow7_clicked is returning w/o checking";
 
-}
+//}
 
 
 void PIHMgisDialog::on_pushButton_PickWorkspace_clicked(bool checked)

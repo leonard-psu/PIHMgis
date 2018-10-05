@@ -2,6 +2,7 @@
 #define DISSOLVEPOLYGONS_H
 
 #include <QDialog>
+#include <QException>
 
 namespace Ui {
 class DissolvePolygons;
@@ -12,11 +13,12 @@ class DissolvePolygons : public QDialog
     Q_OBJECT
 
 public:
-    explicit DissolvePolygons(QWidget *parent = 0);
+    explicit DissolvePolygons(QWidget *parent = 0, QString filename_open_project = "");
     ~DissolvePolygons();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
+    //QStringList ProjectIOStringList;
+
 
 private slots:
 
@@ -34,9 +36,17 @@ private slots:
 
     void pushButtonSetFocus();
 
+    void Clear_Log();
+
+    bool Check_File_Valid(QString file);
+
+    bool Load_Project_Settings();
+
 
 private:
     Ui::DissolvePolygons *ui;
+    QString filename_open_project;
+
 };
 
 #endif // DISSOLVEPOLYGONS_H
