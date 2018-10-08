@@ -678,7 +678,10 @@ void PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked";
 
     try {
-        PolylineToLines *PolylineToLinesDialog = new PolylineToLines(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        PolylineToLines *PolylineToLinesDialog = new PolylineToLines(this, filename_open_project);
+        PolylineToLinesDialog->setModal(true);
         PolylineToLinesDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked is returning w/o checking";

@@ -200,7 +200,7 @@ bool PolygonToPolylines::Load_Project_Settings()
                         }
                         else
                         {
-                            LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file2 + tr(" input does not exist. </span>") +tr("<br>"));
+                            LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
                             ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
                         }
                         ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignRight);
@@ -356,41 +356,42 @@ void PolygonToPolylines::on_pushButtonAdd_clicked()
                 QString file2 = file1.replace(".shp","_pln.shp");
                 bool file1_check = Check_File_Valid(file1);
                 bool file2_check = Check_File_Valid(file2);
+                int rowlen = ui->tableWidget->rowCount()-1;
 
                 if(file1.length() > 0 )
                 {
                     QTableWidgetItem *NewTableItem = new QTableWidgetItem(file1);
-                    ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,NewTableItem);
+                    ui->tableWidget->setItem(rowlen,0,NewTableItem);
                     if(file1_check)
                     {
-                        ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextColor(Qt::black);
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::black);
                     }
                     else
                     {
                         LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file2 + tr(" input does not exist. </span>") +tr("<br>"));
-                        ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextColor(Qt::red);
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
                     }
-                    ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextAlignment(Qt::AlignRight);
-                    ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextAlignment(Qt::AlignVCenter);
+                    ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignRight);
+                    ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignVCenter);
                 }
 
                 if(file2.length() > 0 )
                 {
                     QTableWidgetItem *NewTableItem = new QTableWidgetItem(file2);
-                    ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,1,NewTableItem);
+                    ui->tableWidget->setItem(rowlen,1,NewTableItem);
                     if(file2_check)
                     {
                         LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + file2 + tr(" output already exists. </span>") +tr("<br>"));
-                        ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextColor(Qt::red);
+                        ui->tableWidget->item(rowlen,1)->setTextColor(Qt::red);
                     }
                     else
                     {
                         LogsString.append(tr("<span style=\"color:#FF0000\">INFO: ") + file2 + tr(" does not exist. </span>") +tr("<br>"));
-                        ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextColor(Qt::black);
+                        ui->tableWidget->item(rowlen,1)->setTextColor(Qt::black);
                     }
 
-                    ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextAlignment(Qt::AlignRight);
-                    ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextAlignment(Qt::AlignVCenter);
+                    ui->tableWidget->item(rowlen,1)->setTextAlignment(Qt::AlignRight);
+                    ui->tableWidget->item(rowlen,1)->setTextAlignment(Qt::AlignVCenter);
                 }
 
                 ui->textBrowserLogs->setHtml(LogsString);
