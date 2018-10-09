@@ -12,11 +12,10 @@ class MergeVectorLayers : public QDialog
     Q_OBJECT
 
 public:
-    explicit MergeVectorLayers(QWidget *parent = 0);
+    explicit MergeVectorLayers(QWidget *parent = 0, QString filename_open_project = "");
     ~MergeVectorLayers();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonAdd_clicked();
@@ -35,8 +34,17 @@ private slots:
 
     void pushButtonSetFocus();
 
+    void Clear_Log();
+
+    bool Load_Project_Settings();
+
+    bool Check_File_Valid(QString file);
+
+
 private:
     Ui::MergeVectorLayers *ui;
+    QString filename_open_project;
+
 };
 
 #endif // MERGEVECTORLAYERS_H

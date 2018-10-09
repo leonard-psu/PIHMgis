@@ -425,8 +425,16 @@
     </disabled>
    </palette>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>10</pointsize>
+    <weight>75</weight>
+    <bold>true</bold>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>: :   Merge Vector Layers   : :</string>
+   <string>Merge Vector Layers</string>
   </property>
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
@@ -445,7 +453,7 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>321</y>
+     <y>340</y>
      <width>581</width>
      <height>61</height>
     </rect>
@@ -454,6 +462,9 @@
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -461,6 +472,11 @@
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -478,6 +494,11 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Close</string>
     </property>
@@ -493,6 +514,11 @@
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string/>
@@ -1418,6 +1444,11 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Add</string>
     </property>
@@ -1442,9 +1473,9 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="acceptDrops">
@@ -1461,6 +1492,9 @@
     </property>
     <property name="lineWidth">
      <number>1</number>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOn</enum>
     </property>
     <property name="editTriggers">
      <set>QAbstractItemView::CurrentChanged|QAbstractItemView::SelectedClicked</set>
@@ -1492,13 +1526,14 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="textAlignment">
-      <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+      <set>AlignLeading|AlignVCenter</set>
      </property>
     </column>
    </widget>
@@ -1511,6 +1546,11 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Remove</string>
     </property>
@@ -1519,18 +1559,21 @@
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBoxMergeLayer">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>480</x>
       <y>150</y>
-      <width>91</width>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Sans Serif</family>
-      <pointsize>12</pointsize>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
@@ -1541,8 +1584,11 @@
     <property name="text">
      <string>Load in GIS</string>
     </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
     <property name="checked">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonClear">
@@ -1554,6 +1600,11 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Clear</string>
     </property>
@@ -1564,10 +1615,10 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>217</x>
+      <x>137</x>
       <y>179</y>
-      <width>251</width>
-      <height>16</height>
+      <width>331</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="font">
@@ -1588,7 +1639,7 @@
      <x>15</x>
      <y>245</y>
      <width>581</width>
-     <height>61</height>
+     <height>91</height>
     </rect>
    </property>
    <property name="title">
@@ -1597,11 +1648,16 @@
    <widget class="QPushButton" name="pushButtonMergeLayer">
     <property name="geometry">
      <rect>
-      <x>474</x>
-      <y>16</y>
+      <x>470</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -1613,28 +1669,33 @@
    <widget class="QLineEdit" name="lineEditMergeLayer">
     <property name="geometry">
      <rect>
-      <x>144</x>
-      <y>17</y>
-      <width>325</width>
+      <x>10</x>
+      <y>50</y>
+      <width>561</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
    </widget>
    <widget class="QLabel" name="textLabel1_2">
     <property name="geometry">
      <rect>
-      <x>15</x>
-      <y>16</y>
-      <width>131</width>
+      <x>190</x>
+      <y>10</y>
+      <width>161</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Merge Vector Layer</string>

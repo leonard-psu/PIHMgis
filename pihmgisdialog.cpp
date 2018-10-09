@@ -694,7 +694,10 @@ void PIHMgisDialog::on_pushButtonVectorProcessingMergeVectorLayers_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingMergeVectorLayers_clicked";
 
     try {
-        MergeVectorLayers *MergeVectorLayersDialog = new MergeVectorLayers(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        MergeVectorLayers *MergeVectorLayersDialog = new MergeVectorLayers(this, filename_open_project);
+        MergeVectorLayersDialog->setModal(true);
         MergeVectorLayersDialog->show();
 
     } catch (...) {
@@ -716,8 +719,12 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionReadTopology_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDomainDecompositionReadTopology_clicked";
 
     try {
-        ReadTopology *ReadTopologyDialog = new ReadTopology(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        ReadTopology *ReadTopologyDialog = new ReadTopology(this, filename_open_project);
+        ReadTopologyDialog->setModal(true);
         ReadTopologyDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDomainDecompositionReadTopology_clicked is returning w/o checking";
     }

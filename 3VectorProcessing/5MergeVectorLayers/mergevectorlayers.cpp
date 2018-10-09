@@ -14,8 +14,11 @@
 #include "globals.h"
 
 
-
-MergeVectorLayers::MergeVectorLayers(QWidget *parent) :
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MergeVectorLayers Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+MergeVectorLayers::MergeVectorLayers(QWidget *parent, QString filename) :
     QDialog(parent),
     ui(new Ui::MergeVectorLayers)
 {
@@ -25,74 +28,27 @@ MergeVectorLayers::MergeVectorLayers(QWidget *parent) :
     try {
         ui->setupUi(this);
 
-        ui->tableWidget->setColumnWidth(0,432);
 
-        // ** Start: Fill Form If Module Has Been Run Previously
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
+        filename_open_project = filename;
+        bool found_file = false;
+
+        QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        QString ProjectFolder   = ProjectFileTextStream.readLine();
-        QString ProjectFileName = ProjectFileTextStream.readLine();
+        else
+        {
+            found_file = true;
+        }
         ProjectFile.close();
 
-        QString InpPolygonFileName, OutPolylineFileName;
-
-        QStringList ModuleStringList;
-
-        QTableWidgetItem *NewTableItem;
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("PolylineToLines"));
-        if ( ModuleStringList.length() > 0  )
+        if(found_file)
         {
-            for (int i=1; i+1<ModuleStringList.length(); i=i+2)
-            {
-                ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-
-                NewTableItem = new QTableWidgetItem(ModuleStringList.at(i+1));
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,NewTableItem);
-            }
+            Load_Project_Settings();
         }
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("MergeVectorLayers"));
-        if ( ModuleStringList.length() > 0 )
-        {
-            //ui->tableWidget->clear();
-            while( ui->tableWidget->rowCount() )
-                ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
-            ui->tableWidget->setRowCount(0);
-            //ui->tableWidget->setStyleSheet("color: rgb(0, 180, 0);");
-
-            qDebug() << "Length = " << ModuleStringList.length();
-            for (int i=1; i<ModuleStringList.length()-2; i++)
-            {
-                ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-
-                NewTableItem = new QTableWidgetItem(ModuleStringList.at(i));
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,NewTableItem);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextColor(QColor(0, 180, 0));
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextAlignment(Qt::AlignRight);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextAlignment(Qt::AlignVCenter);
-
-                //qDebug() << i << " " << InpPolygonFileName << " <> " << OutPolygonFileName << "\n";
-            }
-
-        }
-
-        int ID = 0;
-        QString ID_String;
-        //ID_String = QString("000");
-        ID_String = QString("%1").arg(QString::number(ID),3,'0');
-        while ( QFile::exists(ProjectFolder+"/2VectorProcessing/MergeVectorLayer"+ID_String+".shp") )
-        {
-            ID ++;
-            ID_String = QString("%1").arg(QString::number(ID),3,'0');
-        }
-        ui->lineEditMergeLayer->setText(ProjectFolder+"/2VectorProcessing/MergeVectorLayer"+ID_String+".shp");
 
         pushButtonSetFocus();
 
@@ -101,6 +57,126 @@ MergeVectorLayers::MergeVectorLayers(QWidget *parent) :
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool MergeVectorLayers::Load_Project_Settings()
+{
+    try {
+
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("PolylineToLines"));
+
+        if ( ModuleStringList.length() > 0  )
+        {
+            for (int i=1; i+1<ModuleStringList.length(); i=i+2)
+            {
+                ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+
+                QString file1 = ModuleStringList.at(i+1);
+                if(file1.length() > 0 )
+                {
+                    bool file1_check = Check_File_Valid(file1);
+
+                    int rowlen = ui->tableWidget->rowCount()-1;
+                    if(rowlen >= 0)
+                    {
+                        if(file1_check)
+                        {
+                            QTableWidgetItem *NewTableItem = new QTableWidgetItem(file1);
+                            ui->tableWidget->setItem(rowlen,0,NewTableItem);
+                            ui->tableWidget->item(rowlen,0)->setTextColor(Qt::black);
+                        }
+                        else
+                        {
+                            QTableWidgetItem *NewTableItem = new QTableWidgetItem(file1);
+                            ui->tableWidget->setItem(rowlen,0,NewTableItem);
+                            ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
+                            LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
+                        }
+                    }
+                }
+            }
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("MergeVectorLayers"));
+        if ( ModuleStringList.length() > 0 )
+        {
+            while( ui->tableWidget->rowCount() )
+                ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+            ui->tableWidget->setRowCount(0);
+
+            for (int i=1; i<ModuleStringList.length()-2; i++)
+            {
+                ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+
+                int rowlen = ui->tableWidget->rowCount()-1;
+                if(rowlen >= 0)
+                {
+                    QString file1 = ModuleStringList.at(i);
+                    bool file1_check = Check_File_Valid(file1);
+
+                    QTableWidgetItem *NewTableItem = new QTableWidgetItem(file1);
+                    ui->tableWidget->setItem(rowlen,0,NewTableItem);
+
+                    if(file1_check)
+                    {
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::black);
+                    }
+                    else
+                    {
+                        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
+                    }
+                    ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignRight);
+                    ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignVCenter);
+
+                    //qDebug() << i << " " << InpPolygonFileName << " <> " << OutPolygonFileName << "\n";
+
+                }
+            }
+        }
+
+
+        int ID = 0;
+        QString ID_String = QString("%1").arg(QString::number(ID),3,'0');
+        while ( QFile::exists(user_pihmgis_root_folder+"/2VectorProcessing/MergeVectorLayer"+ID_String+".shp") )
+        {
+            ID ++;
+            ID_String = QString("%1").arg(QString::number(ID),3,'0');
+        }
+
+        QString outputfile = user_pihmgis_root_folder+"/2VectorProcessing/MergeVectorLayer" + ID_String + ".shp";
+        bool outputfile_check = Check_File_Valid(outputfile);
+        ui->lineEditMergeLayer->setText(outputfile);
+        if(outputfile_check)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + outputfile + tr(" output already exists. </span>") +tr("<br>"));
+            ui->lineEditMergeLayer->setStyleSheet("Qt::red");
+        }
+        else
+        {
+            ui->lineEditMergeLayer->setStyleSheet("Qt::black");
+        }
+
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+        ui->tableWidget->resizeColumnsToContents();
+
+        pushButtonSetFocus();
+
+
+    } catch (...) {
+        qDebug() << "Error: MergeVectorLayers::Load_Project_Settings is returning w/o checking";
+        return false;
+    }
+
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MergeVectorLayers Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 MergeVectorLayers::~MergeVectorLayers()
 {
     if(print_debug_messages)
@@ -113,6 +189,67 @@ MergeVectorLayers::~MergeVectorLayers()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void MergeVectorLayers::Clear_Log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start MergeVectorLayers::Clear_Log()";
+
+    try {
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+    } catch (...) {
+        qDebug() << "Error: MergeVectorLayers::Clear_Log() is returning w/o checking";
+    }
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if input file exists (returns true) or does not (returns false)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool MergeVectorLayers::Check_File_Valid(QString file)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_File_Valid()";
+
+    bool result = false;
+
+    try {
+
+        if( fileExists(file) )
+        {
+            result = true;
+
+            qint64 size = file_Size(file);
+            qDebug() << "size " << size;
+
+            if( size < 1)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, file : </span>") + file +tr("<br>"));
+                LogsString.append(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, invalid file size: </span>") + size +tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+                result = false;
+            }
+
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_File_Valid is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to focus button selection (needed for users w/o mouse)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MergeVectorLayers::pushButtonSetFocus()
 {
     if(print_debug_messages)
@@ -144,52 +281,46 @@ void MergeVectorLayers::pushButtonSetFocus()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Add Button Clicked Event  (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MergeVectorLayers::on_pushButtonAdd_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start MergeVectorLayers::on_pushButtonAdd_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-        QTableWidgetItem *NewTableItem;
-        QString TempString;
-        QStringList InputLinesFileNames = QFileDialog::getOpenFileNames(this, "Choose Shape Files", ProjectFolder+tr("/2VectorProcessing"), "Shape File(*.shp *.SHP)");
+        QStringList InputLinesFileNames = QFileDialog::getOpenFileNames(this, "Choose Shape Files", user_pihmgis_root_folder+tr("/2VectorProcessing"), "Shape File(*.shp *.SHP)");
         if ( InputLinesFileNames.length() > 0)
         {
-            //ui->lineEditInputPolygons->setStyleSheet("color: black;");
-
             for (int i=0; i<InputLinesFileNames.length(); i++)
             {
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
-                TempString = InputLinesFileNames.at(i);
+                QString file1 = InputLinesFileNames.at(i);
+                bool file1_check = Check_File_Valid(file1);
+                int rowlen = ui->tableWidget->rowCount()-1;
+                if(file1.length() > 0 )
+                {
+                    QTableWidgetItem *NewTableItem = new QTableWidgetItem(file1);
+                    ui->tableWidget->setItem(rowlen,0,NewTableItem);
+                    ui->tableWidget->item(rowlen,0)->setTextColor(QColor(0,0,0));
+                    if(file1_check)
+                    {
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::black);
+                    }
+                    else
+                    {
+                        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
+                        ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
+                    }
 
-                NewTableItem = new QTableWidgetItem(TempString);
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,NewTableItem);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextColor(QColor(0,0,0));
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextAlignment(Qt::AlignRight);
-                ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextAlignment(Qt::AlignVCenter);
+                    ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignRight);
+                    ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignVCenter);
+                }
             }
 
             pushButtonSetFocus();
@@ -203,6 +334,9 @@ void MergeVectorLayers::on_pushButtonAdd_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Remove Button Clicked Event  (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MergeVectorLayers::on_pushButtonRemove_clicked()
 {
     if(print_debug_messages)
@@ -219,6 +353,9 @@ void MergeVectorLayers::on_pushButtonRemove_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Clear Button Clicked Event  (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MergeVectorLayers::on_pushButtonClear_clicked()
 {
     if(print_debug_messages)
@@ -227,7 +364,7 @@ void MergeVectorLayers::on_pushButtonClear_clicked()
     try {
         while( ui->tableWidget->rowCount() )
             ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
-        //ui->tableWidget->setRowCount(0);
+
         qDebug() << "Row Count = " << ui->tableWidget->rowCount();
 
         pushButtonSetFocus();
@@ -236,34 +373,19 @@ void MergeVectorLayers::on_pushButtonClear_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Merge (Save) Button Clicked Event  (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MergeVectorLayers::on_pushButtonMergeLayer_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start MergeVectorLayers::on_pushButtonMergeLayer_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
+        Clear_Log();
 
-        QString MergeVectorFileName = QFileDialog::getSaveFileName(this, "Choose Merge Layer", ProjectFolder+"/2VectorProcessing","Merge Vector File(*.shp)");
+        QString MergeVectorFileName = QFileDialog::getSaveFileName(this, "Choose Merge Layer", user_pihmgis_root_folder + "/2VectorProcessing","Merge Vector File(*.shp)");
         QString tempString = MergeVectorFileName;
         if ( MergeVectorFileName != nullptr)
         {
@@ -274,183 +396,203 @@ void MergeVectorLayers::on_pushButtonMergeLayer_clicked()
                 tempString.append(".shp");
                 MergeVectorFileName = tempString;
             }
+
+            bool file1_check = Check_File_Valid(MergeVectorFileName);
+
             ui->lineEditMergeLayer->setText(MergeVectorFileName);
+            if(file1_check)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + MergeVectorFileName + tr(" output already exists. </span>") +tr("<br>"));
+                ui->lineEditMergeLayer->setStyleSheet("Qt::red");
+            }
+            else
+            {
+                ui->lineEditMergeLayer->setStyleSheet("Qt::black");
+            }
 
             pushButtonSetFocus();
         }
 
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
     } catch (...) {
         qDebug() << "Error: MergeVectorLayers::on_pushButtonMergeLayer_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run Button Clicked Event  (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MergeVectorLayers::on_pushButtonRun_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start MergeVectorLayers::on_pushButtonRun_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Merge Vector Split Lines Processing Started ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
 
-
-        LogsString.append(tr("Verifying Data Files ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        int runFlag = 1;
-        QFile IOTestFile;
-
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check inputs
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if( ui->tableWidget->rowCount() == 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Split Line Input File(s) Missing </span>")+tr("<br>"));
-            pushButtonSetFocus();
-            runFlag = 0;
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Split-Line Input File(s) Missing </span>")+tr("<br>"));
+            return;
         }
-        else
+
+        bool failure_found = false;
+
+        for (int i=0; i<ui->tableWidget->rowCount(); i++)
         {
-            for (int i=0; i<ui->tableWidget->rowCount(); i++)
+            QString file1 = ui->tableWidget->item(i,0)->text();
+
+            bool file1_check = Check_File_Valid(file1);
+
+            if(file1_check)
             {
-                if ( ! CheckFileAccess(ui->tableWidget->item(i,0)->text(), "ReadOnly") )
+                if ( ! CheckFileAccess(file1, "ReadOnly") )
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->tableWidget->item(i,0)->text()+tr("<br>"));
-                    runFlag = 0;
+                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + file1 +tr("<br>"));
+                    failure_found = true;
                 }
-                LogsString.append(ui->tableWidget->item(i,0)->text() + " ... <br>");
-            }
-
-            if ( ! CheckFileAccess(ui->lineEditMergeLayer->text(), "WriteOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->lineEditMergeLayer->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditMergeLayer->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        if(runFlag == 1)
-        {
-
-            ProjectIOStringList << "MergeVectorLayers";
-
-            LogsString.append("Running Merge Vector Split Lines ... <br>");
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
-            QString InpShpFileName, InpDbfFileName;
-            QString OutShpFileName, OutDbfFileName;
-
-            OutShpFileName = ui->lineEditMergeLayer->text();
-            OutDbfFileName = OutShpFileName;
-            OutDbfFileName.replace(QString(".shp"), QString(".dbf"));
-
-            qDebug() << "OutFileName: " << OutShpFileName << " # " << OutDbfFileName;
-
-
-            const char **shpFileNamesChar = new const char*[ui->tableWidget->rowCount()];
-            const char **dbfFileNamesChar = new const char*[ui->tableWidget->rowCount()];
-
-            for (int i=0; i<ui->tableWidget->rowCount(); i++)
-            {
-                InpShpFileName = ui->tableWidget->item(i,0)->text();
-                InpDbfFileName = InpShpFileName;
-                InpDbfFileName.replace(QString(".shp"), QString(".dbf"));
-
-                qDebug() << InpShpFileName << " # " << InpDbfFileName;
-
-                shpFileNamesChar[i] = new char[InpShpFileName.length()+1];
-                dbfFileNamesChar[i] = new char[InpDbfFileName.length()+1];
-
-                sprintf( (char *)shpFileNamesChar[i],"%s", qPrintable(InpShpFileName) );
-                sprintf( (char *)dbfFileNamesChar[i],"%s", qPrintable(InpDbfFileName) );
-
-                qDebug () << shpFileNamesChar[i];
-
-                ProjectIOStringList << InpShpFileName;
-            }
-
-            ProjectIOStringList << OutShpFileName;
-
-            int ErrorMrg = merge_lines( shpFileNamesChar, dbfFileNamesChar, ui->tableWidget->rowCount(), (char *)qPrintable(OutShpFileName), (char *)qPrintable(OutDbfFileName) );
-            if ( ErrorMrg == 1 || ErrorMrg == 5 || ErrorMrg == 8 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Non-Arc Layer ... </span>")+InpShpFileName+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-            else if ( ErrorMrg != 0 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Merge Vector Split Lines Processing Failed ... </span>")+tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorMrg)+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
             }
             else
             {
-                if ( ProjectIOStringList.length() > 2)
-                    WriteModuleLine(ProjectFileName, ProjectIOStringList);
-                ProjectIOStringList.clear();
-
-                QString MergeFileNameInVector = ui->lineEditMergeLayer->text();
-                QString MergeFileNameInDomainDecomposition = MergeFileNameInVector;
-                MergeFileNameInDomainDecomposition.replace("2VectorProcessing","3DomainDecomposition");
-
-                ProjectIOStringList << "MergeVectorDomainDecomposition" << MergeFileNameInVector << MergeFileNameInDomainDecomposition;
-                WriteModuleLine(ProjectFileName, ProjectIOStringList);
-                ProjectIOStringList.clear();
-
-                QFile::remove(MergeFileNameInDomainDecomposition);
-                QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
-
-                MergeFileNameInVector.replace(".shp",".shx");
-                MergeFileNameInDomainDecomposition.replace(".shp",".shx");
-                QFile::remove(MergeFileNameInDomainDecomposition);
-                QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
-
-                MergeFileNameInVector.replace(".shx",".dbf");
-                MergeFileNameInDomainDecomposition.replace(".shx",".dbf");
-                QFile::remove(MergeFileNameInDomainDecomposition);
-                QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
-
-                MergeFileNameInDomainDecomposition.replace(".dbf",".shp");
-
-                if( ui->checkBoxMergeLayer->isChecked() == 1 )
-                {
-                    LogsString.append("Loading Data in GIS ... <br>");
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                }
-
-                if(ui->checkBoxMergeLayer->isChecked() == 1)
-                {
-                    if ( ! QDesktopServices::openUrl(QUrl("file://"+MergeFileNameInDomainDecomposition)) )
-                        LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load SHP File in GIS ... </span>")+OutShpFileName+tr("<br>"));
-                }
+                failure_found = true;
             }
+        }
 
+        QString file2 = ui->lineEditMergeLayer->text();
+        if ( ! CheckFileAccess(file2, "WriteOnly") )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + file2 + tr("<br>"));
+            failure_found = true;
+        }
 
-            LogsString.append(tr("<br><b>Merge Vector Split Lines Processing Completed.</b>")+tr("<br>"));
+        if(failure_found)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Input and Output File issues </span>")+ tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
-
-            ui->pushButtonRun->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
+            return;
         }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Run MergeVectorLayers
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        LogsString.append("Running Merge Vector Split Lines ... <br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        QStringList ProjectIOStringList;
+        ProjectIOStringList << "MergeVectorLayers";
+
+
+        //QString InpShpFileName, InpDbfFileName;
+        QString OutShpFileName, OutDbfFileName;
+
+        OutShpFileName = ui->lineEditMergeLayer->text();
+        OutDbfFileName = OutShpFileName;
+        OutDbfFileName.replace(QString(".shp"), QString(".dbf"));
+
+        qDebug() << "OutFileName: " << OutShpFileName << " # " << OutDbfFileName;
+
+        int row_count = ui->tableWidget->rowCount();
+        const char **shpFileNamesChar = new const char*[row_count];
+        const char **dbfFileNamesChar = new const char*[row_count];
+
+        for (int i=0; i < row_count; i++)
+        {
+            QString InpShpFileName = ui->tableWidget->item(i,0)->text();
+            QString InpDbfFileName = InpShpFileName;
+            InpDbfFileName.replace(QString(".shp"), QString(".dbf"));
+
+            qDebug() << InpShpFileName << " # " << InpDbfFileName;
+
+            shpFileNamesChar[i] = new char[InpShpFileName.length()+1];
+            dbfFileNamesChar[i] = new char[InpDbfFileName.length()+1];
+
+            sprintf( (char *)shpFileNamesChar[i],"%s", qPrintable(InpShpFileName) );
+            sprintf( (char *)dbfFileNamesChar[i],"%s", qPrintable(InpDbfFileName) );
+
+            qDebug () << shpFileNamesChar[i];
+
+            ProjectIOStringList << InpShpFileName;
+        }
+
+        ProjectIOStringList << OutShpFileName;
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Run merge_lines
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        int ErrorMrg = merge_lines( shpFileNamesChar, dbfFileNamesChar, ui->tableWidget->rowCount(), (char *)qPrintable(OutShpFileName), (char *)qPrintable(OutDbfFileName) );
+        if ( ErrorMrg == 1 || ErrorMrg == 5 || ErrorMrg == 8 )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Non-Arc Layer specified... </span>")+tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+        else if ( ErrorMrg != 0 )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Merge Vector Split Lines Processing Failed ... </span>")+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorMrg)+tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if ( ProjectIOStringList.length() > 2)
+            WriteModuleLine(filename_open_project, ProjectIOStringList);
+        ProjectIOStringList.clear();
+
+        QString MergeFileNameInVector = ui->lineEditMergeLayer->text();
+        QString MergeFileNameInDomainDecomposition = MergeFileNameInVector;
+        MergeFileNameInDomainDecomposition.replace("2VectorProcessing","3DomainDecomposition");
+
+        ProjectIOStringList << "MergeVectorDomainDecomposition" << MergeFileNameInVector << MergeFileNameInDomainDecomposition;
+        WriteModuleLine(filename_open_project, ProjectIOStringList);
+        ProjectIOStringList.clear();
+
+
+        QFile::remove(MergeFileNameInDomainDecomposition);
+        QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
+
+        MergeFileNameInVector.replace(".shp",".shx");
+        MergeFileNameInDomainDecomposition.replace(".shp",".shx");
+        QFile::remove(MergeFileNameInDomainDecomposition);
+        QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
+
+        MergeFileNameInVector.replace(".shx",".dbf");
+        MergeFileNameInDomainDecomposition.replace(".shx",".dbf");
+        QFile::remove(MergeFileNameInDomainDecomposition);
+        QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Message box
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+
+        LogsString.append(tr("<br><b>Merge Vector Split Lines Processing Completed.</b>")+tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        ui->pushButtonRun->setDefault(false);
+        ui->pushButtonClose->setDefault(true);
+        ui->pushButtonClose->setFocus();
+
 
 
     } catch (...) {
@@ -458,31 +600,39 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close button event
+// TODO, Decide on keeping button next highlights or not
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MergeVectorLayers::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start MergeVectorLayers::on_pushButtonClose_clicked()";
 
     try {
-        QStringList default_params; default_params << "WORKFLOW4" << "WORKFLOW8";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //QStringList default_params; default_params << "WORKFLOW4" << "WORKFLOW8";
+        //QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
     } catch (...) {
         qDebug() << "Error: MergeVectorLayers::on_pushButtonClose_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MergeVectorLayers::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start MergeVectorLayers::on_pushButtonHelp_clicked()";
 
     try {
-//        LogsString = tr("");
-//        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Merge_Vector_Layers")) )
-//            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
-//        ui->textBrowserLogs->setHtml(LogsString);
-//        ui->textBrowserLogs->repaint();
+        //        LogsString = tr("");
+        //        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Merge_Vector_Layers")) )
+        //            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
+        //        ui->textBrowserLogs->setHtml(LogsString);
+        //        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: MergeVectorLayers::on_pushButtonHelp_clicked() is returning w/o checking";
     }

@@ -393,7 +393,7 @@ void SimplifyPolylines::on_pushButtonAdd_clicked()
                     }
                     else
                     {
-                        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file2 + tr(" input does not exist. </span>") +tr("<br>"));
+                        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
                         ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
                     }
 
