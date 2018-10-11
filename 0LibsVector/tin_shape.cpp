@@ -40,6 +40,7 @@ int tin_shape(const char* eleFileName, const char* nodeFileName, const char* shp
         Point* nodes = new Point[countNode];
 
         tempLogString->append(QObject::tr("Reading Elements ... <br>"));
+        tempLogString->append(QVariant(countEle).toString() + "<br>");
 
         for(int i=0; i<countEle; i++)
         {
@@ -51,6 +52,7 @@ int tin_shape(const char* eleFileName, const char* nodeFileName, const char* shp
         }
 
         tempLogString->append(QObject::tr("Reading Nodes ... <br>"));
+        tempLogString->append(QVariant(countNode).toString() + "<br>");
 
         for(int i=0; i<countNode; i++)
         {
@@ -66,6 +68,8 @@ int tin_shape(const char* eleFileName, const char* nodeFileName, const char* shp
         SHPHandle newShp=SHPCreate(shpFileName, SHPT_POLYGON);
         if ( newShp == nullptr )
             return 60;
+
+        tempLogString->append("1 Writing SHP File ... <br>");
 
         SHPObject* shpObj = new SHPObject;
         double px[4], py[4], pz[4], pm[4];
@@ -88,6 +92,8 @@ int tin_shape(const char* eleFileName, const char* nodeFileName, const char* shp
 
             SHPComputeExtents(shpObj);
             temp = SHPWriteObject(newShp, -1, shpObj);
+            //tempLogString->append("Shp temp = " + QVariant(temp).toString() + "<br>");
+
             if ( temp < 0 )
                 return 80;
         }
@@ -96,6 +102,7 @@ int tin_shape(const char* eleFileName, const char* nodeFileName, const char* shp
 
         //Creates .dbf file
         tempLogString->append(QObject::tr("Writing DBF File ... <br>"));
+
         DBFHandle newDbf = DBFCreate(dbfFileName);
         if ( newDbf == nullptr )
             return 88;
@@ -108,15 +115,21 @@ int tin_shape(const char* eleFileName, const char* nodeFileName, const char* shp
         for(int i=0; i<countEle; i++)
         {
             temp = DBFWriteIntegerAttribute(newDbf, i, 0, i+1);
+            //tempLogString->append("DBF temp = " + QVariant(temp).toString() + "<br>");
+
             if ( temp == 0 )
                 return 99;
         }
 
         DBFClose(newDbf);
 
+        tempLogString->append("Done...<br>");
+
+
     } catch (...) {
 
         qDebug() << "Error: tin_shape is returning w/o checking";
+        tempLogString->append("Error: tin_shape is returning w/o checking");
 
 
     }

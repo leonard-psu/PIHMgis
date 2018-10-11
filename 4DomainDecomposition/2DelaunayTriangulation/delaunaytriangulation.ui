@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>611</width>
-    <height>409</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="palette">
@@ -426,13 +426,13 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>: :   Delaunay Triangulations   : :</string>
+   <string>Delaunay Triangulations</string>
   </property>
   <widget class="Line" name="BorderBottom">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>393</y>
+     <y>484</y>
      <width>611</width>
      <height>20</height>
     </rect>
@@ -878,27 +878,35 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>121</y>
+     <y>100</y>
      <width>581</width>
      <height>100</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+     <italic>true</italic>
+    </font>
+   </property>
    <property name="title">
-    <string>Options</string>
+    <string>Input Options</string>
    </property>
    <widget class="QLineEdit" name="lineEditAngle">
     <property name="geometry">
      <rect>
       <x>21</x>
       <y>58</y>
-      <width>121</width>
+      <width>141</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
+      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
@@ -911,9 +919,18 @@
      <rect>
       <x>21</x>
       <y>31</y>
-      <width>121</width>
+      <width>141</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string>Minimum Angle Quality Constrain</string>
@@ -925,16 +942,17 @@
    <widget class="QLineEdit" name="lineEditArea">
     <property name="geometry">
      <rect>
-      <x>219</x>
+      <x>180</x>
       <y>58</y>
-      <width>131</width>
+      <width>231</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
+      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
@@ -947,9 +965,18 @@
      <rect>
       <x>219</x>
       <y>31</y>
-      <width>131</width>
+      <width>151</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string>Maximum Area Quality Constrain</string>
@@ -966,6 +993,15 @@
       <width>131</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string>e  output a list of edges of the triangulation
@@ -991,8 +1027,9 @@ i  use the incremental algorith rather than divide and conquer</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>10</pointsize>
       <weight>75</weight>
+      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
@@ -1004,23 +1041,34 @@ i  use the incremental algorith rather than divide and conquer</string>
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
-     <x>13</x>
-     <y>237</y>
+     <x>10</x>
+     <y>200</y>
      <width>581</width>
-     <height>61</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>16</x>
-      <y>17</y>
+      <y>10</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -1033,10 +1081,18 @@ i  use the incremental algorith rather than divide and conquer</string>
     <property name="geometry">
      <rect>
       <x>330</x>
-      <y>17</y>
+      <y>10</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Close</string>
@@ -1049,10 +1105,18 @@ i  use the incremental algorith rather than divide and conquer</string>
     <property name="geometry">
      <rect>
       <x>455</x>
-      <y>17</y>
+      <y>10</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string/>
@@ -1495,6 +1559,14 @@ i  use the incremental algorith rather than divide and conquer</string>
      </disabled>
     </palette>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(0, 51, 153);</string>
    </property>
@@ -1517,8 +1589,15 @@ i  use the incremental algorith rather than divide and conquer</string>
      <x>16</x>
      <y>17</y>
      <width>581</width>
-     <height>100</height>
+     <height>81</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+     <italic>true</italic>
+    </font>
    </property>
    <property name="title">
     <string>Input</string>
@@ -1526,28 +1605,38 @@ i  use the incremental algorith rather than divide and conquer</string>
    <widget class="QLineEdit" name="lineEditPSLG">
     <property name="geometry">
      <rect>
-      <x>132</x>
+      <x>12</x>
       <y>44</y>
-      <width>325</width>
+      <width>561</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonPSLG">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>43</y>
+      <x>475</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -1565,15 +1654,19 @@ i  use the incremental algorith rather than divide and conquer</string>
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>43</y>
-      <width>101</width>
+      <x>220</x>
+      <y>10</y>
+      <width>141</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>13</pointsize>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -1585,14 +1678,113 @@ i  use the incremental algorith rather than divide and conquer</string>
    <property name="geometry">
     <rect>
      <x>13</x>
-     <y>315</y>
+     <y>255</y>
      <width>581</width>
-     <height>71</height>
+     <height>141</height>
     </rect>
    </property>
-   <property name="lineWrapMode">
-    <enum>QTextEdit::NoWrap</enum>
+   <property name="font">
+    <font>
+     <italic>false</italic>
+    </font>
    </property>
+   <property name="autoFormatting">
+    <set>QTextEdit::AutoAll</set>
+   </property>
+   <property name="lineWrapMode">
+    <enum>QTextEdit::WidgetWidth</enum>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>400</y>
+     <width>591</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <italic>true</italic>
+    </font>
+   </property>
+   <property name="title">
+    <string>Triangle Software Location</string>
+   </property>
+   <widget class="QPushButton" name="pushButtonFIND">
+    <property name="geometry">
+     <rect>
+      <x>482</x>
+      <y>13</y>
+      <width>98</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Find</string>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEditFIND">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>50</y>
+      <width>561</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="textLabel1_2">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>20</y>
+      <width>301</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Specify your Triangle Tool and Location</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

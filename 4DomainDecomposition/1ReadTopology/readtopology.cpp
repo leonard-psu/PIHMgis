@@ -91,18 +91,7 @@ bool ReadTopology::Load_Project_Settings()
                 QString file2 = file1;
                 file2.replace(QString(".shp"),QString(".poly"));
                 bool file2_check = Check_File_Valid(file2);
-
-                ui->lineEditPSLG->setText(file2);
-
-                if(file2_check)
-                {
-                    ui->lineEditPSLG->setStyleSheet("Qt::black");
-                }
-                else
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file2 + tr(" input does not exist. </span>") +tr("<br>"));
-                    ui->lineEditPSLG->setStyleSheet("Qt::red");
-                }
+                Check_PSLG_Output(file2,true);
             }
         }
 
@@ -126,15 +115,7 @@ bool ReadTopology::Load_Project_Settings()
             QString file2 = ModuleStringList.at(2);
             bool file2_check = Check_File_Valid(file2);
             ui->lineEditPSLG->setText(file2);
-            if(file2_check)
-            {
-                ui->lineEditPSLG->setStyleSheet("Qt::black");
-            }
-            else
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file2 + tr(" output does not exist. </span>") +tr("<br>"));
-                ui->lineEditPSLG->setStyleSheet("Qt::red");
-            }
+            Check_PSLG_Output(file2, true);
         }
 
 
@@ -275,8 +256,9 @@ bool ReadTopology::Check_MergeVector_Input(QString file)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if CatchmentPolygon OUTPUT file exists (returns true) or does not (returns false)
+// Will color red and warning if exists with color_and_message_if_exists=true
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ReadTopology::Check_PSLG_Output(QString file, bool message)
+bool ReadTopology::Check_PSLG_Output(QString file, bool color_and_message_if_exists)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Check_PSLG_Output()";
@@ -287,21 +269,22 @@ bool ReadTopology::Check_PSLG_Output(QString file, bool message)
 
         if(  fileExists(file) )
         {
-            ui->lineEditPSLG->setStyleSheet("color: black;");
+            if(color_and_message_if_exists)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Tinshape output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+                ui->lineEditPSLG->setStyleSheet("color: rgb(180, 0, 0);");
+            }
             ui->lineEditPSLG->setText(file);
             result = true;
         }
         else
         {
-            ui->lineEditPSLG->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditPSLG->setStyleSheet("color: black;");
             ui->lineEditPSLG->setText(file);
 
-            if(message)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: CatchmentPolygon output does not exist: </span>") + file +tr(" You will need to redo this step.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
+
             result = false;
         }
 

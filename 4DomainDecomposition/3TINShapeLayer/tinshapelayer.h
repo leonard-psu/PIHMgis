@@ -12,11 +12,11 @@ class TINShapeLayer : public QDialog
     Q_OBJECT
 
 public:
-    explicit TINShapeLayer(QWidget *parent = 0);
+    explicit TINShapeLayer(QWidget *parent = 0, QString filename_open_project = "");
     ~TINShapeLayer();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
+    //QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonElementFile_clicked();
@@ -33,9 +33,22 @@ private slots:
 
     void pushButtonSetFocus();
 
+    void Clear_Log();
+
+    bool Load_Project_Settings();
+
+    bool Check_Element_Input(QString file);
+
+    bool Check_Node_Input(QString file);
+
+    bool Check_TinShape_Output(QString file, bool message);
+
+
 
 private:
     Ui::TINShapeLayer *ui;
+    QString filename_open_project;
+
 };
 
 #endif // TINSHAPELAYER_H

@@ -12,7 +12,11 @@
 #include "globals.h"
 
 
-TINShapeLayer::TINShapeLayer(QWidget *parent) :
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TINShapeLayer Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+TINShapeLayer::TINShapeLayer(QWidget *parent, QString filename) :
     QDialog(parent),
     ui(new Ui::TINShapeLayer)
 {
@@ -23,59 +27,27 @@ TINShapeLayer::TINShapeLayer(QWidget *parent) :
     try {
         ui->setupUi(this);
 
-        // ** Start: Fill Form If Module Has Been Run Previously
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
+        filename_open_project = filename;
+        bool found_file = false;
+
+        QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        QString ProjectFolder   = ProjectFileTextStream.readLine();
-        QString ProjectFileName = ProjectFileTextStream.readLine();
+        else
+        {
+            found_file = true;
+        }
         ProjectFile.close();
 
-        QStringList ModuleStringList;
-        QString TempFileName;
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("DelaunayTriangulation"));
-        if ( ModuleStringList.length() > 0  )
+        if(found_file)
         {
-            TempFileName = ModuleStringList.at(1);
-            TempFileName.replace( QString(".poly"), QString(".1.ele") );
-            ui->lineEditElementFile->setText( TempFileName );
-
-            TempFileName.replace( QString(".1.ele"), QString(".1.node") );
-            ui->lineEditNodeFile->setText( TempFileName );
+            Load_Project_Settings();
         }
 
-        TempFileName.replace( QString(".1.node"), QString("") );
-
-        if ( ModuleStringList.at(2) != "" )
-            TempFileName.append( QString("_q") + ModuleStringList.at(2) );
-
-        if ( ModuleStringList.at(3) != "" )
-            TempFileName.append( QString("_a") + ModuleStringList.at(3) );
-
-        TempFileName.append(".shp");
-        ui->lineEditTINFile->setText(TempFileName);
-
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("TINShapeLayer"));
-
-        if ( ModuleStringList.length() > 0 )
-        {
-            ui->lineEditElementFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditNodeFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditTINFile->setStyleSheet("color: rgb(0, 180, 0);");
-
-            ui->lineEditElementFile->setText(ModuleStringList.at(1));
-            ui->lineEditNodeFile->setText(ModuleStringList.at(2));
-            ui->lineEditTINFile->setText(ModuleStringList.at(3));
-        }
-
-        // ** End: Fill Form If Module Has Been Run Previously
         pushButtonSetFocus();
 
     } catch (...) {
@@ -83,6 +55,10 @@ TINShapeLayer::TINShapeLayer(QWidget *parent) :
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TINShapeLayer Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TINShapeLayer::~TINShapeLayer()
 {
     if(print_debug_messages)
@@ -95,6 +71,201 @@ TINShapeLayer::~TINShapeLayer()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool TINShapeLayer::Load_Project_Settings()
+{
+    try {
+
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("DelaunayTriangulation"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            QString TempFileName = ModuleStringList.at(1);
+            TempFileName.replace( QString(".poly"), QString(".1.ele") );
+            Check_Element_Input( TempFileName );
+
+            TempFileName.replace( QString(".1.ele"), QString(".1.node") );
+            bool valid = Check_Node_Input( TempFileName );
+
+            if(valid)
+            {
+                TempFileName.replace( QString(".1.node"), QString("") );
+
+                if ( ModuleStringList.at(2).length() > 0 )
+                {
+                    TempFileName.append( QString("_q") + ModuleStringList.at(2) );
+                }
+
+                if ( ModuleStringList.at(3).length() > 0 )
+                {
+                    TempFileName.append( QString("_a") + ModuleStringList.at(3) );
+                }
+
+                //Will overwrite previous merge file if I don't add _tin
+                TempFileName.append("_tin.shp");
+                Check_TinShape_Output(TempFileName,true);
+
+            }
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
+
+        if ( ModuleStringList.length() > 0 )
+        {
+            QString ElementFileName = ModuleStringList.at(1);
+            QString NodeFileName = ModuleStringList.at(2);
+            QString TINFileName = ModuleStringList.at(3);
+
+            Check_Element_Input( ElementFileName );
+            Check_Node_Input( NodeFileName );
+            Check_TinShape_Output(TINFileName,true);
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: TINShapeLayer::Load_Project_Settings is returning w/o checking";
+        return false;
+    }
+
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check Element File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool TINShapeLayer::Check_Element_Input(QString file){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_Element_Input()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            ui->lineEditElementFile->setStyleSheet("color: black;");
+            ui->lineEditElementFile->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditElementFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditElementFile->setText(file);
+
+            result = false;
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: Check_Element_Input is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check Node File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool TINShapeLayer::Check_Node_Input(QString file){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_Node_Input()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            ui->lineEditNodeFile->setStyleSheet("color: black;");
+            ui->lineEditNodeFile->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditNodeFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditNodeFile->setText(file);
+
+            result = false;
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: Check_Node_Input is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if CatchmentPolygon OUTPUT file exists (returns true) or does not (returns false)
+// Will color red and warning if exists with color_and_message_if_exists=true
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool TINShapeLayer::Check_TinShape_Output(QString file, bool color_and_message_if_exists){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_TinShape_Output()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            if(color_and_message_if_exists)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Tinshape output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+                ui->lineEditTINFile->setStyleSheet("color: rgb(180, 0, 0);");
+            }
+
+            ui->lineEditTINFile->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditTINFile->setStyleSheet("color: black;");
+            ui->lineEditTINFile->setText(file);
+
+            result = false;
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: Check_TinShape_Output is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void TINShapeLayer::Clear_Log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start TINShapeLayer::Clear_Log()";
+
+    try {
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+    } catch (...) {
+        qDebug() << "Error: TINShapeLayer::Clear_Log() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to focus button selection (needed for users w/o mouse)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TINShapeLayer::pushButtonSetFocus()
 {
     if(print_debug_messages)
@@ -134,301 +305,272 @@ void TINShapeLayer::pushButtonSetFocus()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Element Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TINShapeLayer::on_pushButtonElementFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start TINShapeLayer::on_pushButtonElementFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        Clear_Log();
+
+        QString EleFileName = QFileDialog::getOpenFileName(this, "Ele (.1.ele) File", user_pihmgis_root_folder +tr("/3DomainDecomposition"), "Ele File(*.ele)");
+        if ( EleFileName.length() > 0)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-        QString EleFileName = QFileDialog::getOpenFileName(this, "Ele (.1.ele) File", ProjectFolder+tr("/3DomainDecomposition"), "Ele File(*.ele)");
-        if ( EleFileName != nullptr)
-        {
-            ui->lineEditElementFile->setStyleSheet("color: black;");
-            ui->lineEditElementFile->setText(EleFileName);
+            Check_Element_Input(EleFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error:  TINShapeLayer::on_pushButtonElementFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Node Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TINShapeLayer::on_pushButtonNodeFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start TINShapeLayer::on_pushButtonNodeFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-        QString NodeFileName = QFileDialog::getOpenFileName(this, "Node (.1.node) File", ProjectFolder+tr("/3DomainDecomposition"), "Node File(*.node)");
+        QString NodeFileName = QFileDialog::getOpenFileName(this, "Node (.1.node) File", user_pihmgis_root_folder+tr("/3DomainDecomposition"), "Node File(*.node)");
         if ( NodeFileName != nullptr)
         {
-            ui->lineEditNodeFile->setStyleSheet("color: black;");
-            ui->lineEditNodeFile->setText(NodeFileName);
+            Check_Node_Input(NodeFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error:  TINShapeLayer::on_pushButtonNodeFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button TIN Clicked Event (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TINShapeLayer::on_pushButtonTINFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start TINShapeLayer::on_pushButtonTINFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
+        Clear_Log();
 
-        QString TINShapeFileName = QFileDialog::getSaveFileName(this, "Choose TIN Shape File Name", ProjectFolder+"/3DomainDecomposition","Shape File(*.shp)");
-        QString tempString = TINShapeFileName;
+        QString TINShapeFileName = QFileDialog::getSaveFileName(this, "Choose TIN Shape File Name", user_pihmgis_root_folder +"/3DomainDecomposition","Shape File(*.shp)");
+
         if ( TINShapeFileName != nullptr)
         {
-            ui->lineEditTINFile->setStyleSheet("color: black;");
-
+            QString tempString = TINShapeFileName;
             if( ! (tempString.toLower()).endsWith(".shp") )
             {
                 tempString.append(".shp");
                 TINShapeFileName = tempString;
             }
-            ui->lineEditTINFile->setText(TINShapeFileName);
+
+            Check_TinShape_Output(TINShapeFileName, true);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+
     } catch (...) {
         qDebug() << "Error:  TINShapeLayer::on_pushButtonTINFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run Button Clicked Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TINShapeLayer::on_pushButtonRun_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start TINShapeLayer::on_pushButtonRun_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("TIN Shape Layer Processing Started ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check inputs
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString element_input_filename = ui->lineEditElementFile->text();
+        QString node_input_filename = ui->lineEditNodeFile->text();
+        QString tinshape_input_filename = ui->lineEditTINFile->text();
 
 
-        LogsString.append(tr("Verifying Data Files ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        int runFlag = 1;
-
-        if( ui->lineEditElementFile->text() == nullptr )
+        bool ElementCheck = Check_Element_Input(element_input_filename);
+        if(!ElementCheck)
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Element (.1.ele) Input File Missing </span>")+tr("<br>"));
-            runFlag = 0;
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
         }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditElementFile->text(), "ReadOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditElementFile->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditElementFile->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditNodeFile->text() == nullptr )
+        bool NodeCheck = Check_Node_Input(node_input_filename);
+        if(!NodeCheck)
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Node (.1.node) Input File Missing </span>")+tr("<br>"));
-            runFlag = 0;
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
         }
-        else
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Does output already exist?
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        bool TinShapeCheck = Check_TinShape_Output(tinshape_input_filename, false);
+        if(TinShapeCheck)
         {
-            if ( ! CheckFileAccess(ui->lineEditNodeFile->text(), "ReadOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditNodeFile->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditNodeFile->text() + " ... <br>");
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: CatchmentPolygon TIN Shape already exists </span>")+tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check file access
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if ( ! CheckFileAccess(element_input_filename, "ReadOnly") )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + element_input_filename + tr("<br>"));
+            return;
+        }
+
+        if ( ! CheckFileAccess(node_input_filename, "ReadOnly") )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + node_input_filename + tr("<br>"));
+            return;
+        }
+
+        if ( ! CheckFileAccess(tinshape_input_filename, "WriteOnly") )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + tinshape_input_filename + tr("<br>"));
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Running Catchment Polygon
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        LogsString.append("Running TIN Shape Layer ... <br>");
+        LogsString.append(element_input_filename + "<br>");
+        LogsString.append(node_input_filename + "<br>");
+
+
+        QString TINShpFileName, TINDbfFileName;
+        TINShpFileName = tinshape_input_filename;
+        TINDbfFileName = TINShpFileName;
+        TINDbfFileName.replace( QString(".shp"), QString(".dbf") );
+
+        LogsString.append(TINDbfFileName + "<br>");
+        LogsString.append(TINDbfFileName + "<br>");
+
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
 
-        if( ui->lineEditTINFile->text() == nullptr )
+        int ErrorTIN = tin_shape((char *)qPrintable(element_input_filename), (char *)qPrintable(node_input_filename), (char *)qPrintable(TINShpFileName), (char *)qPrintable(TINDbfFileName), &LogsString);
+        if( ErrorTIN != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: TIN Shape Output File Missing </span>")+tr("<br>"));
-            runFlag = 0;
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: TIN Shape Layer Processing Failed ... </span>")+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorTIN)+tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
         }
-        else
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check output filenames
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        TinShapeCheck = Check_TinShape_Output(tinshape_input_filename, false);
+        if(!TinShapeCheck)
         {
-            if ( ! CheckFileAccess(ui->lineEditTINFile->text(), "WriteOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->lineEditTINFile->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditTINFile->text() + " ... <br>");
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: TinShape failed, file does not exist: </span>") + TinShapeCheck +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
         }
+
+        qint64 size = file_Size(tinshape_input_filename);
+        if( size < 1)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: CatchmentPolygon failed, invalid file size: </span>") + size +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QStringList ProjectIOStringList;
+        ProjectIOStringList << "TINShapeLayer" << ui->lineEditElementFile->text() << ui->lineEditNodeFile->text() << ui->lineEditTINFile->text();
+        WriteModuleLine(filename_open_project, ProjectIOStringList);
+        ProjectIOStringList.clear();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Message box
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Clear_Log();
+
+        LogsString.append(tr("<br><b>TIN Shape Layer Processing Completed.</b>")+tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
-        if(runFlag == 1)
-        {
-            LogsString.append("Running TIN Shape Layer ... <br>");
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+        ui->pushButtonRun->setDefault(false);
+        ui->pushButtonClose->setDefault(true);
+        ui->pushButtonClose->setFocus();
 
-            QString TINShpFileName, TINDbfFileName;
-            TINShpFileName = ui->lineEditTINFile->text();
-            TINDbfFileName = TINShpFileName;
-            TINDbfFileName.replace( QString(".shp"), QString(".dbf") );
-
-            int ErrorTIN = tin_shape((char *)qPrintable(ui->lineEditElementFile->text()), (char *)qPrintable(ui->lineEditNodeFile->text()), (char *)qPrintable(TINShpFileName), (char *)qPrintable(TINDbfFileName), &LogsString);
-            if( ErrorTIN != 0 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: TIN Shape Layer Processing Failed ... </span>")+tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorTIN)+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
-            }
-
-            ProjectIOStringList << "TINShapeLayer" << ui->lineEditElementFile->text() << ui->lineEditNodeFile->text() << ui->lineEditTINFile->text();
-            WriteModuleLine(ProjectFileName, ProjectIOStringList);
-            ProjectIOStringList.clear();
-
-            if( ui->checkBoxTINFile->isChecked() == 1 )
-            {
-                LogsString.append("Loading Data in GIS ... <br>");
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-
-            if(ui->checkBoxTINFile->isChecked() == 1)
-            {
-                if ( ! QDesktopServices::openUrl(QUrl("file://"+TINShpFileName)) )
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load SHP File in GIS ... </span>")+TINShpFileName+tr("<br>"));
-            }
-
-
-            LogsString.append(tr("<br><b>TIN Shape Layer Processing Completed.</b>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
-            ui->pushButtonRun->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
-        }
 
     } catch (...) {
         qDebug() << "Error:  TINShapeLayer::on_pushButtonRun_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close button event
+// TODO, Decide on keeping button next highlights or not
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TINShapeLayer::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start TINShapeLayer::on_pushButtonClose_clicked()";
 
     try {
-        QStringList default_params; default_params << "WORKFLOW5";// << "WORKFLOW8";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //QStringList default_params; default_params << "WORKFLOW5";// << "WORKFLOW8";
+        // QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
     } catch (...) {
         qDebug() << "Error:  TINShapeLayer::on_pushButtonClose_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TINShapeLayer::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start TINShapeLayer::on_pushButtonHelp_clicked()";
 
     try {
-//        LogsString = tr("");
-//        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#TIN_Shape_Layer")) )
-//            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
-//        ui->textBrowserLogs->setHtml(LogsString);
-//        ui->textBrowserLogs->repaint();
+        //        LogsString = tr("");
+        //        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#TIN_Shape_Layer")) )
+        //            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
+        //        ui->textBrowserLogs->setHtml(LogsString);
+        //        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error:  TINShapeLayer::on_pushButtonHelp_clicked() is returning w/o checking";
     }

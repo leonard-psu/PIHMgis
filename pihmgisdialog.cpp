@@ -736,7 +736,10 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked";
 
     try {
-        DelaunayTriangulation *DelaunayTriangulationDialog = new DelaunayTriangulation(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        DelaunayTriangulation *DelaunayTriangulationDialog = new DelaunayTriangulation(this, filename_open_project);
+        DelaunayTriangulationDialog->setModal(true);
         DelaunayTriangulationDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked is returning w/o checking";
@@ -749,8 +752,12 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked";
 
     try {
-        TINShapeLayer *TINShapeLayerDialog = new TINShapeLayer(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        TINShapeLayer *TINShapeLayerDialog = new TINShapeLayer(this, filename_open_project);
+        TINShapeLayerDialog->setModal(true);
         TINShapeLayerDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked is returning w/o checking";
     }
@@ -1126,6 +1133,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 
 bool fileExists(QString path) {
 
+   // QString tmp = path.replace("/","\\");
     QFileInfo check_file(path);
 
     // check if file exists and if yes: Is it really a file and no directory?

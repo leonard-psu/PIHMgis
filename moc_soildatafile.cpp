@@ -1,48 +1,51 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'soildatafile.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.1.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.11.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "5DataModelLoader/4SoilDataFile/soildatafile.h"
+#include "../5DataModelLoader/4SoilDataFile/soildatafile.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'soildatafile.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.1.1. It"
+#error "This file was generated using the moc from 5.11.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SoilDataFile_t {
     QByteArrayData data[8];
-    char stringdata[183];
+    char stringdata0[182];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    offsetof(qt_meta_stringdata_SoilDataFile_t, stringdata) + ofs \
-        - idx * sizeof(QByteArrayData) \
+    qptrdiff(offsetof(qt_meta_stringdata_SoilDataFile_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
     )
 static const qt_meta_stringdata_SoilDataFile_t qt_meta_stringdata_SoilDataFile = {
     {
-QT_MOC_LITERAL(0, 0, 12),
-QT_MOC_LITERAL(1, 13, 36),
-QT_MOC_LITERAL(2, 50, 0),
-QT_MOC_LITERAL(3, 51, 33),
-QT_MOC_LITERAL(4, 85, 24),
-QT_MOC_LITERAL(5, 110, 26),
-QT_MOC_LITERAL(6, 137, 25),
-QT_MOC_LITERAL(7, 163, 18)
+QT_MOC_LITERAL(0, 0, 12), // "SoilDataFile"
+QT_MOC_LITERAL(1, 13, 36), // "on_pushButtonSoilTextureFile_..."
+QT_MOC_LITERAL(2, 50, 0), // ""
+QT_MOC_LITERAL(3, 51, 33), // "on_pushButtonSoilDataFile_cli..."
+QT_MOC_LITERAL(4, 85, 24), // "on_pushButtonRun_clicked"
+QT_MOC_LITERAL(5, 110, 26), // "on_pushButtonClose_clicked"
+QT_MOC_LITERAL(6, 137, 25), // "on_pushButtonHelp_clicked"
+QT_MOC_LITERAL(7, 163, 18) // "pushButtonSetFocus"
+
     },
     "SoilDataFile\0on_pushButtonSoilTextureFile_clicked\0"
     "\0on_pushButtonSoilDataFile_clicked\0"
     "on_pushButtonRun_clicked\0"
     "on_pushButtonClose_clicked\0"
-    "on_pushButtonHelp_clicked\0pushButtonSetFocus\0"
+    "on_pushButtonHelp_clicked\0pushButtonSetFocus"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,12 +63,12 @@ static const uint qt_meta_data_SoilDataFile[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   44,    2, 0x08,
-       3,    0,   45,    2, 0x08,
-       4,    0,   46,    2, 0x08,
-       5,    0,   47,    2, 0x08,
-       6,    0,   48,    2, 0x08,
-       7,    0,   49,    2, 0x08,
+       1,    0,   44,    2, 0x08 /* Private */,
+       3,    0,   45,    2, 0x08 /* Private */,
+       4,    0,   46,    2, 0x08 /* Private */,
+       5,    0,   47,    2, 0x08 /* Private */,
+       6,    0,   48,    2, 0x08 /* Private */,
+       7,    0,   49,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -82,6 +85,7 @@ void SoilDataFile::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         SoilDataFile *_t = static_cast<SoilDataFile *>(_o);
+        Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->on_pushButtonSoilTextureFile_clicked(); break;
         case 1: _t->on_pushButtonSoilDataFile_clicked(); break;
@@ -95,9 +99,9 @@ void SoilDataFile::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
     Q_UNUSED(_a);
 }
 
-const QMetaObject SoilDataFile::staticMetaObject = {
+QT_INIT_METAOBJECT const QMetaObject SoilDataFile::staticMetaObject = {
     { &QDialog::staticMetaObject, qt_meta_stringdata_SoilDataFile.data,
-      qt_meta_data_SoilDataFile,  qt_static_metacall, 0, 0}
+      qt_meta_data_SoilDataFile,  qt_static_metacall, nullptr, nullptr}
 };
 
 
@@ -108,9 +112,9 @@ const QMetaObject *SoilDataFile::metaObject() const
 
 void *SoilDataFile::qt_metacast(const char *_clname)
 {
-    if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_SoilDataFile.stringdata))
-        return static_cast<void*>(const_cast< SoilDataFile*>(this));
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_SoilDataFile.stringdata0))
+        return static_cast<void*>(this);
     return QDialog::qt_metacast(_clname);
 }
 
@@ -130,4 +134,5 @@ int SoilDataFile::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     }
     return _id;
 }
+QT_WARNING_POP
 QT_END_MOC_NAMESPACE
