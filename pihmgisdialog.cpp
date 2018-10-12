@@ -777,7 +777,12 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked";
 
     try {
-        MeshDataFile *MeshDataFileDialog = new MeshDataFile(this);
+
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+
+        MeshDataFile *MeshDataFileDialog = new MeshDataFile(this, filename_open_project);
+        MeshDataFileDialog->setModal(true);
         MeshDataFileDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked0 is returning w/o checking";

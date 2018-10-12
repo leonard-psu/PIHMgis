@@ -866,17 +866,905 @@ DESTDIR_TARGET = debug\PIHMgis.exe
 
 .SUFFIXES: .c .cpp .cc .cxx
 
-.cpp.obj:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fo$@ $<
+{0LibsVector}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
 
-.cc.obj:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fo$@ $<
+{0LibsVector}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
 
-.cxx.obj:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fo$@ $<
+{0LibsVector}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
 
-.c.obj:
-	$(CC) -c $(CFLAGS) $(INCPATH) -Fo$@ $<
+{0LibsVector}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\1DissolvePolygons}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\1DissolvePolygons}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\1DissolvePolygons}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\1DissolvePolygons}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsRaster}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsRaster}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsRaster}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsRaster}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\5GeolDataFile}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\5GeolDataFile}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\5GeolDataFile}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\5GeolDataFile}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\5MergeVectorLayers}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\5MergeVectorLayers}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\5MergeVectorLayers}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\5MergeVectorLayers}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\6LcDataFile}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\6LcDataFile}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\6LcDataFile}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\6LcDataFile}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\3StreamGrids}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\3StreamGrids}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\3StreamGrids}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\3StreamGrids}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\6StreamPolyline}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\6StreamPolyline}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\6StreamPolyline}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\6StreamPolyline}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\2AttDataFile}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\2AttDataFile}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\2AttDataFile}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\2AttDataFile}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\1FillPits}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\1FillPits}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\1FillPits}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\1FillPits}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsShape}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsShape}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsShape}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsShape}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\1MeshSpatial}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\1MeshSpatial}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\1MeshSpatial}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\1MeshSpatial}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\5CatchmentGrids}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\5CatchmentGrids}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\5CatchmentGrids}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\5CatchmentGrids}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\2PolygonToPolylines}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\2PolygonToPolylines}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\2PolygonToPolylines}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\2PolygonToPolylines}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\3ImportProject}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\3ImportProject}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\3ImportProject}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\3ImportProject}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\1PIHM_v2.2}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\1PIHM_v2.2}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\1PIHM_v2.2}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\1PIHM_v2.2}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\PIHMThread}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\PIHMThread}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\PIHMThread}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\PIHMThread}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\2OpenProject}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\2OpenProject}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\2OpenProject}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\2OpenProject}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\9ParaDataFile}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\9ParaDataFile}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\9ParaDataFile}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\9ParaDataFile}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\3RiverSpatial}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\3RiverSpatial}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\3RiverSpatial}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\3RiverSpatial}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\7InitDataFile}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\7InitDataFile}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\7InitDataFile}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\7InitDataFile}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\3SimplifyPolylines}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\3SimplifyPolylines}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\3SimplifyPolylines}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\3SimplifyPolylines}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\1MeshDataFile}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\1MeshDataFile}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\1MeshDataFile}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\1MeshDataFile}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\1NewProject}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\1NewProject}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\1NewProject}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\1NewProject}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\10CalibDataFile}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\10CalibDataFile}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\10CalibDataFile}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\10CalibDataFile}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\QCustomPlot}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\QCustomPlot}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\QCustomPlot}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\QCustomPlot}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{.}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{.}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{.}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{.}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{debug}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{debug}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{debug}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{debug}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\8IbcDataFile}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\8IbcDataFile}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\8IbcDataFile}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\8IbcDataFile}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\QCustomPlotMainWindow}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\QCustomPlotMainWindow}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\QCustomPlotMainWindow}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\QCustomPlotMainWindow}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\2MeshTemporal}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\2MeshTemporal}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\2MeshTemporal}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\2MeshTemporal}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\7CatchmentPolygon}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\7CatchmentPolygon}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\7CatchmentPolygon}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\7CatchmentPolygon}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\2FlowGrids}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\2FlowGrids}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\2FlowGrids}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\2FlowGrids}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\4SoilDataFile}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\4SoilDataFile}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\4SoilDataFile}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\4SoilDataFile}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\PIHMSrc\PIHM_v2.2}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\PIHMSrc\PIHM_v2.2}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\PIHMSrc\PIHM_v2.2}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{6PIHMSimulation\PIHMSrc\PIHM_v2.2}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\4PolylineToLines}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\4PolylineToLines}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\4PolylineToLines}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{3VectorProcessing\4PolylineToLines}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\4LinkGrids}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\4LinkGrids}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\4LinkGrids}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{2RasterProcessing\4LinkGrids}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsOther}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsOther}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsOther}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsOther}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\3TINShapeLayer}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\3TINShapeLayer}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\3TINShapeLayer}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\3TINShapeLayer}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\2DelaunayTriangulation}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\2DelaunayTriangulation}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\2DelaunayTriangulation}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\2DelaunayTriangulation}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\4CloseProject}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\4CloseProject}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\4CloseProject}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{1ProjectManagement\4CloseProject}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\4RiverTemporal}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\4RiverTemporal}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\4RiverTemporal}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{7VisualAnalytics\4RiverTemporal}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsIO}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsIO}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsIO}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{0LibsIO}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\3RivDataFile}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\3RivDataFile}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\3RivDataFile}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{5DataModelLoader\3RivDataFile}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\1ReadTopology}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\1ReadTopology}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\1ReadTopology}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{4DomainDecomposition\1ReadTopology}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
 
 ####### Build rules
 
@@ -10580,7 +11468,6 @@ debug\main.obj: main.cpp main.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qguiapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qinputmethod.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\main.obj main.cpp
 
 debug\pihmgisdialog.obj: pihmgisdialog.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
@@ -10788,7 +11675,6 @@ debug\pihmgisdialog.obj: pihmgisdialog.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCo
 		7VisualAnalytics/3RiverSpatial/riverspatial.h \
 		7VisualAnalytics/4RiverTemporal/rivertemporal.h \
 		globals.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\pihmgisdialog.obj pihmgisdialog.cpp
 
 debug\newproject.obj: 1ProjectManagement\1NewProject\newproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -11145,7 +12031,6 @@ debug\newproject.obj: 1ProjectManagement\1NewProject\newproject.cpp G:\Qt\5.11.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\newproject.obj 1ProjectManagement\1NewProject\newproject.cpp
 
 debug\openproject.obj: 1ProjectManagement\2OpenProject\openproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -11501,7 +12386,6 @@ debug\openproject.obj: 1ProjectManagement\2OpenProject\openproject.cpp G:\Qt\5.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\openproject.obj 1ProjectManagement\2OpenProject\openproject.cpp
 
 debug\importproject.obj: 1ProjectManagement\3ImportProject\importproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -11857,7 +12741,6 @@ debug\importproject.obj: 1ProjectManagement\3ImportProject\importproject.cpp G:\
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\importproject.obj 1ProjectManagement\3ImportProject\importproject.cpp
 
 debug\closeproject.obj: 1ProjectManagement\4CloseProject\closeproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -12212,7 +13095,6 @@ debug\closeproject.obj: 1ProjectManagement\4CloseProject\closeproject.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QTextEdit \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\closeproject.obj 1ProjectManagement\4CloseProject\closeproject.cpp
 
 debug\fillpits.obj: 2RasterProcessing\1FillPits\fillpits.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -12574,7 +13456,6 @@ debug\fillpits.obj: 2RasterProcessing\1FillPits\fillpits.cpp G:\Qt\5.11.1\msvc20
 		0LibsRaster/flood.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\fillpits.obj 2RasterProcessing\1FillPits\fillpits.cpp
 
 debug\IOProjectFile.obj: 0LibsIO\IOProjectFile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -12899,7 +13780,6 @@ debug\IOProjectFile.obj: 0LibsIO\IOProjectFile.cpp G:\Qt\5.11.1\msvc2017_64\incl
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\IOProjectFile.obj 0LibsIO\IOProjectFile.cpp
 
 debug\ADFFiletoASCFile.obj: 0LibsRaster\ADFFiletoASCFile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
@@ -12998,7 +13878,6 @@ debug\ADFFiletoASCFile.obj: 0LibsRaster\ADFFiletoASCFile.cpp G:\Qt\5.11.1\msvc20
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ADFFiletoASCFile.obj 0LibsRaster\ADFFiletoASCFile.cpp
 
 debug\flood.obj: 0LibsRaster\flood.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -13073,7 +13952,6 @@ debug\flood.obj: 0LibsRaster\flood.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\Q
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\flood.obj 0LibsRaster\flood.cpp
 
 debug\gridio.obj: 0LibsRaster\gridio.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -13147,21 +14025,16 @@ debug\gridio.obj: 0LibsRaster\gridio.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\gridio.obj 0LibsRaster\gridio.cpp
 
 debug\gridio_null.obj: 0LibsRaster\gridio_null.cpp 0LibsRaster/gioapi.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\gridio_null.obj 0LibsRaster\gridio_null.cpp
 
 debug\lsmcom.obj: 0LibsRaster\lsmcom.cpp 0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\lsmcom.obj 0LibsRaster\lsmcom.cpp
 
 debug\callocate.obj: 0LibsRaster\callocate.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\callocate.obj 0LibsRaster\callocate.cpp
 
 debug\avcalls_null.obj: 0LibsRaster\avcalls_null.cpp 0LibsRaster/avexec32.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\avcalls_null.obj 0LibsRaster\avcalls_null.cpp
 
 debug\flowgrids.obj: 2RasterProcessing\2FlowGrids\flowgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -13524,7 +14397,6 @@ debug\flowgrids.obj: 2RasterProcessing\2FlowGrids\flowgrids.cpp G:\Qt\5.11.1\msv
 		0LibsRaster/aread8.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\flowgrids.obj 2RasterProcessing\2FlowGrids\flowgrids.cpp
 
 debug\setdir.obj: 0LibsRaster\setdir.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -13599,7 +14471,6 @@ debug\setdir.obj: 0LibsRaster\setdir.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\setdir.obj 0LibsRaster\setdir.cpp
 
 debug\aread8.obj: 0LibsRaster\aread8.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -13674,7 +14545,6 @@ debug\aread8.obj: 0LibsRaster\aread8.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\aread8.obj 0LibsRaster\aread8.cpp
 
 debug\streamgrids.obj: 2RasterProcessing\3StreamGrids\streamgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -14035,7 +14905,6 @@ debug\streamgrids.obj: 2RasterProcessing\3StreamGrids\streamgrids.cpp G:\Qt\5.11
 		0LibsRaster/stream_definition.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\streamgrids.obj 2RasterProcessing\3StreamGrids\streamgrids.cpp
 
 debug\stream_definition.obj: 0LibsRaster\stream_definition.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -14110,7 +14979,6 @@ debug\stream_definition.obj: 0LibsRaster\stream_definition.cpp G:\Qt\5.11.1\msvc
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\stream_definition.obj 0LibsRaster\stream_definition.cpp
 
 debug\linkgrids.obj: 2RasterProcessing\4LinkGrids\linkgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -14471,7 +15339,6 @@ debug\linkgrids.obj: 2RasterProcessing\4LinkGrids\linkgrids.cpp G:\Qt\5.11.1\msv
 		0LibsRaster/stream_links.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\linkgrids.obj 2RasterProcessing\4LinkGrids\linkgrids.cpp
 
 debug\stream_links.obj: 0LibsRaster\stream_links.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -14546,7 +15413,6 @@ debug\stream_links.obj: 0LibsRaster\stream_links.cpp G:\Qt\5.11.1\msvc2017_64\in
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\stream_links.obj 0LibsRaster\stream_links.cpp
 
 debug\catchmentgrids.obj: 2RasterProcessing\5CatchmentGrids\catchmentgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -14907,7 +15773,6 @@ debug\catchmentgrids.obj: 2RasterProcessing\5CatchmentGrids\catchmentgrids.cpp G
 		0LibsRaster/catchment.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\catchmentgrids.obj 2RasterProcessing\5CatchmentGrids\catchmentgrids.cpp
 
 debug\catchment.obj: 0LibsRaster\catchment.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -14982,7 +15847,6 @@ debug\catchment.obj: 0LibsRaster\catchment.cpp G:\Qt\5.11.1\msvc2017_64\include\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\catchment.obj 0LibsRaster\catchment.cpp
 
 debug\streampolyline.obj: 2RasterProcessing\6StreamPolyline\streampolyline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -15343,13 +16207,10 @@ debug\streampolyline.obj: 2RasterProcessing\6StreamPolyline\streampolyline.cpp G
 		0LibsRaster/stream_shape.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\streampolyline.obj 2RasterProcessing\6StreamPolyline\streampolyline.cpp
 
 debug\shpopen.obj: 0LibsShape\shpopen.c 0LibsShape/shapefil.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\shpopen.obj 0LibsShape\shpopen.c
 
 debug\dbfopen.obj: 0LibsShape\dbfopen.c 0LibsShape/shapefil.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\dbfopen.obj 0LibsShape\dbfopen.c
 
 debug\stream_shape.obj: 0LibsRaster\stream_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -15425,7 +16286,6 @@ debug\stream_shape.obj: 0LibsRaster\stream_shape.cpp G:\Qt\5.11.1\msvc2017_64\in
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\stream_shape.obj 0LibsRaster\stream_shape.cpp
 
 debug\catchmentpolygon.obj: 2RasterProcessing\7CatchmentPolygon\catchmentpolygon.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -15786,7 +16646,6 @@ debug\catchmentpolygon.obj: 2RasterProcessing\7CatchmentPolygon\catchmentpolygon
 		0LibsRaster/catchment_shape.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\catchmentpolygon.obj 2RasterProcessing\7CatchmentPolygon\catchmentpolygon.cpp
 
 debug\catchment_shape.obj: 0LibsRaster\catchment_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
@@ -15863,7 +16722,6 @@ debug\catchment_shape.obj: 0LibsRaster\catchment_shape.cpp G:\Qt\5.11.1\msvc2017
 		0LibsRaster/gioapi.h \
 		0LibsShape/shapefil.h \
 		globals.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\catchment_shape.obj 0LibsRaster\catchment_shape.cpp
 
 debug\dissolvepolygons.obj: 3VectorProcessing\1DissolvePolygons\dissolvepolygons.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -16237,7 +17095,6 @@ debug\dissolvepolygons.obj: 3VectorProcessing\1DissolvePolygons\dissolvepolygons
 		0LibsVector/dissolve_ogr.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\dissolvepolygons.obj 3VectorProcessing\1DissolvePolygons\dissolvepolygons.cpp
 
 debug\dissolve.obj: 0LibsVector\dissolve.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -16311,7 +17168,6 @@ debug\dissolve.obj: 0LibsVector\dissolve.cpp G:\Qt\5.11.1\msvc2017_64\include\Qt
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\dissolve.obj 0LibsVector\dissolve.cpp
 
 debug\polygontopolylines.obj: 3VectorProcessing\2PolygonToPolylines\polygontopolylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -16684,7 +17540,6 @@ debug\polygontopolylines.obj: 3VectorProcessing\2PolygonToPolylines\polygontopol
 		0LibsShape/shapefil.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\polygontopolylines.obj 3VectorProcessing\2PolygonToPolylines\polygontopolylines.cpp
 
 debug\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -16758,7 +17613,6 @@ debug\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt\5.11.1\msvc
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\polygon_polylines.obj 0LibsVector\polygon_polylines.cpp
 
 debug\simplifypolylines.obj: 3VectorProcessing\3SimplifyPolylines\simplifypolylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -17130,7 +17984,6 @@ debug\simplifypolylines.obj: 3VectorProcessing\3SimplifyPolylines\simplifypolyli
 		0LibsVector/simplify_shape.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\simplifypolylines.obj 3VectorProcessing\3SimplifyPolylines\simplifypolylines.cpp
 
 debug\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -17205,7 +18058,6 @@ debug\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt\5.11.1\msvc2017_6
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\simplify_shape.obj 0LibsVector\simplify_shape.cpp
 
 debug\simplify_polyline.obj: 0LibsVector\simplify_polyline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -17278,7 +18130,6 @@ debug\simplify_polyline.obj: 0LibsVector\simplify_polyline.cpp G:\Qt\5.11.1\msvc
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\simplify_polyline.obj 0LibsVector\simplify_polyline.cpp
 
 debug\polylinetolines.obj: 3VectorProcessing\4PolylineToLines\polylinetolines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -17650,7 +18501,6 @@ debug\polylinetolines.obj: 3VectorProcessing\4PolylineToLines\polylinetolines.cp
 		0LibsVector/polyline_splitline.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\polylinetolines.obj 3VectorProcessing\4PolylineToLines\polylinetolines.cpp
 
 debug\polyline_splitline.obj: 0LibsVector\polyline_splitline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -17723,7 +18573,6 @@ debug\polyline_splitline.obj: 0LibsVector\polyline_splitline.cpp G:\Qt\5.11.1\ms
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\polyline_splitline.obj 0LibsVector\polyline_splitline.cpp
 
 debug\dissolve_ogr.obj: 0LibsVector\dissolve_ogr.cpp ..\gdal-2.3.1\gcore\gdal.h \
 		..\gdal-2.3.1\gcore\gdal_version.h \
@@ -17750,7 +18599,6 @@ debug\dissolve_ogr.obj: 0LibsVector\dissolve_ogr.cpp ..\gdal-2.3.1\gcore\gdal.h 
 		..\gdal-2.3.1\ogr\ogr_srs_api.h \
 		..\gdal-2.3.1\ogr\ogrsf_frmts\ogrsf_frmts.h \
 		..\gdal-2.3.1\ogr\ogr_p.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\dissolve_ogr.obj 0LibsVector\dissolve_ogr.cpp
 
 debug\mergevectorlayers.obj: 3VectorProcessing\5MergeVectorLayers\mergevectorlayers.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -18126,7 +18974,6 @@ debug\mergevectorlayers.obj: 3VectorProcessing\5MergeVectorLayers\mergevectorlay
 		0LibsVector/merge_lines.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\mergevectorlayers.obj 3VectorProcessing\5MergeVectorLayers\mergevectorlayers.cpp
 
 debug\merge_lines.obj: 0LibsVector\merge_lines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -18199,7 +19046,6 @@ debug\merge_lines.obj: 0LibsVector\merge_lines.cpp G:\Qt\5.11.1\msvc2017_64\incl
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\merge_lines.obj 0LibsVector\merge_lines.cpp
 
 debug\readtopology.obj: 4DomainDecomposition\1ReadTopology\readtopology.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -18558,7 +19404,6 @@ debug\readtopology.obj: 4DomainDecomposition\1ReadTopology\readtopology.cpp G:\Q
 		0LibsOther/shape_pslg.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\readtopology.obj 4DomainDecomposition\1ReadTopology\readtopology.cpp
 
 debug\shape_pslg.obj: 0LibsOther\shape_pslg.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -18632,7 +19477,6 @@ debug\shape_pslg.obj: 0LibsOther\shape_pslg.cpp G:\Qt\5.11.1\msvc2017_64\include
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\shape_pslg.obj 0LibsOther\shape_pslg.cpp
 
 debug\delaunaytriangulation.obj: 4DomainDecomposition\2DelaunayTriangulation\delaunaytriangulation.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -18993,7 +19837,6 @@ debug\delaunaytriangulation.obj: 4DomainDecomposition\2DelaunayTriangulation\del
 		0LibsOther/triangle_shewchuk.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\delaunaytriangulation.obj 4DomainDecomposition\2DelaunayTriangulation\delaunaytriangulation.cpp
 
 debug\tinshapelayer.obj: 4DomainDecomposition\3TINShapeLayer\tinshapelayer.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -19354,10 +20197,8 @@ debug\tinshapelayer.obj: 4DomainDecomposition\3TINShapeLayer\tinshapelayer.cpp G
 		0LibsVector/tin_shape.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\tinshapelayer.obj 4DomainDecomposition\3TINShapeLayer\tinshapelayer.cpp
 
 debug\triangle_shewchuk.obj: 0LibsOther\triangle_shewchuk.cpp 0LibsOther/triangle_shewchuk.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\triangle_shewchuk.obj 0LibsOther\triangle_shewchuk.cpp
 
 debug\tin_shape.obj: 0LibsVector\tin_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -19432,7 +20273,6 @@ debug\tin_shape.obj: 0LibsVector\tin_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\tin_shape.obj 0LibsVector\tin_shape.cpp
 
 debug\meshdatafile.obj: 5DataModelLoader\1MeshDataFile\meshdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -19794,7 +20634,6 @@ debug\meshdatafile.obj: 5DataModelLoader\1MeshDataFile\meshdatafile.cpp G:\Qt\5.
 		0LibsOther/interpolate_river_nodes_elev.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\meshdatafile.obj 5DataModelLoader\1MeshDataFile\meshdatafile.cpp
 
 debug\mesh_data_file.obj: 0LibsOther\mesh_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -19893,7 +20732,6 @@ debug\mesh_data_file.obj: 0LibsOther\mesh_data_file.cpp G:\Qt\5.11.1\msvc2017_64
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\mesh_data_file.obj 0LibsOther\mesh_data_file.cpp
 
 debug\raster_grid_value.obj: 0LibsOther\raster_grid_value.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -19989,7 +20827,6 @@ debug\raster_grid_value.obj: 0LibsOther\raster_grid_value.cpp G:\Qt\5.11.1\msvc2
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\raster_grid_value.obj 0LibsOther\raster_grid_value.cpp
 
 debug\interpolate_river_nodes_elev.obj: 0LibsOther\interpolate_river_nodes_elev.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QFile \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
@@ -20066,7 +20903,6 @@ debug\interpolate_river_nodes_elev.obj: 0LibsOther\interpolate_river_nodes_elev.
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\interpolate_river_nodes_elev.obj 0LibsOther\interpolate_river_nodes_elev.cpp
 
 debug\attdatafile.obj: 5DataModelLoader\2AttDataFile\attdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -20430,7 +21266,6 @@ debug\attdatafile.obj: 5DataModelLoader\2AttDataFile\attdatafile.cpp G:\Qt\5.11.
 		0LibsOther/att_data_file.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\attdatafile.obj 5DataModelLoader\2AttDataFile\attdatafile.cpp
 
 debug\att_data_file.obj: 0LibsOther\att_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -20530,7 +21365,6 @@ debug\att_data_file.obj: 0LibsOther\att_data_file.cpp G:\Qt\5.11.1\msvc2017_64\i
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\att_data_file.obj 0LibsOther\att_data_file.cpp
 
 debug\rivdatafile.obj: 5DataModelLoader\3RivDataFile\rivdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -20891,7 +21725,6 @@ debug\rivdatafile.obj: 5DataModelLoader\3RivDataFile\rivdatafile.cpp G:\Qt\5.11.
 		0LibsOther/riv_data_file.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\rivdatafile.obj 5DataModelLoader\3RivDataFile\rivdatafile.cpp
 
 debug\riv_data_file.obj: 0LibsOther\riv_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -20969,7 +21802,6 @@ debug\riv_data_file.obj: 0LibsOther\riv_data_file.cpp G:\Qt\5.11.1\msvc2017_64\i
 		0LibsOther/riv_data_file.h \
 		0LibsShape/shapefil.h \
 		globals.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\riv_data_file.obj 0LibsOther\riv_data_file.cpp
 
 debug\soildatafile.obj: 5DataModelLoader\4SoilDataFile\soildatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -21328,7 +22160,6 @@ debug\soildatafile.obj: 5DataModelLoader\4SoilDataFile\soildatafile.cpp G:\Qt\5.
 		0LibsOther/pedo_transfer_functions.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\soildatafile.obj 5DataModelLoader\4SoilDataFile\soildatafile.cpp
 
 debug\geoldatafile.obj: 5DataModelLoader\5GeolDataFile\geoldatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -21687,7 +22518,6 @@ debug\geoldatafile.obj: 5DataModelLoader\5GeolDataFile\geoldatafile.cpp G:\Qt\5.
 		0LibsOther/pedo_transfer_functions.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\geoldatafile.obj 5DataModelLoader\5GeolDataFile\geoldatafile.cpp
 
 debug\pedo_transfer_functions.obj: 0LibsOther\pedo_transfer_functions.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -21763,7 +22593,6 @@ debug\pedo_transfer_functions.obj: 0LibsOther\pedo_transfer_functions.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\pedo_transfer_functions.obj 0LibsOther\pedo_transfer_functions.cpp
 
 debug\lcdatafile.obj: 5DataModelLoader\6LcDataFile\lcdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -22122,7 +22951,6 @@ debug\lcdatafile.obj: 5DataModelLoader\6LcDataFile\lcdatafile.cpp G:\Qt\5.11.1\m
 		0LibsOther/pedo_transfer_functions.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\lcdatafile.obj 5DataModelLoader\6LcDataFile\lcdatafile.cpp
 
 debug\initdatafile.obj: 5DataModelLoader\7InitDataFile\initdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -22482,7 +23310,6 @@ debug\initdatafile.obj: 5DataModelLoader\7InitDataFile\initdatafile.cpp G:\Qt\5.
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\initdatafile.obj 5DataModelLoader\7InitDataFile\initdatafile.cpp
 
 debug\ibcdatafile.obj: 5DataModelLoader\8IbcDataFile\ibcdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -22840,7 +23667,6 @@ debug\ibcdatafile.obj: 5DataModelLoader\8IbcDataFile\ibcdatafile.cpp G:\Qt\5.11.
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ibcdatafile.obj 5DataModelLoader\8IbcDataFile\ibcdatafile.cpp
 
 debug\paradatafile.obj: 5DataModelLoader\9ParaDataFile\paradatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -23218,7 +24044,6 @@ debug\paradatafile.obj: 5DataModelLoader\9ParaDataFile\paradatafile.cpp G:\Qt\5.
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\paradatafile.obj 5DataModelLoader\9ParaDataFile\paradatafile.cpp
 
 debug\calibdatafile.obj: 5DataModelLoader\10CalibDataFile\calibdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -23582,7 +24407,6 @@ debug\calibdatafile.obj: 5DataModelLoader\10CalibDataFile\calibdatafile.cpp G:\Q
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\calibdatafile.obj 5DataModelLoader\10CalibDataFile\calibdatafile.cpp
 
 debug\PIHMThread.obj: 6PIHMSimulation\PIHMThread\PIHMThread.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -23703,7 +24527,6 @@ debug\PIHMThread.obj: 6PIHMSimulation\PIHMThread\PIHMThread.cpp G:\Qt\5.11.1\msv
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\PIHMThread.obj 6PIHMSimulation\PIHMThread\PIHMThread.cpp
 
 debug\pihmsimulation.obj: 6PIHMSimulation\1PIHM_v2.2\pihmsimulation.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -24067,7 +24890,6 @@ debug\pihmsimulation.obj: 6PIHMSimulation\1PIHM_v2.2\pihmsimulation.cpp G:\Qt\5.
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		globals.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\pihmsimulation.obj 6PIHMSimulation\1PIHM_v2.2\pihmsimulation.cpp
 
 debug\update.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\update.cpp ..\sundials_windows_install\include\nvector\nvector_serial.h \
 		..\sundials_windows_install\include\sundials\sundials_nvector.h \
@@ -24183,7 +25005,6 @@ debug\update.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\update.cpp ..\sundials_windo
 		6PIHMSimulation/PIHMThread/PIHMThread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\update.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\update.cpp
 
 debug\read_alloc.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\read_alloc.cpp 6PIHMSimulation/PIHMSrc/PIHM_v2.2/pihm.h \
 		..\sundials_windows_install\include\sundials\sundials_types.h \
@@ -24299,7 +25120,6 @@ debug\read_alloc.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\read_alloc.cpp 6PIHMSimu
 		6PIHMSimulation/PIHMThread/PIHMThread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\read_alloc.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\read_alloc.cpp
 
 debug\print.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\print.cpp ..\sundials_windows_install\include\sundials\sundials_types.h \
 		..\sundials_windows_install\include\sundials\sundials_config.h \
@@ -24420,7 +25240,6 @@ debug\print.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\print.cpp ..\sundials_windows
 		..\sundials_windows_install\include\cvode\cvode_direct.h \
 		..\sundials_windows_install\include\sundials\sundials_direct.h \
 		..\sundials_windows_install\include\sundials\sundials_dense.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\print.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\print.cpp
 
 debug\pihm.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\pihm.cpp ..\sundials_windows_install\include\sundials\sundials_types.h \
 		..\sundials_windows_install\include\sundials\sundials_config.h \
@@ -24772,7 +25591,6 @@ debug\pihm.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\pihm.cpp ..\sundials_windows_i
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\pihm.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\pihm.cpp
 
 debug\is_sm_et.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\is_sm_et.cpp ..\sundials_windows_install\include\sundials\sundials_types.h \
 		..\sundials_windows_install\include\sundials\sundials_config.h \
@@ -24888,7 +25706,6 @@ debug\is_sm_et.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\is_sm_et.cpp ..\sundials_w
 		6PIHMSimulation/PIHMThread/PIHMThread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\is_sm_et.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\is_sm_et.cpp
 
 debug\initialize.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\initialize.cpp ..\sundials_windows_install\include\sundials\sundials_types.h \
 		..\sundials_windows_install\include\sundials\sundials_config.h \
@@ -25004,7 +25821,6 @@ debug\initialize.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\initialize.cpp ..\sundia
 		6PIHMSimulation/PIHMThread/PIHMThread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\initialize.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\initialize.cpp
 
 debug\f.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\f.cpp ..\sundials_windows_install\include\nvector\nvector_serial.h \
 		..\sundials_windows_install\include\sundials\sundials_nvector.h \
@@ -25120,7 +25936,6 @@ debug\f.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\f.cpp ..\sundials_windows_install
 		6PIHMSimulation/PIHMThread/PIHMThread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\f.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\f.cpp
 
 debug\PIHMThreadProgress.obj: 6PIHMSimulation\PIHMThread\PIHMThreadProgress.cpp 6PIHMSimulation/PIHMThread/PIHMThreadProgress.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QProgressBar \
@@ -25454,7 +26269,6 @@ debug\PIHMThreadProgress.obj: 6PIHMSimulation\PIHMThread\PIHMThreadProgress.cpp 
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\PIHMThreadProgress.obj 6PIHMSimulation\PIHMThread\PIHMThreadProgress.cpp
 
 debug\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
@@ -25961,7 +26775,6 @@ debug\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp G:\Qt
 		0LibsIO/IOProjectFile.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\rivertemporal.obj 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp
 
 debug\qcustomplot.obj: 7VisualAnalytics\QCustomPlot\qcustomplot.cpp 7VisualAnalytics/QCustomPlot/qcustomplot.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
@@ -26452,7 +27265,6 @@ debug\qcustomplot.obj: 7VisualAnalytics\QCustomPlot\qcustomplot.cpp 7VisualAnaly
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qtprintsupportversion.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\qcustomplot.obj 7VisualAnalytics\QCustomPlot\qcustomplot.cpp
 
 debug\qcustomplotmainwindow.obj: 7VisualAnalytics\QCustomPlotMainWindow\qcustomplotmainwindow.cpp 7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
@@ -26950,7 +27762,6 @@ debug\qcustomplotmainwindow.obj: 7VisualAnalytics\QCustomPlotMainWindow\qcustomp
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qtprintsupportversion.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\qcustomplotmainwindow.obj 7VisualAnalytics\QCustomPlotMainWindow\qcustomplotmainwindow.cpp
 
 debug\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
@@ -27457,7 +28268,6 @@ debug\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp G:\Qt\5.
 		0LibsIO/IOProjectFile.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\meshtemporal.obj 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp
 
 debug\meshspatial.obj: 7VisualAnalytics\1MeshSpatial\meshspatial.cpp 7VisualAnalytics/1MeshSpatial/meshspatial.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -27966,7 +28776,6 @@ debug\meshspatial.obj: 7VisualAnalytics\1MeshSpatial\meshspatial.cpp 7VisualAnal
 		0LibsShape/shapefil.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\meshspatial.obj 7VisualAnalytics\1MeshSpatial\meshspatial.cpp
 
 debug\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -28334,7 +29143,6 @@ debug\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp G:\Qt\5.
 		0LibsShape/shapefil.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\riverspatial.obj 7VisualAnalytics\3RiverSpatial\riverspatial.cpp
 
 debug\IOProjectFile.obj: 0LibsIO\IOProjectFile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -28659,7 +29467,6 @@ debug\IOProjectFile.obj: 0LibsIO\IOProjectFile.cpp G:\Qt\5.11.1\msvc2017_64\incl
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\IOProjectFile.obj 0LibsIO\IOProjectFile.cpp
 
 debug\att_data_file.obj: 0LibsOther\att_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -28759,7 +29566,6 @@ debug\att_data_file.obj: 0LibsOther\att_data_file.cpp G:\Qt\5.11.1\msvc2017_64\i
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\att_data_file.obj 0LibsOther\att_data_file.cpp
 
 debug\interpolate_river_nodes_elev.obj: 0LibsOther\interpolate_river_nodes_elev.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QFile \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
@@ -28836,7 +29642,6 @@ debug\interpolate_river_nodes_elev.obj: 0LibsOther\interpolate_river_nodes_elev.
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\interpolate_river_nodes_elev.obj 0LibsOther\interpolate_river_nodes_elev.cpp
 
 debug\mesh_data_file.obj: 0LibsOther\mesh_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -28935,7 +29740,6 @@ debug\mesh_data_file.obj: 0LibsOther\mesh_data_file.cpp G:\Qt\5.11.1\msvc2017_64
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\mesh_data_file.obj 0LibsOther\mesh_data_file.cpp
 
 debug\pedo_transfer_functions.obj: 0LibsOther\pedo_transfer_functions.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -29011,7 +29815,6 @@ debug\pedo_transfer_functions.obj: 0LibsOther\pedo_transfer_functions.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\pedo_transfer_functions.obj 0LibsOther\pedo_transfer_functions.cpp
 
 debug\raster_grid_value.obj: 0LibsOther\raster_grid_value.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -29107,7 +29910,6 @@ debug\raster_grid_value.obj: 0LibsOther\raster_grid_value.cpp G:\Qt\5.11.1\msvc2
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\raster_grid_value.obj 0LibsOther\raster_grid_value.cpp
 
 debug\riv_data_file.obj: 0LibsOther\riv_data_file.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -29185,7 +29987,6 @@ debug\riv_data_file.obj: 0LibsOther\riv_data_file.cpp G:\Qt\5.11.1\msvc2017_64\i
 		0LibsOther/riv_data_file.h \
 		0LibsShape/shapefil.h \
 		globals.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\riv_data_file.obj 0LibsOther\riv_data_file.cpp
 
 debug\shape_pslg.obj: 0LibsOther\shape_pslg.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -29259,10 +30060,8 @@ debug\shape_pslg.obj: 0LibsOther\shape_pslg.cpp G:\Qt\5.11.1\msvc2017_64\include
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\shape_pslg.obj 0LibsOther\shape_pslg.cpp
 
 debug\triangle_shewchuk.obj: 0LibsOther\triangle_shewchuk.cpp 0LibsOther/triangle_shewchuk.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\triangle_shewchuk.obj 0LibsOther\triangle_shewchuk.cpp
 
 debug\ADFFiletoASCFile.obj: 0LibsRaster\ADFFiletoASCFile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qobject.h \
@@ -29361,7 +30160,6 @@ debug\ADFFiletoASCFile.obj: 0LibsRaster\ADFFiletoASCFile.cpp G:\Qt\5.11.1\msvc20
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ADFFiletoASCFile.obj 0LibsRaster\ADFFiletoASCFile.cpp
 
 debug\aread8.obj: 0LibsRaster\aread8.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -29436,13 +30234,10 @@ debug\aread8.obj: 0LibsRaster\aread8.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\aread8.obj 0LibsRaster\aread8.cpp
 
 debug\avcalls_null.obj: 0LibsRaster\avcalls_null.cpp 0LibsRaster/avexec32.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\avcalls_null.obj 0LibsRaster\avcalls_null.cpp
 
 debug\callocate.obj: 0LibsRaster\callocate.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\callocate.obj 0LibsRaster\callocate.cpp
 
 debug\catchment.obj: 0LibsRaster\catchment.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -29517,7 +30312,6 @@ debug\catchment.obj: 0LibsRaster\catchment.cpp G:\Qt\5.11.1\msvc2017_64\include\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\catchment.obj 0LibsRaster\catchment.cpp
 
 debug\catchment_shape.obj: 0LibsRaster\catchment_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
@@ -29594,7 +30388,6 @@ debug\catchment_shape.obj: 0LibsRaster\catchment_shape.cpp G:\Qt\5.11.1\msvc2017
 		0LibsRaster/gioapi.h \
 		0LibsShape/shapefil.h \
 		globals.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\catchment_shape.obj 0LibsRaster\catchment_shape.cpp
 
 debug\flood.obj: 0LibsRaster\flood.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -29669,7 +30462,6 @@ debug\flood.obj: 0LibsRaster\flood.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\Q
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\flood.obj 0LibsRaster\flood.cpp
 
 debug\gridio.obj: 0LibsRaster\gridio.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -29743,15 +30535,12 @@ debug\gridio.obj: 0LibsRaster\gridio.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\gridio.obj 0LibsRaster\gridio.cpp
 
 debug\gridio_null.obj: 0LibsRaster\gridio_null.cpp 0LibsRaster/gioapi.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\gridio_null.obj 0LibsRaster\gridio_null.cpp
 
 debug\lsmcom.obj: 0LibsRaster\lsmcom.cpp 0LibsRaster/lsm.h \
 		0LibsRaster/gridio.h \
 		0LibsRaster/gioapi.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\lsmcom.obj 0LibsRaster\lsmcom.cpp
 
 debug\setdir.obj: 0LibsRaster\setdir.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -29826,7 +30615,6 @@ debug\setdir.obj: 0LibsRaster\setdir.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\setdir.obj 0LibsRaster\setdir.cpp
 
 debug\stream_definition.obj: 0LibsRaster\stream_definition.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -29901,7 +30689,6 @@ debug\stream_definition.obj: 0LibsRaster\stream_definition.cpp G:\Qt\5.11.1\msvc
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\stream_definition.obj 0LibsRaster\stream_definition.cpp
 
 debug\stream_links.obj: 0LibsRaster\stream_links.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -29976,7 +30763,6 @@ debug\stream_links.obj: 0LibsRaster\stream_links.cpp G:\Qt\5.11.1\msvc2017_64\in
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\stream_links.obj 0LibsRaster\stream_links.cpp
 
 debug\stream_shape.obj: 0LibsRaster\stream_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30052,7 +30838,6 @@ debug\stream_shape.obj: 0LibsRaster\stream_shape.cpp G:\Qt\5.11.1\msvc2017_64\in
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\stream_shape.obj 0LibsRaster\stream_shape.cpp
 
 debug\dissolve.obj: 0LibsVector\dissolve.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30126,7 +30911,6 @@ debug\dissolve.obj: 0LibsVector\dissolve.cpp G:\Qt\5.11.1\msvc2017_64\include\Qt
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\dissolve.obj 0LibsVector\dissolve.cpp
 
 debug\dissolve_ogr.obj: 0LibsVector\dissolve_ogr.cpp ..\gdal-2.3.1\gcore\gdal.h \
 		..\gdal-2.3.1\gcore\gdal_version.h \
@@ -30153,7 +30937,6 @@ debug\dissolve_ogr.obj: 0LibsVector\dissolve_ogr.cpp ..\gdal-2.3.1\gcore\gdal.h 
 		..\gdal-2.3.1\ogr\ogr_srs_api.h \
 		..\gdal-2.3.1\ogr\ogrsf_frmts\ogrsf_frmts.h \
 		..\gdal-2.3.1\ogr\ogr_p.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\dissolve_ogr.obj 0LibsVector\dissolve_ogr.cpp
 
 debug\merge_lines.obj: 0LibsVector\merge_lines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30226,7 +31009,6 @@ debug\merge_lines.obj: 0LibsVector\merge_lines.cpp G:\Qt\5.11.1\msvc2017_64\incl
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\merge_lines.obj 0LibsVector\merge_lines.cpp
 
 debug\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30300,7 +31082,6 @@ debug\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt\5.11.1\msvc
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\polygon_polylines.obj 0LibsVector\polygon_polylines.cpp
 
 debug\polyline_splitline.obj: 0LibsVector\polyline_splitline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30373,7 +31154,6 @@ debug\polyline_splitline.obj: 0LibsVector\polyline_splitline.cpp G:\Qt\5.11.1\ms
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\polyline_splitline.obj 0LibsVector\polyline_splitline.cpp
 
 debug\simplify_polyline.obj: 0LibsVector\simplify_polyline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30446,7 +31226,6 @@ debug\simplify_polyline.obj: 0LibsVector\simplify_polyline.cpp G:\Qt\5.11.1\msvc
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\simplify_polyline.obj 0LibsVector\simplify_polyline.cpp
 
 debug\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -30521,7 +31300,6 @@ debug\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt\5.11.1\msvc2017_6
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\simplify_shape.obj 0LibsVector\simplify_shape.cpp
 
 debug\tin_shape.obj: 0LibsVector\tin_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qstring.h \
@@ -30596,7 +31374,6 @@ debug\tin_shape.obj: 0LibsVector\tin_shape.cpp G:\Qt\5.11.1\msvc2017_64\include\
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\tin_shape.obj 0LibsVector\tin_shape.cpp
 
 debug\newproject.obj: 1ProjectManagement\1NewProject\newproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -30953,7 +31730,6 @@ debug\newproject.obj: 1ProjectManagement\1NewProject\newproject.cpp G:\Qt\5.11.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\newproject.obj 1ProjectManagement\1NewProject\newproject.cpp
 
 debug\openproject.obj: 1ProjectManagement\2OpenProject\openproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -31309,7 +32085,6 @@ debug\openproject.obj: 1ProjectManagement\2OpenProject\openproject.cpp G:\Qt\5.1
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\openproject.obj 1ProjectManagement\2OpenProject\openproject.cpp
 
 debug\importproject.obj: 1ProjectManagement\3ImportProject\importproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -31665,7 +32440,6 @@ debug\importproject.obj: 1ProjectManagement\3ImportProject\importproject.cpp G:\
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qabstractscrollarea.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\importproject.obj 1ProjectManagement\3ImportProject\importproject.cpp
 
 debug\closeproject.obj: 1ProjectManagement\4CloseProject\closeproject.cpp G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGui \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QtGuiDepends \
@@ -32020,7 +32794,6 @@ debug\closeproject.obj: 1ProjectManagement\4CloseProject\closeproject.cpp G:\Qt\
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QTextEdit \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\closeproject.obj 1ProjectManagement\4CloseProject\closeproject.cpp
 
 debug\fillpits.obj: 2RasterProcessing\1FillPits\fillpits.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -32382,7 +33155,6 @@ debug\fillpits.obj: 2RasterProcessing\1FillPits\fillpits.cpp G:\Qt\5.11.1\msvc20
 		0LibsRaster/flood.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\fillpits.obj 2RasterProcessing\1FillPits\fillpits.cpp
 
 debug\flowgrids.obj: 2RasterProcessing\2FlowGrids\flowgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -32745,7 +33517,6 @@ debug\flowgrids.obj: 2RasterProcessing\2FlowGrids\flowgrids.cpp G:\Qt\5.11.1\msv
 		0LibsRaster/aread8.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\flowgrids.obj 2RasterProcessing\2FlowGrids\flowgrids.cpp
 
 debug\streamgrids.obj: 2RasterProcessing\3StreamGrids\streamgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -33106,7 +33877,6 @@ debug\streamgrids.obj: 2RasterProcessing\3StreamGrids\streamgrids.cpp G:\Qt\5.11
 		0LibsRaster/stream_definition.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\streamgrids.obj 2RasterProcessing\3StreamGrids\streamgrids.cpp
 
 debug\linkgrids.obj: 2RasterProcessing\4LinkGrids\linkgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -33467,7 +34237,6 @@ debug\linkgrids.obj: 2RasterProcessing\4LinkGrids\linkgrids.cpp G:\Qt\5.11.1\msv
 		0LibsRaster/stream_links.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\linkgrids.obj 2RasterProcessing\4LinkGrids\linkgrids.cpp
 
 debug\catchmentgrids.obj: 2RasterProcessing\5CatchmentGrids\catchmentgrids.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -33828,7 +34597,6 @@ debug\catchmentgrids.obj: 2RasterProcessing\5CatchmentGrids\catchmentgrids.cpp G
 		0LibsRaster/catchment.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\catchmentgrids.obj 2RasterProcessing\5CatchmentGrids\catchmentgrids.cpp
 
 debug\streampolyline.obj: 2RasterProcessing\6StreamPolyline\streampolyline.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -34189,7 +34957,6 @@ debug\streampolyline.obj: 2RasterProcessing\6StreamPolyline\streampolyline.cpp G
 		0LibsRaster/stream_shape.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\streampolyline.obj 2RasterProcessing\6StreamPolyline\streampolyline.cpp
 
 debug\catchmentpolygon.obj: 2RasterProcessing\7CatchmentPolygon\catchmentpolygon.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -34550,7 +35317,6 @@ debug\catchmentpolygon.obj: 2RasterProcessing\7CatchmentPolygon\catchmentpolygon
 		0LibsRaster/catchment_shape.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\catchmentpolygon.obj 2RasterProcessing\7CatchmentPolygon\catchmentpolygon.cpp
 
 debug\dissolvepolygons.obj: 3VectorProcessing\1DissolvePolygons\dissolvepolygons.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -34924,7 +35690,6 @@ debug\dissolvepolygons.obj: 3VectorProcessing\1DissolvePolygons\dissolvepolygons
 		0LibsVector/dissolve_ogr.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\dissolvepolygons.obj 3VectorProcessing\1DissolvePolygons\dissolvepolygons.cpp
 
 debug\polygontopolylines.obj: 3VectorProcessing\2PolygonToPolylines\polygontopolylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -35297,7 +36062,6 @@ debug\polygontopolylines.obj: 3VectorProcessing\2PolygonToPolylines\polygontopol
 		0LibsShape/shapefil.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\polygontopolylines.obj 3VectorProcessing\2PolygonToPolylines\polygontopolylines.cpp
 
 debug\simplifypolylines.obj: 3VectorProcessing\3SimplifyPolylines\simplifypolylines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -35669,7 +36433,6 @@ debug\simplifypolylines.obj: 3VectorProcessing\3SimplifyPolylines\simplifypolyli
 		0LibsVector/simplify_shape.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\simplifypolylines.obj 3VectorProcessing\3SimplifyPolylines\simplifypolylines.cpp
 
 debug\polylinetolines.obj: 3VectorProcessing\4PolylineToLines\polylinetolines.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -36041,7 +36804,6 @@ debug\polylinetolines.obj: 3VectorProcessing\4PolylineToLines\polylinetolines.cp
 		0LibsVector/polyline_splitline.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\polylinetolines.obj 3VectorProcessing\4PolylineToLines\polylinetolines.cpp
 
 debug\mergevectorlayers.obj: 3VectorProcessing\5MergeVectorLayers\mergevectorlayers.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -36417,7 +37179,6 @@ debug\mergevectorlayers.obj: 3VectorProcessing\5MergeVectorLayers\mergevectorlay
 		0LibsVector/merge_lines.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\mergevectorlayers.obj 3VectorProcessing\5MergeVectorLayers\mergevectorlayers.cpp
 
 debug\readtopology.obj: 4DomainDecomposition\1ReadTopology\readtopology.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -36776,7 +37537,6 @@ debug\readtopology.obj: 4DomainDecomposition\1ReadTopology\readtopology.cpp G:\Q
 		0LibsOther/shape_pslg.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\readtopology.obj 4DomainDecomposition\1ReadTopology\readtopology.cpp
 
 debug\delaunaytriangulation.obj: 4DomainDecomposition\2DelaunayTriangulation\delaunaytriangulation.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -37137,7 +37897,6 @@ debug\delaunaytriangulation.obj: 4DomainDecomposition\2DelaunayTriangulation\del
 		0LibsOther/triangle_shewchuk.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\delaunaytriangulation.obj 4DomainDecomposition\2DelaunayTriangulation\delaunaytriangulation.cpp
 
 debug\tinshapelayer.obj: 4DomainDecomposition\3TINShapeLayer\tinshapelayer.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -37498,7 +38257,6 @@ debug\tinshapelayer.obj: 4DomainDecomposition\3TINShapeLayer\tinshapelayer.cpp G
 		0LibsVector/tin_shape.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\tinshapelayer.obj 4DomainDecomposition\3TINShapeLayer\tinshapelayer.cpp
 
 debug\calibdatafile.obj: 5DataModelLoader\10CalibDataFile\calibdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -37862,7 +38620,6 @@ debug\calibdatafile.obj: 5DataModelLoader\10CalibDataFile\calibdatafile.cpp G:\Q
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\calibdatafile.obj 5DataModelLoader\10CalibDataFile\calibdatafile.cpp
 
 debug\meshdatafile.obj: 5DataModelLoader\1MeshDataFile\meshdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -38224,7 +38981,6 @@ debug\meshdatafile.obj: 5DataModelLoader\1MeshDataFile\meshdatafile.cpp G:\Qt\5.
 		0LibsOther/interpolate_river_nodes_elev.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\meshdatafile.obj 5DataModelLoader\1MeshDataFile\meshdatafile.cpp
 
 debug\attdatafile.obj: 5DataModelLoader\2AttDataFile\attdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -38588,7 +39344,6 @@ debug\attdatafile.obj: 5DataModelLoader\2AttDataFile\attdatafile.cpp G:\Qt\5.11.
 		0LibsOther/att_data_file.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\attdatafile.obj 5DataModelLoader\2AttDataFile\attdatafile.cpp
 
 debug\rivdatafile.obj: 5DataModelLoader\3RivDataFile\rivdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -38949,7 +39704,6 @@ debug\rivdatafile.obj: 5DataModelLoader\3RivDataFile\rivdatafile.cpp G:\Qt\5.11.
 		0LibsOther/riv_data_file.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\rivdatafile.obj 5DataModelLoader\3RivDataFile\rivdatafile.cpp
 
 debug\soildatafile.obj: 5DataModelLoader\4SoilDataFile\soildatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -39308,7 +40062,6 @@ debug\soildatafile.obj: 5DataModelLoader\4SoilDataFile\soildatafile.cpp G:\Qt\5.
 		0LibsOther/pedo_transfer_functions.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\soildatafile.obj 5DataModelLoader\4SoilDataFile\soildatafile.cpp
 
 debug\geoldatafile.obj: 5DataModelLoader\5GeolDataFile\geoldatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -39667,7 +40420,6 @@ debug\geoldatafile.obj: 5DataModelLoader\5GeolDataFile\geoldatafile.cpp G:\Qt\5.
 		0LibsOther/pedo_transfer_functions.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\geoldatafile.obj 5DataModelLoader\5GeolDataFile\geoldatafile.cpp
 
 debug\lcdatafile.obj: 5DataModelLoader\6LcDataFile\lcdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -40026,7 +40778,6 @@ debug\lcdatafile.obj: 5DataModelLoader\6LcDataFile\lcdatafile.cpp G:\Qt\5.11.1\m
 		0LibsOther/pedo_transfer_functions.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\lcdatafile.obj 5DataModelLoader\6LcDataFile\lcdatafile.cpp
 
 debug\initdatafile.obj: 5DataModelLoader\7InitDataFile\initdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -40386,7 +41137,6 @@ debug\initdatafile.obj: 5DataModelLoader\7InitDataFile\initdatafile.cpp G:\Qt\5.
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\initdatafile.obj 5DataModelLoader\7InitDataFile\initdatafile.cpp
 
 debug\ibcdatafile.obj: 5DataModelLoader\8IbcDataFile\ibcdatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -40744,7 +41494,6 @@ debug\ibcdatafile.obj: 5DataModelLoader\8IbcDataFile\ibcdatafile.cpp G:\Qt\5.11.
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ibcdatafile.obj 5DataModelLoader\8IbcDataFile\ibcdatafile.cpp
 
 debug\paradatafile.obj: 5DataModelLoader\9ParaDataFile\paradatafile.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -41122,7 +41871,6 @@ debug\paradatafile.obj: 5DataModelLoader\9ParaDataFile\paradatafile.cpp G:\Qt\5.
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\paradatafile.obj 5DataModelLoader\9ParaDataFile\paradatafile.cpp
 
 debug\pihmsimulation.obj: 6PIHMSimulation\1PIHM_v2.2\pihmsimulation.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -41486,7 +42234,6 @@ debug\pihmsimulation.obj: 6PIHMSimulation\1PIHM_v2.2\pihmsimulation.cpp G:\Qt\5.
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtguiversion.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
 		globals.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\pihmsimulation.obj 6PIHMSimulation\1PIHM_v2.2\pihmsimulation.cpp
 
 debug\f.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\f.cpp ..\sundials_windows_install\include\nvector\nvector_serial.h \
 		..\sundials_windows_install\include\sundials\sundials_nvector.h \
@@ -41602,7 +42349,6 @@ debug\f.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\f.cpp ..\sundials_windows_install
 		6PIHMSimulation/PIHMThread/PIHMThread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\f.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\f.cpp
 
 debug\initialize.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\initialize.cpp ..\sundials_windows_install\include\sundials\sundials_types.h \
 		..\sundials_windows_install\include\sundials\sundials_config.h \
@@ -41718,7 +42464,6 @@ debug\initialize.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\initialize.cpp ..\sundia
 		6PIHMSimulation/PIHMThread/PIHMThread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\initialize.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\initialize.cpp
 
 debug\is_sm_et.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\is_sm_et.cpp ..\sundials_windows_install\include\sundials\sundials_types.h \
 		..\sundials_windows_install\include\sundials\sundials_config.h \
@@ -41834,7 +42579,6 @@ debug\is_sm_et.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\is_sm_et.cpp ..\sundials_w
 		6PIHMSimulation/PIHMThread/PIHMThread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\is_sm_et.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\is_sm_et.cpp
 
 debug\pihm.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\pihm.cpp ..\sundials_windows_install\include\sundials\sundials_types.h \
 		..\sundials_windows_install\include\sundials\sundials_config.h \
@@ -42186,7 +42930,6 @@ debug\pihm.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\pihm.cpp ..\sundials_windows_i
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\pihm.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\pihm.cpp
 
 debug\print.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\print.cpp ..\sundials_windows_install\include\sundials\sundials_types.h \
 		..\sundials_windows_install\include\sundials\sundials_config.h \
@@ -42307,7 +43050,6 @@ debug\print.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\print.cpp ..\sundials_windows
 		..\sundials_windows_install\include\cvode\cvode_direct.h \
 		..\sundials_windows_install\include\sundials\sundials_direct.h \
 		..\sundials_windows_install\include\sundials\sundials_dense.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\print.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\print.cpp
 
 debug\read_alloc.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\read_alloc.cpp 6PIHMSimulation/PIHMSrc/PIHM_v2.2/pihm.h \
 		..\sundials_windows_install\include\sundials\sundials_types.h \
@@ -42423,7 +43165,6 @@ debug\read_alloc.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\read_alloc.cpp 6PIHMSimu
 		6PIHMSimulation/PIHMThread/PIHMThread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\read_alloc.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\read_alloc.cpp
 
 debug\update.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\update.cpp ..\sundials_windows_install\include\nvector\nvector_serial.h \
 		..\sundials_windows_install\include\sundials\sundials_nvector.h \
@@ -42539,7 +43280,6 @@ debug\update.obj: 6PIHMSimulation\PIHMSrc\PIHM_v2.2\update.cpp ..\sundials_windo
 		6PIHMSimulation/PIHMThread/PIHMThread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QThread \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\update.obj 6PIHMSimulation\PIHMSrc\PIHM_v2.2\update.cpp
 
 debug\PIHMThread.obj: 6PIHMSimulation\PIHMThread\PIHMThread.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdebug.h \
@@ -42660,7 +43400,6 @@ debug\PIHMThread.obj: 6PIHMSimulation\PIHMThread\PIHMThread.cpp G:\Qt\5.11.1\msv
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\PIHMThread.obj 6PIHMSimulation\PIHMThread\PIHMThread.cpp
 
 debug\PIHMThreadProgress.obj: 6PIHMSimulation\PIHMThread\PIHMThreadProgress.cpp 6PIHMSimulation/PIHMThread/PIHMThreadProgress.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QProgressBar \
@@ -42994,7 +43733,6 @@ debug\PIHMThreadProgress.obj: 6PIHMSimulation\PIHMThread\PIHMThreadProgress.cpp 
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDebug
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\PIHMThreadProgress.obj 6PIHMSimulation\PIHMThread\PIHMThreadProgress.cpp
 
 debug\meshspatial.obj: 7VisualAnalytics\1MeshSpatial\meshspatial.cpp 7VisualAnalytics/1MeshSpatial/meshspatial.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -43503,7 +44241,6 @@ debug\meshspatial.obj: 7VisualAnalytics\1MeshSpatial\meshspatial.cpp 7VisualAnal
 		0LibsShape/shapefil.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\meshspatial.obj 7VisualAnalytics\1MeshSpatial\meshspatial.cpp
 
 debug\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
@@ -44010,7 +44747,6 @@ debug\meshtemporal.obj: 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp G:\Qt\5.
 		0LibsIO/IOProjectFile.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\meshtemporal.obj 7VisualAnalytics\2MeshTemporal\meshtemporal.cpp
 
 debug\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
@@ -44378,7 +45114,6 @@ debug\riverspatial.obj: 7VisualAnalytics\3RiverSpatial\riverspatial.cpp G:\Qt\5.
 		0LibsShape/shapefil.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\riverspatial.obj 7VisualAnalytics\3RiverSpatial\riverspatial.cpp
 
 debug\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
@@ -44885,7 +45620,6 @@ debug\rivertemporal.obj: 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp G:\Qt
 		0LibsIO/IOProjectFile.h \
 		globals.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\rivertemporal.obj 7VisualAnalytics\4RiverTemporal\rivertemporal.cpp
 
 debug\qcustomplot.obj: 7VisualAnalytics\QCustomPlot\qcustomplot.cpp 7VisualAnalytics/QCustomPlot/qcustomplot.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
@@ -45376,7 +46110,6 @@ debug\qcustomplot.obj: 7VisualAnalytics\QCustomPlot\qcustomplot.cpp 7VisualAnaly
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qtprintsupportversion.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\qcustomplot.obj 7VisualAnalytics\QCustomPlot\qcustomplot.cpp
 
 debug\qcustomplotmainwindow.obj: 7VisualAnalytics\QCustomPlotMainWindow\qcustomplotmainwindow.cpp 7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
@@ -45874,7 +46607,6 @@ debug\qcustomplotmainwindow.obj: 7VisualAnalytics\QCustomPlotMainWindow\qcustomp
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qtprintsupportversion.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\qcustomplotmainwindow.obj 7VisualAnalytics\QCustomPlotMainWindow\qcustomplotmainwindow.cpp
 
 debug\main.obj: main.cpp main.h \
 		pihmgisdialog.h \
@@ -45989,7 +46721,6 @@ debug\main.obj: main.cpp main.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qdesktopwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qguiapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qinputmethod.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\main.obj main.cpp
 
 debug\moc_attdatafile.obj: moc_attdatafile.cpp 5DataModelLoader/2AttDataFile/attdatafile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -46096,7 +46827,6 @@ debug\moc_attdatafile.obj: moc_attdatafile.cpp 5DataModelLoader/2AttDataFile/att
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_attdatafile.obj moc_attdatafile.cpp
 
 debug\moc_calibdatafile.obj: moc_calibdatafile.cpp 5DataModelLoader/10CalibDataFile/calibdatafile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -46203,7 +46933,6 @@ debug\moc_calibdatafile.obj: moc_calibdatafile.cpp 5DataModelLoader/10CalibDataF
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_calibdatafile.obj moc_calibdatafile.cpp
 
 debug\moc_catchmentgrids.obj: moc_catchmentgrids.cpp 2RasterProcessing/5CatchmentGrids/catchmentgrids.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -46310,7 +47039,6 @@ debug\moc_catchmentgrids.obj: moc_catchmentgrids.cpp 2RasterProcessing/5Catchmen
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_catchmentgrids.obj moc_catchmentgrids.cpp
 
 debug\moc_catchmentpolygon.obj: moc_catchmentpolygon.cpp 2RasterProcessing/7CatchmentPolygon/catchmentpolygon.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -46417,7 +47145,6 @@ debug\moc_catchmentpolygon.obj: moc_catchmentpolygon.cpp 2RasterProcessing/7Catc
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_catchmentpolygon.obj moc_catchmentpolygon.cpp
 
 debug\moc_closeproject.obj: moc_closeproject.cpp 1ProjectManagement/4CloseProject/closeproject.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -46524,7 +47251,6 @@ debug\moc_closeproject.obj: moc_closeproject.cpp 1ProjectManagement/4CloseProjec
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_closeproject.obj moc_closeproject.cpp
 
 debug\moc_delaunaytriangulation.obj: moc_delaunaytriangulation.cpp 4DomainDecomposition/2DelaunayTriangulation/delaunaytriangulation.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -46631,7 +47357,6 @@ debug\moc_delaunaytriangulation.obj: moc_delaunaytriangulation.cpp 4DomainDecomp
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_delaunaytriangulation.obj moc_delaunaytriangulation.cpp
 
 debug\moc_dissolvepolygons.obj: moc_dissolvepolygons.cpp 3VectorProcessing/1DissolvePolygons/dissolvepolygons.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -46740,7 +47465,6 @@ debug\moc_dissolvepolygons.obj: moc_dissolvepolygons.cpp 3VectorProcessing/1Diss
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QException \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qexception.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_dissolvepolygons.obj moc_dissolvepolygons.cpp
 
 debug\moc_fillpits.obj: moc_fillpits.cpp 2RasterProcessing/1FillPits/fillpits.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -46847,7 +47571,6 @@ debug\moc_fillpits.obj: moc_fillpits.cpp 2RasterProcessing/1FillPits/fillpits.h 
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_fillpits.obj moc_fillpits.cpp
 
 debug\moc_flowgrids.obj: moc_flowgrids.cpp 2RasterProcessing/2FlowGrids/flowgrids.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -46954,7 +47677,6 @@ debug\moc_flowgrids.obj: moc_flowgrids.cpp 2RasterProcessing/2FlowGrids/flowgrid
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_flowgrids.obj moc_flowgrids.cpp
 
 debug\moc_geoldatafile.obj: moc_geoldatafile.cpp 5DataModelLoader/5GeolDataFile/geoldatafile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -47061,7 +47783,6 @@ debug\moc_geoldatafile.obj: moc_geoldatafile.cpp 5DataModelLoader/5GeolDataFile/
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_geoldatafile.obj moc_geoldatafile.cpp
 
 debug\moc_ibcdatafile.obj: moc_ibcdatafile.cpp 5DataModelLoader/8IbcDataFile/ibcdatafile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -47168,7 +47889,6 @@ debug\moc_ibcdatafile.obj: moc_ibcdatafile.cpp 5DataModelLoader/8IbcDataFile/ibc
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_ibcdatafile.obj moc_ibcdatafile.cpp
 
 debug\moc_importproject.obj: moc_importproject.cpp 1ProjectManagement/3ImportProject/importproject.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -47275,7 +47995,6 @@ debug\moc_importproject.obj: moc_importproject.cpp 1ProjectManagement/3ImportPro
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_importproject.obj moc_importproject.cpp
 
 debug\moc_initdatafile.obj: moc_initdatafile.cpp 5DataModelLoader/7InitDataFile/initdatafile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -47382,7 +48101,6 @@ debug\moc_initdatafile.obj: moc_initdatafile.cpp 5DataModelLoader/7InitDataFile/
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_initdatafile.obj moc_initdatafile.cpp
 
 debug\moc_lcdatafile.obj: moc_lcdatafile.cpp 5DataModelLoader/6LcDataFile/lcdatafile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -47489,7 +48207,6 @@ debug\moc_lcdatafile.obj: moc_lcdatafile.cpp 5DataModelLoader/6LcDataFile/lcdata
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_lcdatafile.obj moc_lcdatafile.cpp
 
 debug\moc_linkgrids.obj: moc_linkgrids.cpp 2RasterProcessing/4LinkGrids/linkgrids.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -47596,7 +48313,6 @@ debug\moc_linkgrids.obj: moc_linkgrids.cpp 2RasterProcessing/4LinkGrids/linkgrid
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_linkgrids.obj moc_linkgrids.cpp
 
 debug\moc_mergevectorlayers.obj: moc_mergevectorlayers.cpp 3VectorProcessing/5MergeVectorLayers/mergevectorlayers.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -47703,7 +48419,6 @@ debug\moc_mergevectorlayers.obj: moc_mergevectorlayers.cpp 3VectorProcessing/5Me
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_mergevectorlayers.obj moc_mergevectorlayers.cpp
 
 debug\moc_meshdatafile.obj: moc_meshdatafile.cpp 5DataModelLoader/1MeshDataFile/meshdatafile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -47810,7 +48525,6 @@ debug\moc_meshdatafile.obj: moc_meshdatafile.cpp 5DataModelLoader/1MeshDataFile/
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_meshdatafile.obj moc_meshdatafile.cpp
 
 debug\moc_meshspatial.obj: moc_meshspatial.cpp 7VisualAnalytics/1MeshSpatial/meshspatial.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -47917,7 +48631,6 @@ debug\moc_meshspatial.obj: moc_meshspatial.cpp 7VisualAnalytics/1MeshSpatial/mes
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_meshspatial.obj moc_meshspatial.cpp
 
 debug\moc_meshtemporal.obj: moc_meshtemporal.cpp 7VisualAnalytics/2MeshTemporal/meshtemporal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -48024,7 +48737,6 @@ debug\moc_meshtemporal.obj: moc_meshtemporal.cpp 7VisualAnalytics/2MeshTemporal/
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_meshtemporal.obj moc_meshtemporal.cpp
 
 debug\moc_newproject.obj: moc_newproject.cpp 1ProjectManagement/1NewProject/newproject.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -48133,7 +48845,6 @@ debug\moc_newproject.obj: moc_newproject.cpp 1ProjectManagement/1NewProject/newp
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDate \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdatetime.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_newproject.obj moc_newproject.cpp
 
 debug\moc_openproject.obj: moc_openproject.cpp 1ProjectManagement/2OpenProject/openproject.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -48240,7 +48951,6 @@ debug\moc_openproject.obj: moc_openproject.cpp 1ProjectManagement/2OpenProject/o
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_openproject.obj moc_openproject.cpp
 
 debug\moc_paradatafile.obj: moc_paradatafile.cpp 5DataModelLoader/9ParaDataFile/paradatafile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -48347,7 +49057,6 @@ debug\moc_paradatafile.obj: moc_paradatafile.cpp 5DataModelLoader/9ParaDataFile/
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_paradatafile.obj moc_paradatafile.cpp
 
 debug\moc_pihmgisdialog.obj: moc_pihmgisdialog.cpp pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QWidget \
@@ -48454,7 +49163,6 @@ debug\moc_pihmgisdialog.obj: moc_pihmgisdialog.cpp pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_pihmgisdialog.obj moc_pihmgisdialog.cpp
 
 debug\moc_pihmsimulation.obj: moc_pihmsimulation.cpp 6PIHMSimulation/1PIHM_v2.2/pihmsimulation.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -48567,7 +49275,6 @@ debug\moc_pihmsimulation.obj: moc_pihmsimulation.cpp 6PIHMSimulation/1PIHM_v2.2/
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QProgressBar \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qprogressbar.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qframe.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_pihmsimulation.obj moc_pihmsimulation.cpp
 
 debug\moc_polygontopolylines.obj: moc_polygontopolylines.cpp 3VectorProcessing/2PolygonToPolylines/polygontopolylines.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -48674,7 +49381,6 @@ debug\moc_polygontopolylines.obj: moc_polygontopolylines.cpp 3VectorProcessing/2
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_polygontopolylines.obj moc_polygontopolylines.cpp
 
 debug\moc_polylinetolines.obj: moc_polylinetolines.cpp 3VectorProcessing/4PolylineToLines/polylinetolines.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -48781,7 +49487,6 @@ debug\moc_polylinetolines.obj: moc_polylinetolines.cpp 3VectorProcessing/4Polyli
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_polylinetolines.obj moc_polylinetolines.cpp
 
 debug\moc_qcustomplot.obj: moc_qcustomplot.cpp 7VisualAnalytics/QCustomPlot/qcustomplot.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QObject \
@@ -49272,7 +49977,6 @@ debug\moc_qcustomplot.obj: moc_qcustomplot.cpp 7VisualAnalytics/QCustomPlot/qcus
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qprintpreviewwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtPrintSupport\qtprintsupportversion.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_qcustomplot.obj moc_qcustomplot.cpp
 
 debug\moc_qcustomplotmainwindow.obj: moc_qcustomplotmainwindow.cpp 7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QMainWindow \
@@ -49381,7 +50085,6 @@ debug\moc_qcustomplotmainwindow.obj: moc_qcustomplotmainwindow.cpp 7VisualAnalyt
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qtabwidget.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qicon.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_qcustomplotmainwindow.obj moc_qcustomplotmainwindow.cpp
 
 debug\moc_readtopology.obj: moc_readtopology.cpp 4DomainDecomposition/1ReadTopology/readtopology.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -49488,7 +50191,6 @@ debug\moc_readtopology.obj: moc_readtopology.cpp 4DomainDecomposition/1ReadTopol
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_readtopology.obj moc_readtopology.cpp
 
 debug\moc_rivdatafile.obj: moc_rivdatafile.cpp 5DataModelLoader/3RivDataFile/rivdatafile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -49595,7 +50297,6 @@ debug\moc_rivdatafile.obj: moc_rivdatafile.cpp 5DataModelLoader/3RivDataFile/riv
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_rivdatafile.obj moc_rivdatafile.cpp
 
 debug\moc_riverspatial.obj: moc_riverspatial.cpp 7VisualAnalytics/3RiverSpatial/riverspatial.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -49702,7 +50403,6 @@ debug\moc_riverspatial.obj: moc_riverspatial.cpp 7VisualAnalytics/3RiverSpatial/
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_riverspatial.obj moc_riverspatial.cpp
 
 debug\moc_rivertemporal.obj: moc_rivertemporal.cpp 7VisualAnalytics/4RiverTemporal/rivertemporal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -49809,7 +50509,6 @@ debug\moc_rivertemporal.obj: moc_rivertemporal.cpp 7VisualAnalytics/4RiverTempor
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_rivertemporal.obj moc_rivertemporal.cpp
 
 debug\moc_simplifypolylines.obj: moc_simplifypolylines.cpp 3VectorProcessing/3SimplifyPolylines/simplifypolylines.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -49916,7 +50615,6 @@ debug\moc_simplifypolylines.obj: moc_simplifypolylines.cpp 3VectorProcessing/3Si
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_simplifypolylines.obj moc_simplifypolylines.cpp
 
 debug\moc_soildatafile.obj: moc_soildatafile.cpp 5DataModelLoader/4SoilDataFile/soildatafile.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -50023,7 +50721,6 @@ debug\moc_soildatafile.obj: moc_soildatafile.cpp 5DataModelLoader/4SoilDataFile/
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_soildatafile.obj moc_soildatafile.cpp
 
 debug\moc_streamgrids.obj: moc_streamgrids.cpp 2RasterProcessing/3StreamGrids/streamgrids.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -50130,7 +50827,6 @@ debug\moc_streamgrids.obj: moc_streamgrids.cpp 2RasterProcessing/3StreamGrids/st
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_streamgrids.obj moc_streamgrids.cpp
 
 debug\moc_streampolyline.obj: moc_streampolyline.cpp 2RasterProcessing/6StreamPolyline/streampolyline.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -50237,7 +50933,6 @@ debug\moc_streampolyline.obj: moc_streampolyline.cpp 2RasterProcessing/6StreamPo
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_streampolyline.obj moc_streampolyline.cpp
 
 debug\moc_tinshapelayer.obj: moc_tinshapelayer.cpp 4DomainDecomposition/3TINShapeLayer/tinshapelayer.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \
@@ -50344,7 +51039,6 @@ debug\moc_tinshapelayer.obj: moc_tinshapelayer.cpp 4DomainDecomposition/3TINShap
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_tinshapelayer.obj moc_tinshapelayer.cpp
 
 debug\pihmgisdialog.obj: pihmgisdialog.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
@@ -50552,7 +51246,6 @@ debug\pihmgisdialog.obj: pihmgisdialog.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCo
 		7VisualAnalytics/3RiverSpatial/riverspatial.h \
 		7VisualAnalytics/4RiverTemporal/rivertemporal.h \
 		globals.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\pihmgisdialog.obj pihmgisdialog.cpp
 
 debug\qrc_Icons.obj: qrc_Icons.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\qglobal.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qconfig-bootstrapped.h \
@@ -50575,121 +51268,82 @@ debug\qrc_Icons.obj: qrc_Icons.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCore\qglob
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qmutex.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qnumeric.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qversiontagging.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\qrc_Icons.obj qrc_Icons.cpp
 
 debug\qrc_Icons.obj: debug\qrc_Icons.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\qrc_Icons.obj debug\qrc_Icons.cpp
 
 debug\moc_pihmgisdialog.obj: debug\moc_pihmgisdialog.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_pihmgisdialog.obj debug\moc_pihmgisdialog.cpp
 
 debug\moc_newproject.obj: debug\moc_newproject.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_newproject.obj debug\moc_newproject.cpp
 
 debug\moc_openproject.obj: debug\moc_openproject.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_openproject.obj debug\moc_openproject.cpp
 
 debug\moc_importproject.obj: debug\moc_importproject.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_importproject.obj debug\moc_importproject.cpp
 
 debug\moc_closeproject.obj: debug\moc_closeproject.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_closeproject.obj debug\moc_closeproject.cpp
 
 debug\moc_fillpits.obj: debug\moc_fillpits.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_fillpits.obj debug\moc_fillpits.cpp
 
 debug\moc_flowgrids.obj: debug\moc_flowgrids.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_flowgrids.obj debug\moc_flowgrids.cpp
 
 debug\moc_streamgrids.obj: debug\moc_streamgrids.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_streamgrids.obj debug\moc_streamgrids.cpp
 
 debug\moc_linkgrids.obj: debug\moc_linkgrids.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_linkgrids.obj debug\moc_linkgrids.cpp
 
 debug\moc_catchmentgrids.obj: debug\moc_catchmentgrids.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_catchmentgrids.obj debug\moc_catchmentgrids.cpp
 
 debug\moc_streampolyline.obj: debug\moc_streampolyline.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_streampolyline.obj debug\moc_streampolyline.cpp
 
 debug\moc_catchmentpolygon.obj: debug\moc_catchmentpolygon.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_catchmentpolygon.obj debug\moc_catchmentpolygon.cpp
 
 debug\moc_dissolvepolygons.obj: debug\moc_dissolvepolygons.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_dissolvepolygons.obj debug\moc_dissolvepolygons.cpp
 
 debug\moc_polygontopolylines.obj: debug\moc_polygontopolylines.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_polygontopolylines.obj debug\moc_polygontopolylines.cpp
 
 debug\moc_simplifypolylines.obj: debug\moc_simplifypolylines.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_simplifypolylines.obj debug\moc_simplifypolylines.cpp
 
 debug\moc_polylinetolines.obj: debug\moc_polylinetolines.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_polylinetolines.obj debug\moc_polylinetolines.cpp
 
 debug\moc_mergevectorlayers.obj: debug\moc_mergevectorlayers.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_mergevectorlayers.obj debug\moc_mergevectorlayers.cpp
 
 debug\moc_readtopology.obj: debug\moc_readtopology.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_readtopology.obj debug\moc_readtopology.cpp
 
 debug\moc_delaunaytriangulation.obj: debug\moc_delaunaytriangulation.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_delaunaytriangulation.obj debug\moc_delaunaytriangulation.cpp
 
 debug\moc_tinshapelayer.obj: debug\moc_tinshapelayer.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_tinshapelayer.obj debug\moc_tinshapelayer.cpp
 
 debug\moc_meshdatafile.obj: debug\moc_meshdatafile.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_meshdatafile.obj debug\moc_meshdatafile.cpp
 
 debug\moc_attdatafile.obj: debug\moc_attdatafile.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_attdatafile.obj debug\moc_attdatafile.cpp
 
 debug\moc_rivdatafile.obj: debug\moc_rivdatafile.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_rivdatafile.obj debug\moc_rivdatafile.cpp
 
 debug\moc_soildatafile.obj: debug\moc_soildatafile.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_soildatafile.obj debug\moc_soildatafile.cpp
 
 debug\moc_geoldatafile.obj: debug\moc_geoldatafile.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_geoldatafile.obj debug\moc_geoldatafile.cpp
 
 debug\moc_lcdatafile.obj: debug\moc_lcdatafile.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_lcdatafile.obj debug\moc_lcdatafile.cpp
 
 debug\moc_initdatafile.obj: debug\moc_initdatafile.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_initdatafile.obj debug\moc_initdatafile.cpp
 
 debug\moc_ibcdatafile.obj: debug\moc_ibcdatafile.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_ibcdatafile.obj debug\moc_ibcdatafile.cpp
 
 debug\moc_paradatafile.obj: debug\moc_paradatafile.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_paradatafile.obj debug\moc_paradatafile.cpp
 
 debug\moc_calibdatafile.obj: debug\moc_calibdatafile.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_calibdatafile.obj debug\moc_calibdatafile.cpp
 
 debug\moc_pihmsimulation.obj: debug\moc_pihmsimulation.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_pihmsimulation.obj debug\moc_pihmsimulation.cpp
 
 debug\moc_rivertemporal.obj: debug\moc_rivertemporal.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_rivertemporal.obj debug\moc_rivertemporal.cpp
 
 debug\moc_qcustomplotmainwindow.obj: debug\moc_qcustomplotmainwindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_qcustomplotmainwindow.obj debug\moc_qcustomplotmainwindow.cpp
 
 debug\moc_qcustomplot.obj: debug\moc_qcustomplot.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_qcustomplot.obj debug\moc_qcustomplot.cpp
 
 debug\moc_meshtemporal.obj: debug\moc_meshtemporal.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_meshtemporal.obj debug\moc_meshtemporal.cpp
 
 debug\moc_meshspatial.obj: debug\moc_meshspatial.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_meshspatial.obj debug\moc_meshspatial.cpp
 
 debug\moc_riverspatial.obj: debug\moc_riverspatial.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\moc_riverspatial.obj debug\moc_riverspatial.cpp
 
 ####### Install
 
