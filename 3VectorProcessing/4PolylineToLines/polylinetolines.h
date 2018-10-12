@@ -16,7 +16,6 @@ public:
     ~PolylineToLines();
 
     QString LogsString;
-    //QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonAdd_clicked();

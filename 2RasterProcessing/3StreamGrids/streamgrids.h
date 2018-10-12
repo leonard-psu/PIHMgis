@@ -16,7 +16,6 @@ public:
     ~StreamGrids();
 
     QString LogsString;
-    // QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonFlowAccGrids_clicked();
@@ -39,9 +38,11 @@ private slots:
 
     bool Check_FlowAccGrids_Input(QString file);
 
-    bool Check_StreamGrids_Output(QString file, bool message);
-
     bool Check_Threshold_Input(QString threshold);
+
+    bool Check_StreamGrids_Output(QString file, bool color_and_message_if_exists);
+
+    bool Load_Project_Settings();
 
 private:
     Ui::StreamGrids *ui;

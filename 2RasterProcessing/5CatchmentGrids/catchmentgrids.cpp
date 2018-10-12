@@ -46,62 +46,7 @@ CatchmentGrids::CatchmentGrids(QWidget *parent, QString filename) :
 
         if(found_file)
         {
-            QString LinkGrids_filename;
-            QString FlowDirGrids_filename;
-            QString CatchmentGrids_filename;
-
-            QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("LinkGrids"));
-
-            if ( ModuleStringList.length() > 0  )
-            {
-                LinkGrids_filename = ModuleStringList.at(3);
-            }
-
-            ModuleStringList = ReadModuleLine(filename_open_project,tr("StreamGrids"));
-            if ( ModuleStringList.length() > 0  )
-            {
-                CatchmentGrids_filename = filename_open_project +"/1RasterProcessing/Catchment"+ModuleStringList.at(3)+".asc";
-            }
-
-            ModuleStringList = ReadModuleLine(filename_open_project,tr("FlowGrids"));
-            if ( ModuleStringList.length() > 0  )
-            {
-                FlowDirGrids_filename = ModuleStringList.at(2);
-            }
-
-            ModuleStringList = ReadModuleLine(filename_open_project,tr("CatchmentGrids"));
-
-            if ( ModuleStringList.length() > 0 )
-            {
-                LinkGrids_filename = ModuleStringList.at(1);
-                FlowDirGrids_filename = ModuleStringList.at(2);
-                CatchmentGrids_filename = ModuleStringList.at(3);
-            }
-
-            bool LinkGrids_check = Check_LinkGrids_Input(LinkGrids_filename);
-            if(!LinkGrids_check)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: LinkGrids input does not exist. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-
-            bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGrids_filename);
-            if(!FlowDirGrids_check)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrid input does not exist. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-
-            bool CatchmentGrids_check = Check_CatchmentGrids_Output(CatchmentGrids_filename, true);
-            if(CatchmentGrids_check)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: CatchmentGrids output already exists. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-
+            Load_Project_Settings();
         }
 
         pushButtonSetFocus();
@@ -129,6 +74,75 @@ CatchmentGrids::~CatchmentGrids()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CatchmentGrids::Load_Project_Settings()
+{
+    if (print_debug_messages)
+        qDebug() << "INFO: CatchmentGrids::Load_Project_Settings()";
+
+    try {
+
+        QString LinkGrids_filename;
+        QString FlowDirGrids_filename;
+        QString CatchmentGrids_filename;
+
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("LinkGrids"));
+
+        if ( ModuleStringList.length() > 0  )
+        {
+            LinkGrids_filename = ModuleStringList.at(3);
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("StreamGrids"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            CatchmentGrids_filename = filename_open_project +"/1RasterProcessing/Catchment"+ModuleStringList.at(3)+".asc";
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("FlowGrids"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            FlowDirGrids_filename = ModuleStringList.at(2);
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("CatchmentGrids"));
+
+        if ( ModuleStringList.length() > 0 )
+        {
+            LinkGrids_filename = ModuleStringList.at(1);
+            FlowDirGrids_filename = ModuleStringList.at(2);
+            CatchmentGrids_filename = ModuleStringList.at(3);
+        }
+
+        bool LinkGrids_check = Check_LinkGrids_Input(LinkGrids_filename);
+        if(!LinkGrids_check)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: LinkGrids input does not exist. </span>") +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+        }
+
+        bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGrids_filename);
+        if(!FlowDirGrids_check)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrid input does not exist. </span>") +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+        }
+
+        bool CatchmentGrids_check = Check_CatchmentGrids_Output(CatchmentGrids_filename, true);
+
+
+    } catch (...) {
+        qDebug() << "Error: CatchmentGrids::Load_Project_Settings is returning w/o checking";
+        return false;
+    }
+
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if input file exists (returns true) or does not (returns false)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CatchmentGrids::Check_LinkGrids_Input(QString file)
@@ -148,7 +162,7 @@ bool CatchmentGrids::Check_LinkGrids_Input(QString file)
         }
         else
         {
-            ui->lineEditLinkGrids->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditLinkGrids->setStyleSheet("color: red;");
             ui->lineEditLinkGrids->setText(file);
 
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: LinkGrids input does not exist: </span>") + file +tr("<br>"));
@@ -186,7 +200,7 @@ bool CatchmentGrids::Check_FlowDirGrids_Input(QString file)
         }
         else
         {
-            ui->lineEditFlowDirGrids->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditFlowDirGrids->setStyleSheet("color: red;");
             ui->lineEditFlowDirGrids->setText(file);
 
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrids input does not exist: </span>") + file +tr("<br>"));
@@ -207,7 +221,7 @@ bool CatchmentGrids::Check_FlowDirGrids_Input(QString file)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if CatchmentGrids OUTPUT file exists (returns true) or does not (returns false)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CatchmentGrids::Check_CatchmentGrids_Output(QString file, bool message)
+bool CatchmentGrids::Check_CatchmentGrids_Output(QString file, bool color_and_message_if_exists)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Check_CatchmentGrids_Output()";
@@ -218,21 +232,24 @@ bool CatchmentGrids::Check_CatchmentGrids_Output(QString file, bool message)
 
         if(  fileExists(file) )
         {
-            ui->lineEditCatchmentGrids->setStyleSheet("color: black;");
+            if(color_and_message_if_exists)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: CatchmentGrids output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
+            ui->lineEditCatchmentGrids->setStyleSheet("color: red;");
             ui->lineEditCatchmentGrids->setText(file);
             result = true;
         }
         else
         {
-            ui->lineEditCatchmentGrids->setStyleSheet("color: rgb(180, 0, 0);");
+
+            ui->lineEditCatchmentGrids->setStyleSheet("color: black;");
             ui->lineEditCatchmentGrids->setText(file);
 
-            if(message)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: CatchmentGrids output does not exist: </span>") + file +tr(" You will need to redo this step.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
+
             result = false;
         }
 
@@ -447,14 +464,11 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Does output already exist?
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool CatchmentGridsCheck = Check_CatchmentGrids_Output(CatchmentGrids_filename, false);
+        bool CatchmentGridsCheck = Check_CatchmentGrids_Output(CatchmentGrids_filename, true);
         if(CatchmentGridsCheck)
-         {
-             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Catchment Grid Output already exists </span>")+tr("<br>"));
-             ui->textBrowserLogs->setHtml(LogsString);
-             ui->textBrowserLogs->repaint();
-             return;
-         }
+        {
+            return;
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
@@ -500,12 +514,9 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check output filenames
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        CatchmentGridsCheck = Check_CatchmentGrids_Output(CatchmentGrids_filename, false);
+        CatchmentGridsCheck = Check_CatchmentGrids_Output(CatchmentGrids_filename, true);
         if(!CatchmentGridsCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: CatchmentGrids failed, file does not exist: </span>") + CatchmentGrids_filename +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
             return;
         }
 
@@ -557,7 +568,7 @@ void CatchmentGrids::on_pushButtonClose_clicked()
         qDebug() << "INFO: Start on_pushButtonClose_clicked()";
 
     try {
-       // QStringList default_params; default_params << "WORKFLOW2" << "STRPOLY";
+        // QStringList default_params; default_params << "WORKFLOW2" << "STRPOLY";
         //QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
     } catch (...) {

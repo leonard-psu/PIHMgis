@@ -36,6 +36,7 @@ private slots:
 
     void Clear_Log();
 
+    bool Load_Project_Settings();
 
 private:
     Ui::FillPits *ui;

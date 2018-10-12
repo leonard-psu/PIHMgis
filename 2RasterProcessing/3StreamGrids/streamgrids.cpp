@@ -49,54 +49,7 @@ StreamGrids::StreamGrids(QWidget *parent, QString filename) :
 
         if(found_file)
         {
-            QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("FlowGrids"));
-            if ( ModuleStringList.length() > 0  )
-            {
-                QString FlowAccGrids = ModuleStringList.at(3);
-
-                //Suggested file name
-                QString threshold = ui->lineEditThreshold->text();
-                QString StreamGrids = filename_open_project+"/1RasterProcessing/Stream" + threshold + ".asc";
-
-                bool flowacc_check = Check_FlowAccGrids_Input(FlowAccGrids);
-                if(!flowacc_check)
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowAcc input does not exist. </span>") +tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                }
-
-                ui->lineEditStreamGrids->setText(StreamGrids);
-                //ui->lineEditThreshold->setText(""); //Why blank it, as threshold is used in name?
-
-                bool streamgrids_check = Check_StreamGrids_Output(StreamGrids, true);
-                if(streamgrids_check)
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">WARNING: Output already exist. </span>") +tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                }
-            }
-
-            ModuleStringList = ReadModuleLine(filename_open_project,tr("StreamGrids"));
-            if ( ModuleStringList.length() > 0  )
-            {
-                QString FlowAccGrids = ModuleStringList.at(1);
-                QString StreamGrids = ModuleStringList.at(2);
-                QString Threshold = ModuleStringList.at(3);
-
-                bool flowacc_check = Check_FlowAccGrids_Input(FlowAccGrids);
-                bool streamgrids_check = Check_StreamGrids_Output(StreamGrids, true);
-                bool threshold_check = Check_Threshold_Input(Threshold);
-
-                if(streamgrids_check)
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">WARNING: Output already exist. </span>") +tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                }
-            }
-
+            Load_Project_Settings();
         }
 
         pushButtonSetFocus();
@@ -120,6 +73,58 @@ StreamGrids::~StreamGrids()
     } catch (...) {
         qDebug() << "Error: ~StreamGrids is returning w/o checking";
     }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool StreamGrids::Load_Project_Settings()
+{
+    try {
+
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("FlowGrids"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            QString FlowAccGrids = ModuleStringList.at(3);
+
+            //Suggested file name
+            QString threshold = ui->lineEditThreshold->text();
+            QString StreamGrids = filename_open_project+"/1RasterProcessing/Stream" + threshold + ".asc";
+
+            bool flowacc_check = Check_FlowAccGrids_Input(FlowAccGrids);
+            if(!flowacc_check)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowAcc input does not exist. </span>") +tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
+            ui->lineEditStreamGrids->setText(StreamGrids);
+            //ui->lineEditThreshold->setText(""); //Why blank it, as threshold is used in name?
+
+            bool streamgrids_check = Check_StreamGrids_Output(StreamGrids, true);
+
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("StreamGrids"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            QString FlowAccGrids = ModuleStringList.at(1);
+            QString StreamGrids = ModuleStringList.at(2);
+            QString Threshold = ModuleStringList.at(3);
+
+            bool flowacc_check = Check_FlowAccGrids_Input(FlowAccGrids);
+            bool threshold_check = Check_Threshold_Input(Threshold);
+            bool streamgrids_check = Check_StreamGrids_Output(StreamGrids, true);
+
+        }
+
+    } catch (...) {
+        qDebug() << "Error: StreamGrids::Load_Project_Settings is returning w/o checking";
+        return false;
+    }
+
+    return true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +172,7 @@ bool StreamGrids::Check_Threshold_Input(QString Threshold)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if StreamGrids OUTPUT file exists (returns true) or does not (returns false)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool StreamGrids::Check_StreamGrids_Output(QString file, bool message)
+bool StreamGrids::Check_StreamGrids_Output(QString file, bool color_and_message_if_exists)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Check_StreamGrids_Input()";
@@ -178,21 +183,22 @@ bool StreamGrids::Check_StreamGrids_Output(QString file, bool message)
 
         if(  fileExists(file) )
         {
-            ui->lineEditStreamGrids->setStyleSheet("color: black;");
+            if(color_and_message_if_exists)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: StreamGrids output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
+            ui->lineEditStreamGrids->setStyleSheet("color: red;");
             ui->lineEditStreamGrids->setText(file);
             result = true;
         }
         else
         {
-            ui->lineEditStreamGrids->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditStreamGrids->setStyleSheet("color: black;");
             ui->lineEditStreamGrids->setText(file);
 
-            if(message)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: StreamGrids output does not exist: </span>") + file +tr(" You will need to redo this step.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
             result = false;
         }
 
@@ -225,7 +231,7 @@ bool StreamGrids::Check_FlowAccGrids_Input(QString file )
         }
         else
         {
-            ui->lineEditFlowAccGrids->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditFlowAccGrids->setStyleSheet("color: red;");
             ui->lineEditFlowAccGrids->setText(file);
 
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowAcc input does not exist: </span>") + file +tr("<br>"));
@@ -546,12 +552,9 @@ void StreamGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Does output already exist?
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool streamgrids_check = Check_StreamGrids_Output(StreamGrids, false);
+        bool streamgrids_check = Check_StreamGrids_Output(StreamGrids, true);
         if(streamgrids_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Stream Grid Output already exists </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
             return;
         }
 
@@ -593,12 +596,9 @@ void StreamGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check output filenames
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        streamgrids_check = Check_StreamGrids_Output(StreamGrids, false);
+        streamgrids_check = Check_StreamGrids_Output(StreamGrids, true);
         if(!streamgrids_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: StreamGrids failed, file does not exist: </span>") + StreamGrids +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
             return;
         }
 

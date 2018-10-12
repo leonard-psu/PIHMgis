@@ -16,7 +16,6 @@ public:
     ~SimplifyPolylines();
 
     QString LogsString;
-    //QStringList ProjectIOStringList;
     int DEMResolution;
 
 public slots:

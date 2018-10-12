@@ -147,16 +147,8 @@ bool MergeVectorLayers::Load_Project_Settings()
 
         QString outputfile = user_pihmgis_root_folder+"/2VectorProcessing/MergeVectorLayer" + ID_String + ".shp";
         bool outputfile_check = Check_File_Valid(outputfile);
-        ui->lineEditMergeLayer->setText(outputfile);
-        if(outputfile_check)
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + outputfile + tr(" output already exists. </span>") +tr("<br>"));
-            ui->lineEditMergeLayer->setStyleSheet("Qt::red");
-        }
-        else
-        {
-            ui->lineEditMergeLayer->setStyleSheet("Qt::black");
-        }
+
+        Check_MergeLayer_Output(outputfile, true);
 
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
@@ -399,22 +391,11 @@ void MergeVectorLayers::on_pushButtonMergeLayer_clicked()
 
             bool file1_check = Check_File_Valid(MergeVectorFileName);
 
-            ui->lineEditMergeLayer->setText(MergeVectorFileName);
-            if(file1_check)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + MergeVectorFileName + tr(" output already exists. </span>") +tr("<br>"));
-                ui->lineEditMergeLayer->setStyleSheet("Qt::red");
-            }
-            else
-            {
-                ui->lineEditMergeLayer->setStyleSheet("Qt::black");
-            }
+            Check_MergeLayer_Output(MergeVectorFileName, true);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: MergeVectorLayers::on_pushButtonMergeLayer_clicked() is returning w/o checking";
@@ -636,4 +617,47 @@ void MergeVectorLayers::on_pushButtonHelp_clicked()
     } catch (...) {
         qDebug() << "Error: MergeVectorLayers::on_pushButtonHelp_clicked() is returning w/o checking";
     }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if MergeLayer OUTPUT file exists (returns true) or does not (returns false)
+// Will color red and warning if exists with color_and_message_if_exists=true
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool MergeVectorLayers::Check_MergeLayer_Output(QString file, bool color_and_message_if_exists){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_MergeLayer_Output()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            if(color_and_message_if_exists)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: MergeLayer output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
+            ui->lineEditMergeLayer->setStyleSheet("color: red;");
+            ui->lineEditMergeLayer->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditMergeLayer->setStyleSheet("color: black;");
+            ui->lineEditMergeLayer->setText(file);
+
+            result = false;
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: Check_MergeLayer_Output is returning w/o checking";
+        result = false;
+    }
+
+    return result;
 }

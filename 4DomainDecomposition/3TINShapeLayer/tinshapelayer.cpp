@@ -151,7 +151,7 @@ bool TINShapeLayer::Check_Element_Input(QString file){
         }
         else
         {
-            ui->lineEditElementFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditElementFile->setStyleSheet("color: red;");
             ui->lineEditElementFile->setText(file);
 
             result = false;
@@ -186,7 +186,7 @@ bool TINShapeLayer::Check_Node_Input(QString file){
         }
         else
         {
-            ui->lineEditNodeFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditNodeFile->setStyleSheet("color: red;");
             ui->lineEditNodeFile->setText(file);
 
             result = false;
@@ -221,9 +221,9 @@ bool TINShapeLayer::Check_TinShape_Output(QString file, bool color_and_message_i
                 LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Tinshape output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
                 ui->textBrowserLogs->setHtml(LogsString);
                 ui->textBrowserLogs->repaint();
-                ui->lineEditTINFile->setStyleSheet("color: rgb(180, 0, 0);");
             }
 
+            ui->lineEditTINFile->setStyleSheet("color: red;");
             ui->lineEditTINFile->setText(file);
             result = true;
         }

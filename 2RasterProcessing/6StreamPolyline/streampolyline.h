@@ -16,9 +16,9 @@ public:
     ~StreamPolyline();
 
     QString LogsString;
-    //QStringList ProjectIOStringList;
 
 private slots:
+
     void on_pushButtonStreamGrids_clicked();
 
     void on_pushButtonFlowDirGrids_clicked();
@@ -39,8 +39,9 @@ private slots:
 
     bool Check_FlowDirGrids_Input(QString file);
 
-    bool Check_StreamPolyline_Output(QString file, bool message);
+    bool Check_StreamPolyline_Output(QString file, bool color_and_message_if_exists);
 
+    bool Load_Project_Settings();
 
 private:
     Ui::StreamPolyline *ui;

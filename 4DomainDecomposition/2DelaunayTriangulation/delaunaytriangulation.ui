@@ -880,7 +880,7 @@
      <x>15</x>
      <y>100</y>
      <width>581</width>
-     <height>100</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="font">
@@ -897,14 +897,14 @@
     <property name="geometry">
      <rect>
       <x>21</x>
-      <y>58</y>
+      <y>46</y>
       <width>141</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
@@ -918,7 +918,7 @@
     <property name="geometry">
      <rect>
       <x>21</x>
-      <y>31</y>
+      <y>23</y>
       <width>141</width>
       <height>20</height>
      </rect>
@@ -943,14 +943,14 @@
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>58</y>
+      <y>46</y>
       <width>231</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
@@ -964,7 +964,7 @@
     <property name="geometry">
      <rect>
       <x>219</x>
-      <y>31</y>
+      <y>23</y>
       <width>151</width>
       <height>20</height>
      </rect>
@@ -989,7 +989,7 @@
     <property name="geometry">
      <rect>
       <x>429</x>
-      <y>31</y>
+      <y>23</y>
       <width>131</width>
       <height>20</height>
      </rect>
@@ -1020,14 +1020,14 @@ i  use the incremental algorith rather than divide and conquer</string>
     <property name="geometry">
      <rect>
       <x>429</x>
-      <y>58</y>
+      <y>46</y>
       <width>131</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
@@ -1042,7 +1042,7 @@ i  use the incremental algorith rather than divide and conquer</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>200</y>
+     <y>184</y>
      <width>581</width>
      <height>51</height>
     </rect>
@@ -1080,7 +1080,7 @@ i  use the incremental algorith rather than divide and conquer</string>
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>336</x>
       <y>10</y>
       <width>113</width>
       <height>32</height>
@@ -1104,7 +1104,7 @@ i  use the incremental algorith rather than divide and conquer</string>
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>455</x>
+      <x>461</x>
       <y>10</y>
       <width>113</width>
       <height>32</height>
@@ -1613,10 +1613,10 @@ i  use the incremental algorith rather than divide and conquer</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
-      <weight>50</weight>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
       <italic>false</italic>
-      <bold>false</bold>
+      <bold>true</bold>
      </font>
     </property>
    </widget>
@@ -1678,13 +1678,15 @@ i  use the incremental algorith rather than divide and conquer</string>
    <property name="geometry">
     <rect>
      <x>13</x>
-     <y>255</y>
+     <y>245</y>
      <width>581</width>
-     <height>141</height>
+     <height>151</height>
     </rect>
    </property>
    <property name="font">
     <font>
+     <family>Arial</family>
+     <pointsize>11</pointsize>
      <italic>false</italic>
     </font>
    </property>
@@ -1692,7 +1694,7 @@ i  use the incremental algorith rather than divide and conquer</string>
     <set>QTextEdit::AutoAll</set>
    </property>
    <property name="lineWrapMode">
-    <enum>QTextEdit::WidgetWidth</enum>
+    <enum>QTextEdit::NoWrap</enum>
    </property>
   </widget>
   <widget class="QGroupBox" name="groupBox">
@@ -1748,15 +1750,15 @@ i  use the incremental algorith rather than divide and conquer</string>
    <widget class="QLineEdit" name="lineEditFIND">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>50</y>
-      <width>561</width>
+      <width>571</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>11</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>

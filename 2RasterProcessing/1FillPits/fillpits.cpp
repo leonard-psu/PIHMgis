@@ -51,23 +51,7 @@ FillPits::FillPits(QWidget *parent, QString filename) :
 
         if(found_file)
         {
-            QStringList ModuleStringList = ReadModuleLine(filename_open_project, tr("FillPits"));
-
-            if ( ModuleStringList.length() > 0 )
-            {
-                QString dem = ModuleStringList.at(1);
-                QString fillpits = ModuleStringList.at(2);
-
-                bool dem_check = Check_DEM_Input(dem);
-                bool fill_check = Check_Fillpit_Output(fillpits, true);
-
-                if(dem_check && fill_check)
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">INFO: Both input and output already exist. </span>") +tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                }
-            }
+            Load_Project_Settings();
         }
 
         pushButtonSetFocus();
@@ -94,6 +78,38 @@ FillPits::~FillPits()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool FillPits::Load_Project_Settings()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: FillPits::Load_Project_Settings()";
+
+    try {
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project, tr("FillPits"));
+
+        if ( ModuleStringList.length() > 0 )
+        {
+            QString dem = ModuleStringList.at(1);
+            QString fillpits = ModuleStringList.at(2);
+
+            bool dem_check = Check_DEM_Input(dem);
+
+            bool fill_check = Check_Fillpit_Output(fillpits, true);
+
+        }
+
+        pushButtonSetFocus();
+
+    } catch (...) {
+        qDebug() << "Error: FillPits::Load_Project_Settings is returning w/o checking";
+        return false;
+    }
+
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if DEM input file exists (returns true) or does not (returns false)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool FillPits::Check_DEM_Input(QString dem )
@@ -113,7 +129,7 @@ bool FillPits::Check_DEM_Input(QString dem )
         }
         else
         {
-            ui->lineEditDEM->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditDEM->setStyleSheet("color: red;");
             ui->lineEditDEM->setText(dem);
 
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: DEM input does not exist: </span>") + dem +tr("<br>"));
@@ -131,11 +147,11 @@ bool FillPits::Check_DEM_Input(QString dem )
     return result;
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if Pitfilled DEM output file exists (returns true) or does not (returns false)
+// Will color red and warning if exists with color_and_message_if_exists=true
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool FillPits::Check_Fillpit_Output(QString fillpits, bool message )
+bool FillPits::Check_Fillpit_Output(QString fillpits, bool color_and_message_if_exists )
 {
     if(print_debug_messages)
         qDebug() << "INFO: Check_Fillpit_Output()";
@@ -146,23 +162,21 @@ bool FillPits::Check_Fillpit_Output(QString fillpits, bool message )
 
         if(  fileExists(fillpits) )
         {
+            if(color_and_message_if_exists)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: fillpits output already exists: </span>") + fillpits +tr(" You may need to delete this file(s).<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
 
-            ui->lineEditFillPits->setStyleSheet("color: black;");
+            ui->lineEditFillPits->setStyleSheet("color: red;");
             ui->lineEditFillPits->setText(fillpits);
             result = true;
         }
         else
         {
-            ui->lineEditFillPits->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditFillPits->setStyleSheet("color: black;");
             ui->lineEditFillPits->setText(fillpits);
-
-            if(message)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: fillpits output does not exist: </span>") + fillpits +tr(" You will need to redo this step.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-
 
             result = false;
         }
@@ -279,7 +293,7 @@ void FillPits::on_pushButtonFillPits_clicked()
         if ( FillPitFileName != nullptr)
         {
             Check_DEM_Input(ui->lineEditDEM->text());
-            Check_Fillpit_Output(FillPitFileName, false);
+            Check_Fillpit_Output(FillPitFileName, true);
             pushButtonSetFocus();
         }
         else
@@ -328,9 +342,6 @@ void FillPits::on_pushButtonRun_clicked()
         bool fill_check = Check_Fillpit_Output(filename_fill, true);
         if(fill_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Fillpit output already exists: </span>") + filename_fill +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
             return;
         }
 
@@ -398,12 +409,9 @@ void FillPits::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check output file
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        fill_check = Check_Fillpit_Output(filename_fill, false);
+        fill_check = Check_Fillpit_Output(filename_fill, true);
         if(!fill_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Fillpit failed, file does not exist: </span>") + filename_fill +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
             return;
         }
         qint64 size = file_Size(filename_fill);

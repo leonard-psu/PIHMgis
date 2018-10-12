@@ -16,7 +16,6 @@ public:
     ~PolygonToPolylines();
 
     QString LogsString;
-    //QStringList ProjectIOStringList;
 
 private slots:
 

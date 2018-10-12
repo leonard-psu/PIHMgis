@@ -438,10 +438,15 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>387</y>
+     <y>357</y>
      <width>581</width>
-     <height>71</height>
+     <height>101</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
    </property>
    <property name="lineWrapMode">
     <enum>QTextEdit::NoWrap</enum>
@@ -908,7 +913,7 @@
    <widget class="QLineEdit" name="lineEditFillPits">
     <property name="geometry">
      <rect>
-      <x>14</x>
+      <x>10</x>
       <y>44</y>
       <width>561</width>
       <height>29</height>
@@ -916,7 +921,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -930,6 +935,13 @@
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -947,14 +959,15 @@
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>170</x>
       <y>10</y>
-      <width>221</width>
+      <width>271</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1427,12 +1440,13 @@
      <rect>
       <x>230</x>
       <y>10</y>
-      <width>111</width>
+      <width>121</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1480,6 +1494,13 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Browse</string>
     </property>
@@ -1498,7 +1519,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1509,12 +1530,13 @@
      <rect>
       <x>230</x>
       <y>110</y>
-      <width>111</width>
+      <width>121</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1526,7 +1548,7 @@
    <widget class="QLineEdit" name="lineEditFlowDirGrids">
     <property name="geometry">
      <rect>
-      <x>14</x>
+      <x>10</x>
       <y>48</y>
       <width>561</width>
       <height>29</height>
@@ -1534,7 +1556,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1579,6 +1601,13 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Browse</string>
     </property>
@@ -1591,9 +1620,9 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>312</y>
+     <y>303</y>
      <width>581</width>
-     <height>61</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
@@ -1606,13 +1635,14 @@
     <property name="geometry">
      <rect>
       <x>16</x>
-      <y>17</y>
+      <y>7</y>
       <width>113</width>
       <height>32</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1628,13 +1658,14 @@
     <property name="geometry">
      <rect>
       <x>330</x>
-      <y>17</y>
+      <y>7</y>
       <width>113</width>
       <height>32</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1650,13 +1681,14 @@
     <property name="geometry">
      <rect>
       <x>455</x>
-      <y>17</y>
+      <y>7</y>
       <width>113</width>
       <height>32</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>

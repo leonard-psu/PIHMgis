@@ -54,47 +54,7 @@ FlowGrids::FlowGrids(QWidget *parent, QString filename) :
 
         if(found_file)
         {
-
-            QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("FillPits"));
-
-            if ( ModuleStringList.length() > 0  )
-            {
-                QString fillpits = ModuleStringList.at(2);
-
-                //Suggested file names
-                QString flowdir = filename_open_project+"/1RasterProcessing/FlowDir.asc";
-                QString flowacc = filename_open_project+"/1RasterProcessing/FlowAcc.asc";
-
-                bool fill_check = Check_Fillpit_Input(fillpits);
-                if(!fill_check)
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fillpit input does not exist. </span>") +tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                }
-
-                ui->lineEditFlowDirGrids->setText(flowdir);
-                ui->lineEditFlowAccGrids->setText(flowacc);
-            }
-
-            //Check if outputs already exist
-            ModuleStringList = ReadModuleLine(filename_open_project,tr("FlowGrids"));
-
-            if ( ModuleStringList.length() > 0 )
-            {
-                QString flowdir = ModuleStringList.at(2);
-                QString flowacc = ModuleStringList.at(3);
-
-                bool flow_check = Check_FlowDir_Output(flowdir, true);
-                bool acc_check = Check_FlowAcc_Output(flowacc, true);
-
-                if(acc_check)
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Output already exist. </span>") +tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                }
-            }
+            Load_Project_Settings();
         }
 
         pushButtonSetFocus();
@@ -122,6 +82,60 @@ FlowGrids::~FlowGrids()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool FlowGrids::Load_Project_Settings()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: FlowGrids::Load_Project_Settings()";
+
+    try {
+
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("FillPits"));
+
+        if ( ModuleStringList.length() > 0  )
+        {
+            QString fillpits = ModuleStringList.at(2);
+
+            //Suggested file names
+            QString flowdir = filename_open_project+"/1RasterProcessing/FlowDir.asc";
+            QString flowacc = filename_open_project+"/1RasterProcessing/FlowAcc.asc";
+
+            bool fill_check = Check_Fillpit_Input(fillpits);
+            if(!fill_check)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fillpit input does not exist. </span>") +tr("<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
+            ui->lineEditFlowDirGrids->setText(flowdir);
+            ui->lineEditFlowAccGrids->setText(flowacc);
+        }
+
+        //Check if outputs already exist
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("FlowGrids"));
+
+        if ( ModuleStringList.length() > 0 )
+        {
+            QString flowdir = ModuleStringList.at(2);
+            QString flowacc = ModuleStringList.at(3);
+
+            bool flow_check = Check_FlowDir_Output(flowdir, true);
+            bool acc_check = Check_FlowAcc_Output(flowacc, true);
+
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: FlowGrids::Load_Project_Settings is returning w/o checking";
+        return false;
+    }
+
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if DEM input file exists (returns true) or does not (returns false)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool FlowGrids::Check_Fillpit_Input(QString file )
@@ -141,7 +155,7 @@ bool FlowGrids::Check_Fillpit_Input(QString file )
         }
         else
         {
-            ui->lineEditFillPits->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditFillPits->setStyleSheet("color: red;");
             ui->lineEditFillPits->setText(file);
 
             LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fillpit input does not exist: </span>") + file +tr("<br>"));
@@ -162,7 +176,7 @@ bool FlowGrids::Check_Fillpit_Input(QString file )
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if Flow Direction Grid output file exists (returns true) or does not (returns false)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool FlowGrids::Check_FlowDir_Output(QString file, bool message )
+bool FlowGrids::Check_FlowDir_Output(QString file, bool color_and_message_if_exists )
 {
     if(print_debug_messages)
         qDebug() << "INFO: Check_FlowDir_Output()";
@@ -173,23 +187,22 @@ bool FlowGrids::Check_FlowDir_Output(QString file, bool message )
 
         if(  fileExists(file) )
         {
-
-            ui->lineEditFlowDirGrids->setStyleSheet("color: black;");
-            ui->lineEditFlowDirGrids->setText(file);
-            result = true;
-        }
-        else
-        {
-            ui->lineEditFlowDirGrids->setStyleSheet("color: rgb(180, 0, 0);");
-            ui->lineEditFlowDirGrids->setText(file);
-
-            if(message)
+            if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Flow Direction output does not exist: </span>") + file +tr(" You will need to redo this step.<br>"));
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Flow Direction output already exists: </span>") + file +tr(" You may need to delete this file(s).<br>"));
                 ui->textBrowserLogs->setHtml(LogsString);
                 ui->textBrowserLogs->repaint();
             }
 
+            ui->lineEditFlowDirGrids->setStyleSheet("color: red;");
+            ui->lineEditFlowDirGrids->setText(file);
+
+            result = true;
+        }
+        else
+        {
+            ui->lineEditFlowDirGrids->setText(file);
+            ui->lineEditFlowDirGrids->setStyleSheet("color: black;");
 
             result = false;
         }
@@ -206,7 +219,7 @@ bool FlowGrids::Check_FlowDir_Output(QString file, bool message )
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if Flow Accumulation Grid output file exists (returns true) or does not (returns false)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool FlowGrids::Check_FlowAcc_Output(QString file, bool message )
+bool FlowGrids::Check_FlowAcc_Output(QString file, bool color_and_message_if_exists )
 {
     if(print_debug_messages)
         qDebug() << "INFO: Check_FlowAcc_Output()";
@@ -217,23 +230,21 @@ bool FlowGrids::Check_FlowAcc_Output(QString file, bool message )
 
         if(  fileExists(file) )
         {
+            if(color_and_message_if_exists)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Flow Accumulation already exist: </span>") + file +tr(" You may need to delete this file(s).<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
 
-            ui->lineEditFlowAccGrids->setStyleSheet("color: black;");
+            ui->lineEditFlowAccGrids->setStyleSheet("color: red;");
             ui->lineEditFlowAccGrids->setText(file);
             result = true;
         }
         else
         {
-            ui->lineEditFlowAccGrids->setStyleSheet("color: rgb(180, 0, 0);");
             ui->lineEditFlowAccGrids->setText(file);
-
-            if(message)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Flow Accumulation output does not exist: </span>") + file +tr(" You will need to redo this step.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-
+            ui->lineEditFlowAccGrids->setStyleSheet("color: black;");
 
             result = false;
         }
@@ -358,8 +369,8 @@ void FlowGrids::on_pushButtonsFlowDirGrid_clicked()
         if ( FlowDirFileName != nullptr)
         {
             Check_Fillpit_Input(ui->lineEditFillPits->text());
-            Check_FlowDir_Output(FlowDirFileName, false);
-            Check_FlowAcc_Output(ui->lineEditFlowAccGrids->text(), false);
+            Check_FlowDir_Output(FlowDirFileName, true);
+            Check_FlowAcc_Output(ui->lineEditFlowAccGrids->text(), true);
 
             pushButtonSetFocus();
         }
@@ -386,8 +397,8 @@ void FlowGrids::on_pushButtonFlowAccGrid_clicked()
         if ( FlowAccFileName != nullptr)
         {
             Check_Fillpit_Input(ui->lineEditFillPits->text());
-            Check_FlowDir_Output(ui->lineEditFlowDirGrids->text(), false);
-            Check_FlowAcc_Output(FlowAccFileName, false);
+            Check_FlowDir_Output(ui->lineEditFlowDirGrids->text(), true);
+            Check_FlowAcc_Output(FlowAccFileName, true);
 
             pushButtonSetFocus();
         }
@@ -439,9 +450,6 @@ void FlowGrids::on_pushButtonRun_clicked()
         bool flow_check = Check_FlowDir_Output(filename_flow, true);
         if(flow_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Fillpit output already exists: </span>") + filename_flow +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
             return;
         }
 
@@ -454,7 +462,7 @@ void FlowGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Does output filename_acc already exist?
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool acc_check = Check_FlowAcc_Output(filename_acc, true);
+        bool acc_check = Check_FlowAcc_Output(filename_acc, false);
         if(acc_check)
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">Error: Fill acc output already exists: </span>") + filename_acc +tr("<br>"));
@@ -544,12 +552,9 @@ void FlowGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check output filename_flow
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        fill_check = Check_FlowDir_Output(filename_flow, false);
+        fill_check = Check_FlowDir_Output(filename_flow, true);
         if(!fill_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Flow Direction failed, file does not exist: </span>") + filename_flow +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
             return;
         }
         qint64 size = file_Size(filename_flow);

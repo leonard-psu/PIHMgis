@@ -46,50 +46,10 @@ CatchmentPolygon::CatchmentPolygon(QWidget *parent, QString filename) :
 
         if(found_file)
         {
-            QString CatchmentGrids_filename;
-            QString CatchmentPolygon_filename;
-
-            QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("CatchmentGrids"));
-
-            if ( ModuleStringList.length() > 0  )
-            {
-                CatchmentGrids_filename = ModuleStringList.at(3);
-            }
-
-            ModuleStringList = ReadModuleLine(filename_open_project,tr("StreamGrids"));
-
-            if ( ModuleStringList.length() > 0  && ui->lineEditCatchmentPolygon->text() == nullptr)
-            {
-                CatchmentPolygon_filename = filename_open_project +"/1RasterProcessing/Catchment"+ModuleStringList.at(3)+".shp";
-            }
-
-            ModuleStringList = ReadModuleLine(filename_open_project,tr("CatchmentPolygon"));
-
-            if ( ModuleStringList.length() > 0 )
-            {
-                CatchmentGrids_filename = ModuleStringList.at(1);
-                CatchmentPolygon_filename = ModuleStringList.at(2);
-            }
-
-            bool CatchmentGrids_check = Check_CatchmentGrids_Input(CatchmentGrids_filename);
-            if(!CatchmentGrids_check)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: CatchmentGrids input does not exist. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-
-            bool CatchmentPolygon_check = Check_CatchmentPolygon_Output(CatchmentPolygon_filename, true);
-            if(CatchmentPolygon_check)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: CatchmentPolygon output already exists. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
-
-            // ** End: Fill Form If Module Has Been Run Previously
-            pushButtonSetFocus();
+            Load_Project_Settings();
         }
+
+        pushButtonSetFocus();
 
     } catch (...) {
         qDebug() << "Error: CatchmentPolygon is returning w/o checking";
@@ -110,6 +70,62 @@ CatchmentPolygon::~CatchmentPolygon()
     } catch (...) {
         qDebug() << "Error: ~CatchmentPolygon is returning w/o checking";
     }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CatchmentPolygon::Load_Project_Settings()
+{
+    if (print_debug_messages)
+        qDebug() << "INFO: CatchmentPolygon::Load_Project_Settings()";
+
+    try {
+
+        QString CatchmentGrids_filename;
+        QString CatchmentPolygon_filename;
+
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("CatchmentGrids"));
+
+        if ( ModuleStringList.length() > 0  )
+        {
+            CatchmentGrids_filename = ModuleStringList.at(3);
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("StreamGrids"));
+
+        if ( ModuleStringList.length() > 0  && ui->lineEditCatchmentPolygon->text() == nullptr)
+        {
+            CatchmentPolygon_filename = filename_open_project +"/1RasterProcessing/Catchment"+ModuleStringList.at(3)+".shp";
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("CatchmentPolygon"));
+
+        if ( ModuleStringList.length() > 0 )
+        {
+            CatchmentGrids_filename = ModuleStringList.at(1);
+            CatchmentPolygon_filename = ModuleStringList.at(2);
+        }
+
+        bool CatchmentGrids_check = Check_CatchmentGrids_Input(CatchmentGrids_filename);
+        if(!CatchmentGrids_check)
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: CatchmentGrids input does not exist. </span>") +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+        }
+
+        bool CatchmentPolygon_check = Check_CatchmentPolygon_Output(CatchmentPolygon_filename, true);
+
+        pushButtonSetFocus();
+
+
+    } catch (...) {
+        qDebug() << "Error: CatchmentPolygon::Load_Project_Settings is returning w/o checking";
+        return false;
+    }
+
+    return true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,39 +187,39 @@ void CatchmentPolygon::Clear_Log()
 bool CatchmentPolygon::Check_CatchmentGrids_Input(QString file)
 {
     if(print_debug_messages)
-         qDebug() << "INFO: Check_CatchmentGrids_Input()";
+        qDebug() << "INFO: Check_CatchmentGrids_Input()";
 
-     bool result = false;
+    bool result = false;
 
-     try {
+    try {
 
-         if(  fileExists(file) )
-         {
-             ui->lineEditCatchmentGrids->setStyleSheet("color: black;");
-             ui->lineEditCatchmentGrids->setText(file);
-             result = true;
-         }
-         else
-         {
-             ui->lineEditCatchmentGrids->setStyleSheet("color: rgb(180, 0, 0);");
-             ui->lineEditCatchmentGrids->setText(file);
+        if(  fileExists(file) )
+        {
+            ui->lineEditCatchmentGrids->setStyleSheet("color: black;");
+            ui->lineEditCatchmentGrids->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditCatchmentGrids->setStyleSheet("color: red;");
+            ui->lineEditCatchmentGrids->setText(file);
 
-             result = false;
-         }
+            result = false;
+        }
 
 
-     } catch (...) {
-         qDebug() << "Error: Check_CatchmentGrids_Input is returning w/o checking";
-         result = false;
-     }
+    } catch (...) {
+        qDebug() << "Error: Check_CatchmentGrids_Input is returning w/o checking";
+        result = false;
+    }
 
-     return result;
+    return result;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if CatchmentPolygon OUTPUT file exists (returns true) or does not (returns false)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CatchmentPolygon::Check_CatchmentPolygon_Output(QString file, bool message)
+bool CatchmentPolygon::Check_CatchmentPolygon_Output(QString file, bool color_and_message_if_exists)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Check_CatchmentPolygon_Output()";
@@ -214,21 +230,21 @@ bool CatchmentPolygon::Check_CatchmentPolygon_Output(QString file, bool message)
 
         if(  fileExists(file) )
         {
-            ui->lineEditCatchmentPolygon->setStyleSheet("color: black;");
+            if(color_and_message_if_exists)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: CatchmentPolygon output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
+            ui->lineEditCatchmentPolygon->setStyleSheet("color: red;");
             ui->lineEditCatchmentPolygon->setText(file);
             result = true;
         }
         else
         {
-            ui->lineEditCatchmentPolygon->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditCatchmentPolygon->setStyleSheet("color: black;");
             ui->lineEditCatchmentPolygon->setText(file);
-
-            if(message)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: CatchmentPolygon output does not exist: </span>") + file +tr(" You will need to redo this step.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
             result = false;
         }
 
@@ -332,12 +348,9 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Does output already exist?
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool CatchmentPolygonCheck = Check_CatchmentPolygon_Output(CatchmentPolygon_filename, false);
+        bool CatchmentPolygonCheck = Check_CatchmentPolygon_Output(CatchmentPolygon_filename, true);
         if(CatchmentPolygonCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: CatchmentPolygon Output already exists </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
             return;
         }
 
@@ -385,12 +398,9 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check output filenames
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        CatchmentPolygonCheck = Check_CatchmentPolygon_Output(CatchmentPolygon_filename, false);
+        CatchmentPolygonCheck = Check_CatchmentPolygon_Output(CatchmentPolygon_filename, true);
         if(!CatchmentPolygonCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: CatchmentPolygon failed, file does not exist: </span>") + CatchmentPolygon_filename +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
             return;
         }
 

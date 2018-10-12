@@ -16,9 +16,9 @@ public:
     ~CatchmentPolygon();
 
     QString LogsString;
-    //QStringList ProjectIOStringList;
 
 private slots:
+
     void on_pushButtonCatchmentGrids_clicked();
 
     void on_pushButtonCatchmentPolygon_clicked();
@@ -35,8 +35,9 @@ private slots:
 
     bool Check_CatchmentGrids_Input(QString file);
 
-    bool Check_CatchmentPolygon_Output(QString file, bool message);
+    bool Check_CatchmentPolygon_Output(QString file, bool color_and_message_if_exists);
 
+    bool Load_Project_Settings();
 
 private:
     Ui::CatchmentPolygon *ui;

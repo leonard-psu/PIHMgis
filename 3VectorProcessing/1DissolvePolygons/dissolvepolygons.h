@@ -17,8 +17,6 @@ public:
     ~DissolvePolygons();
 
     QString LogsString;
-    //QStringList ProjectIOStringList;
-
 
 private slots:
 

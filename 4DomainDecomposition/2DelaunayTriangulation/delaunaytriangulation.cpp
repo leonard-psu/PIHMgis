@@ -181,7 +181,7 @@ bool DelaunayTriangulation::Check_PSLG_Input(QString file)
         }
         else
         {
-            ui->lineEditPSLG->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditPSLG->setStyleSheet("color: red;");
             ui->lineEditPSLG->setText(file);
 
             result = false;
@@ -815,7 +815,7 @@ bool DelaunayTriangulation::Check_Triangle_Software_Input(QString file)
         }
         else
         {
-            ui->lineEditFIND->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditFIND->setStyleSheet("color: red;");
             ui->lineEditFIND->setText(file);
 
             result = false;
@@ -879,7 +879,7 @@ void DelaunayTriangulation::on_lineEditFIND_textChanged(const QString &arg1)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if CatchmentPolygon OUTPUT file exists (returns true) or does not (returns false)
 // Will color red and warning if exists with color_and_message_if_exists=true
-// Note only display message in window
+// NOTE only display message in window as Triangle software appends .1.ele and .1.node to filename input
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool DelaunayTriangulation::Check_TIN_Output(QString file, bool color_and_message_if_exists)
 {

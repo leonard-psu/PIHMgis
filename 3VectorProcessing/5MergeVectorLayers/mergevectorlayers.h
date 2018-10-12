@@ -40,6 +40,7 @@ private slots:
 
     bool Check_File_Valid(QString file);
 
+    bool Check_MergeLayer_Output(QString file, bool color_and_message_if_exists);
 
 private:
     Ui::MergeVectorLayers *ui;

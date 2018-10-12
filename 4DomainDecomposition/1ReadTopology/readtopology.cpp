@@ -239,7 +239,7 @@ bool ReadTopology::Check_MergeVector_Input(QString file)
         }
         else
         {
-            ui->lineEditMerge->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditMerge->setStyleSheet("color: red;");
             ui->lineEditMerge->setText(file);
 
             result = false;
@@ -274,8 +274,9 @@ bool ReadTopology::Check_PSLG_Output(QString file, bool color_and_message_if_exi
                 LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Tinshape output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
                 ui->textBrowserLogs->setHtml(LogsString);
                 ui->textBrowserLogs->repaint();
-                ui->lineEditPSLG->setStyleSheet("color: rgb(180, 0, 0);");
             }
+
+            ui->lineEditPSLG->setStyleSheet("color: red;");
             ui->lineEditPSLG->setText(file);
             result = true;
         }

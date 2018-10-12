@@ -442,8 +442,14 @@
      <x>15</x>
      <y>17</y>
      <width>581</width>
-     <height>171</height>
+     <height>161</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="title">
     <string>Input</string>
@@ -456,6 +462,13 @@
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -475,9 +488,16 @@
      <rect>
       <x>240</x>
       <y>10</y>
-      <width>87</width>
+      <width>101</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Stream Grid</string>
@@ -487,14 +507,14 @@
     <property name="geometry">
      <rect>
       <x>4</x>
-      <y>53</y>
+      <y>46</y>
       <width>571</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -504,14 +524,14 @@
     <property name="geometry">
      <rect>
       <x>5</x>
-      <y>136</y>
+      <y>122</y>
       <width>571</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -521,10 +541,17 @@
     <property name="geometry">
      <rect>
       <x>480</x>
-      <y>100</y>
+      <y>86</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -543,10 +570,17 @@
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>100</y>
-      <width>87</width>
+      <y>86</y>
+      <width>111</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Flow Dir. Grid</string>
@@ -1003,10 +1037,15 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>387</y>
+     <y>357</y>
      <width>581</width>
-     <height>71</height>
+     <height>101</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
    </property>
    <property name="lineWrapMode">
     <enum>QTextEdit::NoWrap</enum>
@@ -1021,6 +1060,12 @@
      <height>111</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="title">
     <string>Output</string>
    </property>
@@ -1032,6 +1077,13 @@
       <width>90</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Link Grid</string>
@@ -1045,6 +1097,13 @@
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -1064,7 +1123,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1108,9 +1167,9 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>312</y>
+     <y>300</y>
      <width>581</width>
-     <height>61</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
@@ -1123,10 +1182,17 @@
     <property name="geometry">
      <rect>
       <x>16</x>
-      <y>17</y>
+      <y>9</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -1139,10 +1205,17 @@
     <property name="geometry">
      <rect>
       <x>330</x>
-      <y>17</y>
+      <y>9</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Close</string>
@@ -1155,10 +1228,17 @@
     <property name="geometry">
      <rect>
       <x>455</x>
-      <y>17</y>
+      <y>9</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string/>

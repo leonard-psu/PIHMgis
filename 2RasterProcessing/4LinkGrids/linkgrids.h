@@ -16,7 +16,6 @@ public:
     ~LinkGrids();
 
     QString LogsString;
-   // QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonStreamGrids_clicked();
@@ -39,8 +38,9 @@ private slots:
 
     bool Check_FlowDirGrids_Input(QString file);
 
-    bool Check_LinkGrids_Output(QString file, bool message);
+    bool Check_LinkGrids_Output(QString file, bool color_and_message_if_exists);
 
+    bool Load_Project_Settings();
 
 
 private:

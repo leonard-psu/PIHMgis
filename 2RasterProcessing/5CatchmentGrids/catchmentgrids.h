@@ -16,7 +16,6 @@ public:
     ~CatchmentGrids();
 
     QString LogsString;
-    //QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonLinkGrids_clicked();
@@ -39,8 +38,9 @@ private slots:
 
     bool Check_FlowDirGrids_Input(QString file);
 
-    bool Check_CatchmentGrids_Output(QString file, bool message);
+    bool Check_CatchmentGrids_Output(QString file, bool color_and_message_if_exists);
 
+    bool Load_Project_Settings();
 
 private:
     Ui::CatchmentGrids *ui;

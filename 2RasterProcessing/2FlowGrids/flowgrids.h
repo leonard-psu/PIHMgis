@@ -16,7 +16,6 @@ public:
     ~FlowGrids();
 
     QString LogsString;
-    //QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonFillPits_clicked();
@@ -33,15 +32,15 @@ private slots:
 
     void pushButtonSetFocus();
 
-
     bool Check_Fillpit_Input(QString file);
 
-    bool Check_FlowDir_Output(QString file, bool message );
+    bool Check_FlowDir_Output(QString file, bool color_and_message_if_exists );
 
-    bool Check_FlowAcc_Output(QString file, bool message );
+    bool Check_FlowAcc_Output(QString file, bool color_and_message_if_exists );
 
     void Clear_Log();
 
+    bool Load_Project_Settings();
 
 private:
     Ui::FlowGrids *ui;

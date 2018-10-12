@@ -886,10 +886,16 @@
    <property name="geometry">
     <rect>
      <x>16</x>
-     <y>117</y>
+     <y>106</y>
      <width>581</width>
      <height>111</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="title">
     <string>Output</string>
@@ -899,9 +905,16 @@
      <rect>
       <x>220</x>
       <y>10</y>
-      <width>131</width>
+      <width>171</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Catchment Polygon</string>
@@ -916,6 +929,13 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Browse</string>
     </property>
@@ -926,15 +946,15 @@
    <widget class="QLineEdit" name="lineEditCatchmentPolygon">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>50</y>
-      <width>561</width>
+      <x>7</x>
+      <y>47</y>
+      <width>571</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -946,8 +966,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>90</y>
+      <x>484</x>
+      <y>81</y>
       <width>91</width>
       <height>21</height>
      </rect>
@@ -1424,10 +1444,15 @@
    <property name="geometry">
     <rect>
      <x>16</x>
-     <y>326</y>
+     <y>276</y>
      <width>581</width>
-     <height>71</height>
+     <height>121</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
    </property>
    <property name="lineWrapMode">
     <enum>QTextEdit::NoWrap</enum>
@@ -1437,9 +1462,9 @@
    <property name="geometry">
     <rect>
      <x>16</x>
-     <y>248</y>
+     <y>221</y>
      <width>581</width>
-     <height>61</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
@@ -1452,10 +1477,17 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>17</y>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -1468,10 +1500,17 @@
     <property name="geometry">
      <rect>
       <x>326</x>
-      <y>17</y>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Close</string>
@@ -1484,10 +1523,17 @@
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>17</y>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string/>
@@ -1506,8 +1552,14 @@
      <x>16</x>
      <y>17</y>
      <width>581</width>
-     <height>100</height>
+     <height>81</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="title">
     <string>Input</string>
@@ -1520,6 +1572,13 @@
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -1539,9 +1598,16 @@
      <rect>
       <x>230</x>
       <y>10</y>
-      <width>111</width>
+      <width>131</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Catchment Grid</string>
@@ -1550,15 +1616,15 @@
    <widget class="QLineEdit" name="lineEditCatchmentGrids">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>45</y>
-      <width>561</width>
+      <x>7</x>
+      <y>44</y>
+      <width>571</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
