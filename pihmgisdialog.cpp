@@ -894,8 +894,13 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderCalibDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderCalibDataFile_clicked";
 
     try {
-        CalibDataFile *CalibDataFileDialog = new CalibDataFile(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+
+        CalibDataFile *CalibDataFileDialog = new CalibDataFile(this, filename_open_project);
+        CalibDataFileDialog->setModal(true);
         CalibDataFileDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderCalibDataFile_clicked is returning w/o checking";
     }
@@ -1133,7 +1138,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 
 bool fileExists(QString path) {
 
-   // QString tmp = path.replace("/","\\");
+    // QString tmp = path.replace("/","\\");
     QFileInfo check_file(path);
 
     // check if file exists and if yes: Is it really a file and no directory?

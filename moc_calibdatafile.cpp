@@ -92,8 +92,7 @@ void CalibDataFile::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 2: _t->on_pushButtonClose_clicked(); break;
         case 3: _t->on_pushButtonHelp_clicked(); break;
         case 4: _t->pushButtonSetFocus(); break;
-        case 5: { int _r = _t->calib_data_file();
-            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = std::move(_r); }  break;
+
         default: ;
         }
     }

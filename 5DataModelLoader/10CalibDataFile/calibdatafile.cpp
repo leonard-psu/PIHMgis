@@ -10,8 +10,11 @@
 #include "0LibsIO/IOProjectFile.h"
 #include "globals.h"
 
-
-CalibDataFile::CalibDataFile(QWidget *parent) :
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CalibDataFile Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+CalibDataFile::CalibDataFile(QWidget *parent, QString filename) :
     QDialog(parent),
     ui(new Ui::CalibDataFile)
 {
@@ -21,52 +24,83 @@ CalibDataFile::CalibDataFile(QWidget *parent) :
     try {
         ui->setupUi(this);
 
-        // ** Start: Set Defaults
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
+        filename_open_project = filename;
+        bool found_file = false;
+
+        QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        QString ProjectFolder   = ProjectFileTextStream.readLine();
-        QString ProjectFileName = ProjectFileTextStream.readLine();
+        else
+        {
+            found_file = true;
+        }
         ProjectFile.close();
 
+        if(found_file)
+        {
+            Load_Project_Settings();
+        }
 
-        QStringList ModuleStringList;
-        QString TempFileName;
+        ui->tabWidget->setCurrentIndex( 0 );
 
-        // ** Data Model INPUT File Name
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("TINShapeLayer"));
+        pushButtonSetFocus();
+    } catch (...) {
+        qDebug() << "Error: CalibDataFile is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CalibDataFile Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+CalibDataFile::~CalibDataFile()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ~CalibDataFile";
+
+    try {
+        delete ui;
+    } catch (...) {
+        qDebug() << "Error: ~CalibDataFile is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CalibDataFile::Load_Project_Settings()
+{
+    if (print_debug_messages)
+        qDebug() << "INFO: TINShapeLayer::Load_Project_Settings()";
+
+    try {
+
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
-            TempFileName = ModuleStringList.at(3);
+            QString TempFileName = ModuleStringList.at(3);
             TempFileName = TempFileName.right(TempFileName.length()-TempFileName.lastIndexOf("/")-1);
 
             TempFileName.replace( QString(".shp"), QString(".calib") );
-            ui->lineEditCalibDataFile->setText(ProjectFolder+"/4DataModelLoader/"+TempFileName);
+            ui->lineEditCalibDataFile->setText(user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName);
         }
 
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("MeshDataFile"));
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("MeshDataFile"));
         if ( ModuleStringList.length() > 0  )
         {
-            TempFileName = ModuleStringList.at(9);
-            ui->lineEditCalibDataFile->setText(ProjectFolder+"/4DataModelLoader/"+TempFileName+".calib");
+            QString TempFileName = ModuleStringList.at(9);
+            ui->lineEditCalibDataFile->setText(user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName+".calib");
         }
-        // ** End: Set Defaults
 
-
-        // ** Start: Fill Form If Module Has Been Run Previously
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("CalibDataFile"));
-
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("CalibDataFile"));
         if ( ModuleStringList.length() > 0 )
         {
-            ui->lineEditCalibDataFile->setStyleSheet("color: rgb(0, 180, 0);");
-
-            ui->lineEditCalibDataFile->setText(ModuleStringList.at(1));
+            QString calib_filename = ModuleStringList.at(1);
+            Check_Calib_Output(calib_filename,true);
 
             ui->doubleSpinBoxS_Alpha->setValue(ModuleStringList.at(2).toDouble());
             ui->doubleSpinBoxS_Beta->setValue(ModuleStringList.at(3).toDouble());
@@ -103,28 +137,38 @@ CalibDataFile::CalibDataFile(QWidget *parent) :
             ui->doubleSpinBoxF_ThruFall->setValue(ModuleStringList.at(30).toDouble());
             ui->doubleSpinBoxF_MeltFac->setValue(ModuleStringList.at(31).toDouble());
         }
-        // ** End: Fill Form If Module Has Been Run Previously
 
-        ui->tabWidget->setCurrentIndex( 0 );
 
-        pushButtonSetFocus();
     } catch (...) {
-        qDebug() << "Error: CalibDataFile is returning w/o checking";
+        qDebug() << "Error: TINShapeLayer::Load_Project_Settings is returning w/o checking";
+        return false;
     }
+
+    return true;
 }
 
-CalibDataFile::~CalibDataFile()
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void CalibDataFile::Clear_Log()
 {
     if(print_debug_messages)
-        qDebug() << "INFO: Start ~CalibDataFile";
+        qDebug() << "INFO: Start CalibDataFile::Clear_Log()";
 
     try {
-        delete ui;
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
     } catch (...) {
-        qDebug() << "Error: ~CalibDataFile is returning w/o checking";
+        qDebug() << "Error: CalibDataFile::Clear_Log() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to focus button selection (needed for users w/o mouse)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CalibDataFile::pushButtonSetFocus()
 {
     if(print_debug_messages)
@@ -147,66 +191,92 @@ void CalibDataFile::pushButtonSetFocus()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Clicked Event  (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CalibDataFile::on_pushButtonCalibDataFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start CalibDataFile::on_pushButtonCalibDataFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
+        Clear_Log();
 
-        QString CalibDataFileName = QFileDialog::getSaveFileName(this, "Choose Calib Data File Name", ProjectFolder+"/4DataModelLoader","Calib Data File(*.calib)");
+        QString CalibDataFileName = QFileDialog::getSaveFileName(this, "Choose Calib Data File Name", user_pihmgis_root_folder +"/4DataModelLoader","Calib Data File(*.calib)");
         QString tempString = CalibDataFileName;
         if ( CalibDataFileName != nullptr)
         {
-            ui->lineEditCalibDataFile->setStyleSheet("color: black;");
-
             if( ! (tempString.toLower()).endsWith(".calib") )
             {
                 tempString.append(".calib");
                 CalibDataFileName = tempString;
             }
-            ui->lineEditCalibDataFile->setText(CalibDataFileName);
-
+            Check_Calib_Output(CalibDataFileName,true);
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: CalibDataFile::on_pushButtonCalibDataFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if CALIB OUTPUT file exists (returns true) or does not (returns false)
+// Will color red and warning if exists with color_and_message_if_exists=true
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CalibDataFile::Check_Calib_Output(QString file, bool color_and_message_if_exists){
 
-int CalibDataFile::calib_data_file()
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_Calib_Output()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            if(color_and_message_if_exists)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Calib output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
+            ui->lineEditCalibDataFile->setStyleSheet("color: red;");
+            ui->lineEditCalibDataFile->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditCalibDataFile->setStyleSheet("color: black;");
+            ui->lineEditCalibDataFile->setText(file);
+
+            result = false;
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_Calib_Output is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Create CALIB file (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int CalibDataFile::calib_data_file(QString filename)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start CalibDataFile::calib_data_file()";
 
     try {
-        QFile CalibFile( ui->lineEditCalibDataFile->text() );
+
+        QFile CalibFile( filename );
         if ( ! CalibFile.open(QIODevice::WriteOnly | QIODevice::Text) )
             return 129;
+
         QTextStream CalibFileTextStream(&CalibFile);
 
         CalibFileTextStream << ui->doubleSpinBoxG_KsatH->text() << "\t";
@@ -259,144 +329,158 @@ int CalibDataFile::calib_data_file()
     return 0;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run Button Clicked Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CalibDataFile::on_pushButtonRun_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start CalibDataFile::on_pushButtonRun_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Calib Data File Processing Started ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Does output already exist?
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString calib_filename = ui->lineEditCalibDataFile->text();
 
-        LogsString.append(tr("Verifying Data Files ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        int runFlag = 1;
-
-        if( ui->lineEditCalibDataFile->text() == nullptr )
+        bool calibCheck = Check_Calib_Output(calib_filename, true);
+        if(calibCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Calib Data Output File Missing </span>")+tr("<br>"));
-            runFlag = 0;
+            return;
         }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditCalibDataFile->text(), "WriteOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->lineEditCalibDataFile->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditCalibDataFile->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
-        if(runFlag == 1)
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check file access
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if ( ! CheckFileAccess(calib_filename, "WriteOnly") )
         {
-            LogsString.append("Running Calib Data File ... <br>");
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + calib_filename + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
+            return;
+        }
 
-            int ErrorCalib = calib_data_file();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Running Catchment Polygon
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        LogsString.append("Running Calib Data File ... <br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
 
-            if( ErrorCalib != 0 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Calib Data File Processing Failed ... </span>")+tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE CALIB: ... </span>")+QString::number(ErrorCalib)+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
-            }
+        int ErrorCalib = calib_data_file(calib_filename);
 
-            ProjectIOStringList << "CalibDataFile" << ui->lineEditCalibDataFile->text();
-            ProjectIOStringList << ui->doubleSpinBoxS_Alpha->text();
-            ProjectIOStringList << ui->doubleSpinBoxS_Beta->text();
-            ProjectIOStringList << ui->doubleSpinBoxS_Porosity->text();
-            ProjectIOStringList << ui->doubleSpinBoxS_InfilDepth->text();
-            ProjectIOStringList << ui->doubleSpinBoxS_KsatV->text();
-            ProjectIOStringList << ui->doubleSpinBoxS_MPKsatV->text();
-
-            ProjectIOStringList << ui->doubleSpinBoxG_KsatH->text();
-            ProjectIOStringList << ui->doubleSpinBoxG_KsatV->text();
-            ProjectIOStringList << ui->doubleSpinBoxG_MPKsatH->text();
-            ProjectIOStringList << ui->doubleSpinBoxG_MPDepth->text();
-            ProjectIOStringList << ui->doubleSpinBoxG_MPfracV->text();
-            ProjectIOStringList << ui->doubleSpinBoxG_MPfracH->text();
-
-            ProjectIOStringList << ui->doubleSpinBoxL_RZDepth->text();
-            ProjectIOStringList << ui->doubleSpinBoxL_VegFrac->text();
-            ProjectIOStringList << ui->doubleSpinBoxL_Albedo->text();
-            ProjectIOStringList << ui->doubleSpinBoxL_Roughness->text();
-
-            ProjectIOStringList << ui->doubleSpinBoxR_Rough->text();
-            ProjectIOStringList << ui->doubleSpinBoxR_BedTh->text();
-            ProjectIOStringList << ui->doubleSpinBoxR_KsatH->text();
-            ProjectIOStringList << ui->doubleSpinBoxR_KsatV->text();
-            ProjectIOStringList << ui->doubleSpinBoxR_Depth->text();
-            ProjectIOStringList << ui->doubleSpinBoxR_Width->text();
-
-            ProjectIOStringList << ui->doubleSpinBoxF_Precip->text();
-            ProjectIOStringList << ui->doubleSpinBoxF_Temp->text();
-            ProjectIOStringList << ui->doubleSpinBoxF_ET0->text();
-            ProjectIOStringList << ui->doubleSpinBoxF_ET1->text();
-            ProjectIOStringList << ui->doubleSpinBoxF_ET2->text();
-            ProjectIOStringList << ui->doubleSpinBoxF_ISMax->text();
-            ProjectIOStringList << ui->doubleSpinBoxF_ThruFall->text();
-            ProjectIOStringList << ui->doubleSpinBoxF_MeltFac->text();
-
-            WriteModuleLine(ProjectFileName, ProjectIOStringList);
-            ProjectIOStringList.clear();
-
-            LogsString.append(tr("<br><b>Calib Data File Processing Complete.</b>")+tr("<br>"));
+        if( ErrorCalib != 0 )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Calib Data File Processing Failed ... </span>")+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE CALIB: ... </span>")+QString::number(ErrorCalib)+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
-
-            ui->pushButtonRun->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
+            return;
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QStringList ProjectIOStringList;
+
+        ProjectIOStringList << "CalibDataFile" << ui->lineEditCalibDataFile->text();
+        ProjectIOStringList << ui->doubleSpinBoxS_Alpha->text();
+        ProjectIOStringList << ui->doubleSpinBoxS_Beta->text();
+        ProjectIOStringList << ui->doubleSpinBoxS_Porosity->text();
+        ProjectIOStringList << ui->doubleSpinBoxS_InfilDepth->text();
+        ProjectIOStringList << ui->doubleSpinBoxS_KsatV->text();
+        ProjectIOStringList << ui->doubleSpinBoxS_MPKsatV->text();
+
+        ProjectIOStringList << ui->doubleSpinBoxG_KsatH->text();
+        ProjectIOStringList << ui->doubleSpinBoxG_KsatV->text();
+        ProjectIOStringList << ui->doubleSpinBoxG_MPKsatH->text();
+        ProjectIOStringList << ui->doubleSpinBoxG_MPDepth->text();
+        ProjectIOStringList << ui->doubleSpinBoxG_MPfracV->text();
+        ProjectIOStringList << ui->doubleSpinBoxG_MPfracH->text();
+
+        ProjectIOStringList << ui->doubleSpinBoxL_RZDepth->text();
+        ProjectIOStringList << ui->doubleSpinBoxL_VegFrac->text();
+        ProjectIOStringList << ui->doubleSpinBoxL_Albedo->text();
+        ProjectIOStringList << ui->doubleSpinBoxL_Roughness->text();
+
+        ProjectIOStringList << ui->doubleSpinBoxR_Rough->text();
+        ProjectIOStringList << ui->doubleSpinBoxR_BedTh->text();
+        ProjectIOStringList << ui->doubleSpinBoxR_KsatH->text();
+        ProjectIOStringList << ui->doubleSpinBoxR_KsatV->text();
+        ProjectIOStringList << ui->doubleSpinBoxR_Depth->text();
+        ProjectIOStringList << ui->doubleSpinBoxR_Width->text();
+
+        ProjectIOStringList << ui->doubleSpinBoxF_Precip->text();
+        ProjectIOStringList << ui->doubleSpinBoxF_Temp->text();
+        ProjectIOStringList << ui->doubleSpinBoxF_ET0->text();
+        ProjectIOStringList << ui->doubleSpinBoxF_ET1->text();
+        ProjectIOStringList << ui->doubleSpinBoxF_ET2->text();
+        ProjectIOStringList << ui->doubleSpinBoxF_ISMax->text();
+        ProjectIOStringList << ui->doubleSpinBoxF_ThruFall->text();
+        ProjectIOStringList << ui->doubleSpinBoxF_MeltFac->text();
+
+        WriteModuleLine(filename_open_project, ProjectIOStringList);
+        ProjectIOStringList.clear();
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Message box
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+
+        LogsString.append(tr("<br><b>Calib Data File Processing Complete.</b>")+tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        ui->pushButtonRun->setDefault(false);
+        ui->pushButtonClose->setDefault(true);
+        ui->pushButtonClose->setFocus();
+
 
     } catch (...) {
         qDebug() << "Error: CalibDataFile::on_pushButtonRun_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close button event
+// TODO, Decide on keeping button next highlights or not
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CalibDataFile::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start CalibDataFile::on_pushButtonClose_clicked()";
 
     try {
-        QStringList default_params; default_params << "WORKFLOW5" << "FORC";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //QStringList default_params; default_params << "WORKFLOW5" << "FORC";
+        //QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
     } catch (...) {
         qDebug() << "Error: CalibDataFile::on_pushButtonClose_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CalibDataFile::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start CalibDataFile::on_pushButtonHelp_clicked()";
 
     try {
-//        LogsString = tr("");
-//        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#calib_Data_File")) )
-//            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
-//        ui->textBrowserLogs->setHtml(LogsString);
-//        ui->textBrowserLogs->repaint();
+        //        LogsString = tr("");
+        //        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#calib_Data_File")) )
+        //            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
+        //        ui->textBrowserLogs->setHtml(LogsString);
+        //        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: CalibDataFile::on_pushButtonHelp_clicked() is returning w/o checking";
     }
