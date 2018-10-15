@@ -12,11 +12,10 @@ class AttDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit AttDataFile(QWidget *parent = 0);
+    explicit AttDataFile(QWidget *parent = 0, QString filename_open_project = "");
     ~AttDataFile();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
 
 private slots:
 
@@ -57,11 +56,9 @@ private slots:
     void on_pushButtonBoundaryConditionFile_clicked();
 
 
-
     void on_pushButtonTINShapeLayerFile_clicked();
 
     void on_pushButtonAttDataFile_clicked();
-
 
 
     void on_checkBoxPrecipitation_toggled(bool checked);
@@ -101,7 +98,6 @@ private slots:
     void on_checkBoxBoundaryCondition_toggled(bool checked);
 
 
-
     void on_pushButtonRun_clicked();
 
     void on_pushButtonClose_clicked();
@@ -109,9 +105,7 @@ private slots:
     void on_pushButtonHelp_clicked();
 
 
-
     void pushButtonSetFocus();
-
 
 
     void on_lineEditPrecipitationFile_textChanged(const QString &arg1);
@@ -154,8 +148,43 @@ private slots:
 
     void on_lineEditAttDataFile_textChanged(const QString &arg1);
 
+
+    void Clear_Log();
+
+    bool Load_Project_Settings();
+
+    bool Check_Att_Output(QString file, bool message);
+
+    bool Check_TINShape_Input(QString file);
+
+    bool Check_PrecipitationFileorValue(QString file);
+    bool Check_TemperatureFileorValue(QString file);
+    bool Check_RelativeHumidityFileorValue(QString file);
+    bool Check_WindVelocityFileorValue(QString file);
+    bool Check_SolarRadiationFileorValue(QString file);
+    bool Check_VaporPressureFileorValue(QString file);
+
+    bool Check_SoilClassesFileorValue(QString file);
+    bool Check_GeologyClassesFileorValue(QString file);
+    bool Check_MacroporesFileorValue(QString file);
+    bool Check_LandCoverClassesFileorValue(QString file);
+    bool Check_MeltRegionsFileorValue(QString file);
+    bool Check_SourcesSinksFileorValue(QString file);
+
+    bool Check_InterceptionFileorValue(QString file);
+    bool Check_SnowCoverFileorValue(QString file);
+    bool Check_SurfaceStorageFileorValue(QString file);
+    bool Check_SoilMoistureFileorValue(QString file);
+    bool Check_GroundwaterFileorValue(QString file);
+    bool Check_BoundaryConditionFileorValue(QString file);
+
+    void Log_Warning_Message(QString message);
+    void Log_Error_Message(QString message);
+
 private:
     Ui::AttDataFile *ui;
+    QString filename_open_project;
+
 };
 
 #endif // ATTDATAFILE_H

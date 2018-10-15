@@ -426,13 +426,13 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>: :   Att Data File   : :</string>
+   <string>Att Data File</string>
   </property>
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>460</y>
+     <y>400</y>
      <width>581</width>
      <height>61</height>
     </rect>
@@ -441,6 +441,9 @@
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -448,6 +451,14 @@
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -465,6 +476,14 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Close</string>
     </property>
@@ -481,6 +500,14 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="toolTip">
      <string/>
     </property>
@@ -494,15 +521,16 @@
    <widget class="QLabel" name="textLabelLegends1">
     <property name="geometry">
      <rect>
-      <x>139</x>
+      <x>127</x>
       <y>-1</y>
-      <width>121</width>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>11</pointsize>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="text">
@@ -512,15 +540,16 @@
    <widget class="QLabel" name="textLabelLegends2">
     <property name="geometry">
      <rect>
-      <x>139</x>
+      <x>127</x>
       <y>16</y>
-      <width>151</width>
+      <width>181</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>11</pointsize>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="text">
@@ -530,15 +559,16 @@
    <widget class="QLabel" name="textLabelLegends3">
     <property name="geometry">
      <rect>
-      <x>139</x>
+      <x>127</x>
       <y>32</y>
-      <width>181</width>
+      <width>201</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>11</pointsize>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="text">
@@ -1422,6 +1452,12 @@
      </disabled>
     </palette>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(0, 51, 153);</string>
    </property>
@@ -1442,9 +1478,9 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>529</y>
+     <y>469</y>
      <width>581</width>
-     <height>71</height>
+     <height>131</height>
     </rect>
    </property>
    <property name="lineWrapMode">
@@ -1457,8 +1493,14 @@
      <x>16</x>
      <y>19</y>
      <width>581</width>
-     <height>281</height>
+     <height>251</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="currentIndex">
     <number>2</number>
@@ -1471,14 +1513,15 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>11</y>
+       <y>5</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1491,10 +1534,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>131</y>
+       <y>106</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -1513,10 +1563,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>211</y>
+       <y>176</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -1535,14 +1592,15 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>212</y>
+       <y>177</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1555,14 +1613,15 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>91</y>
+       <y>73</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1574,24 +1633,39 @@
     <widget class="QLabel" name="textLabelTemperature">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>50</y>
+       <x>18</x>
+       <y>38</y>
        <width>111</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Temperature</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButtonPrecipitationFile">
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>10</y>
+       <y>4</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -1610,10 +1684,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>90</y>
+       <y>72</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -1632,27 +1713,36 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>211</y>
+       <y>176</y>
        <width>121</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Vapor Pressure</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLineEdit" name="lineEditWindVelocityFile">
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>132</y>
+       <y>107</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1665,10 +1755,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>171</y>
+       <y>141</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -1687,14 +1784,15 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>172</y>
+       <y>142</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1707,23 +1805,38 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>171</y>
+       <y>141</y>
        <width>121</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Solar Radiation</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButtonTemperatureFile">
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>50</y>
+       <y>38</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -1741,41 +1854,58 @@
     <widget class="QLabel" name="textLabelRelativeHumidity">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>90</y>
+       <x>0</x>
+       <y>72</y>
        <width>131</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Relative Humidity</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="textLabelPrecipitation">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
+       <x>16</x>
+       <y>4</y>
        <width>111</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Precipitation</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLineEdit" name="lineEditTemperatureFile">
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>51</y>
+       <y>39</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1788,20 +1918,28 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>131</y>
+       <y>106</y>
        <width>121</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Wind Velocity</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QCheckBox" name="checkBoxPrecipitation">
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>14</y>
+       <y>8</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -1814,7 +1952,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>53</y>
+       <y>41</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -1827,7 +1965,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>94</y>
+       <y>76</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -1840,7 +1978,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>135</y>
+       <y>110</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -1853,7 +1991,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>175</y>
+       <y>145</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -1866,7 +2004,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>215</y>
+       <y>180</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -1883,37 +2021,60 @@
     <widget class="QLabel" name="textLabelGeologyClasses">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>50</y>
+       <x>9</x>
+       <y>37</y>
        <width>121</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Geology Classes</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="textLabelSoilClasses">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
+       <x>20</x>
+       <y>2</y>
        <width>111</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Soil Classes</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButtonGeologyClassesFile">
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>50</y>
+       <y>37</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -1932,14 +2093,14 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>91</y>
+       <y>71</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1951,24 +2112,39 @@
     <widget class="QLabel" name="textLabelLandCoverClasses">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>131</y>
+       <x>0</x>
+       <y>104</y>
        <width>131</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Land Cover Classes</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButtonLandCoverClassesFile">
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>131</y>
+       <y>104</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -1987,14 +2163,14 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>11</y>
+       <y>3</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2007,10 +2183,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>171</y>
+       <y>137</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -2028,41 +2211,57 @@
     <widget class="QLabel" name="textLabelMacropores">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>90</y>
+       <x>20</x>
+       <y>70</y>
        <width>111</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Macropores</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="textLabelMeltRegions">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>171</y>
+       <x>20</x>
+       <y>137</y>
        <width>111</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Melt Regions</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLineEdit" name="lineEditGeologyClassesFile">
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>51</y>
+       <y>38</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2075,14 +2274,14 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>172</y>
+       <y>138</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2095,10 +2294,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>10</y>
+       <y>2</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -2117,10 +2323,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>90</y>
+       <y>70</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -2139,14 +2352,14 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>132</y>
+       <y>105</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2159,14 +2372,14 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>212</y>
+       <y>173</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2179,23 +2392,38 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>211</y>
+       <y>172</y>
        <width>121</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Sources / Sinks</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButtonSourcesSinksFile">
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>211</y>
+       <y>172</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -2214,7 +2442,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>14</y>
+       <y>6</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2227,7 +2455,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>53</y>
+       <y>40</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2240,7 +2468,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>94</y>
+       <y>74</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2253,7 +2481,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>135</y>
+       <y>108</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2266,7 +2494,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>175</y>
+       <y>141</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2279,7 +2507,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>215</y>
+       <y>176</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2296,41 +2524,57 @@
     <widget class="QLabel" name="textLabelSoilMoisture">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>131</y>
+       <x>7</x>
+       <y>106</y>
        <width>121</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Soil Moisture (m)</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="textLabelBoundaryCondition">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>211</y>
-       <width>131</width>
+       <x>5</x>
+       <y>173</y>
+       <width>121</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>Boundary Condition</string>
+      <string>BoundaryCondition</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLineEdit" name="lineEditInterceptionFile">
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>11</y>
+       <y>4</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2343,14 +2587,14 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>91</y>
+       <y>73</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2363,10 +2607,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>50</y>
+       <y>37</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -2384,24 +2635,39 @@
     <widget class="QLabel" name="textLabelGroundwater">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>171</y>
+       <x>6</x>
+       <y>139</y>
        <width>121</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Groundwater (m)</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButtonGroundwaterFile">
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>171</y>
+       <y>139</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -2420,10 +2686,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>211</y>
+       <y>173</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -2442,14 +2715,14 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>212</y>
+       <y>174</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2462,14 +2735,14 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>51</y>
+       <y>38</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2482,10 +2755,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>90</y>
+       <y>72</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -2504,10 +2784,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>10</y>
+       <y>3</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -2526,10 +2813,17 @@
      <property name="geometry">
       <rect>
        <x>469</x>
-       <y>131</y>
+       <y>106</y>
        <width>98</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Browse</string>
@@ -2547,28 +2841,36 @@
     <widget class="QLabel" name="textLabelSnowCover">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>50</y>
+       <x>6</x>
+       <y>37</y>
        <width>121</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Snow Cover (m)</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLineEdit" name="lineEditGroundwaterFile">
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>172</y>
+       <y>140</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2581,14 +2883,14 @@
      <property name="geometry">
       <rect>
        <x>163</x>
-       <y>132</y>
+       <y>107</y>
        <width>301</width>
        <height>29</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2600,34 +2902,50 @@
     <widget class="QLabel" name="textLabelInterception">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
+       <x>6</x>
+       <y>3</y>
        <width>121</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Interception (m)</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="textLabelSurfaceStorage">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>90</y>
+       <x>-3</x>
+       <y>72</y>
        <width>131</width>
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Surface water (m)</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QCheckBox" name="checkBoxSurfaceStorage">
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>94</y>
+       <y>76</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2640,7 +2958,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>14</y>
+       <y>7</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2653,7 +2971,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>53</y>
+       <y>40</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2666,7 +2984,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>135</y>
+       <y>110</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2679,7 +2997,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>175</y>
+       <y>143</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2692,7 +3010,7 @@
      <property name="geometry">
       <rect>
        <x>141</x>
-       <y>215</y>
+       <y>177</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2707,9 +3025,9 @@
    <property name="geometry">
     <rect>
      <x>16</x>
-     <y>310</y>
+     <y>271</y>
      <width>581</width>
-     <height>56</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
@@ -2718,11 +3036,19 @@
    <widget class="QLabel" name="textLabel1_7">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>13</y>
+      <x>14</x>
+      <y>7</y>
       <width>131</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>TIN Shape Layer</string>
@@ -2731,11 +3057,18 @@
    <widget class="QPushButton" name="pushButtonTINShapeLayerFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>13</y>
+      <x>473</x>
+      <y>7</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -2747,15 +3080,16 @@
    <widget class="QLineEdit" name="lineEditTINShapeLayerFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>14</y>
+      <x>143</x>
+      <y>8</y>
       <width>325</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <family>Arial</family>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -2766,10 +3100,16 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>366</y>
+     <y>320</y>
      <width>581</width>
-     <height>85</height>
+     <height>81</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="title">
     <string>Output</string>
@@ -2777,24 +3117,42 @@
    <widget class="QLabel" name="textLabel1_8">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>37</y>
-      <width>131</width>
+      <x>220</x>
+      <y>10</y>
+      <width>141</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Att Data File</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonAttDataFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>37</y>
+      <x>480</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -2806,15 +3164,16 @@
    <widget class="QLineEdit" name="lineEditAttDataFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>38</y>
-      <width>325</width>
+      <x>5</x>
+      <y>43</y>
+      <width>571</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <family>Arial</family>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>

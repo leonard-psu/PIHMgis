@@ -795,7 +795,11 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked";
 
     try {
-        AttDataFile *AttDataFileDialog = new AttDataFile(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        AttDataFile *AttDataFileDialog = new AttDataFile(this, filename_open_project);
+        AttDataFileDialog->setModal(true);
+
         AttDataFileDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked is returning w/o checking";

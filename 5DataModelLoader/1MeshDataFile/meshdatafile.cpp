@@ -180,7 +180,7 @@ bool MeshDataFile::Check_ElementFile_Input(QString file){
         }
         else
         {
-            ui->lineEditElementFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditElementFile->setStyleSheet("color: red;");
             ui->lineEditElementFile->setText(file);
 
             result = false;
@@ -215,7 +215,7 @@ bool MeshDataFile::Check_NodeFile_Input(QString file){
         }
         else
         {
-            ui->lineEditNodeFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditNodeFile->setStyleSheet("color: red;");
             ui->lineEditNodeFile->setText(file);
 
             result = false;
@@ -250,7 +250,7 @@ bool MeshDataFile::Check_NeighbourFile_Input(QString file){
         }
         else
         {
-            ui->lineEditNeighbourFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditNeighbourFile->setStyleSheet("color: red;");
             ui->lineEditNeighbourFile->setText(file);
 
             result = false;
@@ -284,7 +284,7 @@ bool MeshDataFile::Check_RiverFile_Input(QString file){
         }
         else
         {
-            ui->lineEditRiverFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditRiverFile->setStyleSheet("color: red;");
             ui->lineEditRiverFile->setText(file);
 
             result = false;
@@ -318,7 +318,7 @@ bool MeshDataFile::Check_SurfaceElevationFile_Input(QString file){
         }
         else
         {
-            ui->lineEditSurfaceElevationFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditSurfaceElevationFile->setStyleSheet("color: red;");
             ui->lineEditSurfaceElevationFile->setText(file);
 
             result = false;
@@ -353,7 +353,7 @@ bool MeshDataFile::Check_SubsurfaceThickness_Input(QString file){
         }
         else
         {
-            ui->lineEditSubsurfaceThickness->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditSubsurfaceThickness->setStyleSheet("color: red;");
             ui->lineEditSubsurfaceThickness->setText(file);
 
             result = false;

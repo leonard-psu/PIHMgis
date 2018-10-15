@@ -12,7 +12,11 @@
 #include "globals.h"
 
 
-AttDataFile::AttDataFile(QWidget *parent) :
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// AttDataFile Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+AttDataFile::AttDataFile(QWidget *parent, QString filename) :
     QDialog(parent),
     ui(new Ui::AttDataFile)
 {
@@ -22,46 +26,94 @@ AttDataFile::AttDataFile(QWidget *parent) :
     try {
         ui->setupUi(this);
 
-        // ** Start: Set Defaults
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
+        filename_open_project = filename;
+        bool found_file = false;
+
+        QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("ERROR: Unable to Open File: </span>" + filename_open_project + tr("<br>"));
         }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        QString ProjectFolder   = ProjectFileTextStream.readLine();
-        QString ProjectFileName = ProjectFileTextStream.readLine();
+        else
+        {
+            found_file = true;
+        }
         ProjectFile.close();
+
+        if(found_file)
+        {
+            Load_Project_Settings();
+        }
+
+        pushButtonSetFocus();
+
+
+    } catch (...) {
+        qDebug() << "Error: AttDataFile is returning w/o checking";
+    }
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// AttDataFile Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+AttDataFile::~AttDataFile()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ~AttDataFile";
+
+    try {
+        delete ui;
+    } catch (...) {
+        qDebug() << "Error: ~AttDataFile is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Load_Project_Settings()
+{
+    if (print_debug_messages)
+        qDebug() << "INFO: AttDataFile::Load_Project_Settings()";
+
+    try {
 
         QStringList ModuleStringList;
         QString TempFileName;
+        bool already_displayed_message = false;
 
         // ** Data Model OUTPUT File Name
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("TINShapeLayer"));
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
             TempFileName = ModuleStringList.at(3);
             TempFileName = TempFileName.right(TempFileName.length()-TempFileName.lastIndexOf("/")-1);
             TempFileName.replace( QString(".shp"), QString(".att") );
-            ui->lineEditAttDataFile->setText(ProjectFolder+"/4DataModelLoader/"+TempFileName);
+
+            QString output_filename = user_pihmgis_root_folder + "/4DataModelLoader/" + TempFileName;
+            already_displayed_message = Check_Att_Output(output_filename, true);
         }
 
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("MeshDataFile"));
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("MeshDataFile"));
         if ( ModuleStringList.length() > 0  )
         {
             TempFileName = ModuleStringList.at(9);
-            ui->lineEditAttDataFile->setText(ProjectFolder+"/4DataModelLoader/"+TempFileName+".att");
+            QString output_filename = user_pihmgis_root_folder + "/4DataModelLoader/" + TempFileName;
+            if(already_displayed_message)
+                Check_Att_Output(output_filename, false);
+            else
+                already_displayed_message = Check_Att_Output(output_filename, true);
         }
 
         ui->tabWidget->setCurrentIndex( 0 );
 
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("TINShapeLayer"));
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
             TempFileName = ModuleStringList.at(3);
-            ui->lineEditTINShapeLayerFile->setText(TempFileName);
+            AttDataFile::Check_TINShape_Input(TempFileName);
         }
 
         on_checkBoxPrecipitation_toggled(true);
@@ -108,14 +160,12 @@ AttDataFile::AttDataFile(QWidget *parent) :
 
         // ** End: Set Defaults
 
-
         // ** Start: Fill Form If Module Has Been Run Previously
 
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("AttDataFile"));
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("AttDataFile"));
 
         if ( ModuleStringList.length() > 0 )
         {
-
             ui->checkBoxPrecipitation->setChecked(ModuleStringList.at(2).toInt());
             ui->checkBoxTemperature->setChecked(ModuleStringList.at(4).toInt());
             ui->checkBoxRelativeHumidity->setChecked(ModuleStringList.at(6).toInt());
@@ -137,76 +187,68 @@ AttDataFile::AttDataFile(QWidget *parent) :
             ui->checkBoxGroundwater->setChecked(ModuleStringList.at(34).toInt());
             ui->checkBoxBoundaryCondition->setChecked(ModuleStringList.at(36).toInt());
 
-            ui->lineEditPrecipitationFile->setText(ModuleStringList.at(1));
-            ui->lineEditTemperatureFile->setText(ModuleStringList.at(3));
-            ui->lineEditRelativeHumidityFile->setText(ModuleStringList.at(5));
-            ui->lineEditWindVelocityFile->setText(ModuleStringList.at(7));
-            ui->lineEditSolarRadiationFile->setText(ModuleStringList.at(9));
-            ui->lineEditVaporPressureFile->setText(ModuleStringList.at(11));
 
-            ui->lineEditSoilClassesFile->setText(ModuleStringList.at(13));
-            ui->lineEditGeologyClassesFile->setText(ModuleStringList.at(15));
-            ui->lineEditMacroporesFile->setText(ModuleStringList.at(17));
-            ui->lineEditLandCoverClassesFile->setText(ModuleStringList.at(19));
-            ui->lineEditMeltRegionsFile->setText(ModuleStringList.at(21));
-            ui->lineEditSourcesSinksFile->setText(ModuleStringList.at(23));
+            Check_PrecipitationFileorValue(ModuleStringList.at(1));
+            Check_TemperatureFileorValue(ModuleStringList.at(3));
+            Check_RelativeHumidityFileorValue(ModuleStringList.at(5));
+            Check_WindVelocityFileorValue(ModuleStringList.at(7));
+            Check_SolarRadiationFileorValue(ModuleStringList.at(9));
+            Check_VaporPressureFileorValue(ModuleStringList.at(11));
 
-            ui->lineEditInterceptionFile->setText(ModuleStringList.at(25));
-            ui->lineEditSnowCoverFile->setText(ModuleStringList.at(27));
-            ui->lineEditSurfaceStorageFile->setText(ModuleStringList.at(29));
-            ui->lineEditSoilMoistureFile->setText(ModuleStringList.at(31));
-            ui->lineEditGroundwaterFile->setText(ModuleStringList.at(33));
-            ui->lineEditBoundaryConditionFile->setText(ModuleStringList.at(35));
+            Check_SoilClassesFileorValue(ModuleStringList.at(13));
+            Check_GeologyClassesFileorValue(ModuleStringList.at(15));
+            Check_MacroporesFileorValue(ModuleStringList.at(17));
+            Check_LandCoverClassesFileorValue(ModuleStringList.at(19));
+            Check_MeltRegionsFileorValue(ModuleStringList.at(21));
+            Check_SourcesSinksFileorValue(ModuleStringList.at(23));
 
-            ui->lineEditTINShapeLayerFile->setText(ModuleStringList.at(37));
-            ui->lineEditAttDataFile->setText(ModuleStringList.at(38));
+            Check_InterceptionFileorValue(ModuleStringList.at(25));
+            Check_SnowCoverFileorValue(ModuleStringList.at(27));
+            Check_SurfaceStorageFileorValue(ModuleStringList.at(29));
+            Check_SoilMoistureFileorValue(ModuleStringList.at(31));
+            Check_GroundwaterFileorValue(ModuleStringList.at(33));
+            Check_BoundaryConditionFileorValue(ModuleStringList.at(35));
 
-            ui->lineEditPrecipitationFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditTemperatureFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditRelativeHumidityFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditWindVelocityFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditSolarRadiationFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditVaporPressureFile->setStyleSheet("color: rgb(0, 180, 0);");
+            Check_TINShape_Input(ModuleStringList.at(37));
 
-            ui->lineEditSoilClassesFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditGeologyClassesFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditMacroporesFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditLandCoverClassesFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditMeltRegionsFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditSourcesSinksFile->setStyleSheet("color: rgb(0, 180, 0);");
-
-            ui->lineEditInterceptionFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditSnowCoverFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditSurfaceStorageFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditSoilMoistureFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditGroundwaterFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditBoundaryConditionFile->setStyleSheet("color: rgb(0, 180, 0);");
-
-            ui->lineEditTINShapeLayerFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditAttDataFile->setStyleSheet("color: rgb(0, 180, 0);");
+            if(already_displayed_message)
+                Check_Att_Output(ModuleStringList.at(38), false);
+            else
+                Check_Att_Output(ModuleStringList.at(38), true);
         }
-        // ** End: Fill Form If Module Has Been Run Previously
 
         pushButtonSetFocus();
 
     } catch (...) {
-        qDebug() << "Error: AttDataFile is returning w/o checking";
+        qDebug() << "Error: AttDataFile::Load_Project_Settings is returning w/o checking";
+        return false;
     }
 
+    return true;
 }
 
-AttDataFile::~AttDataFile()
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void AttDataFile::Clear_Log()
 {
     if(print_debug_messages)
-        qDebug() << "INFO: Start ~AttDataFile";
+        qDebug() << "INFO: Start AttDataFile::Clear_Log()";
 
     try {
-        delete ui;
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
     } catch (...) {
-        qDebug() << "Error: ~AttDataFile is returning w/o checking";
+        qDebug() << "Error: AttDataFile::Clear_Log() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to focus button selection (needed for users w/o mouse)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::pushButtonSetFocus()
 {
     if(print_debug_messages)
@@ -370,52 +412,1098 @@ void AttDataFile::pushButtonSetFocus()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if Check_Att_Output OUTPUT file exists (returns true) or does not (returns false)
+// Will color red and warning if exists with color_and_message_if_exists=true
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_Att_Output(QString file, bool color_and_message_if_exists){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_Att_Output()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            if(color_and_message_if_exists)
+            {
+                Log_Error_Message(" Att output already exists: " + file +tr(" You may need to delete these files.<br>"));
+            }
+
+            ui->lineEditAttDataFile->setStyleSheet("color: red;");
+            ui->lineEditAttDataFile->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditAttDataFile->setStyleSheet("color: black;");
+            ui->lineEditAttDataFile->setText(file);
+
+            result = false;
+        }
+
+    } catch (...) {
+        qDebug() << "Error: AttDataFile::Check_Att_Output is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check TINShape File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_TINShape_Input(QString file){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_TINShape_Input()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            ui->lineEditTINShapeLayerFile->setStyleSheet("color: black;");
+            ui->lineEditTINShapeLayerFile->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditTINShapeLayerFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditTINShapeLayerFile->setText(file);
+
+            result = false;
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: Check_TINShape_Input is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check Precipitation File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_PrecipitationFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_PrecipitationFileorValue()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxPrecipitation->isChecked())
+        {
+            if(value.isNull() || value.isEmpty() )
+            {
+                ui->lineEditPrecipitationFile->setStyleSheet("color: red;");
+                ui->lineEditPrecipitationFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditPrecipitationFile->setStyleSheet("color: black;");
+                ui->lineEditPrecipitationFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditPrecipitationFile->setStyleSheet("color: red;");
+                ui->lineEditPrecipitationFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_PrecipitationFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check Temperature File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_TemperatureFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_TemperatureFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxTemperature->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditTemperatureFile->setStyleSheet("color: red;");
+                ui->lineEditTemperatureFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditTemperatureFile->setStyleSheet("color: black;");
+                ui->lineEditTemperatureFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditTemperatureFile->setStyleSheet("color: red;");
+                ui->lineEditTemperatureFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_TemperatureFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check RelativeHumidity File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_RelativeHumidityFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_RelativeHumidityFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxRelativeHumidity->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditRelativeHumidityFile->setStyleSheet("color: red;");
+                ui->lineEditRelativeHumidityFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditRelativeHumidityFile->setStyleSheet("color: black;");
+                ui->lineEditRelativeHumidityFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditRelativeHumidityFile->setStyleSheet("color: red;");
+                ui->lineEditRelativeHumidityFile->setText(value);
+
+                result = false;
+            }
+        }
+    } catch (...) {
+        qDebug() << "Error: Check_RelativeHumidityFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check WindVelocity File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_WindVelocityFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_WindVelocityFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxWindVelocity->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditWindVelocityFile->setStyleSheet("color: red;");
+                ui->lineEditWindVelocityFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditWindVelocityFile->setStyleSheet("color: black;");
+                ui->lineEditWindVelocityFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditWindVelocityFile->setStyleSheet("color: red;");
+                ui->lineEditWindVelocityFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_WindVelocityFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check SolarRadiation File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_SolarRadiationFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_SolarRadiationFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxSolarRadiation->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditSolarRadiationFile->setStyleSheet("color: red;");
+                ui->lineEditSolarRadiationFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditSolarRadiationFile->setStyleSheet("color: black;");
+                ui->lineEditSolarRadiationFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditSolarRadiationFile->setStyleSheet("color: red;");
+                ui->lineEditSolarRadiationFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_SolarRadiationFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check VaporPressure File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_VaporPressureFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_VaporPressureFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxVaporPressure->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditVaporPressureFile->setStyleSheet("color: red;");
+                ui->lineEditVaporPressureFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditVaporPressureFile->setStyleSheet("color: black;");
+                ui->lineEditVaporPressureFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditVaporPressureFile->setStyleSheet("color: red;");
+                ui->lineEditVaporPressureFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_VaporPressureFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check SoilClasses File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_SoilClassesFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_SoilClassesFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxSoilClasses->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditSoilClassesFile->setStyleSheet("color: red;");
+                ui->lineEditSoilClassesFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditSoilClassesFile->setStyleSheet("color: black;");
+                ui->lineEditSoilClassesFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditSoilClassesFile->setStyleSheet("color: red;");
+                ui->lineEditSoilClassesFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_SoilClassesFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check GeologyClasses File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_GeologyClassesFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_GeologyClassesFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxGeologyClasses->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditGeologyClassesFile->setStyleSheet("color: red;");
+                ui->lineEditGeologyClassesFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditGeologyClassesFile->setStyleSheet("color: black;");
+                ui->lineEditGeologyClassesFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditGeologyClassesFile->setStyleSheet("color: red;");
+                ui->lineEditGeologyClassesFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_GeologyClassesFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check Macropores File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_MacroporesFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_MacroporesFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxMacropores->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditMacroporesFile->setStyleSheet("color: red;");
+                ui->lineEditMacroporesFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditMacroporesFile->setStyleSheet("color: black;");
+                ui->lineEditMacroporesFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditMacroporesFile->setStyleSheet("color: red;");
+                ui->lineEditMacroporesFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_MacroporesFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check LandCover File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_LandCoverClassesFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_LandCoverClassesFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxLandCoverClasses->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditLandCoverClassesFile->setStyleSheet("color: red;");
+                ui->lineEditLandCoverClassesFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditLandCoverClassesFile->setStyleSheet("color: black;");
+                ui->lineEditLandCoverClassesFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditLandCoverClassesFile->setStyleSheet("color: red;");
+                ui->lineEditLandCoverClassesFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_LandCoverClassesFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check MeltRegions File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_MeltRegionsFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_MeltRegionsFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxMeltRegions->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditMeltRegionsFile->setStyleSheet("color: red;");
+                ui->lineEditMeltRegionsFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditMeltRegionsFile->setStyleSheet("color: black;");
+                ui->lineEditMeltRegionsFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditMeltRegionsFile->setStyleSheet("color: red;");
+                ui->lineEditMeltRegionsFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_MeltRegionsFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check SourcesSinks File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_SourcesSinksFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_SourcesSinksFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxSourcesSinks->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditSourcesSinksFile->setStyleSheet("color: red;");
+                ui->lineEditSourcesSinksFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditSourcesSinksFile->setStyleSheet("color: black;");
+                ui->lineEditSourcesSinksFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditSourcesSinksFile->setStyleSheet("color: red;");
+                ui->lineEditSourcesSinksFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_SourcesSinksFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check Interception File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_InterceptionFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_InterceptionFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxInterception->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditInterceptionFile->setStyleSheet("color: red;");
+                ui->lineEditInterceptionFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditInterceptionFile->setStyleSheet("color: black;");
+                ui->lineEditInterceptionFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditInterceptionFile->setStyleSheet("color: red;");
+                ui->lineEditInterceptionFile->setText(value);
+
+                result = false;
+            }
+
+        }
+    } catch (...) {
+        qDebug() << "Error: Check_InterceptionFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check SnowCover File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_SnowCoverFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_SnowCoverFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxSnowCover->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditSnowCoverFile->setStyleSheet("color: red;");
+                ui->lineEditSnowCoverFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditSnowCoverFile->setStyleSheet("color: black;");
+                ui->lineEditSnowCoverFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditSnowCoverFile->setStyleSheet("color: red;");
+                ui->lineEditSnowCoverFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_SnowCoverFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check SurfaceStorage File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_SurfaceStorageFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_SurfaceStorageFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxSurfaceStorage->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditSurfaceStorageFile->setStyleSheet("color: red;");
+                ui->lineEditSurfaceStorageFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditSurfaceStorageFile->setStyleSheet("color: black;");
+                ui->lineEditSurfaceStorageFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditSurfaceStorageFile->setStyleSheet("color: red;");
+                ui->lineEditSurfaceStorageFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_SurfaceStorageFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check SoilMoisture File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_SoilMoistureFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_SoilMoistureFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxSoilMoisture->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditSoilMoistureFile->setStyleSheet("color: red;");
+                ui->lineEditSoilMoistureFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditSoilMoistureFile->setStyleSheet("color: black;");
+                ui->lineEditSoilMoistureFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditSoilMoistureFile->setStyleSheet("color: red;");
+                ui->lineEditSoilMoistureFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_SoilMoistureFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check Groundwater File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_GroundwaterFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_GroundwaterFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxGroundwater->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditGroundwaterFile->setStyleSheet("color: red;");
+                ui->lineEditGroundwaterFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditGroundwaterFile->setStyleSheet("color: black;");
+                ui->lineEditGroundwaterFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditGroundwaterFile->setStyleSheet("color: red;");
+                ui->lineEditGroundwaterFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_GroundwaterFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check BoundaryCondition File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Check_BoundaryConditionFileorValue(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_BoundaryConditionFile()";
+
+    bool result = false;
+
+    try {
+
+        if(ui->checkBoxBoundaryCondition->isChecked())
+        {
+            if(value.isNull() || value.isEmpty())
+            {
+                ui->lineEditBoundaryConditionFile->setStyleSheet("color: red;");
+                ui->lineEditBoundaryConditionFile->setText("Missing");
+                result = false;
+            }
+            else if(value == QString("Missing"))
+            {
+                result = false;
+            }
+            else
+            {
+                result = true; //For now assume validators work
+            }
+
+        }
+        else //is a file name to check
+        {
+            if(  fileExists(value) )
+            {
+                ui->lineEditBoundaryConditionFile->setStyleSheet("color: black;");
+                ui->lineEditBoundaryConditionFile->setText(value);
+                result = true;
+            }
+            else
+            {
+                ui->lineEditBoundaryConditionFile->setStyleSheet("color: red;");
+                ui->lineEditBoundaryConditionFile->setText(value);
+
+                result = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_BoundaryConditionFile is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Precipitation Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonPrecipitationFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonPrecipitationFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Precipitation Raster", ProjectFolder, "Precipitation Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Precipitation Raster", user_pihmgis_root_folder, "Precipitation Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditPrecipitationFile->setStyleSheet("color: black;");
-            ui->lineEditPrecipitationFile->setText(RasterFileName);
+            Check_PrecipitationFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonPrecipitationFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Temperature Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonTemperatureFile_clicked()
 {
 
@@ -423,783 +1511,441 @@ void AttDataFile::on_pushButtonTemperatureFile_clicked()
         qDebug() << "INFO: Start AttDataFile::on_pushButtonTemperatureFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Temperature Raster", ProjectFolder, "Temperature Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Temperature Raster", user_pihmgis_root_folder, "Temperature Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditTemperatureFile->setStyleSheet("color: black;");
-            ui->lineEditTemperatureFile->setText(RasterFileName);
+            Check_TemperatureFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
-        qDebug() << "Error: AttDataFile::on_pushButtonPrecipitationFile_clicked() is returning w/o checking";
+        qDebug() << "Error: AttDataFile::on_pushButtonTemperatureFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button RelativeHumidity Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonRelativeHumidityFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonRelativeHumidityFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Relative Humidity Raster", ProjectFolder, "Relative Humidity Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Relative Humidity Raster", user_pihmgis_root_folder, "Relative Humidity Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditRelativeHumidityFile->setStyleSheet("color: black;");
-            ui->lineEditRelativeHumidityFile->setText(RasterFileName);
+            Check_RelativeHumidityFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonRelativeHumidityFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button WindVelocity Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonWindVelocityFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonWindVelocityFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Wind Velocity Raster", ProjectFolder, "Wind Velocity Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Wind Velocity Raster", user_pihmgis_root_folder, "Wind Velocity Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditWindVelocityFile->setStyleSheet("color: black;");
-            ui->lineEditWindVelocityFile->setText(RasterFileName);
+            Check_WindVelocityFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonWindVelocityFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button SolarRadiation Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonSolarRadiationFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonSolarRadiationFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Solar Radiation Raster", ProjectFolder, "Solar Radiation Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Solar Radiation Raster", user_pihmgis_root_folder, "Solar Radiation Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditSolarRadiationFile->setStyleSheet("color: black;");
-            ui->lineEditSolarRadiationFile->setText(RasterFileName);
+            Check_SolarRadiationFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSolarRadiationFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button VaporPressure Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonVaporPressureFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonVaporPressureFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Vapor Pressure Raster", ProjectFolder, "Vapor Pressure Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Vapor Pressure Raster", user_pihmgis_root_folder, "Vapor Pressure Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditVaporPressureFile->setStyleSheet("color: black;");
-            ui->lineEditVaporPressureFile->setText(RasterFileName);
+            Check_VaporPressureFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonVaporPressureFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button SoilClasses Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonSoilClassesFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonSoilClassesFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Soil Classes Raster", ProjectFolder, "Soil Classes Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Soil Classes Raster", user_pihmgis_root_folder, "Soil Classes Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditSoilClassesFile->setStyleSheet("color: black;");
-            ui->lineEditSoilClassesFile->setText(RasterFileName);
+            Check_SoilClassesFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSoilClassesFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button GeologyClasses Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonGeologyClassesFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonGeologyClassesFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
+        Clear_Log();
 
 
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Geology Classes Raster", ProjectFolder, "Geology Classes Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Geology Classes Raster", user_pihmgis_root_folder, "Geology Classes Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditGeologyClassesFile->setStyleSheet("color: black;");
-            ui->lineEditGeologyClassesFile->setText(RasterFileName);
+            Check_GeologyClassesFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonGeologyClassesFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Macropores Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonMacroporesFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonMacroporesFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Macropores Raster", ProjectFolder, "Macropores Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Macropores Raster", user_pihmgis_root_folder, "Macropores Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditMacroporesFile->setStyleSheet("color: black;");
-            ui->lineEditMacroporesFile->setText(RasterFileName);
+            Check_MacroporesFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonMacroporesFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button LandCoverClasses Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonLandCoverClassesFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonLandCoverClassesFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Land-cover Raster", ProjectFolder, "Land-cover Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Land-cover Raster", user_pihmgis_root_folder, "Land-cover Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditLandCoverClassesFile->setStyleSheet("color: black;");
-            ui->lineEditLandCoverClassesFile->setText(RasterFileName);
+            Check_LandCoverClassesFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonLandCoverClassesFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button MeltRegions Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonMeltRegionsFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonMeltRegionsFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Melt Regions Raster", ProjectFolder, "Melt Regions Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Melt Regions Raster", user_pihmgis_root_folder, "Melt Regions Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditMeltRegionsFile->setStyleSheet("color: black;");
-            ui->lineEditMeltRegionsFile->setText(RasterFileName);
+            Check_MeltRegionsFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonMeltRegionsFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button SourcesSinks Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonSourcesSinksFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonSourcesSinksFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Sources-Sinks Raster", ProjectFolder, "Sources-Sinks Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Sources-Sinks Raster", user_pihmgis_root_folder, "Sources-Sinks Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditSourcesSinksFile->setStyleSheet("color: black;");
-            ui->lineEditSourcesSinksFile->setText(RasterFileName);
+            Check_SourcesSinksFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSourcesSinksFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Interception Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonInterceptionFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonInterceptionFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Interception Raster", ProjectFolder, "Interception Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Interception Raster", user_pihmgis_root_folder, "Interception Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditInterceptionFile->setStyleSheet("color: black;");
-            ui->lineEditInterceptionFile->setText(RasterFileName);
+            Check_InterceptionFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonInterceptionFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button SnowCover Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonSnowCoverFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonSnowCoverFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Snow Cover Raster", ProjectFolder, "Snow Cover Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Snow Cover Raster", user_pihmgis_root_folder, "Snow Cover Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditSnowCoverFile->setStyleSheet("color: black;");
-            ui->lineEditSnowCoverFile->setText(RasterFileName);
+            Check_SnowCoverFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSnowCoverFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button SurfaceStorage Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonSurfaceStorageFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonSurfaceStorageFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Surface-water Raster", ProjectFolder, "Surface-water Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Surface-water Raster", user_pihmgis_root_folder, "Surface-water Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditSurfaceStorageFile->setStyleSheet("color: black;");
-            ui->lineEditSurfaceStorageFile->setText(RasterFileName);
+            Check_SurfaceStorageFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSurfaceStorageFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button SoilMoisture Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonSoilMoistureFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonSoilMoistureFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
+        Clear_Log();
 
 
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Soil Moisture Raster", ProjectFolder, "Soil Moisture Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Soil Moisture Raster", user_pihmgis_root_folder, "Soil Moisture Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditSoilMoistureFile->setStyleSheet("color: black;");
-            ui->lineEditSoilMoistureFile->setText(RasterFileName);
+            Check_SoilMoistureFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSoilMoistureFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Groundwater Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonGroundwaterFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonGroundwaterFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Groundwater Raster", ProjectFolder, "Groundwater Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Groundwater Raster", user_pihmgis_root_folder, "Groundwater Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditGroundwaterFile->setStyleSheet("color: black;");
-            ui->lineEditGroundwaterFile->setText(RasterFileName);
+            Check_GroundwaterFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonGroundwaterFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button BoundaryConditionFile Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonBoundaryConditionFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonBoundaryConditionFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "Boundary Condition Raster", ProjectFolder, "Boundary Condition Raster(*.adf *.asc)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "Boundary Condition Raster", user_pihmgis_root_folder, "Boundary Condition Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditBoundaryConditionFile->setStyleSheet("color: black;");
-            ui->lineEditBoundaryConditionFile->setText(RasterFileName);
+            Check_BoundaryConditionFileorValue(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonBoundaryConditionFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button TINShapeLayer Clicked Event (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonTINShapeLayerFile_clicked()
 {
     if(print_debug_messages)
@@ -1207,99 +1953,60 @@ void AttDataFile::on_pushButtonTINShapeLayerFile_clicked()
 
     try {
 
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
+        Clear_Log();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-
-        QString RasterFileName = QFileDialog::getOpenFileName(this, "TIN Shape Layer", ProjectFolder+"/3DomainDecomposition/", "TIN Shape Layer(*.shp *.SHP)");
+        QString RasterFileName = QFileDialog::getOpenFileName(this, "TIN Shape Layer", user_pihmgis_root_folder+"/3DomainDecomposition/", "TIN Shape Layer(*.shp *.SHP)");
 
         if ( RasterFileName != nullptr)
         {
-            ui->lineEditTINShapeLayerFile->setStyleSheet("color: black;");
-            ui->lineEditTINShapeLayerFile->setText(RasterFileName);
+            Check_TINShape_Input(RasterFileName);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonTINShapeLayerFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button TINShapeLayer Clicked Event (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonAttDataFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonAttDataFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
+        Clear_Log();
 
-        QString DataFileName = QFileDialog::getSaveFileName(this, "Choose Att Data File Name", ProjectFolder+"/4DataModelLoader","Att Data File(*.att)");
+
+        QString DataFileName = QFileDialog::getSaveFileName(this, "Choose Att Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Att Data File(*.att)");
         QString tempString = DataFileName;
         if ( DataFileName != nullptr)
         {
-            ui->lineEditAttDataFile->setStyleSheet("color: black;");
-
             if( ! (tempString.toLower()).endsWith(".att") )
             {
                 tempString.append(".att");
                 DataFileName = tempString;
             }
-            ui->lineEditAttDataFile->setText(DataFileName);
+            Check_Att_Output(DataFileName, true);
 
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonAttDataFile_clicked() is returning w/o checking";
     }
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for Precipitation
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxPrecipitation_toggled(bool checked)
 {
+
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_checkBoxPrecipitation_toggled()";
 
@@ -1311,6 +2018,7 @@ void AttDataFile::on_checkBoxPrecipitation_toggled(bool checked)
             ui->lineEditPrecipitationFile->setFixedWidth(100);
             ui->lineEditPrecipitationFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonPrecipitationFile->setDisabled(true);
+            ui->lineEditPrecipitationFile->setText("1"); //Reset to default value
         }
         else
         {
@@ -1319,14 +2027,18 @@ void AttDataFile::on_checkBoxPrecipitation_toggled(bool checked)
             ui->lineEditPrecipitationFile->setFixedWidth(301);
             ui->lineEditPrecipitationFile->setValidator( new QRegExpValidator );
             ui->pushButtonPrecipitationFile->setDisabled(false);
+            ui->lineEditPrecipitationFile->setText("");
         }
+
         ui->lineEditPrecipitationFile->setStyleSheet("color: black;");
-        ui->lineEditPrecipitationFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxPrecipitation_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for Temperature
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxTemperature_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1340,6 +2052,7 @@ void AttDataFile::on_checkBoxTemperature_toggled(bool checked)
             ui->lineEditTemperatureFile->setFixedWidth(100);
             ui->lineEditTemperatureFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonTemperatureFile->setDisabled(true);
+            ui->lineEditTemperatureFile->setText("1"); //Reset to default value
         }
         else
         {
@@ -1348,14 +2061,18 @@ void AttDataFile::on_checkBoxTemperature_toggled(bool checked)
             ui->lineEditTemperatureFile->setFixedWidth(301);
             ui->lineEditTemperatureFile->setValidator( new QRegExpValidator );
             ui->pushButtonTemperatureFile->setDisabled(false);
+            ui->lineEditTemperatureFile->setText(""); //Reset to default value
         }
+
         ui->lineEditTemperatureFile->setStyleSheet("color: black;");
-        ui->lineEditTemperatureFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxTemperature_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for RelativeHumidity
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxRelativeHumidity_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1369,6 +2086,7 @@ void AttDataFile::on_checkBoxRelativeHumidity_toggled(bool checked)
             ui->lineEditRelativeHumidityFile->setFixedWidth(100);
             ui->lineEditRelativeHumidityFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonRelativeHumidityFile->setDisabled(true);
+            ui->lineEditRelativeHumidityFile->setText("1"); //Reset to default value
         }
         else
         {
@@ -1377,14 +2095,18 @@ void AttDataFile::on_checkBoxRelativeHumidity_toggled(bool checked)
             ui->lineEditRelativeHumidityFile->setFixedWidth(301);
             ui->lineEditRelativeHumidityFile->setValidator( new QRegExpValidator );
             ui->pushButtonRelativeHumidityFile->setDisabled(false);
+            ui->lineEditRelativeHumidityFile->setText(""); //Reset to default value
         }
+
         ui->lineEditRelativeHumidityFile->setStyleSheet("color: black;");
-        ui->lineEditRelativeHumidityFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxRelativeHumidity_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for WindVelocity
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxWindVelocity_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1398,6 +2120,7 @@ void AttDataFile::on_checkBoxWindVelocity_toggled(bool checked)
             ui->lineEditWindVelocityFile->setFixedWidth(100);
             ui->lineEditWindVelocityFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonWindVelocityFile->setDisabled(true);
+            ui->lineEditWindVelocityFile->setText("1"); //Reset to default value
         }
         else
         {
@@ -1406,14 +2129,17 @@ void AttDataFile::on_checkBoxWindVelocity_toggled(bool checked)
             ui->lineEditWindVelocityFile->setFixedWidth(301);
             ui->lineEditWindVelocityFile->setValidator( new QRegExpValidator );
             ui->pushButtonWindVelocityFile->setDisabled(false);
+            ui->lineEditWindVelocityFile->setText(""); //Reset to default value
         }
         ui->lineEditWindVelocityFile->setStyleSheet("color: black;");
-        ui->lineEditWindVelocityFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxWindVelocity_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for SolarRadiation
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxSolarRadiation_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1427,6 +2153,7 @@ void AttDataFile::on_checkBoxSolarRadiation_toggled(bool checked)
             ui->lineEditSolarRadiationFile->setFixedWidth(100);
             ui->lineEditSolarRadiationFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonSolarRadiationFile->setDisabled(true);
+            ui->lineEditSolarRadiationFile->setText("1"); //Reset to default value
         }
         else
         {
@@ -1435,14 +2162,17 @@ void AttDataFile::on_checkBoxSolarRadiation_toggled(bool checked)
             ui->lineEditSolarRadiationFile->setFixedWidth(301);
             ui->lineEditSolarRadiationFile->setValidator( new QRegExpValidator );
             ui->pushButtonSolarRadiationFile->setDisabled(false);
+            ui->lineEditSolarRadiationFile->setText(""); //Reset to default value
         }
         ui->lineEditSolarRadiationFile->setStyleSheet("color: black;");
-        ui->lineEditSolarRadiationFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxSolarRadiation_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for VaporPressure
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxVaporPressure_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1456,6 +2186,7 @@ void AttDataFile::on_checkBoxVaporPressure_toggled(bool checked)
             ui->lineEditVaporPressureFile->setFixedWidth(100);
             ui->lineEditVaporPressureFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonVaporPressureFile->setDisabled(true);
+            ui->lineEditVaporPressureFile->setText("1"); //Reset to default value
         }
         else
         {
@@ -1464,14 +2195,17 @@ void AttDataFile::on_checkBoxVaporPressure_toggled(bool checked)
             ui->lineEditVaporPressureFile->setFixedWidth(301);
             ui->lineEditVaporPressureFile->setValidator( new QRegExpValidator );
             ui->pushButtonVaporPressureFile->setDisabled(false);
+            ui->lineEditVaporPressureFile->setText(""); //Reset to default value
         }
         ui->lineEditVaporPressureFile->setStyleSheet("color: black;");
-        ui->lineEditVaporPressureFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxVaporPressure_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for SoilClasses
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxSoilClasses_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1485,6 +2219,7 @@ void AttDataFile::on_checkBoxSoilClasses_toggled(bool checked)
             ui->lineEditSoilClassesFile->setFixedWidth(100);
             ui->lineEditSoilClassesFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonSoilClassesFile->setDisabled(true);
+            ui->lineEditSoilClassesFile->setText("1"); //Reset to default value
         }
         else
         {
@@ -1493,14 +2228,17 @@ void AttDataFile::on_checkBoxSoilClasses_toggled(bool checked)
             ui->lineEditSoilClassesFile->setFixedWidth(301);
             ui->lineEditSoilClassesFile->setValidator( new QRegExpValidator );
             ui->pushButtonSoilClassesFile->setDisabled(false);
+            ui->lineEditSoilClassesFile->setText(""); //Reset to default value
         }
         ui->lineEditSoilClassesFile->setStyleSheet("color: black;");
-        ui->lineEditSoilClassesFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxSoilClasses_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for GeologyClasses
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxGeologyClasses_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1514,6 +2252,7 @@ void AttDataFile::on_checkBoxGeologyClasses_toggled(bool checked)
             ui->lineEditGeologyClassesFile->setFixedWidth(100);
             ui->lineEditGeologyClassesFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonGeologyClassesFile->setDisabled(true);
+            ui->lineEditGeologyClassesFile->setText("1"); //Reset to default value
         }
         else
         {
@@ -1522,14 +2261,17 @@ void AttDataFile::on_checkBoxGeologyClasses_toggled(bool checked)
             ui->lineEditGeologyClassesFile->setFixedWidth(301);
             ui->lineEditGeologyClassesFile->setValidator( new QRegExpValidator );
             ui->pushButtonGeologyClassesFile->setDisabled(false);
+            ui->lineEditGeologyClassesFile->setText(""); //Reset to default value
         }
         ui->lineEditGeologyClassesFile->setStyleSheet("color: black;");
-        ui->lineEditGeologyClassesFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxGeologyClasses_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for Macropores
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxMacropores_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1543,6 +2285,7 @@ void AttDataFile::on_checkBoxMacropores_toggled(bool checked)
             ui->lineEditMacroporesFile->setFixedWidth(100);
             ui->lineEditMacroporesFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonMacroporesFile->setDisabled(true);
+            ui->lineEditMacroporesFile->setText("1"); //Reset to default value
         }
         else
         {
@@ -1551,14 +2294,17 @@ void AttDataFile::on_checkBoxMacropores_toggled(bool checked)
             ui->lineEditMacroporesFile->setFixedWidth(301);
             ui->lineEditMacroporesFile->setValidator( new QRegExpValidator );
             ui->pushButtonMacroporesFile->setDisabled(false);
+            ui->lineEditMacroporesFile->setText(""); //Reset to default value
         }
         ui->lineEditMacroporesFile->setStyleSheet("color: black;");
-        ui->lineEditMacroporesFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxMacropores_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for LandCover
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxLandCoverClasses_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1572,6 +2318,7 @@ void AttDataFile::on_checkBoxLandCoverClasses_toggled(bool checked)
             ui->lineEditLandCoverClassesFile->setFixedWidth(100);
             ui->lineEditLandCoverClassesFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonLandCoverClassesFile->setDisabled(true);
+            ui->lineEditLandCoverClassesFile->setText("1"); //Reset to default value
         }
         else
         {
@@ -1580,15 +2327,18 @@ void AttDataFile::on_checkBoxLandCoverClasses_toggled(bool checked)
             ui->lineEditLandCoverClassesFile->setFixedWidth(301);
             ui->lineEditLandCoverClassesFile->setValidator( new QRegExpValidator );
             ui->pushButtonLandCoverClassesFile->setDisabled(false);
+            ui->lineEditLandCoverClassesFile->setText(""); //Reset to default value
         }
         ui->lineEditLandCoverClassesFile->setStyleSheet("color: black;");
-        ui->lineEditLandCoverClassesFile->setText("");
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxLandCoverClasses_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for MeltRegions
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxMeltRegions_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1603,6 +2353,7 @@ void AttDataFile::on_checkBoxMeltRegions_toggled(bool checked)
             ui->lineEditMeltRegionsFile->setFixedWidth(100);
             ui->lineEditMeltRegionsFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonMeltRegionsFile->setDisabled(true);
+            ui->lineEditMeltRegionsFile->setText("1"); //Reset to default value
         }
         else
         {
@@ -1611,15 +2362,18 @@ void AttDataFile::on_checkBoxMeltRegions_toggled(bool checked)
             ui->lineEditMeltRegionsFile->setFixedWidth(301);
             ui->lineEditMeltRegionsFile->setValidator( new QRegExpValidator );
             ui->pushButtonMeltRegionsFile->setDisabled(false);
+            ui->lineEditMeltRegionsFile->setText(""); //Reset to default value
         }
         ui->lineEditMeltRegionsFile->setStyleSheet("color: black;");
-        ui->lineEditMeltRegionsFile->setText("");
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxMeltRegions_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for SourcesSinks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxSourcesSinks_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1633,6 +2387,7 @@ void AttDataFile::on_checkBoxSourcesSinks_toggled(bool checked)
             ui->lineEditSourcesSinksFile->setFixedWidth(100);
             ui->lineEditSourcesSinksFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonSourcesSinksFile->setDisabled(true);
+            ui->lineEditSourcesSinksFile->setText("0"); //Reset to default value
         }
         else
         {
@@ -1641,14 +2396,17 @@ void AttDataFile::on_checkBoxSourcesSinks_toggled(bool checked)
             ui->lineEditSourcesSinksFile->setFixedWidth(301);
             ui->lineEditSourcesSinksFile->setValidator( new QRegExpValidator );
             ui->pushButtonSourcesSinksFile->setDisabled(false);
+            ui->lineEditSourcesSinksFile->setText(""); //Reset to default value
         }
         ui->lineEditSourcesSinksFile->setStyleSheet("color: black;");
-        ui->lineEditSourcesSinksFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxSourcesSinks_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for Interception
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxInterception_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1662,6 +2420,7 @@ void AttDataFile::on_checkBoxInterception_toggled(bool checked)
             ui->lineEditInterceptionFile->setFixedWidth(100);
             ui->lineEditInterceptionFile->setValidator( new QDoubleValidator(0.0,100.0,4,this) );
             ui->pushButtonInterceptionFile->setDisabled(true);
+            ui->lineEditInterceptionFile->setText("0"); //Reset to default value
         }
         else
         {
@@ -1670,14 +2429,17 @@ void AttDataFile::on_checkBoxInterception_toggled(bool checked)
             ui->lineEditInterceptionFile->setFixedWidth(301);
             ui->lineEditInterceptionFile->setValidator( new QRegExpValidator );
             ui->pushButtonInterceptionFile->setDisabled(false);
+            ui->lineEditInterceptionFile->setText(""); //Reset to default value
         }
         ui->lineEditInterceptionFile->setStyleSheet("color: black;");
-        ui->lineEditInterceptionFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxInterception_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for SnowCover
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxSnowCover_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1691,6 +2453,7 @@ void AttDataFile::on_checkBoxSnowCover_toggled(bool checked)
             ui->lineEditSnowCoverFile->setFixedWidth(100);
             ui->lineEditSnowCoverFile->setValidator( new QDoubleValidator(0.0,100.0,4,this) );
             ui->pushButtonSnowCoverFile->setDisabled(true);
+            ui->lineEditSnowCoverFile->setText("0"); //Reset to default value
         }
         else
         {
@@ -1699,14 +2462,17 @@ void AttDataFile::on_checkBoxSnowCover_toggled(bool checked)
             ui->lineEditSnowCoverFile->setFixedWidth(301);
             ui->lineEditSnowCoverFile->setValidator( new QRegExpValidator );
             ui->pushButtonSnowCoverFile->setDisabled(false);
+            ui->lineEditSnowCoverFile->setText(""); //Reset to default value
         }
         ui->lineEditSnowCoverFile->setStyleSheet("color: black;");
-        ui->lineEditSnowCoverFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxSnowCover_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for SurfaceStorage
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxSurfaceStorage_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1720,6 +2486,7 @@ void AttDataFile::on_checkBoxSurfaceStorage_toggled(bool checked)
             ui->lineEditSurfaceStorageFile->setFixedWidth(100);
             ui->lineEditSurfaceStorageFile->setValidator( new QDoubleValidator(0.0,100.0,4,this) );
             ui->pushButtonSurfaceStorageFile->setDisabled(true);
+            ui->lineEditSurfaceStorageFile->setText("0"); //Reset to default value
         }
         else
         {
@@ -1728,14 +2495,17 @@ void AttDataFile::on_checkBoxSurfaceStorage_toggled(bool checked)
             ui->lineEditSurfaceStorageFile->setFixedWidth(301);
             ui->lineEditSurfaceStorageFile->setValidator( new QRegExpValidator );
             ui->pushButtonSurfaceStorageFile->setDisabled(false);
+            ui->lineEditSurfaceStorageFile->setText(""); //Reset to default value
         }
         ui->lineEditSurfaceStorageFile->setStyleSheet("color: black;");
-        ui->lineEditSurfaceStorageFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxSurfaceStorage_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for SoilMoisture
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxSoilMoisture_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1749,6 +2519,7 @@ void AttDataFile::on_checkBoxSoilMoisture_toggled(bool checked)
             ui->lineEditSoilMoistureFile->setFixedWidth(100);
             ui->lineEditSoilMoistureFile->setValidator( new QDoubleValidator(0.0,100.0,4,this) );
             ui->pushButtonSoilMoistureFile->setDisabled(true);
+            ui->lineEditSoilMoistureFile->setText("0"); //Reset to default value
         }
         else
         {
@@ -1757,14 +2528,17 @@ void AttDataFile::on_checkBoxSoilMoisture_toggled(bool checked)
             ui->lineEditSoilMoistureFile->setFixedWidth(301);
             ui->lineEditSoilMoistureFile->setValidator( new QRegExpValidator );
             ui->pushButtonSoilMoistureFile->setDisabled(false);
+            ui->lineEditSoilMoistureFile->setText(""); //Reset to default value
         }
         ui->lineEditSoilMoistureFile->setStyleSheet("color: black;");
-        ui->lineEditSoilMoistureFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxSoilMoisture_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for Groundwater
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxGroundwater_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1778,6 +2552,7 @@ void AttDataFile::on_checkBoxGroundwater_toggled(bool checked)
             ui->lineEditGroundwaterFile->setFixedWidth(100);
             ui->lineEditGroundwaterFile->setValidator( new QDoubleValidator(0.0,100.0,4,this) );
             ui->pushButtonGroundwaterFile->setDisabled(true);
+            ui->lineEditGroundwaterFile->setText("0"); //Reset to default value
         }
         else
         {
@@ -1786,14 +2561,17 @@ void AttDataFile::on_checkBoxGroundwater_toggled(bool checked)
             ui->lineEditGroundwaterFile->setFixedWidth(301);
             ui->lineEditGroundwaterFile->setValidator( new QRegExpValidator );
             ui->pushButtonGroundwaterFile->setDisabled(false);
+            ui->lineEditGroundwaterFile->setText(""); //Reset to default value
         }
         ui->lineEditGroundwaterFile->setStyleSheet("color: black;");
-        ui->lineEditGroundwaterFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxGroundwater_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for BoundaryCondition
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_checkBoxBoundaryCondition_toggled(bool checked)
 {
     if(print_debug_messages)
@@ -1807,6 +2585,7 @@ void AttDataFile::on_checkBoxBoundaryCondition_toggled(bool checked)
             ui->lineEditBoundaryConditionFile->setFixedWidth(100);
             ui->lineEditBoundaryConditionFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonBoundaryConditionFile->setDisabled(true);
+            ui->lineEditBoundaryConditionFile->setText("0"); //Reset to default value
         }
         else
         {
@@ -1815,825 +2594,831 @@ void AttDataFile::on_checkBoxBoundaryCondition_toggled(bool checked)
             ui->lineEditBoundaryConditionFile->setFixedWidth(301);
             ui->lineEditBoundaryConditionFile->setValidator( new QRegExpValidator );
             ui->pushButtonBoundaryConditionFile->setDisabled(false);
+            ui->lineEditBoundaryConditionFile->setText(""); //Reset to default value
         }
         ui->lineEditBoundaryConditionFile->setStyleSheet("color: black;");
-        ui->lineEditBoundaryConditionFile->setText("");
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_checkBoxBoundaryCondition_toggled() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for PrecipitationFile
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditPrecipitationFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditPrecipitationFile_textChanged()";
 
     try {
-        ui->lineEditPrecipitationFile->setStyleSheet("color: black;");
+        Check_PrecipitationFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditPrecipitationFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for TemperatureFile
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditTemperatureFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditTemperatureFile_textChanged()";
 
     try {
-        ui->lineEditTemperatureFile->setStyleSheet("color: black;");
+        Check_TemperatureFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditTemperatureFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for RelativeHumidity
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditRelativeHumidityFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditRelativeHumidityFile_textChanged()";
 
     try {
-        ui->lineEditRelativeHumidityFile->setStyleSheet("color: black;");
+        Check_RelativeHumidityFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditRelativeHumidityFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for WindVelocity
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditWindVelocityFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditWindVelocityFile_textChanged()";
 
     try {
-        ui->lineEditWindVelocityFile->setStyleSheet("color: black;");
+        Check_RelativeHumidityFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditWindVelocityFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for SolarRadiationFile
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditSolarRadiationFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSolarRadiationFile_textChanged()";
 
     try {
-        ui->lineEditSolarRadiationFile->setStyleSheet("color: black;");
+        Check_SolarRadiationFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSolarRadiationFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to switch betweem File Browse and Int Value for VaporPressure
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditVaporPressureFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditVaporPressureFile_textChanged()";
 
     try {
-        ui->lineEditVaporPressureFile->setStyleSheet("color: black;");
+        Check_VaporPressureFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditVaporPressureFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for SoilClasses
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditSoilClassesFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSoilClassesFile_textChanged()";
 
     try {
-        ui->lineEditSoilClassesFile->setStyleSheet("color: black;");
+        Check_SoilClassesFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSoilClassesFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for GeologyClasse
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditGeologyClassesFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditGeologyClassesFile_textChanged()";
 
     try {
-        ui->lineEditGeologyClassesFile->setStyleSheet("color: black;");
+        Check_GeologyClassesFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditGeologyClassesFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for Macropores
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditMacroporesFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditMacroporesFile_textChanged()";
 
     try {
-        ui->lineEditMacroporesFile->setStyleSheet("color: black;");
+        Check_MacroporesFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditMacroporesFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for LandCoverClasses
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditLandCoverClassesFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditLandCoverClassesFile_textChanged()";
 
     try {
-        ui->lineEditLandCoverClassesFile->setStyleSheet("color: black;");
+        Check_LandCoverClassesFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditLandCoverClassesFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for MeltRegions
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditMeltRegionsFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditMeltRegionsFile_textChanged()";
 
     try {
-        ui->lineEditMeltRegionsFile->setStyleSheet("color: black;");
+        Check_MeltRegionsFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditMeltRegionsFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for SourcesSinks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditSourcesSinksFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSourcesSinksFile_textChanged()";
 
     try {
-        ui->lineEditSourcesSinksFile->setStyleSheet("color: black;");
+        Check_SourcesSinksFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSourcesSinksFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for Interception
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditInterceptionFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditInterceptionFile_textChanged()";
 
     try {
-        ui->lineEditInterceptionFile->setStyleSheet("color: black;");
+        Check_InterceptionFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditInterceptionFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for SnowCover
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditSnowCoverFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSnowCoverFile_textChanged()";
 
     try {
-        ui->lineEditSnowCoverFile->setStyleSheet("color: black;");
+        Check_SnowCoverFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSnowCoverFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for SurfaceStorage
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditSurfaceStorageFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSurfaceStorageFile_textChanged()";
 
     try {
-        ui->lineEditSurfaceStorageFile->setStyleSheet("color: black;");
+        Check_SurfaceStorageFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSurfaceStorageFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for SoilMoisture
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditSoilMoistureFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSoilMoistureFile_textChanged()";
 
     try {
-        ui->lineEditSoilMoistureFile->setStyleSheet("color: black;");
+        Check_SoilMoistureFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSoilMoistureFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for Groundwater
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditGroundwaterFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditGroundwaterFile_textChanged()";
 
     try {
-        ui->lineEditGroundwaterFile->setStyleSheet("color: black;");
+        Check_GroundwaterFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditGroundwaterFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for BoundaryCondition
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditBoundaryConditionFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditBoundaryConditionFile_textChanged()";
 
     try {
-        ui->lineEditBoundaryConditionFile->setStyleSheet("color: black;");
+        Check_BoundaryConditionFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditBoundaryConditionFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for TINShape
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditTINShapeLayerFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditTINShapeLayerFile_textChanged()";
 
     try {
-        ui->lineEditTINShapeLayerFile->setStyleSheet("color: black;");
+        Check_TINShape_Input(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditTINShapeLayerFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for Att OUTPUT
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_lineEditAttDataFile_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_lineEditAttDataFile_textChanged()";
 
     try {
-        ui->lineEditAttDataFile->setStyleSheet("color: black;");
+        Check_Att_Output(arg1, true);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditAttDataFile_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void AttDataFile::Log_Warning_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void AttDataFile::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run Button Clicked Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonRun_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start AttDataFile::on_pushButtonRun_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Att Data File Processing Started ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get CheckBox Input Values
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        bool checked_PrecipitationFile  = ui->checkBoxPrecipitation->isChecked();
+        bool checked_TemperatureFile  = ui->checkBoxTemperature->isChecked();
+        bool checked_RelativeHumidityFile = ui->checkBoxRelativeHumidity->isChecked();
+        bool checked_WindVelocityFile = ui->checkBoxWindVelocity->isChecked();
+        bool checked_SolarRadiationFile = ui->checkBoxSolarRadiation->isChecked();
+        bool checked_VaporPressureFile  = ui->checkBoxVaporPressure->isChecked();
 
-        LogsString.append(tr("Verifying Data Files ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        bool checked_SoilClassesFile  = ui->checkBoxSoilClasses->isChecked();
+        bool checked_GeologyClassesFile = ui->checkBoxGeologyClasses->isChecked();
+        bool checked_MacroporesFile = ui->checkBoxMacropores->isChecked();
+        bool checked_LandCoverClassesFile = ui->checkBoxLandCoverClasses->isChecked();
+        bool checked_MeltRegionsFile  = ui->checkBoxMeltRegions->isChecked();
+        bool checked_SourcesSinksFile = ui->checkBoxSourcesSinks->isChecked();
 
+        bool checked_InterceptionFile = ui->checkBoxInterception->isChecked();
+        bool checked_SnowCoverFile = ui->checkBoxSnowCover->isChecked();
+        bool checked_SurfaceStorageFile = ui->checkBoxSurfaceStorage->isChecked();
+        bool checked_SoilMoistureFile = ui->checkBoxSoilMoisture->isChecked();
+        bool checked_GroundwaterFile  = ui->checkBoxGroundwater->isChecked();
+        bool checked_BoundaryConditionFile = ui->checkBoxBoundaryCondition->isChecked();
 
-        int runFlag = 1;
-
-        // *** TIN File Input
-        if( ui->lineEditTINShapeLayerFile->text() == nullptr )
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check inputs and file access
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString input_filename_TINShape_Input = ui->lineEditTINShapeLayerFile->text();
+        bool checked_input = Check_TINShape_Input(input_filename_TINShape_Input);
+        if(!checked_input)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: TIN Shape File Missing </span>")+tr("<br>"));
-            runFlag = 0;
+            Log_Error_Message("TINShape Input File or Value Missing " + input_filename_TINShape_Input );
+            return;
         }
-        else
+        if ( !CheckFileAccess(input_filename_TINShape_Input, "ReadOnly") )
         {
-            if ( ! CheckFileAccess(ui->lineEditTINShapeLayerFile->text(), "ReadOnly") )
+            Log_Error_Message("No Read Access to TINShape Input File or Value Missing " + input_filename_TINShape_Input );
+            return;
+        }
+
+        QString input_filename_PrecipitationFile = ui->lineEditPrecipitationFile->text();
+        checked_input = Check_PrecipitationFileorValue(input_filename_PrecipitationFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("Precipitation Input File or Value Missing " + input_filename_PrecipitationFile );
+            return;
+        }
+        if ( !checked_PrecipitationFile )
+        {
+            if ( ! CheckFileAccess(input_filename_PrecipitationFile, "ReadOnly") )
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditTINShapeLayerFile->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditTINShapeLayerFile->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        // *** Climate Forcings : START
-
-        if( ui->lineEditPrecipitationFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Precipitation Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxPrecipitation->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditPrecipitationFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditPrecipitationFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditPrecipitationFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditTemperatureFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Temperature Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxTemperature->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditTemperatureFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditTemperatureFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditTemperatureFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditRelativeHumidityFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Relative Humidity Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxRelativeHumidity->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditRelativeHumidityFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditRelativeHumidityFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditRelativeHumidityFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditWindVelocityFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Wind Velocity Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxWindVelocity->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditWindVelocityFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditWindVelocityFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditWindVelocityFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditSolarRadiationFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Solar Radiation Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxSolarRadiation->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditSolarRadiationFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditSolarRadiationFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditSolarRadiationFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditVaporPressureFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Vapor Pressure Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxVaporPressure->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditVaporPressureFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditVaporPressureFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditVaporPressureFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        // *** Climate Forcings : END
-
-        // *** Soils / Geology / Land Cover : START
-
-        if( ui->lineEditSoilClassesFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Soil Classes Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxSoilClasses->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditSoilClassesFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditSoilClassesFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditSoilClassesFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditGeologyClassesFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Geology Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxGeologyClasses->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditGeologyClassesFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditGeologyClassesFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditGeologyClassesFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditMacroporesFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Macropores Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxMacropores->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditMacroporesFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditMacroporesFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditMacroporesFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditLandCoverClassesFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Land-Cover Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxLandCoverClasses->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditLandCoverClassesFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditLandCoverClassesFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditLandCoverClassesFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditMeltRegionsFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Melt Regions Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxMeltRegions->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditMeltRegionsFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditMeltRegionsFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditMeltRegionsFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditSourcesSinksFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Sources-Sinks Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxSourcesSinks->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditSourcesSinksFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditSourcesSinksFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditSourcesSinksFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        // *** Soils / Geology / Land Cover : END
-
-        // *** Initial & Boundary Conditions : START
-
-        if( ui->lineEditInterceptionFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Interception Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxInterception->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditInterceptionFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditInterceptionFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditInterceptionFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditSnowCoverFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Snow Cover Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxSnowCover->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditSnowCoverFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditSnowCoverFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditSnowCoverFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditSurfaceStorageFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Surface Storage Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxSurfaceStorage->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditSurfaceStorageFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditSurfaceStorageFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditSurfaceStorageFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditSoilMoistureFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Soil Moisture Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxSoilMoisture->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditSoilMoistureFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditSoilMoistureFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditSoilMoistureFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditGroundwaterFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Groundwater Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxGroundwater->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditGroundwaterFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditGroundwaterFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditGroundwaterFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if( ui->lineEditBoundaryConditionFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Boundary Condition Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! ui->checkBoxBoundaryCondition->isChecked() )
-            {
-                if ( ! CheckFileAccess(ui->lineEditBoundaryConditionFile->text(), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditBoundaryConditionFile->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditBoundaryConditionFile->text() + " ... <br>");
-            }
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        // *** Initial & Boundary Conditions : END
-
-
-        // *** ATT Data File
-        if( ui->lineEditAttDataFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: ATT Data Output File Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditAttDataFile->text(), "WriteOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditAttDataFile->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditAttDataFile->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-
-        if ( runFlag == 1 )
-        {
-
-            LogsString.append("Running Att Data File ... <br>");
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
-
-            // *** ATT Function Calls
-            //int att_data_file(
-            //        QString PrecipitationFileName, bool PrecipitationFlag, QString TemperatureFileName,    bool TemperatureFlag,    QString RelativeHumidityFileName, bool RelativeHumidityFlag, QString WindVelocityFileName,     bool WindVelocityFlag,     QString SolarRadiationFileName, bool SolarRadiationFlag, QString VaporPressureFileName,     bool VaporPressureFlag,
-            //        QString SoilClassesFileName,   bool SoilClassesFlag,   QString GeologyClassesFileName, bool GeologyClassesFlag, QString MacroporesFileName,       bool MacroporesFlag,       QString LandCoverClassesFileName, bool LandCoverClassesFlag, QString MeltRegionsFileName,    bool MeltRegionsFlag,    QString SourcesSinksFileName,      bool SourcesSinksFlag,
-            //        QString InterceptionFileName,  bool InterceptionFlag,  QString SnowCoverFileFileName,  bool SnowCoverFileFlag,  QString SurfaceStorageFileName,   bool SurfaceStorageFlag,   QString SoilMoistureFileName,     bool SoilMoistureFlag,     QString GroundwaterFileName,    bool GroundwaterFlag,    QString BoundaryConditionFileName, bool BoundaryConditionFlag,
-            //        QString TINShapeLayerFileName, QString AttDataFileName
-            //        );
-            int ErrorAtt = att_data_file(
-
-                        ui->lineEditPrecipitationFile->text(),     ui->checkBoxPrecipitation->isChecked(),
-                        ui->lineEditTemperatureFile->text(),       ui->checkBoxTemperature->isChecked(),
-                        ui->lineEditRelativeHumidityFile->text(),  ui->checkBoxRelativeHumidity->isChecked(),
-                        ui->lineEditWindVelocityFile->text(),      ui->checkBoxWindVelocity->isChecked(),
-                        ui->lineEditSolarRadiationFile->text(),    ui->checkBoxSolarRadiation->isChecked(),
-                        ui->lineEditVaporPressureFile->text(),     ui->checkBoxVaporPressure->isChecked(),
-
-                        ui->lineEditSoilClassesFile->text(),       ui->checkBoxSoilClasses->isChecked(),
-                        ui->lineEditGeologyClassesFile->text(),    ui->checkBoxGeologyClasses->isChecked(),
-                        ui->lineEditMacroporesFile->text(),        ui->checkBoxMacropores->isChecked(),
-                        ui->lineEditLandCoverClassesFile->text(),  ui->checkBoxLandCoverClasses->isChecked(),
-                        ui->lineEditMeltRegionsFile->text(),       ui->checkBoxMeltRegions->isChecked(),
-                        ui->lineEditSourcesSinksFile->text(),      ui->checkBoxSourcesSinks->isChecked(),
-
-                        ui->lineEditInterceptionFile->text(),      ui->checkBoxInterception->isChecked(),
-                        ui->lineEditSnowCoverFile->text(),         ui->checkBoxSnowCover->isChecked(),
-                        ui->lineEditSurfaceStorageFile->text(),    ui->checkBoxSurfaceStorage->isChecked(),
-                        ui->lineEditSoilMoistureFile->text(),      ui->checkBoxSoilMoisture->isChecked(),
-                        ui->lineEditGroundwaterFile->text(),       ui->checkBoxGroundwater->isChecked(),
-                        ui->lineEditBoundaryConditionFile->text(), ui->checkBoxBoundaryCondition->isChecked(),
-
-                        ui->lineEditTINShapeLayerFile->text(), ui->lineEditAttDataFile->text()
-
-                        );
-
-
-            if( ErrorAtt != 0 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Att Data File Processing Failed ... </span>")+tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE ATT: ... </span>")+QString::number(ErrorAtt)+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message("No Read Access to Precipitation Input File or Value Missing " + input_filename_PrecipitationFile );
                 return;
             }
+        }
 
-            ProjectIOStringList << "AttDataFile"
-                                << ui->lineEditPrecipitationFile->text() <<      QString::number( (int) ui->checkBoxPrecipitation->isChecked() )
-                                << ui->lineEditTemperatureFile->text() <<        QString::number( (int) ui->checkBoxTemperature->isChecked() )
-                                << ui->lineEditRelativeHumidityFile->text() <<   QString::number( (int) ui->checkBoxRelativeHumidity->isChecked() )
-                                << ui->lineEditWindVelocityFile->text() <<       QString::number( (int) ui->checkBoxWindVelocity->isChecked() )
-                                << ui->lineEditSolarRadiationFile->text() <<     QString::number( (int) ui->checkBoxSolarRadiation->isChecked() )
-                                << ui->lineEditVaporPressureFile->text() <<      QString::number( (int) ui->checkBoxVaporPressure->isChecked() )
+        QString input_filename_TemperatureFile = ui->lineEditTemperatureFile->text();
+        checked_input = Check_TemperatureFileorValue(input_filename_TemperatureFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("Temperature Input File or Value Missing " + input_filename_PrecipitationFile );
+            return;
+        }
+        if ( !checked_TemperatureFile )
+        {
+            if ( ! CheckFileAccess(input_filename_TemperatureFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to Temperature Input File or Value Missing " + input_filename_TemperatureFile );
+                return;
+            }
+        }
 
-                                << ui->lineEditSoilClassesFile->text() <<        QString::number( (int) ui->checkBoxSoilClasses->isChecked() )
-                                << ui->lineEditGeologyClassesFile->text() <<     QString::number( (int) ui->checkBoxGeologyClasses->isChecked() )
-                                << ui->lineEditMacroporesFile->text() <<         QString::number( (int) ui->checkBoxMacropores->isChecked() )
-                                << ui->lineEditLandCoverClassesFile->text() <<   QString::number( (int) ui->checkBoxLandCoverClasses->isChecked() )
-                                << ui->lineEditMeltRegionsFile->text() <<        QString::number( (int) ui->checkBoxMeltRegions->isChecked() )
-                                << ui->lineEditSourcesSinksFile->text() <<       QString::number( (int) ui->checkBoxSourcesSinks->isChecked() )
+        QString input_filename_RelativeHumidityFile = ui->lineEditRelativeHumidityFile->text();
+        checked_input = Check_RelativeHumidityFileorValue(input_filename_RelativeHumidityFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("RelativeHumidity Input File or Value Missing " + input_filename_RelativeHumidityFile );
+            return;
+        }
+        if ( !checked_RelativeHumidityFile )
+        {
+            if ( ! CheckFileAccess(input_filename_RelativeHumidityFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to RelativeHumidity Input File or Value Missing " + input_filename_RelativeHumidityFile );
+                return;
+            }
+        }
 
-                                << ui->lineEditInterceptionFile->text() <<       QString::number( (int) ui->checkBoxInterception->isChecked() )
-                                << ui->lineEditSnowCoverFile->text() <<          QString::number( (int) ui->checkBoxSnowCover->isChecked() )
-                                << ui->lineEditSurfaceStorageFile->text() <<     QString::number( (int) ui->checkBoxSurfaceStorage->isChecked() )
-                                << ui->lineEditSoilMoistureFile->text() <<       QString::number( (int) ui->checkBoxSoilMoisture->isChecked() )
-                                << ui->lineEditGroundwaterFile->text() <<        QString::number( (int) ui->checkBoxGroundwater->isChecked() )
-                                << ui->lineEditBoundaryConditionFile->text() <<  QString::number( (int) ui->checkBoxBoundaryCondition->isChecked() )
+        QString input_filename_WindVelocityFile = ui->lineEditWindVelocityFile->text();
+        checked_input = Check_WindVelocityFileorValue(input_filename_WindVelocityFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("WindVelocity Input File or Value Missing " + input_filename_WindVelocityFile );
+            return;
+        }
+        if ( !checked_WindVelocityFile )
+        {
+            if ( ! CheckFileAccess(input_filename_WindVelocityFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to WindVelocity Input File or Value Missing " + input_filename_WindVelocityFile );
+                return;
+            }
+        }
 
-                                << ui->lineEditTINShapeLayerFile->text() <<       ui->lineEditAttDataFile->text();
+        QString input_filename_SolarRadiationFile = ui->lineEditSolarRadiationFile->text();
+        checked_input = Check_SolarRadiationFileorValue(input_filename_SolarRadiationFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("SolarRadiation Input File or Value Missing " + input_filename_SolarRadiationFile );
+            return;
+        }
+        if ( !checked_SolarRadiationFile )
+        {
+            if ( ! CheckFileAccess(input_filename_SolarRadiationFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to SolarRadiation Input File or Value Missing " + input_filename_SolarRadiationFile );
+                return;
+            }
+        }
 
-            WriteModuleLine(ProjectFileName, ProjectIOStringList);
-            ProjectIOStringList.clear();
+        QString input_filename_VaporPressureFile = ui->lineEditVaporPressureFile->text();
+        checked_input = Check_VaporPressureFileorValue(input_filename_VaporPressureFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("VaporPressure Input File or Value Missing " + input_filename_VaporPressureFile );
+            return;
+        }
+        if ( !checked_VaporPressureFile )
+        {
+            if ( ! CheckFileAccess(input_filename_VaporPressureFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to VaporPressure Input File or Value Missing " + input_filename_VaporPressureFile );
+                return;
+            }
+        }
 
-            LogsString.append(tr("<br><b>Att Data File Processing Complete.</b>")+tr("<br>"));
+        QString input_filename_SoilClassesFile = ui->lineEditSoilClassesFile->text();
+        checked_input = Check_SoilClassesFileorValue(input_filename_SoilClassesFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("SoilClasses Input File or Value Missing " + input_filename_SoilClassesFile );
+            return;
+        }
+        if ( !checked_SoilClassesFile )
+        {
+            if ( ! CheckFileAccess(input_filename_SoilClassesFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to SoilClasses Input File or Value Missing " + input_filename_SoilClassesFile );
+                return;
+            }
+        }
+
+        QString input_filename_GeologyClassesFile = ui->lineEditGeologyClassesFile->text();
+        checked_input = Check_GeologyClassesFileorValue(input_filename_GeologyClassesFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("GeologyClasses Input File or Value Missing " + input_filename_GeologyClassesFile );
+            return;
+        }
+        if ( !checked_GeologyClassesFile )
+        {
+            if ( ! CheckFileAccess(input_filename_GeologyClassesFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to GeologyClasses Input File or Value Missing " + input_filename_GeologyClassesFile );
+                return;
+            }
+        }
+
+        QString input_filename_MacroporesFile = ui->lineEditMacroporesFile->text();
+        checked_input = Check_MacroporesFileorValue(input_filename_MacroporesFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("Macropores Input File or Value Missing " + input_filename_MacroporesFile );
+            return;
+        }
+        if ( !checked_MacroporesFile )
+        {
+            if ( ! CheckFileAccess(input_filename_MacroporesFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to Macropores Input File or Value Missing " + input_filename_MacroporesFile );
+                return;
+            }
+        }
+
+        QString input_filename_LandCoverClassesFile = ui->lineEditLandCoverClassesFile->text();
+        checked_input = Check_LandCoverClassesFileorValue(input_filename_LandCoverClassesFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("LandCover Input File or Value Missing " + input_filename_LandCoverClassesFile );
+            return;
+        }
+        if ( !checked_LandCoverClassesFile )
+        {
+            if ( ! CheckFileAccess(input_filename_LandCoverClassesFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to LandCover Input File or Value Missing " + input_filename_LandCoverClassesFile );
+                return;
+            }
+        }
+
+        QString input_filename_MeltRegionsFile = ui->lineEditMeltRegionsFile->text();
+        checked_input = Check_MeltRegionsFileorValue(input_filename_MeltRegionsFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("MeltRegions Input File or Value Missing " + input_filename_MeltRegionsFile );
+            return;
+        }
+        if ( !checked_MeltRegionsFile )
+        {
+            if ( ! CheckFileAccess(input_filename_MeltRegionsFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to MeltRegions Input File or Value Missing " + input_filename_MeltRegionsFile );
+                return;
+            }
+        }
+
+        QString input_filename_SourcesSinksFile = ui->lineEditSourcesSinksFile->text();
+        checked_input = Check_SourcesSinksFileorValue(input_filename_SourcesSinksFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("SourcesSinks Input File or Value Missing " + input_filename_SourcesSinksFile );
+            return;
+        }
+        if ( !checked_SourcesSinksFile)
+        {
+            if ( ! CheckFileAccess(input_filename_SourcesSinksFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to SourcesSinks Input File or Value Missing " + input_filename_SourcesSinksFile );
+                return;
+            }
+        }
+
+        QString input_filename_InterceptionFile = ui->lineEditInterceptionFile->text();
+        checked_input = Check_InterceptionFileorValue(input_filename_InterceptionFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("Interception Input File or Value Missing " + input_filename_InterceptionFile );
+            return;
+        }
+        if ( !checked_InterceptionFile )
+        {
+            if ( ! CheckFileAccess(input_filename_InterceptionFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to Interception Input File or Value Missing " + input_filename_InterceptionFile );
+                return;
+            }
+        }
+
+        QString input_filename_SnowCoverFile = ui->lineEditSnowCoverFile->text();
+        checked_input = Check_SnowCoverFileorValue(input_filename_SnowCoverFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("SnowCover Input File or Value Missing " + input_filename_SnowCoverFile );
+            return;
+        }
+        if ( !checked_SnowCoverFile )
+        {
+            if ( ! CheckFileAccess(input_filename_SnowCoverFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to SnowCover Input File or Value Missing " + input_filename_SnowCoverFile );
+                return;
+            }
+        }
+
+        QString input_filename_SurfaceStorageFile = ui->lineEditSurfaceStorageFile->text();
+        checked_input = Check_SurfaceStorageFileorValue(input_filename_SurfaceStorageFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("SurfaceStorage Input File or Value Missing " + input_filename_SurfaceStorageFile );
+            return;
+        }
+        if ( !checked_SurfaceStorageFile )
+        {
+            if ( ! CheckFileAccess(input_filename_SurfaceStorageFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to SurfaceStorage Input File or Value Missing " + input_filename_SurfaceStorageFile );
+                return;
+            }
+        }
+
+        QString input_filename_SoilMoistureFile = ui->lineEditSoilMoistureFile->text();
+        checked_input = Check_SoilMoistureFileorValue(input_filename_SoilMoistureFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("SoilMoisture Input File or Value Missing " + input_filename_SoilMoistureFile );
+            return;
+        }
+        if ( !checked_SoilMoistureFile )
+        {
+            if ( ! CheckFileAccess(input_filename_SoilMoistureFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to SoilMoisture Input File or Value Missing " + input_filename_SoilMoistureFile );
+                return;
+            }
+        }
+
+        QString input_filename_GroundwaterFile = ui->lineEditGroundwaterFile->text();
+        checked_input = Check_GroundwaterFileorValue(input_filename_GroundwaterFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("Groundwater Input File or Value Missing " + input_filename_GroundwaterFile );
+            return;
+        }
+        if ( !checked_GroundwaterFile )
+        {
+            if ( ! CheckFileAccess(input_filename_GroundwaterFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to Groundwater Input File or Value Missing " + input_filename_GroundwaterFile );
+                return;
+            }
+        }
+
+        QString input_filename_BoundaryConditionFile = ui->lineEditBoundaryConditionFile->text();
+        checked_input = Check_BoundaryConditionFileorValue(input_filename_BoundaryConditionFile);
+        if(!checked_input)
+        {
+            Log_Error_Message("BoundaryCondition Input File or Value Missing " + input_filename_BoundaryConditionFile );
+            return;
+        }
+        if ( !checked_BoundaryConditionFile )
+        {
+            if ( ! CheckFileAccess(input_filename_BoundaryConditionFile, "ReadOnly") )
+            {
+                Log_Error_Message("NO Read Access to BoundaryCondition Input File or Value Missing " + input_filename_BoundaryConditionFile );
+                return;
+            }
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check Outputs
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString output_filename = ui->lineEditAttDataFile->text();
+
+        bool output_check = Check_Att_Output(output_filename, true);
+        if(output_check)
+        {
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Running Att Data File
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        LogsString.append("Running Att Data File ... <br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+
+        // *** ATT Function Calls
+        //int att_data_file(
+        //        QString PrecipitationFileName, bool PrecipitationFlag, QString TemperatureFileName,    bool TemperatureFlag,    QString RelativeHumidityFileName, bool RelativeHumidityFlag, QString WindVelocityFileName,     bool WindVelocityFlag,     QString SolarRadiationFileName, bool SolarRadiationFlag, QString VaporPressureFileName,     bool VaporPressureFlag,
+        //        QString SoilClassesFileName,   bool SoilClassesFlag,   QString GeologyClassesFileName, bool GeologyClassesFlag, QString MacroporesFileName,       bool MacroporesFlag,       QString LandCoverClassesFileName, bool LandCoverClassesFlag, QString MeltRegionsFileName,    bool MeltRegionsFlag,    QString SourcesSinksFileName,      bool SourcesSinksFlag,
+        //        QString InterceptionFileName,  bool InterceptionFlag,  QString SnowCoverFileFileName,  bool SnowCoverFileFlag,  QString SurfaceStorageFileName,   bool SurfaceStorageFlag,   QString SoilMoistureFileName,     bool SoilMoistureFlag,     QString GroundwaterFileName,    bool GroundwaterFlag,    QString BoundaryConditionFileName, bool BoundaryConditionFlag,
+        //        QString TINShapeLayerFileName, QString AttDataFileName
+        //        );
+        int ErrorAtt = att_data_file(
+                    input_filename_PrecipitationFile,     checked_PrecipitationFile,
+                    input_filename_TemperatureFile,       checked_TemperatureFile,
+                    input_filename_RelativeHumidityFile,  checked_RelativeHumidityFile,
+                    input_filename_WindVelocityFile,      checked_WindVelocityFile,
+                    input_filename_SolarRadiationFile,    checked_SolarRadiationFile,
+                    input_filename_VaporPressureFile,     checked_VaporPressureFile,
+
+                    input_filename_SoilClassesFile,       checked_SoilClassesFile,
+                    input_filename_GeologyClassesFile,    checked_GeologyClassesFile,
+                    input_filename_MacroporesFile,        checked_MacroporesFile,
+                    input_filename_LandCoverClassesFile,  checked_LandCoverClassesFile,
+                    input_filename_MeltRegionsFile,       checked_MeltRegionsFile,
+                    input_filename_SourcesSinksFile,      checked_SourcesSinksFile,
+
+                    input_filename_InterceptionFile,      checked_InterceptionFile,
+                    input_filename_SnowCoverFile,         checked_SnowCoverFile,
+                    input_filename_SurfaceStorageFile,    checked_SurfaceStorageFile,
+                    input_filename_SoilMoistureFile,      checked_SoilMoistureFile,
+                    input_filename_GroundwaterFile,       checked_GroundwaterFile,
+                    input_filename_BoundaryConditionFile, checked_BoundaryConditionFile,
+
+                    input_filename_TINShape_Input,
+                    output_filename
+
+                    );
+
+        if( ErrorAtt != 0 )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Att Data File Processing Failed ... </span>")+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE ATT: ... </span>")+QString::number(ErrorAtt)+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
-
-            ui->pushButtonRun->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
-
+            return;
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QStringList ProjectIOStringList;
+
+        ProjectIOStringList << "AttDataFile"
+                            << input_filename_PrecipitationFile <<      QString::number( (int) checked_PrecipitationFile )
+                            << input_filename_TemperatureFile <<        QString::number( (int) checked_TemperatureFile)
+                            << input_filename_RelativeHumidityFile <<   QString::number( (int) checked_RelativeHumidityFile )
+                            << input_filename_WindVelocityFile <<       QString::number( (int) checked_WindVelocityFile )
+                            << input_filename_SolarRadiationFile <<     QString::number( (int) checked_SolarRadiationFile )
+                            << input_filename_VaporPressureFile <<      QString::number( (int) checked_VaporPressureFile )
+
+                            << input_filename_SoilClassesFile <<        QString::number( (int) checked_SoilClassesFile)
+                            << input_filename_GeologyClassesFile <<     QString::number( (int) checked_GeologyClassesFile )
+                            << input_filename_MacroporesFile <<         QString::number( (int) checked_MacroporesFile)
+                            << input_filename_LandCoverClassesFile <<   QString::number( (int) checked_LandCoverClassesFile )
+                            << input_filename_MeltRegionsFile <<        QString::number( (int) checked_MeltRegionsFile )
+                            << input_filename_SourcesSinksFile <<       QString::number( (int) checked_SourcesSinksFile )
+
+                            << input_filename_InterceptionFile <<       QString::number( (int) checked_InterceptionFile )
+                            << input_filename_SnowCoverFile <<          QString::number( (int) checked_SnowCoverFile )
+                            << input_filename_SurfaceStorageFile <<     QString::number( (int) checked_SurfaceStorageFile )
+                            << input_filename_SoilMoistureFile <<       QString::number( (int) checked_SoilMoistureFile )
+                            << input_filename_GroundwaterFile <<        QString::number( (int) checked_GroundwaterFile )
+                            << input_filename_BoundaryConditionFile <<  QString::number( (int) checked_BoundaryConditionFile )
+
+                            << input_filename_TINShape_Input <<       output_filename;
+
+        WriteModuleLine(filename_open_project, ProjectIOStringList);
+        ProjectIOStringList.clear();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Message box
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+
+        LogsString.append(tr("<br><b>Att Data File Processing Complete.</b>")+tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        ui->pushButtonRun->setDefault(false);
+        ui->pushButtonClose->setDefault(true);
+        ui->pushButtonClose->setFocus();
+
+
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonRun_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start on_pushButtonClose_clicked";
 
     try {
-        QStringList default_params; default_params << "WORKFLOW5" << "RIVX";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //QStringList default_params; default_params << "WORKFLOW5" << "RIVX";
+        //QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonClose_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AttDataFile::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start on_pushButtonHelp_clicked";
 
     try {
-//        LogsString = tr("");
-//        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#att_Data_File")) )
-//            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
-//        ui->textBrowserLogs->setHtml(LogsString);
-//        ui->textBrowserLogs->repaint();
+        //        LogsString = tr("");
+        //        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#att_Data_File")) )
+        //            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
+        //        ui->textBrowserLogs->setHtml(LogsString);
+        //        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonHelp_clicked() is returning w/o checking";
     }
