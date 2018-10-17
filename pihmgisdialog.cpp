@@ -894,7 +894,10 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked";
 
     try {
-        IbcDataFile *IbcDataFileDialog = new IbcDataFile(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        IbcDataFile *IbcDataFileDialog = new IbcDataFile(this, filename_open_project);
+        IbcDataFileDialog->setModal(true);
         IbcDataFileDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked is returning w/o checking";

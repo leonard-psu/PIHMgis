@@ -40,7 +40,7 @@ public:
     {
         if (IbcDataFile->objectName().isEmpty())
             IbcDataFile->setObjectName(QStringLiteral("IbcDataFile"));
-        IbcDataFile->resize(611, 305);
+        IbcDataFile->resize(611, 325);
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -98,9 +98,16 @@ public:
         palette.setBrush(QPalette::Disabled, QPalette::ToolTipBase, brush4);
         palette.setBrush(QPalette::Disabled, QPalette::ToolTipText, brush);
         IbcDataFile->setPalette(palette);
+        QFont font;
+        font.setFamily(QStringLiteral("Arial"));
+        font.setPointSize(10);
+        IbcDataFile->setFont(font);
         textBrowserLogs = new QTextBrowser(IbcDataFile);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(15, 214, 581, 71));
+        textBrowserLogs->setGeometry(QRect(15, 140, 581, 161));
+        QFont font1;
+        font1.setPointSize(11);
+        textBrowserLogs->setFont(font1);
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
         BorderTop = new QFrame(IbcDataFile);
         BorderTop->setObjectName(QStringLiteral("BorderTop"));
@@ -172,22 +179,30 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         groupBoxButtons = new QGroupBox(IbcDataFile);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(15, 134, 581, 61));
+        groupBoxButtons->setGeometry(QRect(15, 93, 581, 41));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
-        pushButtonHelp->setGeometry(QRect(10, 17, 113, 32));
+        pushButtonHelp->setEnabled(false);
+        pushButtonHelp->setGeometry(QRect(10, 5, 113, 32));
+        QFont font2;
+        font2.setPointSize(12);
+        font2.setBold(true);
+        font2.setWeight(75);
+        pushButtonHelp->setFont(font2);
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(326, 17, 113, 32));
+        pushButtonClose->setGeometry(QRect(340, 5, 113, 32));
+        pushButtonClose->setFont(font2);
         pushButtonClose->setAutoDefault(false);
         pushButtonRun = new QPushButton(groupBoxButtons);
         pushButtonRun->setObjectName(QStringLiteral("pushButtonRun"));
-        pushButtonRun->setGeometry(QRect(460, 17, 113, 32));
+        pushButtonRun->setGeometry(QRect(460, 5, 113, 32));
+        pushButtonRun->setFont(font2);
         pushButtonRun->setAutoDefault(false);
         BorderBottom = new QFrame(IbcDataFile);
         BorderBottom->setObjectName(QStringLiteral("BorderBottom"));
-        BorderBottom->setGeometry(QRect(0, 289, 611, 20));
+        BorderBottom->setGeometry(QRect(0, 305, 611, 20));
         BorderBottom->setBaseSize(QSize(0, 0));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush5);
@@ -243,22 +258,24 @@ public:
         BorderBottom->setFrameShape(QFrame::HLine);
         groupBoxOutput = new QGroupBox(IbcDataFile);
         groupBoxOutput->setObjectName(QStringLiteral("groupBoxOutput"));
-        groupBoxOutput->setGeometry(QRect(15, 23, 581, 91));
+        groupBoxOutput->setGeometry(QRect(15, 13, 581, 81));
         textLabel2 = new QLabel(groupBoxOutput);
         textLabel2->setObjectName(QStringLiteral("textLabel2"));
-        textLabel2->setGeometry(QRect(16, 41, 131, 31));
+        textLabel2->setGeometry(QRect(230, 10, 131, 31));
+        textLabel2->setFont(font2);
         pushButtonIbcDataFile = new QPushButton(groupBoxOutput);
         pushButtonIbcDataFile->setObjectName(QStringLiteral("pushButtonIbcDataFile"));
-        pushButtonIbcDataFile->setGeometry(QRect(475, 41, 98, 32));
+        pushButtonIbcDataFile->setGeometry(QRect(477, 10, 98, 32));
+        pushButtonIbcDataFile->setFont(font2);
         pushButtonIbcDataFile->setAutoDefault(false);
         lineEditIbcDataFile = new QLineEdit(groupBoxOutput);
         lineEditIbcDataFile->setObjectName(QStringLiteral("lineEditIbcDataFile"));
-        lineEditIbcDataFile->setGeometry(QRect(145, 42, 325, 29));
-        QFont font;
-        font.setPointSize(14);
-        font.setBold(true);
-        font.setWeight(75);
-        lineEditIbcDataFile->setFont(font);
+        lineEditIbcDataFile->setGeometry(QRect(6, 45, 571, 29));
+        QFont font3;
+        font3.setPointSize(11);
+        font3.setBold(true);
+        font3.setWeight(75);
+        lineEditIbcDataFile->setFont(font3);
 
         retranslateUi(IbcDataFile);
 
@@ -267,7 +284,7 @@ public:
 
     void retranslateUi(QDialog *IbcDataFile)
     {
-        IbcDataFile->setWindowTitle(QApplication::translate("IbcDataFile", ": :   Ibc Data File   : :", nullptr));
+        IbcDataFile->setWindowTitle(QApplication::translate("IbcDataFile", "Ibc Data File", nullptr));
         groupBoxButtons->setTitle(QString());
         pushButtonHelp->setText(QApplication::translate("IbcDataFile", "Help", nullptr));
         pushButtonClose->setText(QApplication::translate("IbcDataFile", "Close", nullptr));

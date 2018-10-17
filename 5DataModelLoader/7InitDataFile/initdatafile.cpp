@@ -188,7 +188,7 @@ bool InitDataFile::Load_Project_Settings()
 void InitDataFile::Clear_Log()
 {
     if(print_debug_messages)
-        qDebug() << "INFO: Start MeshDataFile::Clear_Log()";
+        qDebug() << "INFO: Start InitDataFile::Clear_Log()";
 
     try {
 

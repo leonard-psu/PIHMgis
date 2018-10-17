@@ -12,11 +12,10 @@ class IbcDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit IbcDataFile(QWidget *parent = 0);
+    explicit IbcDataFile(QWidget *parent = 0, QString filename_open_project = "");
     ~IbcDataFile();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonIbcDataFile_clicked();
@@ -29,10 +28,20 @@ private slots:
 
     void pushButtonSetFocus();
 
-    int  ibc_data_file( QString );
 
 private:
+
+    int  ibc_data_file( QString );
+
+    void Clear_Log();
+    bool Load_Project_Settings();
+    void Log_Error_Message(QString message);
+
+    bool Check_IbcData_Output(QString file, bool message); //lineEditIbcDataFile
+
     Ui::IbcDataFile *ui;
+    QString filename_open_project;
+
 };
 
 #endif // IBCDATAFILE_H

@@ -71,10 +71,10 @@ private:
     bool Check_River_Input(QString value);
     bool Check_Riverbed_Input(QString value);
 
-    bool Check_MeshData_Input(QString file); //ui->lineEditMeshDataFile->setText(ModuleStringList.at(9));
-    bool Check_RivData_Input(QString file); //ui->lineEditRivDataFile->setText(ModuleStringList.at(10));
+    bool Check_MeshData_Input(QString file);
+    bool Check_RivData_Input(QString file);
 
-    bool Check_InitData_Output(QString file, bool message); //ui->lineEditInitDataFile->setText(ModuleStringList.at(11));
+    bool Check_InitData_Output(QString file, bool message);
 
 
 

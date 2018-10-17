@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>611</width>
-    <height>305</height>
+    <height>325</height>
    </rect>
   </property>
   <property name="palette">
@@ -425,17 +425,28 @@
     </disabled>
    </palette>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>: :   Ibc Data File   : :</string>
+   <string>Ibc Data File</string>
   </property>
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>214</y>
+     <y>140</y>
      <width>581</width>
-     <height>71</height>
+     <height>161</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
    </property>
    <property name="lineWrapMode">
     <enum>QTextEdit::NoWrap</enum>
@@ -891,22 +902,32 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>134</y>
+     <y>93</y>
      <width>581</width>
-     <height>61</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="title">
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>17</y>
+      <y>5</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -918,11 +939,18 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>326</x>
-      <y>17</y>
+      <x>340</x>
+      <y>5</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Close</string>
@@ -935,10 +963,17 @@
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>17</y>
+      <y>5</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string/>
@@ -955,7 +990,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>289</y>
+     <y>305</y>
      <width>611</width>
      <height>20</height>
     </rect>
@@ -1401,9 +1436,9 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>23</y>
+     <y>13</y>
      <width>581</width>
-     <height>91</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="title">
@@ -1412,11 +1447,18 @@
    <widget class="QLabel" name="textLabel2">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>41</y>
+      <x>230</x>
+      <y>10</y>
       <width>131</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>IBC Data File</string>
@@ -1425,11 +1467,18 @@
    <widget class="QPushButton" name="pushButtonIbcDataFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>41</y>
+      <x>477</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -1441,15 +1490,15 @@
    <widget class="QLineEdit" name="lineEditIbcDataFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>42</y>
-      <width>325</width>
+      <x>6</x>
+      <y>45</y>
+      <width>571</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
