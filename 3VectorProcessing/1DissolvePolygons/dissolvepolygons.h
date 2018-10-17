@@ -34,14 +34,16 @@ private slots:
 
     void pushButtonSetFocus();
 
+
+
+private:
+
     void Clear_Log();
 
     bool Check_File_Valid(QString file);
 
     bool Load_Project_Settings();
 
-
-private:
     Ui::DissolvePolygons *ui;
     QString filename_open_project;
 

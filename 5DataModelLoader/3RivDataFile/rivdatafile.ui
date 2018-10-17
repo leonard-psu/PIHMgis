@@ -425,8 +425,14 @@
     </disabled>
    </palette>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>: :   Riv Data File   : :</string>
+   <string>Riv Data File</string>
   </property>
   <widget class="Line" name="BorderBottom">
    <property name="geometry">
@@ -878,7 +884,7 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>394</y>
+     <y>327</y>
      <width>581</width>
      <height>61</height>
     </rect>
@@ -887,6 +893,9 @@
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -894,6 +903,12 @@
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -905,11 +920,17 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>326</x>
+      <x>340</x>
       <y>17</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Close</string>
@@ -927,6 +948,12 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="toolTip">
      <string/>
     </property>
@@ -942,9 +969,9 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>465</y>
+     <y>395</y>
      <width>581</width>
-     <height>71</height>
+     <height>141</height>
     </rect>
    </property>
    <property name="lineWrapMode">
@@ -1381,6 +1408,12 @@
      </disabled>
     </palette>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(0, 51, 153);</string>
    </property>
@@ -1401,10 +1434,15 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>295</y>
+     <y>250</y>
      <width>581</width>
      <height>85</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="title">
     <string>Output</string>
@@ -1412,24 +1450,41 @@
    <widget class="QLabel" name="textLabel1_2">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>37</y>
+      <x>220</x>
+      <y>10</y>
       <width>131</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Riv Data File</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonRivDataFile">
     <property name="geometry">
      <rect>
       <x>475</x>
-      <y>37</y>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -1441,15 +1496,15 @@
    <widget class="QLineEdit" name="lineEditRivDataFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>38</y>
-      <width>325</width>
+      <x>5</x>
+      <y>46</y>
+      <width>571</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1462,8 +1517,13 @@
      <x>15</x>
      <y>12</y>
      <width>581</width>
-     <height>203</height>
+     <height>161</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="title">
     <string>Input</string>
@@ -1472,10 +1532,17 @@
     <property name="geometry">
      <rect>
       <x>475</x>
-      <y>32</y>
+      <y>15</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -1493,28 +1560,38 @@
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>32</y>
+      <x>25</x>
+      <y>15</y>
       <width>111</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Element File</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEditElementFile">
     <property name="geometry">
      <rect>
       <x>145</x>
-      <y>33</y>
+      <y>16</y>
       <width>325</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1524,14 +1601,14 @@
     <property name="geometry">
      <rect>
       <x>145</x>
-      <y>74</y>
+      <y>50</y>
       <width>325</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1540,24 +1617,41 @@
    <widget class="QLabel" name="textLabel1_3">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>73</y>
+      <x>25</x>
+      <y>49</y>
       <width>111</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Node File</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonNodeFile">
     <property name="geometry">
      <rect>
       <x>475</x>
-      <y>73</y>
+      <y>49</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -1576,14 +1670,14 @@
     <property name="geometry">
      <rect>
       <x>145</x>
-      <y>115</y>
+      <y>84</y>
       <width>325</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1592,24 +1686,41 @@
    <widget class="QLabel" name="textLabel1_4">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>114</y>
+      <x>25</x>
+      <y>83</y>
       <width>111</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Neighbour File</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonNeighbourFile">
     <property name="geometry">
      <rect>
       <x>475</x>
-      <y>114</y>
+      <y>83</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -1628,14 +1739,14 @@
     <property name="geometry">
      <rect>
       <x>145</x>
-      <y>158</y>
+      <y>116</y>
       <width>325</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1644,24 +1755,41 @@
    <widget class="QLabel" name="textLabel1_5">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>157</y>
-      <width>111</width>
+      <x>5</x>
+      <y>115</y>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>River Shape File</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonRiverFile">
     <property name="geometry">
      <rect>
       <x>475</x>
-      <y>158</y>
+      <y>116</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -1681,10 +1809,17 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>220</y>
+     <y>180</y>
      <width>581</width>
      <height>71</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
    <property name="title">
     <string>Outlet(s) Boundary Condition</string>
@@ -1697,6 +1832,13 @@
       <width>131</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string> Dirichlet</string>
@@ -1711,6 +1853,13 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string> Neumann</string>
     </property>
@@ -1723,6 +1872,13 @@
       <width>131</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string> Zero-depth</string>

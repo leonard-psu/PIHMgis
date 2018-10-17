@@ -12,13 +12,13 @@ class RivDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit RivDataFile(QWidget *parent = 0);
+    explicit RivDataFile(QWidget *parent = 0, QString filename_open_project = "");
     ~RivDataFile();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
 
 private slots:
+
     void on_pushButtonElementFile_clicked();
 
     void on_pushButtonNodeFile_clicked();
@@ -38,7 +38,24 @@ private slots:
     void pushButtonSetFocus();
 
 private:
+
+    void Clear_Log();
+
+    bool Load_Project_Settings();
+
+    bool Check_Element_Input(QString file);
+    bool Check_Node_Input(QString file);
+    bool Check_Neighbor_Input(QString file);
+    bool Check_RiverShape_Input(QString file);
+
+    bool Check_RiverData_Output(QString file, bool message);
+
+    void Log_Warning_Message(QString message);
+    void Log_Error_Message(QString message);
+
     Ui::RivDataFile *ui;
+    QString filename_open_project;
+
 };
 
 #endif // RIVDATAFILE_H

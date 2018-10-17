@@ -425,17 +425,28 @@
     </disabled>
    </palette>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>: :   Soil Data File   : :</string>
+   <string>Soil Data File</string>
   </property>
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>310</y>
+     <y>240</y>
      <width>581</width>
-     <height>71</height>
+     <height>141</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
    </property>
    <property name="lineWrapMode">
     <enum>QTextEdit::NoWrap</enum>
@@ -445,22 +456,32 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>235</y>
+     <y>190</y>
      <width>581</width>
-     <height>61</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="title">
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>17</y>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -472,11 +493,18 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>326</x>
-      <y>17</y>
+      <x>340</x>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Close</string>
@@ -489,10 +517,17 @@
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>17</y>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string/>
@@ -509,7 +544,7 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>124</y>
+     <y>100</y>
      <width>581</width>
      <height>91</height>
     </rect>
@@ -520,24 +555,42 @@
    <widget class="QLabel" name="textLabel2">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>41</y>
+      <x>190</x>
+      <y>10</y>
       <width>131</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Soil Data File</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonSoilDataFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>41</y>
+      <x>478</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -549,15 +602,15 @@
    <widget class="QLineEdit" name="lineEditSoilDataFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
+      <x>5</x>
       <y>42</y>
-      <width>325</width>
+      <width>571</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1462,7 +1515,7 @@
      <x>15</x>
      <y>18</y>
      <width>581</width>
-     <height>91</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="title">
@@ -1471,11 +1524,18 @@
    <widget class="QPushButton" name="pushButtonSoilTextureFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>40</y>
+      <x>477</x>
+      <y>10</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -1493,28 +1553,39 @@
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>40</y>
+      <x>200</x>
+      <y>10</y>
       <width>111</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Soil Texture</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEditSoilTextureFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>41</y>
-      <width>325</width>
+      <x>6</x>
+      <y>46</y>
+      <width>571</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>

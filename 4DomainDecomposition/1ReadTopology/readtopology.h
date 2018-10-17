@@ -31,6 +31,9 @@ private slots:
 
     void pushButtonSetFocus();
 
+
+private:
+
     void Clear_Log();
 
     bool Load_Project_Settings();
@@ -41,8 +44,6 @@ private slots:
 
     bool Check_PSLG_Output(QString file, bool message);
 
-
-private:
     Ui::ReadTopology *ui;
 
     QString filename_open_project;

@@ -28,6 +28,8 @@ private slots:
 
     void pushButtonSetFocus();
 
+private:
+
     int calib_data_file(QString filename);
 
     void Clear_Log();
@@ -37,7 +39,6 @@ private slots:
     bool Check_Calib_Output(QString file, bool color_and_message_if_exists);
 
 
-private:
     Ui::CalibDataFile *ui;
     QString filename_open_project;
 

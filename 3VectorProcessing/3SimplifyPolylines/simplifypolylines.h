@@ -37,14 +37,14 @@ private slots:
 
     void on_tableWidget_cellChanged(int row, int column);
 
+private:
+
     void Clear_Log();
 
     bool Load_Project_Settings();
 
     bool Check_File_Valid(QString file);
 
-
-private:
     Ui::SimplifyPolylines *ui;
     QString filename_open_project;
 

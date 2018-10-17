@@ -34,6 +34,8 @@ private slots:
 
     void pushButtonSetFocus();
 
+private:
+
     void Clear_Log();
 
     bool Load_Project_Settings();
@@ -42,7 +44,6 @@ private slots:
 
     bool Check_MergeLayer_Output(QString file, bool color_and_message_if_exists);
 
-private:
     Ui::MergeVectorLayers *ui;
     QString filename_open_project;
 

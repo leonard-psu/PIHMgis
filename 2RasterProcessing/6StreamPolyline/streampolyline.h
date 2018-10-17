@@ -33,6 +33,8 @@ private slots:
 
     void pushButtonSetFocus();
 
+private:
+
     void Clear_Log();
 
     bool Check_StreamGrids_Input(QString file);
@@ -43,7 +45,6 @@ private slots:
 
     bool Load_Project_Settings();
 
-private:
     Ui::StreamPolyline *ui;
     QString filename_open_project;
 

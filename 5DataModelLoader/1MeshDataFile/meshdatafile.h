@@ -42,6 +42,8 @@ private slots:
 
     void on_checkBoxSubsurfaceThickness_toggled(bool checked);
 
+private:
+
     void Clear_Log();
 
     bool Load_Project_Settings();
@@ -60,7 +62,6 @@ private slots:
 
     bool Check_MeshData_Output(QString file, bool message);
 
-private:
     Ui::MeshDataFile *ui;
     QString filename_open_project;
 

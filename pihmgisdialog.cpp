@@ -812,7 +812,11 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked";
 
     try {
-        RivDataFile *RivDataFileDialog = new RivDataFile(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        RivDataFile *RivDataFileDialog = new RivDataFile(this, filename_open_project);
+        RivDataFileDialog->setModal(true);
+
         RivDataFileDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked is returning w/o checking";
@@ -825,7 +829,11 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked";
 
     try {
-        SoilDataFile *SoilDataFileDialog = new SoilDataFile(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        SoilDataFile *SoilDataFileDialog = new SoilDataFile(this, filename_open_project);
+        SoilDataFileDialog->setModal(true);
+
         SoilDataFileDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked is returning w/o checking";
@@ -838,7 +846,10 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked";
 
     try {
-        GeolDataFile *GeolDataFileDialog = new GeolDataFile(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        GeolDataFile *GeolDataFileDialog = new GeolDataFile(this, filename_open_project);
+        GeolDataFileDialog->setModal(true);
         GeolDataFileDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked is returning w/o checking";
@@ -851,7 +862,10 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked";
 
     try {
-        LcDataFile *LcDataFileDialog = new LcDataFile(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        LcDataFile *LcDataFileDialog = new LcDataFile(this, filename_open_project);
+        LcDataFileDialog->setModal(true);
         LcDataFileDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked is returning w/o checking";
@@ -864,7 +878,10 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked";
 
     try {
-        InitDataFile *InitDataFileDialog = new InitDataFile(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        InitDataFile *InitDataFileDialog = new InitDataFile(this, filename_open_project);
+        InitDataFileDialog->setModal(true);
         InitDataFileDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked is returning w/o checking";

@@ -149,6 +149,9 @@ private slots:
     void on_lineEditAttDataFile_textChanged(const QString &arg1);
 
 
+private:
+
+
     void Clear_Log();
 
     bool Load_Project_Settings();
@@ -181,9 +184,11 @@ private slots:
     void Log_Warning_Message(QString message);
     void Log_Error_Message(QString message);
 
-private:
+
     Ui::AttDataFile *ui;
     QString filename_open_project;
+
+
 
 };
 

@@ -12,7 +12,7 @@ class SoilDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit SoilDataFile(QWidget *parent = 0);
+    explicit SoilDataFile(QWidget *parent = 0, QString filename_open_project = "");
     ~SoilDataFile();
 
     QString LogsString;
@@ -33,7 +33,20 @@ private slots:
 
 
 private:
+
+    void Clear_Log();
+
+    bool Load_Project_Settings();
+
+    bool Check_SoilTexture_Input(QString file);
+
+    bool Check_SoilData_Output(QString file, bool message);
+
+
+
     Ui::SoilDataFile *ui;
+    QString filename_open_project;
+
 };
 
 #endif // SOILDATAFILE_H

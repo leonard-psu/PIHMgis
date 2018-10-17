@@ -906,8 +906,8 @@ void   VSLOPE(float E0,float E1, float E2,
 
 void sloped8(void )
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start sloped8";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start sloped8";
 
     try {
         int k,i,j,in,jn = 0;

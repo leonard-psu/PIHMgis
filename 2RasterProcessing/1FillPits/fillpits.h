@@ -30,6 +30,9 @@ private slots:
 
     void pushButtonSetFocus();
 
+
+private:
+
     bool Check_DEM_Input(QString dem);
 
     bool Check_Fillpit_Output(QString fillpits, bool message );
@@ -38,7 +41,6 @@ private slots:
 
     bool Load_Project_Settings();
 
-private:
     Ui::FillPits *ui;
     QString filename_open_project;
 };

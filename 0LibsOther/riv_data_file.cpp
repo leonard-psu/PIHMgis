@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QDir>
 #include <qmath.h>
+#include <iostream>
 
 #include "riv_data_file.h"
 #include "./0LibsShape/shapefil.h"
@@ -17,8 +18,8 @@
 
 double SLOPE(Point p1, Point p2)
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start SLOPE";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: Start SLOPE";
 
     double delX = p2.x - p1.x;
     double delY = delX==0?p2.y - p1.y + 0.0000001:p2.y - p1.y;
@@ -261,6 +262,7 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                         break;
                 }
                 //cout<<numPt<<" "<<neighNode[numPt][j]<<"\n"; getchar(); getchar();
+std::cout<<numPt<<" "<<neighNode[numPt][j]<<"\n";
 
                 X[0] = node[numPt].x;
                 Y[0] = node[numPt].y;

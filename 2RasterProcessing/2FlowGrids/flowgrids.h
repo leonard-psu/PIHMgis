@@ -32,6 +32,9 @@ private slots:
 
     void pushButtonSetFocus();
 
+
+private:
+
     bool Check_Fillpit_Input(QString file);
 
     bool Check_FlowDir_Output(QString file, bool color_and_message_if_exists );
@@ -42,7 +45,6 @@ private slots:
 
     bool Load_Project_Settings();
 
-private:
     Ui::FlowGrids *ui;
     QString filename_open_project;
 

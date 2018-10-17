@@ -32,6 +32,8 @@ private slots:
 
     void pushButtonSetFocus();
 
+private:
+
     void Clear_Log();
 
     bool Load_Project_Settings();
@@ -39,7 +41,6 @@ private slots:
     bool Check_File_Valid(QString file);
 
 
-private:
     Ui::PolylineToLines *ui;
     QString filename_open_project;
 

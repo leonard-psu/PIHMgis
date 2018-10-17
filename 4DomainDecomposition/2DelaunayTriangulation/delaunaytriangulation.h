@@ -41,6 +41,9 @@ private slots:
 
     void pushButtonSetFocus();
 
+
+private:
+
     void Clear_Log();
 
     bool Load_Project_Settings();
@@ -63,8 +66,6 @@ private slots:
 
     bool Check_TIN_Output(QString file, bool message);
 
-
-private:
     Ui::DelaunayTriangulation *ui;
     QString filename_open_project;
 

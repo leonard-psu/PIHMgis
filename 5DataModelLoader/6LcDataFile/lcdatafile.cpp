@@ -12,7 +12,11 @@
 #include "globals.h"
 
 
-LcDataFile::LcDataFile(QWidget *parent) :
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// LcDataFile Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+LcDataFile::LcDataFile(QWidget *parent, QString filename) :
     QDialog(parent),
     ui(new Ui::LcDataFile)
 {
@@ -23,55 +27,26 @@ LcDataFile::LcDataFile(QWidget *parent) :
 
         ui->setupUi(this);
 
-        // ** Start: Set Defaults
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
+        filename_open_project = filename;
+        bool found_file = false;
+
+        QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        QString ProjectFolder   = ProjectFileTextStream.readLine();
-        QString ProjectFileName = ProjectFileTextStream.readLine();
+        else
+        {
+            found_file = true;
+        }
         ProjectFile.close();
 
-        QStringList ModuleStringList;
-        QString TempFileName;
-
-        // ** Data Model OUTPUT File Name
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("TINShapeLayer"));
-        if ( ModuleStringList.length() > 0  )
+        if(found_file)
         {
-            TempFileName = ModuleStringList.at(3);
-            TempFileName = TempFileName.right(TempFileName.length()-TempFileName.lastIndexOf("/")-1);
-            TempFileName.replace( QString(".shp"), QString(".lc") );
-            ui->lineEditLcDataFile->setText(ProjectFolder+"/4DataModelLoader/"+TempFileName);
+            Load_Project_Settings();
         }
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("MeshDataFile"));
-        if ( ModuleStringList.length() > 0  )
-        {
-            TempFileName = ModuleStringList.at(9);
-            ui->lineEditLcDataFile->setText(ProjectFolder+"/4DataModelLoader/"+TempFileName+".lc");
-        }
-        // ** End: Set Defaults
-
-
-        // ** Start: Fill Form If Module Has Been Run Previously
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("LcDataFile"));
-
-        if ( ModuleStringList.length() > 0 )
-        {
-            ui->lineEditLcClassFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditLcDataFile->setStyleSheet("color: rgb(0, 180, 0);");
-
-            ui->lineEditLcClassFile->setText(ModuleStringList.at(1));
-            ui->lineEditLcDataFile->setText(ModuleStringList.at(2));
-
-        }
-        // ** End: Fill Form If Module Has Been Run Previously
 
         pushButtonSetFocus();
 
@@ -80,6 +55,10 @@ LcDataFile::LcDataFile(QWidget *parent) :
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MeshDataFile Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 LcDataFile::~LcDataFile()
 {
     if(print_debug_messages)
@@ -92,6 +71,153 @@ LcDataFile::~LcDataFile()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool LcDataFile::Load_Project_Settings()
+{
+    if (print_debug_messages)
+        qDebug() << "INFO: LcDataFile::Load_Project_Settings()";
+
+    try {
+
+        // ** Data Model OUTPUT File Name
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            QString TempFileName = ModuleStringList.at(3);
+            TempFileName = TempFileName.right(TempFileName.length()-TempFileName.lastIndexOf("/")-1);
+            TempFileName.replace( QString(".shp"), QString(".lc") );
+            QString fname = user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName;
+            Check_LCData_Output(fname,true);
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("MeshDataFile"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            QString TempFileName = ModuleStringList.at(9);
+            QString fname = user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName+".lc";
+            Check_LCData_Output(fname,true);
+        }
+        // ** End: Set Defaults
+
+        // ** Start: Fill Form If Module Has Been Run Previously
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("LcDataFile"));
+        if ( ModuleStringList.length() > 0 )
+        {
+            Check_LCTexture_Input(ModuleStringList.at(1));
+            Check_LCData_Output(ModuleStringList.at(2),true);
+        }
+        // ** End: Fill Form If Module Has Been Run Previously
+
+        pushButtonSetFocus();
+
+    } catch (...) {
+        qDebug() << "Error: LcDataFile::Load_Project_Settings is returning w/o checking";
+        return false;
+    }
+
+    return true;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void LcDataFile::Clear_Log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start MeshDataFile::Clear_Log()";
+
+    try {
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+    } catch (...) {
+        qDebug() << "Error: LcDataFile::Clear_Log() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check SoilTexture File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool LcDataFile::Check_LCTexture_Input(QString file){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_GeolTexture_Input()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            ui->lineEditLcClassFile->setStyleSheet("color: black;");
+            ui->lineEditLcClassFile->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditLcClassFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditLcClassFile->setText(file);
+
+            result = false;
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_GeolTexture_Input is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if Check_SoilData_Output OUTPUT file exists (returns true) or does not (returns false)
+// Will color red and warning if exists with color_and_message_if_exists=true
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool LcDataFile::Check_LCData_Output(QString file, bool color_and_message_if_exists){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_GeolData_Output()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(file) )
+        {
+            if(color_and_message_if_exists)
+            {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: MeshData output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                ui->textBrowserLogs->setHtml(LogsString);
+                ui->textBrowserLogs->repaint();
+            }
+
+            ui->lineEditLcDataFile->setStyleSheet("color: red;");
+            ui->lineEditLcDataFile->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditLcDataFile->setStyleSheet("color: black;");
+            ui->lineEditLcDataFile->setText(file);
+
+            result = false;
+        }
+
+    } catch (...) {
+        qDebug() << "Error: LcDataFile::Check_GeolData_Output is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to focus button selection (needed for users w/o mouse)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void LcDataFile::pushButtonSetFocus()
 {
     if(print_debug_messages)
@@ -122,205 +248,176 @@ void LcDataFile::pushButtonSetFocus()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button LcClass Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void LcDataFile::on_pushButtonLcClassFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start LcDataFile::on_pushButtonLcClassFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
+        Clear_Log();
 
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
-
-        QString LcClassFileName = QFileDialog::getOpenFileName(this, "Lc class File Name", ProjectFolder, "Lc Class File(*.txt *.TXT)");
+        QString LcClassFileName = QFileDialog::getOpenFileName(this, "Lc class File Name", user_pihmgis_root_folder, "Lc Class File(*.txt *.TXT)");
 
         if ( LcClassFileName != nullptr)
         {
-            ui->lineEditLcClassFile->setStyleSheet("color: black;");
-            ui->lineEditLcClassFile->setText(LcClassFileName);
-
+            Check_LCTexture_Input(LcClassFileName);
             pushButtonSetFocus();
         }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: LcDataFile::on_pushButtonLcClassFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button LcData Clicked Event (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void LcDataFile::on_pushButtonLcDataFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start LcDataFile::on_pushButtonLcDataFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
+        Clear_Log();
 
-        QString LcDataFileName = QFileDialog::getSaveFileName(this, "Choose Lc Data File Name", ProjectFolder+"/4DataModelLoader","Lc Data File(*.lc)");
+        QString LcDataFileName = QFileDialog::getSaveFileName(this, "Choose Lc Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Lc Data File(*.lc)");
         QString tempString = LcDataFileName;
         if ( LcDataFileName != nullptr)
         {
-            ui->lineEditLcDataFile->setStyleSheet("color: black;");
-
             if( ! (tempString.toLower()).endsWith(".lc") )
             {
                 tempString.append(".lc");
                 LcDataFileName = tempString;
             }
-            ui->lineEditLcDataFile->setText(LcDataFileName);
-
+            Check_LCData_Output(LcDataFileName,true);
             pushButtonSetFocus();
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: LcDataFile::on_pushButtonLcDataFile_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run Button Clicked Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void LcDataFile::on_pushButtonRun_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start LcDataFile::on_pushButtonRun_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Lc Data File Processing Started ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
 
-        LogsString.append(tr("Verifying Data Files ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check Input
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString input_LCTexture_filename = ui->lineEditLcClassFile->text();
 
-        int runFlag = 1;
-
-        if( ui->lineEditLcClassFile->text() == nullptr )
+        bool checked_LCTexture = Check_LCTexture_Input(input_LCTexture_filename);
+        if(!checked_LCTexture)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Lc Class Input File Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditLcClassFile->text(), "ReadOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ui->lineEditLcClassFile->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditLcClassFile->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        if( ui->lineEditLcDataFile->text() == nullptr )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Lc Data Output File Missing </span>")+tr("<br>"));
-            runFlag = 0;
-        }
-        else
-        {
-            if ( ! CheckFileAccess(ui->lineEditLcDataFile->text(), "WriteOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->lineEditLcDataFile->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditLcDataFile->text() + " ... <br>");
-        }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        if(runFlag == 1)
-        {
-            LogsString.append("Running Lc Data File ... <br>");
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Geol Texture File (*.txt *.TXT) Input File Missing </span>")+input_LCTexture_filename + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
+            return;
+        }
 
-            int ErrorLc = Lc_PedoTransferFunction( ui->lineEditLcClassFile->text(), ui->lineEditLcDataFile->text() );
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check Output
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString output_LCData_filename = ui->lineEditLcDataFile->text();
 
-            if( ErrorLc != 0 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Lc Data File Processing Failed ... </span>")+tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE LC: ... </span>")+QString::number(ErrorLc)+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
-            }
+        bool output_check = Check_LCData_Output(output_LCData_filename, true);
+        if(output_check)
+        {
+            return;
+        }
 
-            ProjectIOStringList << "LcDataFile" << ui->lineEditLcClassFile->text() << ui->lineEditLcDataFile->text();
-            WriteModuleLine(ProjectFileName, ProjectIOStringList);
-            ProjectIOStringList.clear();
-
-            LogsString.append(tr("<br><b>Lc Data File Processing Complete.</b>")+tr("<br>"));
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check file access
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if ( ! CheckFileAccess(input_LCTexture_filename, "ReadOnly") )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + input_LCTexture_filename + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
-
-            ui->pushButtonRun->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
+            return;
         }
+
+        if ( ! CheckFileAccess(output_LCData_filename, "WriteOnly") )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + output_LCData_filename + tr("<br>"));
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Running Mesh Data File
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        LogsString.append("Running Lc Data File ... <br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        int ErrorLc = Lc_PedoTransferFunction( input_LCTexture_filename, output_LCData_filename );
+
+        if( ErrorLc != 0 )
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Lc Data File Processing Failed ... </span>")+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE LC: ... </span>")+QString::number(ErrorLc)+tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QStringList ProjectIOStringList;
+        ProjectIOStringList << "LcDataFile" << input_LCTexture_filename << input_LCTexture_filename;
+        WriteModuleLine(filename_open_project, ProjectIOStringList);
+        ProjectIOStringList.clear();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Message box
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+
+        LogsString.append(tr("<br><b>Lc Data File Processing Complete.</b>")+tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        ui->pushButtonRun->setDefault(false);
+        ui->pushButtonClose->setDefault(true);
+        ui->pushButtonClose->setFocus();
+
 
     } catch (...) {
         qDebug() << "Error: LcDataFile::on_pushButtonRun_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close button event
+// TODO, Decide on keeping button next highlights or not
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void LcDataFile::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start LcDataFile::on_pushButtonClose_clicked()";
 
     try {
-        QStringList default_params; default_params << "WORKFLOW5" << "INIT";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //QStringList default_params; default_params << "WORKFLOW5" << "INIT";
+        //QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
 
     } catch (...) {
@@ -328,17 +425,21 @@ void LcDataFile::on_pushButtonClose_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void LcDataFile::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start LcDataFile::on_pushButtonHelp_clicked()";
 
     try {
-//        LogsString = tr("");
-//        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#lc_Data_File")) )
-//            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
-//        ui->textBrowserLogs->setHtml(LogsString);
-//        ui->textBrowserLogs->repaint();
+        //        LogsString = tr("");
+        //        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#lc_Data_File")) )
+        //            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
+        //        ui->textBrowserLogs->setHtml(LogsString);
+        //        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: LcDataFile::on_pushButtonHelp_clicked() is returning w/o checking";
     }
