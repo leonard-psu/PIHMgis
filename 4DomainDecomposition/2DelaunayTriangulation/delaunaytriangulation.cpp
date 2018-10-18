@@ -610,7 +610,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //        if ( ! CheckFileAccess(PSLG_filename, "ReadOnly") )
         //        {
-        //            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + PSLG_filename + tr("<br>"));
+        //            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + PSLG_filename + tr("<br>"));
         //            return;
         //        }
         //PROBLEM CREATES FILE HERE

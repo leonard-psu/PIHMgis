@@ -408,7 +408,7 @@ void ReadTopology::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + input_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_filename + tr("<br>"));
             return;
         }
 

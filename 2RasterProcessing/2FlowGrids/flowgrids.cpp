@@ -455,7 +455,7 @@ void FlowGrids::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(filename_flow, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + filename_flow + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + filename_flow + tr("<br>"));
             return;
         }
 
@@ -473,7 +473,7 @@ void FlowGrids::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(filename_acc, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + filename_acc + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + filename_acc + tr("<br>"));
             return;
         }
 

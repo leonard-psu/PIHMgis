@@ -11,7 +11,7 @@ QStringList ReadModuleLine(QString ProjectFileName, QString Module)
 
     try {
 
-        qDebug() << "ProjectFileName " << ProjectFileName;
+        //qDebug() << "ProjectFileName " << ProjectFileName;
 
 
         QFile ProjectFile(ProjectFileName);
@@ -25,7 +25,7 @@ QStringList ReadModuleLine(QString ProjectFileName, QString Module)
         {
             ProjectFileLineString     = ProjectFileTextStream.readLine();
             ProjectFileLineStringList = ProjectFileLineString.split(",");
-            qDebug() << "ProjectFileLineString " << ProjectFileLineString;
+            //qDebug() << "ProjectFileLineString " << ProjectFileLineString;
 
             if ( ProjectFileLineStringList.at(0) == Module )
                 return ProjectFileLineStringList;

@@ -286,7 +286,7 @@ void IbcDataFile::on_pushButtonRun_clicked()
         }
         if ( ! CheckFileAccess(output_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + output_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_filename + tr("<br>"));
             return;
         }
 

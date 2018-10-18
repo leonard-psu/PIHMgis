@@ -467,18 +467,18 @@ void StreamPolyline::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(StreamGrids_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + StreamGrids_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + StreamGrids_filename + tr("<br>"));
             return;
         }
         if ( ! CheckFileAccess(FlowDirGrids_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + FlowDirGrids_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + FlowDirGrids_filename + tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(StreamPolyline_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + StreamPolyline_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + StreamPolyline_filename + tr("<br>"));
             return;
         }
 

@@ -944,6 +944,7 @@ public:
         label_22->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         pushButtonDataModelLoaderForcDataFile = new QPushButton(PIHMgisToolBox_DataModelLoader);
         pushButtonDataModelLoaderForcDataFile->setObjectName(QStringLiteral("pushButtonDataModelLoaderForcDataFile"));
+        pushButtonDataModelLoaderForcDataFile->setEnabled(false);
         pushButtonDataModelLoaderForcDataFile->setGeometry(QRect(526, 188, 225, 34));
         QPalette palette30;
         palette30.setBrush(QPalette::Active, QPalette::WindowText, brush5);

@@ -768,28 +768,28 @@ void MeshDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_Element_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + input_Element_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_Element_filename + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
         }
         if ( ! CheckFileAccess(input_Node_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + input_Node_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_Node_filename + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
         }
         if ( ! CheckFileAccess(input_Neighbour_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + input_Neighbour_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_Neighbour_filename + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
         }
         if ( ! CheckFileAccess(input_River_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + input_River_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_River_filename + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -798,7 +798,7 @@ void MeshDataFile::on_pushButtonRun_clicked()
         {
             if ( ! CheckFileAccess(input_SurfaceElevation_filename, "ReadOnly") )
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + input_SurfaceElevation_filename + tr("<br>"));
+                LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_SurfaceElevation_filename + tr("<br>"));
                 ui->textBrowserLogs->setHtml(LogsString);
                 ui->textBrowserLogs->repaint();
                 return;
@@ -807,7 +807,7 @@ void MeshDataFile::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(output_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + output_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_filename + tr("<br>"));
             return;
         }
 

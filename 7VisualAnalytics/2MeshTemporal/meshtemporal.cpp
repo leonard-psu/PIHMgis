@@ -411,14 +411,14 @@ void MeshTemporal::on_pushButtonRun_clicked()
 
             if ( ! CheckFileAccess(OutputFileName+".mesh", "ReadOnly") )
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+OutputFileName+".mesh"+tr("<br>"));
+                LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>")+OutputFileName+".mesh"+tr("<br>"));
                 runFlag = 0;
             }
             LogsString.append(OutputFileName+".mesh" + " ... <br>");
 
             if ( ! CheckFileAccess(OutputFileName+".riv", "ReadOnly") )
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+OutputFileName+".riv"+tr("<br>"));
+                LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>")+OutputFileName+".riv"+tr("<br>"));
                 runFlag = 0;
             }
             LogsString.append(OutputFileName+".riv" + " ... <br>");
@@ -427,7 +427,7 @@ void MeshTemporal::on_pushButtonRun_clicked()
             {
                 if ( ! CheckFileAccess(OutputFileName+Extensions.at(i), "ReadOnly") )
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+OutputFileName+Extensions.at(i)+tr("<br>"));
+                    LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>")+OutputFileName+Extensions.at(i)+tr("<br>"));
                     runFlag = 0;
                 }
                 LogsString.append(OutputFileName+Extensions.at(i) + " ... <br>");

@@ -490,7 +490,7 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
             {
                 if ( ! CheckFileAccess(file1, "ReadOnly") )
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + file1 +tr("<br>"));
+                    LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + file1 +tr("<br>"));
                     failure_found = true;
                 }
             }
@@ -510,7 +510,7 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
             {
                 if ( ! CheckFolderAccessFromFilePath(file2, "WriteOnly") )
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + file2 +tr("<br>"));
+                    LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + file2 +tr("<br>"));
                     ui->textBrowserLogs->setHtml(LogsString);
                     ui->textBrowserLogs->repaint();
                     failure_found = true;

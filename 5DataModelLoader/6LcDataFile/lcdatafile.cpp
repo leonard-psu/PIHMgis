@@ -349,7 +349,7 @@ void LcDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_LCTexture_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + input_LCTexture_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_LCTexture_filename + tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;
@@ -357,7 +357,7 @@ void LcDataFile::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(output_LCData_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + output_LCData_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_LCData_filename + tr("<br>"));
             return;
         }
 

@@ -359,13 +359,13 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(CatchmentGrids_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>") + CatchmentGrids_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + CatchmentGrids_filename + tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(CatchmentPolygon_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + CatchmentPolygon_filename + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + CatchmentPolygon_filename + tr("<br>"));
             return;
         }
 

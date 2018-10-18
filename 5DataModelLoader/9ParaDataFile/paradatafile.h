@@ -12,11 +12,10 @@ class ParaDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit ParaDataFile(QWidget *parent = 0);
+    explicit ParaDataFile(QWidget *parent = 0, QString filename_open_project = "");
     ~ParaDataFile();
 
     QString LogsString;
-    QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonParaDataFile_clicked();
@@ -29,11 +28,20 @@ private slots:
 
     void pushButtonSetFocus();
 
-    int para_data_file();
 
 
 private:
+    int para_data_file(QString filename);
+
+    bool Check_Para_Output(QString file, bool message);
+
+    void Clear_Log();
+
+    bool Load_Project_Settings();
+    void Log_Error_Message(QString message);
+
     Ui::ParaDataFile *ui;
+    QString filename_open_project;
 
 };
 

@@ -431,7 +431,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>: :   Calib Data File   : :</string>
+   <string>Calib Data File </string>
   </property>
   <widget class="Line" name="BorderTop">
    <property name="geometry">
@@ -888,9 +888,9 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>334</y>
+     <y>314</y>
      <width>581</width>
-     <height>101</height>
+     <height>121</height>
     </rect>
    </property>
    <property name="font">
@@ -1358,9 +1358,9 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>278</y>
+     <y>270</y>
      <width>581</width>
-     <height>51</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="title">
@@ -1373,7 +1373,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>7</y>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -1395,8 +1395,8 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>326</x>
-      <y>7</y>
+      <x>340</x>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -1419,7 +1419,7 @@
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>7</y>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -1446,9 +1446,9 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>183</y>
+     <y>181</y>
      <width>581</width>
-     <height>91</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="font">
@@ -1507,7 +1507,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
+      <y>47</y>
       <width>561</width>
       <height>29</height>
      </rect>
@@ -1571,7 +1571,7 @@
     <widget class="QLabel" name="textLabel1_20">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>195</x>
        <y>29</y>
        <width>71</width>
        <height>31</height>
@@ -1579,6 +1579,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1590,14 +1591,15 @@
     <widget class="QLabel" name="textLabel1_21">
      <property name="geometry">
       <rect>
-       <x>390</x>
+       <x>378</x>
        <y>73</y>
-       <width>71</width>
+       <width>81</width>
        <height>31</height>
       </rect>
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1609,7 +1611,7 @@
     <widget class="QLabel" name="textLabel1_22">
      <property name="geometry">
       <rect>
-       <x>410</x>
+       <x>402</x>
        <y>29</y>
        <width>71</width>
        <height>31</height>
@@ -1617,6 +1619,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1711,6 +1714,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1730,6 +1734,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1766,14 +1771,15 @@
     <widget class="QLabel" name="textLabel1_25">
      <property name="geometry">
       <rect>
-       <x>197</x>
+       <x>186</x>
        <y>73</y>
-       <width>71</width>
+       <width>81</width>
        <height>31</height>
       </rect>
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1840,7 +1846,7 @@
     <widget class="QLabel" name="textLabel1_6">
      <property name="geometry">
       <rect>
-       <x>18</x>
+       <x>11</x>
        <y>74</y>
        <width>71</width>
        <height>31</height>
@@ -1848,6 +1854,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1859,7 +1866,7 @@
     <widget class="QLabel" name="textLabel1_8">
      <property name="geometry">
       <rect>
-       <x>18</x>
+       <x>11</x>
        <y>30</y>
        <width>71</width>
        <height>31</height>
@@ -1867,6 +1874,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1928,14 +1936,15 @@
     <widget class="QLabel" name="textLabel1_9">
      <property name="geometry">
       <rect>
-       <x>198</x>
+       <x>184</x>
        <y>30</y>
-       <width>71</width>
+       <width>81</width>
        <height>31</height>
       </rect>
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1947,14 +1956,15 @@
     <widget class="QLabel" name="textLabel1_7">
      <property name="geometry">
       <rect>
-       <x>198</x>
+       <x>184</x>
        <y>74</y>
-       <width>71</width>
+       <width>81</width>
        <height>31</height>
       </rect>
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -1991,7 +2001,7 @@
     <widget class="QLabel" name="textLabel1_10">
      <property name="geometry">
       <rect>
-       <x>398</x>
+       <x>383</x>
        <y>30</y>
        <width>71</width>
        <height>31</height>
@@ -1999,6 +2009,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2035,7 +2046,7 @@
     <widget class="QLabel" name="textLabel1_19">
      <property name="geometry">
       <rect>
-       <x>398</x>
+       <x>383</x>
        <y>74</y>
        <width>71</width>
        <height>31</height>
@@ -2043,6 +2054,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2117,12 +2129,16 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
       <string>Albedo</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxL_Albedo">
@@ -2153,7 +2169,7 @@
     <widget class="QLabel" name="textLabel1_30">
      <property name="geometry">
       <rect>
-       <x>90</x>
+       <x>80</x>
        <y>29</y>
        <width>71</width>
        <height>31</height>
@@ -2161,6 +2177,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2168,11 +2185,14 @@
      <property name="text">
       <string>RZ Depth</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="textLabel1_31">
      <property name="geometry">
       <rect>
-       <x>90</x>
+       <x>80</x>
        <y>73</y>
        <width>71</width>
        <height>31</height>
@@ -2180,12 +2200,16 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
       <string>Veg Frac</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxL_Roughness">
@@ -2216,20 +2240,24 @@
     <widget class="QLabel" name="textLabel1_32">
      <property name="geometry">
       <rect>
-       <x>320</x>
+       <x>300</x>
        <y>73</y>
-       <width>71</width>
+       <width>91</width>
        <height>31</height>
       </rect>
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
       <string>Roughness</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxL_RZDepth">
@@ -2265,7 +2293,7 @@
     <widget class="QDoubleSpinBox" name="doubleSpinBoxR_BedTh">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>84</x>
        <y>74</y>
        <width>101</width>
        <height>29</height>
@@ -2298,6 +2326,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2305,11 +2334,14 @@
      <property name="text">
       <string>Ksat H</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxR_KsatH">
      <property name="geometry">
       <rect>
-       <x>267</x>
+       <x>275</x>
        <y>30</y>
        <width>101</width>
        <height>29</height>
@@ -2334,7 +2366,7 @@
     <widget class="QLabel" name="textLabel1_14">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>0</x>
        <y>29</y>
        <width>71</width>
        <height>31</height>
@@ -2342,6 +2374,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2349,11 +2382,14 @@
      <property name="text">
       <string>Rough</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="textLabel1_15">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>0</x>
        <y>73</y>
        <width>71</width>
        <height>31</height>
@@ -2361,6 +2397,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2368,11 +2405,14 @@
      <property name="text">
       <string>Bed Th</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxR_KsatV">
      <property name="geometry">
       <rect>
-       <x>267</x>
+       <x>275</x>
        <y>74</y>
        <width>101</width>
        <height>29</height>
@@ -2405,6 +2445,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2412,11 +2453,14 @@
      <property name="text">
       <string>Ksat V</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxR_Rough">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>84</x>
        <y>30</y>
        <width>101</width>
        <height>29</height>
@@ -2441,7 +2485,7 @@
     <widget class="QLabel" name="textLabel1_17">
      <property name="geometry">
       <rect>
-       <x>390</x>
+       <x>383</x>
        <y>29</y>
        <width>71</width>
        <height>31</height>
@@ -2449,12 +2493,16 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
       <string>Depth</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxR_Width">
@@ -2485,7 +2533,7 @@
     <widget class="QLabel" name="textLabel1_18">
      <property name="geometry">
       <rect>
-       <x>390</x>
+       <x>383</x>
        <y>73</y>
        <width>71</width>
        <height>31</height>
@@ -2493,12 +2541,16 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>12</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
       <string>Width</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxR_Depth">
@@ -2542,6 +2594,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2586,6 +2639,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2697,7 +2751,7 @@
     <widget class="QLabel" name="textLabel1_26">
      <property name="geometry">
       <rect>
-       <x>200</x>
+       <x>190</x>
        <y>49</y>
        <width>71</width>
        <height>31</height>
@@ -2705,6 +2759,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2712,11 +2767,14 @@
      <property name="text">
       <string>Transp</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="textLabel1_27">
      <property name="geometry">
       <rect>
-       <x>399</x>
+       <x>380</x>
        <y>49</y>
        <width>71</width>
        <height>31</height>
@@ -2724,6 +2782,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2732,11 +2791,14 @@
       <string>Evap
 Ground</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="textLabel1_28">
      <property name="geometry">
       <rect>
-       <x>17</x>
+       <x>-10</x>
        <y>45</y>
        <width>71</width>
        <height>41</height>
@@ -2744,6 +2806,7 @@ Ground</string>
      </property>
      <property name="font">
       <font>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2751,6 +2814,9 @@ Ground</string>
      <property name="text">
       <string>Evap
 Canopy</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxF_ISMax">
@@ -2806,7 +2872,7 @@ Canopy</string>
     <widget class="QLabel" name="textLabel1_33">
      <property name="geometry">
       <rect>
-       <x>399</x>
+       <x>390</x>
        <y>92</y>
        <width>71</width>
        <height>31</height>
@@ -2814,6 +2880,7 @@ Canopy</string>
      </property>
      <property name="font">
       <font>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2825,7 +2892,7 @@ Canopy</string>
     <widget class="QLabel" name="textLabel1_34">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>16</x>
        <y>88</y>
        <width>71</width>
        <height>41</height>
@@ -2833,6 +2900,7 @@ Canopy</string>
      </property>
      <property name="font">
       <font>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -2877,6 +2945,7 @@ Canopy</string>
      </property>
      <property name="font">
       <font>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>

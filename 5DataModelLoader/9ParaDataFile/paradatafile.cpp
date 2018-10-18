@@ -11,7 +11,11 @@
 #include "globals.h"
 
 
-ParaDataFile::ParaDataFile(QWidget *parent) :
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ParaDataFile Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ParaDataFile::ParaDataFile(QWidget *parent, QString filename) :
     QDialog(parent),
     ui(new Ui::ParaDataFile)
 {
@@ -22,39 +26,91 @@ ParaDataFile::ParaDataFile(QWidget *parent) :
 
         ui->setupUi(this);
 
-        // ** Start: Set Defaults
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
+        filename_open_project = filename;
+        bool found_file = false;
+
+        QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("ERROR: Unable to Open File: </span>" + filename_open_project + tr("<br>"));
         }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        QString ProjectFolder   = ProjectFileTextStream.readLine();
-        QString ProjectFileName = ProjectFileTextStream.readLine();
+        else
+        {
+            found_file = true;
+        }
         ProjectFile.close();
 
+        if(found_file)
+        {
+            Load_Project_Settings();
+        }
 
-        QStringList ModuleStringList;
-        QString TempFileName;
+        pushButtonSetFocus();
+
+
+    } catch (...) {
+        qDebug() << "Error: SimplifyPolylines is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ParaDataFile Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ParaDataFile::~ParaDataFile()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ~ParaDataFile";
+
+    try {
+        delete ui;
+    } catch (...) {
+        qDebug() << "Error: ~ParaDataFile is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void ParaDataFile::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ParaDataFile::Load_Project_Settings()
+{
+    if (print_debug_messages)
+        qDebug() << "INFO: ParaDataFile::Load_Project_Settings()";
+
+    try {
 
         // ** Data Model INPUT File Name
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("TINShapeLayer"));
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
-            TempFileName = ModuleStringList.at(3);
+            QString TempFileName = ModuleStringList.at(3);
             TempFileName = TempFileName.right(TempFileName.length()-TempFileName.lastIndexOf("/")-1);
 
             TempFileName.replace( QString(".shp"), QString(".para") );
-            ui->lineEditParaDataFile->setText(ProjectFolder+"/4DataModelLoader/"+TempFileName);
+            QString output_filename = user_pihmgis_root_folder + "/4DataModelLoader/" + TempFileName;
+            Check_Para_Output(output_filename,true);
         }
 
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("MeshDataFile"));
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("MeshDataFile"));
         if ( ModuleStringList.length() > 0  )
         {
-            TempFileName = ModuleStringList.at(9);
-            ui->lineEditParaDataFile->setText(ProjectFolder+"/4DataModelLoader/"+TempFileName+".para");
+            QString TempFileName = ModuleStringList.at(9);
+            QString output_filename = user_pihmgis_root_folder + "/4DataModelLoader/" + TempFileName +".para";
+            Check_Para_Output(output_filename,true);
         }
 
         ui->comboBoxStartStop->setCurrentIndex(2);
@@ -65,12 +121,11 @@ ParaDataFile::ParaDataFile(QWidget *parent) :
 
         // ** Start: Fill Form If Module Has Been Run Previously
 
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("ParaDataFile"));
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("ParaDataFile"));
 
         if ( ModuleStringList.length() > 0 )
         {
-            ui->lineEditParaDataFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditParaDataFile->setText(ModuleStringList.at(1));
+            Check_Para_Output(ModuleStringList.at(1),true);
 
             ui->comboBoxSurfaceMode->setCurrentIndex(ModuleStringList.at(2).toInt());
             ui->comboBoxSubsurfaceMode->setCurrentIndex(ModuleStringList.at(3).toInt());
@@ -119,25 +174,76 @@ ParaDataFile::ParaDataFile(QWidget *parent) :
 
         ui->tabWidget->setCurrentIndex( 2 );
 
-        pushButtonSetFocus();
-
     } catch (...) {
-        qDebug() << "Error: SimplifyPolylines is returning w/o checking";
+        qDebug() << "Error: ParaDataFile::Load_Project_Settings is returning w/o checking";
+        return false;
     }
+
+    return true;
 }
 
-ParaDataFile::~ParaDataFile()
-{
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to assist if Check_Para_Output OUTPUT file exists (returns true) or does not (returns false)
+// Will color red and warning if exists with color_and_message_if_exists=true
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ParaDataFile::Check_Para_Output(QString file, bool color_and_message_if_exists){
+
     if(print_debug_messages)
-        qDebug() << "INFO: Start ~ParaDataFile";
+        qDebug() << "INFO: Check_Para_Output()";
+
+    bool result = false;
 
     try {
-        delete ui;
+
+        if(  fileExists(file) )
+        {
+            if(color_and_message_if_exists)
+            {
+                Log_Error_Message(" Para output already exists: " + file +tr(" You may need to delete these files.<br>"));
+            }
+
+            ui->lineEditParaDataFile->setStyleSheet("color: red;");
+            ui->lineEditParaDataFile->setText(file);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditParaDataFile->setStyleSheet("color: black;");
+            ui->lineEditParaDataFile->setText(file);
+
+            result = false;
+        }
+
     } catch (...) {
-        qDebug() << "Error: ~ParaDataFile is returning w/o checking";
+        qDebug() << "Error: ParaDataFile::Check_Para_Output is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void ParaDataFile::Clear_Log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ParaDataFile::Clear_Log()";
+
+    try {
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+    } catch (...) {
+        qDebug() << "Error: ParaDataFile::Clear_Log() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to focus button selection (needed for users w/o mouse)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ParaDataFile::pushButtonSetFocus()
 {
     if(print_debug_messages)
@@ -161,65 +267,47 @@ void ParaDataFile::pushButtonSetFocus()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button TINShapeLayer Clicked Event (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ParaDataFile::on_pushButtonParaDataFile_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start ParaDataFile::on_pushButtonParaDataFile_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
+        Clear_Log();
 
-        QString ParaDataFileName = QFileDialog::getSaveFileName(this, "Choose Para Data File Name", ProjectFolder+"/4DataModelLoader","Para Data File(*.para)");
+        QString ParaDataFileName = QFileDialog::getSaveFileName(this, "Choose Para Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Para Data File(*.para)");
         QString tempString = ParaDataFileName;
         if ( ParaDataFileName != nullptr)
         {
-            ui->lineEditParaDataFile->setStyleSheet("color: black;");
-
             if( ! (tempString.toLower()).endsWith(".para") )
             {
                 tempString.append(".para");
                 ParaDataFileName = tempString;
             }
-            ui->lineEditParaDataFile->setText(ParaDataFileName);
+            Check_Para_Output(ParaDataFileName, true);
 
             pushButtonSetFocus();
         }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
     } catch (...) {
         qDebug() << "Error:ParaDataFile::on_pushButtonParaDataFile_clicked() is returning w/o checking";
     }
 }
 
-int ParaDataFile::para_data_file()
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to create Para file
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int ParaDataFile::para_data_file(QString filename)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start ParaDataFile::para_data_file()";
 
     try {
 
-        QFile ParaFile( ui->lineEditParaDataFile->text() );
+        QFile ParaFile( filename);
         if ( ! ParaFile.open(QIODevice::WriteOnly | QIODevice::Text) )
             return 129;
         QTextStream ParaFileTextStream(&ParaFile);
@@ -321,6 +409,7 @@ int ParaDataFile::para_data_file()
         if ( ui->comboBoxStartStop->currentIndex() + 1 == 4 ) factor = 60*24*7;
         if ( ui->comboBoxStartStop->currentIndex() + 1 == 5 ) factor = 60*24*30;
         if ( ui->comboBoxStartStop->currentIndex() + 1 == 6 ) factor = 60*24*365;
+
         ParaFileTextStream << ui->spinBoxStartTime->text().toInt() * factor << "\t";
         ParaFileTextStream << ui->spinBoxStopTime->text().toInt() * factor << "\t";
         ParaFileTextStream << "0\n";
@@ -332,147 +421,154 @@ int ParaDataFile::para_data_file()
 
     } catch (...) {
         qDebug() << "Error:ParaDataFile::para_data_file() is returning w/o checking";
+        return 500;
     }
 
     return 0;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run Button Clicked Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ParaDataFile::on_pushButtonRun_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start ParaDataFile::on_pushButtonRun_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Para Data File Processing Started ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check Outputs
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString output_filename = ui->lineEditParaDataFile->text();
 
-        LogsString.append(tr("Verifying Data Files ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        int runFlag = 1;
-
-        if( ui->lineEditParaDataFile->text() == nullptr )
+        bool output_check = Check_Para_Output(output_filename, true);
+        if(output_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Para Data Output File Missing </span>")+tr("<br>"));
-            runFlag = 0;
+            return;
         }
-        else
+
+        if ( ! CheckFileAccess(output_filename, "WriteOnly") )
         {
-            if ( ! CheckFileAccess(ui->lineEditParaDataFile->text(), "WriteOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>")+ui->lineEditParaDataFile->text()+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(ui->lineEditParaDataFile->text() + " ... <br>");
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_filename + tr("<br>"));
+            return;
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Running Mesh Data File
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        LogsString.append("Running Para Data File ... <br>");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
+        int ErrorPara = para_data_file(output_filename);
 
-        if(runFlag == 1)
+        if( ErrorPara != 0 )
         {
-
-            LogsString.append("Running Para Data File ... <br>");
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Para Data File Processing Failed ... </span>")+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE PARA: ... </span>")+QString::number(ErrorPara)+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
-
-            int ErrorPara = para_data_file();
-
-            if( ErrorPara != 0 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Para Data File Processing Failed ... </span>")+tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE PARA: ... </span>")+QString::number(ErrorPara)+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
-            }
-
-            ProjectIOStringList << "ParaDataFile" << ui->lineEditParaDataFile->text();
-
-            ProjectIOStringList << QString::number(ui->comboBoxSurfaceMode->currentIndex());
-            ProjectIOStringList << QString::number(ui->comboBoxSubsurfaceMode->currentIndex());
-            ProjectIOStringList << QString::number(ui->comboBoxRiverMode->currentIndex());
-            ProjectIOStringList << QString::number(ui->comboBoxInitMode->currentIndex());
-            ProjectIOStringList << QString::number(ui->checkBoxVerboseMode->isChecked());
-            ProjectIOStringList << QString::number(ui->checkBoxDebugMode->isChecked());
-
-            ProjectIOStringList << QString::number(ui->radioButtonDirectDense->isChecked());
-            ProjectIOStringList << QString::number(ui->radioButtonIterative->isChecked());
-            ProjectIOStringList << QString::number(ui->comboBoxGrahmSchmidt->currentIndex());
-            ProjectIOStringList << ui->spinBoxKrylovDimension->text();
-            ProjectIOStringList << ui->doubleSpinBoxConvergenceThreshold->text();
-            ProjectIOStringList << ui->doubleSpinBoxETStep->text();
-            ProjectIOStringList << ui->doubleSpinBoxInitialStep->text();
-            ProjectIOStringList << ui->doubleSpinBoxMaximumStep->text();
-            ProjectIOStringList << ui->doubleSpinBoxRelativeTolerance->text();
-            ProjectIOStringList << ui->doubleSpinBoxAbsoluteTolerance->text();
-
-            ProjectIOStringList << ui->spinBoxStartTime->text();
-            ProjectIOStringList << ui->spinBoxStopTime->text();
-            ProjectIOStringList << QString::number(ui->comboBoxStartStop->currentIndex());
-            ProjectIOStringList << QString::number(ui->comboBoxOutput->currentIndex());
-            ProjectIOStringList << ui->spinBoxRiver->text();
-            ProjectIOStringList << ui->spinBoxRiverUpDown->text();
-            ProjectIOStringList << ui->spinBoxRiverSurfaceLeftRight->text();
-            ProjectIOStringList << ui->spinBoxRiverBaseLeftRight->text();
-            ProjectIOStringList << ui->spinBoxRiverbed->text();
-            ProjectIOStringList << ui->spinBoxRiverbedUpDown->text();
-            ProjectIOStringList << ui->spinBoxRiverbedLeftRight->text();
-            ProjectIOStringList << ui->spinBoxRivertoRiverBed->text();
-            ProjectIOStringList << ui->spinBoxInterception->text();
-            ProjectIOStringList << ui->spinBoxSnow->text();
-            ProjectIOStringList << ui->spinBoxSurface->text();
-            ProjectIOStringList << ui->spinBoxSoilMoisture->text();
-            ProjectIOStringList << ui->spinBoxGroundwater->text();
-            ProjectIOStringList << ui->spinBoxInfiltration->text();
-            ProjectIOStringList << ui->spinBoxRecharge->text();
-            ProjectIOStringList << ui->spinBoxCanopyEvaporation->text();
-            ProjectIOStringList << ui->spinBoxTranspiration->text();
-            ProjectIOStringList << ui->spinBoxGroundEvaporation->text();
-
-            WriteModuleLine(ProjectFileName, ProjectIOStringList);
-            ProjectIOStringList.clear();
-
-            LogsString.append(tr("<br><b>Para Data File Processing Complete.</b>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
-            ui->pushButtonRun->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
+            return;
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QStringList ProjectIOStringList;
+
+        ProjectIOStringList << "ParaDataFile" << ui->lineEditParaDataFile->text();
+
+        ProjectIOStringList << QString::number(ui->comboBoxSurfaceMode->currentIndex());
+        ProjectIOStringList << QString::number(ui->comboBoxSubsurfaceMode->currentIndex());
+        ProjectIOStringList << QString::number(ui->comboBoxRiverMode->currentIndex());
+        ProjectIOStringList << QString::number(ui->comboBoxInitMode->currentIndex());
+        ProjectIOStringList << QString::number(ui->checkBoxVerboseMode->isChecked());
+        ProjectIOStringList << QString::number(ui->checkBoxDebugMode->isChecked());
+
+        ProjectIOStringList << QString::number(ui->radioButtonDirectDense->isChecked());
+        ProjectIOStringList << QString::number(ui->radioButtonIterative->isChecked());
+        ProjectIOStringList << QString::number(ui->comboBoxGrahmSchmidt->currentIndex());
+        ProjectIOStringList << ui->spinBoxKrylovDimension->text();
+        ProjectIOStringList << ui->doubleSpinBoxConvergenceThreshold->text();
+        ProjectIOStringList << ui->doubleSpinBoxETStep->text();
+        ProjectIOStringList << ui->doubleSpinBoxInitialStep->text();
+        ProjectIOStringList << ui->doubleSpinBoxMaximumStep->text();
+        ProjectIOStringList << ui->doubleSpinBoxRelativeTolerance->text();
+        ProjectIOStringList << ui->doubleSpinBoxAbsoluteTolerance->text();
+
+        ProjectIOStringList << ui->spinBoxStartTime->text();
+        ProjectIOStringList << ui->spinBoxStopTime->text();
+        ProjectIOStringList << QString::number(ui->comboBoxStartStop->currentIndex());
+        ProjectIOStringList << QString::number(ui->comboBoxOutput->currentIndex());
+        ProjectIOStringList << ui->spinBoxRiver->text();
+        ProjectIOStringList << ui->spinBoxRiverUpDown->text();
+        ProjectIOStringList << ui->spinBoxRiverSurfaceLeftRight->text();
+        ProjectIOStringList << ui->spinBoxRiverBaseLeftRight->text();
+        ProjectIOStringList << ui->spinBoxRiverbed->text();
+        ProjectIOStringList << ui->spinBoxRiverbedUpDown->text();
+        ProjectIOStringList << ui->spinBoxRiverbedLeftRight->text();
+        ProjectIOStringList << ui->spinBoxRivertoRiverBed->text();
+        ProjectIOStringList << ui->spinBoxInterception->text();
+        ProjectIOStringList << ui->spinBoxSnow->text();
+        ProjectIOStringList << ui->spinBoxSurface->text();
+        ProjectIOStringList << ui->spinBoxSoilMoisture->text();
+        ProjectIOStringList << ui->spinBoxGroundwater->text();
+        ProjectIOStringList << ui->spinBoxInfiltration->text();
+        ProjectIOStringList << ui->spinBoxRecharge->text();
+        ProjectIOStringList << ui->spinBoxCanopyEvaporation->text();
+        ProjectIOStringList << ui->spinBoxTranspiration->text();
+        ProjectIOStringList << ui->spinBoxGroundEvaporation->text();
+
+        WriteModuleLine(filename_open_project, ProjectIOStringList);
+        ProjectIOStringList.clear();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Message box
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+
+        LogsString.append(tr("<br><b>Para Data File Processing Complete.</b>")+tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        ui->pushButtonRun->setDefault(false);
+        ui->pushButtonClose->setDefault(true);
+        ui->pushButtonClose->setFocus();
+
 
     } catch (...) {
         qDebug() << "Error:ParaDataFile::on_pushButtonRun_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ParaDataFile::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start ParaDataFile::on_pushButtonClose_clicked()";
 
     try {
-        QStringList default_params; default_params << "WORKFLOW5" << "CALI";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //QStringList default_params; default_params << "WORKFLOW5" << "CALI";
+        //QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
     } catch (...) {
         qDebug() << "Error:ParaDataFile::on_pushButtonClose_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ParaDataFile::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)

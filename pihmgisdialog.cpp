@@ -910,8 +910,12 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderParamDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderParamDataFile_clicked";
 
     try {
-        ParaDataFile *ParaDataFileDialog = new ParaDataFile(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        ParaDataFile *ParaDataFileDialog = new ParaDataFile(this, filename_open_project);
+        ParaDataFileDialog->setModal(true);
         ParaDataFileDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderParamDataFile_clicked is returning w/o checking";
     }

@@ -213,7 +213,7 @@ int PIHMSimulation::CheckInputFileAccess(QString Extension)
 
         if ( ! CheckFileAccess(FileName + Extension, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Access ... </span>")+ FileName + Extension +tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>")+ FileName + Extension +tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return -9;

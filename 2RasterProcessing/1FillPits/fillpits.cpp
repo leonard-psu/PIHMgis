@@ -38,7 +38,7 @@ FillPits::FillPits(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open project file: </span>") + filename_open_project +tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Unable to Open project file: </span>") + filename_open_project +tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
         }
@@ -347,7 +347,7 @@ void FillPits::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(filename_fill, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + filename_fill + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access ... </span>") + filename_fill + tr("<br>"));
             return;
         }
 

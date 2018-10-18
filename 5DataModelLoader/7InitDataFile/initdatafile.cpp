@@ -1216,7 +1216,7 @@ void InitDataFile::on_pushButtonRun_clicked()
         }
         if ( ! CheckFileAccess(output_InitData, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + output_InitData + tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_InitData + tr("<br>"));
             return;
         }
 
