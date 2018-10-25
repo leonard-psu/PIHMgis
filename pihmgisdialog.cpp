@@ -967,8 +967,11 @@ void PIHMgisDialog::on_pushButtonPIHMSimulation_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMSimulation_clicked";
 
     try {
-        PIHMSimulation *PIHMSimulationDialog = new PIHMSimulation(this);
-        PIHMSimulationDialog->ModelVersion = ui->comboBoxPIHMVersion->currentText();
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        PIHMSimulation *PIHMSimulationDialog = new PIHMSimulation(this, filename_open_project);
+        PIHMSimulationDialog->setModal(true);
+        //PIHMSimulationDialog->ModelVersion = ui->comboBoxPIHMVersion->currentText();
         PIHMSimulationDialog->show();
 
     } catch (...) {
@@ -990,7 +993,10 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked";
 
     try {
-        MeshSpatial *MeshSpatialDialog = new MeshSpatial(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        MeshSpatial *MeshSpatialDialog = new MeshSpatial(this, filename_open_project);
+        MeshSpatialDialog->setModal(true);
         MeshSpatialDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked is returning w/o checking";

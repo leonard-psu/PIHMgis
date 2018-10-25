@@ -97,7 +97,6 @@ public:
     QCheckBox *checkBoxNitrogen;
     QCheckBox *checkBoxAge;
     QComboBox *comboBoxPIHMVersion;
-    QLabel *label_13;
     QWidget *PIHMgisToolBox_VisualAnalytics;
     QGroupBox *groupBox;
     QPushButton *pushButtonVisualAnalyticsTemporalWatershed;
@@ -976,7 +975,7 @@ public:
         PIHMgisToolBox_PIHMSimulation->setGeometry(QRect(0, 0, 765, 233));
         pushButtonPIHMSimulation = new QPushButton(PIHMgisToolBox_PIHMSimulation);
         pushButtonPIHMSimulation->setObjectName(QStringLiteral("pushButtonPIHMSimulation"));
-        pushButtonPIHMSimulation->setGeometry(QRect(490, 140, 221, 34));
+        pushButtonPIHMSimulation->setGeometry(QRect(490, 108, 221, 81));
         QPalette palette31;
         palette31.setBrush(QPalette::Active, QPalette::WindowText, brush5);
         palette31.setBrush(QPalette::Active, QPalette::Text, brush5);
@@ -997,7 +996,7 @@ public:
         pushButtonPIHMSimulation->setFlat(false);
         groupBox_3 = new QGroupBox(PIHMgisToolBox_PIHMSimulation);
         groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
-        groupBox_3->setGeometry(QRect(40, 50, 201, 178));
+        groupBox_3->setGeometry(QRect(20, 18, 221, 178));
         QFont font11;
         font11.setFamily(QStringLiteral("Arial"));
         groupBox_3->setFont(font11);
@@ -1040,7 +1039,7 @@ public:
         groupBox_4 = new QGroupBox(PIHMgisToolBox_PIHMSimulation);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
         groupBox_4->setEnabled(false);
-        groupBox_4->setGeometry(QRect(270, 50, 201, 178));
+        groupBox_4->setGeometry(QRect(250, 18, 221, 178));
         groupBox_4->setFont(font11);
         checkBoxOrganicCarbon = new QCheckBox(groupBox_4);
         checkBoxOrganicCarbon->setObjectName(QStringLiteral("checkBoxOrganicCarbon"));
@@ -1064,16 +1063,9 @@ public:
         checkBoxAge->setFont(font12);
         comboBoxPIHMVersion = new QComboBox(PIHMgisToolBox_PIHMSimulation);
         comboBoxPIHMVersion->addItem(QString());
-        comboBoxPIHMVersion->addItem(QString());
         comboBoxPIHMVersion->setObjectName(QStringLiteral("comboBoxPIHMVersion"));
-        comboBoxPIHMVersion->setGeometry(QRect(493, 80, 215, 29));
+        comboBoxPIHMVersion->setGeometry(QRect(493, 48, 215, 29));
         comboBoxPIHMVersion->setFont(font11);
-        label_13 = new QLabel(PIHMgisToolBox_PIHMSimulation);
-        label_13->setObjectName(QStringLiteral("label_13"));
-        label_13->setGeometry(QRect(20, -6, 691, 51));
-        label_13->setFont(font9);
-        label_13->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
-        label_13->setOpenExternalLinks(true);
         PIHMgisToolBox->addItem(PIHMgisToolBox_PIHMSimulation, QStringLiteral("Group [6] : : PIHM Simulation"));
         PIHMgisToolBox_VisualAnalytics = new QWidget();
         PIHMgisToolBox_VisualAnalytics->setObjectName(QStringLiteral("PIHMgisToolBox_VisualAnalytics"));
@@ -1476,7 +1468,7 @@ public:
 
         retranslateUi(PIHMgisDialog);
 
-        PIHMgisToolBox->setCurrentIndex(0);
+        PIHMgisToolBox->setCurrentIndex(5);
         pushButtonPIHMgisProjectNew->setDefault(false);
         pushButtonPIHMgisProjectClose->setDefault(false);
         pushButtonPIHMgisProjectImport->setDefault(false);
@@ -1588,9 +1580,7 @@ public:
         checkBoxNitrogen->setText(QApplication::translate("PIHMgisDialog", "Nitrogen", nullptr));
         checkBoxAge->setText(QApplication::translate("PIHMgisDialog", "Age of Water", nullptr));
         comboBoxPIHMVersion->setItemText(0, QApplication::translate("PIHMgisDialog", "PIHM v2.2", nullptr));
-        comboBoxPIHMVersion->setItemText(1, QApplication::translate("PIHMgisDialog", "PIHM v3.0", nullptr));
 
-        label_13->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">PIHM Simulation tool provides ability to perform concurrent executions of multiple instances of<br/>PIHM simulations.</span></p></body></html>", nullptr));
         PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_PIHMSimulation), QApplication::translate("PIHMgisDialog", "Group [6] : : PIHM Simulation", nullptr));
         groupBox->setTitle(QString());
         pushButtonVisualAnalyticsTemporalWatershed->setText(QApplication::translate("PIHMgisDialog", "TEMPORAL: MESH ELEMENTS", nullptr));

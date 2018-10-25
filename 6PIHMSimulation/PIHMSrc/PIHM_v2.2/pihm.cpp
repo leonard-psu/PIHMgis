@@ -66,7 +66,7 @@
 //#include "sundials_smalldense.h"/* use generic DENSE linear solver for
 //				 * "small"   */
 #include "sundials/sundials_math.h"	/* contains UnitRoundoff, RSqrt, SQR
-				 * functions   */
+    * functions   */
 #include "cvode/cvode_dense.h"	/* CVDENSE header file                           */
 #include "sundials/sundials_dense.h"	/* generic dense solver header file              */
 
@@ -82,211 +82,201 @@
 #define UNIT_C 1440		/* Unit Conversions */
 
 /* Function Declarations */
-void            initialize(char *, Model_Data, Control_Data *, N_Vector);
+void            initialize(PIHMThread *thread, Model_Data, Control_Data *, N_Vector);
 //void            is_sm_et(realtype, realtype, Model_Data, N_Vector);
 /* Function to calculate right hand side of ODE systems */
 int             f(realtype, N_Vector, N_Vector, void *);
-void            read_alloc(char *, Model_Data, Control_Data *);	/* Variable definition */
+void            read_alloc(PIHMThread *thread, Model_Data, Control_Data *);	/* Variable definition */
 //void            update(realtype, Model_Data);
 void            PrintData(FILE **, Control_Data *, Model_Data, N_Vector, realtype);
 void            FreeData(Model_Data, Control_Data *);
 
 /* Main Function */
 int
-PIHM_v2_2(int argc, char *argv[], QProgressBar* progressBar, QString logFileName, int* RunFlag, PIHMThread *thread)
+//PIHM_v2_2(int argc, char *argv[], QProgressBar* progressBar, QString logFileName, int* RunFlag, PIHMThread *thread)
+PIHM_v2_2(PIHMThread *thread)
 {
-    char            tmpLName[20], tmpFName[425];	/* rivFlux File names */
-	Model_Data      mData;	/* Model Data                */
-	Control_Data    cData;	/* Solver Control Data       */
-	N_Vector        CV_Y;	/* State Variables Vector    */
-	void           *cvode_mem;	/* Model Data Pointer        */
-	int             flag;	/* flag to test return value */
-	FILE           *Ofile[25];	/* Output file     */
-	char           *ofn[25];
-	FILE           *iproj;	/* Project File */
-	int             N;	/* Problem size              */
-	int             i, j, k;/* loop index                */
-	realtype        t;	/* simulation time           */
-	realtype        NextPtr, StepSize;	/* stress period & step size */
-	clock_t         start, end_r, end_s;	/* system clock at points    */
-	realtype        cputime_r, cputime_s;	/* for duration in realtype  */
-	char           *filename;
+    //-------------------------------------------------------------------------------------//
+    printf("\n [00] PIHM 2.2 is starting ... \n");
+    //-------------------------------------------------------------------------------------//
 
-    printf("\nPIHM %d %s %d\n",argc,argv[1],*RunFlag);
-	/* Project Input Name */
-	if (argc != 2) {
-		iproj = fopen("projectName.txt", "r");
-        if (iproj == nullptr) {
-			printf("\t\nUsage ./pihm project_name");
-			printf("\t\n         OR              ");
-			printf("\t\nUsage ./pihm, and have a file in the current directory named projectName.txt with the project name in it");
-			exit(0);
-		} else {
-            filename = (char *) malloc(405 * sizeof(char));
-			fscanf(iproj, "%s", filename);
-			fclose(iproj);
-		}
-	} else {
-		/* get user specified file name in command line */
-		filename = (char *) malloc(strlen(argv[1]) * sizeof(char));
-		strcpy(filename, argv[1]);
-	}
-	/* Open Output Files */
-    ofn[0] = (char *) malloc((strlen(filename) + 8) * sizeof(char));
-	strcpy(ofn[0], filename);
-    Ofile[0] = fopen(strcat(ofn[0], ".gw.dat"), "w");
-    ofn[1] = (char *) malloc((strlen(filename) + 10) * sizeof(char));
-	strcpy(ofn[1], filename);
-    Ofile[1] = fopen(strcat(ofn[1], ".surf.dat"), "w");
-    ofn[2] = (char *) malloc((strlen(filename) + 9) * sizeof(char));
-	strcpy(ofn[2], filename);
-    Ofile[2] = fopen(strcat(ofn[2], ".et0.dat"), "w");
-    ofn[3] = (char *) malloc((strlen(filename) + 9) * sizeof(char));
-	strcpy(ofn[3], filename);
-    Ofile[3] = fopen(strcat(ofn[3], ".et1.dat"), "w");
-    ofn[4] = (char *) malloc((strlen(filename) + 9) * sizeof(char));
-	strcpy(ofn[4], filename);
-    Ofile[4] = fopen(strcat(ofn[4], ".et2.dat"), "w");
-    ofn[5] = (char *) malloc((strlen(filename) + 8) * sizeof(char));
-	strcpy(ofn[5], filename);
-    Ofile[5] = fopen(strcat(ofn[5], ".is.dat"), "w");
-    ofn[6] = (char *) malloc((strlen(filename) + 10) * sizeof(char));
-	strcpy(ofn[6], filename);
-    Ofile[6] = fopen(strcat(ofn[6], ".snow.dat"), "w");
-	for (i = 0; i < 11; i++) {
-        sprintf(tmpLName, ".rivFlx%02d.dat", i);
-		strcpy(tmpFName, filename);
-		strcat(tmpFName, tmpLName);
-		Ofile[7 + i] = fopen(tmpFName, "w");
-	}
-    ofn[18] = (char *) malloc((strlen(filename) + 11) * sizeof(char));
-	strcpy(ofn[18], filename);
-    Ofile[18] = fopen(strcat(ofn[18], ".stage.dat"), "w");
-    ofn[19] = (char *) malloc((strlen(filename) + 11) * sizeof(char));
-	strcpy(ofn[19], filename);
-    Ofile[19] = fopen(strcat(ofn[19], ".unsat.dat"), "w");
-    ofn[20] = (char *) malloc((strlen(filename) + 10) * sizeof(char));
-	strcpy(ofn[20], filename);
-    Ofile[20] = fopen(strcat(ofn[20], ".rech.dat"), "w");
-    ofn[21] = (char *) malloc((strlen(filename) + 10) * sizeof(char));
-		strcpy(ofn[21], filename);
-    Ofile[21] = fopen(strcat(ofn[21], ".rbed.dat"), "w");
-    ofn[22] = (char *) malloc((strlen(filename) + 11) * sizeof(char));
-		strcpy(ofn[22], filename);
-    Ofile[22] = fopen(strcat(ofn[22], ".infil.dat"), "w");
+    Model_Data      mData;              /* Model Data                */
+    N_Vector        CV_Y;               /* State Variables Vector    */
+    Control_Data    cData;              /* Solver Control Data       */
+    void           *cvode_mem;          /* Model Data Pointer        */
+    FILE           *Ofile[25];          /* Output files              */
+    realtype        t = 0;              /* simulation time           */
+    realtype        NextPtr, StepSize;	/* stress period & step size */
+    int             N = 0;              /* Problem size              */
+    int             i = 0;              /* loop index                */
+    int             flag = 0;           /* flag to test return value */
 
-	/* allocate memory for model data structure */
-	mData = (Model_Data) malloc(sizeof *mData);
+    //-------------------------------------------------------------------------------------//
+    /* START Open Output Files */
+    printf("\n [01] Creating output file locations");
+    //-------------------------------------------------------------------------------------//
 
-	printf("\n ...  PIHM 2.2 is starting ... \n");
+    char *tmp_filename = thread->get_Groundwater_Output_FileName();
+    Ofile[0] = fopen(tmp_filename, "w"); //".gw.dat"
+    tmp_filename = thread->get_Surf_Output_FileName();
+    Ofile[1] = fopen(tmp_filename, "w"); //".surf.dat"
+    tmp_filename = thread->get_et0_Output_FileName();
+    Ofile[2] = fopen(tmp_filename, "w"); //".et0.dat"
+    tmp_filename = thread->get_et1_Output_FileName();
+    Ofile[3] = fopen(tmp_filename, "w"); //".et1.dat"
+    tmp_filename = thread->get_et2_Output_FileName();
+    Ofile[4] = fopen(tmp_filename, "w"); //".et2.dat"
+    tmp_filename = thread->get_is_Output_FileName();
+    Ofile[5] = fopen(tmp_filename, "w"); //".is.dat"
+    tmp_filename = thread->get_Snow_Output_FileName();
+    Ofile[6] = fopen(tmp_filename, "w"); //".snow.dat"
+    for (i = 0; i < 11; i++) {
+        tmp_filename = thread->get_rivFlx_Output_FileName(i);
+        Ofile[7 + i] = fopen(tmp_filename, "w");
+    }
+    tmp_filename = thread->get_Stage_Output_FileName();
+    Ofile[18] = fopen(tmp_filename, "w"); //".stage.dat"
+    tmp_filename = thread->get_Unsat_Output_FileName();
+    Ofile[19] = fopen(tmp_filename, "w"); //".unsat.dat"
+    tmp_filename = thread->get_Rech_Output_FileName();
+    Ofile[20] = fopen(tmp_filename, "w"); //".rech.dat"
+    tmp_filename = thread->get_rbed_Output_FileName();
+    Ofile[21] = fopen(tmp_filename, "w"); //".rbed.dat"
+    tmp_filename = thread->get_infil_Output_FileName();
+    Ofile[22] = fopen(tmp_filename, "w"); //".infil.dat"
+    tmp_filename = nullptr;
 
-	/* read in 9 input files with "filename" as prefix */
-    printf("Reading Data Files ... ");
-	read_alloc(filename, mData, &cData);
-    printf("Done.\n");
-	/*
-	 * if(mData->UnsatMode ==1) {    }
-	 */
-	if (mData->UnsatMode == 2) {
-		/* problem size */
-		N = 3 * mData->NumEle + 2 * mData->NumRiv;
-		mData->DummyY = (realtype *) malloc((3 * mData->NumEle + 2 * mData->NumRiv) * sizeof(realtype));
-	}
+    /* END Open Output Files */
+
+    //-------------------------------------------------------------------------------------//
+    /* allocate memory for model data structure */
+    printf("\n [02] Creating model data structure");
+    //-------------------------------------------------------------------------------------//
+    mData = (Model_Data) malloc(sizeof *mData);
+
+    //-------------------------------------------------------------------------------------//
+    /* read in 9 input files with "filename" as prefix */
+    printf("\n [03] Reading Data Files");
+    //-------------------------------------------------------------------------------------//
+
+    read_alloc(thread, mData, &cData);
+
+    //-------------------------------------------------------------------------------------//
+    printf("\n [04] Defining Problem Size");
+    //-------------------------------------------------------------------------------------//
+    /*
+     * if(mData->UnsatMode ==1) {    }
+     */
+    if (mData->UnsatMode == 2) {
+        /* problem size */
+        N = 3 * mData->NumEle + 2 * mData->NumRiv;
+        mData->DummyY = (realtype *) malloc((3 * mData->NumEle + 2 * mData->NumRiv) * sizeof(realtype));
+    }
+    else
+    {
+        printf("\n [04] Error: Defining Problem Size as ubdefined mode requested");
+        return (1000);
+    }
+
+
     printf("\nODE Size = %d\n",N);
-	/* initial state variable depending on machine */
-	CV_Y = N_VNew_Serial(N);
+    /* initial state variable depending on machine */
+    CV_Y = N_VNew_Serial(N);
 
-	/* initialize mode data structure */
-    printf("Calling Initialize Data Structures ... ");
-	initialize(filename, mData, &cData, CV_Y);
-    printf("Done.\n");
+    //-------------------------------------------------------------------------------------//
+    /* initialize mode data structure */
+    printf("\n [05] Initialize Data Structures");
+    //-------------------------------------------------------------------------------------//
+    initialize(thread, mData, &cData, CV_Y);
 
-    printf("\nInitializing CVODE ... ");
-	/* allocate memory for solver */
-	cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
+    //-------------------------------------------------------------------------------------//
+    /* allocate memory for solver */
+    printf("\n [06] Initialize CVODE");
+    //-------------------------------------------------------------------------------------//
+    cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
     if (cvode_mem == nullptr) {
-		printf("CVodeMalloc failed. \n");
-		return (1);
-	}
+        printf("CVodeMalloc failed. \n");
+        return (1001);
+    }
+
     //flag = CVodeSetFdata(cvode_mem, mData);
-	flag = CVodeSetInitStep(cvode_mem, cData.InitStep);
-	flag = CVodeSetStabLimDet(cvode_mem, TRUE);
-	flag = CVodeSetMaxStep(cvode_mem, cData.MaxStep);
+    flag = CVodeSetInitStep(cvode_mem, cData.InitStep);
+    flag = CVodeSetStabLimDet(cvode_mem, TRUE);
+    flag = CVodeSetMaxStep(cvode_mem, cData.MaxStep);
     //flag = CVodeMalloc(cvode_mem, f, cData.StartTime, CV_Y, CV_SS, cData.reltol, &cData.abstol);
     flag = CVodeInit(cvode_mem, f, cData.StartTime, CV_Y);
 
     flag = CVSpgmr(cvode_mem, PREC_NONE, 0);
-	//flag = CVSpgmrSetGSType(cvode_mem, MODIFIED_GS);
-    printf("Done.\n");
+    //flag = CVSpgmrSetGSType(cvode_mem, MODIFIED_GS);
 
-	/* set start time */
-	t = cData.StartTime;
+    /* set start time */
+    t = cData.StartTime;
     //start = clock();
 
-	/* start solver in loops */
-    printf("\nSolving ODE system ... \n");
+    //-------------------------------------------------------------------------------------//
+    /* start solver in loops */
+    printf("\n [07] Solving ODE system");
+    //-------------------------------------------------------------------------------------//
 
-    printf("RunFlag = %d %d of %d\n",*RunFlag,i,cData.NumSteps); fflush(stdout);
     int progress;
-	for (i = 0; i < cData.NumSteps; i++) {
-//        if(*RunFlag == 0)
-//            return 0;
-		/*
-		 * if (cData.Verbose != 1) { printf("  Running: %-4.1f%% ...
-		 * ", (100*(i+1)/((realtype) cData.NumSteps)));
-		 * fflush(stdout); }
-		 */
-		/*
-		 * inner loops to next output points with ET step size
-		 * control
-		 */
-		while (t < cData.Tout[i + 1]) {
-			if (t + cData.ETStep >= cData.Tout[i + 1]) {
-				NextPtr = cData.Tout[i + 1];
-			} else {
-				NextPtr = t + cData.ETStep;
-			}
-			StepSize = NextPtr - t;
+    for (i = 0; i < cData.NumSteps; i++) {
 
-			/* calculate Interception Storage */
-			is_sm_et(t, StepSize, mData, CV_Y);
-            printf("\n Tsteps = %f of %f %d", t+1, cData.EndTime, *RunFlag);
-            /*progress = (int) (100*(t+1)/cData.EndTime);
-            if( progress > thread->progressBar->value() )
+        while (t < cData.Tout[i + 1]) {
+            if (t + cData.ETStep >= cData.Tout[i + 1]) {
+                NextPtr = cData.Tout[i + 1];
+            } else {
+                NextPtr = t + cData.ETStep;
+            }
+            StepSize = NextPtr - t;
+
+            if(thread->has_user_requested_kill_thread())
             {
-                printf("Progress %d \%",progress);
-                //thread->progressBar->setValue(progress);
-                //QApplication::processEvents();
+                printf("\n Trying to stop PIHM nicely.");
+                i = cData.NumSteps;
+            }
+
+            //-------------------------------------------------------------------------------------//
+            /* calculate Interception Storage */
+            //-------------------------------------------------------------------------------------//
+            is_sm_et(t, StepSize, mData, CV_Y);
+
+            printf("\n Tsteps = %f of %f ", t+1, cData.EndTime);
+
+            progress = (int) (100*(t+1)/cData.EndTime);
+            if( progress > thread->get_Progress_Bar_Value() )
+            {
+                printf("Progress %d ",progress);
                 emit thread->updateProgressBar(progress);
-                //QMetaObject::invokeMethod(thread,"updateProgressBar",Qt::DirectConnection,Q_ARG(int,progress));
-                //QMetaObject::invokeMethod(obj,"updateProgressBarValue",Qt::QueuedConnection,Q_ARG(int,progress)));
-                //PIHMThreadProgress(progressBar, progress);
-                //progressBar->setValue(progress);
-            }*/
-			flag = CVode(cvode_mem, NextPtr, CV_Y, &t, CV_NORMAL);
-			update(t, mData);
-		}
-		PrintData(Ofile, &cData, mData, CV_Y, t);
+            }
+
+            flag = CVode(cvode_mem, NextPtr, CV_Y, &t, CV_NORMAL);
+            update(t, mData);
+        }
+        PrintData(Ofile, &cData, mData, CV_Y, t);
 
         progress = (int) (100*(t+1)/cData.EndTime);
-        if( progress > thread->progressBar->value() )
+        if( progress > thread->get_Progress_Bar_Value() )
         {
-            printf(" Progress %d %d %",thread->progressBar->value(), progress);
+            printf(" Progress %d %d", thread->get_Progress_Bar_Value(), progress);
             emit thread->updateProgressBar(progress);
         }
-        if(*RunFlag == 0)
-            i = cData.NumSteps;
-	}
-	/* Free memory */
-	N_VDestroy_Serial(CV_Y);
-	/* Free integrator memory */
-	CVodeFree(&cvode_mem);
-	FreeData(mData, &cData);
-        for(i=0;i<23;i++)fclose(Ofile[i]);
-        for(i=0;i<7;i++)free(ofn[i]);
-        for(i=18;i<23;i++)free(ofn[i]);
-        free(filename);
 
-        free(mData);
-        return 0;
+        if(thread->has_user_requested_kill_thread())
+        {
+            printf("\n Trying to stop PIHM nicely.");
+            i = cData.NumSteps;
+        }
+
+    }
+    /* Free memory */
+    N_VDestroy_Serial(CV_Y);
+
+    /* Free integrator memory */
+    CVodeFree(&cvode_mem);
+    FreeData(mData, &cData);
+    for(i=0;i<23;i++)
+        fclose(Ofile[i]);
+
+    free(mData);
+    return 0;
 }

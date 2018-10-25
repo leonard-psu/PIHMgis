@@ -14,13 +14,12 @@ class PIHMSimulation : public QDialog
     Q_OBJECT
 
 public:
-    explicit PIHMSimulation(QWidget *parent = 0);
+    explicit PIHMSimulation(QWidget *parent = 0, QString filename_open_project = "");
     ~PIHMSimulation();
 
-    QString ModelVersion;
 
     QString LogsString;
-    QStringList ProjectIOStringList;
+
     PIHMThread* MyPIHMThread;
 
 private slots:
@@ -34,28 +33,37 @@ private slots:
 
     void pushButtonSetFocus();
 
-    int CheckInputFiles();
-
-    int CheckInputFileAccess(QString);
-
-    int CopyInputFiles(QString);
-
-    int CopyInputFile(QString, QString);
-
-
-
     void on_progressBar_valueChanged(int value);
+
     void updateProgressBarValue(int value);
+
     void PIHMThreadFinished();
 
     void on_lineEditInputDataFolder_textChanged(const QString &arg1);
 
     void on_lineEditDataKey_textChanged(const QString &arg1);
 
-    void verifyInputOutputFile();
 
 private:
+
+    void Clear_Log();
+    bool Load_Project_Settings();
+    void Log_Error_Message(QString message);
+
+    bool Check_InputDataFolder(QString folder);
+    bool Check_DataKey(QString value);
+    bool Check_PIHM_Project_Inputs(QString base_folder, QString project_name, bool return_on_error);
+    bool CopyInputFiles(QString output_folder, QString input_folder, QString project_name, bool delete_existing_output_file, bool return_on_error);
+
+    int CheckInputFileAccess(QString folder, QString project_name, QString extension, bool message);
+    int CopyInputFile(QString output_folder, QString input_folder, QString project_name, QString file_extension, bool delete_existing_output_file);
+
+    void verifyInputOutputFile();
+
     Ui::PIHMSimulation *ui;
+    QString filename_open_project;
+    QString ModelVersion = "PIHM v2.2"; //Constant for now
+
 };
 
 #endif // PIHMSimulation_H

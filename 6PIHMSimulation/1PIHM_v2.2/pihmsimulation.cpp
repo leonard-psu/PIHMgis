@@ -12,7 +12,11 @@
 #include "globals.h"
 
 
-PIHMSimulation::PIHMSimulation(QWidget *parent) :
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PIHMSimulation Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+PIHMSimulation::PIHMSimulation(QWidget *parent, QString filename) :
     QDialog(parent),
     ui(new Ui::PIHMSimulation)
 {
@@ -21,64 +25,30 @@ PIHMSimulation::PIHMSimulation(QWidget *parent) :
         qDebug() << "INFO: Start PIHMSimulation";
 
     try {
-        this->setWindowTitle(tr(": :   ")+this->ModelVersion+tr("   : :"));
+        //this->setWindowTitle(tr(": :   ")+this->ModelVersion+tr("   : :"));
 
         ui->setupUi(this);
+        filename_open_project = filename;
+        bool found_file = false;
 
         ui->progressBar->setValue(0);
 
-        // ** Start: Set Defaults
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
+        QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Unable to Open File: </span>" + filename_open_project + tr("<br>"));
         }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        QString ProjectFolder   = ProjectFileTextStream.readLine();
-        QString ProjectFileName = ProjectFileTextStream.readLine();
+        else
+        {
+            found_file = true;
+        }
         ProjectFile.close();
 
-
-        QStringList ModuleStringList;
-        QString TempFileName;
-
-        ui->lineEditInputDataFolder->setText(ProjectFolder+"/4DataModelLoader");
-        // **
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("TINShapeLayer"));
-        if ( ModuleStringList.length() > 0  )
+        if(found_file)
         {
-            TempFileName = ModuleStringList.at(3);
-            TempFileName = TempFileName.right(TempFileName.length()-TempFileName.lastIndexOf("/")-1);
-
-            TempFileName.replace( QString(".shp"), QString("") );
-            ui->lineEditDataKey->setText(TempFileName);
+            Load_Project_Settings();
         }
 
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("MeshDataFile"));
-        if ( ModuleStringList.length() > 0  )
-        {
-            TempFileName = ModuleStringList.at(9);
-            ui->lineEditDataKey->setText(TempFileName);
-        }
-        // ** End: Set Defaults
-
-
-        // ** Start: Fill Form If Module Has Been Run Previously
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("PIHMSimulation"));
-
-        if ( ModuleStringList.length() > 0 )
-        {
-            ui->lineEditInputDataFolder->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditInputDataFolder->setText(ModuleStringList.at(1));
-
-            ui->lineEditDataKey->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditDataKey->setText(ModuleStringList.at(2));
-        }
-
-        ui->pushButtonRun->setText("Run");
         pushButtonSetFocus();
 
     } catch (...) {
@@ -86,6 +56,10 @@ PIHMSimulation::PIHMSimulation(QWidget *parent) :
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PIHMSimulation Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 PIHMSimulation::~PIHMSimulation()
 {
     if(print_debug_messages)
@@ -98,82 +72,187 @@ PIHMSimulation::~PIHMSimulation()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool PIHMSimulation::Load_Project_Settings()
+{
+    if (print_debug_messages)
+        qDebug() << "INFO: MeshDataFile::Load_Project_Settings()";
+
+    try {
+        QStringList ModuleStringList;
+        QString TempFileName;
+
+        Check_InputDataFolder(user_pihmgis_root_folder+"/4DataModelLoader");
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            TempFileName = ModuleStringList.at(3);
+            TempFileName = TempFileName.right(TempFileName.length()-TempFileName.lastIndexOf("/")-1);
+            TempFileName.replace( QString(".shp"), QString("") );
+            Check_DataKey(TempFileName);
+        }
+
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("MeshDataFile"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            TempFileName = ModuleStringList.at(9);
+            Check_DataKey(TempFileName);
+        }
+
+        // ** Start: Fill Form If Module Has Been Run Previously
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("PIHMSimulation"));
+
+        if ( ModuleStringList.length() > 0 )
+        {
+            Check_InputDataFolder(ModuleStringList.at(1));
+            Check_DataKey(ModuleStringList.at(2));
+        }
+
+        ui->pushButtonRun->setText("Run");
+        pushButtonSetFocus();
+
+    } catch (...) {
+        qDebug() << "Error: MeshDataFile::Load_Project_Settings is returning w/o checking";
+        return false;
+    }
+
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMSimulation::Clear_Log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMSimulation::Clear_Log()";
+
+    try {
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+    } catch (...) {
+        qDebug() << "Error: PIHMSimulation::Clear_Log() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMSimulation::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check InputDataFolder File exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool PIHMSimulation::Check_InputDataFolder(QString folder){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_InputDataFolder()";
+
+    bool result = false;
+
+    try {
+
+        if(  fileExists(folder) )
+        {
+            ui->lineEditInputDataFolder->setStyleSheet("color: black;");
+            ui->lineEditInputDataFolder->setText(folder);
+            result = true;
+        }
+        else
+        {
+            ui->lineEditInputDataFolder->setStyleSheet("color: red;");
+            ui->lineEditInputDataFolder->setText(folder);
+
+            result = false;
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_InputDataFolder is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check_DataKey Value exists (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool PIHMSimulation::Check_DataKey(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_DataKey()";
+
+    bool result = false;
+
+    try {
+
+        if(value.isNull() || value.isEmpty() )
+        {
+            ui->lineEditDataKey->setStyleSheet("color: red;");
+            ui->lineEditDataKey->setText("Missing");
+            result = false;
+        }
+        else if(value == QString("Missing"))
+        {
+            result = false;
+        }
+        else
+        {
+            ui->lineEditDataKey->setText(value);
+            result = true;
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_DataKey is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button InputDataFolder Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMSimulation::on_pushButtonInputDataFolder_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start PIHMSimulation::on_pushButtonInputDataFolder_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
+        Clear_Log();
 
-        QString InputDataFolder = QFileDialog::getExistingDirectory(this, "PIHM Input Data Folder", ProjectFolder+"/4DataModelLoader", 0);
+        QString InputDataFolder = QFileDialog::getExistingDirectory(this, "PIHM Input Data Folder", user_pihmgis_root_folder+"/4DataModelLoader", 0);
 
         if( InputDataFolder != nullptr )
         {
-            ui->lineEditInputDataFolder->setStyleSheet("color: black;");
-            ui->lineEditInputDataFolder->setText(InputDataFolder);
-
-            QStringList ModuleStringList;
-            QString TempFileName;
-
-            if( ui->lineEditDataKey->text() == nullptr )
-            {
-                // ** Data Model INPUT File Name
-                ModuleStringList = ReadModuleLine(ProjectFileName,tr("TINShapeLayer"));
-                if ( ModuleStringList.length() > 0  )
-                {
-                    TempFileName = ModuleStringList.at(3);
-                    TempFileName = TempFileName.right(TempFileName.length()-TempFileName.lastIndexOf("/")-1);
-
-                    TempFileName.replace( QString(".shp"), QString("") );
-                    if ( CheckFileAccess(ui->lineEditInputDataFolder->text()+"/"+TempFileName+".mesh", "ReadOnly") )
-                    {
-                        ui->lineEditDataKey->setText(TempFileName);
-                    }
-
-                }
-
-                ModuleStringList = ReadModuleLine(ProjectFileName,tr("MeshDataFile"));
-                if ( ModuleStringList.length() > 0  )
-                {
-                    TempFileName = ModuleStringList.at(9);
-                    if ( CheckFileAccess(ui->lineEditInputDataFolder->text()+"/"+TempFileName+".mesh", "ReadOnly") )
-                    {
-                        ui->lineEditDataKey->setText(TempFileName);
-                    }
-                }
-            }
+            Check_InputDataFolder(InputDataFolder);
+            pushButtonSetFocus();
         }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        pushButtonSetFocus();
 
     } catch (...) {
         qDebug() << "Error: PIHMSimulation::on_pushButtonInputDataFolder_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to focus button selection (needed for users w/o mouse)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMSimulation::pushButtonSetFocus()
 {
     if(print_debug_messages)
@@ -203,88 +282,144 @@ void PIHMSimulation::pushButtonSetFocus()
     }
 }
 
-int PIHMSimulation::CheckInputFileAccess(QString Extension)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check file contents exist for PIHM project
+// Note depenency on using project folder and name. Meaning, users cannot mix and match.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool PIHMSimulation::Check_PIHM_Project_Inputs(QString base_folder, QString project_name, bool return_on_error)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_PIHM_Project_Inputs()";
+
+    bool result = false;
+
+    try {
+        if ( this->ModelVersion == "PIHM v2.2")
+        {
+            if(return_on_error)
+            {
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".mesh"), true)  != 0 ) return 2201;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".att"), true)   != 0 ) return 2202;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".riv"), true)   != 0 ) return 2203;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".soil"), true)  != 0 ) return 2204;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".geol"), true)  != 0 ) return 2205;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".lc"), true)    != 0 ) return 2206;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".init"), true)  != 0 ) return 2207;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".ibc"), true)   != 0 ) return 2208;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".para"), true)  != 0 ) return 2209;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".calib"), true) != 0 ) return 2210;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".forc"), true)  != 0 ) return 2211;
+
+                result = true;
+            }
+            else
+            {
+                bool error_found = false;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".mesh"), true)  != 0 ) error_found = true;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".att"), true)   != 0 ) error_found = true;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".riv"), true)   != 0 ) error_found = true;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".soil"), true)  != 0 ) error_found = true;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".geol"), true)  != 0 ) error_found = true;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".lc"), true)    != 0 ) error_found = true;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".init"), true)  != 0 ) error_found = true;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".ibc"), true)   != 0 ) error_found = true;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".para"), true)  != 0 ) error_found = true;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".calib"), true) != 0 ) error_found = true;
+                if ( CheckInputFileAccess(base_folder,project_name, tr(".forc"), true)  != 0 ) error_found = true;
+
+                result = error_found;
+            }
+        }
+        else
+        {
+            LogsString.append(tr("<span style=\"color:#FF0000\">Warning: PIHM Version Not Supported </span>")+tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+            result = false;
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: Check_PIHM_Project_Inputs is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check file access
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int PIHMSimulation::CheckInputFileAccess(QString folder, QString project_name, QString Extension, bool message)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start PIHMSimulation::CheckInputFileAccess()";
 
     try {
-        QString FileName = ui->lineEditInputDataFolder->text() + "/" + ui->lineEditDataKey->text();
+        QString FileNamewithExtension = folder + "/" + project_name + Extension;
 
-        if ( ! CheckFileAccess(FileName + Extension, "ReadOnly") )
+        if ( ! CheckFileAccess(FileNamewithExtension, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>")+ FileName + Extension +tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>")+ FileNamewithExtension +tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return -9;
         }
-        LogsString.append(FileName + Extension + " ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+
+        if(message)
+        {
+            LogsString.append(FileNamewithExtension + " ... <br>");
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+        }
 
     } catch (...) {
         qDebug() << "Error: PIHMSimulation::CheckInputFileAccess() is returning w/o checking";
+        return -10;
     }
     return 0;
 }
 
-int PIHMSimulation::CheckInputFiles()
-{
-    if(print_debug_messages)
-        qDebug() << "INFO: Start PIHMSimulation::CheckInputFiles()";
-
-    try {
-        if ( this->ModelVersion == "PIHM v2.2")
-        {
-            if ( CheckInputFileAccess(tr(".mesh"))  != 0 ) return 2201;
-            if ( CheckInputFileAccess(tr(".att"))   != 0 ) return 2202;
-            if ( CheckInputFileAccess(tr(".riv"))   != 0 ) return 2203;
-            if ( CheckInputFileAccess(tr(".soil"))  != 0 ) return 2204;
-            if ( CheckInputFileAccess(tr(".geol"))  != 0 ) return 2205;
-            if ( CheckInputFileAccess(tr(".lc"))    != 0 ) return 2206;
-            if ( CheckInputFileAccess(tr(".init"))  != 0 ) return 2207;
-            if ( CheckInputFileAccess(tr(".ibc"))   != 0 ) return 2208;
-            if ( CheckInputFileAccess(tr(".para"))  != 0 ) return 2209;
-            if ( CheckInputFileAccess(tr(".calib")) != 0 ) return 2210;
-            if ( CheckInputFileAccess(tr(".forc"))  != 0 ) return 2211;
-        }
-        else
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: PIHM Version Not Supported </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return 999;
-        }
-
-    } catch (...) {
-        qDebug() << "Error: PIHMSimulation::CheckInputFiles() is returning w/o checking";
-    }
-    return 0;
-}
-
-int PIHMSimulation::CopyInputFile( QString SimulationFolder, QString Extension )
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Copy PIHM Input file to PIHM output folder
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int PIHMSimulation::CopyInputFile( QString output_folder, QString input_folder, QString project_name, QString file_extension, bool delete_existing_output_file )
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start PIHMSimulation::CopyInputFile()";
 
     try {
 
-        QString SrcFileName = ui->lineEditInputDataFolder->text() + "/" + ui->lineEditDataKey->text();
+        QString input_FileName = input_folder + "/" + project_name + file_extension;
+        QString output_FileName = output_folder + "/" + project_name + file_extension;
 
-        if( QFile(SimulationFolder+"/"+ui->lineEditDataKey->text()+Extension).exists() )
-            if ( ! QFile::remove(SimulationFolder+"/"+ui->lineEditDataKey->text()+Extension) )
+        if( QFile(output_FileName).exists() )
+        {
+            if(delete_existing_output_file)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to remove file </span>")+SimulationFolder+"/"+ui->lineEditDataKey->text()+Extension+tr("<br>"));
+                if ( ! QFile::remove(output_FileName) )
+                {
+                    LogsString.append(tr("<span style=\"color:#FF0000\">Error: Unable to remove file </span>") + output_FileName + tr("<br>"));
+                    ui->textBrowserLogs->setHtml(LogsString);
+                    ui->textBrowserLogs->repaint();
+                    return -9;
+                }
+            }
+            else {
+                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Not overwriting Input file that already exists in Output folder location. </span>") + output_FileName + tr("<br>"));
                 ui->textBrowserLogs->setHtml(LogsString);
                 ui->textBrowserLogs->repaint();
-                return -9;
+                return -10;
             }
-        if ( ! QFile::copy(SrcFileName+Extension,SimulationFolder+"/"+ui->lineEditDataKey->text()+Extension) )
+        }
+
+        if ( ! QFile::copy(input_FileName, output_FileName) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to copy file </span>")+SrcFileName+Extension+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Unable to copy file </span>")+input_FileName+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
-            return -9;
+            return -11;
         }
 
     } catch (...) {
@@ -293,194 +428,214 @@ int PIHMSimulation::CopyInputFile( QString SimulationFolder, QString Extension )
     return 0;
 }
 
-
-int PIHMSimulation::CopyInputFiles( QString SimulationFolder )
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Copy PIHM Input files to PIHM output folder
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool PIHMSimulation::CopyInputFiles( QString output_folder, QString input_folder, QString project_name, bool delete_existing_output_file, bool return_on_error )
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start PIHMSimulation::CopyInputFiles()";
 
+    bool result = false;
+
     try {
+
         if ( this->ModelVersion == "PIHM v2.2")
         {
-            if ( CopyInputFile(SimulationFolder,tr(".mesh"))  != 0 ) return 2301;
-            if ( CopyInputFile(SimulationFolder,tr(".att"))   != 0 ) return 2302;
-            if ( CopyInputFile(SimulationFolder,tr(".riv"))   != 0 ) return 2303;
-            if ( CopyInputFile(SimulationFolder,tr(".soil"))  != 0 ) return 2304;
-            if ( CopyInputFile(SimulationFolder,tr(".geol"))  != 0 ) return 2305;
-            if ( CopyInputFile(SimulationFolder,tr(".lc"))    != 0 ) return 2306;
-            if ( CopyInputFile(SimulationFolder,tr(".init"))  != 0 ) return 2307;
-            if ( CopyInputFile(SimulationFolder,tr(".ibc"))   != 0 ) return 2308;
-            if ( CopyInputFile(SimulationFolder,tr(".para"))  != 0 ) return 2309;
-            if ( CopyInputFile(SimulationFolder,tr(".calib")) != 0 ) return 2310;
-            if ( CopyInputFile(SimulationFolder,tr(".forc"))  != 0 ) return 2311;
+            if(return_on_error)
+            {
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".mesh"),delete_existing_output_file)  != 0 ) return 2301;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".att"),delete_existing_output_file)   != 0 ) return 2302;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".riv"),delete_existing_output_file)   != 0 ) return 2303;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".soil"),delete_existing_output_file)  != 0 ) return 2304;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".geol"),delete_existing_output_file)  != 0 ) return 2305;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".lc"),delete_existing_output_file)    != 0 ) return 2306;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".init"),delete_existing_output_file)  != 0 ) return 2307;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".ibc"),delete_existing_output_file)   != 0 ) return 2308;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".para"),delete_existing_output_file)  != 0 ) return 2309;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".calib"),delete_existing_output_file) != 0 ) return 2310;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".forc"),delete_existing_output_file)  != 0 ) return 2311;
+            }
+            else
+            {
+                bool error_found = false;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".mesh"),delete_existing_output_file)  != 0 ) error_found = true;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".att"),delete_existing_output_file)   != 0 ) error_found = true;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".riv"),delete_existing_output_file)   != 0 ) error_found = true;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".soil"),delete_existing_output_file)  != 0 ) error_found = true;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".geol"),delete_existing_output_file)  != 0 ) error_found = true;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".lc"),delete_existing_output_file)    != 0 ) error_found = true;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".init"),delete_existing_output_file)  != 0 ) error_found = true;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".ibc"),delete_existing_output_file)   != 0 ) error_found = true;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".para"),delete_existing_output_file)  != 0 ) error_found = true;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".calib"),delete_existing_output_file) != 0 ) error_found = true;
+                if ( CopyInputFile(output_folder,input_folder, project_name,tr(".forc"),delete_existing_output_file)  != 0 ) error_found = true;
+                result = error_found;
+            }
+
         }
         else
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: PIHM Version Not Supported </span>")+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">Error: PIHM Version Not Supported </span>")+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
-            return 999;
+            result = false;
         }
     } catch (...) {
         qDebug() << "Error: PIHMSimulation::CopyInputFiles() is returning w/o checking";
+        result = false;
     }
-    return 0;
+    return result;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run Button Clicked Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMSimulation::on_pushButtonRun_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start PIHMSimulation::on_pushButtonRun_clicked()";
 
     try {
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+        ui->progressBar->setValue(0);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get Input Values
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString input_folder  = ui->lineEditInputDataFolder->text();
+        QString project_name  = ui->lineEditDataKey->text();
+        bool delete_existing_output_file = false; //TODO GUI
+        bool return_on_error = true; //TODO GUI
+
+        bool checked_input = Check_InputDataFolder(input_folder);
+        if(!checked_input)
+        {
+            Log_Error_Message("Invalid Project Input Folder or Value Missing" + input_folder );
+            return;
+        }
+        checked_input = Check_DataKey(project_name);
+        if(!checked_input)
+        {
+            Log_Error_Message("Invalid Project Name or Value Missing " + project_name );
+            return;
+        }
+
+        checked_input = Check_PIHM_Project_Inputs(input_folder, project_name, true);
+        if(!checked_input)
+        {
+            Log_Error_Message("Missing input file(s) for project: " + project_name );
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check Output Location
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString output_folder = user_pihmgis_root_folder + "/5PIHMSimulation";
+        if (!QDir(output_folder).exists() )
+        {
+            Log_Error_Message("Project output folder is missing: " + output_folder );
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Copy input files to Output Location
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        bool checked_output = CopyInputFiles(output_folder, input_folder, project_name, delete_existing_output_file, return_on_error);
+        if(!checked_output)
+        {
+            Log_Error_Message("Issues with copying input file(s) to output folder: " + output_folder );
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Running Simulation
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         LogsString = tr("");
         LogsString.append(tr("PIHM Simulation Processing ... <br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-
-        ui->progressBar->setValue(0);
 
         if(ui->pushButtonRun->text() == "Run")
         {
-            ui->pushButtonRun->setText("Stop");
+            ui->pushButtonRun->setText("Stop"); //Want user to know to clip to stop existing thread
 
-            LogsString.append(tr("Verifying Data Files ... <br>"));
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Update Project file
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            QStringList ProjectIOStringList;
+
+            ProjectIOStringList << "PIHMSimulation" << input_folder;
+            ProjectIOStringList << project_name;
+            ProjectIOStringList << QString::number(false); //TODO Update project expectations sometime later
+            ProjectIOStringList << output_folder;
+            WriteModuleLine(filename_open_project, ProjectIOStringList);
+            ProjectIOStringList.clear();
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Preparing Thread Project file
+            //TODO error checking
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            MyPIHMThread = new PIHMThread(this);
+            bool error_check = MyPIHMThread->set_Output_Folder(output_folder);
+            if(!error_check)
+            {
+                Log_Error_Message("Problem with output folder: " + output_folder );
+                return;
+            }
+            error_check = MyPIHMThread->set_Project_Name(project_name);
+            if(!error_check)
+            {
+                Log_Error_Message("Problem with Project Name: " + project_name );
+                return;
+            }
+            error_check = MyPIHMThread->set_Model_Version(ModelVersion);
+            if(!error_check)
+            {
+                Log_Error_Message("Problem with Model_Version: " + ModelVersion );
+                return;
+            }
+            error_check = MyPIHMThread->set_Progress_Bar(ui->progressBar);
+            if(!error_check)
+            {
+                Log_Error_Message("Problem with progressBar " );
+                return;
+            }
+            error_check = MyPIHMThread->set_LogFile(LogsString);
+            if(!error_check)
+            {
+                Log_Error_Message("Problem with log string: " + LogsString );
+                return;
+            }
+            error_check = MyPIHMThread->init();
+            if(!error_check)
+            {
+                Log_Error_Message("Problem with setting up thread initization" );
+                return;
+            }
+
+            LogsString.append(tr("Running PIHM ...")+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
 
-            int runFlag = 1;
+            connect(MyPIHMThread,SIGNAL(finished()),this,SLOT(PIHMThreadFinished()));
 
-            if( ui->lineEditInputDataFolder->text() == nullptr )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: PIHM Input Data Folder Missing </span>")+tr("<br>"));
-                runFlag = 0;
-            }
-            else
-            {
-                if ( ! QDir(ui->lineEditInputDataFolder->text()).exists() )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>")+ui->lineEditInputDataFolder->text()+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(ui->lineEditInputDataFolder->text() + " ... <br>");
-            }
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            this->moveToThread(MyPIHMThread);
+            MyPIHMThread->start();
 
 
-            if( ui->lineEditDataKey->text() == nullptr )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: PIHM Input Data Key Missing </span>")+tr("<br>"));
-                runFlag = 0;
-            }
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
-
-            int ErrorPIHM = 0;
-
-            ErrorPIHM = CheckInputFiles();
-
-            if ( ErrorPIHM != 0 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: PIHM Input File(s) Missing </span>")+tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorPIHM)+tr("<br>"));
-                runFlag = 0;
-            }
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
-            QString SimulationFolder;
-            if ( runFlag == 1 )
-            {
-                SimulationFolder = ProjectFolder + "/5PIHMSimulation";
-                int SimulationCount = 1;
-                QString SimulationCountString;
-                if ( ui->checkBoxArchive->isChecked() )
-                {
-                    while ( QDir(SimulationFolder+"/"+SimulationCountString.sprintf("Simul%03d",SimulationCount)).exists() )
-                        SimulationCount++;
-                    SimulationFolder = SimulationFolder+"/"+SimulationCountString.sprintf("Simul%03d",SimulationCount);
-                }
-                QDir qdir;
-                if ( qdir.mkpath(SimulationFolder) )
-                {
-                    LogsString.append(tr("Created Simulation Folder: ")+SimulationFolder+tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                }
-                else
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">Unable to Create Folder: </span>")+SimulationFolder+tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                    return;
-                }
-
-                if ( CopyInputFiles( SimulationFolder ) != 0 )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">Unable to Copy Input Files</span>")+tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
-                    return;
-                }
-
-                ProjectIOStringList << "PIHMSimulation" << ui->lineEditInputDataFolder->text();
-                ProjectIOStringList << ui->lineEditDataKey->text();
-                ProjectIOStringList << QString::number(ui->checkBoxArchive->isChecked());
-                ProjectIOStringList << SimulationFolder;
-                WriteModuleLine(ProjectFileName, ProjectIOStringList);
-                ProjectIOStringList.clear();
-
-
-                MyPIHMThread = new PIHMThread(this);
-
-                char **arguments;
-                arguments    = (char **) malloc(2 * sizeof(char*));
-                arguments[0] = (char * ) malloc(400*sizeof(char) );
-                arguments[1] = (char * ) malloc(400*sizeof(char) );
-
-                //Problems here
-                const char *dummystr = "2 ";
-                arguments[0] = (char *)dummystr; //"2 ";
-
-
-                //arguments[1] = (char *) qPrintable(SimulationFolder+"/"+ui->lineEditDataKey->text());
-                sprintf(arguments[1],"%s",qPrintable(SimulationFolder+"/"+ui->lineEditDataKey->text()));
-                qDebug() << arguments[1];
-
-                MyPIHMThread->init(2,arguments,ui->progressBar,LogsString,this->ModelVersion,1);
-
-                LogsString.append(tr("Running PIHM ...")+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-
-                connect(MyPIHMThread,SIGNAL(finished()),this,SLOT(PIHMThreadFinished()));
-                //connect(MyPIHMThread,SIGNAL(updateProgressBar(int)),this,SLOT(updateProgressBarValue(int)),Qt::DirectConnection);
-                //ui->progressBar->connect(MyPIHMThread,SIGNAL(MyPIHMThread->updateProgressBar(int)),SLOT(updateProgressBarValue(int)),Qt::DirectConnection);
-
-                this->moveToThread(MyPIHMThread);
-                MyPIHMThread->start();
-
-
-            }
-            else
-            {
-                ui->pushButtonRun->setText("Run");
-            }
         }
         else
         {
             // TODO: If simulation is running stop it
-            ui->pushButtonRun->setText("Stoping...");
+            ui->pushButtonRun->setText("Stopping...");
 
             if( MyPIHMThread != nullptr )
             {
@@ -507,25 +662,38 @@ void PIHMSimulation::on_pushButtonRun_clicked()
     }
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMSimulation::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start PIHMSimulation::on_pushButtonClose_clicked()";
 
     try {
-        ui->pushButtonClose->setText("Closing...");
-        // TODO: If simulation is running -- stop first before closing
-        if( MyPIHMThread != nullptr )
-        {
-            MyPIHMThread->kill();//?? TEST IF THIS IS REQUIRED?
-            //thread->wait();
-            //done(0);
-        }
+
+        //        if( MyPIHMThread != nullptr )
+        //        {
+        //        qDebug() << "MyPIHMThread = " << MyPIHMThread;
+        //        }
+        //        else
+        //        {
+        //             qDebug() << "Empty PIHMThread";
+        //        }
+
+        //        ui->pushButtonClose->setText("Closing...");
+        //        // TODO: If simulation is running -- stop first before closing
+        //        if( MyPIHMThread != nullptr )
+        //        {
+        //            MyPIHMThread->kill();//?? TEST IF THIS IS REQUIRED?
+        //            //thread->wait();
+        //            //done(0);
+        //        }
         //    while () // Wait for thread to close/terminate
 
-        QStringList default_params; default_params << "WORKFLOW7" << "WORKFLOW8";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
+        //QStringList default_params; default_params << "WORKFLOW7" << "WORKFLOW8";
+        //QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
 
     } catch (...) {
@@ -533,6 +701,10 @@ void PIHMSimulation::on_pushButtonClose_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMSimulation::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)
