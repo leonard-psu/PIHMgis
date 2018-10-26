@@ -425,8 +425,14 @@
     </disabled>
    </palette>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>: :   Mesh Time Series   : :</string>
+   <string>Mesh Time Series</string>
   </property>
   <widget class="QGroupBox" name="groupBoxOutput">
    <property name="geometry">
@@ -434,7 +440,7 @@
      <x>15</x>
      <y>30</y>
      <width>581</width>
-     <height>211</height>
+     <height>221</height>
     </rect>
    </property>
    <property name="title">
@@ -443,11 +449,18 @@
    <widget class="QLabel" name="textLabel2">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>19</y>
-      <width>131</width>
+      <x>210</x>
+      <y>0</y>
+      <width>151</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Output Data Folder</string>
@@ -457,10 +470,17 @@
     <property name="geometry">
      <rect>
       <x>475</x>
-      <y>19</y>
+      <y>5</y>
       <width>98</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Browse</string>
@@ -472,15 +492,15 @@
    <widget class="QLineEdit" name="lineEditOutputDataFolder">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>20</y>
-      <width>325</width>
+      <x>10</x>
+      <y>40</y>
+      <width>561</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -489,15 +509,15 @@
    <widget class="QLineEdit" name="lineEditDataKey">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>66</y>
-      <width>211</width>
+      <x>159</x>
+      <y>74</y>
+      <width>411</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -506,11 +526,18 @@
    <widget class="QLabel" name="textLabel2_2">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>65</y>
-      <width>131</width>
+      <x>45</x>
+      <y>73</y>
+      <width>111</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Data Key (ID)</string>
@@ -519,11 +546,18 @@
    <widget class="QLabel" name="textLabel2_3">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>160</y>
-      <width>131</width>
+      <x>48</x>
+      <y>180</y>
+      <width>101</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Plot Variable</string>
@@ -532,11 +566,18 @@
    <widget class="QLabel" name="textLabel2_4">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>115</y>
+      <x>19</x>
+      <y>110</y>
       <width>131</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Model Segments</string>
@@ -545,11 +586,18 @@
    <widget class="QComboBox" name="comboBoxPlotVariable">
     <property name="geometry">
      <rect>
-      <x>142</x>
-      <y>160</y>
-      <width>221</width>
+      <x>160</x>
+      <y>180</y>
+      <width>411</width>
       <height>28</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <item>
      <property name="text">
@@ -610,15 +658,15 @@
    <widget class="QLineEdit" name="lineEditModelSegments">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>157</y>
-      <width>171</width>
+      <x>160</x>
+      <y>140</y>
+      <width>411</width>
       <height>29</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -636,11 +684,18 @@
    <widget class="QComboBox" name="comboBoxModelSegments">
     <property name="geometry">
      <rect>
-      <x>142</x>
-      <y>117</y>
-      <width>221</width>
+      <x>160</x>
+      <y>110</y>
+      <width>411</width>
       <height>28</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <item>
      <property name="text">
@@ -673,10 +728,15 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>335</y>
+     <y>295</y>
      <width>581</width>
-     <height>71</height>
+     <height>111</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
    </property>
    <property name="lineWrapMode">
     <enum>QTextEdit::NoWrap</enum>
@@ -1132,22 +1192,32 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>258</y>
+     <y>249</y>
      <width>581</width>
-     <height>61</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="title">
     <string/>
    </property>
    <widget class="QPushButton" name="pushButtonHelp">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>17</y>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Help</string>
@@ -1159,11 +1229,18 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>326</x>
-      <y>17</y>
+      <x>341</x>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Close</string>
@@ -1176,10 +1253,17 @@
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>17</y>
+      <y>4</y>
       <width>113</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="toolTip">
      <string/>
@@ -1621,6 +1705,12 @@
       </colorrole>
      </disabled>
     </palette>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(0, 51, 153);</string>

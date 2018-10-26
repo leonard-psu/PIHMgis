@@ -464,11 +464,11 @@ void MeshSpatial::verifyInputOutputFile()
 
         if ( !exists)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>")+ui->lineEditOutputDataFolder->text()+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>") + output_data_folder + tr("<br>"));
         }
         else
         {
-            LogsString.append(tr("Output Folder Exists ... ")+ui->lineEditOutputDataFolder->text()+tr("<br>"));
+            //LogsString.append(tr("Output Folder Exists ... ") + output_data_folder + tr("<br>"));
         }
 
         QString FileName = output_data_folder + "/" + project_name;
@@ -481,7 +481,7 @@ void MeshSpatial::verifyInputOutputFile()
         }
         else
         {
-            LogsString.append(tr("Para File Exists ... ")+ para_filename +tr("<br>"));
+            //LogsString.append(tr("Para File Exists ... ")+ para_filename +tr("<br>"));
         }
 
         QStringList Extensions;
@@ -979,7 +979,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
         int time_step = time_step2 - time_step1;
         if( time_step <=0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with riv geometry file, number of river segments </span>") + QString::number(time_step) + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with time_step </span>") + QString::number(time_step) + tr("<br>"));
             return;
         }
 

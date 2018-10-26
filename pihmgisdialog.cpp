@@ -945,8 +945,8 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderForcDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderForcDataFile_clicked";
 
     try {
-        QStringList default_params; default_params << "WORKFLOW6" << "WORKFLOW8"; set_defaults(default_params);
-        bool success = QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#forc_Data_File"));
+        //QStringList default_params; default_params << "WORKFLOW6" << "WORKFLOW8"; set_defaults(default_params);
+        //bool success = QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#forc_Data_File"));
 
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderForcDataFile_clicked is returning w/o checking";
@@ -998,6 +998,7 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked()
         MeshSpatial *MeshSpatialDialog = new MeshSpatial(this, filename_open_project);
         MeshSpatialDialog->setModal(true);
         MeshSpatialDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked is returning w/o checking";
     }
@@ -1009,8 +1010,12 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalWatershed_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalWatershed_clicked";
 
     try {
-        MeshTemporal *MeshTemporalDialog = new MeshTemporal(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        MeshTemporal *MeshTemporalDialog = new MeshTemporal(this, filename_open_project);
+        MeshTemporalDialog->setModal(true);
         MeshTemporalDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalWatershed_clicked is returning w/o checking";
     }

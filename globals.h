@@ -14,4 +14,13 @@ extern QString user_pihmgis_project_folder;
 extern bool fileExists(QString path);
 extern qint64 file_Size(QString path);
 
+
+struct Time_Values
+{
+    int time_step1;
+    int time_step2;
+
+};
+
+
 #endif // GLOBALS_H

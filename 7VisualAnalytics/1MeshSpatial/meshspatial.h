@@ -2,17 +2,12 @@
 #define MESHSPATIAL_H
 
 #include <QDialog>
+#include "globals.h"
 
 namespace Ui {
 class MeshSpatial;
 }
 
-struct Time_Values
-{
-    int time_step1;
-    int time_step2;
-
-};
 
 class MeshSpatial : public QDialog
 {
