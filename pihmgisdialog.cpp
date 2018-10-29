@@ -1027,7 +1027,9 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked";
 
     try {
-        RiverSpatial *RiverSpatialDialog = new RiverSpatial(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        RiverSpatial *RiverSpatialDialog = new RiverSpatial(this, filename_open_project);
         RiverSpatialDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked is returning w/o checking";
