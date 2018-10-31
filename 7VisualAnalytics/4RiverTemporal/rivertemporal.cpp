@@ -9,7 +9,11 @@
 #include "0LibsIO/IOProjectFile.h"
 #include "globals.h"
 
-RiverTemporal::RiverTemporal(QWidget *parent) :
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// RiverTemporal Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+RiverTemporal::RiverTemporal(QWidget *parent, QString filename) :
     QDialog(parent),
     ui(new Ui::RiverTemporal)
 {
@@ -20,57 +24,29 @@ RiverTemporal::RiverTemporal(QWidget *parent) :
 
         ui->setupUi(this);
 
+        filename_open_project = filename;
+        bool found_file = false;
+
         QAction *PrintAction = new QAction(tr("&Save..."),this);
         PrintAction->setShortcut(tr("Ctrl+S"));
         connect(PrintAction,SIGNAL(triggered()),this,SLOT(on_pushButtonRun_clicked()));
 
-        // ** Start: Set Defaults
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
+        QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Unable to Open File: </span>" + filename_open_project + tr("<br>"));
         }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        QString ProjectFolder   = ProjectFileTextStream.readLine();
-        QString ProjectFileName = ProjectFileTextStream.readLine();
+        else
+        {
+            found_file = true;
+        }
         ProjectFile.close();
 
-
-        QStringList ModuleStringList;
-        QString TempFileName;
-
-        // **
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("PIHMSimulation"));
-        if ( ModuleStringList.length() > 0  )
+        if(found_file)
         {
-            TempFileName = ModuleStringList.at(4);
-            ui->lineEditOutputDataFolder->setText(TempFileName);
-
-            TempFileName = ModuleStringList.at(2);
-            ui->lineEditDataKey->setText(TempFileName);
-        }
-        // ** End: Set Defaults
-
-
-        // ** Start: Fill Form If Module Has Been Run Previously
-
-        ModuleStringList = ReadModuleLine(ProjectFileName,tr("RiverTemporal"));
-
-        if ( ModuleStringList.length() > 0 )
-        {
-            ui->lineEditOutputDataFolder->setText(ModuleStringList.at(1));
-            ui->lineEditOutputDataFolder->setStyleSheet("color: rgb(0, 180, 0);");
-
-            ui->lineEditDataKey->setText(ModuleStringList.at(2));
-            ui->lineEditDataKey->setStyleSheet("color: rgb(0, 180, 0);");
-
-            ui->lineEditModelSegments->setText(ModuleStringList.at(5));
-            ui->lineEditModelSegments->setStyleSheet("color: rgb(0, 180, 0);");
+            Load_Project_Settings();
         }
 
-        verifyInputOutputFile();
         pushButtonSetFocus();
 
     } catch (...) {
@@ -78,6 +54,10 @@ RiverTemporal::RiverTemporal(QWidget *parent) :
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// RiverTemporal Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 RiverTemporal::~RiverTemporal()
 {
     if(print_debug_messages)
@@ -90,82 +70,234 @@ RiverTemporal::~RiverTemporal()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void RiverTemporal::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void RiverTemporal::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\"> ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Load_Project_Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool RiverTemporal::Load_Project_Settings()
+{
+    if (print_debug_messages)
+        qDebug() << "INFO: RiverTemporal::Load_Project_Settings()";
+
+    try {
+
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("PIHMSimulation"));
+        if ( ModuleStringList.length() > 0  )
+        {
+            QString TempFileName = ModuleStringList.at(4);
+            Check_OutputFolder_Location(TempFileName);
+
+            TempFileName = ModuleStringList.at(2);
+            Check_Project_Name_Input(TempFileName);
+        }
+
+        // ** Start: Fill Form If Module Has Been Run Previously
+        ModuleStringList = ReadModuleLine(filename_open_project,tr("RiverTemporal"));
+
+        if ( ModuleStringList.length() > 0 )
+        {
+            Check_OutputFolder_Location(ModuleStringList.at(1));
+            Check_Project_Name_Input(ModuleStringList.at(2));
+            Check_ModelSegments_Input(ModuleStringList.at(5));
+        }
+
+        verifyInputOutputFile();
+        pushButtonSetFocus();
+
+    } catch (...) {
+        qDebug() << "Error: RiverTemporal::Load_Project_Settings is returning w/o checking";
+        return false;
+    }
+
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void RiverTemporal::Clear_Log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start RiverTemporal::Clear_Log()";
+
+    try {
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+    } catch (...) {
+        qDebug() << "Error: RiverTemporal::Clear_Log() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check OutputFolder File exists (INPUT Location of Model)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool RiverTemporal::Check_OutputFolder_Location(QString folder)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_OutputFolder_Location()";
+
+    bool result = false;
+
+    try {
+        QDir dir(folder);
+
+        if(dir.exists())
+        {
+            ui->lineEditOutputDataFolder->setText(folder);
+            ui->lineEditOutputDataFolder->setStyleSheet("color: black;");
+            result = true;
+        }
+        else
+        {
+            ui->lineEditOutputDataFolder->setText(folder);
+            ui->lineEditOutputDataFolder->setStyleSheet("color: red;");
+            result = false;
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_OutputFolder_Location is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check Project_Name value exists (INPUT Location of Model)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool RiverTemporal::Check_Project_Name_Input(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_Project_Name_Input()";
+
+    bool result = false;
+
+    try {
+
+        if(value.isNull() || value.isEmpty())
+        {
+            ui->lineEditDataKey->setStyleSheet("color: red;");
+            ui->lineEditDataKey->setText("Missing");
+            result = false;
+        }
+        else if(value == QString("Missing"))
+        {
+            ui->lineEditDataKey->setStyleSheet("color: red;");
+            result = false;
+        }
+        else
+        {
+            ui->lineEditDataKey->setStyleSheet("color: black;");
+            ui->lineEditDataKey->setText(value);
+            result = true; //For now assume validators work
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_Project_Name_Input is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check ModelSegments (INPUT)
+// TODO error checking
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool RiverTemporal::Check_ModelSegments_Input(QString value){
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Check_ModelSegments_Input()";
+
+    bool result = false;
+
+    try {
+
+        if(value.isNull() || value.isEmpty())
+        {
+            ui->lineEditModelSegments->setStyleSheet("color: red;");
+            ui->lineEditModelSegments->setText("Missing");
+            result = false;
+        }
+        else if(value == QString("Missing"))
+        {
+            ui->lineEditModelSegments->setStyleSheet("color: red;");
+            result = false;
+        }
+        else
+        {
+            ui->lineEditModelSegments->setStyleSheet("color: black;");
+            ui->lineEditModelSegments->setText(value);
+            result = true;
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Check_ModelSegments_Input is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button OutputDataFolder Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RiverTemporal::on_pushButtonOutputDataFolder_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start RiverTemporal::on_pushButtonOutputDataFolder_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>")+user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            return;
-        }
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
-        qDebug() << ProjectFolder;
+        Clear_Log();
 
-        QString OutputDataFolder = QFileDialog::getExistingDirectory(this, "PIHM Input Data Folder", ProjectFolder+"/5PIHMSimulation", 0);
+        QString OutputDataFolder = QFileDialog::getExistingDirectory(this, "PIHM Input Data Folder", user_pihmgis_root_folder+"/5PIHMSimulation", 0);
 
         if( OutputDataFolder != nullptr )
         {
-            ui->lineEditOutputDataFolder->setStyleSheet("color: black;");
-            ui->lineEditOutputDataFolder->setText(OutputDataFolder);
-
-            QStringList ModuleStringList;
-            QString TempFileName;
-
-            if( ui->lineEditDataKey->text() == nullptr )
-            {
-                // ** Data Model INPUT File Name
-                ModuleStringList = ReadModuleLine(ProjectFileName,tr("TINShapeLayer"));
-                if ( ModuleStringList.length() > 0  )
-                {
-                    TempFileName = ModuleStringList.at(3);
-                    TempFileName = TempFileName.right(TempFileName.length()-TempFileName.lastIndexOf("/")-1);
-
-                    TempFileName.replace( QString(".shp"), QString("") );
-                    if ( QFile(ui->lineEditOutputDataFolder->text()+"/"+TempFileName+".para").exists() )
-                    {
-                        ui->lineEditDataKey->setText(TempFileName);
-                    }
-
-                }
-
-                ModuleStringList = ReadModuleLine(ProjectFileName,tr("MeshDataFile"));
-                if ( ModuleStringList.length() > 0  )
-                {
-                    TempFileName = ModuleStringList.at(9);
-                    if ( QFile(ui->lineEditOutputDataFolder->text()+"/"+TempFileName+".para").exists() )
-                    {
-                        ui->lineEditDataKey->setText(TempFileName);
-                    }
-                }
-            }
+            Check_OutputFolder_Location(OutputDataFolder);
+            pushButtonSetFocus();
         }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        pushButtonSetFocus();
 
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_pushButtonOutputDataFolder_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for ModelSegments
+// TODO
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RiverTemporal::on_comboBoxModelSegments_currentIndexChanged(int index)
 {
     if(print_debug_messages)
@@ -178,50 +310,66 @@ void RiverTemporal::on_comboBoxModelSegments_currentIndexChanged(int index)
             ui->lineEditModelSegments->show();
 
         pushButtonSetFocus();
+
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_comboBoxModelSegments_currentIndexChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for OutputDataFolder
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RiverTemporal::on_lineEditOutputDataFolder_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start RiverTemporal::on_lineEditOutputDataFolder_textChanged()";
 
     try {
-        ui->lineEditOutputDataFolder->setStyleSheet("color: rgb(0, 0, 0);");
-        verifyInputOutputFile();
+        bool checked = Check_OutputFolder_Location(arg1);
+        if(checked)
+            verifyInputOutputFile();
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_lineEditOutputDataFolder_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for Project Name
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RiverTemporal::on_lineEditDataKey_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start RiverTemporal::on_lineEditDataKey_textChanged()";
 
     try {
-        ui->lineEditDataKey->setStyleSheet("color: rgb(0, 0, 0);");
-        verifyInputOutputFile();
+        bool checked = Check_Project_Name_Input(arg1);
+        if(checked)
+            verifyInputOutputFile();
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_lineEditDataKey_textChanged() is returning w/o checking";
     }
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for ModelSegments
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RiverTemporal::on_lineEditModelSegments_textChanged(const QString &arg1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start RiverTemporal::on_lineEditModelSegments_textChanged()";
 
     try {
-        ui->lineEditModelSegments->setStyleSheet("color: rgb(0, 0, 0);");
+        bool checked = Check_ModelSegments_Input(arg1);
+        if(checked)
+            verifyInputOutputFile();
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_lineEditModelSegments_textChanged() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check entered value for PlotVariable
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RiverTemporal::on_comboBoxPlotVariable_currentIndexChanged(int index)
 {
     if(print_debug_messages)
@@ -234,79 +382,98 @@ void RiverTemporal::on_comboBoxPlotVariable_currentIndexChanged(int index)
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to validate inputs and outputs
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RiverTemporal::verifyInputOutputFile()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start RiverTemporal::verifyInputOutputFile()";
 
     try {
-        LogsString = tr("");
-        if ( ! QDir(ui->lineEditOutputDataFolder->text()).exists() )
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check Input Values
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString output_data_folder = ui->lineEditOutputDataFolder->text();
+        QString project_name = ui->lineEditDataKey->text();
+
+        bool exists = Check_OutputFolder_Location(output_data_folder);
+
+        if ( !exists)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>")+ui->lineEditOutputDataFolder->text()+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>") + output_data_folder + tr("<br>"));
         }
         else
         {
-            LogsString.append(tr("Output Folder Exists ... ")+ui->lineEditOutputDataFolder->text()+tr("<br>"));
+            //LogsString.append(tr("Output Folder Exists ... ") + output_data_folder + tr("<br>"));
         }
 
-        QString FileName, Extension;
+        QString FileName = output_data_folder + "/" + project_name;
+        QString Extension = tr(".para");
+        QString para_filename = FileName + Extension;
 
-        FileName = ui->lineEditOutputDataFolder->text() + "/" + ui->lineEditDataKey->text();
-        Extension = tr(".para");
-
-        if ( ! QFile(FileName + Extension).exists() )
+        if ( ! QFile(para_filename).exists() )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ FileName + Extension +tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ para_filename +tr("<br>"));
         }
         else
         {
-            LogsString.append(tr("Para File Exists ... ")+ FileName + Extension +tr("<br>"));
-
+            //LogsString.append(tr("Para File Exists ... ")+ para_filename +tr("<br>"));
         }
 
         QStringList Extensions;
-        if (ui->comboBoxPlotVariable->currentIndex() ==  0) Extensions << ".rivFlx01.dat"; //outflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  1) Extensions << ".rivFlx00.dat"; //inflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  2) Extensions << ".stage.dat";    //storage
-        if (ui->comboBoxPlotVariable->currentIndex() ==  3) Extensions << ".rivFlx02.dat"; //surfaceflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  3) Extensions << ".rivFlx03.dat"; //surfaceflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  4) Extensions << ".rivFlx04.dat"; //baseflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  4) Extensions << ".rivFlx05.dat"; //baseflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  5) Extensions << ".rivFlx02.dat"; //surfaceflow left
-        if (ui->comboBoxPlotVariable->currentIndex() ==  6) Extensions << ".rivFlx03.dat"; //surfaceflow right
-        if (ui->comboBoxPlotVariable->currentIndex() ==  7) Extensions << ".rivFlx04.dat"; //baseflow left
-        if (ui->comboBoxPlotVariable->currentIndex() ==  8) Extensions << ".rivFlx05.dat"; //baseflow right
-        if (ui->comboBoxPlotVariable->currentIndex() ==  9) Extensions << ".rivFlx06.dat"; //seepage bed
-        if (ui->comboBoxPlotVariable->currentIndex() == 10) Extensions << ".rivFlx09.dat"; //bed outflow
-        if (ui->comboBoxPlotVariable->currentIndex() == 11) Extensions << ".rivFlx10.dat"; //bed inflow
-        if (ui->comboBoxPlotVariable->currentIndex() == 12) Extensions << ".rbed.dat";     //bed storage
-        if (ui->comboBoxPlotVariable->currentIndex() == 13) Extensions << ".rivFlx07.dat"; //bed baseflow
-        if (ui->comboBoxPlotVariable->currentIndex() == 13) Extensions << ".rivFlx08.dat"; //bed baseflow
-        if (ui->comboBoxPlotVariable->currentIndex() == 14) Extensions << ".rivFlx07.dat"; //bed baseflow left
-        if (ui->comboBoxPlotVariable->currentIndex() == 15) Extensions << ".rivFlx08.dat"; //bed baseflow right
+        int current_index_comboBoxPlotVariable = ui->comboBoxPlotVariable->currentIndex();
+
+        if (current_index_comboBoxPlotVariable ==  0) Extensions << ".rivFlx01.dat"; //outflow
+        if (current_index_comboBoxPlotVariable ==  1) Extensions << ".rivFlx00.dat"; //inflow
+        if (current_index_comboBoxPlotVariable ==  2) Extensions << ".stage.dat";    //storage
+        if (current_index_comboBoxPlotVariable ==  3) Extensions << ".rivFlx02.dat"; //surfaceflow
+        if (current_index_comboBoxPlotVariable ==  3) Extensions << ".rivFlx03.dat"; //surfaceflow
+        if (current_index_comboBoxPlotVariable ==  4) Extensions << ".rivFlx04.dat"; //baseflow
+        if (current_index_comboBoxPlotVariable ==  4) Extensions << ".rivFlx05.dat"; //baseflow
+        if (current_index_comboBoxPlotVariable ==  5) Extensions << ".rivFlx02.dat"; //surfaceflow left
+        if (current_index_comboBoxPlotVariable ==  6) Extensions << ".rivFlx03.dat"; //surfaceflow right
+        if (current_index_comboBoxPlotVariable ==  7) Extensions << ".rivFlx04.dat"; //baseflow left
+        if (current_index_comboBoxPlotVariable ==  8) Extensions << ".rivFlx05.dat"; //baseflow right
+        if (current_index_comboBoxPlotVariable ==  9) Extensions << ".rivFlx06.dat"; //seepage bed
+        if (current_index_comboBoxPlotVariable == 10) Extensions << ".rivFlx09.dat"; //bed outflow
+        if (current_index_comboBoxPlotVariable == 11) Extensions << ".rivFlx10.dat"; //bed inflow
+        if (current_index_comboBoxPlotVariable == 12) Extensions << ".rbed.dat";     //bed storage
+        if (current_index_comboBoxPlotVariable == 13) Extensions << ".rivFlx07.dat"; //bed baseflow
+        if (current_index_comboBoxPlotVariable == 13) Extensions << ".rivFlx08.dat"; //bed baseflow
+        if (current_index_comboBoxPlotVariable == 14) Extensions << ".rivFlx07.dat"; //bed baseflow left
+        if (current_index_comboBoxPlotVariable == 15) Extensions << ".rivFlx08.dat"; //bed baseflow right
 
         for( int i=0; i < Extensions.length(); i++)
         {
-            if ( ! QFile(FileName + Extensions.at(i)).exists() )
+            QString tmp_filename = FileName + Extensions.at(i);
+            if ( ! QFile(tmp_filename).exists() )
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>")+ FileName + Extensions.at(i) +tr("<br>"));
+                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>") + tmp_filename +tr("<br>"));
             }
             else
             {
-                LogsString.append(tr("Output File Exists ... ")+ FileName + Extensions.at(i) +tr("<br>"));
+                LogsString.append(tr("Output File Exists ... ") + tmp_filename +tr("<br>"));
             }
         }
 
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
-        //pushButtonSetFocus();
 
     } catch (...) {
         qDebug() << "Error: RiverTemporal::verifyInputOutputFile() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to focus button selection (needed for users w/o mouse)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RiverTemporal::pushButtonSetFocus()
 {
     if(print_debug_messages)
@@ -345,6 +512,133 @@ void RiverTemporal::pushButtonSetFocus()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to get Number of elements in Mesh file
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int RiverTemporal::Get_Element_Count(QString element_filename, bool message)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start RiverTemporal::Get_Element_Count()";
+
+    int element_count = -1;
+
+    try {
+        QFile TempFile;
+        QTextStream TempFileTextStream;
+
+        TempFile.setFileName(element_filename);
+        TempFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        TempFileTextStream.setDevice(&TempFile);
+        TempFileTextStream >> element_count;
+        TempFile.close();
+
+        if(message)
+        {
+            LogsString.append(tr("Number of Elements = ")+QString::number(element_count)+tr("<br>"));
+        }
+
+    }
+    catch (...)
+    {
+        element_count = -1;
+        qDebug() << "Error: RiverTemporal::Get_Element_Count() is returning w/o checking";
+
+    }
+
+    return element_count;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to get Number of River Segments in RIV file
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int RiverTemporal::Get_River_Count(QString river_filename, bool message)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start RiverTemporal::Get_River_Count()";
+
+    int river_count = -1;
+
+    try {
+        QFile TempFile;
+        QTextStream TempFileTextStream;
+
+        TempFile.setFileName(river_filename);
+        TempFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        TempFileTextStream.setDevice(&TempFile);
+        TempFileTextStream >> river_count;
+        TempFile.close();
+
+        if(message)
+        {
+            LogsString.append(tr("Number of River Segments = ")+QString::number(river_count)+tr("<br>"));
+        }
+
+    }
+    catch (...)
+    {
+        river_count = -1;
+        qDebug() << "Error: RiverTemporal::Get_River_Count() is returning w/o checking";
+
+    }
+
+    return river_count;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to get time step
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Time_Values RiverTemporal::Get_Time_Steps(QString filename, int num_elements, bool message)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start RiverTemporal::Get_Time_Step()";
+
+    Time_Values result;
+    result.time_step1 = -1;
+    result.time_step2 = -1;
+
+    try {
+        QFile TempFile;
+        QTextStream TempFileTextStream;
+        int TIMESTEP1, TIMESTEP2;
+        double TempDouble;
+
+        TempFile.setFileName(filename);
+        TempFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        TempFileTextStream.setDevice(&TempFile);
+
+        TempFileTextStream >> TIMESTEP1;
+
+        if(message) qDebug() << "Time Step1 = " << TIMESTEP1 << "\n";
+
+        for (int i=0; i < num_elements+1; i++)
+        {
+            TempFileTextStream >> TempDouble;
+            if(message) qDebug() << TempDouble << ", ";
+        }
+        TempFileTextStream >> TIMESTEP2;
+        TempFile.close();
+
+        if(message) qDebug() << "\nTime Step2 = " << TIMESTEP2 << "\n";
+
+        //time_step = TIMESTEP2 - TIMESTEP1;
+        //if(message) qDebug() << "Time Step = " << time_step << "\n";
+        result.time_step1 = TIMESTEP1;
+        result.time_step2 = TIMESTEP2;
+
+    }
+    catch (...)
+    {
+        result.time_step1 = -1;
+        result.time_step2 = -1;
+        qDebug() << "Error: RiverTemporal::Get_Time_Step() is returning w/o checking";
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run Button Clicked Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RiverTemporal::on_pushButtonRun_clicked()
 {
     if(print_debug_messages)
@@ -352,423 +646,458 @@ void RiverTemporal::on_pushButtonRun_clicked()
 
     try {
 
-        LogsString = tr("");
-        LogsString.append(tr("River Time Series Processing Started ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
 
-        QString ProjectFolder, ProjectFileName;
-        QFile ProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
-        ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ProjectFileTextStream(&ProjectFile);
-        ProjectFolder   = ProjectFileTextStream.readLine();
-        ProjectFileName = ProjectFileTextStream.readLine();
-        ProjectFile.close();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check Inputs from GUI
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString project_folder = ui->lineEditOutputDataFolder->text();
+        QString project_name = ui->lineEditDataKey->text();
+        QString output_base_filename = project_folder + "/" + project_name;
+        QString river_filename = output_base_filename + ".riv";
+        QString mesh_filename = output_base_filename + ".mesh";
 
+        bool checked = Check_OutputFolder_Location(project_folder);
+        if(!checked)
+        {
+            Log_Error_Message("Issue with Input Folder : </span>" + project_folder + tr("<br>"));
+            return;
+        }
+        checked = Check_Project_Name_Input(project_name);
+        if(!checked)
+        {
+            Log_Error_Message("Issue with Input Folder : </span>" + project_name + tr("<br>"));
+            return;
+        }
 
-        LogsString.append(tr("Verifying Data Files ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check file access
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QStringList  extensions_list;
+        int current_index_comboBoxPlotVariable = ui->comboBoxPlotVariable->currentIndex();
 
-        int runFlag = 1;
+        if (current_index_comboBoxPlotVariable ==  0) extensions_list << ".rivFlx01.dat"; //outflow
+        if (current_index_comboBoxPlotVariable ==  1) extensions_list << ".rivFlx00.dat"; //inflow
+        if (current_index_comboBoxPlotVariable ==  2) extensions_list << ".stage.dat";    //storage
+        if (current_index_comboBoxPlotVariable ==  3) extensions_list << ".rivFlx02.dat"; //surfaceflow
+        if (current_index_comboBoxPlotVariable ==  3) extensions_list << ".rivFlx03.dat"; //surfaceflow
+        if (current_index_comboBoxPlotVariable ==  4) extensions_list << ".rivFlx04.dat"; //baseflow
+        if (current_index_comboBoxPlotVariable ==  4) extensions_list << ".rivFlx05.dat"; //baseflow
+        if (current_index_comboBoxPlotVariable ==  5) extensions_list << ".rivFlx02.dat"; //surfaceflow left
+        if (current_index_comboBoxPlotVariable ==  6) extensions_list << ".rivFlx03.dat"; //surfaceflow right
+        if (current_index_comboBoxPlotVariable ==  7) extensions_list << ".rivFlx04.dat"; //baseflow left
+        if (current_index_comboBoxPlotVariable ==  8) extensions_list << ".rivFlx05.dat"; //baseflow right
+        if (current_index_comboBoxPlotVariable ==  9) extensions_list << ".rivFlx06.dat"; //seepage bed
+        if (current_index_comboBoxPlotVariable == 10) extensions_list << ".rivFlx09.dat"; //bed outflow
+        if (current_index_comboBoxPlotVariable == 11) extensions_list << ".rivFlx10.dat"; //bed inflow
+        if (current_index_comboBoxPlotVariable == 12) extensions_list << ".rbed.dat";     //bed storage
+        if (current_index_comboBoxPlotVariable == 13) extensions_list << ".rivFlx07.dat"; //bed baseflow
+        if (current_index_comboBoxPlotVariable == 13) extensions_list << ".rivFlx08.dat"; //bed baseflow
+        if (current_index_comboBoxPlotVariable == 14) extensions_list << ".rivFlx07.dat"; //bed baseflow left
+        if (current_index_comboBoxPlotVariable == 15) extensions_list << ".rivFlx08.dat"; //bed baseflow right
 
-        QStringList Extensions;
-        if (ui->comboBoxPlotVariable->currentIndex() ==  0) Extensions << ".rivFlx01.dat"; //outflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  1) Extensions << ".rivFlx00.dat"; //inflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  2) Extensions << ".stage.dat";    //storage
-        if (ui->comboBoxPlotVariable->currentIndex() ==  3) Extensions << ".rivFlx02.dat"; //surfaceflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  3) Extensions << ".rivFlx03.dat"; //surfaceflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  4) Extensions << ".rivFlx04.dat"; //baseflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  4) Extensions << ".rivFlx05.dat"; //baseflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  5) Extensions << ".rivFlx02.dat"; //surfaceflow left
-        if (ui->comboBoxPlotVariable->currentIndex() ==  6) Extensions << ".rivFlx03.dat"; //surfaceflow right
-        if (ui->comboBoxPlotVariable->currentIndex() ==  7) Extensions << ".rivFlx04.dat"; //baseflow left
-        if (ui->comboBoxPlotVariable->currentIndex() ==  8) Extensions << ".rivFlx05.dat"; //baseflow right
-        if (ui->comboBoxPlotVariable->currentIndex() ==  9) Extensions << ".rivFlx06.dat"; //seepage bed
-        if (ui->comboBoxPlotVariable->currentIndex() == 10) Extensions << ".rivFlx09.dat"; //bed outflow
-        if (ui->comboBoxPlotVariable->currentIndex() == 11) Extensions << ".rivFlx10.dat"; //bed inflow
-        if (ui->comboBoxPlotVariable->currentIndex() == 12) Extensions << ".rbed.dat";     //bed storage
-        if (ui->comboBoxPlotVariable->currentIndex() == 13) Extensions << ".rivFlx07.dat"; //bed baseflow
-        if (ui->comboBoxPlotVariable->currentIndex() == 13) Extensions << ".rivFlx08.dat"; //bed baseflow
-        if (ui->comboBoxPlotVariable->currentIndex() == 14) Extensions << ".rivFlx07.dat"; //bed baseflow left
-        if (ui->comboBoxPlotVariable->currentIndex() == 15) Extensions << ".rivFlx08.dat"; //bed baseflow right
+        if ( ! CheckFileAccess(mesh_filename, "ReadOnly") )
+        {
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + mesh_filename + tr("<br>"));
+            return;
+        }
+        if ( ! CheckFileAccess(river_filename, "ReadOnly") )
+        {
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + river_filename + tr("<br>"));
+            return;
+        }
+
+        bool error_found = false;
+        for (int i=0; i< extensions_list.length(); i++)
+        {
+            QString tmp_fname = output_base_filename + extensions_list.at(i);
+            if ( ! CheckFileAccess(tmp_fname, "ReadOnly") )
+            {
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + tmp_fname +tr("<br>"));
+                error_found = true;
+            }
+        }
+        if(error_found)
+        {
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get Geometry Properties
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        int element_count = Get_Element_Count(mesh_filename,true);
+        if(element_count <= 0)
+        {
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with mesh geometry file, number of elements </span>") + element_count + tr("<br>"));
+            return;
+        }
+        int river_count = Get_River_Count(river_filename,true);
+        if(river_count <= 0)
+        {
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with riv geometry file, number of river segments </span>") + river_count + tr("<br>"));
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get other inputs (these should be harder to fail as they are GUI based retrieval)
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         QString PlotParameter;
-        if (ui->comboBoxPlotVariable->currentIndex() ==  0) PlotParameter = "River Outflow"; //outflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  1) PlotParameter = "River Inflow"; //inflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  2) PlotParameter = "River Storage";    //storage
-        if (ui->comboBoxPlotVariable->currentIndex() ==  3) PlotParameter = "River Surfaceflow"; //surfaceflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  4) PlotParameter = "River Baseflow"; //baseflow
-        if (ui->comboBoxPlotVariable->currentIndex() ==  5) PlotParameter = "River Surfaceflow"; //surfaceflow left
-        if (ui->comboBoxPlotVariable->currentIndex() ==  6) PlotParameter = "River Surfaceflow"; //surfaceflow right
-        if (ui->comboBoxPlotVariable->currentIndex() ==  7) PlotParameter = "River Baseflow"; //baseflow left
-        if (ui->comboBoxPlotVariable->currentIndex() ==  8) PlotParameter = "River Baseflow"; //baseflow right
-        if (ui->comboBoxPlotVariable->currentIndex() ==  9) PlotParameter = "River Seepage"; //seepage bed
-        if (ui->comboBoxPlotVariable->currentIndex() == 10) PlotParameter = "Riverbed Outflow"; //bed outflow
-        if (ui->comboBoxPlotVariable->currentIndex() == 11) PlotParameter = "Riverbed Inflow"; //bed inflow
-        if (ui->comboBoxPlotVariable->currentIndex() == 12) PlotParameter = "Riverbed Storage";     //bed storage
-        if (ui->comboBoxPlotVariable->currentIndex() == 13) PlotParameter = "Riverbed Baseflow"; //bed baseflow
-        if (ui->comboBoxPlotVariable->currentIndex() == 14) PlotParameter = "Riverbed Baseflow"; //bed baseflow left
-        if (ui->comboBoxPlotVariable->currentIndex() == 15) PlotParameter = "Riverbed Baseflow"; //bed baseflow right
+        if (current_index_comboBoxPlotVariable ==  0) PlotParameter = "River Outflow"; //outflow
+        if (current_index_comboBoxPlotVariable ==  1) PlotParameter = "River Inflow"; //inflow
+        if (current_index_comboBoxPlotVariable ==  2) PlotParameter = "River Storage";    //storage
+        if (current_index_comboBoxPlotVariable ==  3) PlotParameter = "River Surfaceflow"; //surfaceflow
+        if (current_index_comboBoxPlotVariable ==  4) PlotParameter = "River Baseflow"; //baseflow
+        if (current_index_comboBoxPlotVariable ==  5) PlotParameter = "River Surfaceflow"; //surfaceflow left
+        if (current_index_comboBoxPlotVariable ==  6) PlotParameter = "River Surfaceflow"; //surfaceflow right
+        if (current_index_comboBoxPlotVariable ==  7) PlotParameter = "River Baseflow"; //baseflow left
+        if (current_index_comboBoxPlotVariable ==  8) PlotParameter = "River Baseflow"; //baseflow right
+        if (current_index_comboBoxPlotVariable ==  9) PlotParameter = "River Seepage"; //seepage bed
+        if (current_index_comboBoxPlotVariable == 10) PlotParameter = "Riverbed Outflow"; //bed outflow
+        if (current_index_comboBoxPlotVariable == 11) PlotParameter = "Riverbed Inflow"; //bed inflow
+        if (current_index_comboBoxPlotVariable == 12) PlotParameter = "Riverbed Storage";     //bed storage
+        if (current_index_comboBoxPlotVariable == 13) PlotParameter = "Riverbed Baseflow"; //bed baseflow
+        if (current_index_comboBoxPlotVariable == 14) PlotParameter = "Riverbed Baseflow"; //bed baseflow left
+        if (current_index_comboBoxPlotVariable == 15) PlotParameter = "Riverbed Baseflow"; //bed baseflow right
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Setup time properties
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString filename_at_zero = output_base_filename + extensions_list.at(0);
+        Time_Values time_steps = Get_Time_Steps(filename_at_zero, river_count, true);
+        QString time_step_units = tr("years");
 
-        QString OutputFileName;
-        int NUMELEMENTS, NUMRIVERS;
-        int TIMESTEP; QString TIMESTEPUNITS;
-        int NGRAPHS, NTIMESTEPS;
-
-
-        NTIMESTEPS = 999999999;
-        if( ui->lineEditOutputDataFolder->text() == nullptr || ui->lineEditDataKey->text() == nullptr )
+        int time_step1 = time_steps.time_step1;
+        int time_step2 = time_steps.time_step2;
+        int time_step = time_step2 - time_step1;
+        if( time_step <=0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Input Folder and/or Data Key Input(s) Missing </span>")+tr("<br>"));
-            runFlag = 0;
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with time_step </span>") + QString::number(time_step) + tr("<br>"));
+            return;
         }
-        else
+
+        if ( time_step/(60*24*365)      >= 1 ) { time_step = 60*24*365; time_step_units = tr("years");   }
+        else if ( time_step/(60*24*30)  >= 1 ) { time_step = 60*24*30;  time_step_units = tr("months");  }
+        else if ( time_step/(60*24*7)   >= 1 ) { time_step = 60*24*7;   time_step_units = tr("weeks");   }
+        else if ( time_step/(60*24*1)   >= 1 ) { time_step = 60*24*1;   time_step_units = tr("days");    }
+        else if ( time_step/(60*1*1)    >= 1 ) { time_step = 60*1*1;    time_step_units = tr("hours");   }
+        else if ( time_step/(1*1*1)     >= 1 ) { time_step = 1*1*1;     time_step_units = tr("minutes"); }
+
+        Log_Message("time_step = " + QString::number( time_step) );
+        Log_Message("time_step_units  = " + time_step_units );
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get Number of time steps
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        int num_time_steps = 999999999;
+        int temp_int = 0;
+
+        for (int i=0; i<extensions_list.length(); i++)
         {
-            OutputFileName = ui->lineEditOutputDataFolder->text() + "/" + ui->lineEditDataKey->text();
-
-            if ( ! CheckFileAccess(OutputFileName+".mesh", "ReadOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>")+OutputFileName+".mesh"+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(OutputFileName+".mesh" + " ... <br>");
-
-            if ( ! CheckFileAccess(OutputFileName+".riv", "ReadOnly") )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>")+OutputFileName+".riv"+tr("<br>"));
-                runFlag = 0;
-            }
-            LogsString.append(OutputFileName+".riv" + " ... <br>");
-
-            for (int i=0; i<Extensions.length(); i++)
-            {
-                if ( ! CheckFileAccess(OutputFileName+Extensions.at(i), "ReadOnly") )
-                {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>")+OutputFileName+Extensions.at(i)+tr("<br>"));
-                    runFlag = 0;
-                }
-                LogsString.append(OutputFileName+Extensions.at(i) + " ... <br>");
-            }
-
             QFile TempFile;
             QTextStream TempFileTextStream;
-
-            TempFile.setFileName(OutputFileName+".mesh");
-            TempFile.open(QIODevice::ReadOnly | QIODevice::Text);
-            TempFileTextStream.setDevice(&TempFile);
-            TempFileTextStream >> NUMELEMENTS;
-            TempFile.close();
-            LogsString.append(tr("Number of Elements = ")+QString::number(NUMELEMENTS)+tr("<br>"));
-            if ( NUMELEMENTS < 1 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Number of Elements Less Than One... </span>")+QString::number(NUMELEMENTS)+tr("<br>"));
-                runFlag = 0;
-            }
-
-            TempFile.setFileName(OutputFileName+".riv");
-            TempFile.open(QIODevice::ReadOnly | QIODevice::Text);
-            TempFileTextStream.setDevice(&TempFile);
-            TempFileTextStream >> NUMRIVERS;
-            TempFile.close();
-            LogsString.append(tr("Number of River Segments = ")+QString::number(NUMRIVERS)+tr("<br>"));
-            if ( NUMRIVERS < 1 )
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">WARNING: Number of River Segments Less Than One... </span>")+QString::number(NUMRIVERS)+tr("<br>"));
-                //runFlag = 0;
-            }
-
-
-            int TIMESTEP1, TIMESTEP2;
-            double TempDouble;
             QString TempQString;
-            TempFile.setFileName(OutputFileName+Extensions.at(0));
+
+            temp_int = 0;
+            TempFile.setFileName(output_base_filename + extensions_list.at(i));
             TempFile.open(QIODevice::ReadOnly | QIODevice::Text);
             TempFileTextStream.setDevice(&TempFile);
 
-            TempFileTextStream >> TIMESTEP1;
-            qDebug() << "Time Step1 = " << TIMESTEP1 << "\n";
-            for (int i=0; i<NUMRIVERS+1; i++)
+            while ( ! TempFileTextStream.atEnd() )
             {
-                TempFileTextStream >> TempDouble;
-                qDebug() << TempDouble << ", ";
+                TempQString = TempFileTextStream.readLine();
+                temp_int++;
             }
-            TempFileTextStream >> TIMESTEP2;
-            qDebug() << "\nTime Step2 = " << TIMESTEP2 << "\n";
+
+            if (temp_int < num_time_steps)
+                num_time_steps = temp_int;
+
             TempFile.close();
-
-            TIMESTEP = TIMESTEP2 - TIMESTEP1;
-            qDebug() << "Time Step = " << TIMESTEP << "\n";
-            if ( TIMESTEP/(60*24*365)      >= 1 ) { TIMESTEP = 60*24*365; TIMESTEPUNITS = tr("years");   }
-            else if ( TIMESTEP/(60*24*30)  >= 1 ) { TIMESTEP = 60*24*30;  TIMESTEPUNITS = tr("months");  }
-            else if ( TIMESTEP/(60*24*7)   >= 1 ) { TIMESTEP = 60*24*7;   TIMESTEPUNITS = tr("weeks");   }
-            else if ( TIMESTEP/(60*24*1)   >= 1 ) { TIMESTEP = 60*24*1;   TIMESTEPUNITS = tr("days");    }
-            else if ( TIMESTEP/(60*1*1)    >= 1 ) { TIMESTEP = 60*1*1;    TIMESTEPUNITS = tr("hours");   }
-            else if ( TIMESTEP/(1*1*1)     >= 1 ) { TIMESTEP = 1*1*1;     TIMESTEPUNITS = tr("minutes"); }
-
-            LogsString.append(tr("TIME STEP UNIT = ")+TIMESTEPUNITS+tr("<br>"));
-
-            int TempInt;
-            for (int i=0; i<Extensions.length(); i++)
-            {
-                TempInt = 0;
-                TempFile.setFileName(OutputFileName+Extensions.at(i));
-                TempFile.open(QIODevice::ReadOnly | QIODevice::Text);
-                TempFileTextStream.setDevice(&TempFile);
-                while ( ! TempFileTextStream.atEnd() )
-                {
-                    TempQString = TempFileTextStream.readLine();
-                    TempInt++;
-                }
-                if (TempInt < NTIMESTEPS) NTIMESTEPS = TempInt;
-                TempFile.close();
-            }
-            LogsString.append(tr("NUMBER OF TIMESTEP = ")+QString::number(NTIMESTEPS)+tr("<br>"));
-            if (NTIMESTEPS < 2)
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Not enough data points to plot </span>")+tr("<br>"));
-                runFlag = 0;
-            }
         }
 
-        qDebug() << "Current Index Model Segments " << ui->comboBoxModelSegments->currentIndex() << "\n";
-        QStringList ModelSegments;
-        if ( ui->comboBoxModelSegments->currentIndex() == 2 || ui->comboBoxModelSegments->currentIndex() == 4 )
+        Log_Message("Number Time Steps = " + QString::number(num_time_steps) );
+        if (num_time_steps < 2)
         {
-            for (int i=1; i<=NUMRIVERS; i++)
+            Log_Error_Message("Not enough data points to plot </span>" + QString::number(num_time_steps)+tr("<br>"));
+            return;
+        }
+        if( num_time_steps >= 999999) //999999999  //TODO calculate available memory
+        {
+            Log_Error_Message("Too many data points to plot </span>" + QString::number(num_time_steps)+tr("<br>"));
+            return;
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get Number of Model Segments
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        int index_model_segments = ui->comboBoxModelSegments->currentIndex();
+        QString string_model_segments = ui->lineEditModelSegments->text();
+
+        QStringList ModelSegments;
+        if ( index_model_segments == 2 || index_model_segments == 4 )
+        {
+            for (int i=1; i<= river_count; i++)
                 ModelSegments << QString::number(i);
         }
         else
         {
-            ModelSegments = ui->lineEditModelSegments->text().split(QRegExp("\\s+"),QString::SkipEmptyParts);
+            ModelSegments = string_model_segments.split(QRegExp("\\s+"),QString::SkipEmptyParts);
         }
-        qDebug() << "Number of Segments " << ModelSegments.length() << "\n";
 
-        NGRAPHS = ModelSegments.length();
-        if ( NGRAPHS < 1 )
+        Log_Message("Index of Model Segments = " + QString::number(index_model_segments) );
+        Log_Message("Number of Segments = " + QString::number(ModelSegments.length()) );
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get Segments for Graph(s)
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        int num_graphs = ModelSegments.length();
+        if ( num_graphs < 1 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Model Segments Input Missing </span>")+tr("<br>"));
-            runFlag = 0;
+            Log_Error_Message("Model Segments Input Missing </span>"+tr("<br>"));
+            return;
         }
-        for (int i=0; i<NGRAPHS; i++)
+
+        error_found = false;
+        for (int i=0; i < num_graphs; i++)
         {
-            if(ModelSegments.at(i).toInt() > NUMRIVERS)
+            int id = ModelSegments.at(i).toInt();
+            if(id > river_count)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Segment ID greater than Max Segments (")+QString::number(NUMRIVERS)+tr(")</span>")+tr("<br>"));
-                runFlag = 0;
+                Log_Error_Message("Segment ID " + QString::number(id) + " greater than Max Segments (" + QString::number(river_count)+tr(")</span>")+tr("<br>"));
+                error_found = true;
             }
         }
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
-        if (runFlag == 1)
+        if ( error_found)
         {
-            ui->pushButtonRun->setText("Running");
+            Log_Error_Message("Issue(s) with Segments ID</span>"+tr("<br>"));
+            return;
+        }
 
-            // 2. TODO SET LABELS
-            QString XLabel, YLabel, WindowTitle;
-            WindowTitle = tr("River Time Series  ::  ") + PlotParameter;
-            XLabel = tr("Time steps (")+TIMESTEPUNITS+tr(")");
-            if (PlotParameter == "River Storage" || PlotParameter == "Riverbed Storage")
-                //YLabel = PlotParameter + tr(" (m)");
-                YLabel = ui->comboBoxPlotVariable->currentText() + tr(" (m)");
-            else
-                //YLabel = PlotParameter + tr(" (cmd)");
-                YLabel = ui->comboBoxPlotVariable->currentText() + tr(" (cmd)");
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Setup Labels
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            QVector<QString> Legends(NGRAPHS);
-            QVector<QVector<double>> datax(NGRAPHS), datay(NGRAPHS);
-            for (int j=0; j<NGRAPHS; j++)
+        QString WindowTitle = tr("River Time Series  ::  ") + PlotParameter;
+        QString XLabel = tr("Time steps (") + time_step_units + tr(")");
+        QString YLabel = ui->comboBoxPlotVariable->currentText();
+
+        if (PlotParameter == "River Storage" || PlotParameter == "Riverbed Storage")
+        {
+            YLabel = YLabel + tr(" (m)");
+        }
+        else
+        {
+            YLabel = YLabel + tr(" (cmd)");
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Setup Legend
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QVector<QString> Legends(num_graphs);
+        QVector<QVector<double>> datax(num_graphs), datay(num_graphs);
+        for (int j=0; j < num_graphs; j++)
+        {
+            datax[j].resize(num_time_steps);
+            datay[j].resize(num_time_steps);
+        }
+
+        for (int i=0; i < num_graphs; i++)
+            Legends[i] = tr("Segment ") + ModelSegments.at(i);
+
+        if(index_model_segments > 0)
+            Legends[0] = ui->comboBoxModelSegments->currentText();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Read Data
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ui->pushButtonRun->setText("Reading data for graphs");
+
+        QFile DataFile;
+        QTextStream DataFileTextStream;
+        QString DataString;
+        QStringList Data;
+
+        for (int i=0; i < extensions_list.length(); i++)
+        {
+            DataFile.setFileName(output_base_filename + extensions_list.at(i));
+            DataFile.open(QIODevice::ReadOnly | QIODevice::Text);
+            DataFileTextStream.setDevice(&DataFile);
+
+            int k=0;
+            while ( ! DataFileTextStream.atEnd() )
             {
-                datax[j].resize(NTIMESTEPS);
-                datay[j].resize(NTIMESTEPS);
-            }
-
-            for (int i=0; i<NGRAPHS; i++)
-                Legends[i] = tr("Segment ") + ModelSegments.at(i);
-            if(ui->comboBoxModelSegments->currentIndex() > 0)
-                Legends[0] = ui->comboBoxModelSegments->currentText();
-
-
-            //** READ DATA
-            QFile DataFile;
-            QTextStream DataFileTextStream;
-            QString DataString;
-            QStringList Data;
-            for (int i=0; i<Extensions.length(); i++)
-            {
-                DataFile.setFileName(OutputFileName+Extensions.at(i));
-                DataFile.open(QIODevice::ReadOnly | QIODevice::Text);
-                DataFileTextStream.setDevice(&DataFile);
-                int k=0;
-                while ( ! DataFileTextStream.atEnd() )
+                DataString = DataFileTextStream.readLine();
+                Data = DataString.split(QRegExp("\\s+"),QString::SkipEmptyParts);
+                for (int j=0; j < num_graphs; j++)
                 {
-                    DataString = DataFileTextStream.readLine();
-                    Data = DataString.split(QRegExp("\\s+"),QString::SkipEmptyParts);
-                    for (int j=0; j<NGRAPHS; j++)
+                    datax[j][k] = Data.at(0).toDouble() / time_step;
+                    datay[j][k] = datay[j][k] + Data.at(ModelSegments.at(j).toInt()).toDouble();
+                    qDebug() << i << "," << j << "," << k << "," << ModelSegments.at(j).toInt() << ", "<< datax[j][k] << "," << datay[j][k] << "\n";
+                }
+                k++;
+            }
+            DataFile.close();
+        }
+
+        if ( index_model_segments != 0 )
+        {
+            if( num_graphs > 1 )
+            {
+                for (int i=0; i < num_time_steps; i++)
+                {
+                    for (int j=1; j < num_graphs; j++)
                     {
-                        datax[j][k] = Data.at(0).toDouble() / TIMESTEP;
-                        datay[j][k] = datay[j][k] + Data.at(ModelSegments.at(j).toInt()).toDouble();
-                        qDebug() << i << "," << j << "," << k << "," << ModelSegments.at(j).toInt() << ", "<< datax[j][k] << "," << datay[j][k] << "\n";
+                        datay[0][i] += datay[j][i];
                     }
-                    k++;
+                    if( index_model_segments == 1 || index_model_segments == 2)
+                        datay[0][i] = datay[0][i] / num_graphs;
                 }
-                DataFile.close();
             }
-            /*
-        for (int j=0; j<NGRAPHS; j++)
-        {
-            datax[j].resize(NTIMESTEPS);
-            datay[j].resize(NTIMESTEPS);
-            for (int i=0; i<NTIMESTEPS; i++)
-            {
-                datax[j][i] = j + i/50.0 - 1; // x goes from -1 to 1
-                datay[j][i] = 10*datax[j][i]*datax[j][i]; // let's plot a quadratic function
-            }
-        }*/
-
-            if ( ui->comboBoxModelSegments->currentIndex() != 0 )
-            {
-                if( NGRAPHS > 1 )
-                {
-                    for (int i=0; i<NTIMESTEPS; i++)
-                    {
-                        for (int j=1; j<NGRAPHS; j++)
-                        {
-                            datay[0][i] += datay[j][i];
-                        }
-                        if( ui->comboBoxModelSegments->currentIndex() == 1 || ui->comboBoxModelSegments->currentIndex() == 2)
-                            datay[0][i] = datay[0][i] / NGRAPHS;
-                    }
-                }
-                NGRAPHS = 1;
-            }
-
-
-
-            QCustomPlotMainWindow *window = new QCustomPlotMainWindow;
-            QCustomPlot *customPlot = new QCustomPlot;
-
-            window->setCentralWidget(customPlot);
-
-            QFont tickLabelFont = font();
-            tickLabelFont.setPointSize(12);
-            customPlot->xAxis->setTickLabelFont(tickLabelFont);
-            customPlot->yAxis->setTickLabelFont(tickLabelFont);
-
-            customPlot->xAxis2->setVisible(true);
-            customPlot->yAxis2->setVisible(true);
-            customPlot->xAxis2->setTicks(false);
-            customPlot->yAxis2->setTicks(false);
-            customPlot->xAxis2->setTickLabels(false);
-            customPlot->yAxis2->setTickLabels(false);
-
-            QPen gridPen = QPen();
-            gridPen.setStyle(Qt::SolidLine);
-            gridPen.setColor(QColor(200,200,200,255));
-            //??gridPen.setWidthF(0.5);
-            customPlot->xAxis->grid()->setPen(gridPen);
-            customPlot->yAxis->grid()->setPen(gridPen);
-
-            customPlot->xAxis->grid()->setSubGridVisible(true);
-            customPlot->yAxis->grid()->setSubGridVisible(true);
-
-            QFont legendFont = font();
-            legendFont.setPointSize(11);
-            customPlot->legend->setFont(legendFont);
-            customPlot->legend->setVisible(true);
-
-            // create graph and assign data to it:
-            QVector<double> x(NTIMESTEPS), y(NTIMESTEPS);
-            double xmin=9E9, xmax=-9E9, ymin=9E9, ymax=-9E9;
-            for (int j=0; j<NGRAPHS; j++)
-            {
-                for (int i=0; i<NTIMESTEPS; i++)
-                {
-                    x[i] = datax[j][i];
-                    y[i] = datay[j][i];
-                    if (x[i] < xmin) xmin = x[i];
-                    if (y[i] < ymin) ymin = y[i];
-                    if (x[i] > xmax) xmax = x[i];
-                    if (y[i] > ymax) ymax = y[i];
-                }
-                customPlot->addGraph();
-                customPlot->graph(j)->setPen(QPen(QColor(rand()%255,rand()%255,rand()%255,255)));
-                customPlot->graph(j)->setData(x, y);
-                customPlot->graph(j)->setName(Legends[j]);
-            }
-
-            // give the axes some labels:
-            QFont labelFont = font();
-            labelFont.setPointSize(14);
-            labelFont.setBold(true);
-            labelFont.setCapitalization(QFont::AllUppercase);
-            //labelFont.setCapitalization(QFont::SmallCaps);
-            customPlot->xAxis->setLabelFont(labelFont);
-            customPlot->yAxis->setLabelFont(labelFont);
-            customPlot->xAxis->setLabel(XLabel);
-            customPlot->yAxis->setLabel(YLabel);
-
-
-            // set axes ranges, so we see all data:
-            customPlot->xAxis->setRange(xmin, xmax);
-            customPlot->yAxis->setRange(ymin, ymax);
-            //customPlot->graph(0)->rescaleAxes();
-            customPlot->replot();
-
-            customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
-            customPlot->setInteraction(QCP::iMultiSelect, true);
-
-            ui->pushButtonRun->setText("Run");
-
-            ProjectIOStringList << "RiverTemporal" << ui->lineEditOutputDataFolder->text() << ui->lineEditDataKey->text();
-            ProjectIOStringList << QString::number(ui->comboBoxModelSegments->currentIndex());
-            ProjectIOStringList << QString::number(ui->comboBoxPlotVariable->currentIndex());
-            ProjectIOStringList << ui->lineEditModelSegments->text();
-            WriteModuleLine(ProjectFileName, ProjectIOStringList);
-            ProjectIOStringList.clear();
-
-            //pushButtonSetFocus();
-            ui->pushButtonRun->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
-
-            window->setWindowTitle(WindowTitle);
-            window->show();
+            num_graphs = 1; //Why do this? As for loop below
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Setup Plot Window
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        QCustomPlotMainWindow *window = new QCustomPlotMainWindow;
+        QCustomPlot *customPlot = new QCustomPlot;
+
+        window->setCentralWidget(customPlot);
+
+        QFont tickLabelFont = font();
+        tickLabelFont.setPointSize(12);
+        customPlot->xAxis->setTickLabelFont(tickLabelFont);
+        customPlot->yAxis->setTickLabelFont(tickLabelFont);
+
+        customPlot->xAxis2->setVisible(true);
+        customPlot->yAxis2->setVisible(true);
+        customPlot->xAxis2->setTicks(false);
+        customPlot->yAxis2->setTicks(false);
+        customPlot->xAxis2->setTickLabels(false);
+        customPlot->yAxis2->setTickLabels(false);
+
+        QPen gridPen = QPen();
+        gridPen.setStyle(Qt::SolidLine);
+        gridPen.setColor(QColor(200,200,200,255));
+        customPlot->xAxis->grid()->setPen(gridPen);
+        customPlot->yAxis->grid()->setPen(gridPen);
+
+        customPlot->xAxis->grid()->setSubGridVisible(true);
+        customPlot->yAxis->grid()->setSubGridVisible(true);
+
+        QFont legendFont = font();
+        legendFont.setPointSize(11);
+        customPlot->legend->setFont(legendFont);
+        customPlot->legend->setVisible(true);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Create graph and assign data to it:
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QVector<double> x(num_time_steps), y(num_time_steps);
+
+        double xmin=9E9, xmax=-9E9, ymin=9E9, ymax=-9E9;
+        for (int j=0; j < num_graphs; j++)  //Why do this? As for loop above
+        {
+            for (int i=0; i < num_time_steps; i++)
+            {
+                x[i] = datax[j][i];
+                y[i] = datay[j][i];
+                if (x[i] < xmin) xmin = x[i];
+                if (y[i] < ymin) ymin = y[i];
+                if (x[i] > xmax) xmax = x[i];
+                if (y[i] > ymax) ymax = y[i];
+            }
+
+            customPlot->addGraph();
+            customPlot->graph(j)->setPen(QPen(QColor(rand()%255,rand()%255,rand()%255,255)));
+            customPlot->graph(j)->setData(x, y);
+            customPlot->graph(j)->setName(Legends[j]);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Assign Labels to Axes
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QFont labelFont = font();
+        labelFont.setPointSize(14);
+        labelFont.setBold(true);
+        labelFont.setCapitalization(QFont::AllUppercase);
+
+        customPlot->xAxis->setLabelFont(labelFont);
+        customPlot->yAxis->setLabelFont(labelFont);
+        customPlot->xAxis->setLabel(XLabel);
+        customPlot->yAxis->setLabel(YLabel);
+        customPlot->xAxis->setRange(xmin, xmax);
+        customPlot->yAxis->setRange(ymin, ymax);
+        //customPlot->graph(0)->rescaleAxes();
+        customPlot->replot();
+
+        customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+        customPlot->setInteraction(QCP::iMultiSelect, true);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QStringList ProjectIOStringList;
+
+        ProjectIOStringList << "RiverTemporal" << project_folder << project_name;
+        ProjectIOStringList << QString::number(index_model_segments);
+        ProjectIOStringList << QString::number(current_index_comboBoxPlotVariable);
+        ProjectIOStringList << string_model_segments;
+        WriteModuleLine(filename_open_project, ProjectIOStringList);
+        ProjectIOStringList.clear();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update Message box and Reset buttons
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
+
+        ui->pushButtonRun->setText("Run");
+        ui->pushButtonRun->setDefault(false);
+        ui->pushButtonClose->setDefault(true);
+        ui->pushButtonClose->setFocus();
+
+        window->setWindowTitle(WindowTitle);
+        window->show();
+
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_pushButtonRun_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RiverTemporal::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start RiverTemporal::on_pushButtonClose_clicked()";
 
     try {
-        QStringList default_params; default_params << "WORKFLOW5" << "FORC";
-        QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
-        //QMetaObject::invokeMethod(parent(),"set_defaults2",Q_ARG(QStringList,default_params),Q_ARG(int,5));
         close();
-
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_pushButtonClose_clicked() is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void RiverTemporal::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start RiverTemporal::on_pushButtonHelp_clicked()";
 
     try {
-//        LogsString = tr("");
-//        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Temporal_Analysis:_River_Elements")) )
-//            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
-//        ui->textBrowserLogs->setHtml(LogsString);
-//        ui->textBrowserLogs->repaint();
+        //        LogsString = tr("");
+        //        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Temporal_Analysis:_River_Elements")) )
+        //            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
+        //        ui->textBrowserLogs->setHtml(LogsString);
+        //        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_pushButtonHelp_clicked() is returning w/o checking";
     }

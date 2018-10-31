@@ -444,7 +444,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>PIHMgis version 3.5</string>
+   <string>PIHMgis version 3.5 for PIHMv2.2</string>
   </property>
   <widget class="QToolBox" name="PIHMgisToolBox">
    <property name="geometry">
@@ -5567,7 +5567,7 @@ color: rgb(71, 71, 71);</string>
      <widget class="QLabel" name="label_38">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>13</x>
         <y>20</y>
         <width>161</width>
         <height>21</height>
@@ -5586,13 +5586,16 @@ color: rgb(71, 71, 71);</string>
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#330099;&quot;&gt;Watershed:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>137</y>
+       <y>116</y>
        <width>661</width>
        <height>61</height>
       </rect>
@@ -5611,7 +5614,7 @@ color: rgb(71, 71, 71);</string>
      <widget class="QLabel" name="label_39">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>13</x>
         <y>20</y>
         <width>161</width>
         <height>21</height>
@@ -5629,6 +5632,9 @@ color: rgb(71, 71, 71);</string>
       </property>
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#330099;&quot;&gt;River Network:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButtonVisualAnalyticsSpatialRiverNetwork">
@@ -5960,9 +5966,9 @@ color: rgb(71, 71, 71);</string>
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>0</x>
        <y>200</y>
-       <width>631</width>
+       <width>761</width>
        <height>31</height>
       </rect>
      </property>
@@ -5977,7 +5983,10 @@ color: rgb(71, 71, 71);</string>
       <string notr="true">color: rgb(204, 51, 0);</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#330099;&quot;&gt;Contacts: &lt;/span&gt;&lt;a href=&quot;mailto:gopal.bhatt@psu.edu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#330099;&quot;&gt;Gopal Bhatt&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#330099;&quot;&gt;;  &lt;/span&gt;&lt;a href=&quot;mailto:mukesh.kumar@duke.edu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#330099;&quot;&gt;Mukesh Kumar&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#330099;&quot;&gt;;  &lt;/span&gt;&lt;a href=&quot;mailto:cxd11@psu.edu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#330099;&quot;&gt;Chris Duffy&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#330099;&quot;&gt;;  &lt;/span&gt;&lt;a href=&quot;http://www.pihm.psu.edu/team.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#330099;&quot;&gt;PIHM Research Group&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot;color:#330099;&quot;&gt;&amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#330099;&quot;&gt;Contact: &lt;/span&gt;&lt;a href=&quot;http://www.pihm.psu.edu/team.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#330099;&quot;&gt;PIHM Research Group&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
      <property name="openExternalLinks">
       <bool>true</bool>
@@ -6896,7 +6905,7 @@ color: rgb(71, 71, 71);</string>
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>10</x>
      <y>14</y>
      <width>811</width>
      <height>587</height>
@@ -7844,7 +7853,7 @@ color: rgb(71, 71, 71);</string>
      </font>
     </property>
     <property name="text">
-     <string>PIHMgis: Penn State Integrated Hydrologic Modeling System (PIHM)</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;PIHMgis:&lt;span style=&quot; font-style:italic;&quot;&gt; for Penn State Integrated Hydrologic Modeling System (PIHM) v2.2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

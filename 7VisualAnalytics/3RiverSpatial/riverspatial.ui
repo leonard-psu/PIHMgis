@@ -432,7 +432,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>: :   River Spatial Analysis   : :</string>
+   <string>River Spatial Analysis</string>
   </property>
   <widget class="Line" name="BorderBottom">
    <property name="geometry">

@@ -1030,6 +1030,8 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked()
         QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
 
         RiverSpatial *RiverSpatialDialog = new RiverSpatial(this, filename_open_project);
+        RiverSpatialDialog->setModal(true);
+
         RiverSpatialDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked is returning w/o checking";
@@ -1042,7 +1044,10 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked";
 
     try {
-        RiverTemporal *RiverTemporalDialog = new RiverTemporal(this);
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+        RiverTemporal *RiverTemporalDialog = new RiverTemporal(this, filename_open_project);
+        RiverTemporalDialog->setModal(true);
         RiverTemporalDialog->show();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked is returning w/o checking";

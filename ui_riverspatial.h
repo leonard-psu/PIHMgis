@@ -394,7 +394,7 @@ public:
 
     void retranslateUi(QDialog *RiverSpatial)
     {
-        RiverSpatial->setWindowTitle(QApplication::translate("RiverSpatial", ": :   River Spatial Analysis   : :", nullptr));
+        RiverSpatial->setWindowTitle(QApplication::translate("RiverSpatial", "River Spatial Analysis", nullptr));
         groupBoxButtons->setTitle(QString());
         pushButtonHelp->setText(QApplication::translate("RiverSpatial", "Help", nullptr));
         pushButtonClose->setText(QApplication::translate("RiverSpatial", "Close", nullptr));

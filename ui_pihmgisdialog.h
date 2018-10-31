@@ -1121,19 +1121,21 @@ public:
         pushButtonVisualAnalyticsSpatialWatershed->setFlat(false);
         label_38 = new QLabel(groupBox);
         label_38->setObjectName(QStringLiteral("label_38"));
-        label_38->setGeometry(QRect(20, 20, 161, 21));
+        label_38->setGeometry(QRect(13, 20, 161, 21));
         label_38->setFont(font1);
         label_38->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
+        label_38->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         groupBox_2 = new QGroupBox(PIHMgisToolBox_VisualAnalytics);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
-        groupBox_2->setGeometry(QRect(50, 137, 661, 61));
+        groupBox_2->setGeometry(QRect(50, 116, 661, 61));
         groupBox_2->setFont(font11);
         groupBox_2->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
         label_39 = new QLabel(groupBox_2);
         label_39->setObjectName(QStringLiteral("label_39"));
-        label_39->setGeometry(QRect(20, 20, 161, 21));
+        label_39->setGeometry(QRect(13, 20, 161, 21));
         label_39->setFont(font1);
         label_39->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
+        label_39->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         pushButtonVisualAnalyticsSpatialRiverNetwork = new QPushButton(groupBox_2);
         pushButtonVisualAnalyticsSpatialRiverNetwork->setObjectName(QStringLiteral("pushButtonVisualAnalyticsSpatialRiverNetwork"));
         pushButtonVisualAnalyticsSpatialRiverNetwork->setGeometry(QRect(180, 14, 225, 34));
@@ -1193,9 +1195,10 @@ public:
         label_6->setOpenExternalLinks(true);
         label_7 = new QLabel(PIHMgisToolBox_Help);
         label_7->setObjectName(QStringLiteral("label_7"));
-        label_7->setGeometry(QRect(30, 200, 631, 31));
+        label_7->setGeometry(QRect(0, 200, 761, 31));
         label_7->setFont(font7);
         label_7->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
+        label_7->setAlignment(Qt::AlignCenter);
         label_7->setOpenExternalLinks(true);
         label_15 = new QLabel(PIHMgisToolBox_Help);
         label_15->setObjectName(QStringLiteral("label_15"));
@@ -1328,7 +1331,7 @@ public:
         BorderTopLine->setFrameShape(QFrame::HLine);
         frame = new QFrame(PIHMgisDialog);
         frame->setObjectName(QStringLiteral("frame"));
-        frame->setGeometry(QRect(15, 14, 811, 587));
+        frame->setGeometry(QRect(10, 14, 811, 587));
         frame->setFont(font11);
         frame->setStyleSheet(QStringLiteral("color: rgb(51, 51, 51);"));
         frame->setFrameShape(QFrame::Box);
@@ -1511,7 +1514,7 @@ public:
 
     void retranslateUi(QWidget *PIHMgisDialog)
     {
-        PIHMgisDialog->setWindowTitle(QApplication::translate("PIHMgisDialog", "PIHMgis version 3.5", nullptr));
+        PIHMgisDialog->setWindowTitle(QApplication::translate("PIHMgisDialog", "PIHMgis version 3.5 for PIHMv2.2", nullptr));
         label_8->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">Project management handles input/output options from grouped steps [2-6]. Each group has multiple sub-steps. </span></p></body></html>", nullptr));
         groupBox_5->setTitle(QApplication::translate("PIHMgisDialog", "PIHMgis Project", nullptr));
         pushButtonPIHMgisProjectNew->setText(QApplication::translate("PIHMgisDialog", "NEW ", nullptr));
@@ -1593,10 +1596,10 @@ public:
         label_14->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">Visual Analytics tools provide ability to analyze simulated outputs as space-time plots for user selected group of mesh or river elements. </span></p></body></html>", nullptr));
         PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_VisualAnalytics), QApplication::translate("PIHMgisDialog", "Optional : : Visual Analytics", nullptr));
         label_6->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Additional Resources:&nbsp;&nbsp;<a href=\"http://www.pihm.psu.edu\"><span style=\" text-decoration: underline; color:#330099;\">http://www.pihm.psu.edu</a></span></span></p></body></html>", nullptr));
-        label_7->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Contacts: </span><a href=\"mailto:gopal.bhatt@psu.edu\"><span style=\" text-decoration: underline; color:#330099;\">Gopal Bhatt</span></a><span style=\" color:#330099;\">;  </span><a href=\"mailto:mukesh.kumar@duke.edu\"><span style=\" text-decoration: underline; color:#330099;\">Mukesh Kumar</span></a><span style=\" color:#330099;\">;  </span><a href=\"mailto:cxd11@psu.edu\"><span style=\" text-decoration: underline; color:#330099;\">Chris Duffy</span></a><span style=\" color:#330099;\">;  </span><a href=\"http://www.pihm.psu.edu/team.html\"><span style=\" text-decoration: underline; color:#330099;\">PIHM Research Group</span></a><span style=\"color:#330099;\">&nbsp;&nbsp;</span></p></body></html>", nullptr));
+        label_7->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p align=\"center\"><span style=\" color:#330099;\">Contact: </span><a href=\"http://www.pihm.psu.edu/team.html\"><span style=\" text-decoration: underline; color:#330099;\">PIHM Research Group</span></a></p></body></html>", nullptr));
         label_15->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Funding to port PIHMGIS to windows provided by: CZO Grant XXXX</span></p></body></html>", nullptr));
         PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_Help), QApplication::translate("PIHMgisDialog", "Help && Other Resources", nullptr));
-        PIHMgisLabel->setText(QApplication::translate("PIHMgisDialog", "PIHMgis: Penn State Integrated Hydrologic Modeling System (PIHM)", nullptr));
+        PIHMgisLabel->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p>PIHMgis:<span style=\" font-style:italic;\"> for Penn State Integrated Hydrologic Modeling System (PIHM) v2.2</span></p></body></html>", nullptr));
     } // retranslateUi
 
 };
