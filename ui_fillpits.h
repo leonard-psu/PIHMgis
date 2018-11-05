@@ -143,7 +143,7 @@ public:
         textLabel1->setFont(font);
         textBrowserLogs = new QTextBrowser(FillPits);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(14, 265, 581, 121));
+        textBrowserLogs->setGeometry(QRect(15, 265, 581, 121));
         QFont font4;
         font4.setPointSize(11);
         textBrowserLogs->setFont(font4);
@@ -304,7 +304,7 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         groupBoxButtons = new QGroupBox(FillPits);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(14, 210, 581, 51));
+        groupBoxButtons->setGeometry(QRect(15, 208, 581, 51));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);
@@ -312,7 +312,7 @@ public:
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(330, 8, 113, 32));
+        pushButtonClose->setGeometry(QRect(336, 8, 113, 32));
         pushButtonClose->setAutoDefault(false);
         pushButtonRun = new QPushButton(groupBoxButtons);
         pushButtonRun->setObjectName(QStringLiteral("pushButtonRun"));

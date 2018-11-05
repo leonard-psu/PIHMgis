@@ -17,34 +17,30 @@ public:
     ~ImportProject();
     QString LogsString;
 
-//    QString string_FillPits;
-//    QString string_FlowGrids;
-//    QString string_StreamGrids;
-//    QString string_LinkGrids;
-//    QString string_CatchmentGrids;
-//    QString string_StreamPolyline;
-//    QString string_StreamRasterVector;
-//    QString string_CatchmentPolygon;
-//    QString string_CatchmentRasterVector;
-//    QString string_DissolvePolygons;
-//    QString string_PolygonToPolylines;
-//    QString string_SimplifyPolylines;
-//    QString string_PolylineToLines;
-//    QString string_MergeVectorLayers;
-//    QString string_MergeVectorDomainDecomposition;
-//    QString string_ReadTopology;
-//    QString string_DelaunayTriangulation;
-//    QString string_TINShapeLayer;
-
-
-private:
-    Ui::ImportProject *ui;
-
 private slots:
     void on_pushButtonHelp_clicked();
     void on_pushButtonImport_clicked();
     void on_pushButtonClose_clicked();
     void on_pushButtonProject_clicked();
+
+
+    void on_pushButtonProject_DataFolder_clicked();
+
+private:
+    void Clear_Log();
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
+
+    QStringList Find_Project_Directories(QString input_file_name, QString basefolder);
+    QMap<QString,QString> Get_Map_Directories(QString input_file_name, QString basefolder);
+    bool Find_Replace_All_Project_Directories(QString input_file_name, QString basefolder, QString output_file_name);
+    bool Find_Replace_Only_Project_Directories(QString input_file_name, QString basefolder, QString only_folder, QString output_file_name);
+
+    QStringList Get_Folder_List(const QString& str);
+
+    Ui::ImportProject *ui;
+    QString new_data_base_folder_location;
+
 };
 
 #endif // IMPORTPROJECT_H

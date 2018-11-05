@@ -93,6 +93,10 @@ public:
         palette.setBrush(QPalette::Disabled, QPalette::ToolTipBase, brush4);
         palette.setBrush(QPalette::Disabled, QPalette::ToolTipText, brush);
         QCustomPlotMainWindow->setPalette(palette);
+        QFont font;
+        font.setFamily(QStringLiteral("Arial"));
+        font.setPointSize(12);
+        QCustomPlotMainWindow->setFont(font);
         actionSave_as_PDF = new QAction(QCustomPlotMainWindow);
         actionSave_as_PDF->setObjectName(QStringLiteral("actionSave_as_PDF"));
         actionSave_as_PDF_2 = new QAction(QCustomPlotMainWindow);
@@ -110,7 +114,7 @@ public:
         QCustomPlotMainWindow->setStatusBar(statusbar);
         menubar = new QMenuBar(QCustomPlotMainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 600, 22));
+        menubar->setGeometry(QRect(0, 0, 600, 24));
         QCustomPlotMainWindow->setMenuBar(menubar);
 
         retranslateUi(QCustomPlotMainWindow);

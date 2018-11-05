@@ -56,7 +56,7 @@
 
 #include "globals.h"
 
-QString user_pihmgis_root_folder = QDir::homePath(); //Default for now, need to customize based on OS
+QString user_pihmgis_root_folder = "Please pick a workspace folder."; //QDir::homePath(); //Default for now, need to customize based on OS
 QString user_pihmgis_project_folder = "/.PIHMgis";   //Default for now, need to customize
 
 
@@ -69,49 +69,29 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
 
     try {
 
+        qDebug() << "PIHMgisDialog started";
+
         this->setWindowIcon(QIcon("Icons/PIHMgis000.icns"));
         ui->setupUi(this);
 
-        //QObject::connect(ui->pushButton_PickWorkspace,SIGNAL(clicked()),this,SLOT(on_pushButton_PickWorkspace_clicked()));
 
-        qDebug() << "PIHMgisDialog started";
+        update_current_workspace_label();
 
-        update_current_label();
-
-
-        //        connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(this->on_pushButton_clicked()));
-
-        //    QDir dir;
-        //    success = dir.mkpath(QDir::homePath()+"/.PIHMgis/");
-        //    if(success == true)
-        //    {
-        //        qDebug() << "Successfully Created Folder: " << QDir::homePath()+"/.PIHMgis/";
-        //    }
-        //    else
-        //    {
-        //        qDebug() << "Unable to Create Director: " << QDir::homePath()+"/.PIHMgis/";
-        //        qDebug() << "Please Check File/Folder Permissions";
-        //        QMessageBox::critical(this,tr("Critical Error"),tr("Unable to Create Folder in the Home Directory.\nPlease Close & Open PIHMgis After Fixing Permissions!"),QMessageBox::Ok);
-        //    }
-
-        //ui->PIHMgisToolBox->setCurrentIndex(8-1);
-        //ui->pushButtonWorkFlow1->setDefault(1);
-        //ui->pushButtonWorkFlow1->setFocus();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog is returning w/o checking";
     }
 
 }
 
-void PIHMgisDialog::update_current_label()
+void PIHMgisDialog::update_current_workspace_label()
 {
     if(print_debug_messages)
-        qDebug() << "INFO: Start update_current_label";
+        qDebug() << "INFO: Start update_current_workspace_label";
 
     try {
         ui->label_home_workspace->setText("Current workspace: " + user_pihmgis_root_folder);
     } catch (...) {
-        qDebug() << "Error: update_current_label is returning w/o checking";
+        qDebug() << "Error: update_current_workspace_label is returning w/o checking";
     }
 }
 
@@ -126,134 +106,6 @@ PIHMgisDialog::~PIHMgisDialog()
         qDebug() << "Error: ~PIHMgisDialog is returning w/o checking";
     }
 }
-
-
-/*void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
-{
-    bool boolWORKFLOW0, boolWORKFLOW1, boolWORKFLOW2, boolWORKFLOW3, boolWORKFLOW4, boolWORKFLOW5, boolWORKFLOW6, boolWORKFLOW7;
-    bool boolNEWPRJ, boolOPENPRJ, boolIMPORTPRJ, boolCLOSEPRJ;
-    bool boolFILLPITS, boolFLOWGRIDS, boolSTRGRIDS, boolLINKGRIDS, boolCATGRIDS, boolSTRPOLY, boolCATPOLY;
-    bool boolDISSOLVE, boolPOLYGON, boolSIMPLIFY, boolPOLYLINE, boolMERGE;
-    bool boolREADSHP, boolTRIANGLE, boolTINSHP;
-    bool boolMESH, boolATTX, boolSOIL, boolRIVX, boolGEOL, boolLCXX, boolPARA, boolINIT, boolIBCX, boolCALI, boolFORC;
-    bool boolPIHM;
-    bool boolSPATIALW, boolSPATIALR, boolTIMEW, boolTIMER;
-
-    boolWORKFLOW0 = boolWORKFLOW1 = boolWORKFLOW2 = boolWORKFLOW3 = boolWORKFLOW4 = boolWORKFLOW5 = boolWORKFLOW6 = boolWORKFLOW7 = false;
-    boolNEWPRJ = boolOPENPRJ = boolIMPORTPRJ = boolCLOSEPRJ = false;
-    boolFILLPITS = boolFLOWGRIDS = boolSTRGRIDS = boolLINKGRIDS = boolCATGRIDS = boolSTRPOLY = boolCATPOLY = false;
-    boolDISSOLVE = boolPOLYGON = boolSIMPLIFY = boolPOLYLINE = boolMERGE = false;
-    boolREADSHP = boolTRIANGLE = boolTINSHP = false;
-    boolMESH = boolATTX = boolSOIL = boolRIVX = boolGEOL = boolLCXX = boolPARA = boolINIT = boolIBCX = boolCALI = boolFORC = false;
-    boolPIHM = false;
-    boolSPATIALW = boolSPATIALR = boolTIMEW = boolTIMER = false;
-
-    qDebug() << "Function set_defaults: " << DEFAULT_PARAM;
-    for(int i=0; i<DEFAULT_PARAM.size(); i++)
-    {
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW0") { boolWORKFLOW0 = true; ui->pushButtonWorkFlow0->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW1") { boolWORKFLOW1 = true; ui->pushButtonWorkFlow1->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW2") { boolWORKFLOW2 = true; ui->pushButtonWorkFlow2->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW3") { boolWORKFLOW3 = true; ui->pushButtonWorkFlow3->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW4") { boolWORKFLOW4 = true; ui->pushButtonWorkFlow4->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW5") { boolWORKFLOW5 = true; ui->pushButtonWorkFlow5->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW6") { boolWORKFLOW6 = true; ui->pushButtonWorkFlow6->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "WORKFLOW7") { boolWORKFLOW7 = true; ui->pushButtonWorkFlow7->setFocus(); continue; }
-
-        if (DEFAULT_PARAM.at(i) == "NEWPRJ")    { boolNEWPRJ    = true; ui->pushButtonPIHMgisProjectNew->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "OPENPRJ")   { boolOPENPRJ   = true; ui->pushButtonPIHMgisProjectOpen->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "IMPORTPRJ") { boolIMPORTPRJ = true; ui->pushButtonPIHMgisProjectImport->setFocus(); continue; }
-        if (DEFAULT_PARAM.at(i) == "CLOSEPRJ")  { boolCLOSEPRJ  = true; ui->pushButtonPIHMgisProjectClose->setFocus();  continue; }
-
-        if (DEFAULT_PARAM.at(i) == "FILLPITS")  { boolFILLPITS  = true; ui->pushButtonRasterProcessingFillPits->setFocus();         continue; }
-        if (DEFAULT_PARAM.at(i) == "FLOWGRIDS") { boolFLOWGRIDS = true; ui->pushButtonRasterProcessingFlowGrids->setFocus();        continue; }
-        if (DEFAULT_PARAM.at(i) == "STRGRIDS")  { boolSTRGRIDS  = true; ui->pushButtonRasterProcessingStreamGrids->setFocus();      continue; }
-        if (DEFAULT_PARAM.at(i) == "LINKGRIDS") { boolLINKGRIDS = true; ui->pushButtonRasterProcessingLinkGrids->setFocus();        continue; }
-        if (DEFAULT_PARAM.at(i) == "CATGRIDS")  { boolCATGRIDS  = true; ui->pushButtonRasterProcessingCatchmentGrids->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "STRPOLY")   { boolSTRPOLY   = true; ui->pushButtonRasterProcessingStreamPolyline->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "CATPOLY")   { boolCATPOLY   = true; ui->pushButtonRasterProcessingCatchmentPolygon->setFocus(); continue; }
-
-        if (DEFAULT_PARAM.at(i) == "DISSOLVE")  { boolDISSOLVE = true; ui->pushButtonVectorProcessingDissolvePolygons->setFocus();      continue; }
-        if (DEFAULT_PARAM.at(i) == "POLYGON")   { boolPOLYGON  = true; ui->pushButtonVectorProcessingPolygonToPolylines->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "SIMPLIFY")  { boolSIMPLIFY = true; ui->pushButtonVectorProcessingSimplifyPolylines->setFocus();     continue; }
-        if (DEFAULT_PARAM.at(i) == "POLYLINE")  { boolPOLYLINE = true; ui->pushButtonVectorProcessingPolylineToLines->setFocus();       continue; }
-        if (DEFAULT_PARAM.at(i) == "MERGE")     { boolMERGE    = true; ui->pushButtonVectorProcessingMergeVectorLayers->setFocus();     continue; }
-
-        if (DEFAULT_PARAM.at(i) == "READSHP")   { boolREADSHP  = true; ui->pushButtonDomainDecompositionReadTopology->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "TRIANGLE")  { boolTRIANGLE = true; ui->pushButtonDomainDecompositionTriangulation->setFocus();  continue; }
-        if (DEFAULT_PARAM.at(i) == "TINSHP")    { boolTINSHP   = true; ui->pushButtonDomainDecompositionTINShapeLayer->setFocus();  continue; }
-
-        if (DEFAULT_PARAM.at(i) == "MESH")  { boolMESH = true; ui->pushButtonDataModelLoaderMeshDataFile->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "ATTX")  { boolATTX = true; ui->pushButtonDataModelLoaderAttDataFile->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "RIVX")  { boolRIVX = true; ui->pushButtonDataModelLoaderRivDataFile->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "SOIL")  { boolSOIL = true; ui->pushButtonDataModelLoaderSoilDataFile->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "GEOL")  { boolGEOL = true; ui->pushButtonDataModelLoaderGeolDataFile->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "LCXX")  { boolLCXX = true; ui->pushButtonDataModelLoaderLcDataFile->setFocus();     continue; }
-        if (DEFAULT_PARAM.at(i) == "INIT")  { boolINIT = true; ui->pushButtonDataModelLoaderInitDataFile->setFocus();   continue; }
-        if (DEFAULT_PARAM.at(i) == "IBCX")  { boolIBCX = true; ui->pushButtonDataModelLoaderIbcDataFile->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "PARA")  { boolPARA = true; ui->pushButtonDataModelLoaderParamDataFile->setFocus();  continue; }
-        if (DEFAULT_PARAM.at(i) == "CALI")  { boolCALI = true; ui->pushButtonDataModelLoaderCalibDataFile->setFocus();  continue; }
-        if (DEFAULT_PARAM.at(i) == "FORC")  { boolFORC = true; ui->pushButtonDataModelLoaderForcDataFile->setFocus();   continue; }
-
-        if (DEFAULT_PARAM.at(i) == "PIHM")  { boolPIHM = true; ui->pushButtonPIHMSimulation->setFocus();    continue; }
-
-        if (DEFAULT_PARAM.at(i) == "SPATIALW")  { boolSPATIALW = true; ui->pushButtonVisualAnalyticsSpatialWatershed->setFocus();       continue; }
-        if (DEFAULT_PARAM.at(i) == "SPATIALR")  { boolSPATIALR = true; ui->pushButtonVisualAnalyticsSpatialRiverNetwork->setFocus();    continue; }
-        if (DEFAULT_PARAM.at(i) == "TIMEW")     { boolTIMEW    = true; ui->pushButtonVisualAnalyticsTemporalWatershed->setFocus();      continue; }
-        if (DEFAULT_PARAM.at(i) == "TIMER")     { boolTIMER    = true; ui->pushButtonVisualAnalyticsTemporalRiverNetwork->setFocus();   continue; }
-    }
-
-    ui->pushButtonWorkFlow0->setDefault(boolWORKFLOW0);
-    ui->pushButtonWorkFlow1->setDefault(boolWORKFLOW1);
-    ui->pushButtonWorkFlow2->setDefault(boolWORKFLOW2);
-    ui->pushButtonWorkFlow3->setDefault(boolWORKFLOW3);
-    ui->pushButtonWorkFlow4->setDefault(boolWORKFLOW4);
-    ui->pushButtonWorkFlow5->setDefault(boolWORKFLOW5);
-    ui->pushButtonWorkFlow6->setDefault(boolWORKFLOW6);
-    ui->pushButtonWorkFlow7->setDefault(boolWORKFLOW7);
-
-    ui->pushButtonPIHMgisProjectNew->setDefault(boolNEWPRJ);
-    ui->pushButtonPIHMgisProjectOpen->setDefault(boolOPENPRJ);
-    ui->pushButtonPIHMgisProjectImport->setDefault(boolIMPORTPRJ);
-    ui->pushButtonPIHMgisProjectClose->setDefault(boolCLOSEPRJ);
-
-    ui->pushButtonRasterProcessingFillPits->setDefault(boolFILLPITS);
-    ui->pushButtonRasterProcessingFlowGrids->setDefault(boolFLOWGRIDS);
-    ui->pushButtonRasterProcessingStreamGrids->setDefault(boolSTRGRIDS);
-    ui->pushButtonRasterProcessingLinkGrids->setDefault(boolLINKGRIDS);
-    ui->pushButtonRasterProcessingCatchmentGrids->setDefault(boolCATGRIDS);
-    ui->pushButtonRasterProcessingStreamPolyline->setDefault(boolSTRPOLY);
-    ui->pushButtonRasterProcessingCatchmentPolygon->setDefault(boolCATPOLY);
-
-    ui->pushButtonVectorProcessingDissolvePolygons->setDefault(boolDISSOLVE);
-    ui->pushButtonVectorProcessingPolygonToPolylines->setDefault(boolPOLYGON);
-    ui->pushButtonVectorProcessingSimplifyPolylines->setDefault(boolSIMPLIFY);
-    ui->pushButtonVectorProcessingPolylineToLines->setDefault(boolPOLYLINE);
-    ui->pushButtonVectorProcessingMergeVectorLayers->setDefault(boolMERGE);
-
-    ui->pushButtonDomainDecompositionReadTopology->setDefault(boolREADSHP);
-    ui->pushButtonDomainDecompositionTriangulation->setDefault(boolTRIANGLE);
-    ui->pushButtonDomainDecompositionTINShapeLayer->setDefault(boolTINSHP);
-
-    ui->pushButtonDataModelLoaderMeshDataFile->setDefault(boolMESH);
-    ui->pushButtonDataModelLoaderAttDataFile->setDefault(boolATTX);
-    ui->pushButtonDataModelLoaderRivDataFile->setDefault(boolRIVX);
-    ui->pushButtonDataModelLoaderSoilDataFile->setDefault(boolSOIL);
-    ui->pushButtonDataModelLoaderGeolDataFile->setDefault(boolGEOL);
-    ui->pushButtonDataModelLoaderLcDataFile->setDefault(boolLCXX);
-    ui->pushButtonDataModelLoaderInitDataFile->setDefault(boolINIT);
-    ui->pushButtonDataModelLoaderIbcDataFile->setDefault(boolIBCX);
-    ui->pushButtonDataModelLoaderParamDataFile->setDefault(boolPARA);
-    ui->pushButtonDataModelLoaderCalibDataFile->setDefault(boolCALI);
-    ui->pushButtonDataModelLoaderForcDataFile->setDefault(boolFORC);
-
-    ui->pushButtonPIHMSimulation->setDefault(boolPIHM);
-
-    ui->pushButtonVisualAnalyticsSpatialWatershed->setDefault(boolSPATIALW);
-    ui->pushButtonVisualAnalyticsSpatialRiverNetwork->setDefault(boolSPATIALR);
-    ui->pushButtonVisualAnalyticsTemporalWatershed->setDefault(boolTIMEW);
-    ui->pushButtonVisualAnalyticsTemporalRiverNetwork->setDefault(boolTIMER);
-}*/
 
 void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
 {
@@ -1075,6 +927,130 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
 //}
 
 
+//FOW NOW USE GLOBAL VARIABLES
+bool PIHMgisDialog::create_default_project_workspace()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::create_default_project_workspace";
+
+    try
+    {
+        QString make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder;
+        QDir dir(make_folder);
+
+        if (!dir.exists()) {
+            dir.mkpath(make_folder);
+            qDebug() << "Creating folder = " << make_folder;
+        }
+        else
+        {
+            qDebug() << "Project Folder already exists = " << make_folder;
+        }
+
+
+        //Need to create default folders for pihmgis
+        make_folder = user_pihmgis_root_folder +  + "/1RasterProcessing";
+        QDir dir_1RasterProcessing(make_folder);
+
+        if (!dir_1RasterProcessing.exists()) {
+            dir_1RasterProcessing.mkpath(make_folder);
+            qDebug() << "Creating 1RasterProcessing folder = " << make_folder;
+        }
+        else
+        {
+            qDebug() << "1RasterProcessing Folder already exists = " << make_folder;
+        }
+
+        make_folder = user_pihmgis_root_folder + "/2VectorProcessing";
+        QDir dir_2VectorProcessing(make_folder);
+
+        if (!dir_2VectorProcessing.exists()) {
+            dir_2VectorProcessing.mkpath(make_folder);
+            qDebug() << "Creating 2VectorProcessing folder = " << make_folder;
+        }
+        else
+        {
+            qDebug() << "2VectorProcessing Folder already exists = " << make_folder;
+        }
+
+
+        make_folder = user_pihmgis_root_folder + "/3DomainDecomposition";
+        QDir dir_3DomainDecomposition(make_folder);
+
+        if (!dir_3DomainDecomposition.exists()) {
+            dir_3DomainDecomposition.mkpath(make_folder);
+            qDebug() << "Creating 3DomainDecomposition folder = " << make_folder;
+        }
+        else
+        {
+            qDebug() << "3DomainDecomposition Folder already exists = " << make_folder;
+        }
+
+        make_folder = user_pihmgis_root_folder + "/4DataModelLoader";
+        QDir dir_4DataModelLoader(make_folder);
+
+        if (!dir_4DataModelLoader.exists()) {
+            dir_4DataModelLoader.mkpath(make_folder);
+            qDebug() << "Creating 4DataModelLoader folder = " << make_folder;
+        }
+        else
+        {
+            qDebug() << "4DataModelLoader Folder already exists = " << make_folder;
+        }
+
+        make_folder = user_pihmgis_root_folder + "/5PIHMSimulation";
+        QDir dir_5PIHMSimulation(make_folder);
+
+        if (!dir_5PIHMSimulation.exists()) {
+            dir_5PIHMSimulation.mkpath(make_folder);
+            qDebug() << "Creating 5PIHMSimulation folder = " << make_folder;
+        }
+        else
+        {
+            qDebug() << "5PIHMSimulation Folder already exists = " << make_folder;
+        }
+
+        make_folder = user_pihmgis_root_folder + "/6VisualAnalytics";
+        QDir dir_6VisualAnalytics(make_folder);
+
+        if (!dir_6VisualAnalytics.exists()) {
+            dir_6VisualAnalytics.mkpath(make_folder);
+            qDebug() << "Creating 6VisualAnalytics folder = " << make_folder;
+        }
+        else
+        {
+            qDebug() << "6VisualAnalytics Folder already exists = " << make_folder;
+        }
+
+        return true;
+
+
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
+        return false;
+
+    }
+}
+
+
+bool PIHMgisDialog::set_project_button_settings(bool enabled)
+{
+    //ui->pushButtonPIHMgisProjectNew->setEnabled(enabled);
+    //ui->pushButtonPIHMgisProjectClose->setEnabled(enabled);
+    //ui->pushButtonPIHMgisProjectOpen->setEnabled(enabled);
+    ui->pushButtonPIHMgisProjectImport->setEnabled(enabled);
+
+    ui->PIHMgisToolBox_RasterProcessing->setEnabled(enabled);
+    ui->PIHMgisToolBox_VectorProcessing->setEnabled(enabled);
+    ui->PIHMgisToolBox_DomainDecomposition->setEnabled(enabled);
+    ui->PIHMgisToolBox_DataModelLoader->setEnabled(enabled);
+    ui->PIHMgisToolBox_PIHMSimulation->setEnabled(enabled);
+    ui->PIHMgisToolBox_VisualAnalytics->setEnabled(enabled);
+
+
+    return true;
+}
+
 
 void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 {
@@ -1090,96 +1066,12 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
         {
             user_pihmgis_root_folder = ProjectHome;
 
-            QString make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder;
-            QDir dir(make_folder);
-
-            if (!dir.exists()) {
-                dir.mkpath(make_folder);
-                qDebug() << "Creating folder = " << make_folder;
-            }
-            else
-            {
-                qDebug() << "Project Folder already exists = " << make_folder;
-            }
-
-
-            //Need to create default folders for pihmgis
-            make_folder = user_pihmgis_root_folder +  + "/1RasterProcessing";
-            QDir dir_1RasterProcessing(make_folder);
-
-            if (!dir_1RasterProcessing.exists()) {
-                dir_1RasterProcessing.mkpath(make_folder);
-                qDebug() << "Creating 1RasterProcessing folder = " << make_folder;
-            }
-            else
-            {
-                qDebug() << "1RasterProcessing Folder already exists = " << make_folder;
-            }
-
-            make_folder = user_pihmgis_root_folder + "/2VectorProcessing";
-            QDir dir_2VectorProcessing(make_folder);
-
-            if (!dir_2VectorProcessing.exists()) {
-                dir_2VectorProcessing.mkpath(make_folder);
-                qDebug() << "Creating 2VectorProcessing folder = " << make_folder;
-            }
-            else
-            {
-                qDebug() << "2VectorProcessing Folder already exists = " << make_folder;
-            }
-
-
-            make_folder = user_pihmgis_root_folder + "/3DomainDecomposition";
-            QDir dir_3DomainDecomposition(make_folder);
-
-            if (!dir_3DomainDecomposition.exists()) {
-                dir_3DomainDecomposition.mkpath(make_folder);
-                qDebug() << "Creating 3DomainDecomposition folder = " << make_folder;
-            }
-            else
-            {
-                qDebug() << "3DomainDecomposition Folder already exists = " << make_folder;
-            }
-
-            make_folder = user_pihmgis_root_folder + "/4DataModelLoader";
-            QDir dir_4DataModelLoader(make_folder);
-
-            if (!dir_4DataModelLoader.exists()) {
-                dir_4DataModelLoader.mkpath(make_folder);
-                qDebug() << "Creating 4DataModelLoader folder = " << make_folder;
-            }
-            else
-            {
-                qDebug() << "4DataModelLoader Folder already exists = " << make_folder;
-            }
-
-            make_folder = user_pihmgis_root_folder + "/5PIHMSimulation";
-            QDir dir_5PIHMSimulation(make_folder);
-
-            if (!dir_5PIHMSimulation.exists()) {
-                dir_5PIHMSimulation.mkpath(make_folder);
-                qDebug() << "Creating 5PIHMSimulation folder = " << make_folder;
-            }
-            else
-            {
-                qDebug() << "5PIHMSimulation Folder already exists = " << make_folder;
-            }
-
-            make_folder = user_pihmgis_root_folder + "/6VisualAnalytics";
-            QDir dir_6VisualAnalytics(make_folder);
-
-            if (!dir_6VisualAnalytics.exists()) {
-                dir_6VisualAnalytics.mkpath(make_folder);
-                qDebug() << "Creating 6VisualAnalytics folder = " << make_folder;
-            }
-            else
-            {
-                qDebug() << "6VisualAnalytics Folder already exists = " << make_folder;
-            }
+            create_default_project_workspace();
+            set_project_button_settings(true);
 
         }
 
-        update_current_label();
+        update_current_workspace_label();
 
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";

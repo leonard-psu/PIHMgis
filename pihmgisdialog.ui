@@ -529,6 +529,9 @@
       <string>PIHMgis Project</string>
      </property>
      <widget class="QPushButton" name="pushButtonPIHMgisProjectNew">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -657,6 +660,9 @@ color: rgb(71, 71, 71);</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButtonPIHMgisProjectClose">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -834,6 +840,9 @@ color: rgb(51, 51, 51);</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButtonPIHMgisProjectImport">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>300</x>
@@ -962,6 +971,9 @@ color: rgb(71, 71, 71);</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButtonPIHMgisProjectOpen">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>300</x>
@@ -1213,6 +1225,9 @@ color: rgb(71, 71, 71);</string>
     <zorder>label_home_workspace</zorder>
    </widget>
    <widget class="QWidget" name="PIHMgisToolBox_RasterProcessing">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -2175,6 +2190,9 @@ color: rgb(71, 71, 71);</string>
     </widget>
    </widget>
    <widget class="QWidget" name="PIHMgisToolBox_VectorProcessing">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -2882,6 +2900,9 @@ color: rgb(71, 71, 71);</string>
     </widget>
    </widget>
    <widget class="QWidget" name="PIHMgisToolBox_DomainDecomposition">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -3384,6 +3405,9 @@ color: rgb(71, 71, 71);</string>
     </widget>
    </widget>
    <widget class="QWidget" name="PIHMgisToolBox_DataModelLoader">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -4862,6 +4886,9 @@ color: rgb(71, 71, 71);</string>
     </widget>
    </widget>
    <widget class="QWidget" name="PIHMgisToolBox_PIHMSimulation">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -5280,6 +5307,9 @@ color: rgb(71, 71, 71);</string>
     </widget>
    </widget>
    <widget class="QWidget" name="PIHMgisToolBox_VisualAnalytics">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>

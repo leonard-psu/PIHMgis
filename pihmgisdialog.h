@@ -18,29 +18,8 @@ public:
 
 public slots:
     void set_defaults(QStringList DEFAULT_PARAM);
-    //void set_defaults(QStringList DEFAULT_PARAM, int toolset);
 
 private slots:
-
-    // **** :: PIHMgis Help & Resources Slots **** //
-
-//    void on_pushButtonWorkFlow0_clicked();
-
-//    void on_pushButtonWorkFlow1_clicked();
-
-//    void on_pushButtonWorkFlow2_clicked();
-
-//    void on_pushButtonWorkFlow3_clicked();
-
-//    void on_pushButtonWorkFlow4_clicked();
-
-//    void on_pushButtonWorkFlow5_clicked();
-
-//    void on_pushButtonWorkFlow6_clicked();
-
- //   void on_pushButtonWorkFlow7_clicked();
-
-    // **** :: PIHMgis Project Management **** //
 
     void on_pushButtonPIHMgisProjectNew_clicked();
 
@@ -137,12 +116,15 @@ private slots:
 
     void on_pushButton_PickWorkspace_clicked();
 
-    void update_current_label();
-    //void on_pushButton_PickWorkspace_clicked(bool checked);
 
     void on_pushButton_PickWorkspace_clicked(bool checked);
 
 private:
+
+    void update_current_workspace_label();
+    bool create_default_project_workspace();
+    bool set_project_button_settings(bool enabled);
+
     Ui::PIHMgisDialog *ui;
 };
 

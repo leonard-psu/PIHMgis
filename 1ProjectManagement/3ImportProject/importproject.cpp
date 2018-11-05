@@ -10,6 +10,10 @@
 #include "globals.h"
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ImportProject Constructor
+// Parent is Main Window, filename is the open project text file used to store project details
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ImportProject::ImportProject(QWidget *parent)
     : QDialog(parent), ui(new Ui::ImportProject)
 {
@@ -19,35 +23,26 @@ ImportProject::ImportProject(QWidget *parent)
     try {
         ui->setupUi(this);
 
-        ui->lineEditNew->setText(user_pihmgis_root_folder);
+        ui->lineEditNew->setText(user_pihmgis_root_folder + "/.PIHMgis"); //TODO
+        //ui->lineEdit_Data_Base_Folder->setText(user_pihmgis_root_folder );
 
-//        string_FillPits = "";
-//        string_FlowGrids = "";
-//        string_StreamGrids = "";
-//        string_LinkGrids = "";
-//        string_CatchmentGrids = "";
-//        string_StreamPolyline = "";
-//        string_StreamRasterVector = "";
-//        string_CatchmentPolygon = "";
-//        string_CatchmentRasterVector = "";
-//        string_DissolvePolygons = "";
-//        string_PolygonToPolylines = "";
-//        string_SimplifyPolylines = "";
-//        string_PolylineToLines = "";
-//        string_MergeVectorLayers = "";
-//        string_MergeVectorDomainDecomposition = "";
-//        string_ReadTopology = "";
-//        string_DelaunayTriangulation = "";
-//        string_TINShapeLayer = "";
-
+        //QString name = QDateTime::currentDateTime().date().toString();
+        //name = name.simplified().remove(' ');
+        //Create Default Name
+        ui->new_lineEdit_ProjectFile->setText("OpenProject.txt"); //TODO
 
         ui->pushButtonProject->setDefault(true);
         ui->pushButtonProject->setFocus();
+
     } catch (...) {
         qDebug() << "Error: ImportProject";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ImportProject Deconstructor
+// Todo: Check for memory leaks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ImportProject::~ImportProject()
 {
     if(print_debug_messages)
@@ -59,61 +54,437 @@ ImportProject::~ImportProject()
     }
 }
 
-//Browse button
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void ImportProject::Clear_Log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ImportProject::Clear_Log()";
+
+    try {
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+    } catch (...) {
+        qDebug() << "Error: ImportProject::Clear_Log() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void ImportProject::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void ImportProject::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to get List of Directories
+// BEWARE: I've observed develope paths returned when str is not a valid path
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+QStringList ImportProject::Get_Folder_List(const QString& str)
+{
+    auto path = QDir::cleanPath(str);
+    QStringList result(path);
+    while((path = QFileInfo(path).path()).length() < result.last().length())
+        result << path;
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to get mapped UNIQUE list of directories
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+QMap<QString,QString> ImportProject::Get_Map_Directories(QString input_file_name, QString new_base_folder)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ImportProject::Get_Map_Directories()";
+
+    QMap<QString,QString> result;
+
+    try {
+
+        QFile inputFile(input_file_name);
+        if (inputFile.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            int count = 0;
+            QTextStream in(&inputFile);
+            while (!in.atEnd())
+            {
+                QString line = in.readLine();
+
+                if(line.startsWith("#") )
+                {
+                    //Do nothing
+                }
+                else
+                {
+                    if( count > 2) //Ignore first 3 lines
+                    {
+                        QStringList slist = line.split(",");
+                        QStringList rebuilt_list;
+                        if ( slist.length() > 1)
+                        {
+                            for(int i = 1; i < slist.count(); i++)
+                            {
+                                //qDebug() << "OLD Found 0 -> " << slist[i];
+
+                                QString str_value = slist[i];
+
+                                if( str_value.contains('/') || str_value.contains('\\'))
+                                {
+                                    QFileInfo fi(slist[i]);
+                                    QString dir = fi.absolutePath();
+                                    //qDebug() << "OLD Found 1 -> " << dir;
+
+                                    if(result.contains(dir))
+                                    {
+                                        //do nothing
+                                    }
+                                    else
+                                    {
+                                        if(dir.isEmpty())
+                                        {
+                                            //Do nothing output_text_stream << line << "\n";
+                                        }
+                                        else
+                                        {
+                                            QStringList fslist = Get_Folder_List(dir);
+                                            //qDebug() << "OLD Found 2 -> " << fslist.at(1) << " " << fslist.length();
+                                            QString value = dir;
+
+                                            QString replace = dir.replace(fslist.at(1), new_base_folder);
+                                            QFileInfo fi2(replace);
+                                            bool exists = fi2.exists();
+                                            //qDebug() << "OLD Found 3 -> " << replace << " " << exists;
+                                            if(exists)
+                                            {
+                                                if(result.contains(replace))
+                                                {
+                                                    //do nothing
+                                                }
+                                                else
+                                                {
+                                                    result.insert(replace,value);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            } //End for loop
+
+                        } //End of list
+                    }
+                }
+
+                count++;
+            }
+            inputFile.close();
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: ImportProject::Get_Map_Directories()";
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to identify unique folders in older project file and FILLS COMBO BBOX
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+QStringList ImportProject::Find_Project_Directories(QString input_file_name, QString new_base_folder)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ImportProject::Find_Project_Directories()";
+
+    QStringList result;
+
+    try {
+        //Key->NEW, Value->OLD Directory
+        QMap<QString,QString> map_dir = Get_Map_Directories(input_file_name, new_base_folder);
+
+        ui->comboBox_old_project_dirs->clear();
+        if(map_dir.count() > 0)
+            ui->comboBox_old_project_dirs->addItem("ALL");
+        ui->comboBox_old_project_dirs->addItem("NONE");
+
+        for(auto e : map_dir.keys())
+        {
+            //qDebug() << "Found: " << e << "," << map_dir.value(e) << '\n';
+            result.append(e);
+            ui->comboBox_old_project_dirs->addItem(map_dir.value(e));
+        }
+
+        //Log_Message("Unique directory count: " + QString::number(map_dir.count()) + tr("<br>"));
+
+    } catch (...) {
+        qDebug() << "Error: ImportProject::Find_Project_Directories()";
+
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to replace Given value from DropDown List of them in older project file
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ImportProject::Find_Replace_Only_Project_Directories(QString input_file_name, QString new_base_folder, QString only_folder, QString output_file_name)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ImportProject::Find_Replace_All_Project_Directories()";
+
+    bool result = false;
+
+    try {
+
+        if(only_folder.length() < 1)
+        {
+            return false;
+        }
+        if(QString::compare("ALL", only_folder, Qt::CaseInsensitive) == 0)
+        {
+            return false;
+        }
+        if(QString::compare("None", only_folder, Qt::CaseInsensitive) == 0)
+        {
+            return false;
+        }
+
+        //Key->NEW, Value->OLD Directory
+        QMap<QString,QString> map_dir = Get_Map_Directories(input_file_name, new_base_folder);
+
+        //qDebug() << only_folder << '\n';
+        //qDebug() << map_dir.key(only_folder) << '\n';
+        //qDebug() << map_dir.value(only_folder) << '\n';
+        QString replace_value;
+        //INEFFICIENT METHOD
+        for(auto e : map_dir.keys())
+        {
+            QString key = e;
+            QString value =  map_dir.value(e);
+            //qDebug() << "Found: " << e << "," << map_dir.value(e) << '\n';
+
+            if(QString::compare(only_folder, value, Qt::CaseInsensitive) == 0)
+            {
+                //qDebug() << "Found: " << e << "," << map_dir.value(e) << '\n';
+                replace_value = e;
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Replace Directories
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QFile outputFile(output_file_name);
+        if (outputFile.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QTextStream output_text_stream(&outputFile);
+            QFile inputFile(input_file_name);
+            if (inputFile.open(QIODevice::ReadOnly | QIODevice::Text))
+            {
+                int count = 0;
+                QTextStream in(&inputFile);
+                while (!in.atEnd())
+                {
+                    QString line = in.readLine();
+                    if(line.startsWith("#") )
+                    {
+                        //Keep original line
+                        output_text_stream << line << '\n';
+                    }
+                    else
+                    {
+                        if( count > 2) //Ignore first 3 lines
+                        {
+                            QString new_line = line;
+
+                            if(line.contains(only_folder))
+                            {
+                                new_line = new_line.replace(only_folder, replace_value);
+                                //qDebug() << new_line << '\n';
+
+                                //Keep original line
+                               output_text_stream << "#Import Replaced " << line << '\n';
+                               output_text_stream << new_line << '\n';
+                            }
+                            else
+                            {
+                                output_text_stream << line << '\n';
+                            }
+
+                        }//End of if
+                    }
+                    count++;
+                }
+
+                inputFile.close();
+            }
+            outputFile.close();
+        }
+
+        result = true;
+
+    } catch (...) {
+        qDebug() << "Error: ImportProject::Find_Replace_All_Project_Directories()";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to identify unique folders and replace ALL of them in older project file
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ImportProject::Find_Replace_All_Project_Directories(QString input_file_name, QString new_base_folder, QString output_file_name)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ImportProject::Find_Replace_All_Project_Directories()";
+
+    bool result = false;
+
+    try {
+
+        //qDebug() << "input_file_name -> " << input_file_name;
+        //qDebug() << "new_base_folder -> " << new_base_folder;
+        //qDebug() << "output_file_name -> " << output_file_name;
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Step 1, Create Unique List of Directories Suitable for replacing old project file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //NEW, OLD Directory
+        QMap<QString,QString> map_dir = Get_Map_Directories(input_file_name, new_base_folder);
+
+        //Log_Message("Found: " + QString::number(map_dir.count()) + tr("<br>"));
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Step 2, Replace Directories
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QFile outputFile(output_file_name);
+        if (outputFile.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QTextStream output_text_stream(&outputFile);
+            QFile inputFile(input_file_name);
+            if (inputFile.open(QIODevice::ReadOnly | QIODevice::Text))
+            {
+                int count = 0;
+                QTextStream in(&inputFile);
+                while (!in.atEnd())
+                {
+                    QString line = in.readLine();
+                    if(line.startsWith("#") )
+                    {
+                        //Keep original line
+                       output_text_stream << line << '\n';
+                    }
+                    else
+                    {
+                        if( count > 2) //Ignore first 3 lines
+                        {
+                            QString new_line = line;
+
+                            for(auto e : map_dir.keys())
+                            {
+                                QString key = e;
+                                QString value =  map_dir.value(e);
+                                //qDebug() << "Found: " << e << "," << map_dir.value(e) << '\n';
+                                //Note swapped, as the key is the new value, while value is the original directory
+                                new_line = new_line.replace(value, key);
+                            }
+                             //Keep original line
+                            output_text_stream << "#Import Replaced " << line << '\n';
+                            output_text_stream << new_line << '\n';
+
+                        }//End of if
+                    }
+                    count++;
+                }
+
+                inputFile.close();
+            }
+            outputFile.close();
+        }
+
+        result = true;
+
+    } catch (...) {
+        qDebug() << "Error: ImportProject::Find_Replace_All_Project_Directories()";
+        result = false;
+    }
+
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button Import Existing Project Clicked Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ImportProject::on_pushButtonProject_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start ImportProject::on_pushButtonProject_clicked()";
 
     try {
-        LogsString = tr("");
-        LogsString.append(tr("Processing ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        LogsString = tr("");
 
-        QString ProjectFolder, ProjectFileName;
-        QFile OpenProjectFile(user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt");
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
 
-        if ( ! OpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            ProjectFolder = user_pihmgis_root_folder;
-        }
-        else
-        {
-            QTextStream OpenProjectFileTextStream(&OpenProjectFile);
-            ProjectFolder = OpenProjectFileTextStream.readLine();
-            ProjectFileName= OpenProjectFileTextStream.readLine();
-            OpenProjectFile.close();
-        }
-
-        QString OldProjectFolder, OldProjectFileName;
-        QString NewProjectFolder, NewProjectFileName;
-        OldProjectFileName = QFileDialog::getOpenFileName(this, "Import Existing Project", ProjectFolder, "PIHMgis Project (*.pihmgis)");
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Get Existing File name
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString OldProjectFileName = QFileDialog::getOpenFileName(this, "Import Existing Project", user_pihmgis_root_folder, "PIHMgis Project (*.pihmgis)");
 
         if (OldProjectFileName != nullptr)
         {
-            NewProjectFileName = OldProjectFileName;
-
-            //NewProjectFolder   = OldProjectFileName;
-            //NewProjectFolder.truncate(NewProjectFolder.lastIndexOf("/",-1));
-            NewProjectFolder = user_pihmgis_root_folder;
+            QString NewProjectFileName = OldProjectFileName;
+            QString NewProjectFolder = user_pihmgis_root_folder + "/.PIHMgis"; //TODO
 
             QFile OldOpenProjectFile(OldProjectFileName);
             OldOpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
             QTextStream OldOpenProjectFileTextStream(&OldOpenProjectFile);
             OldOpenProjectFileTextStream.readLine();
-            OldProjectFolder = OldOpenProjectFileTextStream.readLine();
+            QString OldProjectFolder = OldOpenProjectFileTextStream.readLine();
             OldOpenProjectFile.close();
 
-            qDebug()<<"OldProjectFolder   = "<<OldProjectFolder<<"\n";
-            qDebug()<<"OldProjectFileName = "<<OldProjectFileName<<"\n";
-            qDebug()<<"NewProjectFolder   = "<<NewProjectFolder<<"\n";
-            qDebug()<<"NewProjectFileName = "<<NewProjectFileName<<"\n";
+            //qDebug()<<"OldProjectFolder   = "<<OldProjectFolder<<"\n";
+            //qDebug()<<"OldProjectFileName = "<<OldProjectFileName<<"\n";
+            //qDebug()<<"NewProjectFolder   = "<<NewProjectFolder<<"\n";
+            //qDebug()<<"NewProjectFileName = "<<NewProjectFileName<<"\n";
 
             ui->lineEdit->setText(OldProjectFileName);
             ui->lineEditOld->setText(OldProjectFolder);
             ui->lineEditNew->setText(NewProjectFolder);
+
+            QFileInfo fi(OldProjectFileName);
+            ui->lineEdit_Data_Base_Folder->setText( QString( fi.absolutePath()));
+
+            //QString hack = "G:/Temp/RACHEL/NorthRaccoon_1";
+
+            Find_Project_Directories(OldProjectFileName, fi.absolutePath());
 
             ui->pushButtonProject->setDefault(false);
             ui->pushButtonImport->setDefault(true);
@@ -128,263 +499,180 @@ void ImportProject::on_pushButtonProject_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close Button Clicked Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ImportProject::on_pushButtonClose_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start ImportProject::on_pushButtonClose_clicked()";
 
     try {
-        //QStringList default_params; default_params << "WORKFLOW2" << "WORKFLOW8";
-        //QMetaObject::invokeMethod(parent(),"set_defaults",Q_ARG(QStringList,default_params));
         close();
     } catch (...) {
         qDebug() << "Error: ImportProject::on_pushButtonClose_clicked()";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Import Button Clicked Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ImportProject::on_pushButtonImport_clicked()
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start ImportProject::on_pushButtonImport_clicked()";
 
     try {
-        LogsString = tr("");
 
-        bool success;
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Clear Log
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Clear_Log();
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check Inputs from GUI
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         QString OldProjectFolder = ui->lineEditOld->text();
         QString old_ProjectFileName  = ui->lineEdit->text();
-
         QString NewProjectFolder = ui->lineEditNew->text();
         QString NewProjectName = ui->new_lineEdit_ProjectFile->text();
+        QString data_base_folder = ui->lineEdit_Data_Base_Folder->text();
+        QString replace_old_folders =  ui->comboBox_old_project_dirs->currentText();
 
-
-        QString make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder;
-        QDir dir(make_folder);
-
-        if (!dir.exists()) {
-            dir.mkpath(make_folder);
-            qDebug() << "Creating folder = " << make_folder;
-        }
-        else
+        if(OldProjectFolder.isEmpty())
         {
-            qDebug() << "Folder already exists = " << make_folder;
+            Log_Error_Message("No old project folder name specified: </span>" + OldProjectFolder + tr("<br>"));
+            return;
         }
-
-        if(NewProjectName.length() > 0)
+        if(old_ProjectFileName.isEmpty())
         {
-            //Do nothing
+            Log_Error_Message("Old project file name not specified </span>" + old_ProjectFileName + tr("<br>"));
+            return;
         }
-        else
+        if(NewProjectFolder.isEmpty())
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Need to specify New Project Name: </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-            qDebug() << "Need to specify NewProjectName = " << NewProjectName;
+            Log_Error_Message("New project folder not specified: </span>" + NewProjectFolder + tr("<br>"));
+            return;
+        }
+        if(NewProjectName.isEmpty())
+        {
+            Log_Error_Message("Need to specify New Project Name: </span>" + NewProjectName + tr("<br>"));
+            return;
+        }
+        if(data_base_folder.isEmpty())
+        {
+            Log_Error_Message("Need to specify New Data Folder Location: </span>" + data_base_folder + tr("<br>"));
             return;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check Output from GUI
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-        if( OldProjectFolder != nullptr && NewProjectFolder != nullptr && old_ProjectFileName != nullptr)
+        QString new_ProjectFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + "/TempImportFile.txt";
+        QString output_name = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QFileInfo qfi(new_ProjectFileName);
+        if(qfi.exists())
         {
-            QFile old_ProjectFile(old_ProjectFileName);
-            old_ProjectFile.open(QIODevice::ReadOnly  | QIODevice::Text);
-
-            QTextStream ProjectFileTextStream(&old_ProjectFile);
-
-            QString TempStr;
-            QString TempImportFileName = user_pihmgis_root_folder +user_pihmgis_project_folder + "/TempImportFile.txt";
-            QFile TempImportFile(TempImportFileName);
-
-            qDebug() << "Open Temporary Import File: " << TempImportFileName;
-            if ( ! TempImportFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+            Log_Message("Removing existing project file = " + new_ProjectFileName + tr("<br>"));
+            bool success = QFile::remove(new_ProjectFileName);
+            if(!success)
             {
-                qDebug() << "ERROR: Unable to Open File!";
-                //QMessageBox::critical(this,tr("Import Project"),tr("Error: Unable to Create Temporary Import File"),QMessageBox::Ok);
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open Temporary Import File for Writing: </span>")+TempImportFileName+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
+                Log_Error_Message("Problems removing file = " + new_ProjectFileName + tr("<br>"));
             }
-            QTextStream TempImportFileTextStream(&TempImportFile);
-
-            //Need to assign values
-            /* while (!ProjectFileTextStream.atEnd())
-            {
-                QString line = ProjectFileTextStream.readLine();
-
-                bool is_it = line.startsWith("FillPits,");
-                if(is_it)
-                {
-                    string_FillPits = line;
-                }
-                is_it = line.startsWith("FlowGrids,");
-                if(is_it)
-                {
-                    string_FlowGrids = line;
-                }
-                is_it = line.startsWith("StreamGrids,");
-                if(is_it)
-                {
-                    string_StreamGrids = line;
-                }
-                is_it = line.startsWith("LinkGrids,");
-                if(is_it)
-                {
-                    string_LinkGrids = line;
-                }
-                is_it = line.startsWith("CatchmentGrids,");
-                if(is_it)
-                {
-                    string_CatchmentGrids = line;
-                }
-                is_it = line.startsWith("StreamPolyline,");
-                if(is_it)
-                {
-                    string_StreamPolyline = line;
-                }
-                is_it = line.startsWith("StreamRasterVector,");
-                if(is_it)
-                {
-                    string_StreamRasterVector = line;
-                }
-                is_it = line.startsWith("CatchmentPolygon,");
-                if(is_it)
-                {
-                    string_CatchmentPolygon = line;
-                }
-                is_it = line.startsWith("CatchmentRasterVector,");
-                if(is_it)
-                {
-                    string_CatchmentRasterVector = line;
-                }
-                is_it = line.startsWith("DissolvePolygons,");
-                if(is_it)
-                {
-                    string_DissolvePolygons = line;
-                }
-                is_it = line.startsWith("PolygonToPolylines,");
-                if(is_it)
-                {
-                    string_PolygonToPolylines = line;
-                }
-                is_it = line.startsWith("SimplifyPolylines,");
-                if(is_it)
-                {
-                    string_SimplifyPolylines = line;
-                }
-                is_it = line.startsWith("PolylineToLines,");
-                if(is_it)
-                {
-                    string_PolylineToLines = line;
-                }
-                is_it = line.startsWith("MergeVectorLayers,");
-                if(is_it)
-                {
-                    string_MergeVectorLayers = line;
-                }
-                is_it = line.startsWith("MergeVectorDomainDecomposition,");
-                if(is_it)
-                {
-                    string_MergeVectorDomainDecomposition = line;
-                }
-                is_it = line.startsWith("ReadTopology,");
-                if(is_it)
-                {
-                    string_ReadTopology = line;
-                }
-                is_it = line.startsWith("DelaunayTriangulation,");
-                if(is_it)
-                {
-                    string_DelaunayTriangulation = line;
-                }
-                is_it = line.startsWith("TINShapeLayer,");
-                if(is_it)
-                {
-                    string_TINShapeLayer = line;
-                }
-
-            }
-*/
-
-            TempStr = ProjectFileTextStream.readAll();
-            qDebug() << "Old Project File: \n"<< qPrintable(TempStr) <<"\n";
-
-            TempStr.replace(OldProjectFolder, NewProjectFolder);
-            qDebug() << "New Project File: \n"<< qPrintable(TempStr) <<"\n";
-            TempImportFileTextStream<<TempStr;
-
-            //TempStr = "";
-            old_ProjectFile.close();
-            TempImportFile.close();
-
-            //PLAN TO REMOVE, I DONT WANT TO OVERWRITE OLD FILES
-            //            TempImportFile.open(QIODevice::ReadOnly  | QIODevice::Text);
-            //            QFile new_OpenProjectFile(new_OpenProjectFileName);
-            //            new_OpenProjectFile.open(QIODevice::WriteOnly | QIODevice::Text);
-            //            //QTextStream t7(&ProjectFile);
-            //            TempStr = TempImportFileTextStream.readAll();
-            //            ProjectFileTextStream << TempStr;
-
-            //            qDebug() << "Written To Project File:\n" << TempStr;
-
-            //            TempImportFile.close();
-            //            new_OpenProjectFile.close();
-
-
-            //NewProjectName
-            QString output_name = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
-            //QString output_name = user_pihmgis_root_folder + "/" + NewProjectName + ".pihmgis";
-            QFile OpenProjectFile(output_name);
-            qDebug() << "Open Project File: " << output_name;
-
-
-            if ( ! OpenProjectFile.open(QIODevice::WriteOnly | QIODevice::Text))
-            {
-                qDebug() << "Error: Unable to Open File!";
-                //QMessageBox::critical(this,tr("Import Project"),tr("Error: Unable to Create Project File"),QMessageBox::Ok);
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Create Project File: </span>")+ user_pihmgis_root_folder +user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
-            }
-
-            QTextStream OpenProjectFileTextStream(&OpenProjectFile);
-
-            //MOVE OpenProjectFileTextStream << NewProjectFolder << "\n";
-            //MOVE OpenProjectFileTextStream << old_ProjectFileName;
-            OpenProjectFileTextStream << TempStr;
-            OpenProjectFile.close();
-
-            success = QFile::remove(TempImportFileName);
-            if (success == false)
-            {
-                qDebug() << "ERROR: Unable to Delete Temporary Import File!";
-                //QMessageBox::critical(this,tr("Import Project"),tr("Error: Unable to Delete Temporary Import File"),QMessageBox::Ok);
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Delete Temporary Import File: </span>")+TempImportFileName+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-                return;
-            }
-
-            //QMessageBox::information(this,tr("Import Project"),tr("Project Imported Successfully."),QMessageBox::Ok);
-            LogsString.append(tr("<b>Existing Project Imported Successfully.")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
-
-
-            ui->pushButtonImport->setDefault(false);
-            ui->pushButtonClose->setDefault(true);
-            ui->pushButtonClose->setFocus();
         }
+
+        QFileInfo qfi2(output_name);
+        if(qfi2.exists())
+        {
+            Log_Message("Removing existing project file = " + output_name + tr("<br>"));
+            bool success = QFile::remove(output_name);
+            if(!success)
+            {
+                Log_Error_Message("Problems removing file = " + output_name + tr("<br>"));
+            }
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check project folder exists, if not create it
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder;
+        QDir dir(make_folder);
+
+        if (!dir.exists())
+        {
+            dir.mkpath(make_folder);
+            //qDebug() << "Creating folder = " << make_folder;
+        }
+        else
+        {
+            //qDebug() << "Folder already exists = " << make_folder;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Copy Project File to new location as temp file
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Log_Message("Opening Existing Project File = " + old_ProjectFileName + tr("<br>"));
+
+        QFile::copy(old_ProjectFileName, new_ProjectFileName);
+        Log_Message("Copying temporary project tile = " + new_ProjectFileName + tr("<br>"));
+
+        if(replace_old_folders.length() < 1)
+        {
+            //do nothing
+        }
+        if(QString::compare("ALL", replace_old_folders, Qt::CaseInsensitive) == 0)
+        {
+            Find_Replace_All_Project_Directories(old_ProjectFileName, data_base_folder, new_ProjectFileName);
+        }
+        else if(QString::compare("None", replace_old_folders, Qt::CaseInsensitive) == 0)
+        {
+            //do nothing
+        }
+        else
+        {
+            QString only_folder = replace_old_folders;
+            //qDebug() << "only_folder: " << only_folder;
+
+            Find_Replace_Only_Project_Directories(old_ProjectFileName, data_base_folder, only_folder, new_ProjectFileName);
+
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Copy Edited Project File to new location
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        QFileInfo qfi3(output_name);
+        if(qfi3.exists())
+        {
+            Log_Message("Removing existing project file = " + output_name + tr("<br>"));
+            bool success = QFile::remove(output_name);
+        }
+
+        Log_Message("Copying edited project file = " + output_name + tr("<br>"));
+        QFile::copy(new_ProjectFileName, output_name);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Finished and let user know
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        LogsString.append(tr("<b>Project Imported Successfully.")+tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        ui->pushButtonImport->setDefault(false);
+        ui->pushButtonClose->setDefault(true);
+        ui->pushButtonClose->setFocus();
+
 
     } catch (...) {
         qDebug() << "Error: ImportProject::on_pushButtonImport_clicked()";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Help button event
+// TODO, Need cataract server back online
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ImportProject::on_pushButtonHelp_clicked()
 {
     if(print_debug_messages)
@@ -399,6 +687,26 @@ void ImportProject::on_pushButtonHelp_clicked()
     } catch (...) {
         qDebug() << "Error: ImportProject::on_pushButtonImport_clicked()";
     }
-
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Browse Button for base folder location (Clicked Event) INPUT
+// This is needed to specify where the data is located. Not always the same location as pihmgis file
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void ImportProject::on_pushButtonProject_DataFolder_clicked()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start ImportProject::on_pushButtonProject_DataFolder_clicked()";
+
+    try {
+
+        new_data_base_folder_location = QFileDialog::getExistingDirectory(this, "Specify Base Folder Location, where your data is", user_pihmgis_root_folder, 0);
+        ui->lineEdit_Data_Base_Folder->setText(new_data_base_folder_location);
+
+        QString OldProjectFileName = ui->lineEditOld->text();
+        Find_Project_Directories(OldProjectFileName, new_data_base_folder_location);
+
+    } catch (...) {
+        qDebug() << "Error: ImportProject::on_pushButtonProject_DataFolder_clicked()";
+    }
+}
