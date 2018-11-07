@@ -33,13 +33,17 @@ private:
 
     QStringList Find_Project_Directories(QString input_file_name, QString basefolder);
     QMap<QString,QString> Get_Map_Directories(QString input_file_name, QString basefolder);
+    QString Find_File_In_Base_Folder(QString input_string,  QString data_folder);
+
+
     bool Find_Replace_All_Project_Directories(QString input_file_name, QString basefolder, QString output_file_name);
     bool Find_Replace_Only_Project_Directories(QString input_file_name, QString basefolder, QString only_folder, QString output_file_name);
 
     QStringList Get_Folder_List(const QString& str);
 
     Ui::ImportProject *ui;
-    QString new_data_base_folder_location;
+
+    QString filename_open_project;
 
 };
 
