@@ -117,7 +117,7 @@ bool PolylineToLines::Load_Project_Settings()
                         }
                         else
                         {
-                            LogsString.append(tr("<span style=\"color:#FF0000\">INFO: ") + OutPolylineFileName + tr(" does not exist. </span>") +tr("<br>"));
+                            //LogsString.append(tr("<span style=\"color:#FF0000\">INFO: ") + OutPolylineFileName + tr(" does not exist. </span>") +tr("<br>"));
                             ui->tableWidget->item(rowlen,1)->setTextColor(Qt::black);
                         }
                     }
@@ -174,7 +174,7 @@ bool PolylineToLines::Load_Project_Settings()
                     }
                     else
                     {
-                        LogsString.append(tr("<span style=\"color:#FF0000\">INFO: ") + file2 + tr(" does not exist. </span>") +tr("<br>"));
+                        //LogsString.append(tr("<span style=\"color:#FF0000\">INFO: ") + file2 + tr(" does not exist. </span>") +tr("<br>"));
                         ui->tableWidget->item(rowlen,1)->setTextColor(Qt::black);
                     }
 

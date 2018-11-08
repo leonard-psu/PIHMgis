@@ -73,6 +73,7 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
 
         this->setWindowIcon(QIcon("Icons/PIHMgis000.icns"));
         ui->setupUi(this);
+        ui->label_project_found->setVisible(false);
 
 
         update_current_workspace_label();
@@ -88,8 +89,10 @@ void PIHMgisDialog::update_current_workspace_label()
     if(print_debug_messages)
         qDebug() << "INFO: Start update_current_workspace_label";
 
-    try {
-        ui->label_home_workspace->setText("Current workspace: " + user_pihmgis_root_folder);
+    try
+    {
+        ui->label_home_workspace->setText("Current workspace: " + user_pihmgis_root_folder);   
+
     } catch (...) {
         qDebug() << "Error: update_current_workspace_label is returning w/o checking";
     }
@@ -1033,6 +1036,16 @@ bool PIHMgisDialog::create_default_project_workspace()
 }
 
 
+void PIHMgisDialog::update_project_file_label()
+{
+    QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+
+    bool exists = QFileInfo(filename_open_project).exists();
+    ui->label_project_found->setVisible(exists);
+
+}
+
+
 bool PIHMgisDialog::set_project_button_settings(bool enabled)
 {
     //ui->pushButtonPIHMgisProjectNew->setEnabled(enabled);
@@ -1047,6 +1060,7 @@ bool PIHMgisDialog::set_project_button_settings(bool enabled)
     ui->PIHMgisToolBox_PIHMSimulation->setEnabled(enabled);
     ui->PIHMgisToolBox_VisualAnalytics->setEnabled(enabled);
 
+    update_project_file_label();
 
     return true;
 }
@@ -1067,11 +1081,11 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
             user_pihmgis_root_folder = ProjectHome;
 
             create_default_project_workspace();
-            set_project_button_settings(true);
+            update_current_workspace_label();
 
+            set_project_button_settings(true);
         }
 
-        update_current_workspace_label();
 
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
@@ -1116,6 +1130,6 @@ qint64 file_Size(QString path){
 
 void PIHMgisDialog::on_pushButton_PickWorkspace_clicked(bool checked)
 {
-    qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
+//    qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
 
 }

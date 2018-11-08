@@ -121,6 +121,8 @@ private slots:
 
 private:
 
+
+    void update_project_file_label();
     void update_current_workspace_label();
     bool create_default_project_workspace();
     bool set_project_button_settings(bool enabled);

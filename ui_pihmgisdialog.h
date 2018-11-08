@@ -41,6 +41,7 @@ public:
     QLabel *PIHMgisProjectLableImport;
     QGroupBox *groupBox_6;
     QPushButton *pushButton_PickWorkspace;
+    QLabel *label_project_found;
     QLabel *label_home_workspace;
     QWidget *PIHMgisToolBox_RasterProcessing;
     QPushButton *pushButtonRasterProcessingFillPits;
@@ -337,7 +338,7 @@ public:
         groupBox_6->setFont(font3);
         pushButton_PickWorkspace = new QPushButton(groupBox_6);
         pushButton_PickWorkspace->setObjectName(QStringLiteral("pushButton_PickWorkspace"));
-        pushButton_PickWorkspace->setGeometry(QRect(30, 30, 141, 51));
+        pushButton_PickWorkspace->setGeometry(QRect(30, 23, 141, 51));
         QFont font5;
         font5.setFamily(QStringLiteral("Arial"));
         font5.setPointSize(20);
@@ -347,11 +348,17 @@ public:
         pushButton_PickWorkspace->setFont(font5);
         pushButton_PickWorkspace->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
+        label_project_found = new QLabel(groupBox_6);
+        label_project_found->setObjectName(QStringLiteral("label_project_found"));
+        label_project_found->setEnabled(true);
+        label_project_found->setGeometry(QRect(30, 70, 151, 31));
+        QFont font6;
+        font6.setPointSize(10);
+        label_project_found->setFont(font6);
+        label_project_found->setWordWrap(true);
         label_home_workspace = new QLabel(PIHMgisToolBox_PIHMgisProject);
         label_home_workspace->setObjectName(QStringLiteral("label_home_workspace"));
         label_home_workspace->setGeometry(QRect(10, 150, 751, 81));
-        QFont font6;
-        font6.setPointSize(10);
         label_home_workspace->setFont(font6);
         label_home_workspace->setWordWrap(true);
         PIHMgisToolBox->addItem(PIHMgisToolBox_PIHMgisProject, QStringLiteral("Step [1] : : Load/Create PIHMgis project settings"));
@@ -1537,6 +1544,7 @@ public:
         PIHMgisProjectLableImport->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Import Project</span></p></body></html>", nullptr));
         groupBox_6->setTitle(QApplication::translate("PIHMgisDialog", "PIHMgis workspace", nullptr));
         pushButton_PickWorkspace->setText(QApplication::translate("PIHMgisDialog", "Pick", nullptr));
+        label_project_found->setText(QApplication::translate("PIHMgisDialog", "Found Project Settings", nullptr));
         label_home_workspace->setText(QApplication::translate("PIHMgisDialog", "Current Workspace", nullptr));
         PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_PIHMgisProject), QApplication::translate("PIHMgisDialog", "Step [1] : : Load/Create PIHMgis project settings", nullptr));
         pushButtonRasterProcessingFillPits->setText(QApplication::translate("PIHMgisDialog", "Start >> (1) FILL PITS", nullptr));

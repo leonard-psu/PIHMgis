@@ -742,7 +742,7 @@
    </widget>
    <widget class="QLineEdit" name="new_lineEdit_ProjectFile">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>

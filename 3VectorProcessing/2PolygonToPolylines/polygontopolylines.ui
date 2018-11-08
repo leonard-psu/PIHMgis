@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
+    <width>800</width>
     <height>419</height>
    </rect>
   </property>
@@ -438,7 +438,7 @@
     <rect>
      <x>15</x>
      <y>286</y>
-     <width>581</width>
+     <width>771</width>
      <height>111</height>
     </rect>
    </property>
@@ -456,7 +456,7 @@
     <rect>
      <x>0</x>
      <y>-4</y>
-     <width>611</width>
+     <width>791</width>
      <height>20</height>
     </rect>
    </property>
@@ -902,7 +902,7 @@
     <rect>
      <x>0</x>
      <y>403</y>
-     <width>611</width>
+     <width>791</width>
      <height>20</height>
     </rect>
    </property>
@@ -1348,7 +1348,7 @@
     <rect>
      <x>15</x>
      <y>29</y>
-     <width>581</width>
+     <width>771</width>
      <height>201</height>
     </rect>
    </property>
@@ -1358,7 +1358,7 @@
    <widget class="QPushButton" name="pushButtonAdd">
     <property name="geometry">
      <rect>
-      <x>475</x>
+      <x>665</x>
       <y>28</y>
       <width>98</width>
       <height>32</height>
@@ -1389,7 +1389,7 @@
      <rect>
       <x>15</x>
       <y>19</y>
-      <width>451</width>
+      <width>641</width>
       <height>171</height>
      </rect>
     </property>
@@ -1415,6 +1415,9 @@
     </property>
     <property name="lineWidth">
      <number>1</number>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOn</enum>
     </property>
     <property name="editTriggers">
      <set>QAbstractItemView::CurrentChanged|QAbstractItemView::SelectedClicked</set>
@@ -1477,7 +1480,7 @@
    <widget class="QPushButton" name="pushButtonRemove">
     <property name="geometry">
      <rect>
-      <x>475</x>
+      <x>665</x>
       <y>67</y>
       <width>98</width>
       <height>32</height>
@@ -1503,7 +1506,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>667</x>
       <y>150</y>
       <width>101</width>
       <height>21</height>
@@ -1533,7 +1536,7 @@
    <widget class="QPushButton" name="pushButtonClear">
     <property name="geometry">
      <rect>
-      <x>475</x>
+      <x>665</x>
       <y>107</y>
       <width>98</width>
       <height>32</height>
@@ -1559,7 +1562,7 @@
     <rect>
      <x>15</x>
      <y>233</y>
-     <width>581</width>
+     <width>771</width>
      <height>51</height>
     </rect>
    </property>
@@ -1593,7 +1596,7 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>326</x>
+      <x>530</x>
       <y>5</y>
       <width>113</width>
       <height>32</height>
@@ -1616,7 +1619,7 @@
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>650</x>
       <y>5</y>
       <width>113</width>
       <height>32</height>

@@ -185,7 +185,7 @@ public:
         label_5->setFont(font);
         new_lineEdit_ProjectFile = new QLineEdit(groupBox);
         new_lineEdit_ProjectFile->setObjectName(QStringLiteral("new_lineEdit_ProjectFile"));
-        new_lineEdit_ProjectFile->setEnabled(false);
+        new_lineEdit_ProjectFile->setEnabled(true);
         new_lineEdit_ProjectFile->setGeometry(QRect(160, 140, 411, 22));
         new_lineEdit_ProjectFile->setFont(font1);
         label_6 = new QLabel(groupBox);

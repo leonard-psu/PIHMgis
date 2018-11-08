@@ -43,7 +43,7 @@ public:
     {
         if (PolygonToPolylines->objectName().isEmpty())
             PolygonToPolylines->setObjectName(QStringLiteral("PolygonToPolylines"));
-        PolygonToPolylines->resize(611, 419);
+        PolygonToPolylines->resize(800, 419);
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -106,14 +106,14 @@ public:
         PolygonToPolylines->setFont(font);
         textBrowserLogs = new QTextBrowser(PolygonToPolylines);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(15, 286, 581, 111));
+        textBrowserLogs->setGeometry(QRect(15, 286, 771, 111));
         QFont font1;
         font1.setPointSize(11);
         textBrowserLogs->setFont(font1);
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
         BorderTop = new QFrame(PolygonToPolylines);
         BorderTop->setObjectName(QStringLiteral("BorderTop"));
-        BorderTop->setGeometry(QRect(0, -4, 611, 20));
+        BorderTop->setGeometry(QRect(0, -4, 791, 20));
         BorderTop->setBaseSize(QSize(0, 0));
         QPalette palette1;
         QBrush brush5(QColor(0, 51, 153, 255));
@@ -181,7 +181,7 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         BorderBottom = new QFrame(PolygonToPolylines);
         BorderBottom->setObjectName(QStringLiteral("BorderBottom"));
-        BorderBottom->setGeometry(QRect(0, 403, 611, 20));
+        BorderBottom->setGeometry(QRect(0, 403, 791, 20));
         BorderBottom->setBaseSize(QSize(0, 0));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush5);
@@ -237,10 +237,10 @@ public:
         BorderBottom->setFrameShape(QFrame::HLine);
         groupBoxInput = new QGroupBox(PolygonToPolylines);
         groupBoxInput->setObjectName(QStringLiteral("groupBoxInput"));
-        groupBoxInput->setGeometry(QRect(15, 29, 581, 201));
+        groupBoxInput->setGeometry(QRect(15, 29, 771, 201));
         pushButtonAdd = new QPushButton(groupBoxInput);
         pushButtonAdd->setObjectName(QStringLiteral("pushButtonAdd"));
-        pushButtonAdd->setGeometry(QRect(475, 28, 98, 32));
+        pushButtonAdd->setGeometry(QRect(665, 28, 98, 32));
         QFont font2;
         font2.setPointSize(12);
         font2.setBold(true);
@@ -272,7 +272,7 @@ public:
         __qtablewidgetitem1->setFont(font4);
         tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setGeometry(QRect(15, 19, 451, 171));
+        tableWidget->setGeometry(QRect(15, 19, 641, 171));
         QFont font5;
         font5.setFamily(QStringLiteral("Arial"));
         font5.setPointSize(11);
@@ -284,6 +284,7 @@ public:
         tableWidget->setFrameShape(QFrame::StyledPanel);
         tableWidget->setFrameShadow(QFrame::Sunken);
         tableWidget->setLineWidth(1);
+        tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         tableWidget->setEditTriggers(QAbstractItemView::CurrentChanged|QAbstractItemView::SelectedClicked);
         tableWidget->setDragEnabled(true);
         tableWidget->setDragDropMode(QAbstractItemView::DragDrop);
@@ -294,13 +295,13 @@ public:
         tableWidget->horizontalHeader()->setMinimumSectionSize(100);
         pushButtonRemove = new QPushButton(groupBoxInput);
         pushButtonRemove->setObjectName(QStringLiteral("pushButtonRemove"));
-        pushButtonRemove->setGeometry(QRect(475, 67, 98, 32));
+        pushButtonRemove->setGeometry(QRect(665, 67, 98, 32));
         pushButtonRemove->setFont(font2);
         pushButtonRemove->setAutoDefault(false);
         checkBoxDissolvePolygons = new QCheckBox(groupBoxInput);
         checkBoxDissolvePolygons->setObjectName(QStringLiteral("checkBoxDissolvePolygons"));
         checkBoxDissolvePolygons->setEnabled(false);
-        checkBoxDissolvePolygons->setGeometry(QRect(480, 150, 101, 21));
+        checkBoxDissolvePolygons->setGeometry(QRect(667, 150, 101, 21));
         QFont font6;
         font6.setFamily(QStringLiteral("Arial"));
         font6.setPointSize(10);
@@ -314,12 +315,12 @@ public:
         checkBoxDissolvePolygons->setChecked(false);
         pushButtonClear = new QPushButton(groupBoxInput);
         pushButtonClear->setObjectName(QStringLiteral("pushButtonClear"));
-        pushButtonClear->setGeometry(QRect(475, 107, 98, 32));
+        pushButtonClear->setGeometry(QRect(665, 107, 98, 32));
         pushButtonClear->setFont(font2);
         pushButtonClear->setAutoDefault(false);
         groupBoxButtons = new QGroupBox(PolygonToPolylines);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(15, 233, 581, 51));
+        groupBoxButtons->setGeometry(QRect(15, 233, 771, 51));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);
@@ -330,12 +331,12 @@ public:
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(326, 5, 113, 32));
+        pushButtonClose->setGeometry(QRect(530, 5, 113, 32));
         pushButtonClose->setFont(font2);
         pushButtonClose->setAutoDefault(false);
         pushButtonRun = new QPushButton(groupBoxButtons);
         pushButtonRun->setObjectName(QStringLiteral("pushButtonRun"));
-        pushButtonRun->setGeometry(QRect(460, 5, 113, 32));
+        pushButtonRun->setGeometry(QRect(650, 5, 113, 32));
         pushButtonRun->setFont(font2);
         pushButtonRun->setAutoDefault(false);
 

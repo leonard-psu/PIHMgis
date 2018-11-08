@@ -28,12 +28,14 @@ ImportProject::ImportProject(QWidget *parent)
         //ui->lineEdit_Data_Base_Folder->setText(user_pihmgis_root_folder );
 
         //TODO
-        filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt";
+        //filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt";
 
-        //QString name = QDateTime::currentDateTime().date().toString();
-        //name = name.simplified().remove(' ');
+        QString name = QDateTime::currentDateTime().date().toString();
+        name = name.simplified().remove(' ');
+        name = name.append(".pihmgis");
         //Create Default Name
-        ui->new_lineEdit_ProjectFile->setText(filename_open_project); //TODO
+        //ui->new_lineEdit_ProjectFile->setText(filename_open_project); //TODO
+        ui->new_lineEdit_ProjectFile->setText(name); //TODO
 
         ui->pushButtonProject->setDefault(true);
         ui->pushButtonProject->setFocus();
@@ -285,6 +287,11 @@ bool ImportProject::Find_Replace_Only_Project_Directories(QString input_file_nam
         //qDebug() << map_dir.key(only_folder) << '\n';
         //qDebug() << map_dir.value(only_folder) << '\n';
         QString replace_value;
+        QString old_project;
+        QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt";
+        bool search = ui->checkBox_Search->isChecked();
+        QString data_folder = new_base_folder;
+
         //INEFFICIENT METHOD
         for(auto e : map_dir.keys())
         {
@@ -314,14 +321,64 @@ bool ImportProject::Find_Replace_Only_Project_Directories(QString input_file_nam
                 while (!in.atEnd())
                 {
                     QString line = in.readLine();
-                    if(line.startsWith("#") )
+
+                    if(count == 0) //Write new create time
+                    {
+                        QString format = QString("MMMddyyyyhhmm");
+                        QDateTime ProjectDateTime = ProjectDateTime.currentDateTime();
+                        output_text_stream << "Created on: " << ProjectDateTime.toString() << "\n";
+                    }
+                    else if (count == 1) //Replace Working directory
+                    {
+                        old_project = line;
+                        output_text_stream << user_pihmgis_root_folder << '\n';
+                    }
+                    else if (count == 2) //Replace Project File
+                    {
+                        output_text_stream << filename_open_project << '\n';
+                    }
+                    else if (line.startsWith("#"))
                     {
                         //Keep original line
                         output_text_stream << line << '\n';
                     }
                     else
                     {
-                        if( count > 2) //Ignore first 3 lines
+                        if(search)
+                        {
+                            QString new_line = line;
+                            if(line.contains(only_folder))
+                            {
+                                //new_line = new_line.replace(only_folder, replace_value);
+                                QString new_line = line;
+                                QStringList line_split = new_line.split(',');
+                                QString rebuilt_list;
+                                QListIterator<QString> itr (line_split);
+                                while (itr.hasNext())
+                                {
+                                    QString current = itr.next();
+                                    if(current.contains('/'))
+                                    {
+                                        QString search_result = Find_File_In_Base_Folder(current, data_folder);
+                                        rebuilt_list.append(search_result + ",");
+
+                                    }
+                                    else
+                                    {
+                                        rebuilt_list.append(current + ",");
+                                    }
+                                }
+
+                                //Keep original line
+                                output_text_stream << "#Import Replaced " << line << '\n';
+                                output_text_stream << rebuilt_list << '\n';
+                            }
+                            else
+                            {
+                                output_text_stream << line << '\n';
+                            }
+                        }
+                        else
                         {
                             QString new_line = line;
 
@@ -338,9 +395,9 @@ bool ImportProject::Find_Replace_Only_Project_Directories(QString input_file_nam
                             {
                                 output_text_stream << line << '\n';
                             }
-
-                        }//End of if
+                        }
                     }
+
                     count++;
                 }
 
@@ -431,6 +488,7 @@ bool ImportProject::Find_Replace_All_Project_Directories(QString input_file_name
 
         bool search = ui->checkBox_Search->isChecked();
         QString new_project = user_pihmgis_root_folder;// + user_pihmgis_project_folder;
+        QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt";
         QString old_project;
         QString data_folder = new_base_folder;
 
@@ -472,50 +530,52 @@ bool ImportProject::Find_Replace_All_Project_Directories(QString input_file_name
                         //Keep original line
                         output_text_stream << line << '\n';
                     }
-
-                    if(search)
-                    {
-                        QString new_line = line;
-                        QStringList line_split = new_line.split(',');
-                        QString rebuilt_list;
-                        QListIterator<QString> itr (line_split);
-                        while (itr.hasNext())
-                        {
-                            QString current = itr.next();
-                            if(current.contains('/'))
-                            {
-                                QString search_result = Find_File_In_Base_Folder(current, data_folder);
-                                rebuilt_list.append(search_result + ",");
-
-                            }
-                            else
-                            {
-                                rebuilt_list.append(current + ",");
-                            }
-                        }
-
-                        //Keep original line
-                        output_text_stream << "#Import Replaced " << line << '\n';
-                        output_text_stream << rebuilt_list << '\n';
-
-                    }
                     else
                     {
-                        QString new_line = line;
-                        new_line = new_line.replace(old_project, new_project);
-
-                        for(auto e : map_dir.keys())
+                        if(search)
                         {
-                            QString key = e;
-                            QString value =  map_dir.value(e);
-                            //qDebug() << "Found: " << e << "," << map_dir.value(e) << '\n';
-                            //Note swapped, as the key is the new value, while value is the original directory
-                            new_line = new_line.replace(value, key);
-                        }
+                            QString new_line = line;
+                            QStringList line_split = new_line.split(',');
+                            QString rebuilt_list;
+                            QListIterator<QString> itr (line_split);
+                            while (itr.hasNext())
+                            {
+                                QString current = itr.next();
+                                if(current.contains('/'))
+                                {
+                                    QString search_result = Find_File_In_Base_Folder(current, data_folder);
+                                    rebuilt_list.append(search_result + ",");
 
-                        //Keep original line
-                        output_text_stream << "#Import Replaced " << line << '\n';
-                        output_text_stream << new_line << '\n';
+                                }
+                                else
+                                {
+                                    rebuilt_list.append(current + ",");
+                                }
+                            }
+
+                            //Keep original line
+                            output_text_stream << "#Import Replaced " << line << '\n';
+                            output_text_stream << rebuilt_list << '\n';
+
+                        }
+                        else
+                        {
+                            QString new_line = line;
+                            new_line = new_line.replace(old_project, new_project);
+
+                            for(auto e : map_dir.keys())
+                            {
+                                QString key = e;
+                                QString value =  map_dir.value(e);
+                                //qDebug() << "Found: " << e << "," << map_dir.value(e) << '\n';
+                                //Note swapped, as the key is the new value, while value is the original directory
+                                new_line = new_line.replace(value, key);
+                            }
+
+                            //Keep original line
+                            output_text_stream << "#Import Replaced " << line << '\n';
+                            output_text_stream << new_line << '\n';
+                        }
                     }
 
                     count++;
@@ -669,7 +729,9 @@ void ImportProject::on_pushButtonImport_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         QString new_ProjectFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + "/TempImportFile.txt";
-        QString output_name = filename_open_project; //user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString new_OpenProject = user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt";
+        QString output_name = user_pihmgis_root_folder + "/" + NewProjectName;
+
         QFileInfo qfi(new_ProjectFileName);
         if(qfi.exists())
         {
@@ -681,7 +743,19 @@ void ImportProject::on_pushButtonImport_clicked()
             }
         }
 
+        qDebug() <<  output_name << '\n';
         QFileInfo qfi2(output_name);
+        QString given_suffix = qfi2.suffix();
+        qDebug() <<  given_suffix << '\n';
+
+        if( !QString::compare("pihmgis", given_suffix, Qt::CaseInsensitive) == 0)
+        {
+            qDebug() <<  output_name << '\n';
+            output_name = output_name.append(".pihmgis");
+            qDebug() <<  output_name << '\n';
+        }
+        qDebug() <<  output_name << '\n';
+
         if(qfi2.exists())
         {
             Log_Message("Removing existing project file = " + output_name + tr("<br>"));
@@ -750,6 +824,22 @@ void ImportProject::on_pushButtonImport_clicked()
 
         Log_Message("Copying edited project file = " + output_name + tr("<br>"));
         QFile::copy(new_ProjectFileName, output_name);
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Copy open Project File to new location
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        QFileInfo qfi4(new_OpenProject);
+        if(qfi4.exists())
+        {
+            Log_Message("Removing existing open project file = " + new_OpenProject + tr("<br>"));
+            bool success = QFile::remove(new_OpenProject);
+        }
+
+        Log_Message("Creating open project file = " + output_name + tr("<br>"));
+        QFile::copy(new_ProjectFileName, new_OpenProject);
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Finished and let user know

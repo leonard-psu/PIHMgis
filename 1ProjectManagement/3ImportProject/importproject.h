@@ -43,7 +43,6 @@ private:
 
     Ui::ImportProject *ui;
 
-    QString filename_open_project;
 
 };
 

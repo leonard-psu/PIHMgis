@@ -50,7 +50,7 @@ public:
     {
         if (MergeVectorLayers->objectName().isEmpty())
             MergeVectorLayers->setObjectName(QStringLiteral("MergeVectorLayers"));
-        MergeVectorLayers->resize(611, 491);
+        MergeVectorLayers->resize(800, 491);
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -116,14 +116,14 @@ public:
         MergeVectorLayers->setFont(font);
         textBrowserLogs = new QTextBrowser(MergeVectorLayers);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(15, 368, 581, 101));
+        textBrowserLogs->setGeometry(QRect(5, 368, 781, 101));
         QFont font1;
         font1.setPointSize(11);
         textBrowserLogs->setFont(font1);
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
         groupBoxButtons = new QGroupBox(MergeVectorLayers);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(15, 309, 581, 51));
+        groupBoxButtons->setGeometry(QRect(15, 310, 771, 51));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);
@@ -134,17 +134,17 @@ public:
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(326, 17, 113, 32));
+        pushButtonClose->setGeometry(QRect(530, 14, 113, 32));
         pushButtonClose->setFont(font2);
         pushButtonClose->setAutoDefault(false);
         pushButtonRun = new QPushButton(groupBoxButtons);
         pushButtonRun->setObjectName(QStringLiteral("pushButtonRun"));
-        pushButtonRun->setGeometry(QRect(460, 17, 113, 32));
+        pushButtonRun->setGeometry(QRect(650, 14, 113, 32));
         pushButtonRun->setFont(font2);
         pushButtonRun->setAutoDefault(false);
         BorderTop = new QFrame(MergeVectorLayers);
         BorderTop->setObjectName(QStringLiteral("BorderTop"));
-        BorderTop->setGeometry(QRect(0, -4, 611, 20));
+        BorderTop->setGeometry(QRect(0, -4, 781, 20));
         BorderTop->setBaseSize(QSize(0, 0));
         QPalette palette1;
         QBrush brush5(QColor(0, 51, 153, 255));
@@ -268,7 +268,7 @@ public:
         BorderBottom->setFrameShape(QFrame::HLine);
         groupBoxInput = new QGroupBox(MergeVectorLayers);
         groupBoxInput->setObjectName(QStringLiteral("groupBoxInput"));
-        groupBoxInput->setGeometry(QRect(15, 19, 581, 211));
+        groupBoxInput->setGeometry(QRect(5, 19, 781, 211));
         QFont font3;
         font3.setBold(false);
         font3.setItalic(true);
@@ -276,7 +276,7 @@ public:
         groupBoxInput->setFont(font3);
         pushButtonAdd = new QPushButton(groupBoxInput);
         pushButtonAdd->setObjectName(QStringLiteral("pushButtonAdd"));
-        pushButtonAdd->setGeometry(QRect(475, 28, 98, 32));
+        pushButtonAdd->setGeometry(QRect(670, 28, 98, 32));
         QFont font4;
         font4.setPointSize(12);
         font4.setBold(true);
@@ -294,7 +294,7 @@ public:
         __qtablewidgetitem->setFont(font);
         tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setGeometry(QRect(15, 18, 451, 161));
+        tableWidget->setGeometry(QRect(15, 18, 651, 161));
         QFont font5;
         font5.setFamily(QStringLiteral("Arial"));
         font5.setPointSize(11);
@@ -318,13 +318,13 @@ public:
         tableWidget->horizontalHeader()->setMinimumSectionSize(100);
         pushButtonRemove = new QPushButton(groupBoxInput);
         pushButtonRemove->setObjectName(QStringLiteral("pushButtonRemove"));
-        pushButtonRemove->setGeometry(QRect(475, 67, 98, 32));
+        pushButtonRemove->setGeometry(QRect(670, 67, 98, 32));
         pushButtonRemove->setFont(font4);
         pushButtonRemove->setAutoDefault(false);
         checkBoxMergeLayer = new QCheckBox(groupBoxInput);
         checkBoxMergeLayer->setObjectName(QStringLiteral("checkBoxMergeLayer"));
         checkBoxMergeLayer->setEnabled(false);
-        checkBoxMergeLayer->setGeometry(QRect(480, 150, 101, 21));
+        checkBoxMergeLayer->setGeometry(QRect(675, 150, 101, 21));
         QFont font6;
         font6.setFamily(QStringLiteral("Arial"));
         font6.setPointSize(10);
@@ -338,12 +338,12 @@ public:
         checkBoxMergeLayer->setChecked(false);
         pushButtonClear = new QPushButton(groupBoxInput);
         pushButtonClear->setObjectName(QStringLiteral("pushButtonClear"));
-        pushButtonClear->setGeometry(QRect(475, 107, 98, 32));
+        pushButtonClear->setGeometry(QRect(670, 107, 98, 32));
         pushButtonClear->setFont(font4);
         pushButtonClear->setAutoDefault(false);
         label = new QLabel(groupBoxInput);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(80, 183, 331, 20));
+        label->setGeometry(QRect(220, 190, 331, 20));
         QFont font7;
         font7.setPointSize(14);
         font7.setBold(true);
@@ -351,16 +351,16 @@ public:
         label->setFont(font7);
         groupBoxButtons_2 = new QGroupBox(MergeVectorLayers);
         groupBoxButtons_2->setObjectName(QStringLiteral("groupBoxButtons_2"));
-        groupBoxButtons_2->setGeometry(QRect(16, 233, 581, 91));
+        groupBoxButtons_2->setGeometry(QRect(6, 230, 781, 91));
         groupBoxButtons_2->setFont(font3);
         pushButtonMergeLayer = new QPushButton(groupBoxButtons_2);
         pushButtonMergeLayer->setObjectName(QStringLiteral("pushButtonMergeLayer"));
-        pushButtonMergeLayer->setGeometry(QRect(470, 10, 98, 32));
+        pushButtonMergeLayer->setGeometry(QRect(672, 13, 98, 32));
         pushButtonMergeLayer->setFont(font4);
         pushButtonMergeLayer->setAutoDefault(false);
         lineEditMergeLayer = new QLineEdit(groupBoxButtons_2);
         lineEditMergeLayer->setObjectName(QStringLiteral("lineEditMergeLayer"));
-        lineEditMergeLayer->setGeometry(QRect(10, 50, 561, 29));
+        lineEditMergeLayer->setGeometry(QRect(10, 50, 761, 29));
         QFont font8;
         font8.setPointSize(11);
         font8.setBold(true);
@@ -369,7 +369,7 @@ public:
         lineEditMergeLayer->setFont(font8);
         textLabel1_2 = new QLabel(groupBoxButtons_2);
         textLabel1_2->setObjectName(QStringLiteral("textLabel1_2"));
-        textLabel1_2->setGeometry(QRect(190, 10, 161, 31));
+        textLabel1_2->setGeometry(QRect(290, 10, 161, 31));
         textLabel1_2->setFont(font4);
 
         retranslateUi(MergeVectorLayers);
