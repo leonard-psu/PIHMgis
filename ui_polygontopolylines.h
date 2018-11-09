@@ -43,7 +43,9 @@ public:
     {
         if (PolygonToPolylines->objectName().isEmpty())
             PolygonToPolylines->setObjectName(QStringLiteral("PolygonToPolylines"));
-        PolygonToPolylines->resize(800, 419);
+        PolygonToPolylines->resize(800, 420);
+        PolygonToPolylines->setMinimumSize(QSize(800, 420));
+        PolygonToPolylines->setMaximumSize(QSize(800, 420));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -106,7 +108,7 @@ public:
         PolygonToPolylines->setFont(font);
         textBrowserLogs = new QTextBrowser(PolygonToPolylines);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(15, 286, 771, 111));
+        textBrowserLogs->setGeometry(QRect(15, 276, 771, 121));
         QFont font1;
         font1.setPointSize(11);
         textBrowserLogs->setFont(font1);
@@ -237,7 +239,7 @@ public:
         BorderBottom->setFrameShape(QFrame::HLine);
         groupBoxInput = new QGroupBox(PolygonToPolylines);
         groupBoxInput->setObjectName(QStringLiteral("groupBoxInput"));
-        groupBoxInput->setGeometry(QRect(15, 29, 771, 201));
+        groupBoxInput->setGeometry(QRect(15, 20, 771, 201));
         pushButtonAdd = new QPushButton(groupBoxInput);
         pushButtonAdd->setObjectName(QStringLiteral("pushButtonAdd"));
         pushButtonAdd->setGeometry(QRect(665, 28, 98, 32));
@@ -320,7 +322,7 @@ public:
         pushButtonClear->setAutoDefault(false);
         groupBoxButtons = new QGroupBox(PolygonToPolylines);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(15, 233, 771, 51));
+        groupBoxButtons->setGeometry(QRect(15, 219, 771, 51));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);

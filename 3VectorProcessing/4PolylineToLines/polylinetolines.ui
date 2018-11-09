@@ -7,8 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>419</height>
+    <height>420</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>420</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>420</height>
+   </size>
   </property>
   <property name="palette">
    <palette>
@@ -438,7 +450,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>29</y>
+     <y>20</y>
      <width>791</width>
      <height>201</height>
     </rect>
@@ -661,7 +673,7 @@
    <property name="geometry">
     <rect>
      <x>5</x>
-     <y>233</y>
+     <y>219</y>
      <width>781</width>
      <height>51</height>
     </rect>
@@ -1204,9 +1216,9 @@
    <property name="geometry">
     <rect>
      <x>5</x>
-     <y>286</y>
+     <y>276</y>
      <width>781</width>
-     <height>111</height>
+     <height>121</height>
     </rect>
    </property>
    <property name="font">

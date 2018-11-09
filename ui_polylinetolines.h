@@ -43,7 +43,9 @@ public:
     {
         if (PolylineToLines->objectName().isEmpty())
             PolylineToLines->setObjectName(QStringLiteral("PolylineToLines"));
-        PolylineToLines->resize(800, 419);
+        PolylineToLines->resize(800, 420);
+        PolylineToLines->setMinimumSize(QSize(800, 420));
+        PolylineToLines->setMaximumSize(QSize(800, 420));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -107,7 +109,7 @@ public:
         PolylineToLines->setFont(font);
         groupBoxInput = new QGroupBox(PolylineToLines);
         groupBoxInput->setObjectName(QStringLiteral("groupBoxInput"));
-        groupBoxInput->setGeometry(QRect(0, 29, 791, 201));
+        groupBoxInput->setGeometry(QRect(0, 20, 791, 201));
         groupBoxInput->setFont(font);
         pushButtonAdd = new QPushButton(groupBoxInput);
         pushButtonAdd->setObjectName(QStringLiteral("pushButtonAdd"));
@@ -192,7 +194,7 @@ public:
         pushButtonClear->setAutoDefault(false);
         groupBoxButtons = new QGroupBox(PolylineToLines);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(5, 233, 781, 51));
+        groupBoxButtons->setGeometry(QRect(5, 219, 781, 51));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);
@@ -280,7 +282,7 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         textBrowserLogs = new QTextBrowser(PolylineToLines);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(5, 286, 781, 111));
+        textBrowserLogs->setGeometry(QRect(5, 276, 781, 121));
         QFont font6;
         font6.setFamily(QStringLiteral("Arial"));
         font6.setPointSize(11);

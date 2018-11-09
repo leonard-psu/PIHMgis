@@ -99,13 +99,16 @@ bool MergeVectorLayers::Load_Project_Settings()
         }
 
         ModuleStringList = ReadModuleLine(filename_open_project,tr("MergeVectorLayers"));
+
+        QString outputfile = "";
+
         if ( ModuleStringList.length() > 0 )
         {
             while( ui->tableWidget->rowCount() )
                 ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
             ui->tableWidget->setRowCount(0);
 
-            for (int i=1; i<ModuleStringList.length()-2; i++)
+            for (int i=1; i < ModuleStringList.length()-2; i++)
             {
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
@@ -134,9 +137,12 @@ bool MergeVectorLayers::Load_Project_Settings()
 
                 }
             }
+
+            int id = ModuleStringList.length()-2;
+            outputfile = ModuleStringList.at(id);
         }
 
-
+/*
         int ID = 0;
         QString ID_String = QString("%1").arg(QString::number(ID),3,'0');
         while ( QFile::exists(user_pihmgis_root_folder+"/2VectorProcessing/MergeVectorLayer"+ID_String+".shp") )
@@ -146,8 +152,10 @@ bool MergeVectorLayers::Load_Project_Settings()
         }
 
         QString outputfile = user_pihmgis_root_folder+"/2VectorProcessing/MergeVectorLayer" + ID_String + ".shp";
-        bool outputfile_check = Check_File_Valid(outputfile);
+*/
 
+        qDebug() << "outputfile -> " << outputfile ;
+        bool outputfile_check = Check_File_Valid(outputfile);
         Check_MergeLayer_Output(outputfile, true);
 
         ui->textBrowserLogs->setHtml(LogsString);

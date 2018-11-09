@@ -27,6 +27,7 @@ FillPits::FillPits(QWidget *parent, QString filename) :
 
     try {
 
+
         ui->setupUi(this);
 
         filename_open_project = filename;

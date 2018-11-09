@@ -42,6 +42,8 @@ private slots:
     void pushButtonSetFocus();
 
 
+    void on_pushButtonFIND_clicked(bool checked);
+
 private:
 
     void Clear_Log();

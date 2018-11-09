@@ -49,7 +49,9 @@ public:
     {
         if (TINShapeLayer->objectName().isEmpty())
             TINShapeLayer->setObjectName(QStringLiteral("TINShapeLayer"));
-        TINShapeLayer->resize(611, 480);
+        TINShapeLayer->resize(800, 480);
+        TINShapeLayer->setMinimumSize(QSize(800, 480));
+        TINShapeLayer->setMaximumSize(QSize(800, 480));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -113,7 +115,7 @@ public:
         TINShapeLayer->setFont(font);
         groupBoxButtons = new QGroupBox(TINShapeLayer);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(15, 276, 581, 51));
+        groupBoxButtons->setGeometry(QRect(6, 271, 781, 51));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);
@@ -127,17 +129,17 @@ public:
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(336, 6, 113, 32));
+        pushButtonClose->setGeometry(QRect(543, 6, 113, 32));
         pushButtonClose->setFont(font1);
         pushButtonClose->setAutoDefault(false);
         pushButtonRun = new QPushButton(groupBoxButtons);
         pushButtonRun->setObjectName(QStringLiteral("pushButtonRun"));
-        pushButtonRun->setGeometry(QRect(461, 6, 113, 32));
+        pushButtonRun->setGeometry(QRect(660, 6, 113, 32));
         pushButtonRun->setFont(font1);
         pushButtonRun->setAutoDefault(false);
         BorderBottom = new QFrame(TINShapeLayer);
         BorderBottom->setObjectName(QStringLiteral("BorderBottom"));
-        BorderBottom->setGeometry(QRect(0, 464, 611, 20));
+        BorderBottom->setGeometry(QRect(0, 464, 800, 20));
         BorderBottom->setBaseSize(QSize(0, 0));
         QPalette palette1;
         QBrush brush5(QColor(0, 51, 153, 255));
@@ -205,7 +207,7 @@ public:
         BorderBottom->setFrameShape(QFrame::HLine);
         groupBoxInput_2 = new QGroupBox(TINShapeLayer);
         groupBoxInput_2->setObjectName(QStringLiteral("groupBoxInput_2"));
-        groupBoxInput_2->setGeometry(QRect(15, 172, 581, 101));
+        groupBoxInput_2->setGeometry(QRect(6, 172, 781, 101));
         QFont font2;
         font2.setItalic(true);
         groupBoxInput_2->setFont(font2);
@@ -220,7 +222,7 @@ public:
         textLabel1_2->setFont(font3);
         pushButtonTINFile = new QPushButton(groupBoxInput_2);
         pushButtonTINFile->setObjectName(QStringLiteral("pushButtonTINFile"));
-        pushButtonTINFile->setGeometry(QRect(480, 10, 98, 32));
+        pushButtonTINFile->setGeometry(QRect(677, 10, 98, 32));
         QFont font4;
         font4.setFamily(QStringLiteral("Arial"));
         font4.setPointSize(12);
@@ -231,7 +233,7 @@ public:
         pushButtonTINFile->setAutoDefault(false);
         lineEditTINFile = new QLineEdit(groupBoxInput_2);
         lineEditTINFile->setObjectName(QStringLiteral("lineEditTINFile"));
-        lineEditTINFile->setGeometry(QRect(6, 44, 571, 29));
+        lineEditTINFile->setGeometry(QRect(3, 44, 771, 29));
         QFont font5;
         font5.setPointSize(11);
         font5.setBold(true);
@@ -243,7 +245,7 @@ public:
         checkBoxTINFile = new QCheckBox(groupBoxInput_2);
         checkBoxTINFile->setObjectName(QStringLiteral("checkBoxTINFile"));
         checkBoxTINFile->setEnabled(false);
-        checkBoxTINFile->setGeometry(QRect(484, 75, 91, 21));
+        checkBoxTINFile->setGeometry(QRect(680, 75, 91, 21));
         QFont font6;
         font6.setFamily(QStringLiteral("Sans Serif"));
         font6.setPointSize(10);
@@ -257,7 +259,7 @@ public:
         checkBoxTINFile->setChecked(false);
         BorderTop = new QFrame(TINShapeLayer);
         BorderTop->setObjectName(QStringLiteral("BorderTop"));
-        BorderTop->setGeometry(QRect(0, -4, 611, 20));
+        BorderTop->setGeometry(QRect(0, -4, 800, 20));
         BorderTop->setBaseSize(QSize(0, 0));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush5);
@@ -313,18 +315,18 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         textBrowserLogs = new QTextBrowser(TINShapeLayer);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(15, 337, 581, 121));
+        textBrowserLogs->setGeometry(QRect(6, 327, 781, 131));
         QFont font7;
         font7.setPointSize(11);
         textBrowserLogs->setFont(font7);
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
         groupBoxInput = new QGroupBox(TINShapeLayer);
         groupBoxInput->setObjectName(QStringLiteral("groupBoxInput"));
-        groupBoxInput->setGeometry(QRect(15, 17, 581, 161));
+        groupBoxInput->setGeometry(QRect(6, 17, 781, 161));
         groupBoxInput->setFont(font2);
         pushButtonElementFile = new QPushButton(groupBoxInput);
         pushButtonElementFile->setObjectName(QStringLiteral("pushButtonElementFile"));
-        pushButtonElementFile->setGeometry(QRect(480, 10, 98, 32));
+        pushButtonElementFile->setGeometry(QRect(677, 10, 98, 32));
         pushButtonElementFile->setFont(font4);
         pushButtonElementFile->setCheckable(false);
         pushButtonElementFile->setAutoDefault(false);
@@ -335,15 +337,15 @@ public:
         textLabel1->setFont(font3);
         lineEditElementFile = new QLineEdit(groupBoxInput);
         lineEditElementFile->setObjectName(QStringLiteral("lineEditElementFile"));
-        lineEditElementFile->setGeometry(QRect(7, 44, 571, 29));
+        lineEditElementFile->setGeometry(QRect(5, 44, 771, 29));
         lineEditElementFile->setFont(font5);
         lineEditNodeFile = new QLineEdit(groupBoxInput);
         lineEditNodeFile->setObjectName(QStringLiteral("lineEditNodeFile"));
-        lineEditNodeFile->setGeometry(QRect(7, 118, 571, 29));
+        lineEditNodeFile->setGeometry(QRect(5, 118, 771, 29));
         lineEditNodeFile->setFont(font5);
         pushButtonNodeFile = new QPushButton(groupBoxInput);
         pushButtonNodeFile->setObjectName(QStringLiteral("pushButtonNodeFile"));
-        pushButtonNodeFile->setGeometry(QRect(480, 84, 98, 32));
+        pushButtonNodeFile->setGeometry(QRect(677, 84, 98, 32));
         pushButtonNodeFile->setFont(font4);
         pushButtonNodeFile->setCheckable(false);
         pushButtonNodeFile->setAutoDefault(false);

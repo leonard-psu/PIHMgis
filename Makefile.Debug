@@ -1816,23 +1816,25 @@ compiler_rcc_clean:
 	-$(DEL_FILE) debug\qrc_Icons.cpp
 debug\qrc_Icons.cpp: Icons.qrc \
 		G:\Qt\5.11.1\msvc2017_64\bin\rcc.exe \
-		Icons\ArrowLeft40x.png \
-		Icons\PIHMgis001.png \
 		Icons\ArrowCurlLeft80x.png \
-		Icons\ArrowRight60x.png \
-		Icons\PIHMSimulation.png \
-		Icons\ArrowCurlDown60x.png \
+		Icons\PIHMgis001.png \
 		Icons\ArrowCurlLeft60x.png \
-		Icons\PIHMgis001.icns \
 		Icons\ArrowRight40x.png \
-		Icons\ArrowDown60x.png \
-		Icons\PIHMSimulation2.png \
-		Icons\PIHMgisFlat.icns \
-		Icons\PIHMgis3D.icns \
-		Icons\Add32.png \
 		Icons\ArrowLeft60x.png \
-		Icons\ArrowCurlDownRight60x.png \
-		Icons\ArrowCurlLeft40x.png
+		Icons\ArrowCurlDown60x.png \
+		Icons\ArrowDown60x.png \
+		Icons\PIHMgis001.icns \
+		Icons\ArrowCurlLeft40x.png \
+		Icons\ArrowLeft40x.png \
+		Icons\PIHMSimulation.png \
+		Icons\PIHM_B_64x64.png \
+		Icons\PIHMSimulation2.png \
+		Icons\Add32.png \
+		Icons\PIHMgisFlat.icns \
+		Icons\PIHM_64x64.png \
+		Icons\PIHMgis3D.icns \
+		Icons\ArrowRight60x.png \
+		Icons\ArrowCurlDownRight60x.png
 	G:\Qt\5.11.1\msvc2017_64\bin\rcc.exe -name Icons Icons.qrc -o debug\qrc_Icons.cpp
 
 compiler_moc_predefs_make_all: debug\moc_predefs.h
@@ -11626,6 +11628,10 @@ debug\pihmgisdialog.obj: pihmgisdialog.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCo
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QPainter \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpainter.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtextoption.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpen.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QException \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qexception.h \
 		pihmgisdialog.h \
@@ -48912,6 +48918,10 @@ debug\pihmgisdialog.obj: pihmgisdialog.cpp G:\Qt\5.11.1\msvc2017_64\include\QtCo
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qthread.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QFileDialog \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qfiledialog.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\QPainter \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpainter.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtextoption.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qpen.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QException \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qexception.h \
 		pihmgisdialog.h \

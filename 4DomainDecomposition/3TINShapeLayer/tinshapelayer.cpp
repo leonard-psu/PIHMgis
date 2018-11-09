@@ -154,6 +154,10 @@ bool TINShapeLayer::Check_Element_Input(QString file){
             ui->lineEditElementFile->setStyleSheet("color: red;");
             ui->lineEditElementFile->setText(file);
 
+            LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Element input file missing: </span>") + file +tr(".<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+
             result = false;
         }
 
@@ -188,6 +192,10 @@ bool TINShapeLayer::Check_Node_Input(QString file){
         {
             ui->lineEditNodeFile->setStyleSheet("color: red;");
             ui->lineEditNodeFile->setText(file);
+
+            LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Node input file missing: </span>") + file +tr(".<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
 
             result = false;
         }

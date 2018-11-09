@@ -184,6 +184,10 @@ bool DelaunayTriangulation::Check_PSLG_Input(QString file)
             ui->lineEditPSLG->setStyleSheet("color: red;");
             ui->lineEditPSLG->setText(file);
 
+            LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Poly input does not exist </span>") + file +tr(".<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+
             result = false;
         }
 
@@ -913,5 +917,32 @@ bool DelaunayTriangulation::Check_TIN_Output(QString file, bool color_and_messag
     }
 
     return result;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Text Changed Event for TRIANGLE SOFTWARE (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void DelaunayTriangulation::on_pushButtonFIND_clicked(bool checked)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start DelaunayTriangulation::on_pushButtonFIND_clicked()";
+
+    try {
+
+        Clear_Log();
+
+        QString fileName = QFileDialog::getOpenFileName(this, "Triangle (.exe) ", user_pihmgis_root_folder + tr("/Software"), "Triangle File(*.exe *.exe)");
+        if ( fileName != nullptr)
+        {
+            Check_Triangle_Software_Input(fileName);
+
+            pushButtonSetFocus();
+        }
+
+    } catch (...) {
+        qDebug() << "Error: DelaunayTriangulation::on_pushButtonFIND_clicked() is returning w/o checking";
+    }
+
 }
 

@@ -104,7 +104,7 @@ public:
         SimplifyPolylines->setWindowOpacity(1);
         groupBoxInput = new QGroupBox(SimplifyPolylines);
         groupBoxInput->setObjectName(QStringLiteral("groupBoxInput"));
-        groupBoxInput->setGeometry(QRect(15, 29, 771, 201));
+        groupBoxInput->setGeometry(QRect(15, 20, 771, 201));
         pushButtonAdd = new QPushButton(groupBoxInput);
         pushButtonAdd->setObjectName(QStringLiteral("pushButtonAdd"));
         pushButtonAdd->setGeometry(QRect(664, 28, 98, 32));
@@ -189,7 +189,7 @@ public:
         pushButtonClear->setAutoDefault(false);
         groupBoxButtons = new QGroupBox(SimplifyPolylines);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(15, 233, 771, 51));
+        groupBoxButtons->setGeometry(QRect(15, 219, 771, 51));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);
@@ -280,7 +280,7 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         textBrowserLogs = new QTextBrowser(SimplifyPolylines);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(15, 286, 771, 111));
+        textBrowserLogs->setGeometry(QRect(15, 276, 771, 121));
         QFont font6;
         font6.setFamily(QStringLiteral("Arial"));
         font6.setPointSize(11);

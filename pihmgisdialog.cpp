@@ -5,6 +5,7 @@
 #include <QUrl>
 #include <QThread>
 #include <QFileDialog>
+#include <QPainter>
 
 #include <QException>
 #include <iostream>
@@ -71,7 +72,13 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
 
         qDebug() << "PIHMgisDialog started";
 
-        this->setWindowIcon(QIcon("Icons/PIHMgis000.icns"));
+//        QPixmap pixmap( 32, 32 );
+//        pixmap.fill( Qt::transparent );
+//        setWindowIcon(QIcon(pixmap));
+
+        QApplication::setAttribute(Qt::AA_DisableWindowContextHelpButton);
+
+        //this->setWindowIcon(QIcon("Icons/PIHMgis000.icns"));
         ui->setupUi(this);
         ui->label_project_found->setVisible(false);
 
@@ -1024,6 +1031,21 @@ bool PIHMgisDialog::create_default_project_workspace()
         {
             qDebug() << "6VisualAnalytics Folder already exists = " << make_folder;
         }
+
+
+        make_folder = user_pihmgis_root_folder + "/Software";
+        QDir dir_Software(make_folder);
+
+        if (!dir_Software.exists()) {
+            dir_Software.mkpath(make_folder);
+            qDebug() << "Creating Software folder = " << make_folder;
+        }
+        else
+        {
+            qDebug() << "Software Folder already exists = " << make_folder;
+        }
+
+
 
         return true;
 

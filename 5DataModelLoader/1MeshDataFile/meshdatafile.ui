@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
+    <width>800</width>
     <height>584</height>
    </rect>
   </property>
@@ -433,7 +433,7 @@
     <rect>
      <x>0</x>
      <y>-4</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -885,9 +885,9 @@
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>372</y>
-     <width>581</width>
+     <x>0</x>
+     <y>320</y>
+     <width>791</width>
      <height>41</height>
     </rect>
    </property>
@@ -900,7 +900,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>6</x>
       <y>3</y>
       <width>113</width>
       <height>32</height>
@@ -924,7 +924,7 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>558</x>
       <y>3</y>
       <width>113</width>
       <height>32</height>
@@ -948,7 +948,7 @@
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>673</x>
       <y>3</y>
       <width>113</width>
       <height>32</height>
@@ -976,10 +976,10 @@
   <widget class="QGroupBox" name="groupBoxInput1">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>0</x>
      <y>12</y>
-     <width>581</width>
-     <height>171</height>
+     <width>791</width>
+     <height>151</height>
     </rect>
    </property>
    <property name="font">
@@ -994,8 +994,8 @@
    <widget class="QPushButton" name="pushButtonElementFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>19</y>
+      <x>687</x>
+      <y>15</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1024,7 +1024,7 @@
     <property name="geometry">
      <rect>
       <x>16</x>
-      <y>19</y>
+      <y>15</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -1050,9 +1050,9 @@
    <widget class="QLineEdit" name="lineEditElementFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>20</y>
-      <width>325</width>
+      <x>135</x>
+      <y>16</y>
+      <width>551</width>
       <height>29</height>
      </rect>
     </property>
@@ -1067,9 +1067,9 @@
    <widget class="QLineEdit" name="lineEditNodeFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>57</y>
-      <width>325</width>
+      <x>135</x>
+      <y>49</y>
+      <width>551</width>
       <height>29</height>
      </rect>
     </property>
@@ -1085,7 +1085,7 @@
     <property name="geometry">
      <rect>
       <x>16</x>
-      <y>56</y>
+      <y>48</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -1111,8 +1111,8 @@
    <widget class="QPushButton" name="pushButtonNodeFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>56</y>
+      <x>687</x>
+      <y>48</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1140,9 +1140,9 @@
    <widget class="QLineEdit" name="lineEditNeighbourFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>94</y>
-      <width>325</width>
+      <x>135</x>
+      <y>82</y>
+      <width>551</width>
       <height>29</height>
      </rect>
     </property>
@@ -1158,7 +1158,7 @@
     <property name="geometry">
      <rect>
       <x>16</x>
-      <y>93</y>
+      <y>81</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -1184,8 +1184,8 @@
    <widget class="QPushButton" name="pushButtonNeighbourFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>93</y>
+      <x>687</x>
+      <y>81</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1213,9 +1213,9 @@
    <widget class="QLineEdit" name="lineEditRiverFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>130</y>
-      <width>325</width>
+      <x>135</x>
+      <y>115</y>
+      <width>551</width>
       <height>29</height>
      </rect>
     </property>
@@ -1231,7 +1231,7 @@
     <property name="geometry">
      <rect>
       <x>6</x>
-      <y>129</y>
+      <y>114</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -1257,8 +1257,8 @@
    <widget class="QPushButton" name="pushButtonRiverFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>129</y>
+      <x>687</x>
+      <y>114</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1287,10 +1287,10 @@
   <widget class="QGroupBox" name="groupBoxOutput">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>307</y>
-     <width>581</width>
-     <height>61</height>
+     <x>0</x>
+     <y>270</y>
+     <width>791</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
@@ -1305,8 +1305,8 @@
    <widget class="QLabel" name="textLabel1_2">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>20</y>
+      <x>0</x>
+      <y>15</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -1327,8 +1327,8 @@
    <widget class="QPushButton" name="pushButtonMeshDataFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>20</y>
+      <x>690</x>
+      <y>15</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1350,9 +1350,9 @@
    <widget class="QLineEdit" name="lineEditMeshDataFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>21</y>
-      <width>325</width>
+      <x>134</x>
+      <y>16</y>
+      <width>551</width>
       <height>29</height>
      </rect>
     </property>
@@ -1370,7 +1370,7 @@
     <rect>
      <x>0</x>
      <y>568</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -1814,10 +1814,10 @@
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>419</y>
-     <width>581</width>
-     <height>151</height>
+     <x>0</x>
+     <y>369</y>
+     <width>791</width>
+     <height>201</height>
     </rect>
    </property>
    <property name="font">
@@ -1833,10 +1833,10 @@
   <widget class="QGroupBox" name="groupBoxInput2">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>185</y>
-     <width>581</width>
-     <height>121</height>
+     <x>0</x>
+     <y>160</y>
+     <width>791</width>
+     <height>111</height>
     </rect>
    </property>
    <property name="font">
@@ -1851,7 +1851,7 @@
    <widget class="QPushButton" name="pushButtonSurfaceElevationFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
+      <x>687</x>
       <y>13</y>
       <width>98</width>
       <height>32</height>
@@ -1880,7 +1880,7 @@
    <widget class="QLabel" name="textLabel1_6">
     <property name="geometry">
      <rect>
-      <x>16</x>
+      <x>12</x>
       <y>13</y>
       <width>111</width>
       <height>31</height>
@@ -1904,9 +1904,9 @@
    <widget class="QLineEdit" name="lineEditSurfaceElevationFile">
     <property name="geometry">
      <rect>
-      <x>145</x>
+      <x>135</x>
       <y>14</y>
-      <width>325</width>
+      <width>551</width>
       <height>29</height>
      </rect>
     </property>
@@ -1921,9 +1921,9 @@
    <widget class="QLineEdit" name="lineEditSubsurfaceThickness">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>51</y>
-      <width>325</width>
+      <x>135</x>
+      <y>47</y>
+      <width>551</width>
       <height>29</height>
      </rect>
     </property>
@@ -1938,8 +1938,8 @@
    <widget class="QLabel" name="textLabelSubsurface">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>50</y>
+      <x>16</x>
+      <y>46</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -1963,8 +1963,8 @@ Thickness (m)</string>
    <widget class="QPushButton" name="pushButtonSubsurfaceThickness">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>50</y>
+      <x>687</x>
+      <y>46</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1993,7 +1993,7 @@ Thickness (m)</string>
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>90</y>
+      <y>81</y>
       <width>16</width>
       <height>23</height>
      </rect>
@@ -2006,7 +2006,7 @@ Thickness (m)</string>
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>90</y>
+      <y>81</y>
       <width>101</width>
       <height>22</height>
      </rect>
@@ -2025,7 +2025,7 @@ Thickness (m)</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>85</y>
+      <y>76</y>
       <width>281</width>
       <height>31</height>
      </rect>

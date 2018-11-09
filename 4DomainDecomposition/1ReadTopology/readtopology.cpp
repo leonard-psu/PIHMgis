@@ -83,12 +83,18 @@ bool ReadTopology::Load_Project_Settings()
         QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("MergeVectorDomainDecomposition"));
         if ( ModuleStringList.length() > 0  )
         {
-            ui->lineEditMerge->setText(ModuleStringList.at(2));
-            QString file1 = ModuleStringList.at(2);
-            bool file1_check = Check_File_Valid(file1);
+
+            QString MergeVectorFileName = ModuleStringList.at(2);
+            qDebug() << "MergeVectorFileName 1 = " << MergeVectorFileName;
+            Check_MergeVector_Input(MergeVectorFileName);
+
+
+            //ui->lineEditMerge->setText(ModuleStringList.at(2));
+            //QString file1 = ModuleStringList.at(2);
+            bool file1_check = Check_File_Valid(MergeVectorFileName); //file1);
             if(file1_check)
             {
-                QString file2 = file1;
+                QString file2 = MergeVectorFileName; //file1;
                 file2.replace(QString(".shp"),QString(".poly"));
                 bool file2_check = Check_File_Valid(file2);
                 Check_PSLG_Output(file2,true);
@@ -100,17 +106,21 @@ bool ReadTopology::Load_Project_Settings()
         if ( ModuleStringList.length() > 0 )
         {
             QString file1 = ModuleStringList.at(1);
-            bool file1_check = Check_File_Valid(file1);
-            ui->lineEditMerge->setText(file1);
-            if(file1_check)
-            {
-                ui->lineEditMerge->setStyleSheet("Qt::black");
-            }
-            else
-            {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
-                ui->lineEditMerge->setStyleSheet("Qt::red");
-            }
+//            bool file1_check = Check_File_Valid(file1);
+//            ui->lineEditMerge->setText(file1);
+//            if(file1_check)
+//            {
+//                ui->lineEditMerge->setStyleSheet("Qt::black");
+//            }
+//            else
+//            {
+//                LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
+//                ui->lineEditMerge->setStyleSheet("Qt::red");
+//            }
+
+            qDebug() << "MergeVectorFileName 2 = " << file1;
+            Check_MergeVector_Input(file1);
+
 
             QString file2 = ModuleStringList.at(2);
             bool file2_check = Check_File_Valid(file2);
@@ -241,7 +251,9 @@ bool ReadTopology::Check_MergeVector_Input(QString file)
         {
             ui->lineEditMerge->setStyleSheet("color: red;");
             ui->lineEditMerge->setText(file);
-
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: MergeVector input does not exist: </span>") + file +tr("<br>"));
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
             result = false;
         }
 

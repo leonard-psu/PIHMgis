@@ -44,7 +44,9 @@ public:
     {
         if (ReadTopology->objectName().isEmpty())
             ReadTopology->setObjectName(QStringLiteral("ReadTopology"));
-        ReadTopology->resize(611, 409);
+        ReadTopology->resize(800, 410);
+        ReadTopology->setMinimumSize(QSize(800, 410));
+        ReadTopology->setMaximumSize(QSize(800, 410));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -108,7 +110,7 @@ public:
         ReadTopology->setFont(font);
         BorderBottom = new QFrame(ReadTopology);
         BorderBottom->setObjectName(QStringLiteral("BorderBottom"));
-        BorderBottom->setGeometry(QRect(0, 393, 611, 20));
+        BorderBottom->setGeometry(QRect(0, 393, 791, 20));
         BorderBottom->setBaseSize(QSize(0, 0));
         QPalette palette1;
         QBrush brush5(QColor(0, 51, 153, 255));
@@ -176,7 +178,7 @@ public:
         BorderBottom->setFrameShape(QFrame::HLine);
         BorderTop = new QFrame(ReadTopology);
         BorderTop->setObjectName(QStringLiteral("BorderTop"));
-        BorderTop->setGeometry(QRect(0, -4, 611, 20));
+        BorderTop->setGeometry(QRect(0, -4, 791, 20));
         BorderTop->setBaseSize(QSize(0, 0));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush5);
@@ -232,13 +234,13 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         groupBoxInput = new QGroupBox(ReadTopology);
         groupBoxInput->setObjectName(QStringLiteral("groupBoxInput"));
-        groupBoxInput->setGeometry(QRect(16, 17, 581, 81));
+        groupBoxInput->setGeometry(QRect(16, 17, 771, 81));
         QFont font1;
         font1.setItalic(true);
         groupBoxInput->setFont(font1);
         lineEditMerge = new QLineEdit(groupBoxInput);
         lineEditMerge->setObjectName(QStringLiteral("lineEditMerge"));
-        lineEditMerge->setGeometry(QRect(6, 44, 571, 29));
+        lineEditMerge->setGeometry(QRect(6, 44, 761, 29));
         QFont font2;
         font2.setPointSize(11);
         font2.setBold(true);
@@ -247,7 +249,7 @@ public:
         lineEditMerge->setFont(font2);
         pushButtonMerge = new QPushButton(groupBoxInput);
         pushButtonMerge->setObjectName(QStringLiteral("pushButtonMerge"));
-        pushButtonMerge->setGeometry(QRect(480, 10, 98, 32));
+        pushButtonMerge->setGeometry(QRect(669, 10, 98, 32));
         QFont font3;
         font3.setFamily(QStringLiteral("Arial"));
         font3.setPointSize(12);
@@ -260,7 +262,7 @@ public:
         pushButtonMerge->setFlat(false);
         textLabel1 = new QLabel(groupBoxInput);
         textLabel1->setObjectName(QStringLiteral("textLabel1"));
-        textLabel1->setGeometry(QRect(230, 10, 141, 31));
+        textLabel1->setGeometry(QRect(306, 10, 141, 31));
         QFont font4;
         font4.setPointSize(14);
         font4.setBold(true);
@@ -269,15 +271,15 @@ public:
         textLabel1->setFont(font4);
         textBrowserLogs = new QTextBrowser(ReadTopology);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(13, 255, 581, 131));
+        textBrowserLogs->setGeometry(QRect(13, 235, 771, 151));
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
         groupBoxButtons = new QGroupBox(ReadTopology);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(10, 195, 591, 51));
+        groupBoxButtons->setGeometry(QRect(15, 189, 771, 41));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);
-        pushButtonHelp->setGeometry(QRect(10, 6, 113, 32));
+        pushButtonHelp->setGeometry(QRect(6, 6, 113, 32));
         QFont font5;
         font5.setFamily(QStringLiteral("Arial"));
         font5.setPointSize(12);
@@ -287,30 +289,30 @@ public:
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(341, 6, 113, 32));
+        pushButtonClose->setGeometry(QRect(536, 5, 113, 32));
         pushButtonClose->setFont(font5);
         pushButtonClose->setAutoDefault(false);
         pushButtonRun = new QPushButton(groupBoxButtons);
         pushButtonRun->setObjectName(QStringLiteral("pushButtonRun"));
-        pushButtonRun->setGeometry(QRect(466, 6, 113, 32));
+        pushButtonRun->setGeometry(QRect(652, 5, 113, 32));
         pushButtonRun->setFont(font5);
         pushButtonRun->setAutoDefault(false);
         groupBoxOutput = new QGroupBox(ReadTopology);
         groupBoxOutput->setObjectName(QStringLiteral("groupBoxOutput"));
-        groupBoxOutput->setGeometry(QRect(15, 110, 581, 81));
+        groupBoxOutput->setGeometry(QRect(15, 110, 771, 81));
         groupBoxOutput->setFont(font1);
         lineEditPSLG = new QLineEdit(groupBoxOutput);
         lineEditPSLG->setObjectName(QStringLiteral("lineEditPSLG"));
-        lineEditPSLG->setGeometry(QRect(4, 45, 571, 29));
+        lineEditPSLG->setGeometry(QRect(4, 44, 761, 29));
         lineEditPSLG->setFont(font2);
         pushButtonPSLG = new QPushButton(groupBoxOutput);
         pushButtonPSLG->setObjectName(QStringLiteral("pushButtonPSLG"));
-        pushButtonPSLG->setGeometry(QRect(480, 10, 98, 32));
+        pushButtonPSLG->setGeometry(QRect(669, 10, 98, 32));
         pushButtonPSLG->setFont(font3);
         pushButtonPSLG->setAutoDefault(false);
         textLabel1_2 = new QLabel(groupBoxOutput);
         textLabel1_2->setObjectName(QStringLiteral("textLabel1_2"));
-        textLabel1_2->setGeometry(QRect(220, 10, 171, 31));
+        textLabel1_2->setGeometry(QRect(289, 10, 171, 31));
         textLabel1_2->setFont(font4);
 
         retranslateUi(ReadTopology);

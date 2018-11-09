@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
-    <height>419</height>
+    <width>800</width>
+    <height>420</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>420</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>420</height>
+   </size>
   </property>
   <property name="palette">
    <palette>
@@ -441,7 +453,7 @@
     <rect>
      <x>1</x>
      <y>403</y>
-     <width>611</width>
+     <width>791</width>
      <height>20</height>
     </rect>
    </property>
@@ -886,9 +898,9 @@
    <property name="geometry">
     <rect>
      <x>16</x>
-     <y>106</y>
-     <width>581</width>
-     <height>111</height>
+     <y>102</y>
+     <width>771</width>
+     <height>101</height>
     </rect>
    </property>
    <property name="font">
@@ -903,7 +915,7 @@
    <widget class="QLabel" name="textLabel1_2">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>299</x>
       <y>10</y>
       <width>171</width>
       <height>31</height>
@@ -923,7 +935,7 @@
    <widget class="QPushButton" name="pushButtonCatchmentPolygon">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>666</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -946,9 +958,9 @@
    <widget class="QLineEdit" name="lineEditCatchmentPolygon">
     <property name="geometry">
      <rect>
-      <x>7</x>
-      <y>47</y>
-      <width>571</width>
+      <x>4</x>
+      <y>44</y>
+      <width>761</width>
       <height>29</height>
      </rect>
     </property>
@@ -966,8 +978,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>484</x>
-      <y>81</y>
+      <x>672</x>
+      <y>76</y>
       <width>91</width>
       <height>21</height>
      </rect>
@@ -999,7 +1011,7 @@
     <rect>
      <x>1</x>
      <y>-4</y>
-     <width>611</width>
+     <width>791</width>
      <height>20</height>
     </rect>
    </property>
@@ -1444,9 +1456,9 @@
    <property name="geometry">
     <rect>
      <x>16</x>
-     <y>276</y>
-     <width>581</width>
-     <height>121</height>
+     <y>246</y>
+     <width>771</width>
+     <height>151</height>
     </rect>
    </property>
    <property name="font">
@@ -1462,9 +1474,9 @@
    <property name="geometry">
     <rect>
      <x>16</x>
-     <y>221</y>
-     <width>581</width>
-     <height>51</height>
+     <y>201</y>
+     <width>771</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="title">
@@ -1499,7 +1511,7 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>326</x>
+      <x>535</x>
       <y>4</y>
       <width>113</width>
       <height>32</height>
@@ -1522,7 +1534,7 @@
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>653</x>
       <y>4</y>
       <width>113</width>
       <height>32</height>
@@ -1551,7 +1563,7 @@
     <rect>
      <x>16</x>
      <y>17</y>
-     <width>581</width>
+     <width>771</width>
      <height>81</height>
     </rect>
    </property>
@@ -1567,7 +1579,7 @@
    <widget class="QPushButton" name="pushButtonCatchmentGrids">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>666</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -1596,7 +1608,7 @@
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>311</x>
       <y>10</y>
       <width>131</width>
       <height>31</height>
@@ -1616,9 +1628,9 @@
    <widget class="QLineEdit" name="lineEditCatchmentGrids">
     <property name="geometry">
      <rect>
-      <x>7</x>
+      <x>5</x>
       <y>44</y>
-      <width>571</width>
+      <width>761</width>
       <height>29</height>
      </rect>
     </property>

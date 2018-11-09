@@ -50,7 +50,9 @@ public:
     {
         if (MergeVectorLayers->objectName().isEmpty())
             MergeVectorLayers->setObjectName(QStringLiteral("MergeVectorLayers"));
-        MergeVectorLayers->resize(800, 491);
+        MergeVectorLayers->resize(800, 490);
+        MergeVectorLayers->setMinimumSize(QSize(800, 490));
+        MergeVectorLayers->setMaximumSize(QSize(800, 490));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -116,30 +118,30 @@ public:
         MergeVectorLayers->setFont(font);
         textBrowserLogs = new QTextBrowser(MergeVectorLayers);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(5, 368, 781, 101));
+        textBrowserLogs->setGeometry(QRect(5, 358, 781, 111));
         QFont font1;
         font1.setPointSize(11);
         textBrowserLogs->setFont(font1);
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
         groupBoxButtons = new QGroupBox(MergeVectorLayers);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(15, 310, 771, 51));
+        groupBoxButtons->setGeometry(QRect(5, 315, 781, 41));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);
-        pushButtonHelp->setGeometry(QRect(10, 17, 113, 32));
+        pushButtonHelp->setGeometry(QRect(10, 9, 113, 32));
         QFont font2;
         font2.setPointSize(12);
         pushButtonHelp->setFont(font2);
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(530, 14, 113, 32));
+        pushButtonClose->setGeometry(QRect(544, 6, 113, 32));
         pushButtonClose->setFont(font2);
         pushButtonClose->setAutoDefault(false);
         pushButtonRun = new QPushButton(groupBoxButtons);
         pushButtonRun->setObjectName(QStringLiteral("pushButtonRun"));
-        pushButtonRun->setGeometry(QRect(650, 14, 113, 32));
+        pushButtonRun->setGeometry(QRect(660, 6, 113, 32));
         pushButtonRun->setFont(font2);
         pushButtonRun->setAutoDefault(false);
         BorderTop = new QFrame(MergeVectorLayers);
@@ -212,7 +214,7 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         BorderBottom = new QFrame(MergeVectorLayers);
         BorderBottom->setObjectName(QStringLiteral("BorderBottom"));
-        BorderBottom->setGeometry(QRect(0, 475, 611, 20));
+        BorderBottom->setGeometry(QRect(0, 475, 781, 20));
         BorderBottom->setBaseSize(QSize(0, 0));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush5);
@@ -268,7 +270,7 @@ public:
         BorderBottom->setFrameShape(QFrame::HLine);
         groupBoxInput = new QGroupBox(MergeVectorLayers);
         groupBoxInput->setObjectName(QStringLiteral("groupBoxInput"));
-        groupBoxInput->setGeometry(QRect(5, 19, 781, 211));
+        groupBoxInput->setGeometry(QRect(4, 15, 781, 211));
         QFont font3;
         font3.setBold(false);
         font3.setItalic(true);
@@ -351,7 +353,7 @@ public:
         label->setFont(font7);
         groupBoxButtons_2 = new QGroupBox(MergeVectorLayers);
         groupBoxButtons_2->setObjectName(QStringLiteral("groupBoxButtons_2"));
-        groupBoxButtons_2->setGeometry(QRect(6, 230, 781, 91));
+        groupBoxButtons_2->setGeometry(QRect(4, 226, 781, 91));
         groupBoxButtons_2->setFont(font3);
         pushButtonMergeLayer = new QPushButton(groupBoxButtons_2);
         pushButtonMergeLayer->setObjectName(QStringLiteral("pushButtonMergeLayer"));

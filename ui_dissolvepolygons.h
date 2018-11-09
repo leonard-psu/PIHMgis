@@ -43,7 +43,9 @@ public:
     {
         if (DissolvePolygons->objectName().isEmpty())
             DissolvePolygons->setObjectName(QStringLiteral("DissolvePolygons"));
-        DissolvePolygons->resize(800, 419);
+        DissolvePolygons->resize(800, 420);
+        DissolvePolygons->setMinimumSize(QSize(800, 420));
+        DissolvePolygons->setMaximumSize(QSize(800, 420));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -107,7 +109,7 @@ public:
         DissolvePolygons->setFont(font);
         groupBoxButtons = new QGroupBox(DissolvePolygons);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(15, 234, 771, 51));
+        groupBoxButtons->setGeometry(QRect(15, 219, 771, 51));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);
@@ -121,17 +123,17 @@ public:
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(530, 5, 113, 32));
+        pushButtonClose->setGeometry(QRect(532, 5, 113, 32));
         pushButtonClose->setFont(font1);
         pushButtonClose->setAutoDefault(false);
         pushButtonRun = new QPushButton(groupBoxButtons);
         pushButtonRun->setObjectName(QStringLiteral("pushButtonRun"));
-        pushButtonRun->setGeometry(QRect(650, 5, 113, 32));
+        pushButtonRun->setGeometry(QRect(652, 5, 113, 32));
         pushButtonRun->setFont(font1);
         pushButtonRun->setAutoDefault(false);
         groupBoxInput = new QGroupBox(DissolvePolygons);
         groupBoxInput->setObjectName(QStringLiteral("groupBoxInput"));
-        groupBoxInput->setGeometry(QRect(15, 29, 771, 201));
+        groupBoxInput->setGeometry(QRect(15, 20, 771, 201));
         QFont font2;
         font2.setPointSize(10);
         groupBoxInput->setFont(font2);
@@ -284,7 +286,7 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         textBrowserLogs = new QTextBrowser(DissolvePolygons);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(15, 286, 771, 111));
+        textBrowserLogs->setGeometry(QRect(15, 276, 771, 121));
         textBrowserLogs->setFont(font);
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
         BorderBottom = new QFrame(DissolvePolygons);

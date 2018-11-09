@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
+    <width>800</width>
     <height>480</height>
    </rect>
   </property>
@@ -437,9 +437,9 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>287</y>
-     <width>581</width>
-     <height>171</height>
+     <y>277</y>
+     <width>771</width>
+     <height>181</height>
     </rect>
    </property>
    <property name="font">
@@ -456,7 +456,7 @@
     <rect>
      <x>0</x>
      <y>464</y>
-     <width>611</width>
+     <width>791</width>
      <height>20</height>
     </rect>
    </property>
@@ -902,7 +902,7 @@
     <rect>
      <x>15</x>
      <y>105</y>
-     <width>581</width>
+     <width>771</width>
      <height>121</height>
     </rect>
    </property>
@@ -918,7 +918,7 @@
    <widget class="QLabel" name="textLabel1_2">
     <property name="geometry">
      <rect>
-      <x>240</x>
+      <x>306</x>
       <y>10</y>
       <width>101</width>
       <height>31</height>
@@ -939,7 +939,7 @@
    <widget class="QLabel" name="textLabel1_2_2_2">
     <property name="geometry">
      <rect>
-      <x>240</x>
+      <x>432</x>
       <y>95</y>
       <width>91</width>
       <height>20</height>
@@ -963,7 +963,7 @@
    <widget class="QLabel" name="textLabel1_2_2">
     <property name="geometry">
      <rect>
-      <x>240</x>
+      <x>432</x>
       <y>70</y>
       <width>90</width>
       <height>31</height>
@@ -983,7 +983,7 @@
    <widget class="QPushButton" name="pushButtonSuggestMe">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>652</x>
       <y>80</y>
       <width>113</width>
       <height>32</height>
@@ -1003,7 +1003,7 @@
    <widget class="QLineEdit" name="lineEditThreshold">
     <property name="geometry">
      <rect>
-      <x>335</x>
+      <x>527</x>
       <y>81</y>
       <width>121</width>
       <height>29</height>
@@ -1023,7 +1023,7 @@
    <widget class="QPushButton" name="pushButtonStreamGrids">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>667</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -1048,7 +1048,7 @@
      <rect>
       <x>4</x>
       <y>46</y>
-      <width>571</width>
+      <width>761</width>
       <height>29</height>
      </rect>
     </property>
@@ -1096,7 +1096,7 @@
     <rect>
      <x>15</x>
      <y>17</y>
-     <width>581</width>
+     <width>771</width>
      <height>81</height>
     </rect>
    </property>
@@ -1112,7 +1112,7 @@
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>300</x>
       <y>10</y>
       <width>121</width>
       <height>31</height>
@@ -1135,7 +1135,7 @@
      <rect>
       <x>4</x>
       <y>44</y>
-      <width>571</width>
+      <width>761</width>
       <height>29</height>
      </rect>
     </property>
@@ -1150,7 +1150,7 @@
    <widget class="QPushButton" name="pushButtonFlowAccGrids">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>667</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -1181,8 +1181,8 @@
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>230</y>
-     <width>581</width>
+     <y>224</y>
+     <width>771</width>
      <height>51</height>
     </rect>
    </property>
@@ -1195,7 +1195,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>16</x>
+      <x>8</x>
       <y>9</y>
       <width>113</width>
       <height>32</height>
@@ -1219,7 +1219,7 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>532</x>
       <y>9</y>
       <width>113</width>
       <height>32</height>
@@ -1243,7 +1243,7 @@
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>455</x>
+      <x>650</x>
       <y>9</y>
       <width>113</width>
       <height>32</height>
@@ -1273,7 +1273,7 @@
     <rect>
      <x>0</x>
      <y>-4</y>
-     <width>611</width>
+     <width>791</width>
      <height>20</height>
     </rect>
    </property>
