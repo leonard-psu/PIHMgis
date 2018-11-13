@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
+    <width>800</width>
     <height>556</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>556</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>556</height>
+   </size>
   </property>
   <property name="palette">
    <palette>
@@ -439,7 +451,7 @@
     <rect>
      <x>0</x>
      <y>540</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -883,10 +895,10 @@
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>327</y>
-     <width>581</width>
-     <height>61</height>
+     <x>5</x>
+     <y>319</y>
+     <width>780</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="title">
@@ -899,7 +911,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>17</y>
+      <y>3</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -920,8 +932,8 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>17</y>
+      <x>546</x>
+      <y>3</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -942,8 +954,8 @@
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>17</y>
+      <x>663</x>
+      <y>3</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -968,10 +980,10 @@
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>395</y>
-     <width>581</width>
-     <height>141</height>
+     <x>5</x>
+     <y>365</y>
+     <width>780</width>
+     <height>171</height>
     </rect>
    </property>
    <property name="lineWrapMode">
@@ -983,7 +995,7 @@
     <rect>
      <x>0</x>
      <y>-4</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -1433,9 +1445,9 @@
   <widget class="QGroupBox" name="groupBoxOutput">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>250</y>
-     <width>581</width>
+     <x>5</x>
+     <y>236</y>
+     <width>780</width>
      <height>85</height>
     </rect>
    </property>
@@ -1473,7 +1485,7 @@
    <widget class="QPushButton" name="pushButtonRivDataFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
+      <x>679</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -1498,7 +1510,7 @@
      <rect>
       <x>5</x>
       <y>46</y>
-      <width>571</width>
+      <width>771</width>
       <height>29</height>
      </rect>
     </property>
@@ -1514,10 +1526,10 @@
   <widget class="QGroupBox" name="groupBoxInput1">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>12</y>
-     <width>581</width>
-     <height>161</height>
+     <width>780</width>
+     <height>151</height>
     </rect>
    </property>
    <property name="font">
@@ -1531,7 +1543,7 @@
    <widget class="QPushButton" name="pushButtonElementFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
+      <x>679</x>
       <y>15</y>
       <width>98</width>
       <height>32</height>
@@ -1585,7 +1597,7 @@
      <rect>
       <x>145</x>
       <y>16</y>
-      <width>325</width>
+      <width>531</width>
       <height>29</height>
      </rect>
     </property>
@@ -1601,8 +1613,8 @@
     <property name="geometry">
      <rect>
       <x>145</x>
-      <y>50</y>
-      <width>325</width>
+      <y>48</y>
+      <width>531</width>
       <height>29</height>
      </rect>
     </property>
@@ -1618,7 +1630,7 @@
     <property name="geometry">
      <rect>
       <x>25</x>
-      <y>49</y>
+      <y>47</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -1640,8 +1652,8 @@
    <widget class="QPushButton" name="pushButtonNodeFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>49</y>
+      <x>679</x>
+      <y>47</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1670,8 +1682,8 @@
     <property name="geometry">
      <rect>
       <x>145</x>
-      <y>84</y>
-      <width>325</width>
+      <y>79</y>
+      <width>531</width>
       <height>29</height>
      </rect>
     </property>
@@ -1687,7 +1699,7 @@
     <property name="geometry">
      <rect>
       <x>25</x>
-      <y>83</y>
+      <y>78</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -1709,8 +1721,8 @@
    <widget class="QPushButton" name="pushButtonNeighbourFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>83</y>
+      <x>679</x>
+      <y>78</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1739,8 +1751,8 @@
     <property name="geometry">
      <rect>
       <x>145</x>
-      <y>116</y>
-      <width>325</width>
+      <y>111</y>
+      <width>531</width>
       <height>29</height>
      </rect>
     </property>
@@ -1756,7 +1768,7 @@
     <property name="geometry">
      <rect>
       <x>5</x>
-      <y>115</y>
+      <y>110</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -1778,8 +1790,8 @@
    <widget class="QPushButton" name="pushButtonRiverFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
-      <y>116</y>
+      <x>679</x>
+      <y>111</y>
       <width>98</width>
       <height>32</height>
      </rect>
@@ -1808,9 +1820,9 @@
   <widget class="QGroupBox" name="groupBoxInput2">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>180</y>
-     <width>581</width>
+     <x>5</x>
+     <y>165</y>
+     <width>780</width>
      <height>71</height>
     </rect>
    </property>

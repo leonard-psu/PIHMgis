@@ -33,9 +33,7 @@ LcDataFile::LcDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Unable to Open File: " + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -72,6 +70,34 @@ LcDataFile::~LcDataFile()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void LcDataFile::Log_Warning_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void LcDataFile::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Load_Project_Settings
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool LcDataFile::Load_Project_Settings()
@@ -81,7 +107,7 @@ bool LcDataFile::Load_Project_Settings()
 
     try {
 
-        // ** Data Model OUTPUT File Name
+        //Data Model OUTPUT File Name
         QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
@@ -99,17 +125,16 @@ bool LcDataFile::Load_Project_Settings()
             QString fname = user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName+".lc";
             Check_LCData_Output(fname,true);
         }
-        // ** End: Set Defaults
+        //End: Set Defaults
 
-        // ** Start: Fill Form If Module Has Been Run Previously
-
+        //Start: Fill Form If Module Has Been Run Previously
         ModuleStringList = ReadModuleLine(filename_open_project,tr("LcDataFile"));
         if ( ModuleStringList.length() > 0 )
         {
             Check_LCTexture_Input(ModuleStringList.at(1));
             Check_LCData_Output(ModuleStringList.at(2),true);
         }
-        // ** End: Fill Form If Module Has Been Run Previously
+        //End: Fill Form If Module Has Been Run Previously
 
         pushButtonSetFocus();
 
@@ -120,6 +145,7 @@ bool LcDataFile::Load_Project_Settings()
 
     return true;
 }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to clear message log
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,12 +166,12 @@ void LcDataFile::Clear_Log()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Helper Function to Check SoilTexture File exists (INPUT)
+// Helper Function to Check LCTexture File exists (INPUT)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool LcDataFile::Check_LCTexture_Input(QString file){
 
     if(print_debug_messages)
-        qDebug() << "INFO: Check_GeolTexture_Input()";
+        qDebug() << "INFO: Check_LCTexture_Input()";
 
     bool result = false;
 
@@ -159,14 +185,16 @@ bool LcDataFile::Check_LCTexture_Input(QString file){
         }
         else
         {
-            ui->lineEditLcClassFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditLcClassFile->setStyleSheet("color: red;");
             ui->lineEditLcClassFile->setText(file);
+
+            Log_Error_Message("Missing LCTexture input file: " + file);
 
             result = false;
         }
 
     } catch (...) {
-        qDebug() << "Error: Check_GeolTexture_Input is returning w/o checking";
+        qDebug() << "Error: Check_LCTexture_Input is returning w/o checking";
         result = false;
     }
 
@@ -180,7 +208,7 @@ bool LcDataFile::Check_LCTexture_Input(QString file){
 bool LcDataFile::Check_LCData_Output(QString file, bool color_and_message_if_exists){
 
     if(print_debug_messages)
-        qDebug() << "INFO: Check_GeolData_Output()";
+        qDebug() << "INFO: Check_LCData_Output()";
 
     bool result = false;
 
@@ -190,9 +218,7 @@ bool LcDataFile::Check_LCData_Output(QString file, bool color_and_message_if_exi
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: MeshData output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message("Warning: MeshData output already exists: " + file +tr(" You may need to delete this file.<br>"));
             }
 
             ui->lineEditLcDataFile->setStyleSheet("color: red;");
@@ -208,7 +234,7 @@ bool LcDataFile::Check_LCData_Output(QString file, bool color_and_message_if_exi
         }
 
     } catch (...) {
-        qDebug() << "Error: LcDataFile::Check_GeolData_Output is returning w/o checking";
+        qDebug() << "Error: LcDataFile::Check_LCData_Output is returning w/o checking";
         result = false;
     }
 
@@ -327,9 +353,7 @@ void LcDataFile::on_pushButtonRun_clicked()
         bool checked_LCTexture = Check_LCTexture_Input(input_LCTexture_filename);
         if(!checked_LCTexture)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Geol Texture File (*.txt *.TXT) Input File Missing </span>")+input_LCTexture_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("LC Texture File (*.txt *.TXT) Input File Missing " + input_LCTexture_filename + tr("<br>"));
             return;
         }
 
@@ -349,15 +373,13 @@ void LcDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_LCTexture_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_LCTexture_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("No Read Access to " + input_LCTexture_filename + tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(output_LCData_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_LCData_filename + tr("<br>"));
+            Log_Error_Message("No Write Access to " + output_LCData_filename + tr("<br>"));
             return;
         }
 
@@ -372,10 +394,8 @@ void LcDataFile::on_pushButtonRun_clicked()
 
         if( ErrorLc != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Lc Data File Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE LC: ... </span>")+QString::number(ErrorLc)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("LC Data File Processing Failed ... </span>"+tr("<br>"));
+            Log_Error_Message("LC error return code: " + QString::number(ErrorLc)+tr("<br>"));
             return;
         }
 
@@ -442,5 +462,39 @@ void LcDataFile::on_pushButtonHelp_clicked()
         //        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: LcDataFile::on_pushButtonHelp_clicked() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// User edited LcClass Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void LcDataFile::on_lineEditLcClassFile_textEdited(const QString &arg1)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start LcDataFile::on_lineEditLcClassFile_textEdited()";
+
+    try {
+
+        Check_LCTexture_Input(arg1);
+
+    } catch (...) {
+        qDebug() << "Error: LcDataFile::on_lineEditLcClassFile_textEdited() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// User edited output Event (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void LcDataFile::on_lineEditLcDataFile_textEdited(const QString &arg1)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start LcDataFile::on_lineEditLcDataFile_textEdited()";
+
+    try {
+
+        Check_LCData_Output(arg1, true);
+
+    } catch (...) {
+        qDebug() << "Error: LcDataFile::on_lineEditLcDataFile_textEdited() is returning w/o checking";
     }
 }

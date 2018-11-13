@@ -870,7 +870,7 @@ void MeshDataFile::on_pushButtonRun_clicked()
 
         if( ErrorInterp != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Mesh Data File Processing Failed ... </span>")+tr("<br>"));
+            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: River Data File Processing Failed ... </span>")+tr("<br>"));
             LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE INTERP: ... </span>")+QString::number(ErrorInterp)+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();

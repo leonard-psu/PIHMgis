@@ -30,14 +30,19 @@ private slots:
 
     void pushButtonSetFocus();
 
+    void on_lineEditLcClassFile_textEdited(const QString &arg1);
+
+    void on_lineEditLcDataFile_textEdited(const QString &arg1);
+
 private:
 
     void Clear_Log();
+    void Log_Warning_Message(QString message);
+    void Log_Error_Message(QString message);
 
     bool Load_Project_Settings();
 
     bool Check_LCTexture_Input(QString file);
-
     bool Check_LCData_Output(QString file, bool message);
 
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
+    <width>800</width>
     <height>401</height>
    </rect>
   </property>
@@ -437,9 +437,9 @@
   <widget class="QGroupBox" name="groupBoxOutput">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>100</y>
-     <width>581</width>
+     <width>781</width>
      <height>81</height>
     </rect>
    </property>
@@ -449,7 +449,7 @@
    <widget class="QLabel" name="textLabel2">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>322</x>
       <y>5</y>
       <width>131</width>
       <height>31</height>
@@ -465,11 +465,14 @@
     <property name="text">
      <string>Geol Data File</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButtonGeolDataFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
+      <x>675</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -494,7 +497,7 @@
      <rect>
       <x>3</x>
       <y>45</y>
-      <width>571</width>
+      <width>771</width>
       <height>29</height>
      </rect>
     </property>
@@ -512,7 +515,7 @@
     <rect>
      <x>0</x>
      <y>385</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -956,9 +959,9 @@
   <widget class="QGroupBox" name="groupBoxInput">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>18</y>
-     <width>581</width>
+     <width>781</width>
      <height>81</height>
     </rect>
    </property>
@@ -968,7 +971,7 @@
    <widget class="QPushButton" name="pushButtonGeolTextureFile">
     <property name="geometry">
      <rect>
-      <x>478</x>
+      <x>678</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -997,7 +1000,7 @@
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>332</x>
       <y>10</y>
       <width>111</width>
       <height>31</height>
@@ -1013,13 +1016,16 @@
     <property name="text">
      <string>Geol Texture</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEditGeolTextureFile">
     <property name="geometry">
      <rect>
       <x>4</x>
       <y>44</y>
-      <width>571</width>
+      <width>771</width>
       <height>29</height>
      </rect>
     </property>
@@ -1035,9 +1041,9 @@
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>180</y>
-     <width>581</width>
+     <x>5</x>
+     <y>179</y>
+     <width>781</width>
      <height>51</height>
     </rect>
    </property>
@@ -1073,7 +1079,7 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>540</x>
       <y>6</y>
       <width>113</width>
       <height>32</height>
@@ -1096,7 +1102,7 @@
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>660</x>
       <y>6</y>
       <width>113</width>
       <height>32</height>
@@ -1123,9 +1129,9 @@
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>240</y>
-     <width>581</width>
+     <width>781</width>
      <height>141</height>
     </rect>
    </property>
@@ -1138,7 +1144,7 @@
     <rect>
      <x>0</x>
      <y>-4</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>

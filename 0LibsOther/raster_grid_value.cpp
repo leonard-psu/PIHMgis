@@ -6,10 +6,12 @@ using namespace std;
 
 static double Xmax, Xmin, Ymax, Ymin;
 static double Xres, Yres;
+bool att_debug_messages = false; //Not a fan of doing this, but outputs too many values to be helpful.
+
 
 double readValue ( void *data, GDALDataType type, int index )
 {
-    if(print_debug_messages)
+    if(att_debug_messages)
         qDebug() << "INFO: Start readValue";
 
     try {
@@ -54,7 +56,7 @@ double readValue ( void *data, GDALDataType type, int index )
 
 void getExtent(GDALDataset *temp, double *ranges){
 
-    if(print_debug_messages)
+    if(att_debug_messages)
         qDebug() << "INFO: Start getExtent";
 
     try {
@@ -77,7 +79,7 @@ void getExtent(GDALDataset *temp, double *ranges){
         Xres = (Xmax - Xmin) / rasterXDimInt;
         Yres = (Ymax - Ymin) / rasterYDimInt;
 
-        if(print_debug_messages)
+        if(att_debug_messages)
         {
             qDebug() << "Xres= "<< Xres <<"\n";
             qDebug() << "Yres= "<< Yres <<"\n";
@@ -103,12 +105,12 @@ void getExtent(GDALDataset *temp, double *ranges){
 
 double raster_grid_value(GDALDataset* layer, int bandNumber, double x, double y, double *ranges){
 
-    if(print_debug_messages)
+    if(att_debug_messages)
         qDebug() << "INFO: Start raster_grid_value";
 
     try {
 
-        if(print_debug_messages)
+        if(att_debug_messages)
         {
             qDebug() << "Xres= " << Xres << "\n";
             qDebug() << "Yres= " << Yres << "\n";
@@ -124,7 +126,7 @@ double raster_grid_value(GDALDataset* layer, int bandNumber, double x, double y,
         int col = (int) floor( (x-ranges[0])/ranges[4] );
         int row = (int) floor( (ranges[3]-y)/ranges[5] );
 
-        if(print_debug_messages)
+        if(att_debug_messages)
         {
             qDebug() << "col = " << col << "\n";
             qDebug() << "row = " << row << "\n";

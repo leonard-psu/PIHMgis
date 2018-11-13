@@ -1115,10 +1115,57 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check if value is Numeric
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool Is_String_Integer(QString input)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Is_String_Numeric()";
+
+    bool result = false;
+
+    try {
+
+        bool integer_check = false;
+        bool double_check = false;
+        bool float_check = false;
+        bool long_check = false;
+
+        //input.toDouble(&result);
+        input.toInt(&integer_check);
+        input.toDouble(&double_check);
+        input.toFloat(&float_check);
+        input.toLong(&long_check);
+
+        if(integer_check)
+            result = true;
+        if(double_check)
+            result = true;
+        if(float_check)
+            result = true;
+        if(long_check)
+            result = true;
+
+    }
+    catch (...) {
+        qDebug() << "Error: Is_String_Numeric. Assuming value is false;";
+        result = false;
+    }
+
+    return result;
+}
+
+
 bool fileExists(QString path) {
 
     // QString tmp = path.replace("/","\\");
     QFileInfo check_file(path);
+
+    //if(Is_String_Integer(path))
+    //    return false;
+
 
     // check if file exists and if yes: Is it really a file and no directory?
     if (check_file.exists() && check_file.isFile()) {

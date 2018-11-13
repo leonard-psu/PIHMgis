@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
+    <width>800</width>
     <height>401</height>
    </rect>
   </property>
@@ -437,9 +437,9 @@
   <widget class="QGroupBox" name="groupBoxInput">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>18</y>
-     <width>581</width>
+     <width>781</width>
      <height>81</height>
     </rect>
    </property>
@@ -449,7 +449,7 @@
    <widget class="QPushButton" name="pushButtonLcClassFile">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>680</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -478,7 +478,7 @@
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>340</x>
       <y>10</y>
       <width>111</width>
       <height>31</height>
@@ -494,13 +494,16 @@
     <property name="text">
      <string>NLCD Classes</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEditLcClassFile">
     <property name="geometry">
      <rect>
       <x>6</x>
       <y>45</y>
-      <width>571</width>
+      <width>771</width>
       <height>29</height>
      </rect>
     </property>
@@ -518,7 +521,7 @@
     <rect>
      <x>0</x>
      <y>385</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -962,9 +965,9 @@
   <widget class="QGroupBox" name="groupBoxOutput">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>100</y>
-     <width>581</width>
+     <width>781</width>
      <height>91</height>
     </rect>
    </property>
@@ -974,7 +977,7 @@
    <widget class="QLabel" name="textLabel2">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>328</x>
       <y>10</y>
       <width>131</width>
       <height>31</height>
@@ -990,11 +993,14 @@
     <property name="text">
      <string>LC Data File</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButtonLcDataFile">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>680</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -1019,7 +1025,7 @@
      <rect>
       <x>7</x>
       <y>46</y>
-      <width>571</width>
+      <width>771</width>
       <height>29</height>
      </rect>
     </property>
@@ -1035,9 +1041,9 @@
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>240</y>
-     <width>581</width>
+     <width>781</width>
      <height>141</height>
     </rect>
    </property>
@@ -1055,7 +1061,7 @@
     <rect>
      <x>0</x>
      <y>-4</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -1499,9 +1505,9 @@
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>194</y>
-     <width>581</width>
+     <x>5</x>
+     <y>189</y>
+     <width>781</width>
      <height>41</height>
     </rect>
    </property>
@@ -1537,7 +1543,7 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>540</x>
       <y>4</y>
       <width>113</width>
       <height>32</height>
@@ -1560,7 +1566,7 @@
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>660</x>
       <y>4</y>
       <width>113</width>
       <height>32</height>

@@ -33,9 +33,7 @@ SoilDataFile::SoilDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Unable to Open File: " + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -74,6 +72,34 @@ SoilDataFile::~SoilDataFile()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void SoilDataFile::Log_Warning_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void SoilDataFile::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Load_Project_Settings
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool SoilDataFile::Load_Project_Settings()
@@ -83,41 +109,34 @@ bool SoilDataFile::Load_Project_Settings()
 
     try {
 
-        QStringList ModuleStringList;
-
-        // ** Data Model OUTPUT File Name
-        ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
+        //Data Model OUTPUT File Name
+        QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
             QString TempFileName = ModuleStringList.at(3);
             TempFileName = TempFileName.right(TempFileName.length()-TempFileName.lastIndexOf("/")-1);
             TempFileName.replace( QString(".shp"), QString(".soil") );
-            ui->lineEditSoilDataFile->setText(user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName);
+            Check_SoilData_Output(user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName, true);
         }
 
         ModuleStringList = ReadModuleLine(filename_open_project,tr("MeshDataFile"));
         if ( ModuleStringList.length() > 0  )
         {
             QString TempFileName = ModuleStringList.at(9);
-            ui->lineEditSoilDataFile->setText(user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName+".soil");
+            Check_SoilData_Output(user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName+".soil", true);
         }
-        // ** End: Set Defaults
+        //End: Set Defaults
 
 
-        // ** Start: Fill Form If Module Has Been Run Previously
-
+        //Start: Fill Form If Module Has Been Run Previously
         ModuleStringList = ReadModuleLine(filename_open_project,tr("SoilDataFile"));
 
         if ( ModuleStringList.length() > 0 )
         {
-            ui->lineEditSoilTextureFile->setStyleSheet("color: rgb(0, 180, 0);");
-            ui->lineEditSoilDataFile->setStyleSheet("color: rgb(0, 180, 0);");
-
-            ui->lineEditSoilTextureFile->setText(ModuleStringList.at(1));
-            ui->lineEditSoilDataFile->setText(ModuleStringList.at(2));
-
+            Check_SoilTexture_Input(ModuleStringList.at(1));
+            Check_SoilData_Output(ModuleStringList.at(2), true);
         }
-        // ** End: Fill Form If Module Has Been Run Previously
+        //End: Fill Form If Module Has Been Run Previously
 
         pushButtonSetFocus();
 
@@ -168,9 +187,10 @@ bool SoilDataFile::Check_SoilTexture_Input(QString file){
         }
         else
         {
-            ui->lineEditSoilTextureFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditSoilTextureFile->setStyleSheet("color: red;");
             ui->lineEditSoilTextureFile->setText(file);
 
+            Log_Error_Message("Missing soil input file: " + file);
             result = false;
         }
 
@@ -199,9 +219,7 @@ bool SoilDataFile::Check_SoilData_Output(QString file, bool color_and_message_if
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: MeshData output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Warning_Message("Soil output already exists: " + file +tr(" You may need to delete this file.<br>"));
             }
 
             ui->lineEditSoilDataFile->setStyleSheet("color: red;");
@@ -297,8 +315,6 @@ void SoilDataFile::on_pushButtonSoilDataFile_clicked()
         QString tempString = SoilDataFileName;
         if ( SoilDataFileName != nullptr)
         {
-            ui->lineEditSoilDataFile->setStyleSheet("color: black;");
-
             if( ! (tempString.toLower()).endsWith(".soil") )
             {
                 tempString.append(".soil");
@@ -358,15 +374,13 @@ void SoilDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_SoilTexture_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_SoilTexture_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("No Read Access to " + input_SoilTexture_filename + tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(output_SoilData_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_SoilData_filename + tr("<br>"));
+            Log_Error_Message("No Write Access to " + output_SoilData_filename + tr("<br>"));
             return;
         }
 
@@ -381,10 +395,8 @@ void SoilDataFile::on_pushButtonRun_clicked()
 
         if( ErrorSoil != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Soil Data File Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE SOIL: ... </span>")+QString::number(ErrorSoil)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Soil Data File Processing Failed "+tr("<br>"));
+            Log_Error_Message("Soil Error Return code: " + QString::number(ErrorSoil)+tr("<br>"));
             return;
         }
 
@@ -432,7 +444,6 @@ void SoilDataFile::on_pushButtonClose_clicked()
     }
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Help button event
 // TODO, Need cataract server back online
@@ -450,5 +461,40 @@ void SoilDataFile::on_pushButtonHelp_clicked()
         //        ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: SoilDataFile::on_pushButtonHelp_clicked() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// User edited SoilTexture Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void SoilDataFile::on_lineEditSoilTextureFile_textEdited(const QString &arg1)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start SoilDataFile::on_lineEditSoilTextureFile_textEdited()";
+
+    try {
+
+        Check_SoilTexture_Input(arg1);
+
+    } catch (...) {
+        qDebug() << "Error: SoilDataFile::on_lineEditSoilTextureFile_textEdited() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// User edited output Event (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void SoilDataFile::on_lineEditSoilDataFile_textEdited(const QString &arg1)
+{
+
+    if(print_debug_messages)
+        qDebug() << "INFO: Start SoilDataFile::on_lineEditSoilTextureFile_textEdited()";
+
+    try {
+
+        Check_SoilData_Output(arg1, true);
+
+    } catch (...) {
+        qDebug() << "Error: SoilDataFile::on_lineEditSoilTextureFile_textEdited() is returning w/o checking";
     }
 }

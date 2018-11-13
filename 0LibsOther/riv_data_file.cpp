@@ -102,6 +102,9 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
 
         NodeFileTextStream >> TempInt; NodeFileTextStream >> TempInt; NodeFileTextStream >> TempInt;
 
+        if(print_debug_messages)
+            qDebug() << "INFO: Start RiverFromTIN [loc 1]";
+
         for(int i=1; i<=NumNode; i++)
         {
             NodeFileTextStream >> TempInt;
@@ -116,6 +119,9 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         int** element = new int*[NumEle+1];
 
         EleFileTextStream >> TempInt; EleFileTextStream >> TempInt;
+
+        if(print_debug_messages)
+            qDebug() << "INFO: Start RiverFromTIN [loc 2]";
 
         for(int i=1; i<=NumEle; i++)
         {
@@ -134,6 +140,9 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
 
         NeighFileTextStream >> TempInt;
 
+        if(print_debug_messages)
+            qDebug() << "INFO: Start RiverFromTIN [loc 3]";
+
         for(int i=1; i<=NumNeigh; i++)
         {
             neighbour[i] = new int[3];
@@ -149,11 +158,17 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         int** nodeInEle      = new int*[NumNode+1]; //tells you : this (node present in which elements)
         int*  nodeInEleCount = new int[NumNode+1];
 
+        if(print_debug_messages)
+            qDebug() << "INFO: Start RiverFromTIN [loc 4]";
+
         for(int i=1; i<=NumNode; i++)
         {
             nodeInEle[i] = new int[20];
             nodeInEleCount[i] = 0;
         }
+
+        if(print_debug_messages)
+            qDebug() << "INFO: Start RiverFromTIN [loc 5]";
 
         for(int i=1; i<=NumEle; i++)
         {
@@ -173,11 +188,17 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         int** neighNode     = new int*[NumNode+1]; //tells you which nodes are neighbours to i-th node
         int* neighNodeCount = new int[NumNode+1];
 
+        if(print_debug_messages)
+            qDebug() << "INFO: Start RiverFromTIN [loc 6]";
+
         for(int i=1; i<=NumNode; i++)
         {
             neighNode[i] = new int[100];
             neighNodeCount[i] = 0;
         }
+
+        if(print_debug_messages)
+            qDebug() << "INFO: Start RiverFromTIN [loc 7]";
 
         for(int i=1; i<=NumNode; i++)
         {
@@ -207,8 +228,10 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         Point pt1, pt2;
         int numPt;
         double oldDist, slope;
+        if(print_debug_messages)
+            qDebug() << "INFO: Start RiverFromTIN [loc 8]";
 
-        for(int i=0; i<recordCount; i++)
+        for(int i=0; i < recordCount; i++)
         {
             SHPObject* shpObj = SHPReadObject(RiverShpHandle, i);
             pt1.x = shpObj->padfX[0];
@@ -219,12 +242,30 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
             Point pt;
             int j;
 
-            for(j=1; j<=NumNode; j++)
+            for(j=1; j <= NumNode; j++)
             {
-                if(distPt(pt1, node[j]) < 0.001)
+                double test = distPt(pt1, node[j]);
+                qDebug() << "j " << j << " " <<  test;
+
+                if( test < 0.001)
                     break;
             }
             numPt = j;
+
+            qDebug() << "NumNode " << NumNode;
+            qDebug() << "The J value used is " << j <<" (" <<pt1.x << "," << pt1.y <<") ";
+            qDebug() << "node[j] " << j <<" (" <<node[j].x << "," << node[j].y <<") ";
+
+            if ( j > NumNode)
+            {
+                SHPClose(RiverShpHandle);
+                DBFClose(RiverDbfHandle);
+                SHPClose(xRiverShpHandle);
+                DBFClose(xRiverDbfHandle);
+
+                qDebug() << "Error ";
+                return 1000;
+            }
 
             /*
         /////////////////
@@ -248,8 +289,12 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                 cout<<neighNode[numPt][ii]<<" ";
             cout<<"\n";
             */
+
+                if(print_debug_messages)
+                    qDebug() << "INFO: Start RiverFromTIN [loc 9]";
+
                 int j, k, l;
-                for(j=0; j<neighNodeCount[numPt]; j++)
+                for(j=0; j < neighNodeCount[numPt]; j++)
                 {
                     //cout<<"x= "<<node[numPt].x<<" y= "<<node[numPt].y<<"\n";
                     //cout<<"x= "<<node[neighNode[numPt][j]].x<<" y= "<<node[neighNode[numPt][j]].y<<"\n";
@@ -262,7 +307,7 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                         break;
                 }
                 //cout<<numPt<<" "<<neighNode[numPt][j]<<"\n"; getchar(); getchar();
-std::cout<<numPt<<" "<<neighNode[numPt][j]<<"\n";
+                std::cout<<numPt<<" "<<neighNode[numPt][j]<<"\n";
 
                 X[0] = node[numPt].x;
                 Y[0] = node[numPt].y;
@@ -293,6 +338,10 @@ std::cout<<numPt<<" "<<neighNode[numPt][j]<<"\n";
             }
             //cout<<"\nend\n";//getchar(); getchar();
         }
+
+        if(print_debug_messages)
+            qDebug() << "INFO: Start RiverFromTIN [loc 10]";
+
 
         SHPClose(RiverShpHandle);
         DBFClose(RiverDbfHandle);

@@ -29,8 +29,8 @@ typedef struct{
 
 double SLOPEa(Point p1, Point p2)
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: SLOPEa";
+    //if(print_debug_messages)
+    //    qDebug() << "INFO: SLOPEa";
 
     double delX = p2.x - p1.x;
     double delY = delX==0?p2.y - p1.y + 0.0000001:p2.y - p1.y;

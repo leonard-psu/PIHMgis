@@ -73,6 +73,34 @@ GeolDataFile::~GeolDataFile()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void GeolDataFile::Log_Warning_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void GeolDataFile::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Load_Project_Settings
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool GeolDataFile::Load_Project_Settings()
@@ -162,8 +190,10 @@ bool GeolDataFile::Check_GeolTexture_Input(QString file){
         }
         else
         {
-            ui->lineEditGeolTextureFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditGeolTextureFile->setStyleSheet("color: red;");
             ui->lineEditGeolTextureFile->setText(file);
+
+            Log_Error_Message("Missing geology input file: " + file);
 
             result = false;
         }
@@ -193,9 +223,7 @@ bool GeolDataFile::Check_GeolData_Output(QString file, bool color_and_message_if
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: MeshData output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Warning_Message("Geology output already exists: " + file +tr(" You may need to delete this file.<br>"));
             }
 
             ui->lineEditGeolDataFile->setStyleSheet("color: red;");
@@ -332,9 +360,7 @@ void GeolDataFile::on_pushButtonRun_clicked()
         bool checked_GeolTexture = Check_GeolTexture_Input(input_GeolTexture_filename);
         if(!checked_GeolTexture)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Geol Texture File (*.txt *.TXT) Input File Missing </span>")+input_GeolTexture_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Geol Texture File (*.txt *.TXT) Input File Missing " + input_GeolTexture_filename + tr("<br>"));
             return;
         }
 
@@ -354,15 +380,13 @@ void GeolDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_GeolTexture_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_GeolTexture_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("No Read Access to " + input_GeolTexture_filename + tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(output_GeolData_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_GeolData_filename + tr("<br>"));
+            Log_Error_Message("No Write Access to " + output_GeolData_filename + tr("<br>"));
             return;
         }
 
@@ -377,10 +401,8 @@ void GeolDataFile::on_pushButtonRun_clicked()
 
         if( ErrorGeol != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Geol Data File Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE GEOL: ... </span>")+QString::number(ErrorGeol)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Geol Data File Processing Failed "+tr("<br>"));
+            Log_Error_Message("Geol error return code: " + QString::number(ErrorGeol)+tr("<br>"));
             return;
         }
 
@@ -450,3 +472,41 @@ void GeolDataFile::on_pushButtonHelp_clicked()
         qDebug() << "Error: GeolDataFile::on_pushButtonHelp_clicked() is returning w/o checking";
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// User edited SoilTexture Event (INPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void GeolDataFile::on_lineEditGeolTextureFile_textEdited(const QString &arg1)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start SoilDataFile::on_lineEditGeolTextureFile_textEdited()";
+
+    try {
+
+        Check_GeolTexture_Input(arg1);
+
+    } catch (...) {
+        qDebug() << "Error: SoilDataFile::on_lineEditGeolTextureFile_textEdited() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// User edited output Event (OUTPUT)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void GeolDataFile::on_lineEditGeolDataFile_textEdited(const QString &arg1)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start SoilDataFile::on_lineEditGeolDataFile_textEdited()";
+
+    try {
+
+        Check_GeolData_Output(arg1, true);
+
+    } catch (...) {
+        qDebug() << "Error: SoilDataFile::on_lineEditGeolDataFile_textEdited() is returning w/o checking";
+    }
+}
+
+
+
+

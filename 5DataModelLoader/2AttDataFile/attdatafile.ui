@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
-    <height>619</height>
+    <width>800</width>
+    <height>620</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>620</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>620</height>
+   </size>
   </property>
   <property name="palette">
    <palette>
@@ -431,11 +443,17 @@
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>400</y>
-     <width>581</width>
-     <height>61</height>
+     <x>7</x>
+     <y>370</y>
+     <width>781</width>
+     <height>51</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>11</pointsize>
+    </font>
    </property>
    <property name="title">
     <string/>
@@ -447,7 +465,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>17</y>
+      <y>7</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -470,8 +488,8 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>326</x>
-      <y>17</y>
+      <x>543</x>
+      <y>7</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -494,8 +512,8 @@
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>17</y>
+      <x>660</x>
+      <y>7</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -521,7 +539,7 @@
    <widget class="QLabel" name="textLabelLegends1">
     <property name="geometry">
      <rect>
-      <x>127</x>
+      <x>140</x>
       <y>-1</y>
       <width>131</width>
       <height>31</height>
@@ -540,8 +558,8 @@
    <widget class="QLabel" name="textLabelLegends2">
     <property name="geometry">
      <rect>
-      <x>127</x>
-      <y>16</y>
+      <x>290</x>
+      <y>0</y>
       <width>181</width>
       <height>31</height>
      </rect>
@@ -559,8 +577,8 @@
    <widget class="QLabel" name="textLabelLegends3">
     <property name="geometry">
      <rect>
-      <x>127</x>
-      <y>32</y>
+      <x>140</x>
+      <y>20</y>
       <width>201</width>
       <height>31</height>
      </rect>
@@ -580,8 +598,8 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>603</y>
-     <width>611</width>
+     <y>604</y>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -1027,7 +1045,7 @@
     <rect>
      <x>0</x>
      <y>-4</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -1477,11 +1495,17 @@
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>469</y>
-     <width>581</width>
-     <height>131</height>
+     <x>6</x>
+     <y>429</y>
+     <width>781</width>
+     <height>171</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>11</pointsize>
+    </font>
    </property>
    <property name="lineWrapMode">
     <enum>QTextEdit::NoWrap</enum>
@@ -1490,16 +1514,16 @@
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>16</x>
+     <x>7</x>
      <y>19</y>
-     <width>581</width>
-     <height>251</height>
+     <width>781</width>
+     <height>221</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Arial</family>
-     <pointsize>10</pointsize>
+     <pointsize>11</pointsize>
     </font>
    </property>
    <property name="currentIndex">
@@ -1512,9 +1536,9 @@
     <widget class="QLineEdit" name="lineEditPrecipitationFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>5</y>
-       <width>301</width>
+       <x>165</x>
+       <y>4</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -1533,10 +1557,10 @@
     <widget class="QPushButton" name="pushButtonWindVelocityFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>106</y>
+       <x>672</x>
+       <y>98</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -1562,10 +1586,10 @@
     <widget class="QPushButton" name="pushButtonVaporPressureFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>176</y>
+       <x>672</x>
+       <y>162</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -1591,9 +1615,9 @@
     <widget class="QLineEdit" name="lineEditVaporPressureFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>177</y>
-       <width>301</width>
+       <x>165</x>
+       <y>162</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -1612,9 +1636,9 @@
     <widget class="QLineEdit" name="lineEditRelativeHumidityFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>73</y>
-       <width>301</width>
+       <x>165</x>
+       <y>66</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -1633,8 +1657,8 @@
     <widget class="QLabel" name="textLabelTemperature">
      <property name="geometry">
       <rect>
-       <x>18</x>
-       <y>38</y>
+       <x>24</x>
+       <y>31</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -1654,10 +1678,10 @@
     <widget class="QPushButton" name="pushButtonPrecipitationFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
+       <x>672</x>
        <y>4</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -1683,10 +1707,10 @@
     <widget class="QPushButton" name="pushButtonRelativeHumidityFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>72</y>
+       <x>672</x>
+       <y>66</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -1712,8 +1736,8 @@
     <widget class="QLabel" name="textLabelVaporPressure">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>176</y>
+       <x>16</x>
+       <y>160</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -1733,9 +1757,9 @@
     <widget class="QLineEdit" name="lineEditWindVelocityFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>107</y>
-       <width>301</width>
+       <x>165</x>
+       <y>98</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -1754,10 +1778,10 @@
     <widget class="QPushButton" name="pushButtonSolarRadiationFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>141</y>
+       <x>672</x>
+       <y>130</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -1783,9 +1807,9 @@
     <widget class="QLineEdit" name="lineEditSolarRadiationFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>142</y>
-       <width>301</width>
+       <x>165</x>
+       <y>130</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -1804,8 +1828,8 @@
     <widget class="QLabel" name="textLabelSolarRadiation">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>141</y>
+       <x>16</x>
+       <y>128</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -1825,10 +1849,10 @@
     <widget class="QPushButton" name="pushButtonTemperatureFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>38</y>
+       <x>672</x>
+       <y>35</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -1854,8 +1878,8 @@
     <widget class="QLabel" name="textLabelRelativeHumidity">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>72</y>
+       <x>6</x>
+       <y>64</y>
        <width>131</width>
        <height>31</height>
       </rect>
@@ -1875,8 +1899,8 @@
     <widget class="QLabel" name="textLabelPrecipitation">
      <property name="geometry">
       <rect>
-       <x>16</x>
-       <y>4</y>
+       <x>26</x>
+       <y>1</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -1896,9 +1920,9 @@
     <widget class="QLineEdit" name="lineEditTemperatureFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>39</y>
-       <width>301</width>
+       <x>165</x>
+       <y>35</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -1917,8 +1941,8 @@
     <widget class="QLabel" name="textLabelWindVelocity">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>106</y>
+       <x>16</x>
+       <y>96</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -1938,8 +1962,8 @@
     <widget class="QCheckBox" name="checkBoxPrecipitation">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>8</y>
+       <x>145</x>
+       <y>6</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -1951,8 +1975,8 @@
     <widget class="QCheckBox" name="checkBoxTemperature">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>41</y>
+       <x>145</x>
+       <y>37</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -1964,8 +1988,8 @@
     <widget class="QCheckBox" name="checkBoxRelativeHumidity">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>76</y>
+       <x>145</x>
+       <y>69</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -1977,8 +2001,8 @@
     <widget class="QCheckBox" name="checkBoxWindVelocity">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>110</y>
+       <x>145</x>
+       <y>101</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -1990,8 +2014,8 @@
     <widget class="QCheckBox" name="checkBoxSolarRadiation">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>145</y>
+       <x>145</x>
+       <y>133</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2003,8 +2027,8 @@
     <widget class="QCheckBox" name="checkBoxVaporPressure">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>180</y>
+       <x>145</x>
+       <y>165</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2021,8 +2045,8 @@
     <widget class="QLabel" name="textLabelGeologyClasses">
      <property name="geometry">
       <rect>
-       <x>9</x>
-       <y>37</y>
+       <x>15</x>
+       <y>31</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -2042,8 +2066,8 @@
     <widget class="QLabel" name="textLabelSoilClasses">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>2</y>
+       <x>26</x>
+       <y>1</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -2063,10 +2087,10 @@
     <widget class="QPushButton" name="pushButtonGeologyClassesFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>37</y>
+       <x>672</x>
+       <y>35</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2092,9 +2116,9 @@
     <widget class="QLineEdit" name="lineEditMacroporesFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>71</y>
-       <width>301</width>
+       <x>165</x>
+       <y>66</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2112,15 +2136,15 @@
     <widget class="QLabel" name="textLabelLandCoverClasses">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>104</y>
+       <x>6</x>
+       <y>96</y>
        <width>131</width>
        <height>31</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="text">
@@ -2133,10 +2157,10 @@
     <widget class="QPushButton" name="pushButtonLandCoverClassesFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>104</y>
+       <x>672</x>
+       <y>98</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2162,9 +2186,9 @@
     <widget class="QLineEdit" name="lineEditSoilClassesFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>3</y>
-       <width>301</width>
+       <x>165</x>
+       <y>4</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2182,10 +2206,10 @@
     <widget class="QPushButton" name="pushButtonMeltRegionsFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>137</y>
+       <x>672</x>
+       <y>130</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2211,8 +2235,8 @@
     <widget class="QLabel" name="textLabelMacropores">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>70</y>
+       <x>26</x>
+       <y>64</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -2232,8 +2256,8 @@
     <widget class="QLabel" name="textLabelMeltRegions">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>137</y>
+       <x>26</x>
+       <y>128</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -2253,9 +2277,9 @@
     <widget class="QLineEdit" name="lineEditGeologyClassesFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>38</y>
-       <width>301</width>
+       <x>165</x>
+       <y>35</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2273,9 +2297,9 @@
     <widget class="QLineEdit" name="lineEditMeltRegionsFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>138</y>
-       <width>301</width>
+       <x>165</x>
+       <y>130</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2293,10 +2317,10 @@
     <widget class="QPushButton" name="pushButtonSoilClassesFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>2</y>
+       <x>672</x>
+       <y>4</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2322,10 +2346,10 @@
     <widget class="QPushButton" name="pushButtonMacroporesFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>70</y>
+       <x>672</x>
+       <y>66</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2351,9 +2375,9 @@
     <widget class="QLineEdit" name="lineEditLandCoverClassesFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>105</y>
-       <width>301</width>
+       <x>165</x>
+       <y>98</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2371,9 +2395,9 @@
     <widget class="QLineEdit" name="lineEditSourcesSinksFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>173</y>
-       <width>301</width>
+       <x>165</x>
+       <y>162</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2391,8 +2415,8 @@
     <widget class="QLabel" name="textLabelSourcesSinks">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>172</y>
+       <x>16</x>
+       <y>160</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -2412,10 +2436,10 @@
     <widget class="QPushButton" name="pushButtonSourcesSinksFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>172</y>
+       <x>672</x>
+       <y>162</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2441,7 +2465,7 @@
     <widget class="QCheckBox" name="checkBoxSoilClasses">
      <property name="geometry">
       <rect>
-       <x>141</x>
+       <x>145</x>
        <y>6</y>
        <width>16</width>
        <height>23</height>
@@ -2454,8 +2478,8 @@
     <widget class="QCheckBox" name="checkBoxGeologyClasses">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>40</y>
+       <x>145</x>
+       <y>37</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2467,8 +2491,8 @@
     <widget class="QCheckBox" name="checkBoxMacropores">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>74</y>
+       <x>145</x>
+       <y>69</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2480,8 +2504,8 @@
     <widget class="QCheckBox" name="checkBoxLandCoverClasses">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>108</y>
+       <x>145</x>
+       <y>101</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2493,8 +2517,8 @@
     <widget class="QCheckBox" name="checkBoxMeltRegions">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>141</y>
+       <x>145</x>
+       <y>133</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2506,8 +2530,8 @@
     <widget class="QCheckBox" name="checkBoxSourcesSinks">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>176</y>
+       <x>145</x>
+       <y>165</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2524,8 +2548,8 @@
     <widget class="QLabel" name="textLabelSoilMoisture">
      <property name="geometry">
       <rect>
-       <x>7</x>
-       <y>106</y>
+       <x>17</x>
+       <y>96</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -2545,8 +2569,8 @@
     <widget class="QLabel" name="textLabelBoundaryCondition">
      <property name="geometry">
       <rect>
-       <x>5</x>
-       <y>173</y>
+       <x>15</x>
+       <y>160</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -2566,9 +2590,9 @@
     <widget class="QLineEdit" name="lineEditInterceptionFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
+       <x>165</x>
        <y>4</y>
-       <width>301</width>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2586,9 +2610,9 @@
     <widget class="QLineEdit" name="lineEditSurfaceStorageFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>73</y>
-       <width>301</width>
+       <x>165</x>
+       <y>66</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2606,10 +2630,10 @@
     <widget class="QPushButton" name="pushButtonSnowCoverFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>37</y>
+       <x>672</x>
+       <y>35</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2635,8 +2659,8 @@
     <widget class="QLabel" name="textLabelGroundwater">
      <property name="geometry">
       <rect>
-       <x>6</x>
-       <y>139</y>
+       <x>16</x>
+       <y>128</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -2656,10 +2680,10 @@
     <widget class="QPushButton" name="pushButtonGroundwaterFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>139</y>
+       <x>672</x>
+       <y>130</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2685,10 +2709,10 @@
     <widget class="QPushButton" name="pushButtonBoundaryConditionFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>173</y>
+       <x>672</x>
+       <y>161</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2714,9 +2738,9 @@
     <widget class="QLineEdit" name="lineEditBoundaryConditionFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>174</y>
-       <width>301</width>
+       <x>165</x>
+       <y>162</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2734,9 +2758,9 @@
     <widget class="QLineEdit" name="lineEditSnowCoverFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>38</y>
-       <width>301</width>
+       <x>165</x>
+       <y>35</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2754,10 +2778,10 @@
     <widget class="QPushButton" name="pushButtonSurfaceStorageFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>72</y>
+       <x>672</x>
+       <y>66</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2783,10 +2807,10 @@
     <widget class="QPushButton" name="pushButtonInterceptionFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>3</y>
+       <x>672</x>
+       <y>4</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2812,10 +2836,10 @@
     <widget class="QPushButton" name="pushButtonSoilMoistureFile">
      <property name="geometry">
       <rect>
-       <x>469</x>
-       <y>106</y>
+       <x>672</x>
+       <y>98</y>
        <width>98</width>
-       <height>32</height>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -2841,8 +2865,8 @@
     <widget class="QLabel" name="textLabelSnowCover">
      <property name="geometry">
       <rect>
-       <x>6</x>
-       <y>37</y>
+       <x>16</x>
+       <y>31</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -2862,9 +2886,9 @@
     <widget class="QLineEdit" name="lineEditGroundwaterFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>140</y>
-       <width>301</width>
+       <x>165</x>
+       <y>130</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2882,9 +2906,9 @@
     <widget class="QLineEdit" name="lineEditSoilMoistureFile">
      <property name="geometry">
       <rect>
-       <x>163</x>
-       <y>107</y>
-       <width>301</width>
+       <x>165</x>
+       <y>98</y>
+       <width>501</width>
        <height>29</height>
       </rect>
      </property>
@@ -2902,8 +2926,8 @@
     <widget class="QLabel" name="textLabelInterception">
      <property name="geometry">
       <rect>
-       <x>6</x>
-       <y>3</y>
+       <x>16</x>
+       <y>1</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -2923,8 +2947,8 @@
     <widget class="QLabel" name="textLabelSurfaceStorage">
      <property name="geometry">
       <rect>
-       <x>-3</x>
-       <y>72</y>
+       <x>7</x>
+       <y>64</y>
        <width>131</width>
        <height>31</height>
       </rect>
@@ -2944,8 +2968,8 @@
     <widget class="QCheckBox" name="checkBoxSurfaceStorage">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>76</y>
+       <x>145</x>
+       <y>69</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2957,8 +2981,8 @@
     <widget class="QCheckBox" name="checkBoxInterception">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>7</y>
+       <x>145</x>
+       <y>6</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2970,8 +2994,8 @@
     <widget class="QCheckBox" name="checkBoxSnowCover">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>40</y>
+       <x>145</x>
+       <y>37</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2983,8 +3007,8 @@
     <widget class="QCheckBox" name="checkBoxSoilMoisture">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>110</y>
+       <x>145</x>
+       <y>101</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -2996,8 +3020,8 @@
     <widget class="QCheckBox" name="checkBoxGroundwater">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>143</y>
+       <x>145</x>
+       <y>133</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -3009,8 +3033,8 @@
     <widget class="QCheckBox" name="checkBoxBoundaryCondition">
      <property name="geometry">
       <rect>
-       <x>141</x>
-       <y>177</y>
+       <x>145</x>
+       <y>165</y>
        <width>16</width>
        <height>23</height>
       </rect>
@@ -3024,11 +3048,17 @@
   <widget class="QGroupBox" name="groupBoxOutput">
    <property name="geometry">
     <rect>
-     <x>16</x>
-     <y>271</y>
-     <width>581</width>
+     <x>7</x>
+     <y>240</y>
+     <width>781</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>11</pointsize>
+    </font>
    </property>
    <property name="title">
     <string/>
@@ -3038,7 +3068,7 @@
      <rect>
       <x>14</x>
       <y>7</y>
-      <width>131</width>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
@@ -3051,16 +3081,16 @@
      </font>
     </property>
     <property name="text">
-     <string>TIN Shape Layer</string>
+     <string>TIN Layer</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonTINShapeLayerFile">
     <property name="geometry">
      <rect>
-      <x>473</x>
-      <y>7</y>
+      <x>672</x>
+      <y>8</y>
       <width>98</width>
-      <height>32</height>
+      <height>29</height>
      </rect>
     </property>
     <property name="font">
@@ -3080,9 +3110,9 @@
    <widget class="QLineEdit" name="lineEditTINShapeLayerFile">
     <property name="geometry">
      <rect>
-      <x>143</x>
+      <x>97</x>
       <y>8</y>
-      <width>325</width>
+      <width>571</width>
       <height>29</height>
      </rect>
     </property>
@@ -3099,16 +3129,16 @@
   <widget class="QGroupBox" name="groupBoxOutput_2">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>320</y>
-     <width>581</width>
-     <height>81</height>
+     <x>7</x>
+     <y>290</y>
+     <width>781</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Arial</family>
-     <pointsize>10</pointsize>
+     <pointsize>11</pointsize>
     </font>
    </property>
    <property name="title">
@@ -3117,7 +3147,7 @@
    <widget class="QLabel" name="textLabel1_8">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>320</x>
       <y>10</y>
       <width>141</width>
       <height>31</height>
@@ -3141,10 +3171,10 @@
    <widget class="QPushButton" name="pushButtonAttDataFile">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>10</y>
+      <x>672</x>
+      <y>6</y>
       <width>98</width>
-      <height>32</height>
+      <height>29</height>
      </rect>
     </property>
     <property name="font">
@@ -3164,9 +3194,9 @@
    <widget class="QLineEdit" name="lineEditAttDataFile">
     <property name="geometry">
      <rect>
-      <x>5</x>
-      <y>43</y>
-      <width>571</width>
+      <x>10</x>
+      <y>38</y>
+      <width>761</width>
       <height>29</height>
      </rect>
     </property>

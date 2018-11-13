@@ -181,6 +181,8 @@ private:
     bool Check_GroundwaterFileorValue(QString file);
     bool Check_BoundaryConditionFileorValue(QString file);
 
+    bool Is_String_Integer(QString file);
+
     void Log_Warning_Message(QString message);
     void Log_Error_Message(QString message);
 
@@ -188,7 +190,9 @@ private:
     Ui::AttDataFile *ui;
     QString filename_open_project;
 
-
+    int input_width_one = 300; //When user has specified file
+    int input_width_two = 100; //When user has value
+    bool finished_loading_files = false; //Need this to prevent multiple file error messages
 
 };
 

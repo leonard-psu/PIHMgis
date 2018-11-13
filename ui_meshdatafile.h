@@ -66,6 +66,8 @@ public:
         if (MeshDataFile->objectName().isEmpty())
             MeshDataFile->setObjectName(QStringLiteral("MeshDataFile"));
         MeshDataFile->resize(800, 584);
+        MeshDataFile->setMinimumSize(QSize(800, 584));
+        MeshDataFile->setMaximumSize(QSize(800, 584));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -223,7 +225,7 @@ public:
         pushButtonRun->setAutoDefault(false);
         groupBoxInput1 = new QGroupBox(MeshDataFile);
         groupBoxInput1->setObjectName(QStringLiteral("groupBoxInput1"));
-        groupBoxInput1->setGeometry(QRect(0, 12, 791, 151));
+        groupBoxInput1->setGeometry(QRect(5, 12, 791, 151));
         QFont font2;
         font2.setFamily(QStringLiteral("Arial"));
         font2.setPointSize(11);
@@ -306,7 +308,7 @@ public:
         pushButtonRiverFile->setFlat(false);
         groupBoxOutput = new QGroupBox(MeshDataFile);
         groupBoxOutput->setObjectName(QStringLiteral("groupBoxOutput"));
-        groupBoxOutput->setGeometry(QRect(0, 270, 791, 51));
+        groupBoxOutput->setGeometry(QRect(1, 270, 791, 51));
         groupBoxOutput->setFont(font2);
         textLabel1_2 = new QLabel(groupBoxOutput);
         textLabel1_2->setObjectName(QStringLiteral("textLabel1_2"));
@@ -388,7 +390,7 @@ public:
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
         groupBoxInput2 = new QGroupBox(MeshDataFile);
         groupBoxInput2->setObjectName(QStringLiteral("groupBoxInput2"));
-        groupBoxInput2->setGeometry(QRect(0, 160, 791, 111));
+        groupBoxInput2->setGeometry(QRect(5, 160, 791, 111));
         groupBoxInput2->setFont(font2);
         pushButtonSurfaceElevationFile = new QPushButton(groupBoxInput2);
         pushButtonSurfaceElevationFile->setObjectName(QStringLiteral("pushButtonSurfaceElevationFile"));

@@ -44,7 +44,7 @@ public:
     {
         if (LcDataFile->objectName().isEmpty())
             LcDataFile->setObjectName(QStringLiteral("LcDataFile"));
-        LcDataFile->resize(611, 401);
+        LcDataFile->resize(800, 401);
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -108,10 +108,10 @@ public:
         LcDataFile->setFont(font);
         groupBoxInput = new QGroupBox(LcDataFile);
         groupBoxInput->setObjectName(QStringLiteral("groupBoxInput"));
-        groupBoxInput->setGeometry(QRect(15, 18, 581, 81));
+        groupBoxInput->setGeometry(QRect(5, 18, 781, 81));
         pushButtonLcClassFile = new QPushButton(groupBoxInput);
         pushButtonLcClassFile->setObjectName(QStringLiteral("pushButtonLcClassFile"));
-        pushButtonLcClassFile->setGeometry(QRect(480, 10, 98, 32));
+        pushButtonLcClassFile->setGeometry(QRect(680, 10, 98, 32));
         QFont font1;
         font1.setPointSize(12);
         font1.setBold(true);
@@ -122,11 +122,12 @@ public:
         pushButtonLcClassFile->setFlat(false);
         textLabel1 = new QLabel(groupBoxInput);
         textLabel1->setObjectName(QStringLiteral("textLabel1"));
-        textLabel1->setGeometry(QRect(220, 10, 111, 31));
+        textLabel1->setGeometry(QRect(340, 10, 111, 31));
         textLabel1->setFont(font1);
+        textLabel1->setAlignment(Qt::AlignCenter);
         lineEditLcClassFile = new QLineEdit(groupBoxInput);
         lineEditLcClassFile->setObjectName(QStringLiteral("lineEditLcClassFile"));
-        lineEditLcClassFile->setGeometry(QRect(6, 45, 571, 29));
+        lineEditLcClassFile->setGeometry(QRect(6, 45, 771, 29));
         QFont font2;
         font2.setPointSize(11);
         font2.setBold(true);
@@ -134,7 +135,7 @@ public:
         lineEditLcClassFile->setFont(font2);
         BorderBottom = new QFrame(LcDataFile);
         BorderBottom->setObjectName(QStringLiteral("BorderBottom"));
-        BorderBottom->setGeometry(QRect(0, 385, 611, 20));
+        BorderBottom->setGeometry(QRect(0, 385, 800, 20));
         BorderBottom->setBaseSize(QSize(0, 0));
         QPalette palette1;
         QBrush brush5(QColor(0, 51, 153, 255));
@@ -202,30 +203,31 @@ public:
         BorderBottom->setFrameShape(QFrame::HLine);
         groupBoxOutput = new QGroupBox(LcDataFile);
         groupBoxOutput->setObjectName(QStringLiteral("groupBoxOutput"));
-        groupBoxOutput->setGeometry(QRect(15, 100, 581, 91));
+        groupBoxOutput->setGeometry(QRect(5, 100, 781, 91));
         textLabel2 = new QLabel(groupBoxOutput);
         textLabel2->setObjectName(QStringLiteral("textLabel2"));
-        textLabel2->setGeometry(QRect(230, 10, 131, 31));
+        textLabel2->setGeometry(QRect(328, 10, 131, 31));
         textLabel2->setFont(font1);
+        textLabel2->setAlignment(Qt::AlignCenter);
         pushButtonLcDataFile = new QPushButton(groupBoxOutput);
         pushButtonLcDataFile->setObjectName(QStringLiteral("pushButtonLcDataFile"));
-        pushButtonLcDataFile->setGeometry(QRect(480, 10, 98, 32));
+        pushButtonLcDataFile->setGeometry(QRect(680, 10, 98, 32));
         pushButtonLcDataFile->setFont(font1);
         pushButtonLcDataFile->setAutoDefault(false);
         lineEditLcDataFile = new QLineEdit(groupBoxOutput);
         lineEditLcDataFile->setObjectName(QStringLiteral("lineEditLcDataFile"));
-        lineEditLcDataFile->setGeometry(QRect(7, 46, 571, 29));
+        lineEditLcDataFile->setGeometry(QRect(7, 46, 771, 29));
         lineEditLcDataFile->setFont(font2);
         textBrowserLogs = new QTextBrowser(LcDataFile);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(15, 240, 581, 141));
+        textBrowserLogs->setGeometry(QRect(5, 240, 781, 141));
         QFont font3;
         font3.setPointSize(11);
         textBrowserLogs->setFont(font3);
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
         BorderTop = new QFrame(LcDataFile);
         BorderTop->setObjectName(QStringLiteral("BorderTop"));
-        BorderTop->setGeometry(QRect(0, -4, 611, 20));
+        BorderTop->setGeometry(QRect(0, -4, 800, 20));
         BorderTop->setBaseSize(QSize(0, 0));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush5);
@@ -281,7 +283,7 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         groupBoxButtons = new QGroupBox(LcDataFile);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(15, 194, 581, 41));
+        groupBoxButtons->setGeometry(QRect(5, 189, 781, 41));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);
@@ -290,12 +292,12 @@ public:
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(340, 4, 113, 32));
+        pushButtonClose->setGeometry(QRect(540, 4, 113, 32));
         pushButtonClose->setFont(font1);
         pushButtonClose->setAutoDefault(false);
         pushButtonRun = new QPushButton(groupBoxButtons);
         pushButtonRun->setObjectName(QStringLiteral("pushButtonRun"));
-        pushButtonRun->setGeometry(QRect(460, 4, 113, 32));
+        pushButtonRun->setGeometry(QRect(660, 4, 113, 32));
         pushButtonRun->setFont(font1);
         pushButtonRun->setAutoDefault(false);
 

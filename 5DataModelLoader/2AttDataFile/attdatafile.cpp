@@ -26,8 +26,12 @@ AttDataFile::AttDataFile(QWidget *parent, QString filename) :
     try {
         ui->setupUi(this);
 
+        input_width_one = 501;
+        input_width_two = 250;
+
         filename_open_project = filename;
         bool found_file = false;
+        finished_loading_files = false;
 
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
@@ -45,6 +49,7 @@ AttDataFile::AttDataFile(QWidget *parent, QString filename) :
             Load_Project_Settings();
         }
 
+        finished_loading_files = true;
         pushButtonSetFocus();
 
 
@@ -472,8 +477,10 @@ bool AttDataFile::Check_TINShape_Input(QString file){
         }
         else
         {
-            ui->lineEditTINShapeLayerFile->setStyleSheet("color: rgb(180, 0, 0);");
+            ui->lineEditTINShapeLayerFile->setStyleSheet("color: red;");
             ui->lineEditTINShapeLayerFile->setText(file);
+
+            Log_Error_Message(" Tin Shape file not found: " + file +tr(" <br>"));
 
             result = false;
         }
@@ -481,6 +488,71 @@ bool AttDataFile::Check_TINShape_Input(QString file){
 
     } catch (...) {
         qDebug() << "Error: Check_TINShape_Input is returning w/o checking";
+        result = false;
+    }
+
+    return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// Helper Function to Check if value is Numeric
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//bool AttDataFile::Is_String_Integer(QString input)
+//{
+//    if(print_debug_messages)
+//        qDebug() << "INFO: Is_String_Numeric()";
+
+//    bool result = false;
+
+//    try {
+
+//        //input.toDouble(&result);
+//        input.toInt(&result);
+//    }
+//    catch (...) {
+//        qDebug() << "Error: Is_String_Numeric. Assuming value is false;";
+//        result = false;
+//    }
+
+//    return result;
+//}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to Check if value is Numeric
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool AttDataFile::Is_String_Integer(QString input)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Is_String_Numeric()";
+
+    bool result = false;
+
+    try {
+
+        bool integer_check = false;
+        bool double_check = false;
+        bool float_check = false;
+        bool long_check = false;
+
+        //input.toDouble(&result);
+        input.toInt(&integer_check);
+        input.toDouble(&double_check);
+        input.toFloat(&float_check);
+        input.toLong(&long_check);
+
+        if(integer_check)
+            result = true;
+        if(double_check)
+            result = true;
+        if(float_check)
+            result = true;
+        if(long_check)
+            result = true;
+
+    }
+    catch (...) {
+        qDebug() << "Error: Is_String_Numeric. Assuming value is false;";
         result = false;
     }
 
@@ -528,6 +600,19 @@ bool AttDataFile::Check_PrecipitationFileorValue(QString value){
             {
                 ui->lineEditPrecipitationFile->setStyleSheet("color: red;");
                 ui->lineEditPrecipitationFile->setText(value);
+
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" Precipitation File not found: " + value +tr(" <br>"));
+                    }
+                }
 
                 result = false;
             }
@@ -584,6 +669,19 @@ bool AttDataFile::Check_TemperatureFileorValue(QString value){
                 ui->lineEditTemperatureFile->setStyleSheet("color: red;");
                 ui->lineEditTemperatureFile->setText(value);
 
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" Temperature File not found: " + value +tr(" <br>"));
+                    }
+                }
+
                 result = false;
             }
         }
@@ -639,6 +737,20 @@ bool AttDataFile::Check_RelativeHumidityFileorValue(QString value){
                 ui->lineEditRelativeHumidityFile->setStyleSheet("color: red;");
                 ui->lineEditRelativeHumidityFile->setText(value);
 
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" RelativeHumidity File not found: " + value +tr(" <br>"));
+                    }
+                }
+
+
                 result = false;
             }
         }
@@ -692,6 +804,19 @@ bool AttDataFile::Check_WindVelocityFileorValue(QString value){
             {
                 ui->lineEditWindVelocityFile->setStyleSheet("color: red;");
                 ui->lineEditWindVelocityFile->setText(value);
+
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" WindVelocity File not found: " + value +tr(" <br>"));
+                    }
+                }
 
                 result = false;
             }
@@ -748,6 +873,19 @@ bool AttDataFile::Check_SolarRadiationFileorValue(QString value){
                 ui->lineEditSolarRadiationFile->setStyleSheet("color: red;");
                 ui->lineEditSolarRadiationFile->setText(value);
 
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" SolarRadiation File not found: " + value +tr(" <br>"));
+                    }
+                }
+
                 result = false;
             }
         }
@@ -802,6 +940,19 @@ bool AttDataFile::Check_VaporPressureFileorValue(QString value){
             {
                 ui->lineEditVaporPressureFile->setStyleSheet("color: red;");
                 ui->lineEditVaporPressureFile->setText(value);
+
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" VaporPressure File not found: " + value +tr(" <br>"));
+                    }
+                }
 
                 result = false;
             }
@@ -858,6 +1009,19 @@ bool AttDataFile::Check_SoilClassesFileorValue(QString value){
                 ui->lineEditSoilClassesFile->setStyleSheet("color: red;");
                 ui->lineEditSoilClassesFile->setText(value);
 
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" Soil Classes File not found: " + value +tr(" <br>"));
+                    }
+                }
+
                 result = false;
             }
         }
@@ -912,6 +1076,19 @@ bool AttDataFile::Check_GeologyClassesFileorValue(QString value){
             {
                 ui->lineEditGeologyClassesFile->setStyleSheet("color: red;");
                 ui->lineEditGeologyClassesFile->setText(value);
+
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" Geology Classes File not found: " + value +tr(" <br>"));
+                    }
+                }
 
                 result = false;
             }
@@ -968,6 +1145,19 @@ bool AttDataFile::Check_MacroporesFileorValue(QString value){
                 ui->lineEditMacroporesFile->setStyleSheet("color: red;");
                 ui->lineEditMacroporesFile->setText(value);
 
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" Macropores File not found: " + value +tr(" <br>"));
+                    }
+                }
+
                 result = false;
             }
         }
@@ -1022,6 +1212,19 @@ bool AttDataFile::Check_LandCoverClassesFileorValue(QString value){
             {
                 ui->lineEditLandCoverClassesFile->setStyleSheet("color: red;");
                 ui->lineEditLandCoverClassesFile->setText(value);
+
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" LandCover Classes File not found: " + value +tr(" <br>"));
+                    }
+                }
 
                 result = false;
             }
@@ -1078,6 +1281,19 @@ bool AttDataFile::Check_MeltRegionsFileorValue(QString value){
                 ui->lineEditMeltRegionsFile->setStyleSheet("color: red;");
                 ui->lineEditMeltRegionsFile->setText(value);
 
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" MeltRegions File not found: " + value +tr(" <br>"));
+                    }
+                }
+
                 result = false;
             }
         }
@@ -1132,6 +1348,19 @@ bool AttDataFile::Check_SourcesSinksFileorValue(QString value){
             {
                 ui->lineEditSourcesSinksFile->setStyleSheet("color: red;");
                 ui->lineEditSourcesSinksFile->setText(value);
+
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" SourcesSinks File not found: " + value +tr(" <br>"));
+                    }
+                }
 
                 result = false;
             }
@@ -1188,6 +1417,19 @@ bool AttDataFile::Check_InterceptionFileorValue(QString value){
                 ui->lineEditInterceptionFile->setStyleSheet("color: red;");
                 ui->lineEditInterceptionFile->setText(value);
 
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" Interception File not found: " + value +tr(" <br>"));
+                    }
+                }
+
                 result = false;
             }
 
@@ -1242,6 +1484,19 @@ bool AttDataFile::Check_SnowCoverFileorValue(QString value){
             {
                 ui->lineEditSnowCoverFile->setStyleSheet("color: red;");
                 ui->lineEditSnowCoverFile->setText(value);
+
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" SnowCover File not found: " + value +tr(" <br>"));
+                    }
+                }
 
                 result = false;
             }
@@ -1298,6 +1553,19 @@ bool AttDataFile::Check_SurfaceStorageFileorValue(QString value){
                 ui->lineEditSurfaceStorageFile->setStyleSheet("color: red;");
                 ui->lineEditSurfaceStorageFile->setText(value);
 
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" SurfaceStorage File not found: " + value +tr(" <br>"));
+                    }
+                }
+
                 result = false;
             }
         }
@@ -1352,6 +1620,19 @@ bool AttDataFile::Check_SoilMoistureFileorValue(QString value){
             {
                 ui->lineEditSoilMoistureFile->setStyleSheet("color: red;");
                 ui->lineEditSoilMoistureFile->setText(value);
+
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" SoilMoisture File not found: " + value +tr(" <br>"));
+                    }
+                }
 
                 result = false;
             }
@@ -1408,6 +1689,19 @@ bool AttDataFile::Check_GroundwaterFileorValue(QString value){
                 ui->lineEditGroundwaterFile->setStyleSheet("color: red;");
                 ui->lineEditGroundwaterFile->setText(value);
 
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" Groundwater File not found: " + value +tr(" <br>"));
+                    }
+                }
+
                 result = false;
             }
         }
@@ -1462,6 +1756,19 @@ bool AttDataFile::Check_BoundaryConditionFileorValue(QString value){
             {
                 ui->lineEditBoundaryConditionFile->setStyleSheet("color: red;");
                 ui->lineEditBoundaryConditionFile->setText(value);
+
+                bool num_check = Is_String_Integer(value);
+                if(!num_check)
+                {
+                    if(value.isNull() || value.isEmpty() )
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        Log_Error_Message(" BoundaryCondition File not found: " + value +tr(" <br>"));
+                    }
+                }
 
                 result = false;
             }
@@ -2015,7 +2322,7 @@ void AttDataFile::on_checkBoxPrecipitation_toggled(bool checked)
         {
             ui->textLabelPrecipitation->setTextFormat(Qt::RichText);
             ui->textLabelPrecipitation->setText(QString("<html><head/><body><p>Precipitation <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditPrecipitationFile->setFixedWidth(100);
+            ui->lineEditPrecipitationFile->setFixedWidth(input_width_two);
             ui->lineEditPrecipitationFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonPrecipitationFile->setDisabled(true);
             ui->lineEditPrecipitationFile->setText("1"); //Reset to default value
@@ -2024,7 +2331,7 @@ void AttDataFile::on_checkBoxPrecipitation_toggled(bool checked)
         {
             ui->textLabelPrecipitation->setTextFormat(Qt::RichText);
             ui->textLabelPrecipitation->setText(QString("<html><head/><body><p>Precipitation <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditPrecipitationFile->setFixedWidth(301);
+            ui->lineEditPrecipitationFile->setFixedWidth(input_width_one);
             ui->lineEditPrecipitationFile->setValidator( new QRegExpValidator );
             ui->pushButtonPrecipitationFile->setDisabled(false);
             ui->lineEditPrecipitationFile->setText("");
@@ -2049,7 +2356,7 @@ void AttDataFile::on_checkBoxTemperature_toggled(bool checked)
         {
             ui->textLabelTemperature->setTextFormat(Qt::RichText);
             ui->textLabelTemperature->setText(QString("<html><head/><body><p>Temperature <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditTemperatureFile->setFixedWidth(100);
+            ui->lineEditTemperatureFile->setFixedWidth(input_width_two);
             ui->lineEditTemperatureFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonTemperatureFile->setDisabled(true);
             ui->lineEditTemperatureFile->setText("1"); //Reset to default value
@@ -2058,7 +2365,7 @@ void AttDataFile::on_checkBoxTemperature_toggled(bool checked)
         {
             ui->textLabelTemperature->setTextFormat(Qt::RichText);
             ui->textLabelTemperature->setText(QString("<html><head/><body><p>Temperature <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditTemperatureFile->setFixedWidth(301);
+            ui->lineEditTemperatureFile->setFixedWidth(input_width_one);
             ui->lineEditTemperatureFile->setValidator( new QRegExpValidator );
             ui->pushButtonTemperatureFile->setDisabled(false);
             ui->lineEditTemperatureFile->setText(""); //Reset to default value
@@ -2083,7 +2390,7 @@ void AttDataFile::on_checkBoxRelativeHumidity_toggled(bool checked)
         {
             ui->textLabelRelativeHumidity->setTextFormat(Qt::RichText);
             ui->textLabelRelativeHumidity->setText(QString("<html><head/><body><p>Relative Humidity <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditRelativeHumidityFile->setFixedWidth(100);
+            ui->lineEditRelativeHumidityFile->setFixedWidth(input_width_two);
             ui->lineEditRelativeHumidityFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonRelativeHumidityFile->setDisabled(true);
             ui->lineEditRelativeHumidityFile->setText("1"); //Reset to default value
@@ -2092,7 +2399,7 @@ void AttDataFile::on_checkBoxRelativeHumidity_toggled(bool checked)
         {
             ui->textLabelRelativeHumidity->setTextFormat(Qt::RichText);
             ui->textLabelRelativeHumidity->setText(QString("<html><head/><body><p>Relative Humidity <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditRelativeHumidityFile->setFixedWidth(301);
+            ui->lineEditRelativeHumidityFile->setFixedWidth(input_width_one);
             ui->lineEditRelativeHumidityFile->setValidator( new QRegExpValidator );
             ui->pushButtonRelativeHumidityFile->setDisabled(false);
             ui->lineEditRelativeHumidityFile->setText(""); //Reset to default value
@@ -2117,7 +2424,7 @@ void AttDataFile::on_checkBoxWindVelocity_toggled(bool checked)
         {
             ui->textLabelWindVelocity->setTextFormat(Qt::RichText);
             ui->textLabelWindVelocity->setText(QString("<html><head/><body><p>Wind Velocity <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditWindVelocityFile->setFixedWidth(100);
+            ui->lineEditWindVelocityFile->setFixedWidth(input_width_two);
             ui->lineEditWindVelocityFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonWindVelocityFile->setDisabled(true);
             ui->lineEditWindVelocityFile->setText("1"); //Reset to default value
@@ -2126,7 +2433,7 @@ void AttDataFile::on_checkBoxWindVelocity_toggled(bool checked)
         {
             ui->textLabelWindVelocity->setTextFormat(Qt::RichText);
             ui->textLabelWindVelocity->setText(QString("<html><head/><body><p>Wind Velocity <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditWindVelocityFile->setFixedWidth(301);
+            ui->lineEditWindVelocityFile->setFixedWidth(input_width_one);
             ui->lineEditWindVelocityFile->setValidator( new QRegExpValidator );
             ui->pushButtonWindVelocityFile->setDisabled(false);
             ui->lineEditWindVelocityFile->setText(""); //Reset to default value
@@ -2150,7 +2457,7 @@ void AttDataFile::on_checkBoxSolarRadiation_toggled(bool checked)
         {
             ui->textLabelSolarRadiation->setTextFormat(Qt::RichText);
             ui->textLabelSolarRadiation->setText(QString("<html><head/><body><p>Solar Radiation <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditSolarRadiationFile->setFixedWidth(100);
+            ui->lineEditSolarRadiationFile->setFixedWidth(input_width_two);
             ui->lineEditSolarRadiationFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonSolarRadiationFile->setDisabled(true);
             ui->lineEditSolarRadiationFile->setText("1"); //Reset to default value
@@ -2159,7 +2466,7 @@ void AttDataFile::on_checkBoxSolarRadiation_toggled(bool checked)
         {
             ui->textLabelSolarRadiation->setTextFormat(Qt::RichText);
             ui->textLabelSolarRadiation->setText(QString("<html><head/><body><p>Solar Radiation <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditSolarRadiationFile->setFixedWidth(301);
+            ui->lineEditSolarRadiationFile->setFixedWidth(input_width_one);
             ui->lineEditSolarRadiationFile->setValidator( new QRegExpValidator );
             ui->pushButtonSolarRadiationFile->setDisabled(false);
             ui->lineEditSolarRadiationFile->setText(""); //Reset to default value
@@ -2183,7 +2490,7 @@ void AttDataFile::on_checkBoxVaporPressure_toggled(bool checked)
         {
             ui->textLabelVaporPressure->setTextFormat(Qt::RichText);
             ui->textLabelVaporPressure->setText(QString("<html><head/><body><p>Vapor Pressure <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditVaporPressureFile->setFixedWidth(100);
+            ui->lineEditVaporPressureFile->setFixedWidth(input_width_two);
             ui->lineEditVaporPressureFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonVaporPressureFile->setDisabled(true);
             ui->lineEditVaporPressureFile->setText("1"); //Reset to default value
@@ -2192,7 +2499,7 @@ void AttDataFile::on_checkBoxVaporPressure_toggled(bool checked)
         {
             ui->textLabelVaporPressure->setTextFormat(Qt::RichText);
             ui->textLabelVaporPressure->setText(QString("<html><head/><body><p>Vapor Pressure <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditVaporPressureFile->setFixedWidth(301);
+            ui->lineEditVaporPressureFile->setFixedWidth(input_width_one);
             ui->lineEditVaporPressureFile->setValidator( new QRegExpValidator );
             ui->pushButtonVaporPressureFile->setDisabled(false);
             ui->lineEditVaporPressureFile->setText(""); //Reset to default value
@@ -2216,7 +2523,7 @@ void AttDataFile::on_checkBoxSoilClasses_toggled(bool checked)
         {
             ui->textLabelSoilClasses->setTextFormat(Qt::RichText);
             ui->textLabelSoilClasses->setText(QString("<html><head/><body><p>Soil Classes <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditSoilClassesFile->setFixedWidth(100);
+            ui->lineEditSoilClassesFile->setFixedWidth(input_width_two);
             ui->lineEditSoilClassesFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonSoilClassesFile->setDisabled(true);
             ui->lineEditSoilClassesFile->setText("1"); //Reset to default value
@@ -2225,7 +2532,7 @@ void AttDataFile::on_checkBoxSoilClasses_toggled(bool checked)
         {
             ui->textLabelSoilClasses->setTextFormat(Qt::RichText);
             ui->textLabelSoilClasses->setText(QString("<html><head/><body><p>Soil Classes <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditSoilClassesFile->setFixedWidth(301);
+            ui->lineEditSoilClassesFile->setFixedWidth(input_width_one);
             ui->lineEditSoilClassesFile->setValidator( new QRegExpValidator );
             ui->pushButtonSoilClassesFile->setDisabled(false);
             ui->lineEditSoilClassesFile->setText(""); //Reset to default value
@@ -2249,7 +2556,7 @@ void AttDataFile::on_checkBoxGeologyClasses_toggled(bool checked)
         {
             ui->textLabelGeologyClasses->setTextFormat(Qt::RichText);
             ui->textLabelGeologyClasses->setText(QString("<html><head/><body><p>Geology Classes <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditGeologyClassesFile->setFixedWidth(100);
+            ui->lineEditGeologyClassesFile->setFixedWidth(input_width_two);
             ui->lineEditGeologyClassesFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonGeologyClassesFile->setDisabled(true);
             ui->lineEditGeologyClassesFile->setText("1"); //Reset to default value
@@ -2258,7 +2565,7 @@ void AttDataFile::on_checkBoxGeologyClasses_toggled(bool checked)
         {
             ui->textLabelGeologyClasses->setTextFormat(Qt::RichText);
             ui->textLabelGeologyClasses->setText(QString("<html><head/><body><p>Geology Classes <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditGeologyClassesFile->setFixedWidth(301);
+            ui->lineEditGeologyClassesFile->setFixedWidth(input_width_one);
             ui->lineEditGeologyClassesFile->setValidator( new QRegExpValidator );
             ui->pushButtonGeologyClassesFile->setDisabled(false);
             ui->lineEditGeologyClassesFile->setText(""); //Reset to default value
@@ -2282,7 +2589,7 @@ void AttDataFile::on_checkBoxMacropores_toggled(bool checked)
         {
             ui->textLabelMacropores->setTextFormat(Qt::RichText);
             ui->textLabelMacropores->setText(QString("<html><head/><body><p>Macropores <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditMacroporesFile->setFixedWidth(100);
+            ui->lineEditMacroporesFile->setFixedWidth(input_width_two);
             ui->lineEditMacroporesFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonMacroporesFile->setDisabled(true);
             ui->lineEditMacroporesFile->setText("1"); //Reset to default value
@@ -2291,7 +2598,7 @@ void AttDataFile::on_checkBoxMacropores_toggled(bool checked)
         {
             ui->textLabelMacropores->setTextFormat(Qt::RichText);
             ui->textLabelMacropores->setText(QString("<html><head/><body><p>Macropores <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditMacroporesFile->setFixedWidth(301);
+            ui->lineEditMacroporesFile->setFixedWidth(input_width_one);
             ui->lineEditMacroporesFile->setValidator( new QRegExpValidator );
             ui->pushButtonMacroporesFile->setDisabled(false);
             ui->lineEditMacroporesFile->setText(""); //Reset to default value
@@ -2315,7 +2622,7 @@ void AttDataFile::on_checkBoxLandCoverClasses_toggled(bool checked)
         {
             ui->textLabelLandCoverClasses->setTextFormat(Qt::RichText);
             ui->textLabelLandCoverClasses->setText(QString("<html><head/><body><p>Land-cover Classes <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditLandCoverClassesFile->setFixedWidth(100);
+            ui->lineEditLandCoverClassesFile->setFixedWidth(input_width_two);
             ui->lineEditLandCoverClassesFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonLandCoverClassesFile->setDisabled(true);
             ui->lineEditLandCoverClassesFile->setText("1"); //Reset to default value
@@ -2324,7 +2631,7 @@ void AttDataFile::on_checkBoxLandCoverClasses_toggled(bool checked)
         {
             ui->textLabelLandCoverClasses->setTextFormat(Qt::RichText);
             ui->textLabelLandCoverClasses->setText(QString("<html><head/><body><p>Land-cover Classes <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditLandCoverClassesFile->setFixedWidth(301);
+            ui->lineEditLandCoverClassesFile->setFixedWidth(input_width_one);
             ui->lineEditLandCoverClassesFile->setValidator( new QRegExpValidator );
             ui->pushButtonLandCoverClassesFile->setDisabled(false);
             ui->lineEditLandCoverClassesFile->setText(""); //Reset to default value
@@ -2350,7 +2657,7 @@ void AttDataFile::on_checkBoxMeltRegions_toggled(bool checked)
         {
             ui->textLabelMeltRegions->setTextFormat(Qt::RichText);
             ui->textLabelMeltRegions->setText(QString("<html><head/><body><p>Melt Regions <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditMeltRegionsFile->setFixedWidth(100);
+            ui->lineEditMeltRegionsFile->setFixedWidth(input_width_two);
             ui->lineEditMeltRegionsFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonMeltRegionsFile->setDisabled(true);
             ui->lineEditMeltRegionsFile->setText("1"); //Reset to default value
@@ -2359,7 +2666,7 @@ void AttDataFile::on_checkBoxMeltRegions_toggled(bool checked)
         {
             ui->textLabelMeltRegions->setTextFormat(Qt::RichText);
             ui->textLabelMeltRegions->setText(QString("<html><head/><body><p>Melt Regions <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditMeltRegionsFile->setFixedWidth(301);
+            ui->lineEditMeltRegionsFile->setFixedWidth(input_width_one);
             ui->lineEditMeltRegionsFile->setValidator( new QRegExpValidator );
             ui->pushButtonMeltRegionsFile->setDisabled(false);
             ui->lineEditMeltRegionsFile->setText(""); //Reset to default value
@@ -2384,7 +2691,7 @@ void AttDataFile::on_checkBoxSourcesSinks_toggled(bool checked)
         {
             ui->textLabelSourcesSinks->setTextFormat(Qt::RichText);
             ui->textLabelSourcesSinks->setText(QString("<html><head/><body><p>Sources-Sinks <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditSourcesSinksFile->setFixedWidth(100);
+            ui->lineEditSourcesSinksFile->setFixedWidth(input_width_two);
             ui->lineEditSourcesSinksFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonSourcesSinksFile->setDisabled(true);
             ui->lineEditSourcesSinksFile->setText("0"); //Reset to default value
@@ -2393,7 +2700,7 @@ void AttDataFile::on_checkBoxSourcesSinks_toggled(bool checked)
         {
             ui->textLabelSourcesSinks->setTextFormat(Qt::RichText);
             ui->textLabelSourcesSinks->setText(QString("<html><head/><body><p>Sources-Sinks <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditSourcesSinksFile->setFixedWidth(301);
+            ui->lineEditSourcesSinksFile->setFixedWidth(input_width_one);
             ui->lineEditSourcesSinksFile->setValidator( new QRegExpValidator );
             ui->pushButtonSourcesSinksFile->setDisabled(false);
             ui->lineEditSourcesSinksFile->setText(""); //Reset to default value
@@ -2417,7 +2724,7 @@ void AttDataFile::on_checkBoxInterception_toggled(bool checked)
         {
             ui->textLabelInterception->setTextFormat(Qt::RichText);
             ui->textLabelInterception->setText(QString("<html><head/><body><p>Interception (m) <span style=\" vertical-align:super;\">3</span></p></body></html>"));
-            ui->lineEditInterceptionFile->setFixedWidth(100);
+            ui->lineEditInterceptionFile->setFixedWidth(input_width_two);
             ui->lineEditInterceptionFile->setValidator( new QDoubleValidator(0.0,100.0,4,this) );
             ui->pushButtonInterceptionFile->setDisabled(true);
             ui->lineEditInterceptionFile->setText("0"); //Reset to default value
@@ -2426,7 +2733,7 @@ void AttDataFile::on_checkBoxInterception_toggled(bool checked)
         {
             ui->textLabelInterception->setTextFormat(Qt::RichText);
             ui->textLabelInterception->setText(QString("<html><head/><body><p>Interception (m) <span style=\" vertical-align:super;\">3</span></p></body></html>"));
-            ui->lineEditInterceptionFile->setFixedWidth(301);
+            ui->lineEditInterceptionFile->setFixedWidth(input_width_one);
             ui->lineEditInterceptionFile->setValidator( new QRegExpValidator );
             ui->pushButtonInterceptionFile->setDisabled(false);
             ui->lineEditInterceptionFile->setText(""); //Reset to default value
@@ -2450,7 +2757,7 @@ void AttDataFile::on_checkBoxSnowCover_toggled(bool checked)
         {
             ui->textLabelSnowCover->setTextFormat(Qt::RichText);
             ui->textLabelSnowCover->setText(QString("<html><head/><body><p>Snow Cover (m) <span style=\" vertical-align:super;\">3</span></p></body></html>"));
-            ui->lineEditSnowCoverFile->setFixedWidth(100);
+            ui->lineEditSnowCoverFile->setFixedWidth(input_width_two);
             ui->lineEditSnowCoverFile->setValidator( new QDoubleValidator(0.0,100.0,4,this) );
             ui->pushButtonSnowCoverFile->setDisabled(true);
             ui->lineEditSnowCoverFile->setText("0"); //Reset to default value
@@ -2459,7 +2766,7 @@ void AttDataFile::on_checkBoxSnowCover_toggled(bool checked)
         {
             ui->textLabelSnowCover->setTextFormat(Qt::RichText);
             ui->textLabelSnowCover->setText(QString("<html><head/><body><p>Snow Cover (m) <span style=\" vertical-align:super;\">3</span></p></body></html>"));
-            ui->lineEditSnowCoverFile->setFixedWidth(301);
+            ui->lineEditSnowCoverFile->setFixedWidth(input_width_one);
             ui->lineEditSnowCoverFile->setValidator( new QRegExpValidator );
             ui->pushButtonSnowCoverFile->setDisabled(false);
             ui->lineEditSnowCoverFile->setText(""); //Reset to default value
@@ -2483,7 +2790,7 @@ void AttDataFile::on_checkBoxSurfaceStorage_toggled(bool checked)
         {
             ui->textLabelSurfaceStorage->setTextFormat(Qt::RichText);
             ui->textLabelSurfaceStorage->setText(QString("<html><head/><body><p>Surface water (m) <span style=\" vertical-align:super;\">3</span></p></body></html>"));
-            ui->lineEditSurfaceStorageFile->setFixedWidth(100);
+            ui->lineEditSurfaceStorageFile->setFixedWidth(input_width_two);
             ui->lineEditSurfaceStorageFile->setValidator( new QDoubleValidator(0.0,100.0,4,this) );
             ui->pushButtonSurfaceStorageFile->setDisabled(true);
             ui->lineEditSurfaceStorageFile->setText("0"); //Reset to default value
@@ -2492,7 +2799,7 @@ void AttDataFile::on_checkBoxSurfaceStorage_toggled(bool checked)
         {
             ui->textLabelSurfaceStorage->setTextFormat(Qt::RichText);
             ui->textLabelSurfaceStorage->setText(QString("<html><head/><body><p>Surface water (m) <span style=\" vertical-align:super;\">3</span></p></body></html>"));
-            ui->lineEditSurfaceStorageFile->setFixedWidth(301);
+            ui->lineEditSurfaceStorageFile->setFixedWidth(input_width_one);
             ui->lineEditSurfaceStorageFile->setValidator( new QRegExpValidator );
             ui->pushButtonSurfaceStorageFile->setDisabled(false);
             ui->lineEditSurfaceStorageFile->setText(""); //Reset to default value
@@ -2516,7 +2823,7 @@ void AttDataFile::on_checkBoxSoilMoisture_toggled(bool checked)
         {
             ui->textLabelSoilMoisture->setTextFormat(Qt::RichText);
             ui->textLabelSoilMoisture->setText(QString("<html><head/><body><p>Soil Moisture (m) <span style=\" vertical-align:super;\">3</span></p></body></html>"));
-            ui->lineEditSoilMoistureFile->setFixedWidth(100);
+            ui->lineEditSoilMoistureFile->setFixedWidth(input_width_two);
             ui->lineEditSoilMoistureFile->setValidator( new QDoubleValidator(0.0,100.0,4,this) );
             ui->pushButtonSoilMoistureFile->setDisabled(true);
             ui->lineEditSoilMoistureFile->setText("0"); //Reset to default value
@@ -2525,7 +2832,7 @@ void AttDataFile::on_checkBoxSoilMoisture_toggled(bool checked)
         {
             ui->textLabelSoilMoisture->setTextFormat(Qt::RichText);
             ui->textLabelSoilMoisture->setText(QString("<html><head/><body><p>Soil Moisture (m) <span style=\" vertical-align:super;\">3</span></p></body></html>"));
-            ui->lineEditSoilMoistureFile->setFixedWidth(301);
+            ui->lineEditSoilMoistureFile->setFixedWidth(input_width_one);
             ui->lineEditSoilMoistureFile->setValidator( new QRegExpValidator );
             ui->pushButtonSoilMoistureFile->setDisabled(false);
             ui->lineEditSoilMoistureFile->setText(""); //Reset to default value
@@ -2549,7 +2856,7 @@ void AttDataFile::on_checkBoxGroundwater_toggled(bool checked)
         {
             ui->textLabelGroundwater->setTextFormat(Qt::RichText);
             ui->textLabelGroundwater->setText(QString("<html><head/><body><p>Groundwater (m) <span style=\" vertical-align:super;\">3</span></p></body></html>"));
-            ui->lineEditGroundwaterFile->setFixedWidth(100);
+            ui->lineEditGroundwaterFile->setFixedWidth(input_width_two);
             ui->lineEditGroundwaterFile->setValidator( new QDoubleValidator(0.0,100.0,4,this) );
             ui->pushButtonGroundwaterFile->setDisabled(true);
             ui->lineEditGroundwaterFile->setText("0"); //Reset to default value
@@ -2558,7 +2865,7 @@ void AttDataFile::on_checkBoxGroundwater_toggled(bool checked)
         {
             ui->textLabelGroundwater->setTextFormat(Qt::RichText);
             ui->textLabelGroundwater->setText(QString("<html><head/><body><p>Groundwater (m) <span style=\" vertical-align:super;\">3</span></p></body></html>"));
-            ui->lineEditGroundwaterFile->setFixedWidth(301);
+            ui->lineEditGroundwaterFile->setFixedWidth(input_width_one);
             ui->lineEditGroundwaterFile->setValidator( new QRegExpValidator );
             ui->pushButtonGroundwaterFile->setDisabled(false);
             ui->lineEditGroundwaterFile->setText(""); //Reset to default value
@@ -2582,7 +2889,7 @@ void AttDataFile::on_checkBoxBoundaryCondition_toggled(bool checked)
         {
             ui->textLabelBoundaryCondition->setTextFormat(Qt::RichText);
             ui->textLabelBoundaryCondition->setText(QString("<html><head/><body><p>Boundary Condition <span style=\" vertical-align:super;\">1</span></p></body></html>"));
-            ui->lineEditBoundaryConditionFile->setFixedWidth(100);
+            ui->lineEditBoundaryConditionFile->setFixedWidth(input_width_two);
             ui->lineEditBoundaryConditionFile->setValidator( new QIntValidator(0,1,this) );
             ui->pushButtonBoundaryConditionFile->setDisabled(true);
             ui->lineEditBoundaryConditionFile->setText("0"); //Reset to default value
@@ -2591,7 +2898,7 @@ void AttDataFile::on_checkBoxBoundaryCondition_toggled(bool checked)
         {
             ui->textLabelBoundaryCondition->setTextFormat(Qt::RichText);
             ui->textLabelBoundaryCondition->setText(QString("<html><head/><body><p>Boundary Condition <span style=\" vertical-align:super;\">2</span></p></body></html>"));
-            ui->lineEditBoundaryConditionFile->setFixedWidth(301);
+            ui->lineEditBoundaryConditionFile->setFixedWidth(input_width_one);
             ui->lineEditBoundaryConditionFile->setValidator( new QRegExpValidator );
             ui->pushButtonBoundaryConditionFile->setDisabled(false);
             ui->lineEditBoundaryConditionFile->setText(""); //Reset to default value
@@ -2611,7 +2918,8 @@ void AttDataFile::on_lineEditPrecipitationFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditPrecipitationFile_textChanged()";
 
     try {
-        Check_PrecipitationFileorValue(arg1);
+        if(finished_loading_files)
+            Check_PrecipitationFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditPrecipitationFile_textChanged() is returning w/o checking";
     }
@@ -2626,7 +2934,8 @@ void AttDataFile::on_lineEditTemperatureFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditTemperatureFile_textChanged()";
 
     try {
-        Check_TemperatureFileorValue(arg1);
+        if(finished_loading_files)
+            Check_TemperatureFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditTemperatureFile_textChanged() is returning w/o checking";
     }
@@ -2641,7 +2950,8 @@ void AttDataFile::on_lineEditRelativeHumidityFile_textChanged(const QString &arg
         qDebug() << "INFO: Start AttDataFile::on_lineEditRelativeHumidityFile_textChanged()";
 
     try {
-        Check_RelativeHumidityFileorValue(arg1);
+        if(finished_loading_files)
+            Check_RelativeHumidityFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditRelativeHumidityFile_textChanged() is returning w/o checking";
     }
@@ -2656,7 +2966,8 @@ void AttDataFile::on_lineEditWindVelocityFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditWindVelocityFile_textChanged()";
 
     try {
-        Check_RelativeHumidityFileorValue(arg1);
+        if(finished_loading_files)
+            Check_RelativeHumidityFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditWindVelocityFile_textChanged() is returning w/o checking";
     }
@@ -2671,7 +2982,8 @@ void AttDataFile::on_lineEditSolarRadiationFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSolarRadiationFile_textChanged()";
 
     try {
-        Check_SolarRadiationFileorValue(arg1);
+        if(finished_loading_files)
+            Check_SolarRadiationFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSolarRadiationFile_textChanged() is returning w/o checking";
     }
@@ -2686,7 +2998,8 @@ void AttDataFile::on_lineEditVaporPressureFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditVaporPressureFile_textChanged()";
 
     try {
-        Check_VaporPressureFileorValue(arg1);
+        if(finished_loading_files)
+            Check_VaporPressureFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditVaporPressureFile_textChanged() is returning w/o checking";
     }
@@ -2701,7 +3014,8 @@ void AttDataFile::on_lineEditSoilClassesFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSoilClassesFile_textChanged()";
 
     try {
-        Check_SoilClassesFileorValue(arg1);
+        if(finished_loading_files)
+            Check_SoilClassesFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSoilClassesFile_textChanged() is returning w/o checking";
     }
@@ -2716,7 +3030,8 @@ void AttDataFile::on_lineEditGeologyClassesFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditGeologyClassesFile_textChanged()";
 
     try {
-        Check_GeologyClassesFileorValue(arg1);
+        if(finished_loading_files)
+            Check_GeologyClassesFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditGeologyClassesFile_textChanged() is returning w/o checking";
     }
@@ -2731,7 +3046,8 @@ void AttDataFile::on_lineEditMacroporesFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditMacroporesFile_textChanged()";
 
     try {
-        Check_MacroporesFileorValue(arg1);
+        if(finished_loading_files)
+            Check_MacroporesFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditMacroporesFile_textChanged() is returning w/o checking";
     }
@@ -2746,7 +3062,8 @@ void AttDataFile::on_lineEditLandCoverClassesFile_textChanged(const QString &arg
         qDebug() << "INFO: Start AttDataFile::on_lineEditLandCoverClassesFile_textChanged()";
 
     try {
-        Check_LandCoverClassesFileorValue(arg1);
+        if(finished_loading_files)
+            Check_LandCoverClassesFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditLandCoverClassesFile_textChanged() is returning w/o checking";
     }
@@ -2761,7 +3078,8 @@ void AttDataFile::on_lineEditMeltRegionsFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditMeltRegionsFile_textChanged()";
 
     try {
-        Check_MeltRegionsFileorValue(arg1);
+        if(finished_loading_files)
+            Check_MeltRegionsFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditMeltRegionsFile_textChanged() is returning w/o checking";
     }
@@ -2776,7 +3094,8 @@ void AttDataFile::on_lineEditSourcesSinksFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSourcesSinksFile_textChanged()";
 
     try {
-        Check_SourcesSinksFileorValue(arg1);
+        if(finished_loading_files)
+            Check_SourcesSinksFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSourcesSinksFile_textChanged() is returning w/o checking";
     }
@@ -2791,7 +3110,8 @@ void AttDataFile::on_lineEditInterceptionFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditInterceptionFile_textChanged()";
 
     try {
-        Check_InterceptionFileorValue(arg1);
+        if(finished_loading_files)
+            Check_InterceptionFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditInterceptionFile_textChanged() is returning w/o checking";
     }
@@ -2806,7 +3126,8 @@ void AttDataFile::on_lineEditSnowCoverFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSnowCoverFile_textChanged()";
 
     try {
-        Check_SnowCoverFileorValue(arg1);
+        if(finished_loading_files)
+            Check_SnowCoverFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSnowCoverFile_textChanged() is returning w/o checking";
     }
@@ -2821,7 +3142,8 @@ void AttDataFile::on_lineEditSurfaceStorageFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSurfaceStorageFile_textChanged()";
 
     try {
-        Check_SurfaceStorageFileorValue(arg1);
+        if(finished_loading_files)
+            Check_SurfaceStorageFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSurfaceStorageFile_textChanged() is returning w/o checking";
     }
@@ -2836,7 +3158,8 @@ void AttDataFile::on_lineEditSoilMoistureFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditSoilMoistureFile_textChanged()";
 
     try {
-        Check_SoilMoistureFileorValue(arg1);
+        if(finished_loading_files)
+            Check_SoilMoistureFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditSoilMoistureFile_textChanged() is returning w/o checking";
     }
@@ -2851,7 +3174,8 @@ void AttDataFile::on_lineEditGroundwaterFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditGroundwaterFile_textChanged()";
 
     try {
-        Check_GroundwaterFileorValue(arg1);
+        if(finished_loading_files)
+            Check_GroundwaterFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditGroundwaterFile_textChanged() is returning w/o checking";
     }
@@ -2866,7 +3190,8 @@ void AttDataFile::on_lineEditBoundaryConditionFile_textChanged(const QString &ar
         qDebug() << "INFO: Start AttDataFile::on_lineEditBoundaryConditionFile_textChanged()";
 
     try {
-        Check_BoundaryConditionFileorValue(arg1);
+        if(finished_loading_files)
+            Check_BoundaryConditionFileorValue(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditBoundaryConditionFile_textChanged() is returning w/o checking";
     }
@@ -2881,7 +3206,8 @@ void AttDataFile::on_lineEditTINShapeLayerFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditTINShapeLayerFile_textChanged()";
 
     try {
-        Check_TINShape_Input(arg1);
+        if(finished_loading_files)
+            Check_TINShape_Input(arg1);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditTINShapeLayerFile_textChanged() is returning w/o checking";
     }
@@ -2896,7 +3222,8 @@ void AttDataFile::on_lineEditAttDataFile_textChanged(const QString &arg1)
         qDebug() << "INFO: Start AttDataFile::on_lineEditAttDataFile_textChanged()";
 
     try {
-        Check_Att_Output(arg1, true);
+        if(finished_loading_files)
+            Check_Att_Output(arg1, true);
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_lineEditAttDataFile_textChanged() is returning w/o checking";
     }
