@@ -33,6 +33,8 @@ private:
     int calib_data_file(QString filename);
 
     void Clear_Log();
+    void Log_Warning_Message(QString message);
+    void Log_Error_Message(QString message);
 
     bool Load_Project_Settings();
 

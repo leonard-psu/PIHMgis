@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
+    <width>800</width>
     <height>588</height>
    </rect>
   </property>
@@ -437,9 +437,9 @@
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>21</y>
-     <width>581</width>
+     <width>781</width>
      <height>281</height>
     </rect>
    </property>
@@ -455,7 +455,7 @@
       <rect>
        <x>123</x>
        <y>128</y>
-       <width>131</width>
+       <width>250</width>
        <height>30</height>
       </rect>
      </property>
@@ -488,7 +488,7 @@
       <rect>
        <x>123</x>
        <y>73</y>
-       <width>131</width>
+       <width>250</width>
        <height>30</height>
       </rect>
      </property>
@@ -567,7 +567,7 @@
       <rect>
        <x>123</x>
        <y>17</y>
-       <width>131</width>
+       <width>250</width>
        <height>30</height>
       </rect>
      </property>
@@ -623,7 +623,7 @@
       <rect>
        <x>5</x>
        <y>180</y>
-       <width>565</width>
+       <width>771</width>
        <height>3</height>
       </rect>
      </property>
@@ -634,7 +634,7 @@
     <widget class="Line" name="line2_3">
      <property name="geometry">
       <rect>
-       <x>287</x>
+       <x>389</x>
        <y>5</y>
        <width>3</width>
        <height>165</height>
@@ -716,7 +716,7 @@
     <widget class="QLabel" name="textLabel3_25">
      <property name="geometry">
       <rect>
-       <x>310</x>
+       <x>410</x>
        <y>17</y>
        <width>91</width>
        <height>31</height>
@@ -736,9 +736,9 @@
     <widget class="QComboBox" name="comboBoxInitMode">
      <property name="geometry">
       <rect>
-       <x>414</x>
+       <x>510</x>
        <y>17</y>
-       <width>131</width>
+       <width>250</width>
        <height>30</height>
       </rect>
      </property>
@@ -779,7 +779,7 @@
     <widget class="QLabel" name="textLabel1_2">
      <property name="geometry">
       <rect>
-       <x>310</x>
+       <x>400</x>
        <y>207</y>
        <width>151</width>
        <height>31</height>
@@ -803,9 +803,9 @@
     <widget class="QDoubleSpinBox" name="doubleSpinBoxAbsoluteTolerance">
      <property name="geometry">
       <rect>
-       <x>465</x>
+       <x>560</x>
        <y>208</y>
-       <width>101</width>
+       <width>200</width>
        <height>29</height>
       </rect>
      </property>
@@ -836,9 +836,9 @@
     <widget class="QDoubleSpinBox" name="doubleSpinBoxRelativeTolerance">
      <property name="geometry">
       <rect>
-       <x>465</x>
+       <x>560</x>
        <y>169</y>
-       <width>101</width>
+       <width>200</width>
        <height>29</height>
       </rect>
      </property>
@@ -869,7 +869,7 @@
     <widget class="QLabel" name="textLabel1_3">
      <property name="geometry">
       <rect>
-       <x>310</x>
+       <x>400</x>
        <y>168</y>
        <width>151</width>
        <height>31</height>
@@ -895,7 +895,7 @@
       <rect>
        <x>5</x>
        <y>56</y>
-       <width>565</width>
+       <width>761</width>
        <height>3</height>
       </rect>
      </property>
@@ -906,7 +906,7 @@
     <widget class="QLabel" name="textLabel1_4">
      <property name="geometry">
       <rect>
-       <x>90</x>
+       <x>170</x>
        <y>12</y>
        <width>131</width>
        <height>31</height>
@@ -932,7 +932,7 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>310</x>
        <y>16</y>
        <width>121</width>
        <height>23</height>
@@ -952,7 +952,7 @@
     <widget class="QRadioButton" name="radioButtonIterative">
      <property name="geometry">
       <rect>
-       <x>390</x>
+       <x>470</x>
        <y>16</y>
        <width>121</width>
        <height>23</height>
@@ -975,7 +975,7 @@
     <widget class="QLabel" name="textLabel1_5">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>420</x>
        <y>90</y>
        <width>131</width>
        <height>31</height>
@@ -999,9 +999,9 @@
     <widget class="QDoubleSpinBox" name="doubleSpinBoxInitialStep">
      <property name="geometry">
       <rect>
-       <x>465</x>
+       <x>560</x>
        <y>90</y>
-       <width>101</width>
+       <width>200</width>
        <height>29</height>
       </rect>
      </property>
@@ -1032,7 +1032,7 @@
     <widget class="Line" name="line2_4">
      <property name="geometry">
       <rect>
-       <x>285</x>
+       <x>388</x>
        <y>64</y>
        <width>3</width>
        <height>183</height>
@@ -1045,9 +1045,9 @@
     <widget class="QDoubleSpinBox" name="doubleSpinBoxMaximumStep">
      <property name="geometry">
       <rect>
-       <x>465</x>
+       <x>560</x>
        <y>131</y>
-       <width>101</width>
+       <width>200</width>
        <height>29</height>
       </rect>
      </property>
@@ -1078,7 +1078,7 @@
     <widget class="QLabel" name="textLabel1_7">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>420</x>
        <y>130</y>
        <width>131</width>
        <height>31</height>
@@ -1102,9 +1102,9 @@
     <widget class="QDoubleSpinBox" name="doubleSpinBoxETStep">
      <property name="geometry">
       <rect>
-       <x>156</x>
+       <x>155</x>
        <y>208</y>
-       <width>101</width>
+       <width>220</width>
        <height>29</height>
       </rect>
      </property>
@@ -1135,7 +1135,7 @@
     <widget class="QLabel" name="textLabel1_6">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>207</y>
        <width>131</width>
        <height>31</height>
@@ -1159,7 +1159,7 @@
     <widget class="QLabel" name="textLabel1_8">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>163</y>
        <width>131</width>
        <height>31</height>
@@ -1184,9 +1184,9 @@ Threshold</string>
     <widget class="QDoubleSpinBox" name="doubleSpinBoxConvergenceThreshold">
      <property name="geometry">
       <rect>
-       <x>156</x>
+       <x>155</x>
        <y>164</y>
-       <width>101</width>
+       <width>220</width>
        <height>29</height>
       </rect>
      </property>
@@ -1217,7 +1217,7 @@ Threshold</string>
     <widget class="QLabel" name="textLabel1_9">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>118</y>
        <width>131</width>
        <height>31</height>
@@ -1242,7 +1242,7 @@ Dimension</string>
     <widget class="QLabel" name="textLabel1_10">
      <property name="geometry">
       <rect>
-       <x>21</x>
+       <x>10</x>
        <y>73</y>
        <width>131</width>
        <height>31</height>
@@ -1266,9 +1266,9 @@ Dimension</string>
     <widget class="QComboBox" name="comboBoxGrahmSchmidt">
      <property name="geometry">
       <rect>
-       <x>156</x>
+       <x>155</x>
        <y>74</y>
-       <width>101</width>
+       <width>220</width>
        <height>30</height>
       </rect>
      </property>
@@ -1299,9 +1299,9 @@ Dimension</string>
     <widget class="QSpinBox" name="spinBoxKrylovDimension">
      <property name="geometry">
       <rect>
-       <x>157</x>
+       <x>155</x>
        <y>120</y>
-       <width>101</width>
+       <width>220</width>
        <height>29</height>
       </rect>
      </property>
@@ -1345,7 +1345,7 @@ Dimension</string>
     <widget class="QLabel" name="textLabel2">
      <property name="geometry">
       <rect>
-       <x>202</x>
+       <x>290</x>
        <y>10</y>
        <width>121</width>
        <height>31</height>
@@ -1367,7 +1367,7 @@ Dimension</string>
       <rect>
        <x>96</x>
        <y>10</y>
-       <width>81</width>
+       <width>150</width>
        <height>29</height>
       </rect>
      </property>
@@ -1385,9 +1385,9 @@ Dimension</string>
     <widget class="QSpinBox" name="spinBoxStopTime">
      <property name="geometry">
       <rect>
-       <x>283</x>
+       <x>370</x>
        <y>10</y>
-       <width>81</width>
+       <width>150</width>
        <height>29</height>
       </rect>
      </property>
@@ -1408,9 +1408,9 @@ Dimension</string>
     <widget class="QComboBox" name="comboBoxStartStop">
      <property name="geometry">
       <rect>
-       <x>418</x>
+       <x>557</x>
        <y>10</y>
-       <width>104</width>
+       <width>210</width>
        <height>30</height>
       </rect>
      </property>
@@ -1463,7 +1463,7 @@ Dimension</string>
       <rect>
        <x>6</x>
        <y>47</y>
-       <width>565</width>
+       <width>771</width>
        <height>3</height>
       </rect>
      </property>
@@ -1474,7 +1474,7 @@ Dimension</string>
     <widget class="QLabel" name="textLabel3_11">
      <property name="geometry">
       <rect>
-       <x>127</x>
+       <x>200</x>
        <y>100</y>
        <width>91</width>
        <height>31</height>
@@ -1489,11 +1489,14 @@ Dimension</string>
      <property name="text">
       <string>Riverbed</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="Line" name="line2_2">
      <property name="geometry">
       <rect>
-       <x>262</x>
+       <x>383</x>
        <y>58</y>
        <width>3</width>
        <height>191</height>
@@ -1521,13 +1524,16 @@ Dimension</string>
      <property name="text">
       <string>River</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QSpinBox" name="spinBoxRiverbed">
      <property name="geometry">
       <rect>
-       <x>200</x>
+       <x>300</x>
        <y>100</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1561,13 +1567,16 @@ Dimension</string>
      <property name="text">
       <string>Riv u/d</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QSpinBox" name="spinBoxRiverSurfaceLeftRight">
      <property name="geometry">
       <rect>
-       <x>63</x>
+       <x>120</x>
        <y>174</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1581,9 +1590,9 @@ Dimension</string>
     <widget class="QSpinBox" name="spinBoxRiver">
      <property name="geometry">
       <rect>
-       <x>63</x>
+       <x>120</x>
        <y>100</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1602,9 +1611,9 @@ Dimension</string>
     <widget class="QSpinBox" name="spinBoxRiverUpDown">
      <property name="geometry">
       <rect>
-       <x>63</x>
+       <x>120</x>
        <y>136</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1623,9 +1632,9 @@ Dimension</string>
     <widget class="QLabel" name="textLabel3_14">
      <property name="geometry">
       <rect>
-       <x>9</x>
+       <x>30</x>
        <y>174</y>
-       <width>91</width>
+       <width>70</width>
        <height>31</height>
       </rect>
      </property>
@@ -1638,6 +1647,9 @@ Dimension</string>
      </property>
      <property name="text">
       <string>Riv S l/r</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="textLabel3_15">
@@ -1658,13 +1670,16 @@ Dimension</string>
      <property name="text">
       <string>Riv B l/r</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QSpinBox" name="spinBoxRiverBaseLeftRight">
      <property name="geometry">
       <rect>
-       <x>63</x>
+       <x>120</x>
        <y>212</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1683,9 +1698,9 @@ Dimension</string>
     <widget class="QSpinBox" name="spinBoxInterception">
      <property name="geometry">
       <rect>
-       <x>355</x>
+       <x>510</x>
        <y>60</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1704,7 +1719,7 @@ Dimension</string>
     <widget class="QLabel" name="textLabel3_2">
      <property name="geometry">
       <rect>
-       <x>271</x>
+       <x>376</x>
        <y>98</y>
        <width>121</width>
        <height>31</height>
@@ -1719,11 +1734,14 @@ Dimension</string>
      <property name="text">
       <string>Snow</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="textLabel3">
      <property name="geometry">
       <rect>
-       <x>271</x>
+       <x>376</x>
        <y>60</y>
        <width>121</width>
        <height>31</height>
@@ -1738,13 +1756,16 @@ Dimension</string>
      <property name="text">
       <string>Interception</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QSpinBox" name="spinBoxGroundEvaporation">
      <property name="geometry">
       <rect>
-       <x>513</x>
+       <x>693</x>
        <y>212</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1763,9 +1784,9 @@ Dimension</string>
     <widget class="QSpinBox" name="spinBoxSoilMoisture">
      <property name="geometry">
       <rect>
-       <x>355</x>
+       <x>510</x>
        <y>174</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1784,7 +1805,7 @@ Dimension</string>
     <widget class="QLabel" name="textLabel3_5">
      <property name="geometry">
       <rect>
-       <x>271</x>
+       <x>376</x>
        <y>212</y>
        <width>121</width>
        <height>31</height>
@@ -1799,13 +1820,16 @@ Dimension</string>
      <property name="text">
       <string>Groundwater</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QSpinBox" name="spinBoxGroundwater">
      <property name="geometry">
       <rect>
-       <x>355</x>
+       <x>510</x>
        <y>212</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1824,7 +1848,7 @@ Dimension</string>
     <widget class="Line" name="line2">
      <property name="geometry">
       <rect>
-       <x>418</x>
+       <x>590</x>
        <y>58</y>
        <width>3</width>
        <height>191</height>
@@ -1837,7 +1861,7 @@ Dimension</string>
     <widget class="QLabel" name="textLabel3_6">
      <property name="geometry">
       <rect>
-       <x>428</x>
+       <x>560</x>
        <y>212</y>
        <width>121</width>
        <height>31</height>
@@ -1852,13 +1876,16 @@ Dimension</string>
      <property name="text">
       <string>Ground Evap</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="textLabel3_3">
      <property name="geometry">
       <rect>
-       <x>271</x>
+       <x>406</x>
        <y>136</y>
-       <width>121</width>
+       <width>91</width>
        <height>31</height>
       </rect>
      </property>
@@ -1871,11 +1898,14 @@ Dimension</string>
      <property name="text">
       <string>Surface</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="textLabel3_9">
      <property name="geometry">
       <rect>
-       <x>428</x>
+       <x>560</x>
        <y>98</y>
        <width>121</width>
        <height>31</height>
@@ -1890,11 +1920,14 @@ Dimension</string>
      <property name="text">
       <string>Recharge</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="textLabel3_10">
      <property name="geometry">
       <rect>
-       <x>428</x>
+       <x>560</x>
        <y>60</y>
        <width>121</width>
        <height>31</height>
@@ -1909,11 +1942,14 @@ Dimension</string>
      <property name="text">
       <string>Infiltration</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="textLabel3_4">
      <property name="geometry">
       <rect>
-       <x>271</x>
+       <x>376</x>
        <y>174</y>
        <width>121</width>
        <height>31</height>
@@ -1929,13 +1965,16 @@ Dimension</string>
      <property name="text">
       <string>Soil Moisture</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QSpinBox" name="spinBoxCanopyEvaporation">
      <property name="geometry">
       <rect>
-       <x>513</x>
+       <x>693</x>
        <y>136</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1954,9 +1993,9 @@ Dimension</string>
     <widget class="QSpinBox" name="spinBoxSnow">
      <property name="geometry">
       <rect>
-       <x>355</x>
+       <x>510</x>
        <y>98</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1975,9 +2014,9 @@ Dimension</string>
     <widget class="QSpinBox" name="spinBoxSurface">
      <property name="geometry">
       <rect>
-       <x>355</x>
+       <x>510</x>
        <y>136</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -1996,9 +2035,9 @@ Dimension</string>
     <widget class="QSpinBox" name="spinBoxTranspiration">
      <property name="geometry">
       <rect>
-       <x>513</x>
+       <x>693</x>
        <y>174</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -2017,9 +2056,9 @@ Dimension</string>
     <widget class="QLabel" name="textLabel3_7">
      <property name="geometry">
       <rect>
-       <x>428</x>
+       <x>589</x>
        <y>136</y>
-       <width>121</width>
+       <width>91</width>
        <height>31</height>
       </rect>
      </property>
@@ -2033,13 +2072,16 @@ Dimension</string>
      <property name="text">
       <string>Canopy Evap</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QSpinBox" name="spinBoxRecharge">
      <property name="geometry">
       <rect>
-       <x>513</x>
+       <x>693</x>
        <y>98</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -2058,9 +2100,9 @@ Dimension</string>
     <widget class="QSpinBox" name="spinBoxInfiltration">
      <property name="geometry">
       <rect>
-       <x>513</x>
+       <x>693</x>
        <y>60</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -2079,7 +2121,7 @@ Dimension</string>
     <widget class="QLabel" name="textLabel3_8">
      <property name="geometry">
       <rect>
-       <x>428</x>
+       <x>560</x>
        <y>174</y>
        <width>121</width>
        <height>31</height>
@@ -2094,11 +2136,14 @@ Dimension</string>
      <property name="text">
       <string>Transpiration</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="textLabel3_16">
      <property name="geometry">
       <rect>
-       <x>128</x>
+       <x>201</x>
        <y>212</y>
        <width>91</width>
        <height>31</height>
@@ -2113,13 +2158,16 @@ Dimension</string>
      <property name="text">
       <string>Rivbed s</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QSpinBox" name="spinBoxRiverbedUpDown">
      <property name="geometry">
       <rect>
-       <x>200</x>
+       <x>300</x>
        <y>136</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -2133,7 +2181,7 @@ Dimension</string>
     <widget class="QLabel" name="textLabel3_17">
      <property name="geometry">
       <rect>
-       <x>128</x>
+       <x>201</x>
        <y>174</y>
        <width>91</width>
        <height>31</height>
@@ -2148,13 +2196,16 @@ Dimension</string>
      <property name="text">
       <string>Rivbed l/r</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QSpinBox" name="spinBoxRiverbedLeftRight">
      <property name="geometry">
       <rect>
-       <x>200</x>
+       <x>300</x>
        <y>174</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -2173,9 +2224,9 @@ Dimension</string>
     <widget class="QSpinBox" name="spinBoxRivertoRiverBed">
      <property name="geometry">
       <rect>
-       <x>200</x>
+       <x>300</x>
        <y>212</y>
-       <width>55</width>
+       <width>70</width>
        <height>29</height>
       </rect>
      </property>
@@ -2194,7 +2245,7 @@ Dimension</string>
     <widget class="QLabel" name="textLabel3_18">
      <property name="geometry">
       <rect>
-       <x>128</x>
+       <x>201</x>
        <y>136</y>
        <width>91</width>
        <height>31</height>
@@ -2210,13 +2261,16 @@ Dimension</string>
      <property name="text">
       <string>Rivbed u/d</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QComboBox" name="comboBoxOutput">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>160</x>
        <y>60</y>
-       <width>104</width>
+       <width>210</width>
        <height>30</height>
       </rect>
      </property>
@@ -2289,10 +2343,10 @@ Dimension</string>
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>437</y>
-     <width>581</width>
-     <height>131</height>
+     <x>5</x>
+     <y>427</y>
+     <width>781</width>
+     <height>141</height>
     </rect>
    </property>
    <property name="lineWrapMode">
@@ -2302,9 +2356,9 @@ Dimension</string>
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>388</y>
-     <width>581</width>
+     <x>5</x>
+     <y>383</y>
+     <width>781</width>
      <height>41</height>
     </rect>
    </property>
@@ -2340,7 +2394,7 @@ Dimension</string>
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>540</x>
       <y>6</y>
       <width>113</width>
       <height>32</height>
@@ -2363,7 +2417,7 @@ Dimension</string>
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>657</x>
       <y>6</y>
       <width>113</width>
       <height>32</height>
@@ -2392,7 +2446,7 @@ Dimension</string>
     <rect>
      <x>0</x>
      <y>572</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -2836,9 +2890,9 @@ Dimension</string>
   <widget class="QGroupBox" name="groupBoxOutput">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>304</y>
-     <width>581</width>
+     <width>781</width>
      <height>81</height>
     </rect>
    </property>
@@ -2848,7 +2902,7 @@ Dimension</string>
    <widget class="QLabel" name="textLabelPara">
     <property name="geometry">
      <rect>
-      <x>240</x>
+      <x>321</x>
       <y>10</y>
       <width>131</width>
       <height>31</height>
@@ -2864,11 +2918,14 @@ Dimension</string>
     <property name="text">
      <string>Para Data File</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButtonParaDataFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
+      <x>673</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -2893,7 +2950,7 @@ Dimension</string>
      <rect>
       <x>0</x>
       <y>44</y>
-      <width>571</width>
+      <width>771</width>
       <height>29</height>
      </rect>
     </property>
@@ -2911,7 +2968,7 @@ Dimension</string>
     <rect>
      <x>0</x>
      <y>-4</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>

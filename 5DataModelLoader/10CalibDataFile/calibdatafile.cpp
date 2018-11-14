@@ -30,9 +30,7 @@ CalibDataFile::CalibDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Unable to Open File: " + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -66,6 +64,34 @@ CalibDataFile::~CalibDataFile()
         delete ui;
     } catch (...) {
         qDebug() << "Error: ~CalibDataFile is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void CalibDataFile::Log_Warning_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Warning_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void CalibDataFile::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
     }
 }
 
@@ -238,9 +264,7 @@ bool CalibDataFile::Check_Calib_Output(QString file, bool color_and_message_if_e
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Calib output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message("Calib output already exists: " + file +tr(" You may need to delete this file.<br>"));
             }
 
             ui->lineEditCalibDataFile->setStyleSheet("color: red;");
@@ -360,9 +384,7 @@ void CalibDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(calib_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + calib_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("No Write Access to " + calib_filename + tr("<br>"));
             return;
         }
 
@@ -377,10 +399,8 @@ void CalibDataFile::on_pushButtonRun_clicked()
 
         if( ErrorCalib != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Calib Data File Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE CALIB: ... </span>")+QString::number(ErrorCalib)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Calib Data File Processing Failed " + tr("<br>"));
+            Log_Error_Message("Calib error code: " + QString::number(ErrorCalib)+tr("<br>"));
             return;
         }
 

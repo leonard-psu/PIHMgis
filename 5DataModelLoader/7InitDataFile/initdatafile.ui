@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
+    <width>800</width>
     <height>539</height>
    </rect>
   </property>
@@ -437,9 +437,9 @@
   <widget class="QGroupBox" name="groupBoxOutput">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>290</y>
-     <width>581</width>
+     <width>781</width>
      <height>91</height>
     </rect>
    </property>
@@ -449,8 +449,8 @@
    <widget class="QLabel" name="textLabel2">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>10</y>
+      <x>309</x>
+      <y>15</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -465,11 +465,14 @@
     <property name="text">
      <string>Init Data File</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButtonInitDataFile">
     <property name="geometry">
      <rect>
-      <x>477</x>
+      <x>678</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -495,7 +498,7 @@
      <rect>
       <x>5</x>
       <y>45</y>
-      <width>571</width>
+      <width>771</width>
       <height>29</height>
      </rect>
     </property>
@@ -513,7 +516,7 @@
     <rect>
      <x>0</x>
      <y>523</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -959,7 +962,7 @@
     <rect>
      <x>0</x>
      <y>-4</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -1403,9 +1406,9 @@
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>379</y>
-     <width>581</width>
+     <width>781</width>
      <height>41</height>
     </rect>
    </property>
@@ -1450,7 +1453,7 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>544</x>
       <y>4</y>
       <width>113</width>
       <height>32</height>
@@ -1466,7 +1469,7 @@
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>664</x>
       <y>4</y>
       <width>113</width>
       <height>32</height>
@@ -1494,9 +1497,9 @@
   <widget class="QGroupBox" name="groupBoxInput_2">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>141</y>
-     <width>581</width>
+     <width>781</width>
      <height>151</height>
     </rect>
    </property>
@@ -1506,7 +1509,7 @@
    <widget class="QPushButton" name="pushButtonMeshDataFile">
     <property name="geometry">
      <rect>
-      <x>477</x>
+      <x>678</x>
       <y>3</y>
       <width>98</width>
       <height>32</height>
@@ -1536,8 +1539,8 @@
    <widget class="QLabel" name="textLabel1">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>0</y>
+      <x>320</x>
+      <y>9</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -1552,13 +1555,16 @@
     <property name="text">
      <string>Mesh Data File</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEditMeshDataFile">
     <property name="geometry">
      <rect>
       <x>7</x>
       <y>37</y>
-      <width>571</width>
+      <width>771</width>
       <height>29</height>
      </rect>
     </property>
@@ -1573,8 +1579,8 @@
    <widget class="QLabel" name="textLabel1_4">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>80</y>
+      <x>318</x>
+      <y>76</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -1589,11 +1595,14 @@
     <property name="text">
      <string>Riv Data File</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButtonRivDataFile">
     <property name="geometry">
      <rect>
-      <x>475</x>
+      <x>678</x>
       <y>70</y>
       <width>98</width>
       <height>32</height>
@@ -1625,7 +1634,7 @@
      <rect>
       <x>7</x>
       <y>105</y>
-      <width>571</width>
+      <width>771</width>
       <height>29</height>
      </rect>
     </property>
@@ -1641,9 +1650,9 @@
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>428</y>
-     <width>581</width>
+     <width>781</width>
      <height>91</height>
     </rect>
    </property>
@@ -1654,9 +1663,9 @@
   <widget class="QGroupBox" name="groupBoxInput_1">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>12</y>
-     <width>581</width>
+     <width>781</width>
      <height>131</height>
     </rect>
    </property>
@@ -1666,7 +1675,7 @@
    <widget class="QLabel" name="textLabel1_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>14</y>
       <width>91</width>
       <height>31</height>
@@ -1687,9 +1696,9 @@
    <widget class="QLineEdit" name="lineEditInterception">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>120</x>
       <y>16</y>
-      <width>71</width>
+      <width>130</width>
       <height>29</height>
      </rect>
     </property>
@@ -1707,7 +1716,7 @@
    <widget class="QRadioButton" name="radioButtonMeters">
     <property name="geometry">
      <rect>
-      <x>262</x>
+      <x>420</x>
       <y>13</y>
       <width>111</width>
       <height>23</height>
@@ -1721,6 +1730,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(85, 0, 255);</string>
+    </property>
     <property name="text">
      <string> * meters</string>
     </property>
@@ -1728,7 +1740,7 @@
    <widget class="QRadioButton" name="radioButtonPercent">
     <property name="geometry">
      <rect>
-      <x>402</x>
+      <x>560</x>
       <y>13</y>
       <width>101</width>
       <height>23</height>
@@ -1742,6 +1754,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(85, 0, 255);</string>
+    </property>
     <property name="text">
      <string> * percent</string>
     </property>
@@ -1749,7 +1764,7 @@
    <widget class="QLabel" name="textLabel1_5">
     <property name="geometry">
      <rect>
-      <x>52</x>
+      <x>62</x>
       <y>51</y>
       <width>50</width>
       <height>31</height>
@@ -1770,7 +1785,7 @@
    <widget class="QLabel" name="textLabel1_6">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>50</x>
       <y>88</y>
       <width>61</width>
       <height>31</height>
@@ -1791,9 +1806,9 @@
    <widget class="QLineEdit" name="lineEditSnow">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>120</x>
       <y>53</y>
-      <width>71</width>
+      <width>130</width>
       <height>29</height>
      </rect>
     </property>
@@ -1811,9 +1826,9 @@
    <widget class="QLineEdit" name="lineEditSurface">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>120</x>
       <y>90</y>
-      <width>71</width>
+      <width>130</width>
       <height>29</height>
      </rect>
     </property>
@@ -1831,7 +1846,7 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>181</x>
+      <x>270</x>
       <y>10</y>
       <width>20</width>
       <height>111</height>
@@ -1853,7 +1868,7 @@
    <widget class="QLabel" name="textLabel1_7">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>302</x>
       <y>46</y>
       <width>111</width>
       <height>31</height>
@@ -1867,6 +1882,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(85, 0, 255);</string>
+    </property>
     <property name="text">
      <string>*Soil Moisture</string>
     </property>
@@ -1874,7 +1892,7 @@
    <widget class="QLabel" name="textLabel1_8">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>302</x>
       <y>87</y>
       <width>111</width>
       <height>31</height>
@@ -1888,6 +1906,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(85, 0, 255);</string>
+    </property>
     <property name="text">
      <string>*Groundwater</string>
     </property>
@@ -1895,9 +1916,9 @@
    <widget class="QLineEdit" name="lineEditGroundwater">
     <property name="geometry">
      <rect>
-      <x>322</x>
+      <x>414</x>
       <y>88</y>
-      <width>71</width>
+      <width>130</width>
       <height>29</height>
      </rect>
     </property>
@@ -1915,9 +1936,9 @@
    <widget class="QLineEdit" name="lineEditSoilMoisture">
     <property name="geometry">
      <rect>
-      <x>322</x>
+      <x>414</x>
       <y>47</y>
-      <width>71</width>
+      <width>130</width>
       <height>29</height>
      </rect>
     </property>
@@ -1935,7 +1956,7 @@
    <widget class="QLabel" name="textLabel1_9">
     <property name="geometry">
      <rect>
-      <x>405</x>
+      <x>552</x>
       <y>43</y>
       <width>81</width>
       <height>31</height>
@@ -1949,6 +1970,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(85, 0, 255);</string>
+    </property>
     <property name="text">
      <string>*River</string>
     </property>
@@ -1959,9 +1983,9 @@
    <widget class="QLineEdit" name="lineEditRiverbed">
     <property name="geometry">
      <rect>
-      <x>495</x>
+      <x>642</x>
       <y>85</y>
-      <width>71</width>
+      <width>130</width>
       <height>29</height>
      </rect>
     </property>
@@ -1979,9 +2003,9 @@
    <widget class="QLineEdit" name="lineEditRiver">
     <property name="geometry">
      <rect>
-      <x>495</x>
+      <x>642</x>
       <y>44</y>
-      <width>71</width>
+      <width>130</width>
       <height>29</height>
      </rect>
     </property>
@@ -1999,7 +2023,7 @@
    <widget class="QLabel" name="textLabel1_10">
     <property name="geometry">
      <rect>
-      <x>405</x>
+      <x>552</x>
       <y>84</y>
       <width>81</width>
       <height>31</height>
@@ -2012,6 +2036,9 @@
       <weight>75</weight>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(85, 0, 255);</string>
     </property>
     <property name="text">
      <string>*Riverbed</string>

@@ -32,7 +32,7 @@ ParaDataFile::ParaDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message("ERROR: Unable to Open File: </span>" + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: </span>" + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -93,7 +93,7 @@ bool ParaDataFile::Load_Project_Settings()
 
     try {
 
-        // ** Data Model INPUT File Name
+        //Data Model INPUT File Name
         QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
@@ -116,10 +116,10 @@ bool ParaDataFile::Load_Project_Settings()
         ui->comboBoxStartStop->setCurrentIndex(2);
         ui->comboBoxOutput->setCurrentIndex(2);
 
-        // ** End: Set Defaults
+        //End: Set Defaults
 
 
-        // ** Start: Fill Form If Module Has Been Run Previously
+        //Start: Fill Form If Module Has Been Run Previously
 
         ModuleStringList = ReadModuleLine(filename_open_project,tr("ParaDataFile"));
 
@@ -169,7 +169,7 @@ bool ParaDataFile::Load_Project_Settings()
             ui->spinBoxTranspiration->setValue(ModuleStringList.at(38).toInt());
             ui->spinBoxGroundEvaporation->setValue(ModuleStringList.at(39).toInt());
         }
-        // ** End: Fill Form If Module Has Been Run Previously
+        //End: Fill Form If Module Has Been Run Previously
 
 
         ui->tabWidget->setCurrentIndex( 2 );
@@ -312,22 +312,22 @@ int ParaDataFile::para_data_file(QString filename)
             return 129;
         QTextStream ParaFileTextStream(&ParaFile);
 
-        // ** Verbose
+        //Verbose
         if ( ui->checkBoxVerboseMode->isChecked() )
             ParaFileTextStream << "1\t";
         else
             ParaFileTextStream << "0\t";
 
-        // ** Debug
+        //Debug
         if ( ui->checkBoxDebugMode->isChecked() )
             ParaFileTextStream << "1\t";
         else
             ParaFileTextStream << "0\t";
 
-        // ** Init Mode
+        //Init Mode
         ParaFileTextStream << ui->comboBoxInitMode->currentIndex() + 1 << "\n";
 
-        // ** Print Variables
+        //Print Variables
 
         ( ui->spinBoxGroundwater->text().toInt() > 0 )              ? ( ParaFileTextStream << "1\t" ) : ( ParaFileTextStream << "0\t" );
         ( ui->spinBoxSurface->text().toInt() > 0 )                  ? ( ParaFileTextStream << "1\t" ) : ( ParaFileTextStream << "0\t" );
@@ -354,7 +354,7 @@ int ParaDataFile::para_data_file(QString filename)
         ( ui->spinBoxRiverbedUpDown->text().toInt() > 0 )           ? ( ParaFileTextStream << "1\t" ) : ( ParaFileTextStream << "0\t" );
         ( ui->spinBoxRivertoRiverBed->text().toInt() > 0 )          ? ( ParaFileTextStream << "1\n" ) : ( ParaFileTextStream << "0\n" );
 
-        // ** Print Variable Intervals
+        //Print Variable Intervals
 
         int factor = 1, I_temp = 1;
         if ( ui->comboBoxOutput->currentIndex() + 1 == 1 ) factor = 1;
@@ -455,7 +455,7 @@ void ParaDataFile::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(output_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_filename + tr("<br>"));
+            Log_Error_Message(" No Write Access to " + output_filename + tr("<br>"));
             return;
         }
 
@@ -470,8 +470,8 @@ void ParaDataFile::on_pushButtonRun_clicked()
 
         if( ErrorPara != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Para Data File Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE PARA: ... </span>")+QString::number(ErrorPara)+tr("<br>"));
+            Log_Error_Message("Para Data File Processing Failed " + tr("<br>"));
+            Log_Error_Message("Para error return code " + QString::number(ErrorPara)+tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;

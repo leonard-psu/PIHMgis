@@ -1540,7 +1540,7 @@ public:
         pushButtonDataModelLoaderSoilDataFile->setText(QApplication::translate("PIHMgisDialog", "(4) SOILfile", nullptr));
         pushButtonDataModelLoaderIbcDataFile->setText(QApplication::translate("PIHMgisDialog", "(8) IBC file", nullptr));
         pushButtonDataModelLoaderParamDataFile->setText(QApplication::translate("PIHMgisDialog", "(9) PARAM file", nullptr));
-        label_22->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">PIHM Input Files:</span></p></body></html>", nullptr));
+        label_22->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Create PIHM Input Files:</span></p></body></html>", nullptr));
         pushButtonDataModelLoaderForcDataFile->setText(QApplication::translate("PIHMgisDialog", "(11) FORC file", nullptr));
         label_12->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">Data Model Loader tools perform automated assignment of topology and for mapping spatio-temporal watershed and climatological properties to mesh elements and river reaches. </span></p></body></html>", nullptr));
         PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_DataModelLoader), QApplication::translate("PIHMgisDialog", "Group [5] : : Data Model Loader", nullptr));

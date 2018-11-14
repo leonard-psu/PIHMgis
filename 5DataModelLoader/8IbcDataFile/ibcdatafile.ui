@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
+    <width>800</width>
     <height>325</height>
    </rect>
   </property>
@@ -437,9 +437,9 @@
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>140</y>
-     <width>581</width>
+     <width>781</width>
      <height>161</height>
     </rect>
    </property>
@@ -457,7 +457,7 @@
     <rect>
      <x>0</x>
      <y>-4</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -901,9 +901,9 @@
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>93</y>
-     <width>581</width>
+     <width>781</width>
      <height>41</height>
     </rect>
    </property>
@@ -939,7 +939,7 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>543</x>
       <y>5</y>
       <width>113</width>
       <height>32</height>
@@ -962,7 +962,7 @@
    <widget class="QPushButton" name="pushButtonRun">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>663</x>
       <y>5</y>
       <width>113</width>
       <height>32</height>
@@ -990,8 +990,8 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>305</y>
-     <width>611</width>
+     <y>310</y>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -1435,9 +1435,9 @@
   <widget class="QGroupBox" name="groupBoxOutput">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>13</y>
-     <width>581</width>
+     <width>781</width>
      <height>81</height>
     </rect>
    </property>
@@ -1447,7 +1447,7 @@
    <widget class="QLabel" name="textLabel2">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>330</x>
       <y>10</y>
       <width>131</width>
       <height>31</height>
@@ -1463,11 +1463,14 @@
     <property name="text">
      <string>IBC Data File</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButtonIbcDataFile">
     <property name="geometry">
      <rect>
-      <x>477</x>
+      <x>680</x>
       <y>10</y>
       <width>98</width>
       <height>32</height>
@@ -1492,7 +1495,7 @@
      <rect>
       <x>6</x>
       <y>45</y>
-      <width>571</width>
+      <width>771</width>
       <height>29</height>
      </rect>
     </property>

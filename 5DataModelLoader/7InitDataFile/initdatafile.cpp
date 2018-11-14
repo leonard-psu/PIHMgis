@@ -31,9 +31,7 @@ InitDataFile::InitDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Unable to Open File: " + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -88,9 +86,9 @@ bool InitDataFile::Load_Project_Settings()
         ui->lineEditSoilMoisture->setText(QString("40"));
         ui->lineEditGroundwater->setText(QString("40"));
         ui->lineEditRiver->setText(QString("40"));
+        ui->lineEditRiverbed->setText(QString("40"));
 
-
-        // ** Data Model INPUT File Name
+        //Data Model INPUT File Name
         QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
@@ -118,7 +116,7 @@ bool InitDataFile::Load_Project_Settings()
             Check_RivData_Input(ModuleStringList.at(6));
         }
 
-        // ** Data Model OUTPUT File Name
+        //Data Model OUTPUT File Name
         ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
@@ -137,10 +135,10 @@ bool InitDataFile::Load_Project_Settings()
             QString init_file = user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName+".init";
             Check_InitData_Output(init_file,true);
         }
-        // ** End: Set Defaults
+        //End: Set Defaults
 
 
-        // ** Start: Fill Form If Module Has Been Run Previously
+        //Start: Fill Form If Module Has Been Run Previously
 
         ModuleStringList = ReadModuleLine(filename_open_project,tr("InitDataFile"));
         if ( ModuleStringList.length() > 0 )
@@ -171,7 +169,7 @@ bool InitDataFile::Load_Project_Settings()
 
         }
 
-        // ** End: Fill Form If Module Has Been Run Previously
+        //End: Fill Form If Module Has Been Run Previously
         pushButtonSetFocus();
 
     } catch (...) {
@@ -301,6 +299,7 @@ bool InitDataFile::Check_Interception_Input(QString value)
         }
         else
         {
+            ui->lineEditInterception->setText(value);
             result = true; //For now assume validators work
         }
 
@@ -339,6 +338,7 @@ bool InitDataFile::Check_Snow_Input(QString value)
         }
         else
         {
+            ui->lineEditSnow->setText(value);
             result = true; //For now assume validators work
         }
 
@@ -377,6 +377,7 @@ bool InitDataFile::Check_Surface_Input(QString value)
         }
         else
         {
+            ui->lineEditSurface->setText(value);
             result = true; //For now assume validators work
         }
 
@@ -415,6 +416,7 @@ bool InitDataFile::Check_SoilMoisture_Input(QString value)
         }
         else
         {
+            ui->lineEditSoilMoisture->setText(value);
             result = true; //For now assume validators work
         }
 
@@ -452,6 +454,7 @@ bool InitDataFile::Check_Groundwater_Input(QString value){
         }
         else
         {
+            ui->lineEditGroundwater->setText(value);
             result = true; //For now assume validators work
         }
 
@@ -491,6 +494,7 @@ bool InitDataFile::Check_River_Input(QString value)
         }
         else
         {
+            ui->lineEditRiver->setText(value);
             result = true; //For now assume validators work
         }
 
@@ -529,6 +533,7 @@ bool InitDataFile::Check_Riverbed_Input(QString value)
         }
         else
         {
+            ui->lineEditRiverbed->setText(value);
             result = true; //For now assume validators work
         }
 
@@ -565,6 +570,8 @@ bool InitDataFile::Check_MeshData_Input(QString file)
             ui->lineEditMeshDataFile->setStyleSheet("color: red;");
             ui->lineEditMeshDataFile->setText(file);
 
+            Log_Error_Message("Missing Mesh input file: " + file +tr("<br>"));
+
             result = false;
         }
 
@@ -600,6 +607,8 @@ bool InitDataFile::Check_RivData_Input(QString file)
             ui->lineEditRivDataFile->setStyleSheet("color: red;");
             ui->lineEditRivDataFile->setText(file);
 
+            Log_Error_Message("Missing River input file: " + file +tr("<br>"));
+
             result = false;
         }
 
@@ -629,9 +638,7 @@ bool InitDataFile::Check_InitData_Output(QString file, bool color_and_message_if
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: InitData output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Warning_Message("InitData output already exists: " + file +tr(" You may need to delete thise file.<br>"));
             }
 
             ui->lineEditInitDataFile->setStyleSheet("color: red;");
@@ -898,14 +905,18 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
         qDebug() << "INFO: Start InitDataFile::init_data_file()";
 
     try {
-        qDebug() << "Interception = " << Interception;
-        qDebug() << "Snow = " << Snow;
-        qDebug() << "Surface = " << Surface;
-        qDebug() << "SoilMoisture = " << SoilMoisture;
-        qDebug() << "Groundwater = " << Groundwater;
-        qDebug() << "River = " << River;
-        qDebug() << "Riverbed = " << Riverbed;
-        qDebug() << "MetersOrPercent = " << MetersOrPercent;
+
+        if(print_debug_messages)
+        {
+            qDebug() << "Interception = " << Interception;
+            qDebug() << "Snow = " << Snow;
+            qDebug() << "Surface = " << Surface;
+            qDebug() << "SoilMoisture = " << SoilMoisture;
+            qDebug() << "Groundwater = " << Groundwater;
+            qDebug() << "River = " << River;
+            qDebug() << "Riverbed = " << Riverbed;
+            qDebug() << "MetersOrPercent = " << MetersOrPercent;
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Load Data from Files
@@ -1010,9 +1021,9 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
             {
 
                 qDebug() << Interception << " " << Snow << " " << Surface << " " << SoilMoisture.toDouble();
-qDebug() << NodeDepths[ TINnodes[i][0]-1 ];
-qDebug() << NodeDepths[ TINnodes[i][1]-1 ];
-qDebug() << NodeDepths[ TINnodes[i][2]-1 ];
+                qDebug() << NodeDepths[ TINnodes[i][0]-1 ];
+                qDebug() << NodeDepths[ TINnodes[i][1]-1 ];
+                qDebug() << NodeDepths[ TINnodes[i][2]-1 ];
 
                 InitDataFileTextStream << Interception << "\t";
                 InitDataFileTextStream << Snow << "\t";
@@ -1216,7 +1227,7 @@ void InitDataFile::on_pushButtonRun_clicked()
         }
         if ( ! CheckFileAccess(output_InitData, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_InitData + tr("<br>"));
+            Log_Error_Message("No Write Access to " + output_InitData + tr("<br>"));
             return;
         }
 
@@ -1242,10 +1253,8 @@ void InitDataFile::on_pushButtonRun_clicked()
 
         if( ErrorInit != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Init Data File Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE INIT: ... </span>")+QString::number(ErrorInit)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Init Data File Processing Failed " + tr("<br>"));
+            Log_Error_Message("Init error return code: " + QString::number(ErrorInit) + tr("<br>"));
             return;
         }
 
