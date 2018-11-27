@@ -3,7 +3,6 @@
 
 #include "sundials/sundials_types.h"
 
-void
-is_sm_et(realtype t, realtype stepsize, void *DS, N_Vector VY);
+int is_sm_et(realtype t, realtype stepsize, void *DS, N_Vector VY);
 
 #endif

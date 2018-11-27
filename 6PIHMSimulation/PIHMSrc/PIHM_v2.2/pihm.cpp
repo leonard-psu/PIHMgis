@@ -266,6 +266,7 @@ int PIHM_v2_2(MyThread *thread)
         return 106;
     }
     log_file << "\n[03] Finished Reading Data Files";
+    log_file.flush();
     emit thread->onPIHM_StatusChanged( std::string("Finished Reading Data Files"));
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -307,6 +308,7 @@ int PIHM_v2_2(MyThread *thread)
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     std::cout << "[04] Defining Problem Size" << std::endl; std::cout << std::flush;
     log_file << "\n[04] Defining Problem Size";
+    log_file.flush();
     emit thread->onPIHM_StatusChanged( std::string("Defining Problem Size"));
 
     if (mData->UnsatMode == 2)
@@ -316,7 +318,7 @@ int PIHM_v2_2(MyThread *thread)
     }
     else
     {
-        printf("\n [04] Error: Defining Problem Size or undefined mode requested");
+        std::cout << "[04] Error: Defining Problem Size or undefined mode requested" << std::endl; std::cout << std::flush;
         log_file << "\n[04] Error: Defining Problem Size or undefined mode requested";
         log_file.close();
         emit thread->onPIHM_StatusChanged( std::string("Error: Defining Problem Size or undefined mode requested."));
@@ -345,6 +347,7 @@ int PIHM_v2_2(MyThread *thread)
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     std::cout << "[05] Initialize Data Structures" << std::endl; std::cout << std::flush;
     log_file << "\n[05] Initialize Data Structures";
+    log_file.flush();
     emit thread->onPIHM_StatusChanged( std::string("Initialize Data Structures"));
 
     std::string init_filename = thread->get_init_Input_FileName();
@@ -432,6 +435,7 @@ int PIHM_v2_2(MyThread *thread)
     emit thread->valueChanged(progress_value);
 
     log_file << "\n[07] Solving ODE system";
+    log_file.flush();
     emit thread->onPIHM_StatusChanged( std::string("Solving ODE system. Progress reset to zero."));
 
     stop_mutex.lock();    // prevent other threads from changing the "Stop" value
@@ -469,7 +473,16 @@ int PIHM_v2_2(MyThread *thread)
             }
             stop_mutex.unlock();
 
-            is_sm_et(t, StepSize, mData, CV_Y);
+            int is_err = is_sm_et(t, StepSize, mData, CV_Y);
+if(is_err < 0)
+{
+    //Warning errors unlikely to be caught.
+                    std::cout << "FAILED -> is_sm_et " << std::endl;
+                    log_file.close();
+                    emit thread->onPIHM_StatusChanged( std::string("Job cancelled by PIHM [is_sm_et error]"));
+                    emit thread->onPIHM_Finished(true);
+                    return 110;
+}
 
             flag = CVode(cvode_mem, NextPtr, CV_Y, &t, CV_NORMAL);
             if (flag != CV_SUCCESS)

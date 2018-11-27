@@ -2,11 +2,7 @@
 #define PIHMSimulation_H
 
 #include <QDialog>
-//#include <QtConcurrentRun>
-//#include <QFuture>
-//#include <QFutureWatcher>
 
-//#include "6PIHMSimulation/PIHMThread/PIHMThread.h"
 #include "6PIHMSimulation/PIHMThread/MyThread.h"
 
 namespace Ui {
@@ -22,20 +18,11 @@ public:
     ~PIHMSimulation();
 
 
-    QString LogsString;
-
-    //PIHMThread* MyPIHMThread;
-
-    //TEST START
-
-     MyThread *mThread;
 public slots:
     void onValueChanged(int);
     void onPIHM_StatusChanged(std::string value);
     void onPIHM_Finished(bool);
     void onPIHM_Failed();
-
-    //TEST END
 
 signals:
     void PIHMThread_Results(QString message);
@@ -86,8 +73,10 @@ private:
 
     void PIHMThread_Delete();
 
+    MyThread *mThread;
 
     Ui::PIHMSimulation *ui;
+    QString LogsString;
     QString filename_open_project;
     QString ModelVersion = "PIHM v2.2"; //Constant for now
     bool pihm_running;

@@ -226,7 +226,6 @@ SOURCES += main.cpp\
     #pihmgis_plugin_import.cpp \
     pihmgisdialog.cpp \
     qrc_Icons.cpp \
-    6PIHMSimulation/PIHMThread/user_def.cpp \
     6PIHMSimulation/PIHMThread/MyThread.cpp
 
 HEADERS  += pihmgisdialog.h \
@@ -420,8 +419,6 @@ HEADERS  += pihmgisdialog.h \
 #    ui_tinshapelayer.h \
     main.h \
     globals.h \
-    6PIHMSimulation/PIHMThread/user_def.h \
-    6PIHMSimulation/PIHMThread/user_def.h \
     6PIHMSimulation/PIHMThread/MyThread.h
 
 FORMS    += pihmgisdialog.ui \

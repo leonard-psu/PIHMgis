@@ -16,7 +16,6 @@
 #include "0LibsIO/IOProjectFile.h"
 #include "globals.h"
 
-#include "6PIHMSimulation/PIHMThread/user_def.h"
 #include "6PIHMSimulation/PIHMThread/MyThread.h"
 
 Q_DECLARE_METATYPE(std::string)
@@ -39,6 +38,8 @@ PIHMSimulation::PIHMSimulation(QWidget *parent, QString filename) :
         filename_open_project = filename;
         bool found_file = false;
         pihm_running = false;
+
+        mThread = nullptr;
 
         ui->progressBar->setValue(0);
 
@@ -76,11 +77,12 @@ PIHMSimulation::~PIHMSimulation()
 
     try {
 
-        if(mThread)
-        {
-            mThread->quit();
-            mThread->wait();
-        }
+//For now, let user not kill thread by closing window
+//        if(mThread != nullptr)
+//        {
+//            mThread->quit();
+//            mThread->wait();
+//        }
 
         delete ui;
 
@@ -613,7 +615,7 @@ void PIHMSimulation::on_pushButtonRun_clicked()
         // Running Simulation
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         LogsString = tr("");
-        LogsString.append(tr("PIHM Simulation Processing ... <br>"));
+        LogsString.append(tr("PIHM Simulation Starting ... <br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
@@ -670,18 +672,13 @@ void PIHMSimulation::on_pushButtonClose_clicked()
 
     try {
 
+        qDebug() << "pihm_running " << pihm_running;
+
         if(pihm_running)
         {
-            //User can close window regardless if PIHM is running or not
-
-            if(mThread == nullptr)
-            {
-                close();
-            }
-
             int ret = QMessageBox::warning(this, tr("PIHM is running"),
                                            tr("Closing this window will not stop the PIHM thread.\n"
-                                              "You will need to stop the PIHM process yourself. Otherwise stop before closing this window."),
+                                              "You will need to stop the PIHM process yourself. Otherwise use the Stop PIHM button before closing this window."),
                                            QMessageBox::Close | QMessageBox::Cancel,
                                            QMessageBox::Close);
 
@@ -692,36 +689,25 @@ void PIHMSimulation::on_pushButtonClose_clicked()
                 break;
             case QMessageBox::Cancel:
                 //Do nothing
+                return;
                 break;
             }
-
-        }
-        else
-        {
-             close();
         }
 
-
-        if(mThread == nullptr)
+        if(mThread != nullptr)
         {
-            //Assume its safe to close winsow
-            //mThread->Stop = true;
-            //ui->pushButton_Stop->setEnabled(false);
+            ui->label_PIHM_Status->setText("PIHM Thread not null" );
+
+            qDebug() << "Killing PIHM thread";
+            mThread->quit();
+            mThread->wait();
             close();
+
         }
         else
         {
-
-            if(mThread->Stop)
-            {
-                //Assume thread is in process of closing and safe to close window
-                close();
-            }
-            else
-            {
-                //Not closing thread, user needs to decide on stop
-                ui->label_PIHM_Status->setText("Thread still running" );
-            }
+            qDebug() << "PIHM Thread is null ";
+            close();
         }
 
     } catch (...) {
@@ -978,6 +964,11 @@ void PIHMSimulation::onPIHM_StatusChanged(std::string value)
     try {
 
         ui->label_PIHM_Status->setText(value.c_str());
+
+        LogsString.append( value.c_str() + tr(" <br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
 
     } catch (...) {
         qDebug() << "Error: PIHMSimulation::onPIHM_StatusChanged() is returning w/o checking";
