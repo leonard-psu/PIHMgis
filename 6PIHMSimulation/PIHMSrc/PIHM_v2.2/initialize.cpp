@@ -30,9 +30,7 @@
 #include "nvector/nvector_serial.h"
 #include "pihm.h"
 
-
-//void initialize(char *filename, Model_Data DS, Control_Data * CS, N_Vector CV_Y)
-void initialize(PIHMThread *thread, Model_Data DS, Control_Data * CS, N_Vector CV_Y)
+void initialize(std::string init_filename, Model_Data DS, Control_Data * CS, N_Vector CV_Y)
 
 {
     int             i, j, k, tmpBool, BoolBR, BoolR = 0;
@@ -152,7 +150,7 @@ void initialize(PIHMThread *thread, Model_Data DS, Control_Data * CS, N_Vector C
         DS->Ele[i].Albedo = CS->Cal.Albedo * DS->LandC[DS->Ele[i].LC - 1].Albedo;
         //		if (DS->Ele[i].Albedo > 1) {
         //			printf("Warning: Albedo out of bounds");
-        printf("\nEle %d, LC %d, Albedo %lf, Cal_Albedo %lf",i+1,DS->Ele[i].LC,DS->LandC[DS->Ele[i].LC - 1].Albedo,CS->Cal.Albedo);
+        //printf("\nEle %d, LC %d, Albedo %lf, Cal_Albedo %lf",i+1,DS->Ele[i].LC,DS->LandC[DS->Ele[i].LC - 1].Albedo,CS->Cal.Albedo);
         //			getchar();
         //		}
         DS->Ele[i].VegFrac = CS->Cal.VegFrac * DS->LandC[DS->Ele[i].LC - 1].VegFrac;
@@ -227,7 +225,7 @@ void initialize(PIHMThread *thread, Model_Data DS, Control_Data * CS, N_Vector C
      * Debugging artifacts in data created due to coarser resolution of
      * model elements
      */
-    if (CS->Debug == 1) {
+    if (false) { //CS->Debug == 1) {
         for (i = 0; i < DS->NumEle; i++) {
             /*
              * Correction of Surf Elev (artifacts due to coarse
@@ -422,13 +420,11 @@ void initialize(PIHMThread *thread, Model_Data DS, Control_Data * CS, N_Vector C
         //        init_file = fopen(strcat(fn, ".init"), "r");
         //        printf("\n 11) reading %s.init ... ", filename);
         //        free(fn);
-
         FILE           *init_file;
-        char *tmp_filename = thread->get_init_Input_FileName();
-        init_file =  fopen(tmp_filename, "r"); //".riv"
+        init_file =  fopen(init_filename.c_str(), "r"); //".riv"
 
         if (init_file == nullptr) {
-            printf("\n  Fatal Error: %s.init is in use or does not exist!\n", tmp_filename);
+            printf("\n  Fatal Error: %s.init is in use or does not exist!\n", init_filename.c_str());
             exit(1);
         } else {
             for (i = 0; i < DS->NumEle; i++) {

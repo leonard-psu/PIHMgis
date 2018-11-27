@@ -26,13 +26,43 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <QMutex>
 
-//#include "sundialstypes.h"
 #include "pihm.h"  
 
+extern QMutex stop_mutex; //Used to check thread stop status
 
-void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
+bool read_alloc(MyThread *thread, Model_Data DS, Control_Data *CS)
 {
+
+    //-----------------------------------------------------------------------------------------------/
+    std::string log_filename(thread->get_LogFile_FileName());
+
+    std::ofstream log_file;
+    log_file.open(log_filename, std::ios::out | std::ios::app);
+    if( !log_file.is_open())
+    {
+        std::cerr << "\nread_alloc open log failure: " << std::strerror(errno) << '\n';
+        return false;
+    }
+    //-----------------------------------------------------------------------------------------------/
+
+    int progress_value = 30;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 200;
+    }
+    stop_mutex.unlock();
+
     int i, j;
     int tempindex;
 
@@ -51,26 +81,25 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
     FILE *riv_file;		/* Pointer to .riv file */
     FILE *global_calib;	/* Pointer to .calib file */
 
-
-    //  	printf("\nStart reading in input files ... \n");
-
-    /*========== open *.riv file ==========*/
-    //    printf("\n  1) reading %s.riv  ... ", filename);
-    //    fn[0] = (char *)malloc((strlen(filename)+10)*sizeof(char));
-    //  	strcpy(fn[0], filename);
-    //  	riv_file =  fopen(strcat(fn[0], ".riv"), "r");
-    //    free(fn[0]);
-
     //-----------------------------------------------------------------------------------------------/
-    printf("\n[READ ALLOC 1] Reading riv file ");
-    char *tmp_filename = thread->get_riv_Input_FileName();
-    riv_file =  fopen(tmp_filename, "r"); //".riv"
+    /*========== open *.riv file ==========*/
+    //-----------------------------------------------------------------------------------------------/
+    emit thread->onPIHM_StatusChanged( std::string("Reading riv file"));
+    std::cout << "[READ ALLOC 1] Reading riv file" << std::endl; std::cout << std::flush;
+    std::string tmp_filename = thread->get_riv_Input_FileName();
+    log_file << "\n[01 READ ALLOC] Starting to read riv file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
 
+    riv_file = fopen(tmp_filename.c_str(), "r"); //".riv"
     if(riv_file == nullptr)
     {
-        //   		printf("\n  Fatal Error: %s.riv is in use or does not exist!\n", filename);
-        thread->kill_from_PIHM();
-        exit(1001);
+        std::cout << "\nBBBCC " << tmp_filename.c_str() << std::endl;
+        log_file << "\n[FAILURE READ ALLOC] Error Loading riv file = " << tmp_filename.c_str() << " Does file exist?";
+        log_file.flush();
+        log_file.close();
+        printf("\n  Fatal Error: %s.riv is in use or does not exist!\n", tmp_filename.c_str());
+        return false;
     }
 
     /* start reading riv_file */
@@ -143,26 +172,46 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
 
     }
 
+    //-----------------------------------------------------------------------------------------------/
+    //Clean up
     fclose(riv_file);
-    //  	printf("done.\n");
+    //WARNING: THIS DOES NOT MEAN THE FILE READ SUCCESSFULLY!
+    log_file << "\n[01 READ ALLOC] Finished reading riv file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+
+    progress_value = 31;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 200;
+    }
+    stop_mutex.unlock();
+
+    //-----------------------------------------------------------------------------------------------/
+    /*========== open *.mesh file ==========*/
+    //-----------------------------------------------------------------------------------------------/
+    emit thread->onPIHM_StatusChanged( std::string("Reading mesh file"));
+
+    std::cout << "[READ ALLOC 2] Reading mesh file" << std::endl; std::cout << std::flush;
+    tmp_filename = thread->get_mesh_Input_FileName();
+    log_file << "\n[02 READ ALLOC] Starting to read mesh file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
     //-----------------------------------------------------------------------------------------------/
 
-    /*========== open *.mesh file ==========*/
-    //    printf("\n  2) reading %s.mesh ... ", filename);
-    //    fn[1] = (char *)malloc((strlen(filename)+6)*sizeof(char));
-    //    strcpy(fn[1], filename);
-    //    mesh_file = fopen(strcat(fn[1], ".mesh"), "r");
-    //    free(fn[1]);
-
-    printf("\n[READ ALLOC 2] Reading mesh file ");
-    tmp_filename = thread->get_mesh_Input_FileName();
-    mesh_file =  fopen(tmp_filename, "r"); //".mesh"
+    mesh_file =  fopen(tmp_filename.c_str(), "r"); //".mesh"
 
     if(mesh_file == nullptr)
     {
-        printf("\n  Fatal Error: %s.mesh is in use or does not exist!\n", tmp_filename);
-        thread->kill_from_PIHM();
-        exit(1002);
+        log_file << "\n[FAILURE READ ALLOC] Error Loading mesh file = " << tmp_filename.c_str() << " Does file exist?";
+        log_file.close();
+        log_file.flush();
+        printf("\n  Fatal Error: %s.mesh is in use or does not exist!\n", tmp_filename.c_str());
+        return false;
     }
     
     /* start reading mesh_file */
@@ -187,27 +236,45 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         fscanf(mesh_file, "%lf %lf", &(DS->Node[i].zmin),&(DS->Node[i].zmax));
     }
 
-    //  	printf("done.\n");
-
-    /* finish reading mesh_files */
+    //-----------------------------------------------------------------------------------------------/
+    //Clean up
     fclose(mesh_file);
+    //WARNING: THIS DOES NOT MEAN THE FILE READ SUCCESSFULLY!
+    log_file << "\n[02 READ ALLOC] Finished reading mesh file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+    progress_value = 33;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 200;
+    }
+    stop_mutex.unlock();
 
     //-----------------------------------------------------------------------------------------------/
     /*========== open *.att file ==========*/
-    //    printf("\n  3) reading %s.att  ... ", filename);
-    //    fn[2] = (char *)malloc((strlen(filename)+5)*sizeof(char));
-    //    strcpy(fn[2], filename);
-    //    att_file = fopen(strcat(fn[2], ".att"), "r");
-    //    free(fn[2]);
-    printf("\n[READ ALLOC 3] Reading att file ");
+    //-----------------------------------------------------------------------------------------------/
+    emit thread->onPIHM_StatusChanged( std::string("Reading att file"));
+
+    std::cout << "[READ ALLOC 3] Reading att file" << std::endl; std::cout << std::flush;
     tmp_filename = thread->get_att_Input_FileName();
-    att_file =  fopen(tmp_filename, "r"); //".att"
+    log_file << "\n[03 READ ALLOC] Starting to read att file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+    att_file =  fopen(tmp_filename.c_str(), "r"); //".att"
 
     if(att_file == nullptr)
     {
-        printf("\n  Fatal Error: %s.att is in use or does not exist!\n", tmp_filename);
-        thread->kill_from_PIHM();
-        exit(1003);
+        log_file << "\n[FAILURE READ ALLOC] Error Loading att file = " << tmp_filename.c_str() << " Does file exist?";
+        log_file.close();
+        log_file.flush();
+        printf("\n  Fatal Error: %s.att is in use or does not exist!\n", tmp_filename.c_str());
+        return false;
     }
     
     /* start reading att_file */
@@ -228,27 +295,46 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         fscanf(att_file, "%d", &(DS->Ele[i].Macropore));
     }
 
-    //  	printf("done.\n");
 
-    /* finish reading att_files */
-    fclose(att_file);
-
-    /*========== open *.soil file ==========*/
-    //    printf("\n  4) reading %s.soil ... ", filename);
-    //    fn[3] = (char *)malloc((strlen(filename)+6)*sizeof(char));
-    //    strcpy(fn[3], filename);
-    //    soil_file = fopen(strcat(fn[3], ".soil"), "r");
-    //    free(fn[3]);
     //-----------------------------------------------------------------------------------------------/
-    printf("\n[READ ALLOC 4] Reading soil file ");
+    //Clean up
+    fclose(att_file);
+    //WARNING: THIS DOES NOT MEAN THE FILE READ SUCCESSFULLY!
+    log_file << "\n[03 READ ALLOC] Finished reading att file = " << tmp_filename;
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+    progress_value = 34;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 200;
+    }
+    stop_mutex.unlock();
+
+    //-----------------------------------------------------------------------------------------------/
+    /*========== open *.soil file ==========*/
+    //-----------------------------------------------------------------------------------------------/
+    emit thread->onPIHM_StatusChanged( std::string("Reading soil file"));
+    std::cout << "[READ ALLOC 4] Reading soil file" << std::endl; std::cout << std::flush;
     tmp_filename = thread->get_soil_Input_FileName();
-    soil_file =  fopen(tmp_filename, "r"); //".soil"
+    log_file << "\n[04 READ ALLOC] Starting to read soil file = " << tmp_filename;
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+
+    soil_file =  fopen(tmp_filename.c_str(), "r"); //".soil"
 
     if(soil_file == nullptr)
     {
-        printf("\n  Fatal Error: %s.soil is in use or does not exist!\n", tmp_filename);
-        thread->kill_from_PIHM();
-        exit(1004);
+        log_file << "\n[FAILURE READ ALLOC] Error Loading soil file = " << tmp_filename << " Does file exist?";
+        log_file.close();
+        log_file.flush();
+        printf("\n  Fatal Error: %s.soil is in use or does not exist!\n", tmp_filename.c_str());
+        return false;
     }
 
     /* start reading soil_file */
@@ -265,26 +351,44 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         fscanf(soil_file, "%lf %lf", &(DS->Soil[i].hAreaF),&(DS->Soil[i].macKsatV));
     }
 
-    fclose(soil_file);
-    //  	printf("done.\n");
-
-    /*========== open *.geol file ==========*/
-    //    printf("\n  5) reading %s.geol ... ", filename);
-    //    fn[4] = (char *)malloc((strlen(filename)+6)*sizeof(char));
-    //    strcpy(fn[4], filename);
-    //    geol_file = fopen(strcat(fn[4], ".geol"), "r");
-    //    free(fn[4]);
-
     //-----------------------------------------------------------------------------------------------/
-    printf("\n[READ ALLOC 5] Reading geol file ");
+    //Clean up
+    fclose(soil_file);
+    //WARNING: THIS DOES NOT MEAN THE FILE READ SUCCESSFULLY!
+    log_file << "\n[04 READ ALLOC] Finished reading soil file = " << tmp_filename;
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+    progress_value = 35;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 200;
+    }
+    stop_mutex.unlock();
+    //-----------------------------------------------------------------------------------------------/
+    /*========== open *.geol file ==========*/
+    //-----------------------------------------------------------------------------------------------/
+    emit thread->onPIHM_StatusChanged( std::string("Reading geol file"));
+    std::cout << "[READ ALLOC 5] Reading geol file" << std::endl; std::cout << std::flush;
     tmp_filename = thread->get_geol_Input_FileName();
-    geol_file =  fopen(tmp_filename, "r"); //".geol"
+    log_file << "\n[05 READ ALLOC] Starting to read geol file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+
+    geol_file =  fopen(tmp_filename.c_str(), "r"); //".geol"
 
     if(geol_file == nullptr)
     {
-        printf("\n  Fatal Error: %s.geol is in use or does not exist!\n", tmp_filename);
-        thread->kill_from_PIHM();
-        exit(1005);
+        log_file << "\n[FAILURE READ ALLOC] Error Loading geol file = " << tmp_filename.c_str() << " Does file exist?";
+        log_file.close();
+        log_file.flush();
+        printf("\n  Fatal Error: %s.geol is in use or does not exist!\n", tmp_filename.c_str());
+        return false;
     }
 
     /* start reading*/
@@ -301,27 +405,44 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         fscanf(geol_file, "%lf %lf %lf", &(DS->Geol[i].vAreaF),&(DS->Geol[i].macKsatH),&(DS->Geol[i].macD));
     }
 
+    //-----------------------------------------------------------------------------------------------/
+    //Clean up
     fclose(geol_file);
-    //        printf("done.\n");
+    //WARNING: THIS DOES NOT MEAN THE FILE READ SUCCESSFULLY!
+    log_file << "\n[05 READ ALLOC] Finished reading geol file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+    progress_value = 36;
+    emit thread->valueChanged(progress_value);
 
-
-    /*========== open *.lc file ==========*/
-    //    printf("\n  6) reading %s.lc ... ", filename);
-    //    fn[5] = (char *)malloc((strlen(filename)+4)*sizeof(char));
-    //    strcpy(fn[5], filename);
-    //    lc_file = fopen(strcat(fn[5], ".lc"), "r");
-    //    free(fn[5]);
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 200;
+    }
+    stop_mutex.unlock();
 
     //-----------------------------------------------------------------------------------------------/
-    printf("\n[READ ALLOC 6] Reading lc file ");
+    /*========== open *.lc file ==========*/
+    //-----------------------------------------------------------------------------------------------/
+    emit thread->onPIHM_StatusChanged( std::string("Reading lc file"));
+    std::cout << "[READ ALLOC 6] Reading lc file" << std::endl; std::cout << std::flush;
     tmp_filename = thread->get_lc_Input_FileName();
-    lc_file =  fopen(tmp_filename, "r"); //".lc"
+    log_file << "\n[06 READ ALLOC] Starting to read lc file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+
+    lc_file = fopen(tmp_filename.c_str(), "r"); //".lc"
 
     if(lc_file == NULL)
     {
-        printf("\n  Fatal Error: %s.land cover is in use or does not exist!\n", tmp_filename);
-        thread->kill_from_PIHM();
-        exit(1006);
+        log_file << "\n[FAILURE READ ALLOC] Error Loading lc file = " << tmp_filename.c_str() << " Does file exist?";
+        log_file.close();
+        printf("\n  Fatal Error: %s.land cover is in use or does not exist!\n", tmp_filename.c_str());
+        return false;
     }
 
     /* start reading land cover file */
@@ -338,26 +459,45 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         fscanf(lc_file, "%lf %lf", &(DS->LandC[i].Rough),&(DS->LandC[i].RzD));
     }
 
-    fclose(lc_file);
-    // 	printf("done.\n");
-
-
-    //    /*========== open *.forc file ==========*/
-    //    printf("\n  7) reading %s.forc ... ", filename);
-    //    fn[6] = (char *)malloc((strlen(filename)+6)*sizeof(char));
-    //    strcpy(fn[6], filename);
-    //    forc_file = fopen(strcat(fn[6], ".forc"), "r");
-    //    free(fn[6]);
     //-----------------------------------------------------------------------------------------------/
-    printf("\n[READ ALLOC 7] Reading forc file ");
+    //Clean up
+    fclose(lc_file);
+    //WARNING: THIS DOES NOT MEAN THE FILE READ SUCCESSFULLY!
+    log_file << "\n[06 READ ALLOC] Finished reading lc file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+    progress_value = 37;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 200;
+    }
+    stop_mutex.unlock();
+
+    //-----------------------------------------------------------------------------------------------/
+    //    /*========== open *.forc file ==========*/
+    //-----------------------------------------------------------------------------------------------/
+    emit thread->onPIHM_StatusChanged( std::string("Reading forc file"));
+    std::cout << "[READ ALLOC 7] Reading forc file" << std::endl; std::cout << std::flush;
     tmp_filename = thread->get_forc_Input_FileName();
-    forc_file =  fopen(tmp_filename, "r"); //".forc"
+    log_file << "\n[07 READ ALLOC] Starting to read forc file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+
+    forc_file =  fopen(tmp_filename.c_str(), "r"); //".forc"
 
     if(forc_file == nullptr)
     {
-        printf("\n  Fatal Error: %s.forc is in use or does not exist!\n", tmp_filename);
-        thread->kill_from_PIHM();
-        exit(1007);
+        log_file << "\n[FAILURE READ ALLOC] Error Loading forc file = " << tmp_filename.c_str() << " Does file exist?";
+        log_file.close();
+        log_file.flush();
+        printf("\n  Fatal Error: %s.forc is in use or does not exist!\n", tmp_filename.c_str());
+        return false;
     }
 
     /* start reading forc_file */
@@ -400,6 +540,9 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         }
     }
 
+    progress_value = 38;
+    emit thread->valueChanged(progress_value);
+
     for(i=0; i<DS->NumTemp; i++)
     {
         fscanf(forc_file, "%s %d %d", DS->TSD_Temp[i].name, &DS->TSD_Temp[i].index, &DS->TSD_Temp[i].length);
@@ -416,6 +559,9 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
             fscanf(forc_file, "%lf %lf", &DS->TSD_Temp[i].TS[j][0], &DS->TSD_Temp[i].TS[j][1]);
         }
     }
+
+    progress_value = 39;
+    emit thread->valueChanged(progress_value);
 
     for(i=0; i<DS->NumHumidity; i++)
     {
@@ -434,6 +580,9 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         }
     }
 
+    progress_value = 40;
+    emit thread->valueChanged(progress_value);
+
     for(i=0; i<DS->NumWindVel; i++)
     {
         fscanf(forc_file, "%s %d %d %lf", DS->TSD_WindVel[i].name, &DS->TSD_WindVel[i].index, &DS->TSD_WindVel[i].length, &DS->windH[i]);
@@ -449,6 +598,9 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
             fscanf(forc_file, "%lf %lf", &DS->TSD_WindVel[i].TS[j][0], &DS->TSD_WindVel[i].TS[j][1]);
         }
     }
+
+    progress_value = 41;
+    emit thread->valueChanged(progress_value);
 
     for(i=0; i<DS->NumRn; i++)
     {
@@ -467,6 +619,9 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         }
     }
 
+    progress_value = 42;
+    emit thread->valueChanged(progress_value);
+
     for(i=0; i<DS->NumG; i++)
     {
         fscanf(forc_file, "%s %d %d", DS->TSD_G[i].name, &DS->TSD_G[i].index, &DS->TSD_G[i].length);
@@ -483,6 +638,9 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
             fscanf(forc_file, "%lf %lf", &DS->TSD_G[i].TS[j][0], &DS->TSD_G[i].TS[j][1]);
         }
     }
+
+    progress_value = 43;
+    emit thread->valueChanged(progress_value);
 
     for(i=0; i<DS->NumP; i++)
     {
@@ -501,6 +659,9 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         }
     }
 
+    progress_value = 44;
+    emit thread->valueChanged(progress_value);
+
     for(i=0; i<DS->NumLC; i++)
     {
         fscanf(forc_file, "%s %d %d %lf", DS->TSD_LAI[i].name, &DS->TSD_LAI[i].index, &DS->TSD_LAI[i].length, &DS->ISFactor[i]);
@@ -517,6 +678,9 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
             fscanf(forc_file, "%lf %lf", &DS->TSD_LAI[i].TS[j][0], &DS->TSD_LAI[i].TS[j][1]);
         }
     }
+
+    progress_value = 45;
+    emit thread->valueChanged(progress_value);
 
     for(i=0; i<DS->NumLC; i++)
     {
@@ -535,6 +699,9 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         }
     }
 
+    progress_value = 46;
+    emit thread->valueChanged(progress_value);
+
     for(i=0; i<DS->NumMeltF; i++)
     {
         fscanf(forc_file, "%s %d %d", DS->TSD_MeltF[i].name, &DS->TSD_MeltF[i].index, &DS->TSD_MeltF[i].length);
@@ -551,6 +718,9 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
             fscanf(forc_file, "%lf %lf", &DS->TSD_MeltF[i].TS[j][0], &DS->TSD_MeltF[i].TS[j][1]);
         }
     }
+
+    progress_value = 47;
+    emit thread->valueChanged(progress_value);
 
     for(i=0; i<DS->NumSource; i++)
     {
@@ -569,26 +739,46 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         }
     }
 
+    //-----------------------------------------------------------------------------------------------/
+    //Clean up
     fclose(forc_file);
-    //  	printf("done.\n");
+    //WARNING: THIS DOES NOT MEAN THE FILE READ SUCCESSFULLY!
+    log_file << "\n[07 READ ALLOC] Finished reading forc file = " << tmp_filename;
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
 
-    //    /*========== open *.ibc file ==========*/
-    //    printf("\n  8) reading %s.ibc  ... ", filename);
-    //    fn[7] = (char *)malloc((strlen(filename)+5)*sizeof(char));
-    //    strcpy(fn[7], filename);
-    //    ibc_file =  fopen(strcat(fn[7], ".ibc"), "r");
-    //    free(fn[7]);
+    progress_value = 48;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 200;
+    }
+    stop_mutex.unlock();
 
     //-----------------------------------------------------------------------------------------------/
-    printf("\n[READ ALLOC 8] Reading ibc file ");
+    //    /*========== open *.ibc file ==========*/
+    //-----------------------------------------------------------------------------------------------/
+    emit thread->onPIHM_StatusChanged( std::string("Reading ibc file"));
+    std::cout << "[READ ALLOC 8] Reading ibc file" << std::endl; std::cout << std::flush;
     tmp_filename = thread->get_ibc_Input_FileName();
-    ibc_file =  fopen(tmp_filename, "r"); //".ibc"
+    log_file << "\n[08 READ ALLOC] Starting to read ibc file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+
+    ibc_file =  fopen(tmp_filename.c_str(), "r"); //".ibc"
 
     if(ibc_file == nullptr)
     {
-        printf("\n  Fatal Error: %s.ibc is in use or does not exist!\n", tmp_filename);
-        thread->kill_from_PIHM();
-        exit(1008);
+        log_file << "\n[FAILURE READ ALLOC] Error Loading ibc file = " << tmp_filename.c_str() << " Does file exist?";
+        log_file.close();
+        log_file.flush();
+        printf("\n  Fatal Error: %s.ibc is in use or does not exist!\n", tmp_filename.c_str());
+        return false;
     }
 
     /* start reading ibc_file */
@@ -639,25 +829,46 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
             }
         }
     }
-    fclose(ibc_file);
-    // 	printf("done.\n");
 
-    //    /*========== open *.para file ==========*/
-    //    printf("\n  9) reading %s.para ... ", filename);
-    //    fn[8] = (char *)malloc((strlen(filename)+10)*sizeof(char));
-    //    strcpy(fn[8], filename);
-    //    para_file = fopen(strcat(fn[8], ".para"), "r");
-    //    free(fn[8]);
     //-----------------------------------------------------------------------------------------------/
-    printf("\n[READ ALLOC 9] Reading para file ");
+    fclose(ibc_file);
+    //WARNING: THIS DOES NOT MEAN THE FILE READ SUCCESSFULLY!
+    log_file << "\n[08 READ ALLOC] Finished reading ibc file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+
+    progress_value = 49;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 200;
+    }
+    stop_mutex.unlock();
+
+    //-----------------------------------------------------------------------------------------------/
+    //    /*========== open *.para file ==========*/
+    //-----------------------------------------------------------------------------------------------/
+    emit thread->onPIHM_StatusChanged( std::string("Reading para file"));
+    std::cout << "[READ ALLOC 9] Reading para file" << std::endl; std::cout << std::flush;
     tmp_filename = thread->get_para_Input_FileName();
-    para_file =  fopen(tmp_filename, "r"); //".para"
+    log_file << "\n[09 READ ALLOC] Starting to read para file = " << tmp_filename;
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+
+    para_file =  fopen(tmp_filename.c_str(), "r"); //".para"
 
     if(para_file == nullptr)
     {
-        printf("\n  Fatal Error: %s.para is in use or does not exist!\n", tmp_filename);
-        thread->kill_from_PIHM();
-        exit(1009);
+        log_file << "\n[FAILURE READ ALLOC] Error Loading para file = " << tmp_filename << " Does file exist?";
+        log_file.close();
+        log_file.flush();
+        printf("\n  Fatal Error: %s.para is in use or does not exist!\n", tmp_filename.c_str());
+        return false;
     }
 
     /* start reading para_file */
@@ -730,27 +941,46 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
         CS->Tout[CS->NumSteps] = CS->EndTime;
     }
 
-    fclose(para_file);
-    // 	printf("done.\n");
-
-    //	printf("\nStart reading in calibration file...\n");
-
-    /*========= open *.calib file ==========*/
-    //    printf("\n 10) reading %s.calib ... ", filename);
-    //    fn[9] = (char *)malloc((strlen(filename)+7)*sizeof(char));
-    //    strcpy(fn[9], filename);
-    //    global_calib = fopen(strcat(fn[9], ".calib"), "r");
-    //    free(fn[9]);
     //-----------------------------------------------------------------------------------------------/
-    printf("\n[READ ALLOC 10] Reading calib file ");
+    //Clean up
+    fclose(para_file);
+    //WARNING: THIS DOES NOT MEAN THE FILE READ SUCCESSFULLY!
+    log_file << "\n[09 READ ALLOC] Finished reading para file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+
+    progress_value = 55;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 200;
+    }
+    stop_mutex.unlock();
+
+    //-----------------------------------------------------------------------------------------------/
+    /*========= open *.calib file ==========*/
+    //-----------------------------------------------------------------------------------------------/
+    emit thread->onPIHM_StatusChanged( std::string("Reading calib file"));
+     std::cout << "[READ ALLOC 10] Reading calib file" << std::endl; std::cout << std::flush;
     tmp_filename = thread->get_calib_Input_FileName();
-    global_calib =  fopen(tmp_filename, "r"); //".calib"
+    log_file << "\n[10 READ ALLOC] Starting to read calib file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
+
+    global_calib =  fopen(tmp_filename.c_str(), "r"); //".calib"
 
     if(global_calib == nullptr)
     {
-        printf("\n  Fatal Error: %s.calib is in use or does not exist!\n", tmp_filename);
-        thread->kill_from_PIHM();
-        exit(1010);
+        log_file << "\n[FAILURE READ ALLOC] Error Loading calib file = " << tmp_filename.c_str() << " Does file exist?";
+        log_file.close();
+        log_file.flush();
+        printf("\n  Fatal Error: %s.calib is in use or does not exist!\n", tmp_filename.c_str());
+        return false;
     }
 
     /* start reading calib_file */
@@ -765,11 +995,31 @@ void read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
     fscanf(global_calib,"%lf %lf",&CS->Cal.rivDepth,&CS->Cal.rivShapeCoeff);
     // 	printf("done.\n");
 
+    //-----------------------------------------------------------------------------------------------/
+    //Clean up
     /* finish reading calib file */
     fclose(global_calib);
+    //WARNING: THIS DOES NOT MEAN THE FILE READ SUCCESSFULLY!
+    log_file << "\n[10 READ ALLOC] Finished reading calib file = " << tmp_filename.c_str();
+    log_file.flush(); //Flush so user can trackdata locations
+    //-----------------------------------------------------------------------------------------------/
 
-    tmp_filename = nullptr;
-    return;
+    progress_value = 60;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 200;
+    }
+    stop_mutex.unlock();
+
+    log_file.close();
+
+    return true;
 }
 
 

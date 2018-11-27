@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
@@ -39,13 +40,17 @@ public:
     QPushButton *pushButtonClose;
     QPushButton *pushButtonRun;
     QProgressBar *progressBar;
-    QPushButton *pushButtonClose_2;
+    QPushButton *pushButtonCheckInputs;
+    QCheckBox *checkBoxOverWriteFiles;
+    QGroupBox *groupBox;
+    QLabel *label_PIHM_Status;
+    QPushButton *pushButton_Stop;
 
     void setupUi(QDialog *PIHMSimulation)
     {
         if (PIHMSimulation->objectName().isEmpty())
             PIHMSimulation->setObjectName(QStringLiteral("PIHMSimulation"));
-        PIHMSimulation->resize(611, 393);
+        PIHMSimulation->resize(800, 500);
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -109,18 +114,19 @@ public:
         PIHMSimulation->setFont(font);
         groupBoxOutput = new QGroupBox(PIHMSimulation);
         groupBoxOutput->setObjectName(QStringLiteral("groupBoxOutput"));
-        groupBoxOutput->setGeometry(QRect(15, 20, 581, 131));
+        groupBoxOutput->setGeometry(QRect(5, 20, 781, 131));
         textLabel2 = new QLabel(groupBoxOutput);
         textLabel2->setObjectName(QStringLiteral("textLabel2"));
-        textLabel2->setGeometry(QRect(200, 0, 171, 31));
+        textLabel2->setGeometry(QRect(305, 0, 171, 31));
         QFont font1;
         font1.setPointSize(14);
         font1.setBold(true);
         font1.setWeight(75);
         textLabel2->setFont(font1);
+        textLabel2->setAlignment(Qt::AlignCenter);
         pushButtonInputDataFolder = new QPushButton(groupBoxOutput);
         pushButtonInputDataFolder->setObjectName(QStringLiteral("pushButtonInputDataFolder"));
-        pushButtonInputDataFolder->setGeometry(QRect(475, 4, 98, 32));
+        pushButtonInputDataFolder->setGeometry(QRect(672, 4, 98, 32));
         QFont font2;
         font2.setPointSize(12);
         font2.setBold(true);
@@ -129,7 +135,7 @@ public:
         pushButtonInputDataFolder->setAutoDefault(false);
         lineEditInputDataFolder = new QLineEdit(groupBoxOutput);
         lineEditInputDataFolder->setObjectName(QStringLiteral("lineEditInputDataFolder"));
-        lineEditInputDataFolder->setGeometry(QRect(10, 40, 561, 29));
+        lineEditInputDataFolder->setGeometry(QRect(10, 40, 761, 29));
         QFont font3;
         font3.setPointSize(11);
         font3.setBold(true);
@@ -137,15 +143,17 @@ public:
         lineEditInputDataFolder->setFont(font3);
         lineEditDataKey = new QLineEdit(groupBoxOutput);
         lineEditDataKey->setObjectName(QStringLiteral("lineEditDataKey"));
-        lineEditDataKey->setGeometry(QRect(240, 80, 331, 29));
+        lineEditDataKey->setGeometry(QRect(190, 80, 581, 29));
         lineEditDataKey->setFont(font3);
         textLabel2_2 = new QLabel(groupBoxOutput);
         textLabel2_2->setObjectName(QStringLiteral("textLabel2_2"));
-        textLabel2_2->setGeometry(QRect(90, 70, 131, 81));
+        textLabel2_2->setGeometry(QRect(10, 76, 171, 51));
         textLabel2_2->setFont(font2);
+        textLabel2_2->setTextFormat(Qt::PlainText);
+        textLabel2_2->setAlignment(Qt::AlignCenter);
         BorderTop = new QFrame(PIHMSimulation);
         BorderTop->setObjectName(QStringLiteral("BorderTop"));
-        BorderTop->setGeometry(QRect(0, -4, 611, 20));
+        BorderTop->setGeometry(QRect(0, -4, 800, 20));
         BorderTop->setBaseSize(QSize(0, 0));
         QPalette palette1;
         QBrush brush5(QColor(0, 51, 153, 255));
@@ -213,7 +221,7 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         BorderBottom = new QFrame(PIHMSimulation);
         BorderBottom->setObjectName(QStringLiteral("BorderBottom"));
-        BorderBottom->setGeometry(QRect(0, 377, 611, 20));
+        BorderBottom->setGeometry(QRect(0, 487, 800, 20));
         BorderBottom->setBaseSize(QSize(0, 0));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush5);
@@ -269,14 +277,14 @@ public:
         BorderBottom->setFrameShape(QFrame::HLine);
         textBrowserLogs = new QTextBrowser(PIHMSimulation);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(15, 199, 581, 181));
+        textBrowserLogs->setGeometry(QRect(5, 199, 781, 211));
         QFont font4;
         font4.setPointSize(11);
         textBrowserLogs->setFont(font4);
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
         groupBoxButtons = new QGroupBox(PIHMSimulation);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(15, 149, 581, 51));
+        groupBoxButtons->setGeometry(QRect(5, 149, 781, 51));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
         pushButtonHelp->setEnabled(false);
@@ -285,23 +293,56 @@ public:
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(380, 6, 91, 32));
+        pushButtonClose->setGeometry(QRect(582, 6, 91, 32));
         pushButtonClose->setFont(font2);
         pushButtonClose->setAutoDefault(false);
         pushButtonRun = new QPushButton(groupBoxButtons);
         pushButtonRun->setObjectName(QStringLiteral("pushButtonRun"));
-        pushButtonRun->setGeometry(QRect(482, 6, 91, 32));
+        pushButtonRun->setEnabled(false);
+        pushButtonRun->setGeometry(QRect(678, 6, 91, 32));
         pushButtonRun->setFont(font2);
         pushButtonRun->setAutoDefault(false);
         progressBar = new QProgressBar(groupBoxButtons);
         progressBar->setObjectName(QStringLiteral("progressBar"));
         progressBar->setGeometry(QRect(72, 6, 156, 31));
         progressBar->setValue(24);
-        pushButtonClose_2 = new QPushButton(groupBoxButtons);
-        pushButtonClose_2->setObjectName(QStringLiteral("pushButtonClose_2"));
-        pushButtonClose_2->setGeometry(QRect(230, 5, 141, 32));
-        pushButtonClose_2->setFont(font3);
-        pushButtonClose_2->setAutoDefault(false);
+        pushButtonCheckInputs = new QPushButton(groupBoxButtons);
+        pushButtonCheckInputs->setObjectName(QStringLiteral("pushButtonCheckInputs"));
+        pushButtonCheckInputs->setGeometry(QRect(433, 6, 141, 32));
+        pushButtonCheckInputs->setFont(font3);
+        pushButtonCheckInputs->setAutoDefault(false);
+        checkBoxOverWriteFiles = new QCheckBox(groupBoxButtons);
+        checkBoxOverWriteFiles->setObjectName(QStringLiteral("checkBoxOverWriteFiles"));
+        checkBoxOverWriteFiles->setGeometry(QRect(230, 6, 201, 31));
+        QFont font5;
+        font5.setBold(true);
+        font5.setWeight(75);
+        checkBoxOverWriteFiles->setFont(font5);
+        groupBox = new QGroupBox(PIHMSimulation);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        groupBox->setGeometry(QRect(0, 419, 791, 61));
+        QFont font6;
+        font6.setBold(true);
+        font6.setItalic(true);
+        font6.setWeight(75);
+        groupBox->setFont(font6);
+        label_PIHM_Status = new QLabel(groupBox);
+        label_PIHM_Status->setObjectName(QStringLiteral("label_PIHM_Status"));
+        label_PIHM_Status->setGeometry(QRect(16, 20, 631, 41));
+        QFont font7;
+        font7.setBold(true);
+        font7.setItalic(false);
+        font7.setWeight(75);
+        label_PIHM_Status->setFont(font7);
+        pushButton_Stop = new QPushButton(PIHMSimulation);
+        pushButton_Stop->setObjectName(QStringLiteral("pushButton_Stop"));
+        pushButton_Stop->setEnabled(false);
+        pushButton_Stop->setGeometry(QRect(660, 433, 121, 41));
+        QFont font8;
+        font8.setPointSize(16);
+        font8.setBold(true);
+        font8.setWeight(75);
+        pushButton_Stop->setFont(font8);
 
         retranslateUi(PIHMSimulation);
 
@@ -311,10 +352,11 @@ public:
     void retranslateUi(QDialog *PIHMSimulation)
     {
         PIHMSimulation->setWindowTitle(QApplication::translate("PIHMSimulation", "PIHM v2.2", nullptr));
-        groupBoxOutput->setTitle(QString());
+        groupBoxOutput->setTitle(QApplication::translate("PIHMSimulation", "Setup PIHM Thread", nullptr));
         textLabel2->setText(QApplication::translate("PIHMSimulation", "Input Data Folder", nullptr));
         pushButtonInputDataFolder->setText(QApplication::translate("PIHMSimulation", "Browse", nullptr));
-        textLabel2_2->setText(QApplication::translate("PIHMSimulation", "<html><head/><body><p align=\"center\"><span style=\" font-size:10pt;\">Data Key (ID) or</span></p><p align=\"center\"><span style=\" font-size:10pt;\">Unique Project Name</span></p><p align=\"center\"><br/></p></body></html>", nullptr));
+        textLabel2_2->setText(QApplication::translate("PIHMSimulation", "Data Key (ID) or\n"
+"Unique Project Name", nullptr));
         groupBoxButtons->setTitle(QString());
         pushButtonHelp->setText(QApplication::translate("PIHMSimulation", "Help", nullptr));
         pushButtonClose->setText(QApplication::translate("PIHMSimulation", "Close", nullptr));
@@ -322,7 +364,11 @@ public:
         pushButtonRun->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
         pushButtonRun->setText(QApplication::translate("PIHMSimulation", "Run", nullptr));
-        pushButtonClose_2->setText(QApplication::translate("PIHMSimulation", "Re-Check Inputs", nullptr));
+        pushButtonCheckInputs->setText(QApplication::translate("PIHMSimulation", "Re-Check Inputs", nullptr));
+        checkBoxOverWriteFiles->setText(QApplication::translate("PIHMSimulation", "Overwrite files in Sim folder", nullptr));
+        groupBox->setTitle(QApplication::translate("PIHMSimulation", "PIHM Thread", nullptr));
+        label_PIHM_Status->setText(QApplication::translate("PIHMSimulation", "No Messages from PIHM Thread", nullptr));
+        pushButton_Stop->setText(QApplication::translate("PIHMSimulation", "Stop PIHM", nullptr));
     } // retranslateUi
 
 };

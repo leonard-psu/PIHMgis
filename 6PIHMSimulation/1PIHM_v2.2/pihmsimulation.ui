@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
-    <height>393</height>
+    <width>800</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="palette">
@@ -437,19 +437,19 @@
   <widget class="QGroupBox" name="groupBoxOutput">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>20</y>
-     <width>581</width>
+     <width>781</width>
      <height>131</height>
     </rect>
    </property>
    <property name="title">
-    <string/>
+    <string>Setup PIHM Thread</string>
    </property>
    <widget class="QLabel" name="textLabel2">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>305</x>
       <y>0</y>
       <width>171</width>
       <height>31</height>
@@ -465,11 +465,14 @@
     <property name="text">
      <string>Input Data Folder</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButtonInputDataFolder">
     <property name="geometry">
      <rect>
-      <x>475</x>
+      <x>672</x>
       <y>4</y>
       <width>98</width>
       <height>32</height>
@@ -494,7 +497,7 @@
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>561</width>
+      <width>761</width>
       <height>29</height>
      </rect>
     </property>
@@ -509,9 +512,9 @@
    <widget class="QLineEdit" name="lineEditDataKey">
     <property name="geometry">
      <rect>
-      <x>240</x>
+      <x>190</x>
       <y>80</y>
-      <width>331</width>
+      <width>581</width>
       <height>29</height>
      </rect>
     </property>
@@ -526,10 +529,10 @@
    <widget class="QLabel" name="textLabel2_2">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>70</y>
-      <width>131</width>
-      <height>81</height>
+      <x>10</x>
+      <y>76</y>
+      <width>171</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
@@ -540,7 +543,14 @@
      </font>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Data Key (ID) or&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Unique Project Name&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>Data Key (ID) or
+Unique Project Name</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::PlainText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
@@ -549,7 +559,7 @@
     <rect>
      <x>0</x>
      <y>-4</y>
-     <width>611</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -994,8 +1004,8 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>377</y>
-     <width>611</width>
+     <y>487</y>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -1439,10 +1449,10 @@
   <widget class="QTextBrowser" name="textBrowserLogs">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>199</y>
-     <width>581</width>
-     <height>181</height>
+     <width>781</width>
+     <height>211</height>
     </rect>
    </property>
    <property name="font">
@@ -1457,9 +1467,9 @@
   <widget class="QGroupBox" name="groupBoxButtons">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>5</x>
      <y>149</y>
-     <width>581</width>
+     <width>781</width>
      <height>51</height>
     </rect>
    </property>
@@ -1495,7 +1505,7 @@
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>582</x>
       <y>6</y>
       <width>91</width>
       <height>32</height>
@@ -1516,9 +1526,12 @@
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonRun">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>482</x>
+      <x>678</x>
       <y>6</y>
       <width>91</width>
       <height>32</height>
@@ -1554,11 +1567,11 @@
      <number>24</number>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonClose_2">
+   <widget class="QPushButton" name="pushButtonCheckInputs">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>5</y>
+      <x>433</x>
+      <y>6</y>
       <width>141</width>
       <height>32</height>
      </rect>
@@ -1577,6 +1590,88 @@
      <bool>false</bool>
     </property>
    </widget>
+   <widget class="QCheckBox" name="checkBoxOverWriteFiles">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>6</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Overwrite files in Sim folder</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>419</y>
+     <width>791</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <italic>true</italic>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="title">
+    <string>PIHM Thread</string>
+   </property>
+   <widget class="QLabel" name="label_PIHM_Status">
+    <property name="geometry">
+     <rect>
+      <x>16</x>
+      <y>20</y>
+      <width>631</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>No Messages from PIHM Thread</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="pushButton_Stop">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>433</y>
+     <width>121</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Stop PIHM</string>
+   </property>
   </widget>
  </widget>
  <resources/>

@@ -36,10 +36,10 @@
 
 #include <QProgressBar>
 #include <QString>
-#include "6PIHMSimulation/PIHMThread/PIHMThread.h"
+#include "6PIHMSimulation/PIHMThread/MyThread.h"
 
 //int PIHM_v2_2(int argc, char *argv[], QProgressBar*, QString, int*, PIHMThread *thread);
-int PIHM_v2_2(PIHMThread *thread);
+int PIHM_v2_2(MyThread *thread);
 
 //FILE           *riv_state_file;
 typedef struct element_type {	/* Data model for a triangular element */

@@ -55,49 +55,46 @@
 #include <string.h>
 #include <time.h>
 
-/* SUNDIAL Header Files */
+#include <fstream>
+#include <string>
+#include <iostream>
+
+#include <QMutex>
 
 #include "sundials/sundials_types.h"
 #include "nvector/nvector_serial.h"
-
-
 #include "cvode/cvode.h"		/* CVODE header file                             */
 #include "cvode/cvode_spgmr.h"	/* CVSPGMR linear header file                    */
-//#include "sundials_smalldense.h"/* use generic DENSE linear solver for
-//				 * "small"   */
-#include "sundials/sundials_math.h"	/* contains UnitRoundoff, RSqrt, SQR
-    * functions   */
-#include "cvode/cvode_dense.h"	/* CVDENSE header file                           */
+#include "sundials/sundials_math.h"	/* contains UnitRoundoff, RSqrt, SQR*/
 #include "sundials/sundials_dense.h"	/* generic dense solver header file              */
 
-
 #include "pihm.h"		/* Data Model and Variable Declarations     */
-
 #include "update.h"
 #include "initialize.h"
 #include "is_sm_et.h"
 
-#include "6PIHMSimulation/PIHMThread/PIHMThreadProgress.h"
+#include "6PIHMSimulation/PIHMThread/MyThread.h"
 
 #define UNIT_C 1440		/* Unit Conversions */
+#define Ith(v,i)    NV_Ith_S(v,i-1)       /* Ith numbers components 1..NEQ */
 
-/* Function Declarations */
-void            initialize(PIHMThread *thread, Model_Data, Control_Data *, N_Vector);
-//void            is_sm_et(realtype, realtype, Model_Data, N_Vector);
-/* Function to calculate right hand side of ODE systems */
-int             f(realtype, N_Vector, N_Vector, void *);
-void            read_alloc(PIHMThread *thread, Model_Data, Control_Data *);	/* Variable definition */
-//void            update(realtype, Model_Data);
-void            PrintData(FILE **, Control_Data *, Model_Data, N_Vector, realtype);
-void            FreeData(Model_Data, Control_Data *);
+void  initialize(std::string, Model_Data, Control_Data *, N_Vector);
+int   f(realtype, N_Vector, N_Vector, void *);
+bool  read_alloc(MyThread *thread, Model_Data, Control_Data *);	/* Variable definition */
+void  PrintData(FILE **, Control_Data *, Model_Data, N_Vector, realtype);
+void  FreeData(Model_Data, Control_Data *);
 
-/* Main Function */
-int
-//PIHM_v2_2(int argc, char *argv[], QProgressBar* progressBar, QString logFileName, int* RunFlag, PIHMThread *thread)
-PIHM_v2_2(PIHMThread *thread)
+QMutex stop_mutex; //Used to check thread stop status
+
+int PIHM_v2_2(MyThread *thread)
 {
+    if(thread == NULL)
+        return 100;
+
+    emit thread->onPIHM_StatusChanged( std::string("Starting PIHM 2.2"));
+
     //-------------------------------------------------------------------------------------//
-    printf("\n [00] PIHM 2.2 is starting ... \n");
+    std::cout << "[00] PIHM 2.2 is starting ... " << std::endl; std::cout << std::flush;
     //-------------------------------------------------------------------------------------//
 
     Model_Data      mData;              /* Model Data                */
@@ -110,164 +107,405 @@ PIHM_v2_2(PIHMThread *thread)
     int             N = 0;              /* Problem size              */
     int             i = 0;              /* loop index                */
     int             flag = 0;           /* flag to test return value */
+    int progress_value = 0; //Used to track progress
 
     //-------------------------------------------------------------------------------------//
     /* START Open Output Files */
-    printf("\n [01] Creating output file locations");
+    std::cout << "[01] Creating output file locations" << std::endl; std::cout << std::flush;
     //-------------------------------------------------------------------------------------//
 
-    char *tmp_filename = thread->get_Groundwater_Output_FileName();
-    Ofile[0] = fopen(tmp_filename, "w"); //".gw.dat"
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Step One: Setup log file
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::string log_filename(thread->get_LogFile_FileName());
+    std::cout << "Logfile: " <<  log_filename << std::endl; std::cout << std::flush;
+    if(log_filename.length() < 1)
+    {
+        emit thread->onPIHM_Finished(true);
+        return 101;
+    }
+
+    std::ofstream log_file;
+    log_file.open(log_filename, std::ios::out);
+    if( !log_file.is_open())
+    {
+        std::cerr << "open lof file failure: " << std::strerror(errno) << '\n';
+        emit thread->onPIHM_Finished(true);
+        return 102;
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Step Two: Create Output Files
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    log_file << "\n[01] Creating PIHM Output file names from Thread";
+    std::string tmp_filename = thread->get_Groundwater_Output_FileName();
+    log_file << "\ngw = " << tmp_filename;
+    Ofile[0] = fopen(tmp_filename.c_str(), "w"); //".gw.dat"
+
     tmp_filename = thread->get_Surf_Output_FileName();
-    Ofile[1] = fopen(tmp_filename, "w"); //".surf.dat"
+    log_file << "\nsurf = " << tmp_filename;
+    Ofile[1] = fopen(tmp_filename.c_str(), "w"); //".surf.dat"
+
     tmp_filename = thread->get_et0_Output_FileName();
-    Ofile[2] = fopen(tmp_filename, "w"); //".et0.dat"
+    log_file << "\net0 = " << tmp_filename;
+    Ofile[2] = fopen(tmp_filename.c_str(), "w"); //".et0.dat"
+
     tmp_filename = thread->get_et1_Output_FileName();
-    Ofile[3] = fopen(tmp_filename, "w"); //".et1.dat"
+    log_file << "\net1 = " << tmp_filename;
+    Ofile[3] = fopen(tmp_filename.c_str(), "w"); //".et1.dat"
+
     tmp_filename = thread->get_et2_Output_FileName();
-    Ofile[4] = fopen(tmp_filename, "w"); //".et2.dat"
+    log_file << "\net2 = " << tmp_filename;
+    Ofile[4] = fopen(tmp_filename.c_str(), "w"); //".et2.dat"
+
     tmp_filename = thread->get_is_Output_FileName();
-    Ofile[5] = fopen(tmp_filename, "w"); //".is.dat"
+    log_file << "\nis = " << tmp_filename;
+    Ofile[5] = fopen(tmp_filename.c_str(), "w"); //".is.dat"
+
     tmp_filename = thread->get_Snow_Output_FileName();
-    Ofile[6] = fopen(tmp_filename, "w"); //".snow.dat"
+    log_file << "\nsnow = " << tmp_filename;
+    Ofile[6] = fopen(tmp_filename.c_str(), "w"); //".snow.dat"
+
     for (i = 0; i < 11; i++) {
         tmp_filename = thread->get_rivFlx_Output_FileName(i);
-        Ofile[7 + i] = fopen(tmp_filename, "w");
+        log_file << "\nriv " << i << " = " << tmp_filename;
+        Ofile[7 + i] = fopen(tmp_filename.c_str(), "w");
     }
+
     tmp_filename = thread->get_Stage_Output_FileName();
-    Ofile[18] = fopen(tmp_filename, "w"); //".stage.dat"
+    log_file << "\nstage = " << tmp_filename;
+    Ofile[18] = fopen(tmp_filename.c_str(), "w"); //".stage.dat"
+
     tmp_filename = thread->get_Unsat_Output_FileName();
-    Ofile[19] = fopen(tmp_filename, "w"); //".unsat.dat"
+    log_file << "\nunsat = " << tmp_filename;
+    Ofile[19] = fopen(tmp_filename.c_str(), "w"); //".unsat.dat"
+
     tmp_filename = thread->get_Rech_Output_FileName();
-    Ofile[20] = fopen(tmp_filename, "w"); //".rech.dat"
+    log_file << "\nrech = " << tmp_filename;
+    Ofile[20] = fopen(tmp_filename.c_str(), "w"); //".rech.dat"
+
     tmp_filename = thread->get_rbed_Output_FileName();
-    Ofile[21] = fopen(tmp_filename, "w"); //".rbed.dat"
+    log_file << "\nrbed = " << tmp_filename;
+    Ofile[21] = fopen(tmp_filename.c_str(), "w"); //".rbed.dat"
+
     tmp_filename = thread->get_infil_Output_FileName();
-    Ofile[22] = fopen(tmp_filename, "w"); //".infil.dat"
-    tmp_filename = nullptr;
+    log_file << "\ninfil = " << tmp_filename;
+    Ofile[22] = fopen(tmp_filename.c_str(), "w"); //".infil.dat"
 
-    /* END Open Output Files */
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Check if user requested to stop
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //-------------------------------------------------------------------------------------//
-    /* allocate memory for model data structure */
-    printf("\n [02] Creating model data structure");
-    //-------------------------------------------------------------------------------------//
+    progress_value = 15;
+    emit thread->valueChanged(progress_value);
+    emit thread->onPIHM_StatusChanged( std::string("Created PIHM output files"));
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_Finished(true);
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+
+        return 103;
+    }
+    stop_mutex.unlock();
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Step Two: Allocate memory for model data structure
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "[02] Creating model data structure" << std::endl; std::cout << std::flush;
+    log_file << "\n[02] Creating model data structure";
+    emit thread->onPIHM_StatusChanged( std::string("Creating model data structure"));
+
     mData = (Model_Data) malloc(sizeof *mData);
 
-    //-------------------------------------------------------------------------------------//
-    /* read in 9 input files with "filename" as prefix */
-    printf("\n [03] Reading Data Files");
-    //-------------------------------------------------------------------------------------//
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Check if user requested to stop
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    read_alloc(thread, mData, &cData);
+    progress_value = 30;
+    emit thread->valueChanged(progress_value);
 
-    //-------------------------------------------------------------------------------------//
-    printf("\n [04] Defining Problem Size");
-    //-------------------------------------------------------------------------------------//
-    /*
-     * if(mData->UnsatMode ==1) {    }
-     */
-    if (mData->UnsatMode == 2) {
-        /* problem size */
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+
+        emit thread->onPIHM_Finished(true);
+        return 104;
+    }
+    stop_mutex.unlock();
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Step Three: Read input filenames
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "[03] Reading Data Files" << std::endl; std::cout << std::flush;
+    log_file << "\n[03] Start Reading Data Files";
+    log_file.close(); //Close here so we can open in read_alloc
+    emit thread->onPIHM_StatusChanged( std::string("Start Reading Data Files"));
+
+    bool success = read_alloc(thread, mData, &cData);
+    if(!success)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Issue(s) with reading data."));
+        emit thread->onPIHM_Finished(true);
+        return 105;
+    }
+
+    //Re-open log file
+    log_file.open(log_filename, std::ios::out| std::ios::app);
+    if( !log_file.is_open())
+    {
+        std::cerr << "open failure: " << std::strerror(errno) << '\n';
+        //Must create a log file
+        emit thread->onPIHM_Finished(true);
+        return 106;
+    }
+    log_file << "\n[03] Finished Reading Data Files";
+    emit thread->onPIHM_StatusChanged( std::string("Finished Reading Data Files"));
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Check if user requested to stop
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    progress_value = 60;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 106;
+    }
+    stop_mutex.unlock();
+
+    if( mData->NumEle <= 0 || mData->NumEle > 100000) //100,000 is a guess for now
+    {
+        log_file << "\n[03] Invalid Number of Elements: " << mData->NumEle;
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Invalid number of elements"));
+        emit thread->onPIHM_Finished(true);
+        return 107;
+    }
+
+    if( mData->NumRiv <= 0 || mData->NumRiv > 100000) //100,000 is a guess for now
+    {
+        log_file << "\n[03] Invalid Number of River segments: " << mData->NumRiv;
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Invalid number of river segments"));
+        emit thread->onPIHM_Finished(true);
+        return 108;
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Step Four: Defining Problem Size
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "[04] Defining Problem Size" << std::endl; std::cout << std::flush;
+    log_file << "\n[04] Defining Problem Size";
+    emit thread->onPIHM_StatusChanged( std::string("Defining Problem Size"));
+
+    if (mData->UnsatMode == 2)
+    {
         N = 3 * mData->NumEle + 2 * mData->NumRiv;
         mData->DummyY = (realtype *) malloc((3 * mData->NumEle + 2 * mData->NumRiv) * sizeof(realtype));
     }
     else
     {
-        printf("\n [04] Error: Defining Problem Size as ubdefined mode requested");
-        return (1000);
+        printf("\n [04] Error: Defining Problem Size or undefined mode requested");
+        log_file << "\n[04] Error: Defining Problem Size or undefined mode requested";
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Error: Defining Problem Size or undefined mode requested."));
+        emit thread->onPIHM_Finished(true);
+        return 107;
     }
 
-
-    printf("\nODE Size = %d\n",N);
-    /* initial state variable depending on machine */
+    std::cout << "ODE Size = " << N << std::endl; std::cout << std::flush;
     CV_Y = N_VNew_Serial(N);
 
-    //-------------------------------------------------------------------------------------//
-    /* initialize mode data structure */
-    printf("\n [05] Initialize Data Structures");
-    //-------------------------------------------------------------------------------------//
-    initialize(thread, mData, &cData, CV_Y);
+    progress_value = 70;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 108;
+    }
+    stop_mutex.unlock();
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Step Five: initialize mode data structure
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "[05] Initialize Data Structures" << std::endl; std::cout << std::flush;
+    log_file << "\n[05] Initialize Data Structures";
+    emit thread->onPIHM_StatusChanged( std::string("Initialize Data Structures"));
+
+    std::string init_filename = thread->get_init_Input_FileName();
+    initialize(init_filename, mData, &cData, CV_Y);
+
+    progress_value = 80;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 109;
+    }
+    stop_mutex.unlock();
 
     //-------------------------------------------------------------------------------------//
     /* allocate memory for solver */
-    printf("\n [06] Initialize CVODE");
+    std::cout << "[06] Initialize CVODE" << std::endl; std::cout << std::flush;
     //-------------------------------------------------------------------------------------//
     cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
+
     if (cvode_mem == nullptr) {
         printf("CVodeMalloc failed. \n");
-        return (1001);
+
+        log_file << "\n[06] Initialize CVODE failed";
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string(" Initialize CVODE failed."));
+        emit thread->onPIHM_Finished(true);
+        return 110;
     }
 
-    //flag = CVodeSetFdata(cvode_mem, mData);
-    flag = CVodeSetInitStep(cvode_mem, cData.InitStep);
-    flag = CVodeSetStabLimDet(cvode_mem, TRUE);
-    flag = CVodeSetMaxStep(cvode_mem, cData.MaxStep);
-    //flag = CVodeMalloc(cvode_mem, f, cData.StartTime, CV_Y, CV_SS, cData.reltol, &cData.abstol);
+    progress_value = 90;
+    emit thread->valueChanged(progress_value);
+
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 109;
+    }
+    stop_mutex.unlock();
+
     flag = CVodeInit(cvode_mem, f, cData.StartTime, CV_Y);
+    if (flag != CV_SUCCESS)
+        std::cout << "FAILED -> CVodeInit " << std::endl;
+
+    N_Vector abstol = N_VNew_Serial((long int)1);
+    Ith(abstol, 1) = cData.abstol;
+
+    flag = CVodeSetUserData(cvode_mem, mData);
+
+    flag = CVodeSStolerances(cvode_mem, cData.reltol, cData.abstol);
+    if (flag != CV_SUCCESS)
+        std::cout << "FAILED -> CVodeSStolerances " << std::endl;
 
     flag = CVSpgmr(cvode_mem, PREC_NONE, 0);
-    //flag = CVSpgmrSetGSType(cvode_mem, MODIFIED_GS);
+    if (flag != CV_SUCCESS)
+        std::cout << "FAILED -> CVSpgmr " << std::endl;
+
+    flag = CVodeSetInitStep(cvode_mem, cData.InitStep);
+    if (flag != CV_SUCCESS)
+        std::cout << "FAILED -> CVodeSetInitStep " << std::endl;
+
+    flag = CVodeSetStabLimDet(cvode_mem, TRUE);
+    if (flag != CV_SUCCESS)
+        std::cout << "FAILED -> CVodeSetStabLimDet " << std::endl;
+
+    flag = CVodeSetMaxStep(cvode_mem, cData.MaxStep);
+    if (flag != CV_SUCCESS)
+        std::cout << "FAILED -> CVodeSetMaxStep " << std::endl;
 
     /* set start time */
     t = cData.StartTime;
-    //start = clock();
 
     //-------------------------------------------------------------------------------------//
     /* start solver in loops */
-    printf("\n [07] Solving ODE system");
+    std::cout << "[07] Solving ODE system" << std::endl; std::cout << std::flush;
     //-------------------------------------------------------------------------------------//
+    progress_value = 0;
+    emit thread->valueChanged(progress_value);
 
-    int progress;
-    for (i = 0; i < cData.NumSteps; i++) {
+    log_file << "\n[07] Solving ODE system";
+    emit thread->onPIHM_StatusChanged( std::string("Solving ODE system. Progress reset to zero."));
 
-        while (t < cData.Tout[i + 1]) {
-            if (t + cData.ETStep >= cData.Tout[i + 1]) {
+    stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+    if(thread->Stop)
+    {
+        log_file.close();
+        emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+        emit thread->onPIHM_Finished(true);
+        return 110;
+    }
+    stop_mutex.unlock();
+
+    int progress = 0;
+    for (i = 0; i < cData.NumSteps; i++)
+    {
+        while (t < cData.Tout[i + 1])
+        {
+            if (t + cData.ETStep >= cData.Tout[i + 1])
+            {
                 NextPtr = cData.Tout[i + 1];
-            } else {
+            }
+            else
+            {
                 NextPtr = t + cData.ETStep;
             }
             StepSize = NextPtr - t;
 
-            if(thread->has_user_requested_kill_thread())
+            stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+            if(thread->Stop)
             {
-                printf("\n Trying to stop PIHM nicely.");
-                i = cData.NumSteps;
+                log_file.close();
+                emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+                emit thread->onPIHM_Finished(true);
+                return 110;
             }
+            stop_mutex.unlock();
 
-            //-------------------------------------------------------------------------------------//
-            /* calculate Interception Storage */
-            //-------------------------------------------------------------------------------------//
             is_sm_et(t, StepSize, mData, CV_Y);
 
-            printf("\n Tsteps = %f of %f ", t+1, cData.EndTime);
-
-            progress = (int) (100*(t+1)/cData.EndTime);
-            if( progress > thread->get_Progress_Bar_Value() )
+            flag = CVode(cvode_mem, NextPtr, CV_Y, &t, CV_NORMAL);
+            if (flag != CV_SUCCESS)
             {
-                printf("Progress %d ",progress);
-                emit thread->updateProgressBar(progress);
+                std::cout << "FAILED -> CVode " << std::endl;
+                log_file.close();
+                emit thread->onPIHM_StatusChanged( std::string("Job cancelled by PIHM [CVode Error]"));
+                emit thread->onPIHM_Finished(true);
+                return 110;
             }
 
-            flag = CVode(cvode_mem, NextPtr, CV_Y, &t, CV_NORMAL);
             update(t, mData);
         }
+
         PrintData(Ofile, &cData, mData, CV_Y, t);
 
         progress = (int) (100*(t+1)/cData.EndTime);
-        if( progress > thread->get_Progress_Bar_Value() )
-        {
-            printf(" Progress %d %d", thread->get_Progress_Bar_Value(), progress);
-            emit thread->updateProgressBar(progress);
-        }
 
-        if(thread->has_user_requested_kill_thread())
+        progress_value = progress;
+        emit thread->valueChanged(progress_value);
+
+        stop_mutex.lock();    // prevent other threads from changing the "Stop" value
+        if(thread->Stop)
         {
-            printf("\n Trying to stop PIHM nicely.");
-            i = cData.NumSteps;
+            log_file.close();
+            emit thread->onPIHM_StatusChanged( std::string("Job cancelled by user"));
+            emit thread->onPIHM_Finished(true);
+            emit thread->onPIHM_Failed();
+            return 110;
         }
+        stop_mutex.unlock();
 
     }
+
+    log_file.close();
+
     /* Free memory */
     N_VDestroy_Serial(CV_Y);
 
@@ -278,5 +516,8 @@ PIHM_v2_2(PIHMThread *thread)
         fclose(Ofile[i]);
 
     free(mData);
+
+    emit thread->onPIHM_Finished(true);
+
     return 0;
 }

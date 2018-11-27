@@ -246,6 +246,7 @@ Makefile: PIHMgis.pro G:\Qt\5.11.1\msvc2017_64\mkspecs\win32-msvc\qmake.conf G:\
 		G:\Qt\5.11.1\msvc2017_64\lib\Qt5PrintSupport.prl \
 		G:\Qt\5.11.1\msvc2017_64\lib\Qt5Widgets.prl \
 		G:\Qt\5.11.1\msvc2017_64\lib\Qt5Gui.prl \
+		G:\Qt\5.11.1\msvc2017_64\lib\Qt5Concurrent.prl \
 		G:\Qt\5.11.1\msvc2017_64\lib\Qt5Core.prl
 	$(QMAKE) -o Makefile PIHMgis.pro -spec win32-msvc "CONFIG+=debug" "CONFIG+=qml_debug"
 G:\Qt\5.11.1\msvc2017_64\mkspecs\features\spec_pre.prf:
@@ -419,6 +420,7 @@ G:\Qt\5.11.1\msvc2017_64\lib\qtmaind.prl:
 G:\Qt\5.11.1\msvc2017_64\lib\Qt5PrintSupport.prl:
 G:\Qt\5.11.1\msvc2017_64\lib\Qt5Widgets.prl:
 G:\Qt\5.11.1\msvc2017_64\lib\Qt5Gui.prl:
+G:\Qt\5.11.1\msvc2017_64\lib\Qt5Concurrent.prl:
 G:\Qt\5.11.1\msvc2017_64\lib\Qt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile PIHMgis.pro -spec win32-msvc "CONFIG+=debug" "CONFIG+=qml_debug"

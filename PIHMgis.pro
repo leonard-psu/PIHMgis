@@ -12,6 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += core
 greaterThan(QT_MAJOR_VERSION, 4): QT += gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
 
 TARGET = PIHMgis
 TEMPLATE = app
@@ -82,7 +83,6 @@ SOURCES += main.cpp\
     5DataModelLoader/8IbcDataFile/ibcdatafile.cpp \
     5DataModelLoader/9ParaDataFile/paradatafile.cpp \
     5DataModelLoader/10CalibDataFile/calibdatafile.cpp \
-    6PIHMSimulation/PIHMThread/PIHMThread.cpp \
     6PIHMSimulation/1PIHM_v2.2/pihmsimulation.cpp \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/update.cpp \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/read_alloc.cpp \
@@ -91,7 +91,6 @@ SOURCES += main.cpp\
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/is_sm_et.cpp \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/initialize.cpp \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/f.cpp \
-    6PIHMSimulation/PIHMThread/PIHMThreadProgress.cpp \
     7VisualAnalytics/4RiverTemporal/rivertemporal.cpp \
     7VisualAnalytics/QCustomPlot/qcustomplot.cpp \
     7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.cpp \
@@ -178,8 +177,6 @@ SOURCES += main.cpp\
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/print.cpp \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/read_alloc.cpp \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/update.cpp \
-    6PIHMSimulation/PIHMThread/PIHMThread.cpp \
-    6PIHMSimulation/PIHMThread/PIHMThreadProgress.cpp \
     #6PIHMSimulation/PIHMThread copy/PIHMThread.cpp \
     7VisualAnalytics/1MeshSpatial/meshspatial.cpp \
     7VisualAnalytics/2MeshTemporal/meshtemporal.cpp \
@@ -228,7 +225,9 @@ SOURCES += main.cpp\
     moc_tinshapelayer.cpp \
     #pihmgis_plugin_import.cpp \
     pihmgisdialog.cpp \
-    qrc_Icons.cpp
+    qrc_Icons.cpp \
+    6PIHMSimulation/PIHMThread/user_def.cpp \
+    6PIHMSimulation/PIHMThread/MyThread.cpp
 
 HEADERS  += pihmgisdialog.h \
     1ProjectManagement/1NewProject/newproject.h \
@@ -291,12 +290,10 @@ HEADERS  += pihmgisdialog.h \
     5DataModelLoader/8IbcDataFile/ibcdatafile.h \
     5DataModelLoader/9ParaDataFile/paradatafile.h \
     5DataModelLoader/10CalibDataFile/calibdatafile.h \
-    6PIHMSimulation/PIHMThread/PIHMThread.h \
     6PIHMSimulation/1PIHM_v2.2/pihmsimulation.h \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/pihm.h \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/update.h \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/initialize.h \
-    6PIHMSimulation/PIHMThread/PIHMThreadProgress.h \
     7VisualAnalytics/4RiverTemporal/rivertemporal.h \
     7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.h \
     7VisualAnalytics/QCustomPlot/qcustomplot.h \
@@ -376,8 +373,6 @@ HEADERS  += pihmgisdialog.h \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/is_sm_et.h \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/pihm.h \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/update.h \
-    6PIHMSimulation/PIHMThread/PIHMThread.h \
-    6PIHMSimulation/PIHMThread/PIHMThreadProgress.h \
     #6PIHMSimulation/PIHMThread copy/PIHMThread.h \
     7VisualAnalytics/1MeshSpatial/meshspatial.h \
     7VisualAnalytics/2MeshTemporal/meshtemporal.h \
@@ -424,7 +419,10 @@ HEADERS  += pihmgisdialog.h \
 #    ui_streampolyline.h \
 #    ui_tinshapelayer.h \
     main.h \
-    globals.h
+    globals.h \
+    6PIHMSimulation/PIHMThread/user_def.h \
+    6PIHMSimulation/PIHMThread/user_def.h \
+    6PIHMSimulation/PIHMThread/MyThread.h
 
 FORMS    += pihmgisdialog.ui \
     1ProjectManagement/1NewProject/newproject.ui \
