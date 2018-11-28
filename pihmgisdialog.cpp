@@ -17,6 +17,7 @@
 #include "1ProjectManagement/2OpenProject/openproject.h"
 #include "1ProjectManagement/3ImportProject/importproject.h"
 #include "1ProjectManagement/4CloseProject/closeproject.h"
+#include "1ProjectManagement/CheckProject/checkproject.h"
 
 #include "2RasterProcessing/1FillPits/fillpits.h"
 #include "2RasterProcessing/2FlowGrids/flowgrids.h"
@@ -1067,13 +1068,77 @@ void PIHMgisDialog::update_project_file_label()
 
 }
 
+//Return value indicates the number of folders (total of 7) required for pihm gis
+//Warning not checking if files exist in folder. As users should be able to stop/start project components
+int PIHMgisDialog::check_pihmgis_project_exists(QString folder)
+{
 
-bool PIHMgisDialog::set_project_button_settings(bool enabled)
+    int result = 0;
+    QString project_folder = folder + user_pihmgis_project_folder;
+    QDir dir(project_folder);
+    if (!dir.exists())
+    {
+        result = 0;
+        return result; //No point checking any further
+    }
+    else
+    {
+        result++;
+    }
+
+    QString gisfolder = folder + "/1RasterProcessing";
+    QDir dir1(gisfolder);
+    if (dir1.exists())
+    {
+        result++;
+    }
+
+    gisfolder = folder + "/2VectorProcessing";
+    QDir dir2(gisfolder);
+    if (dir2.exists())
+    {
+        result++;
+    }
+
+    gisfolder = folder + "/3DomainDecomposition";
+    QDir dir3(gisfolder);
+    if (dir3.exists())
+    {
+        result++;
+    }
+
+    gisfolder = folder + "/4DataModelLoader";
+    QDir dir4(gisfolder);
+    if (dir4.exists())
+    {
+        result++;
+    }
+
+    gisfolder = folder + "/5PIHMSimulation";
+    QDir dir5(gisfolder);
+    if (dir5.exists())
+    {
+        result++;
+    }
+
+    gisfolder = folder + "/6VisualAnalytics";
+    QDir dir6(gisfolder);
+    if (dir6.exists())
+    {
+        result++;
+    }
+
+    return result;
+}
+
+
+
+bool PIHMgisDialog::enable_project_settings(bool enabled)
 {
     //ui->pushButtonPIHMgisProjectNew->setEnabled(enabled);
     //ui->pushButtonPIHMgisProjectClose->setEnabled(enabled);
     //ui->pushButtonPIHMgisProjectOpen->setEnabled(enabled);
-    ui->pushButtonPIHMgisProjectImport->setEnabled(enabled);
+    //ui->pushButtonPIHMgisProjectImport->setEnabled(enabled);
 
     ui->PIHMgisToolBox_RasterProcessing->setEnabled(enabled);
     ui->PIHMgisToolBox_VectorProcessing->setEnabled(enabled);
@@ -1087,6 +1152,29 @@ bool PIHMgisDialog::set_project_button_settings(bool enabled)
     return true;
 }
 
+bool PIHMgisDialog::check_if_pihmgis_project_exists()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::check_if_pihmgis_project_exists";
+
+    try {
+
+        QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt";
+        bool exists = QFile::exists(filename_open_project);
+        if(exists)
+            Log_Message("Found PIHMgis project file. ");
+        else
+            Log_Message("Did not find PIHMgis project file. ");
+
+        return exists;
+
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::check_if_pihmgis_project_exists is returning w/o checking";
+    }
+
+    return false;
+}
+
 
 void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 {
@@ -1095,26 +1183,118 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 
     try {
 
+        Clear_Log();
+
         QString ProjectHome = QFileDialog::getExistingDirectory(this, "Specify Home Folder", user_pihmgis_root_folder, 0);
         qDebug() << "ProjectHome = " << ProjectHome;
 
         if(ProjectHome.length() > 0 )
         {
-            user_pihmgis_root_folder = ProjectHome;
+            int folder_count = check_pihmgis_project_exists(ProjectHome);
 
-            create_default_project_workspace();
-            update_current_workspace_label();
+            if(folder_count == 0)
+            {
+                //Need to create workspace
+                user_pihmgis_root_folder = ProjectHome;
+                create_default_project_workspace();
+                update_current_workspace_label();
 
-            set_project_button_settings(true);
+                ui->pushButtonPIHMgisProjectNew->setEnabled(true);
+                ui->pushButtonPIHMgisProjectClose->setEnabled(true);
+                ui->pushButtonPIHMgisProjectOpen->setEnabled(true);
+                ui->pushButtonPIHMgisProjectImport->setEnabled(true);
+
+                enable_project_settings(true);
+            }
+            else if (folder_count == 7) //Everything exists
+            {
+                user_pihmgis_root_folder = ProjectHome;
+                update_current_workspace_label();
+
+                bool prj = check_if_pihmgis_project_exists();
+                if(prj)
+                {
+                    //Dont want users overriding data
+                    ui->pushButtonPIHMgisProjectNew->setEnabled(false);
+                }
+                else
+                {
+                    //Assume user only has folders
+                    ui->pushButtonPIHMgisProjectNew->setEnabled(true);
+                }
+
+                ui->pushButtonPIHMgisProjectClose->setEnabled(true);
+                ui->pushButtonPIHMgisProjectOpen->setEnabled(true);
+                ui->pushButtonPIHMgisProjectImport->setEnabled(true);
+
+                enable_project_settings(true);
+                Log_Message("Found PIHMgis workspace. All folders exist. ");
+
+            }
+            else
+            {
+                //This likely means an older workspace, but user needs to decide how to proceed
+                CheckProject *checkDialog = new CheckProject(this, ProjectHome);
+                checkDialog->setModal(true);
+                checkDialog->exec(); //Note difference here
+
+                //Recheck once
+                int folder_count_recheck = check_pihmgis_project_exists(ProjectHome);
+
+                Clear_Log();
+
+                //Assuming permissions changed or user deleted folders
+                if( folder_count_recheck == 0)
+                {
+                    user_pihmgis_root_folder = ProjectHome;
+                    update_current_workspace_label();
+
+                    ui->pushButtonPIHMgisProjectNew->setEnabled(true);
+                    ui->pushButtonPIHMgisProjectClose->setEnabled(false);
+                    ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
+                    ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+
+                    enable_project_settings(false);
+                    Log_Message("Invalid PIHMgis workspace. Check your file permissions or create new one.");
+
+                }
+                else if( folder_count_recheck == 7)
+                {
+                    user_pihmgis_root_folder = ProjectHome;
+                    update_current_workspace_label();
+
+                    bool prj = check_if_pihmgis_project_exists();
+                    if(prj)
+                    {
+                        //Dont want users overriding data
+                        ui->pushButtonPIHMgisProjectNew->setEnabled(false);
+                    }
+                    else
+                    {
+                        //Assume user only has folders
+                        ui->pushButtonPIHMgisProjectNew->setEnabled(true);
+                    }
+
+                    ui->pushButtonPIHMgisProjectClose->setEnabled(true);
+                    ui->pushButtonPIHMgisProjectOpen->setEnabled(true);
+                    ui->pushButtonPIHMgisProjectImport->setEnabled(true);
+
+                    enable_project_settings(true);
+                    Log_Message("Found PIHMgis workspace. All folders exist. ");
+
+                }
+                else
+                {
+                    enable_project_settings(false);
+                    Log_Message("Invalid PIHMgis workspace. Either fix your workspace or pick another one.");
+                    qDebug() << "Recheck found " << folder_count_recheck << " items. ";
+                }
+            }
         }
-
-
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
     }
-
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to Check if value is Numeric
@@ -1190,6 +1370,55 @@ qint64 file_Size(QString path){
 
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to clear message log
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::Clear_Log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::Clear_Log()";
+
+    try {
+
+        LogsString = tr("");
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+    } catch (...) {
+        qDebug() << "Error: CheckProject::PIHMgisDialog() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::Log_Error_Message(QString message)
+{
+    try {
+
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
+
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>"+tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
+    }
+}
+
 //void PIHMgisDialog::on_pushButtonWorkFlow7_clicked()
 //{
 //    qDebug() << "Error: PIHMgisDialog::on_pushButtonWorkFlow7_clicked is returning w/o checking";
@@ -1201,4 +1430,9 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked(bool checked)
 {
 //    qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
 
+}
+
+void PIHMgisDialog::on_pushButtonFinished_clicked()
+{
+    close();
 }

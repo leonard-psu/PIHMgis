@@ -20,6 +20,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QToolBox>
 #include <QtWidgets/QWidget>
 
@@ -118,14 +119,16 @@ public:
     QFrame *frame;
     QFrame *BarBottom;
     QLabel *PIHMgisLabel;
+    QTextBrowser *textBrowserLogs;
+    QPushButton *pushButtonFinished;
 
     void setupUi(QWidget *PIHMgisDialog)
     {
         if (PIHMgisDialog->objectName().isEmpty())
             PIHMgisDialog->setObjectName(QStringLiteral("PIHMgisDialog"));
-        PIHMgisDialog->resize(840, 620);
-        PIHMgisDialog->setMinimumSize(QSize(840, 620));
-        PIHMgisDialog->setMaximumSize(QSize(840, 620));
+        PIHMgisDialog->resize(840, 700);
+        PIHMgisDialog->setMinimumSize(QSize(840, 700));
+        PIHMgisDialog->setMaximumSize(QSize(840, 700));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -1227,7 +1230,7 @@ public:
         PIHMgisToolBox->addItem(PIHMgisToolBox_Help, QStringLiteral("Help && Other Resources"));
         BorderBottomLine = new QFrame(PIHMgisDialog);
         BorderBottomLine->setObjectName(QStringLiteral("BorderBottomLine"));
-        BorderBottomLine->setGeometry(QRect(0, 599, 840, 20));
+        BorderBottomLine->setGeometry(QRect(0, 684, 840, 20));
         BorderBottomLine->setBaseSize(QSize(0, 0));
         BorderBottomLine->setStyleSheet(QStringLiteral("color: rgb(0, 151, 53);"));
         BorderBottomLine->setFrameShadow(QFrame::Plain);
@@ -1304,7 +1307,7 @@ public:
         BorderTopLine->setFrameShape(QFrame::HLine);
         frame = new QFrame(PIHMgisDialog);
         frame->setObjectName(QStringLiteral("frame"));
-        frame->setGeometry(QRect(10, 14, 811, 587));
+        frame->setGeometry(QRect(5, 15, 825, 587));
         frame->setFont(font11);
         frame->setStyleSheet(QStringLiteral("color: rgb(51, 51, 51);"));
         frame->setFrameShape(QFrame::Box);
@@ -1313,7 +1316,7 @@ public:
         frame->setMidLineWidth(0);
         BarBottom = new QFrame(frame);
         BarBottom->setObjectName(QStringLiteral("BarBottom"));
-        BarBottom->setGeometry(QRect(30, 30, 750, 20));
+        BarBottom->setGeometry(QRect(10, 30, 800, 20));
         BarBottom->setBaseSize(QSize(0, 0));
         QPalette palette37;
         QBrush brush12(QColor(102, 102, 102, 255));
@@ -1376,10 +1379,26 @@ public:
         PIHMgisLabel->setMaximumSize(QSize(750, 26));
         PIHMgisLabel->setFont(font10);
         PIHMgisLabel->setAlignment(Qt::AlignCenter);
+        textBrowserLogs = new QTextBrowser(PIHMgisDialog);
+        textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
+        textBrowserLogs->setGeometry(QRect(5, 610, 691, 71));
+        textBrowserLogs->setFont(font12);
+        textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
+        pushButtonFinished = new QPushButton(PIHMgisDialog);
+        pushButtonFinished->setObjectName(QStringLiteral("pushButtonFinished"));
+        pushButtonFinished->setGeometry(QRect(700, 610, 131, 71));
+        QFont font15;
+        font15.setPointSize(18);
+        font15.setBold(true);
+        font15.setItalic(true);
+        font15.setWeight(75);
+        pushButtonFinished->setFont(font15);
         frame->raise();
         PIHMgisToolBox->raise();
         BorderBottomLine->raise();
         BorderTopLine->raise();
+        textBrowserLogs->raise();
+        pushButtonFinished->raise();
 
         retranslateUi(PIHMgisDialog);
 
@@ -1513,6 +1532,7 @@ public:
         label_15->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Funding to port PIHMGIS to windows provided by: CZO Grant XXXX</span></p></body></html>", nullptr));
         PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_Help), QApplication::translate("PIHMgisDialog", "Help && Other Resources", nullptr));
         PIHMgisLabel->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p>PIHMgis:<span style=\" font-style:italic;\"> for Penn State Integrated Hydrologic Modeling System (PIHM) v2.2</span></p></body></html>", nullptr));
+        pushButtonFinished->setText(QApplication::translate("PIHMgisDialog", "Finished", nullptr));
     } // retranslateUi
 
 };

@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>840</width>
-    <height>620</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>840</width>
-    <height>620</height>
+    <height>700</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>840</width>
-    <height>620</height>
+    <height>700</height>
    </size>
   </property>
   <property name="palette">
@@ -6072,7 +6072,7 @@ color: rgb(71, 71, 71);</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>599</y>
+     <y>684</y>
      <width>840</width>
      <height>20</height>
     </rect>
@@ -6548,9 +6548,9 @@ color: rgb(71, 71, 71);</string>
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>14</y>
-     <width>811</width>
+     <x>5</x>
+     <y>15</y>
+     <width>825</width>
      <height>587</height>
     </rect>
    </property>
@@ -6577,9 +6577,9 @@ color: rgb(71, 71, 71);</string>
    <widget class="Line" name="BarBottom">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>10</x>
       <y>30</y>
-      <width>750</width>
+      <width>800</width>
       <height>20</height>
      </rect>
     </property>
@@ -7057,10 +7057,51 @@ color: rgb(71, 71, 71);</string>
     </property>
    </widget>
   </widget>
+  <widget class="QTextBrowser" name="textBrowserLogs">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>610</y>
+     <width>691</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="lineWrapMode">
+    <enum>QTextEdit::NoWrap</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButtonFinished">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>610</y>
+     <width>131</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>18</pointsize>
+     <weight>75</weight>
+     <italic>true</italic>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Finished</string>
+   </property>
+  </widget>
   <zorder>frame</zorder>
   <zorder>PIHMgisToolBox</zorder>
   <zorder>BorderBottomLine</zorder>
   <zorder>BorderTopLine</zorder>
+  <zorder>textBrowserLogs</zorder>
+  <zorder>pushButtonFinished</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

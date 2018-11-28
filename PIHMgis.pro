@@ -226,7 +226,16 @@ SOURCES += main.cpp\
     #pihmgis_plugin_import.cpp \
     pihmgisdialog.cpp \
     qrc_Icons.cpp \
-    6PIHMSimulation/PIHMThread/MyThread.cpp
+    6PIHMSimulation/PIHMThread/MyThread.cpp \
+    1ProjectManagement/1NewProject/newproject.cpp \
+    1ProjectManagement/2OpenProject/openproject.cpp \
+    1ProjectManagement/3ImportProject/importproject.cpp \
+    1ProjectManagement/4CloseProject/closeproject.cpp \
+    1ProjectManagement/1NewProject/newproject.cpp \
+    1ProjectManagement/2OpenProject/openproject.cpp \
+    1ProjectManagement/3ImportProject/importproject.cpp \
+    1ProjectManagement/4CloseProject/closeproject.cpp \
+    1ProjectManagement/CheckProject/checkproject.cpp
 
 HEADERS  += pihmgisdialog.h \
     1ProjectManagement/1NewProject/newproject.h \
@@ -419,7 +428,16 @@ HEADERS  += pihmgisdialog.h \
 #    ui_tinshapelayer.h \
     main.h \
     globals.h \
-    6PIHMSimulation/PIHMThread/MyThread.h
+    6PIHMSimulation/PIHMThread/MyThread.h \
+    1ProjectManagement/1NewProject/newproject.h \
+    1ProjectManagement/2OpenProject/openproject.h \
+    1ProjectManagement/3ImportProject/importproject.h \
+    1ProjectManagement/4CloseProject/closeproject.h \
+    1ProjectManagement/1NewProject/newproject.h \
+    1ProjectManagement/2OpenProject/openproject.h \
+    1ProjectManagement/3ImportProject/importproject.h \
+    1ProjectManagement/4CloseProject/closeproject.h \
+    1ProjectManagement/CheckProject/checkproject.h
 
 FORMS    += pihmgisdialog.ui \
     1ProjectManagement/1NewProject/newproject.ui \
@@ -456,7 +474,8 @@ FORMS    += pihmgisdialog.ui \
     7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.ui \
     7VisualAnalytics/2MeshTemporal/meshtemporal.ui \
     7VisualAnalytics/1MeshSpatial/meshspatial.ui \
-    7VisualAnalytics/3RiverSpatial/riverspatial.ui
+    7VisualAnalytics/3RiverSpatial/riverspatial.ui \
+    1ProjectManagement/CheckProject/checkproject.ui
 
 OTHER_FILES +=
 

@@ -15,7 +15,6 @@ class ImportProject : public QDialog
 public:
     ImportProject(QWidget *parent = 0);
     ~ImportProject();
-    QString LogsString;
 
 private slots:
     void on_pushButtonHelp_clicked();
@@ -42,6 +41,7 @@ private:
     QStringList Get_Folder_List(const QString& str);
 
     Ui::ImportProject *ui;
+    QString LogsString;
 
 
 };

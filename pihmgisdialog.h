@@ -119,15 +119,28 @@ private slots:
 
     void on_pushButton_PickWorkspace_clicked(bool checked);
 
+    //void on_pushButton_clicked();
+
+    void on_pushButtonFinished_clicked();
+
 private:
+    void Clear_Log();
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
 
     void update_project_file_label();
     void update_current_workspace_label();
+
     bool create_default_project_workspace();
-    bool set_project_button_settings(bool enabled);
+    bool enable_project_settings(bool enabled);
+
+    bool check_if_pihmgis_project_exists();
+    int check_pihmgis_project_exists(QString folder);
 
     Ui::PIHMgisDialog *ui;
+    QString LogsString;
+
 };
 
 #endif // PIHMGISDIALOG_H
