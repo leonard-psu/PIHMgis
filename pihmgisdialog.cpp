@@ -59,8 +59,8 @@
 #include "globals.h"
 
 QString user_pihmgis_root_folder = "Please pick a workspace folder."; //QDir::homePath(); //Default for now, need to customize based on OS
-QString user_pihmgis_project_folder = "/.PIHMgis";   //Default for now, need to customize
-
+QString user_pihmgis_project_folder = "/.PIHMgis";        //Default for now, need to customize
+QString user_pihmgis_project_name = "/OpenProject.txt";   //Note use of forward characters
 
 PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
     QWidget(parent),
@@ -112,7 +112,9 @@ PIHMgisDialog::~PIHMgisDialog()
         qDebug() << "INFO: Start ~PIHMgisDialog";
 
     try {
+
         delete ui;
+
     } catch (...) {
         qDebug() << "Error: ~PIHMgisDialog is returning w/o checking";
     }
@@ -270,22 +272,6 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
     }
 }
 
-// ************************************************************************** //
-
-// **** START :: PIHMgis Help & Resources Slots **** //
-
-//void PIHMgisDialog::on_pushButtonWorkFlow0_clicked()
-//{
-//    if(print_debug_messages)
-//        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonWorkFlow0_clicked";
-
-//    try {
-//        bool success = QDesktopServices::openUrl(QUrl("http://www.pihm.psu.edu"));
-//        QStringList default_params; default_params << "WORKFLOW1"; set_defaults(default_params);
-//    } catch (...) {
-//        qDebug() << "Error: PIHMgisDialog::on_pushButtonWorkFlow0_clicked is returning w/o checking";
-//    }
-//}
 
 // **** START :: PIHMgis Project Management **** //
 
@@ -295,10 +281,80 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked";
 
     try {
-        qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
 
-        NewProject *NewProjectDialog = new NewProject(this);
-        NewProjectDialog->show();
+        QString project_location = user_pihmgis_root_folder; // + user_pihmgis_project_folder;
+        QString project_folder = ".PIHMgis";        //Default
+        QString project_name = "OpenProject.txt";   //Default
+
+        NewProject *NewProjectDialog = new NewProject(this, project_location, project_folder, project_name);
+        NewProjectDialog->setModal(true);
+        NewProjectDialog->exec(); //Note difference
+
+        QString newWfolder   = NewProjectDialog->get_Workspace_Folder();
+        QString newPrjFolder = NewProjectDialog->get_Project_Folder();
+        QString newPrjName   = NewProjectDialog->get_Project_Name();
+        bool created         = NewProjectDialog->get_User_Created_New_Project();
+
+        if(created)
+        {
+            //Check variables created by user
+            if(newWfolder.length() < 1)
+            {
+                ui->pushButtonPIHMgisProjectNew->setEnabled(false);
+                ui->pushButtonPIHMgisProjectClose->setEnabled(false);
+                ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
+                ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+                enable_project_settings(false); //User needs to setup project
+
+                Log_Error_Message("Invalid workspace");
+                return;
+            }
+            if(newPrjFolder.length() < 1)
+            {
+                ui->pushButtonPIHMgisProjectNew->setEnabled(false);
+                ui->pushButtonPIHMgisProjectClose->setEnabled(false);
+                ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
+                ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+                enable_project_settings(false); //User needs to setup project
+
+                Log_Error_Message("Invalid project folder");
+                return;
+            }
+            if(newPrjName.length() < 1)
+            {
+                ui->pushButtonPIHMgisProjectNew->setEnabled(false);
+                ui->pushButtonPIHMgisProjectClose->setEnabled(false);
+                ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
+                ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+                enable_project_settings(false); //User needs to setup project
+
+                Log_Error_Message("Invalid project name");
+                return;
+            }
+
+            //Prevent user for using same settings
+            ui->pushButtonPIHMgisProjectNew->setEnabled(false);
+            ui->pushButtonPIHMgisProjectClose->setEnabled(true);
+            ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
+            ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+            enable_project_settings(true); //User needs to setup project
+
+            //Update global variables. I suggest coming back here and add more checking
+            user_pihmgis_root_folder = newWfolder;
+            user_pihmgis_project_folder = "/" + newPrjFolder;        //Default for now, need to customize
+            user_pihmgis_project_name = "/" + newPrjName;   //Note use of forward characters
+
+        }
+        else
+        {
+            //Assume nothing was created and do nothing for now
+        }
+
+//        Log_Message(user_pihmgis_root_folder);
+//        Log_Message(user_pihmgis_project_folder);
+//        Log_Message(user_pihmgis_project_name);
+
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked is returning w/o checking";
     }
@@ -348,12 +404,7 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked()
 
 // **** END   :: PIHMgis Project Management Slots **** //
 
-
-// ************************************************************************** //
-
-
 // **** START :: Raster Processing Slots **** //
-
 void PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked()
 {
     if(print_debug_messages)
@@ -361,7 +412,7 @@ void PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked()
 
     try {
 
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt";
 
 
         FillPits *FillPitsDialog = new FillPits(this, filename_open_project);
@@ -475,9 +526,7 @@ void PIHMgisDialog::on_pushButtonRasterProcessingCatchmentPolygon_clicked()
 
 // **** END   :: Raster Processing Slots **** //
 
-
 // ************************************************************************** //
-
 
 // **** START :: Vector Processing Slots **** //
 
@@ -570,9 +619,7 @@ void PIHMgisDialog::on_pushButtonVectorProcessingMergeVectorLayers_clicked()
 
 // **** END   :: Vector Processing Slots **** //
 
-
 // ************************************************************************** //
-
 
 // **** START :: Domain Decomposition Slots **** //
 
@@ -628,9 +675,7 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked()
 
 // **** END   :: Domain Decomposition Slots **** //
 
-
 // ************************************************************************** //
-
 
 // **** START :: Data Model Loader Slots **** //
 
@@ -818,9 +863,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderForcDataFile_clicked()
 
 // **** END   :: Data Model Loader Slots **** //
 
-
 // ************************************************************************** //
-
 
 // **** START :: PIHM Simulation Slots **** //
 
@@ -844,9 +887,7 @@ void PIHMgisDialog::on_pushButtonPIHMSimulation_clicked()
 
 // **** END   :: PIHM Simulation Slots **** //
 
-
 // ************************************************************************** //
-
 
 // **** START :: Visual Analytics Slots **** //
 
@@ -919,24 +960,7 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
 
 // **** END   :: Visual Analytics Slots **** //
 
-
 // ************************************************************************** //
-
-//void PIHMgisDialog::on_pushButton_clicked()
-//{
-//    //if(print_debug_messages)
-//    qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_clicked";
-
-//    try {
-//        qDebug() << "on_pushButtonPIHMgisProjectNew_clicked";
-
-//        NewProject *NewProjectDialog = new NewProject(this);
-//        NewProjectDialog->show();
-//    } catch (...) {
-//        qDebug() << "Error: PIHMgisDialog::on_pushButton_clicked is returning w/o checking";
-//    }
-//}
-
 
 //FOW NOW USE GLOBAL VARIABLES
 bool PIHMgisDialog::create_default_project_workspace()
@@ -1058,7 +1082,6 @@ bool PIHMgisDialog::create_default_project_workspace()
     }
 }
 
-
 void PIHMgisDialog::update_project_file_label()
 {
     QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
@@ -1131,8 +1154,6 @@ int PIHMgisDialog::check_pihmgis_project_exists(QString folder)
     return result;
 }
 
-
-
 bool PIHMgisDialog::enable_project_settings(bool enabled)
 {
     //ui->pushButtonPIHMgisProjectNew->setEnabled(enabled);
@@ -1152,6 +1173,13 @@ bool PIHMgisDialog::enable_project_settings(bool enabled)
     return true;
 }
 
+bool PIHMgisDialog::check_directory_IsEmpty(const QDir& _dir)
+{
+    QFileInfoList infoList = _dir.entryInfoList(QDir::AllEntries | QDir::System | QDir::NoDotAndDotDot | QDir::Hidden );
+    return infoList.isEmpty();
+}
+
+//Issue with default project name
 bool PIHMgisDialog::check_if_pihmgis_project_exists()
 {
     if(print_debug_messages)
@@ -1159,7 +1187,16 @@ bool PIHMgisDialog::check_if_pihmgis_project_exists()
 
     try {
 
+        QString project_folder = user_pihmgis_root_folder + user_pihmgis_project_folder;
+        //Default name
         QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt";
+        qDebug() << filename_open_project;
+
+        if(check_directory_IsEmpty(project_folder))
+        {
+            Log_Message("Did not find PIHMgis project file. ");
+        }
+
         bool exists = QFile::exists(filename_open_project);
         if(exists)
             Log_Message("Found PIHMgis project file. ");
@@ -1191,20 +1228,21 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
         if(ProjectHome.length() > 0 )
         {
             int folder_count = check_pihmgis_project_exists(ProjectHome);
+            qDebug() << "folder_count = " << folder_count;
 
             if(folder_count == 0)
             {
                 //Need to create workspace
                 user_pihmgis_root_folder = ProjectHome;
-                create_default_project_workspace();
+//KEEP create_default_project_workspace();
                 update_current_workspace_label();
 
                 ui->pushButtonPIHMgisProjectNew->setEnabled(true);
-                ui->pushButtonPIHMgisProjectClose->setEnabled(true);
+                ui->pushButtonPIHMgisProjectClose->setEnabled(false);  //No need
                 ui->pushButtonPIHMgisProjectOpen->setEnabled(true);
                 ui->pushButtonPIHMgisProjectImport->setEnabled(true);
 
-                enable_project_settings(true);
+                enable_project_settings(false); //User needs to setup project
             }
             else if (folder_count == 7) //Everything exists
             {
@@ -1251,10 +1289,10 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 
                     ui->pushButtonPIHMgisProjectNew->setEnabled(true);
                     ui->pushButtonPIHMgisProjectClose->setEnabled(false);
-                    ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
-                    ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+                    ui->pushButtonPIHMgisProjectOpen->setEnabled(true);
+                    ui->pushButtonPIHMgisProjectImport->setEnabled(true);
 
-                    enable_project_settings(false);
+                    enable_project_settings(false); //User needs to setup project
                     Log_Message("Invalid PIHMgis workspace. Check your file permissions or create new one.");
 
                 }
@@ -1285,7 +1323,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                 }
                 else
                 {
-                    enable_project_settings(false);
+                    enable_project_settings(false); //User needs to setup project
                     Log_Message("Invalid PIHMgis workspace. Either fix your workspace or pick another one.");
                     qDebug() << "Recheck found " << folder_count_recheck << " items. ";
                 }

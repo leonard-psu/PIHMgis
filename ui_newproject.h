@@ -45,8 +45,9 @@ public:
     {
         if (NewProject->objectName().isEmpty())
             NewProject->setObjectName(QStringLiteral("NewProject"));
-        NewProject->resize(611, 395);
-        NewProject->setMaximumSize(QSize(611, 395));
+        NewProject->resize(800, 400);
+        NewProject->setMinimumSize(QSize(800, 400));
+        NewProject->setMaximumSize(QSize(800, 400));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -104,83 +105,96 @@ public:
         palette.setBrush(QPalette::Disabled, QPalette::ToolTipBase, brush4);
         palette.setBrush(QPalette::Disabled, QPalette::ToolTipText, brush);
         NewProject->setPalette(palette);
-        label_0 = new QLabel(NewProject);
-        label_0->setObjectName(QStringLiteral("label_0"));
-        label_0->setGeometry(QRect(100, 20, 391, 41));
         QFont font;
         font.setFamily(QStringLiteral("Arial"));
         font.setPointSize(10);
-        font.setBold(true);
-        font.setWeight(75);
-        label_0->setFont(font);
+        NewProject->setFont(font);
+        label_0 = new QLabel(NewProject);
+        label_0->setObjectName(QStringLiteral("label_0"));
+        label_0->setGeometry(QRect(5, 17, 782, 41));
+        QFont font1;
+        font1.setFamily(QStringLiteral("Arial"));
+        font1.setPointSize(18);
+        font1.setBold(true);
+        font1.setWeight(75);
+        label_0->setFont(font1);
         label_0->setAlignment(Qt::AlignCenter);
         groupBoxButtons = new QGroupBox(NewProject);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(15, 243, 581, 61));
+        groupBoxButtons->setGeometry(QRect(5, 222, 782, 61));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
-        pushButtonHelp->setGeometry(QRect(15, 18, 113, 32));
-        QFont font1;
-        font1.setFamily(QStringLiteral("Arial"));
-        font1.setPointSize(12);
-        font1.setBold(true);
-        font1.setWeight(75);
-        pushButtonHelp->setFont(font1);
+        pushButtonHelp->setEnabled(false);
+        pushButtonHelp->setGeometry(QRect(10, 7, 113, 40));
+        QFont font2;
+        font2.setFamily(QStringLiteral("Arial"));
+        font2.setPointSize(12);
+        font2.setBold(true);
+        font2.setWeight(75);
+        pushButtonHelp->setFont(font2);
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(312, 18, 113, 32));
-        pushButtonClose->setFont(font1);
+        pushButtonClose->setGeometry(QRect(520, 7, 113, 40));
+        pushButtonClose->setFont(font2);
         pushButtonClose->setAutoDefault(false);
         pushButtonCreate = new QPushButton(groupBoxButtons);
         pushButtonCreate->setObjectName(QStringLiteral("pushButtonCreate"));
-        pushButtonCreate->setGeometry(QRect(436, 18, 131, 32));
-        pushButtonCreate->setFont(font1);
+        pushButtonCreate->setGeometry(QRect(640, 7, 131, 40));
+        pushButtonCreate->setFont(font2);
         pushButtonCreate->setAutoDefault(false);
         groupBox = new QGroupBox(NewProject);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setGeometry(QRect(15, 63, 581, 161));
+        groupBox->setGeometry(QRect(5, 63, 782, 161));
         label_1 = new QLabel(groupBox);
         label_1->setObjectName(QStringLiteral("label_1"));
-        label_1->setGeometry(QRect(15, 20, 141, 31));
-        label_1->setFont(font1);
+        label_1->setGeometry(QRect(250, 6, 291, 31));
+        QFont font3;
+        font3.setFamily(QStringLiteral("Arial"));
+        font3.setPointSize(14);
+        font3.setBold(true);
+        font3.setItalic(true);
+        font3.setWeight(75);
+        label_1->setFont(font3);
         lineEditFile = new QLineEdit(groupBox);
         lineEditFile->setObjectName(QStringLiteral("lineEditFile"));
-        lineEditFile->setGeometry(QRect(165, 24, 281, 22));
-        QFont font2;
-        font2.setBold(true);
-        font2.setWeight(75);
-        lineEditFile->setFont(font2);
+        lineEditFile->setGeometry(QRect(10, 40, 762, 30));
+        QFont font4;
+        font4.setBold(true);
+        font4.setWeight(75);
+        lineEditFile->setFont(font4);
         lineEditFile->setMouseTracking(false);
         pushButtonFile = new QPushButton(groupBox);
         pushButtonFile->setObjectName(QStringLiteral("pushButtonFile"));
-        pushButtonFile->setGeometry(QRect(454, 20, 113, 32));
-        pushButtonFile->setFont(font1);
+        pushButtonFile->setGeometry(QRect(660, 0, 113, 32));
+        pushButtonFile->setFont(font2);
         pushButtonFile->setAutoDefault(false);
         label_2 = new QLabel(groupBox);
         label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setGeometry(QRect(15, 58, 131, 51));
-        label_2->setFont(font1);
+        label_2->setGeometry(QRect(12, 70, 131, 51));
+        label_2->setFont(font2);
+        label_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         lineEditFolder = new QLineEdit(groupBox);
         lineEditFolder->setObjectName(QStringLiteral("lineEditFolder"));
         lineEditFolder->setEnabled(false);
-        lineEditFolder->setGeometry(QRect(165, 74, 281, 22));
-        lineEditFolder->setFont(font2);
+        lineEditFolder->setGeometry(QRect(159, 80, 611, 30));
+        lineEditFolder->setFont(font4);
         lineEditFolder->setMouseTracking(false);
         label_3 = new QLabel(groupBox);
         label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setGeometry(QRect(16, 120, 101, 17));
-        label_3->setFont(font1);
+        label_3->setGeometry(QRect(40, 126, 101, 17));
+        label_3->setFont(font2);
+        label_3->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         lineEditFile2 = new QLineEdit(groupBox);
         lineEditFile2->setObjectName(QStringLiteral("lineEditFile2"));
-        lineEditFile2->setEnabled(false);
-        lineEditFile2->setGeometry(QRect(165, 118, 281, 22));
-        lineEditFile2->setFont(font2);
+        lineEditFile2->setEnabled(true);
+        lineEditFile2->setGeometry(QRect(159, 118, 611, 30));
+        lineEditFile2->setFont(font4);
         lineEditFile2->setMouseTracking(false);
-        lineEditFile2->setReadOnly(true);
+        lineEditFile2->setReadOnly(false);
         BorderBottom = new QFrame(NewProject);
         BorderBottom->setObjectName(QStringLiteral("BorderBottom"));
-        BorderBottom->setGeometry(QRect(0, 379, 611, 20));
+        BorderBottom->setGeometry(QRect(0, 384, 800, 20));
         BorderBottom->setBaseSize(QSize(0, 0));
         QPalette palette1;
         QBrush brush5(QColor(0, 51, 153, 255));
@@ -248,7 +262,7 @@ public:
         BorderBottom->setFrameShape(QFrame::HLine);
         BorderTop = new QFrame(NewProject);
         BorderTop->setObjectName(QStringLiteral("BorderTop"));
-        BorderTop->setGeometry(QRect(0, -4, 611, 20));
+        BorderTop->setGeometry(QRect(0, -4, 800, 20));
         BorderTop->setBaseSize(QSize(0, 0));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush5);
@@ -304,7 +318,7 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         textBrowserLogs = new QTextBrowser(NewProject);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(15, 320, 581, 51));
+        textBrowserLogs->setGeometry(QRect(5, 280, 782, 101));
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
 
         retranslateUi(NewProject);
@@ -314,12 +328,12 @@ public:
 
     void retranslateUi(QDialog *NewProject)
     {
-        NewProject->setWindowTitle(QApplication::translate("NewProject", ": :   New PIHMgis Project   : :", nullptr));
+        NewProject->setWindowTitle(QApplication::translate("NewProject", "New PIHMgis Project", nullptr));
         label_0->setText(QApplication::translate("NewProject", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Lucida Grande'; font-size:12pt; font-weight:600;\">Create a New PIHMgis Project</span></p></body></html>", nullptr));
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Lucida Grande'; font-size:14pt; font-weight:600;\">Create a </span><span style=\" font-family:'Lucida Grande'; font-size:14pt; font-weight:600; font-style:italic;\">New</span><span style=\" font-family:'Lucida Grande'; font-size:14pt; font-weight:600;\"> PIHMgis Project</span></p></body></html>", nullptr));
         groupBoxButtons->setTitle(QString());
         pushButtonHelp->setText(QApplication::translate("NewProject", "Help", nullptr));
         pushButtonClose->setText(QApplication::translate("NewProject", "Close", nullptr));
@@ -332,13 +346,12 @@ public:
         label_1->setToolTip(QApplication::translate("NewProject", "It is recommended that you choose PROJECT FOLDER\n"
 "for the Watershed you want to model", nullptr));
 #endif // QT_NO_TOOLTIP
-        label_1->setText(QApplication::translate("NewProject", "Working Directory", nullptr));
+        label_1->setText(QApplication::translate("NewProject", "Change Workspace  Directory", nullptr));
         pushButtonFile->setText(QApplication::translate("NewProject", "Browse...", nullptr));
 #ifndef QT_NO_TOOLTIP
-        label_2->setToolTip(QApplication::translate("NewProject", "This will be your HOME Directory for the PIHMgis.\n"
-"Output files & Folders will be created relative to this path.", nullptr));
+        label_2->setToolTip(QApplication::translate("NewProject", "<html><head/><body><p>This will be your PIHMgis project settings directory.</p></body></html>", nullptr));
 #endif // QT_NO_TOOLTIP
-        label_2->setText(QApplication::translate("NewProject", "Project Folder", nullptr));
+        label_2->setText(QApplication::translate("NewProject", "PIHMgis Folder", nullptr));
 #ifndef QT_NO_TOOLTIP
         label_3->setToolTip(QApplication::translate("NewProject", "This is your new project file that will be created.\n"
 "Choose this file if you need to open the project later.", nullptr));

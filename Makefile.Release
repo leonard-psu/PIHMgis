@@ -2001,6 +2001,9 @@ release\moc_pihmgisdialog.cpp: G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QWidge
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		pihmgisdialog.h \
 		release\moc_predefs.h \
 		G:\Qt\5.11.1\msvc2017_64\bin\moc.exe
@@ -10784,6 +10787,9 @@ release\moc_pihmgisdialog.cpp: G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QWidge
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		pihmgisdialog.h \
 		release\moc_predefs.h \
 		G:\Qt\5.11.1\msvc2017_64\bin\moc.exe
@@ -12592,6 +12598,9 @@ release\main.obj: main.cpp main.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcoreapplication.h \
@@ -44218,6 +44227,9 @@ release\main.obj: main.cpp main.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QApplication \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\qapplication.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qcoreapplication.h \
@@ -46676,7 +46688,10 @@ release\moc_pihmgisdialog.obj: moc_pihmgisdialog.cpp pihmgisdialog.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfiledevice.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qvector2d.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtGui\qtouchdevice.h \
-		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QString \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\QDir \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qdir.h \
+		G:\Qt\5.11.1\msvc2017_64\include\QtCore\qfileinfo.h
 
 release\moc_pihmsimulation.obj: moc_pihmsimulation.cpp 6PIHMSimulation/1PIHM_v2.2/pihmsimulation.h \
 		G:\Qt\5.11.1\msvc2017_64\include\QtWidgets\QDialog \

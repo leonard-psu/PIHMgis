@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QString>
+#include <QDir>
 
 namespace Ui {
 class PIHMgisDialog;
@@ -134,6 +135,7 @@ private:
 
     bool create_default_project_workspace();
     bool enable_project_settings(bool enabled);
+    bool check_directory_IsEmpty(const QDir& _dir);
 
     bool check_if_pihmgis_project_exists();
     int check_pihmgis_project_exists(QString folder);
