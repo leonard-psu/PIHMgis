@@ -46,7 +46,7 @@ PIHMSimulation::PIHMSimulation(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message("Unable to Open File: </span>" + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: </span>" + filename_open_project  );
         }
         else
         {
@@ -178,7 +178,7 @@ void PIHMSimulation::Log_Warning_Message(QString message)
 void PIHMSimulation::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {
@@ -392,7 +392,7 @@ int PIHMSimulation::CheckInputFileAccess(QString folder, QString project_name, Q
 
         if ( ! CheckFileAccess(FileNamewithExtension, "ReadOnly") )
         {
-            Log_Error_Message("No Read Access to " + FileNamewithExtension +tr("<br>"));
+            Log_Error_Message("No Read Access to " + FileNamewithExtension );
             return -9;
         }
 
@@ -429,7 +429,7 @@ int PIHMSimulation::CopyInputFile( QString output_folder, QString input_folder, 
             {
                 if ( ! QFile::remove(output_FileName) )
                 {
-                    Log_Error_Message("Unable to remove file " + output_FileName + tr("<br>"));
+                    Log_Error_Message("Unable to remove file " + output_FileName  );
                     ui->textBrowserLogs->setHtml(LogsString);
                     ui->textBrowserLogs->repaint();
                     return -9;
@@ -443,7 +443,7 @@ int PIHMSimulation::CopyInputFile( QString output_folder, QString input_folder, 
 
         if ( ! QFile::copy(input_FileName, output_FileName) )
         {
-            Log_Error_Message("Unable to copy file " + input_FileName + tr("<br>"));
+            Log_Error_Message("Unable to copy file " + input_FileName  );
             return -11;
         }
 
@@ -473,70 +473,70 @@ bool PIHMSimulation::CopyInputFiles( QString output_folder, QString input_folder
 
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".mesh"),delete_existing_output_file) != 0 )
             {
-                Log_Error_Message("Unable to copy file mesh file<br>");
+                Log_Error_Message("Unable to copy file mesh file");
                 result = false;
             }
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".att"),delete_existing_output_file) != 0 )
             {
-                Log_Error_Message("Unable to copy file att file<br>");
+                Log_Error_Message("Unable to copy file att file");
                 result = false;
             }
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".riv"),delete_existing_output_file) != 0 )
             {
-                Log_Error_Message("Unable to copy file riv file<br>");
+                Log_Error_Message("Unable to copy file riv file");
                 result = false;
             }
 
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".soil"),delete_existing_output_file) != 0 )
             {
-                Log_Error_Message("Unable to copy file soil file<br>");
+                Log_Error_Message("Unable to copy file soil file");
                 result = false;
             }
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".geol"),delete_existing_output_file) != 0 )
             {
-                Log_Error_Message("Unable to copy file geol file<br>");
+                Log_Error_Message("Unable to copy file geol file");
                 result = false;
             }
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".lc"),delete_existing_output_file) != 0 )
             {
-                Log_Error_Message("Unable to copy file lc file<br>");
+                Log_Error_Message("Unable to copy file lc file");
                 result = false;
             }
 
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".init"),delete_existing_output_file) != 0 )
             {
-                Log_Error_Message("Unable to copy file init file<br>");
+                Log_Error_Message("Unable to copy file init file");
                 result = false;
             }
 
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".ibc"),delete_existing_output_file) != 0 )
             {
-                Log_Error_Message("Unable to copy file ibc file<br>");
+                Log_Error_Message("Unable to copy file ibc file");
                 result = false;
             }
 
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".para"),delete_existing_output_file) != 0 )
             {
-                Log_Error_Message("Unable to copy file para file<br>");
+                Log_Error_Message("Unable to copy file para file");
                 result = false;
             }
 
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".calib"),delete_existing_output_file) != 0 )
             {
-                Log_Error_Message("Unable to copy file calib file<br>");
+                Log_Error_Message("Unable to copy file calib file");
                 result = false;
             }
 
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".forc"),delete_existing_output_file) != 0 )
             {
-                Log_Error_Message("Unable to copy file forc file<br>");
+                Log_Error_Message("Unable to copy file forc file");
                 result = false;
             }
 
         }
         else
         {
-            Log_Error_Message("PIHM Version Not Supported "+tr("<br>"));
+            Log_Error_Message("PIHM Version Not Supported " );
             result = false;
         }
 
@@ -842,11 +842,11 @@ void PIHMSimulation::verifyInputOutputFile()
         LogsString = tr("");
         if ( ! QDir(ui->lineEditInputDataFolder->text()).exists() )
         {
-            Log_Error_Message("Folder Does Not Exist " + ui->lineEditInputDataFolder->text() + tr("<br>"));
+            Log_Error_Message("Folder Does Not Exist " + ui->lineEditInputDataFolder->text() );
         }
         else
         {
-            LogsString.append(tr("Output Folder Exists ... ")+ui->lineEditInputDataFolder->text()+tr("<br>"));
+            LogsString.append(tr("Output Folder Exists ... ")+ui->lineEditInputDataFolder->text() );
 
         }
 
@@ -871,12 +871,12 @@ void PIHMSimulation::verifyInputOutputFile()
         {
             if ( ! QFile(FileName + Extensions.at(i)).exists() )
             {
-                Log_Error_Message("Input File Does Not Exist " + FileName + Extensions.at(i) +tr("<br>"));
+                Log_Error_Message("Input File Does Not Exist " + FileName + Extensions.at(i) );
                 missing_files = true;
             }
             else
             {
-                LogsString.append(tr("Input File Exists ... ")+ FileName + Extensions.at(i) +tr("<br>"));
+                LogsString.append(tr("Input File Exists ... ")+ FileName + Extensions.at(i) );
             }
         }
 

@@ -36,7 +36,7 @@ AttDataFile::AttDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message("ERROR: Unable to Open File: </span>" + filename_open_project + tr("<br>"));
+            Log_Error_Message("ERROR: Unable to Open File: </span>" + filename_open_project );
         }
         else
         {
@@ -610,7 +610,7 @@ bool AttDataFile::Check_PrecipitationFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" Precipitation File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" Precipitation File not found: " + value  );
                     }
                 }
 
@@ -678,7 +678,7 @@ bool AttDataFile::Check_TemperatureFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" Temperature File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" Temperature File not found: " + value );
                     }
                 }
 
@@ -746,7 +746,7 @@ bool AttDataFile::Check_RelativeHumidityFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" RelativeHumidity File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" RelativeHumidity File not found: " + value  );
                     }
                 }
 
@@ -814,7 +814,7 @@ bool AttDataFile::Check_WindVelocityFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" WindVelocity File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" WindVelocity File not found: " + value  );
                     }
                 }
 
@@ -882,7 +882,7 @@ bool AttDataFile::Check_SolarRadiationFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" SolarRadiation File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" SolarRadiation File not found: " + value  );
                     }
                 }
 
@@ -950,7 +950,7 @@ bool AttDataFile::Check_VaporPressureFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" VaporPressure File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" VaporPressure File not found: " + value  );
                     }
                 }
 
@@ -1018,7 +1018,7 @@ bool AttDataFile::Check_SoilClassesFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" Soil Classes File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" Soil Classes File not found: " + value  );
                     }
                 }
 
@@ -1086,7 +1086,7 @@ bool AttDataFile::Check_GeologyClassesFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" Geology Classes File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" Geology Classes File not found: " + value  );
                     }
                 }
 
@@ -1154,7 +1154,7 @@ bool AttDataFile::Check_MacroporesFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" Macropores File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" Macropores File not found: " + value  );
                     }
                 }
 
@@ -1222,7 +1222,7 @@ bool AttDataFile::Check_LandCoverClassesFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" LandCover Classes File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" LandCover Classes File not found: " + value  );
                     }
                 }
 
@@ -1290,7 +1290,7 @@ bool AttDataFile::Check_MeltRegionsFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" MeltRegions File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" MeltRegions File not found: " + value );
                     }
                 }
 
@@ -1358,7 +1358,7 @@ bool AttDataFile::Check_SourcesSinksFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" SourcesSinks File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" SourcesSinks File not found: " + value  );
                     }
                 }
 
@@ -1426,7 +1426,7 @@ bool AttDataFile::Check_InterceptionFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" Interception File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" Interception File not found: " + value );
                     }
                 }
 
@@ -1494,7 +1494,7 @@ bool AttDataFile::Check_SnowCoverFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" SnowCover File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" SnowCover File not found: " + value  );
                     }
                 }
 
@@ -1562,7 +1562,7 @@ bool AttDataFile::Check_SurfaceStorageFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" SurfaceStorage File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" SurfaceStorage File not found: " + value  );
                     }
                 }
 
@@ -1630,7 +1630,7 @@ bool AttDataFile::Check_SoilMoistureFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" SoilMoisture File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" SoilMoisture File not found: " + value  );
                     }
                 }
 
@@ -1698,7 +1698,7 @@ bool AttDataFile::Check_GroundwaterFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" Groundwater File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" Groundwater File not found: " + value  );
                     }
                 }
 
@@ -1766,7 +1766,7 @@ bool AttDataFile::Check_BoundaryConditionFileorValue(QString value){
                     }
                     else
                     {
-                        Log_Error_Message(" BoundaryCondition File not found: " + value +tr(" <br>"));
+                        Log_Error_Message(" BoundaryCondition File not found: " + value  );
                     }
                 }
 
@@ -3249,7 +3249,7 @@ void AttDataFile::Log_Warning_Message(QString message)
 void AttDataFile::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {

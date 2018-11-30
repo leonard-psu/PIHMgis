@@ -33,7 +33,7 @@ SoilDataFile::SoilDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message("Unable to Open File: " + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project  );
         }
         else
         {
@@ -91,7 +91,7 @@ void SoilDataFile::Log_Warning_Message(QString message)
 void SoilDataFile::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {
@@ -374,13 +374,13 @@ void SoilDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_SoilTexture_filename, "ReadOnly") )
         {
-            Log_Error_Message("No Read Access to " + input_SoilTexture_filename + tr("<br>"));
+            Log_Error_Message("No Read Access to " + input_SoilTexture_filename  );
             return;
         }
 
         if ( ! CheckFileAccess(output_SoilData_filename, "WriteOnly") )
         {
-            Log_Error_Message("No Write Access to " + output_SoilData_filename + tr("<br>"));
+            Log_Error_Message("No Write Access to " + output_SoilData_filename  );
             return;
         }
 
@@ -395,8 +395,8 @@ void SoilDataFile::on_pushButtonRun_clicked()
 
         if( ErrorSoil != 0 )
         {
-            Log_Error_Message("Soil Data File Processing Failed "+tr("<br>"));
-            Log_Error_Message("Soil Error Return code: " + QString::number(ErrorSoil)+tr("<br>"));
+            Log_Error_Message("Soil Data File Processing Failed " );
+            Log_Error_Message("Soil Error Return code: " + QString::number(ErrorSoil) );
             return;
         }
 

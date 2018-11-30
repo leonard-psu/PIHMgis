@@ -28,7 +28,7 @@ public:
     QGroupBox *groupBoxButtons;
     QPushButton *pushButtonHelp;
     QPushButton *pushButtonClose;
-    QPushButton *pushButtonOpen;
+    QPushButton *pushButtonCloseProject;
     QGroupBox *groupBox;
     QLabel *label;
     QLabel *label_3;
@@ -41,8 +41,14 @@ public:
     {
         if (CloseProject->objectName().isEmpty())
             CloseProject->setObjectName(QStringLiteral("CloseProject"));
-        CloseProject->resize(611, 395);
-        CloseProject->setMaximumSize(QSize(611, 395));
+        CloseProject->resize(800, 400);
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(CloseProject->sizePolicy().hasHeightForWidth());
+        CloseProject->setSizePolicy(sizePolicy);
+        CloseProject->setMinimumSize(QSize(800, 400));
+        CloseProject->setMaximumSize(QSize(800, 400));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -102,7 +108,7 @@ public:
         CloseProject->setPalette(palette);
         label_2 = new QLabel(CloseProject);
         label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setGeometry(QRect(150, 20, 281, 31));
+        label_2->setGeometry(QRect(270, 20, 231, 31));
         QFont font;
         font.setFamily(QStringLiteral("Arial"));
         font.setPointSize(12);
@@ -112,36 +118,37 @@ public:
         label_2->setAlignment(Qt::AlignCenter);
         groupBoxButtons = new QGroupBox(CloseProject);
         groupBoxButtons->setObjectName(QStringLiteral("groupBoxButtons"));
-        groupBoxButtons->setGeometry(QRect(17, 240, 581, 61));
+        groupBoxButtons->setGeometry(QRect(4, 219, 782, 61));
         pushButtonHelp = new QPushButton(groupBoxButtons);
         pushButtonHelp->setObjectName(QStringLiteral("pushButtonHelp"));
-        pushButtonHelp->setGeometry(QRect(12, 18, 113, 32));
+        pushButtonHelp->setEnabled(false);
+        pushButtonHelp->setGeometry(QRect(10, 10, 113, 32));
         pushButtonHelp->setFont(font);
         pushButtonHelp->setAutoDefault(false);
         pushButtonClose = new QPushButton(groupBoxButtons);
         pushButtonClose->setObjectName(QStringLiteral("pushButtonClose"));
-        pushButtonClose->setGeometry(QRect(310, 18, 113, 32));
+        pushButtonClose->setGeometry(QRect(520, 10, 113, 32));
         pushButtonClose->setFont(font);
         pushButtonClose->setAutoDefault(false);
-        pushButtonOpen = new QPushButton(groupBoxButtons);
-        pushButtonOpen->setObjectName(QStringLiteral("pushButtonOpen"));
-        pushButtonOpen->setGeometry(QRect(440, 18, 131, 32));
-        pushButtonOpen->setFont(font);
-        pushButtonOpen->setAutoDefault(false);
+        pushButtonCloseProject = new QPushButton(groupBoxButtons);
+        pushButtonCloseProject->setObjectName(QStringLiteral("pushButtonCloseProject"));
+        pushButtonCloseProject->setGeometry(QRect(640, 10, 131, 32));
+        pushButtonCloseProject->setFont(font);
+        pushButtonCloseProject->setAutoDefault(false);
         groupBox = new QGroupBox(CloseProject);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setGeometry(QRect(16, 60, 581, 161));
+        groupBox->setGeometry(QRect(5, 60, 782, 161));
         label = new QLabel(groupBox);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(30, 20, 491, 21));
+        label->setGeometry(QRect(30, 20, 741, 21));
         label->setFont(font);
         label_3 = new QLabel(groupBox);
         label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setGeometry(QRect(30, 60, 411, 20));
+        label_3->setGeometry(QRect(30, 60, 741, 20));
         label_3->setFont(font);
         textEdit = new QTextEdit(groupBox);
         textEdit->setObjectName(QStringLiteral("textEdit"));
-        textEdit->setGeometry(QRect(30, 86, 524, 61));
+        textEdit->setGeometry(QRect(10, 86, 761, 61));
         QFont font1;
         font1.setPointSize(14);
         font1.setBold(true);
@@ -150,7 +157,7 @@ public:
         textEdit->setTextInteractionFlags(Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse);
         BorderTop = new QFrame(CloseProject);
         BorderTop->setObjectName(QStringLiteral("BorderTop"));
-        BorderTop->setGeometry(QRect(0, -4, 611, 20));
+        BorderTop->setGeometry(QRect(0, -4, 800, 20));
         BorderTop->setBaseSize(QSize(0, 0));
         QPalette palette1;
         QBrush brush5(QColor(0, 51, 153, 255));
@@ -218,7 +225,7 @@ public:
         BorderTop->setFrameShape(QFrame::HLine);
         BorderTop_2 = new QFrame(CloseProject);
         BorderTop_2->setObjectName(QStringLiteral("BorderTop_2"));
-        BorderTop_2->setGeometry(QRect(0, 379, 611, 20));
+        BorderTop_2->setGeometry(QRect(0, 385, 800, 20));
         BorderTop_2->setBaseSize(QSize(0, 0));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush5);
@@ -274,7 +281,7 @@ public:
         BorderTop_2->setFrameShape(QFrame::HLine);
         textBrowserLogs = new QTextBrowser(CloseProject);
         textBrowserLogs->setObjectName(QStringLiteral("textBrowserLogs"));
-        textBrowserLogs->setGeometry(QRect(17, 320, 581, 51));
+        textBrowserLogs->setGeometry(QRect(5, 278, 782, 101));
         textBrowserLogs->setLineWrapMode(QTextEdit::NoWrap);
 
         retranslateUi(CloseProject);
@@ -287,7 +294,7 @@ public:
 
     void retranslateUi(QDialog *CloseProject)
     {
-        CloseProject->setWindowTitle(QApplication::translate("CloseProject", ": :   Close Project   : :", nullptr));
+        CloseProject->setWindowTitle(QApplication::translate("CloseProject", "Close Project", nullptr));
         label_2->setText(QApplication::translate("CloseProject", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -297,12 +304,12 @@ public:
         pushButtonHelp->setText(QApplication::translate("CloseProject", "Help", nullptr));
         pushButtonClose->setText(QApplication::translate("CloseProject", "Close", nullptr));
 #ifndef QT_NO_TOOLTIP
-        pushButtonOpen->setToolTip(QString());
+        pushButtonCloseProject->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        pushButtonOpen->setText(QApplication::translate("CloseProject", "Close Project", nullptr));
+        pushButtonCloseProject->setText(QApplication::translate("CloseProject", "Close Project", nullptr));
         groupBox->setTitle(QString());
         label->setText(QApplication::translate("CloseProject", "Details of the Currently Open PIHMgis Project:", nullptr));
-        label_3->setText(QApplication::translate("CloseProject", "...", nullptr));
+        label_3->setText(QString());
     } // retranslateUi
 
 };

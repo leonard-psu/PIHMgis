@@ -18,6 +18,7 @@
 #include "1ProjectManagement/3ImportProject/importproject.h"
 #include "1ProjectManagement/4CloseProject/closeproject.h"
 #include "1ProjectManagement/CheckProject/checkproject.h"
+#include "1ProjectManagement/InspectProject/inspectproject.h"
 
 #include "2RasterProcessing/1FillPits/fillpits.h"
 #include "2RasterProcessing/2FlowGrids/flowgrids.h"
@@ -48,7 +49,6 @@
 #include "5DataModelLoader/9ParaDataFile/paradatafile.h"
 #include "5DataModelLoader/10CalibDataFile/calibdatafile.h"
 
-//#include "6PIHMSimulation/1PIHM_v2.2/PIHMSimulation.h"
 #include "6PIHMSimulation/1PIHM_v2.2/pihmsimulation.h"
 
 #include "7VisualAnalytics/1MeshSpatial/meshspatial.h"
@@ -366,8 +366,16 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked";
 
     try {
-        OpenProject *OpenProjectDialog = new OpenProject(this);
-        OpenProjectDialog->show();
+        QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + user_pihmgis_project_name;
+
+        //OpenProject *OpenProjectDialog = new OpenProject(this);
+        //OpenProjectDialog->show();
+
+        InspectProject *iprj = new InspectProject(this, filename_open_project);
+        iprj->setModal(true);
+        iprj->exec();
+
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked is returning w/o checking";
     }
@@ -395,8 +403,34 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked";
 
     try {
-        CloseProject *CloseProjectDialog = new CloseProject(this);
-        CloseProjectDialog->show();
+
+        QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + user_pihmgis_project_name;
+        CloseProject *CloseProjectDialog = new CloseProject(this, filename_open_project);
+        CloseProjectDialog->setModal(true);
+        CloseProjectDialog->exec();
+
+        bool user_closed = CloseProjectDialog->user_closed_project();
+        if(user_closed)
+        {
+            //Reset global variables
+            user_pihmgis_root_folder = "";
+            user_pihmgis_project_folder = "";
+            user_pihmgis_project_name = "";
+
+            //Reset user interface
+            update_current_workspace_label();
+
+            ui->pushButtonPIHMgisProjectNew->setEnabled(false);
+            ui->pushButtonPIHMgisProjectClose->setEnabled(false);
+            ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
+            ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+
+            enable_project_settings(false); //User needs to setup project
+            Log_Message("Closed Project");
+
+        }
+
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked is returning w/o checking";
     }
@@ -412,7 +446,7 @@ void PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked()
 
     try {
 
-        QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + user_pihmgis_project_name;
 
 
         FillPits *FillPitsDialog = new FillPits(this, filename_open_project);
@@ -431,7 +465,7 @@ void PIHMgisDialog::on_pushButtonRasterProcessingFlowGrids_clicked()
 
     try {
 
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         FlowGrids *FlowGridsDialog = new FlowGrids(this, filename_open_project);
         FlowGridsDialog->setModal(true);
@@ -447,7 +481,7 @@ void PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         StreamGrids *StreamGridsDialog = new StreamGrids(this, filename_open_project);
         StreamGridsDialog->setModal(true);
@@ -464,7 +498,7 @@ void PIHMgisDialog::on_pushButtonRasterProcessingLinkGrids_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingLinkGrids_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         LinkGrids *LinkGridsDialog = new LinkGrids(this, filename_open_project);
         LinkGridsDialog->setModal(true);
@@ -481,7 +515,7 @@ void PIHMgisDialog::on_pushButtonRasterProcessingCatchmentGrids_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingCatchmentGrids_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         CatchmentGrids *CatchmentGridsDialog = new CatchmentGrids(this, filename_open_project);
         CatchmentGridsDialog->setModal(true);
@@ -498,7 +532,7 @@ void PIHMgisDialog::on_pushButtonRasterProcessingStreamPolyline_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingStreamPolyline_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         StreamPolyline *StreamPolylineDialog = new StreamPolyline(this, filename_open_project);
         StreamPolylineDialog->setModal(true);
@@ -514,7 +548,7 @@ void PIHMgisDialog::on_pushButtonRasterProcessingCatchmentPolygon_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonRasterProcessingCatchmentPolygon_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         CatchmentPolygon *CatchmentPolygonDialog = new CatchmentPolygon(this, filename_open_project);
         CatchmentPolygonDialog->setModal(true);
@@ -537,7 +571,7 @@ void PIHMgisDialog::on_pushButtonVectorProcessingDissolvePolygons_clicked()
 
     try {
 
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         DissolvePolygons *DissolvePolygonsDialog = new DissolvePolygons(this, filename_open_project);
         DissolvePolygonsDialog->setModal(true);
@@ -557,7 +591,7 @@ void PIHMgisDialog::on_pushButtonVectorProcessingPolygonToPolylines_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingPolygonToPolylines_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         PolygonToPolylines *PolygonToPolylinesDialog = new PolygonToPolylines(this, filename_open_project);
         PolygonToPolylinesDialog->setModal(true);
@@ -574,7 +608,7 @@ void PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         SimplifyPolylines *SimplifyPolylinesDialog = new SimplifyPolylines(this, filename_open_project);
         SimplifyPolylinesDialog->setModal(true);
@@ -590,7 +624,7 @@ void PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         PolylineToLines *PolylineToLinesDialog = new PolylineToLines(this, filename_open_project);
         PolylineToLinesDialog->setModal(true);
@@ -606,7 +640,7 @@ void PIHMgisDialog::on_pushButtonVectorProcessingMergeVectorLayers_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVectorProcessingMergeVectorLayers_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         MergeVectorLayers *MergeVectorLayersDialog = new MergeVectorLayers(this, filename_open_project);
         MergeVectorLayersDialog->setModal(true);
@@ -629,7 +663,7 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionReadTopology_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDomainDecompositionReadTopology_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         ReadTopology *ReadTopologyDialog = new ReadTopology(this, filename_open_project);
         ReadTopologyDialog->setModal(true);
@@ -646,7 +680,7 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         DelaunayTriangulation *DelaunayTriangulationDialog = new DelaunayTriangulation(this, filename_open_project);
         DelaunayTriangulationDialog->setModal(true);
@@ -662,7 +696,7 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         TINShapeLayer *TINShapeLayerDialog = new TINShapeLayer(this, filename_open_project);
         TINShapeLayerDialog->setModal(true);
@@ -686,7 +720,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked()
 
     try {
 
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
 
         MeshDataFile *MeshDataFileDialog = new MeshDataFile(this, filename_open_project);
@@ -703,7 +737,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         AttDataFile *AttDataFileDialog = new AttDataFile(this, filename_open_project);
         AttDataFileDialog->setModal(true);
@@ -720,7 +754,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         RivDataFile *RivDataFileDialog = new RivDataFile(this, filename_open_project);
         RivDataFileDialog->setModal(true);
@@ -737,7 +771,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         SoilDataFile *SoilDataFileDialog = new SoilDataFile(this, filename_open_project);
         SoilDataFileDialog->setModal(true);
@@ -754,7 +788,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         GeolDataFile *GeolDataFileDialog = new GeolDataFile(this, filename_open_project);
         GeolDataFileDialog->setModal(true);
@@ -770,7 +804,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         LcDataFile *LcDataFileDialog = new LcDataFile(this, filename_open_project);
         LcDataFileDialog->setModal(true);
@@ -786,7 +820,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         InitDataFile *InitDataFileDialog = new InitDataFile(this, filename_open_project);
         InitDataFileDialog->setModal(true);
@@ -802,7 +836,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         IbcDataFile *IbcDataFileDialog = new IbcDataFile(this, filename_open_project);
         IbcDataFileDialog->setModal(true);
@@ -818,7 +852,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderParamDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderParamDataFile_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         ParaDataFile *ParaDataFileDialog = new ParaDataFile(this, filename_open_project);
         ParaDataFileDialog->setModal(true);
@@ -835,7 +869,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderCalibDataFile_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonDataModelLoaderCalibDataFile_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
 
         CalibDataFile *CalibDataFileDialog = new CalibDataFile(this, filename_open_project);
@@ -873,7 +907,7 @@ void PIHMgisDialog::on_pushButtonPIHMSimulation_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMSimulation_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         PIHMSimulation *PIHMSimulationDialog = new PIHMSimulation(this, filename_open_project);
         PIHMSimulationDialog->setModal(true);
@@ -897,7 +931,7 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         MeshSpatial *MeshSpatialDialog = new MeshSpatial(this, filename_open_project);
         MeshSpatialDialog->setModal(true);
@@ -914,7 +948,7 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalWatershed_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalWatershed_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         MeshTemporal *MeshTemporalDialog = new MeshTemporal(this, filename_open_project);
         MeshTemporalDialog->setModal(true);
@@ -931,7 +965,7 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         RiverSpatial *RiverSpatialDialog = new RiverSpatial(this, filename_open_project);
         RiverSpatialDialog->setModal(true);
@@ -948,7 +982,7 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked";
 
     try {
-        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
         RiverTemporal *RiverTemporalDialog = new RiverTemporal(this, filename_open_project);
         RiverTemporalDialog->setModal(true);
@@ -1084,7 +1118,7 @@ bool PIHMgisDialog::create_default_project_workspace()
 
 void PIHMgisDialog::update_project_file_label()
 {
-    QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + "/OpenProject.txt";
+    QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
     bool exists = QFileInfo(filename_open_project).exists();
     ui->label_project_found->setVisible(exists);
@@ -1189,7 +1223,7 @@ bool PIHMgisDialog::check_if_pihmgis_project_exists()
 
         QString project_folder = user_pihmgis_root_folder + user_pihmgis_project_folder;
         //Default name
-        QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt";
+        QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + user_pihmgis_project_name;
         qDebug() << filename_open_project;
 
         if(check_directory_IsEmpty(project_folder))
@@ -1254,16 +1288,17 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                 {
                     //Dont want users overriding data
                     ui->pushButtonPIHMgisProjectNew->setEnabled(false);
+                    ui->pushButtonPIHMgisProjectImport->setEnabled(false);
                 }
                 else
                 {
                     //Assume user only has folders
                     ui->pushButtonPIHMgisProjectNew->setEnabled(true);
+                    ui->pushButtonPIHMgisProjectImport->setEnabled(true);
                 }
 
                 ui->pushButtonPIHMgisProjectClose->setEnabled(true);
                 ui->pushButtonPIHMgisProjectOpen->setEnabled(true);
-                ui->pushButtonPIHMgisProjectImport->setEnabled(true);
 
                 enable_project_settings(true);
                 Log_Message("Found PIHMgis workspace. All folders exist. ");
@@ -1306,16 +1341,17 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                     {
                         //Dont want users overriding data
                         ui->pushButtonPIHMgisProjectNew->setEnabled(false);
+                        ui->pushButtonPIHMgisProjectImport->setEnabled(false);
                     }
                     else
                     {
                         //Assume user only has folders
                         ui->pushButtonPIHMgisProjectNew->setEnabled(true);
+                        ui->pushButtonPIHMgisProjectImport->setEnabled(true);
                     }
 
                     ui->pushButtonPIHMgisProjectClose->setEnabled(true);
                     ui->pushButtonPIHMgisProjectOpen->setEnabled(true);
-                    ui->pushButtonPIHMgisProjectImport->setEnabled(true);
 
                     enable_project_settings(true);
                     Log_Message("Found PIHMgis workspace. All folders exist. ");
@@ -1433,9 +1469,7 @@ void PIHMgisDialog::Clear_Log()
 void PIHMgisDialog::Log_Error_Message(QString message)
 {
     try {
-
         LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
-
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {

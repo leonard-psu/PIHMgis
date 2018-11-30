@@ -31,7 +31,7 @@ InitDataFile::InitDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message("Unable to Open File: " + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
         else
         {
@@ -1103,7 +1103,7 @@ void InitDataFile::Log_Warning_Message(QString message)
 void InitDataFile::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {
@@ -1227,7 +1227,7 @@ void InitDataFile::on_pushButtonRun_clicked()
         }
         if ( ! CheckFileAccess(output_InitData, "WriteOnly") )
         {
-            Log_Error_Message("No Write Access to " + output_InitData + tr("<br>"));
+            Log_Error_Message("No Write Access to " + output_InitData );
             return;
         }
 
@@ -1253,8 +1253,8 @@ void InitDataFile::on_pushButtonRun_clicked()
 
         if( ErrorInit != 0 )
         {
-            Log_Error_Message("Init Data File Processing Failed " + tr("<br>"));
-            Log_Error_Message("Init error return code: " + QString::number(ErrorInit) + tr("<br>"));
+            Log_Error_Message("Init Data File Processing Failed "  );
+            Log_Error_Message("Init error return code: " + QString::number(ErrorInit) );
             return;
         }
 

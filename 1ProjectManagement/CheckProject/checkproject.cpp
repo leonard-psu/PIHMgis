@@ -100,7 +100,7 @@ void CheckProject::Clear_Log()
 void CheckProject::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {
@@ -139,12 +139,12 @@ int CheckProject::check_pihmgis_project_exists(QString folder)
         if (!dir.exists())
         {
             result = 0;
-            Log_Error_Message("Could not find  :" + project_folder + tr("<br>"));
+            Log_Error_Message("Could not find  :" + project_folder );
             return result; //No point checking any further
         }
         else
         {
-            Log_Message("Found : " + project_folder + tr("<br>"));
+            Log_Message("Found : " + project_folder  );
             result++;
         }
 
@@ -152,72 +152,72 @@ int CheckProject::check_pihmgis_project_exists(QString folder)
         QDir dir1(gisfolder);
         if (dir1.exists())
         {
-            Log_Message("Found : " + gisfolder + tr("<br>"));
+            Log_Message("Found : " + gisfolder  );
             result++;
         }
         else
         {
-            Log_Error_Message("Could not find : " + gisfolder + tr("<br>"));
+            Log_Error_Message("Could not find : " + gisfolder  );
         }
 
         gisfolder = folder + "/2VectorProcessing";
         QDir dir2(gisfolder);
         if (dir2.exists())
         {
-            Log_Message("Found : " + gisfolder + tr("<br>"));
+            Log_Message("Found : " + gisfolder  );
             result++;
         }
         else
         {
-            Log_Error_Message("Could not find : " + gisfolder + tr("<br>"));
+            Log_Error_Message("Could not find : " + gisfolder  );
         }
 
         gisfolder = folder + "/3DomainDecomposition";
         QDir dir3(gisfolder);
         if (dir3.exists())
         {
-            Log_Message("Found : " + gisfolder + tr("<br>"));
+            Log_Message("Found : " + gisfolder  );
             result++;
         }
         else
         {
-            Log_Error_Message("Could not find : " + gisfolder + tr("<br>"));
+            Log_Error_Message("Could not find : " + gisfolder );
         }
 
         gisfolder = folder + "/4DataModelLoader";
         QDir dir4(gisfolder);
         if (dir4.exists())
         {
-            Log_Message("Found : " + gisfolder + tr("<br>"));
+            Log_Message("Found : " + gisfolder  );
             result++;
         }
         else
         {
-            Log_Error_Message("Could not find : " + gisfolder + tr("<br>"));
+            Log_Error_Message("Could not find : " + gisfolder  );
         }
 
         gisfolder = folder + "/5PIHMSimulation";
         QDir dir5(gisfolder);
         if (dir5.exists())
         {
-            Log_Message("Found : " + gisfolder + tr("<br>"));
+            Log_Message("Found : " + gisfolder  );
             result++;
         }
         else
         {
-            Log_Error_Message("Could not find : " + gisfolder + tr("<br>"));
+            Log_Error_Message("Could not find : " + gisfolder );
         }
 
         gisfolder = folder + "/6VisualAnalytics";
         QDir dir6(gisfolder);
         if (dir6.exists())
         {
-            Log_Message("Found : " + gisfolder + tr("<br>"));
+            Log_Message("Found : " + gisfolder  );
             result++;
         }
         else
         {
-            Log_Error_Message("Could not find : " + gisfolder + tr("<br>"));
+            Log_Error_Message("Could not find : " + gisfolder );
         }
 
         return result;

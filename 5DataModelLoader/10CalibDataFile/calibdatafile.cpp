@@ -30,7 +30,7 @@ CalibDataFile::CalibDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message("Unable to Open File: " + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
         else
         {
@@ -87,7 +87,7 @@ void CalibDataFile::Log_Warning_Message(QString message)
 void CalibDataFile::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {
@@ -264,7 +264,7 @@ bool CalibDataFile::Check_Calib_Output(QString file, bool color_and_message_if_e
         {
             if(color_and_message_if_exists)
             {
-                Log_Error_Message("Calib output already exists: " + file +tr(" You may need to delete this file.<br>"));
+                Log_Error_Message("Calib output already exists: " + file +tr(" You may need to delete this file."));
             }
 
             ui->lineEditCalibDataFile->setStyleSheet("color: red;");
@@ -384,7 +384,7 @@ void CalibDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(calib_filename, "WriteOnly") )
         {
-            Log_Error_Message("No Write Access to " + calib_filename + tr("<br>"));
+            Log_Error_Message("No Write Access to " + calib_filename );
             return;
         }
 
@@ -399,8 +399,8 @@ void CalibDataFile::on_pushButtonRun_clicked()
 
         if( ErrorCalib != 0 )
         {
-            Log_Error_Message("Calib Data File Processing Failed " + tr("<br>"));
-            Log_Error_Message("Calib error code: " + QString::number(ErrorCalib)+tr("<br>"));
+            Log_Error_Message("Calib Data File Processing Failed "  );
+            Log_Error_Message("Calib error code: " + QString::number(ErrorCalib) );
             return;
         }
 

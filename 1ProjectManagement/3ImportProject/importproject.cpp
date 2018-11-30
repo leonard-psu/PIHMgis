@@ -85,7 +85,7 @@ void ImportProject::Clear_Log()
 void ImportProject::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {
@@ -700,27 +700,27 @@ void ImportProject::on_pushButtonImport_clicked()
 
         if(OldProjectFolder.isEmpty())
         {
-            Log_Error_Message("No old project folder name specified: </span>" + OldProjectFolder + tr("<br>"));
+            Log_Error_Message("No old project folder name specified: </span>" + OldProjectFolder );
             return;
         }
         if(old_ProjectFileName.isEmpty())
         {
-            Log_Error_Message("Old project file name not specified </span>" + old_ProjectFileName + tr("<br>"));
+            Log_Error_Message("Old project file name not specified </span>" + old_ProjectFileName );
             return;
         }
         if(NewProjectFolder.isEmpty())
         {
-            Log_Error_Message("New project folder not specified: </span>" + NewProjectFolder + tr("<br>"));
+            Log_Error_Message("New project folder not specified: </span>" + NewProjectFolder );
             return;
         }
         if(NewProjectName.isEmpty())
         {
-            Log_Error_Message("Need to specify New Project Name: </span>" + NewProjectName + tr("<br>"));
+            Log_Error_Message("Need to specify New Project Name: </span>" + NewProjectName  );
             return;
         }
         if(data_base_folder.isEmpty())
         {
-            Log_Error_Message("Need to specify New Data Folder Location: </span>" + data_base_folder + tr("<br>"));
+            Log_Error_Message("Need to specify New Data Folder Location: </span>" + data_base_folder  );
             return;
         }
 
@@ -735,11 +735,11 @@ void ImportProject::on_pushButtonImport_clicked()
         QFileInfo qfi(new_ProjectFileName);
         if(qfi.exists())
         {
-            Log_Message("Removing existing project file = " + new_ProjectFileName + tr("<br>"));
+            Log_Message("Removing existing project file = " + new_ProjectFileName );
             bool success = QFile::remove(new_ProjectFileName);
             if(!success)
             {
-                Log_Error_Message("Problems removing file = " + new_ProjectFileName + tr("<br>"));
+                Log_Error_Message("Problems removing file = " + new_ProjectFileName );
             }
         }
 
@@ -758,11 +758,11 @@ void ImportProject::on_pushButtonImport_clicked()
 
         if(qfi2.exists())
         {
-            Log_Message("Removing existing project file = " + output_name + tr("<br>"));
+            Log_Message("Removing existing project file = " + output_name  );
             bool success = QFile::remove(output_name);
             if(!success)
             {
-                Log_Error_Message("Problems removing file = " + output_name + tr("<br>"));
+                Log_Error_Message("Problems removing file = " + output_name  );
             }
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -785,10 +785,10 @@ void ImportProject::on_pushButtonImport_clicked()
         // Copy Project File to new location as temp file
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        Log_Message("Opening Existing Project File = " + old_ProjectFileName + tr("<br>"));
+        Log_Message("Opening Existing Project File = " + old_ProjectFileName  );
 
         QFile::copy(old_ProjectFileName, new_ProjectFileName);
-        Log_Message("Copying temporary project tile = " + new_ProjectFileName + tr("<br>"));
+        Log_Message("Copying temporary project tile = " + new_ProjectFileName  );
 
         if(replace_old_folders.length() < 1)
         {
@@ -818,11 +818,11 @@ void ImportProject::on_pushButtonImport_clicked()
         QFileInfo qfi3(output_name);
         if(qfi3.exists())
         {
-            Log_Message("Removing existing project file = " + output_name + tr("<br>"));
+            Log_Message("Removing existing project file = " + output_name  );
             bool success = QFile::remove(output_name);
         }
 
-        Log_Message("Copying edited project file = " + output_name + tr("<br>"));
+        Log_Message("Copying edited project file = " + output_name  );
         QFile::copy(new_ProjectFileName, output_name);
 
 
@@ -833,11 +833,11 @@ void ImportProject::on_pushButtonImport_clicked()
         QFileInfo qfi4(new_OpenProject);
         if(qfi4.exists())
         {
-            Log_Message("Removing existing open project file = " + new_OpenProject + tr("<br>"));
+            Log_Message("Removing existing open project file = " + new_OpenProject  );
             bool success = QFile::remove(new_OpenProject);
         }
 
-        Log_Message("Creating open project file = " + output_name + tr("<br>"));
+        Log_Message("Creating open project file = " + output_name  );
         QFile::copy(new_ProjectFileName, new_OpenProject);
 
 

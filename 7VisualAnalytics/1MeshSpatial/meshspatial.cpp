@@ -29,7 +29,7 @@ MeshSpatial::MeshSpatial(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message("Unable to Open File: </span>" + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: </span>" + filename_open_project  );
         }
         else
         {
@@ -72,7 +72,7 @@ MeshSpatial::~MeshSpatial()
 void MeshSpatial::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {
@@ -754,7 +754,7 @@ bool MeshSpatial::Check_ShapeFile_Output(QString file_name_without_extension, bo
             {
                 if ( ! QFile::remove(file_name_without_extension + ".shp") )
                 {
-                    Log_Error_Message("Unable to delete file... </span>" + file_name_without_extension + ".shp" + tr("<br>"));
+                    Log_Error_Message("Unable to delete file... </span>" + file_name_without_extension + ".shp"  );
                 }
                 else
                 {
@@ -774,7 +774,7 @@ bool MeshSpatial::Check_ShapeFile_Output(QString file_name_without_extension, bo
             {
                 if ( ! QFile::remove(file_name_without_extension + ".shx") )
                 {
-                    Log_Error_Message("Unable to delete file... </span>" + file_name_without_extension+".shx" + tr("<br>"));
+                    Log_Error_Message("Unable to delete file... </span>" + file_name_without_extension+".shx"  );
                 }
                 else
                 {
@@ -793,7 +793,7 @@ bool MeshSpatial::Check_ShapeFile_Output(QString file_name_without_extension, bo
             {
                 if ( ! QFile::remove(file_name_without_extension + ".dbf") )
                 {
-                    Log_Error_Message("Unable to delete file... </span>" + file_name_without_extension + ".dbf"+tr("<br>"));
+                    Log_Error_Message("Unable to delete file... </span>" + file_name_without_extension + ".dbf" );
                 }
                 else
                 {
@@ -848,18 +848,18 @@ void MeshSpatial::on_pushButtonRun_clicked()
         bool checked = Check_OutputFolder_Location(project_folder);
         if(!checked)
         {
-            Log_Error_Message("Issue with Input Folder : </span>" + project_folder + tr("<br>"));
+            Log_Error_Message("Issue with Input Folder : </span>" + project_folder );
             return;
         }
         checked = Check_Project_Name_Input(project_name);
         if(!checked)
         {
-            Log_Error_Message("Issue with Input Folder : </span>" + project_name + tr("<br>"));
+            Log_Error_Message("Issue with Input Folder : </span>" + project_name  );
             return;
         }
         if( stop_time - start_time <= 0 )
         {
-            Log_Error_Message("Issue with Start and Stop times : Duration calculated is zero or negative</span>" + tr("<br>"));
+            Log_Error_Message("Issue with Start and Stop times : Duration calculated is zero or negative</span>"  );
             return;
         }
 
@@ -885,17 +885,17 @@ void MeshSpatial::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(mesh_filename, "ReadOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + mesh_filename + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + mesh_filename  );
             return;
         }
         if ( ! CheckFileAccess(river_filename, "ReadOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + river_filename + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + river_filename  );
             return;
         }
         if ( ! CheckFileAccess(mesh_shape_filename, "ReadOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + mesh_shape_filename + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + mesh_shape_filename );
             return;
         }
 
@@ -905,7 +905,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
             QString tmp_fname = output_base_filename + extensions_list.at(i);
             if ( ! CheckFileAccess(tmp_fname, "ReadOnly") )
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + tmp_fname +tr("<br>"));
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + tmp_fname  );
                 error_found = true;
             }
         }
@@ -920,13 +920,13 @@ void MeshSpatial::on_pushButtonRun_clicked()
         int element_count = Get_Element_Count(mesh_filename,true);
         if(element_count <= 0)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with mesh geometry file, number of elements </span>") + element_count + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with mesh geometry file, number of elements </span>") + element_count  );
             return;
         }
         int river_count = Get_River_Count(river_filename,true);
         if(river_count <= 0)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with riv geometry file, number of river segments </span>") + river_count + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with riv geometry file, number of river segments </span>") + river_count  );
             return;
         }
 
@@ -964,7 +964,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
         bool check_output = Check_ShapeFile_Output(output_file_name_without_extension,delete_files);
         if( !check_output )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with Shapefile outputs already existing </span>") + output_file_name_without_extension + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with Shapefile outputs already existing </span>") + output_file_name_without_extension  );
             return;
         }
 
@@ -979,7 +979,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
         int time_step = time_step2 - time_step1;
         if( time_step <=0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with time_step </span>") + QString::number(time_step) + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with time_step </span>") + QString::number(time_step) );
             return;
         }
 
@@ -997,7 +997,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
 
         if ( break_steps < 1 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">:Skip Time Steps = ")+QString::number(skip_time_steps)+tr(" Number time steps = ")+QString::number(num_time_steps)+tr(" Break Steps = ")+QString::number(break_steps)+tr("</span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">:Skip Time Steps = ")+QString::number(skip_time_steps)+tr(" Number time steps = ")+QString::number(num_time_steps)+tr(" Break Steps = ")+QString::number(break_steps)+tr("</span>") );
             return;
         }
 
@@ -1039,7 +1039,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
             {
                 if( DataFileTextStream.atEnd() )
                 {
-                    Log_Error_Message("Reached End of File... </span>"+output_base_filename+extensions_list.at(i)+tr("<br>"));
+                    Log_Error_Message("Reached End of File... </span>"+output_base_filename+extensions_list.at(i) );
                     ui->pushButtonRun->setText("Run");
                     return;
                 }
@@ -1051,7 +1051,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
             {
                 if( DataFileTextStream.atEnd() )
                 {
-                    Log_Error_Message("Reached End of File... </span>"+output_base_filename+extensions_list.at(i)+tr("<br>"));
+                    Log_Error_Message("Reached End of File... </span>"+output_base_filename+extensions_list.at(i) );
                     ui->pushButtonRun->setText("Run");
                     return;
                 }
@@ -1087,7 +1087,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
         DBF = DBFCreate((char *)qPrintable(dbfFileName));
         if ( DBF == nullptr )
         {
-            Log_Error_Message("Unable To Open DBF File... </span>"+ dbfFileName + tr("<br>"));
+            Log_Error_Message("Unable To Open DBF File... </span>"+ dbfFileName  );
             ui->pushButtonRun->setText("Run");
             return;
         }
@@ -1098,7 +1098,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
         fields[0] = DBFAddField(DBF, "Ele", FTInteger, 9, 0);
         if ( fields[0] == -1 )
         {
-            Log_Error_Message("Unable To Add New Attribute Ele To DBF File... </span>" + dbfFileName + tr("<br>"));
+            Log_Error_Message("Unable To Add New Attribute Ele To DBF File... </span>" + dbfFileName  );
             ui->pushButtonRun->setText("Run");
             return;
         }
@@ -1109,7 +1109,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
             fields[i+1] = DBFAddField(DBF, fieldName, FTDouble, 16, 8);
             if ( fields[i+1] == -1 )
             {
-                Log_Error_Message("Unable To Add New Attribute To DBF File... </span>" + dbfFileName + tr("<br>"));
+                Log_Error_Message("Unable To Add New Attribute To DBF File... </span>" + dbfFileName  );
                 ui->pushButtonRun->setText("Run");
                 return;
             }
@@ -1126,7 +1126,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
             tempInt = DBFWriteIntegerAttribute(DBF, j, fields[0], j+1);
             if ( tempInt == 0 )
             {
-                Log_Error_Message("Unable To Write Attribute To DBF File... </span>" + dbfFileName + tr("<br>"));
+                Log_Error_Message("Unable To Write Attribute To DBF File... </span>" + dbfFileName  );
                 return;
             }
         }
@@ -1138,7 +1138,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
                 tempInt = DBFWriteDoubleAttribute(DBF, j, fields[i+1], datay[i][j]);
                 if ( tempInt == 0 )
                 {
-                    Log_Error_Message("Unable To Write Attribute To DBF File... </span>" + dbfFileName + tr("<br>"));
+                    Log_Error_Message("Unable To Write Attribute To DBF File... </span>" + dbfFileName );
                     return;
                 }
             }

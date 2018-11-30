@@ -33,7 +33,7 @@ LcDataFile::LcDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message("Unable to Open File: " + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project  );
         }
         else
         {
@@ -89,7 +89,7 @@ void LcDataFile::Log_Warning_Message(QString message)
 void LcDataFile::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {
@@ -218,7 +218,7 @@ bool LcDataFile::Check_LCData_Output(QString file, bool color_and_message_if_exi
         {
             if(color_and_message_if_exists)
             {
-                Log_Error_Message("Warning: MeshData output already exists: " + file +tr(" You may need to delete this file.<br>"));
+                Log_Error_Message("Warning: MeshData output already exists: " + file +tr(" You may need to delete this file."));
             }
 
             ui->lineEditLcDataFile->setStyleSheet("color: red;");
@@ -353,7 +353,7 @@ void LcDataFile::on_pushButtonRun_clicked()
         bool checked_LCTexture = Check_LCTexture_Input(input_LCTexture_filename);
         if(!checked_LCTexture)
         {
-            Log_Error_Message("LC Texture File (*.txt *.TXT) Input File Missing " + input_LCTexture_filename + tr("<br>"));
+            Log_Error_Message("LC Texture File (*.txt *.TXT) Input File Missing " + input_LCTexture_filename  );
             return;
         }
 
@@ -373,13 +373,13 @@ void LcDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_LCTexture_filename, "ReadOnly") )
         {
-            Log_Error_Message("No Read Access to " + input_LCTexture_filename + tr("<br>"));
+            Log_Error_Message("No Read Access to " + input_LCTexture_filename  );
             return;
         }
 
         if ( ! CheckFileAccess(output_LCData_filename, "WriteOnly") )
         {
-            Log_Error_Message("No Write Access to " + output_LCData_filename + tr("<br>"));
+            Log_Error_Message("No Write Access to " + output_LCData_filename );
             return;
         }
 
@@ -394,8 +394,8 @@ void LcDataFile::on_pushButtonRun_clicked()
 
         if( ErrorLc != 0 )
         {
-            Log_Error_Message("LC Data File Processing Failed ... </span>"+tr("<br>"));
-            Log_Error_Message("LC error return code: " + QString::number(ErrorLc)+tr("<br>"));
+            Log_Error_Message("LC Data File Processing Failed ... </span>" );
+            Log_Error_Message("LC error return code: " + QString::number(ErrorLc) );
             return;
         }
 

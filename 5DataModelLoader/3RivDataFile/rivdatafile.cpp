@@ -566,7 +566,7 @@ void RivDataFile::Log_Warning_Message(QString message)
 void RivDataFile::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {
@@ -646,27 +646,27 @@ void RivDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_Element_filename, "ReadOnly") )
         {
-            Log_Error_Message("ERROR: No Read Access ... </span>" + input_Element_filename + tr("<br>"));
+            Log_Error_Message("ERROR: No Read Access ... </span>" + input_Element_filename  );
             return;
         }
         if ( ! CheckFileAccess(input_Node_filename, "ReadOnly") )
         {
-            Log_Error_Message("ERROR: No Read Access ... </span>" + input_Node_filename + tr("<br>"));
+            Log_Error_Message("ERROR: No Read Access ... </span>" + input_Node_filename  );
             return;
         }
         if ( ! CheckFileAccess(input_Neighbour_filename, "ReadOnly") )
         {
-            Log_Error_Message("ERROR: No Read Access ... </span>" + input_Neighbour_filename + tr("<br>"));
+            Log_Error_Message("ERROR: No Read Access ... </span>" + input_Neighbour_filename  );
             return;
         }
         if ( ! CheckFileAccess(input_River_filename, "ReadOnly") )
         {
-            Log_Error_Message("ERROR: No Read Access ... </span>" + input_River_filename + tr("<br>"));
+            Log_Error_Message("ERROR: No Read Access ... </span>" + input_River_filename  );
             return;
         }
         if ( ! CheckFileAccess(output_RivData_filename, "WriteOnly") )
         {
-            Log_Error_Message("ERROR: No Write Access ... </span>" + output_RivData_filename + tr("<br>"));
+            Log_Error_Message("ERROR: No Write Access ... </span>" + output_RivData_filename  );
             return;
         }
 

@@ -75,7 +75,7 @@ ParaDataFile::~ParaDataFile()
 void ParaDataFile::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {
@@ -199,7 +199,7 @@ bool ParaDataFile::Check_Para_Output(QString file, bool color_and_message_if_exi
         {
             if(color_and_message_if_exists)
             {
-                Log_Error_Message(" Para output already exists: " + file +tr(" You may need to delete these files.<br>"));
+                Log_Error_Message(" Para output already exists: " + file +tr(" You may need to delete these files."));
             }
 
             ui->lineEditParaDataFile->setStyleSheet("color: red;");
@@ -455,7 +455,7 @@ void ParaDataFile::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(output_filename, "WriteOnly") )
         {
-            Log_Error_Message(" No Write Access to " + output_filename + tr("<br>"));
+            Log_Error_Message(" No Write Access to " + output_filename );
             return;
         }
 
@@ -470,8 +470,8 @@ void ParaDataFile::on_pushButtonRun_clicked()
 
         if( ErrorPara != 0 )
         {
-            Log_Error_Message("Para Data File Processing Failed " + tr("<br>"));
-            Log_Error_Message("Para error return code " + QString::number(ErrorPara)+tr("<br>"));
+            Log_Error_Message("Para Data File Processing Failed " );
+            Log_Error_Message("Para error return code " + QString::number(ErrorPara) );
             ui->textBrowserLogs->setHtml(LogsString);
             ui->textBrowserLogs->repaint();
             return;

@@ -92,7 +92,7 @@ void GeolDataFile::Log_Warning_Message(QString message)
 void GeolDataFile::Log_Error_Message(QString message)
 {
     try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>")+tr("<br>");
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
     } catch (...) {
@@ -360,7 +360,7 @@ void GeolDataFile::on_pushButtonRun_clicked()
         bool checked_GeolTexture = Check_GeolTexture_Input(input_GeolTexture_filename);
         if(!checked_GeolTexture)
         {
-            Log_Error_Message("Geol Texture File (*.txt *.TXT) Input File Missing " + input_GeolTexture_filename + tr("<br>"));
+            Log_Error_Message("Geol Texture File (*.txt *.TXT) Input File Missing " + input_GeolTexture_filename  );
             return;
         }
 
@@ -380,13 +380,13 @@ void GeolDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_GeolTexture_filename, "ReadOnly") )
         {
-            Log_Error_Message("No Read Access to " + input_GeolTexture_filename + tr("<br>"));
+            Log_Error_Message("No Read Access to " + input_GeolTexture_filename  );
             return;
         }
 
         if ( ! CheckFileAccess(output_GeolData_filename, "WriteOnly") )
         {
-            Log_Error_Message("No Write Access to " + output_GeolData_filename + tr("<br>"));
+            Log_Error_Message("No Write Access to " + output_GeolData_filename );
             return;
         }
 
@@ -402,7 +402,7 @@ void GeolDataFile::on_pushButtonRun_clicked()
         if( ErrorGeol != 0 )
         {
             Log_Error_Message("Geol Data File Processing Failed "+tr("<br>"));
-            Log_Error_Message("Geol error return code: " + QString::number(ErrorGeol)+tr("<br>"));
+            Log_Error_Message("Geol error return code: " + QString::number(ErrorGeol) );
             return;
         }
 
