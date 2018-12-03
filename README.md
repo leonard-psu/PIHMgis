@@ -1,6 +1,12 @@
 ### PIHMgis v3.5 developed using windows Qt Creator 
 Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015) on "windows" 
 
+### These libraries are required
+gdal-2.3.1 or higher
+sundials 2.7.0 solver. This code will need modification to use higher versions of sundials.
+
+### Note this code has been developed and tested on windows environment only.
+
 ### General Steps to compile code using Qt Creator 
 1. Open Qt Project file/folder with this github code repository
 2. Clean All. Make sure no moc files etc automatically created by github exist in folders.
@@ -8,6 +14,8 @@ Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015
 4. Build. Fix any error issues found.
 5. Run.
 
+### Problems you will encounter, as they are dependent on your compute environment
+You will need to modify the (1) include paths (2) depenency paths (3) LIBs locations for this project. These are in the PIHMgis.pro project file. It is recommended to update these via the Qt Creator interface.
 
 ### Code changes to PIHMgis reflect research discussed here:
 
