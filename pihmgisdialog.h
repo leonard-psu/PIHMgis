@@ -17,6 +17,8 @@ public:
     explicit PIHMgisDialog(QWidget *parent = 0);
     ~PIHMgisDialog();
 
+    void Log_Message(QString message); //Display on main window log messages
+
 public slots:
     void set_defaults(QStringList DEFAULT_PARAM);
 
@@ -24,7 +26,7 @@ private slots:
 
     void on_pushButtonPIHMgisProjectNew_clicked();
 
-    void on_pushButtonPIHMgisProjectOpen_clicked();
+   // void on_pushButtonPIHMgisProjectOpen_clicked();
 
     void on_pushButtonPIHMgisProjectImport_clicked();
 
@@ -104,31 +106,15 @@ private slots:
 
     void on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked();
 
-
-    //void on_PIHMgisToolBox_Help_windowIconChanged(const QIcon &icon);
-
-    //void on_pushButtonWorkFlow6_clicked();
-
-    //void on_pushButton_clicked();
-
-    //void on_pushButton_clicked(bool checked);
-
-    //void on_pushButton_2_clicked();
-
     void on_pushButton_PickWorkspace_clicked();
 
-
-    void on_pushButton_PickWorkspace_clicked(bool checked);
-
-    //void on_pushButton_clicked();
-
     void on_pushButtonFinished_clicked();
+
+    void on_pushButtonPIHMgisProjectInspect_clicked();
 
 private:
     void Clear_Log();
     void Log_Error_Message(QString message);
-    void Log_Message(QString message);
-
 
     void update_project_file_label();
     void update_current_workspace_label();
@@ -136,8 +122,8 @@ private:
     bool create_default_project_workspace();
     bool enable_project_settings(bool enabled);
     bool check_directory_IsEmpty(const QDir& _dir);
-
     bool check_if_pihmgis_project_exists();
+
     int check_pihmgis_project_exists(QString folder);
 
     Ui::PIHMgisDialog *ui;

@@ -5,7 +5,9 @@
 #include <QDebug>
 
 
-static bool print_debug_messages = true;
+static bool print_debug_messages = false;  //Print to console window
+static bool print_log_messages = true;     //Print to widget log window (Only important messages)
+
 static float epsilon = 0.000001f;
 
 extern QString user_pihmgis_root_folder;
@@ -22,5 +24,6 @@ struct Time_Values
 
 };
 
+void Print_Message_To_Main_Dialog(QString message);
 
 #endif // GLOBALS_H

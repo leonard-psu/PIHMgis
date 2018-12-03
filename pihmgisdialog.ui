@@ -974,7 +974,7 @@ color: rgb(71, 71, 71);</string>
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonPIHMgisProjectOpen">
+     <widget class="QPushButton" name="pushButtonPIHMgisProjectInspect">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -1105,7 +1105,7 @@ color: rgb(71, 71, 71);</string>
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="PIHMgisProjectLableOpen">
+     <widget class="QLabel" name="PIHMgisProjectLableInspect">
       <property name="geometry">
        <rect>
         <x>407</x>

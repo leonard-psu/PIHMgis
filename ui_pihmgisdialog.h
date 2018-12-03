@@ -38,8 +38,8 @@ public:
     QLabel *PIHMgisProjectLableNew;
     QLabel *PIHMgisProjectLableClose;
     QPushButton *pushButtonPIHMgisProjectImport;
-    QPushButton *pushButtonPIHMgisProjectOpen;
-    QLabel *PIHMgisProjectLableOpen;
+    QPushButton *pushButtonPIHMgisProjectInspect;
+    QLabel *PIHMgisProjectLableInspect;
     QLabel *PIHMgisProjectLableImport;
     QGroupBox *groupBox_6;
     QPushButton *pushButton_PickWorkspace;
@@ -307,10 +307,10 @@ public:
         pushButtonPIHMgisProjectImport->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
         pushButtonPIHMgisProjectImport->setAutoDefault(false);
         pushButtonPIHMgisProjectImport->setFlat(false);
-        pushButtonPIHMgisProjectOpen = new QPushButton(groupBox_5);
-        pushButtonPIHMgisProjectOpen->setObjectName(QStringLiteral("pushButtonPIHMgisProjectOpen"));
-        pushButtonPIHMgisProjectOpen->setEnabled(false);
-        pushButtonPIHMgisProjectOpen->setGeometry(QRect(287, 20, 111, 34));
+        pushButtonPIHMgisProjectInspect = new QPushButton(groupBox_5);
+        pushButtonPIHMgisProjectInspect->setObjectName(QStringLiteral("pushButtonPIHMgisProjectInspect"));
+        pushButtonPIHMgisProjectInspect->setEnabled(false);
+        pushButtonPIHMgisProjectInspect->setGeometry(QRect(287, 20, 111, 34));
         QPalette palette4;
         palette4.setBrush(QPalette::Active, QPalette::WindowText, brush5);
         palette4.setBrush(QPalette::Active, QPalette::Text, brush5);
@@ -321,18 +321,18 @@ public:
         palette4.setBrush(QPalette::Disabled, QPalette::WindowText, brush5);
         palette4.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         palette4.setBrush(QPalette::Disabled, QPalette::ButtonText, brush5);
-        pushButtonPIHMgisProjectOpen->setPalette(palette4);
-        pushButtonPIHMgisProjectOpen->setFont(font4);
-        pushButtonPIHMgisProjectOpen->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
+        pushButtonPIHMgisProjectInspect->setPalette(palette4);
+        pushButtonPIHMgisProjectInspect->setFont(font4);
+        pushButtonPIHMgisProjectInspect->setStyleSheet(QLatin1String("color: rgb(255, 51, 0);\n"
 "color: rgb(71, 71, 71);"));
-        pushButtonPIHMgisProjectOpen->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
-        pushButtonPIHMgisProjectOpen->setAutoDefault(false);
-        pushButtonPIHMgisProjectOpen->setFlat(false);
-        PIHMgisProjectLableOpen = new QLabel(groupBox_5);
-        PIHMgisProjectLableOpen->setObjectName(QStringLiteral("PIHMgisProjectLableOpen"));
-        PIHMgisProjectLableOpen->setGeometry(QRect(407, 30, 121, 20));
-        PIHMgisProjectLableOpen->setFont(font4);
-        PIHMgisProjectLableOpen->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
+        pushButtonPIHMgisProjectInspect->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
+        pushButtonPIHMgisProjectInspect->setAutoDefault(false);
+        pushButtonPIHMgisProjectInspect->setFlat(false);
+        PIHMgisProjectLableInspect = new QLabel(groupBox_5);
+        PIHMgisProjectLableInspect->setObjectName(QStringLiteral("PIHMgisProjectLableInspect"));
+        PIHMgisProjectLableInspect->setGeometry(QRect(407, 30, 121, 20));
+        PIHMgisProjectLableInspect->setFont(font4);
+        PIHMgisProjectLableInspect->setStyleSheet(QStringLiteral("color: rgb(204, 51, 0);"));
         PIHMgisProjectLableImport = new QLabel(groupBox_5);
         PIHMgisProjectLableImport->setObjectName(QStringLiteral("PIHMgisProjectLableImport"));
         PIHMgisProjectLableImport->setGeometry(QRect(407, 70, 121, 20));
@@ -1406,7 +1406,7 @@ public:
         pushButtonPIHMgisProjectNew->setDefault(false);
         pushButtonPIHMgisProjectClose->setDefault(false);
         pushButtonPIHMgisProjectImport->setDefault(false);
-        pushButtonPIHMgisProjectOpen->setDefault(false);
+        pushButtonPIHMgisProjectInspect->setDefault(false);
         pushButtonRasterProcessingFillPits->setDefault(false);
         pushButtonRasterProcessingFlowGrids->setDefault(false);
         pushButtonRasterProcessingStreamGrids->setDefault(false);
@@ -1453,8 +1453,8 @@ public:
         PIHMgisProjectLableNew->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Start a New Project</span></p></body></html>", nullptr));
         PIHMgisProjectLableClose->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Close Project</span></p></body></html>", nullptr));
         pushButtonPIHMgisProjectImport->setText(QApplication::translate("PIHMgisDialog", "IMPORT", nullptr));
-        pushButtonPIHMgisProjectOpen->setText(QApplication::translate("PIHMgisDialog", "INSPECT", nullptr));
-        PIHMgisProjectLableOpen->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Inspect Project</span></p></body></html>", nullptr));
+        pushButtonPIHMgisProjectInspect->setText(QApplication::translate("PIHMgisDialog", "INSPECT", nullptr));
+        PIHMgisProjectLableInspect->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Inspect Project</span></p></body></html>", nullptr));
         PIHMgisProjectLableImport->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Import Project</span></p></body></html>", nullptr));
         groupBox_6->setTitle(QApplication::translate("PIHMgisDialog", "PIHMgis workspace", nullptr));
         pushButton_PickWorkspace->setText(QApplication::translate("PIHMgisDialog", "Pick", nullptr));

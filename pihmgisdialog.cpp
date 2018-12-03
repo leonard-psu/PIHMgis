@@ -62,6 +62,10 @@ QString user_pihmgis_root_folder = "Please pick a workspace folder."; //QDir::ho
 QString user_pihmgis_project_folder = "/.PIHMgis";        //Default for now, need to customize
 QString user_pihmgis_project_name = "/OpenProject.txt";   //Note use of forward characters
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Main Dialog Constructor
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PIHMgisDialog)
@@ -71,41 +75,26 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
 
     try {
 
-        qDebug() << "PIHMgisDialog started";
-
-//        QPixmap pixmap( 32, 32 );
-//        pixmap.fill( Qt::transparent );
-//        setWindowIcon(QIcon(pixmap));
-
         QApplication::setAttribute(Qt::AA_DisableWindowContextHelpButton);
 
-        //this->setWindowIcon(QIcon("Icons/PIHMgis000.icns"));
         ui->setupUi(this);
         ui->label_project_found->setVisible(false);
 
-
         update_current_workspace_label();
+
+        if(print_log_messages)
+            Print_Message_To_Main_Dialog("Welcome to PIHMgis v3.5....");
+
 
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog is returning w/o checking";
     }
-
 }
 
-void PIHMgisDialog::update_current_workspace_label()
-{
-    if(print_debug_messages)
-        qDebug() << "INFO: Start update_current_workspace_label";
-
-    try
-    {
-        ui->label_home_workspace->setText("Current workspace: " + user_pihmgis_root_folder);   
-
-    } catch (...) {
-        qDebug() << "Error: update_current_workspace_label is returning w/o checking";
-    }
-}
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Main Dialog de-Constructor
+// TODO memory checking
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 PIHMgisDialog::~PIHMgisDialog()
 {
     if(print_debug_messages)
@@ -120,6 +109,30 @@ PIHMgisDialog::~PIHMgisDialog()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to display current PIHMgis workspace.
+// This should eliminate issues of using not remembering which workspace/folder they are using.
+// Mixing of folders is a common problem by users creating issues in data files.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::update_current_workspace_label()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start update_current_workspace_label";
+
+    try
+    {
+        ui->label_home_workspace->setText("Current workspace: " + user_pihmgis_root_folder);
+
+    } catch (...) {
+        qDebug() << "Error: update_current_workspace_label is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to aid users in next step. I found this misleading, as closing a dialog will move to the next,
+// regardless if a user finished a step correctly.
+// NOTE: I plan to remove this function. It causes too many compiling issues.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
 {
     if(print_debug_messages)
@@ -161,7 +174,7 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
             //if (DEFAULT_PARAM.at(i) == "WORKFLOW7")    { boolWORKFLOW7    = true; ui->pushButton_PickWorkspace->setFocus();    continue; }
 
             if (DEFAULT_PARAM.at(i) == "NEWPRJ")    {  qDebug() << "Function NEWPRJ"; boolNEWPRJ    = true; ui->pushButtonPIHMgisProjectNew->setFocus();    continue; }
-            if (DEFAULT_PARAM.at(i) == "OPENPRJ")   { boolOPENPRJ   = true; ui->pushButtonPIHMgisProjectOpen->setFocus();   continue; }
+            if (DEFAULT_PARAM.at(i) == "OPENPRJ")   { boolOPENPRJ   = true; ui->pushButtonPIHMgisProjectInspect->setFocus();   continue; }
             if (DEFAULT_PARAM.at(i) == "IMPORTPRJ") { boolIMPORTPRJ = true; ui->pushButtonPIHMgisProjectImport->setFocus(); continue; }
             if (DEFAULT_PARAM.at(i) == "CLOSEPRJ")  { boolCLOSEPRJ  = true; ui->pushButtonPIHMgisProjectClose->setFocus();  continue; }
 
@@ -215,7 +228,7 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
         ui->pushButton_PickWorkspace->setDefault(bool_PICK_location);
 
         ui->pushButtonPIHMgisProjectNew->setDefault(boolNEWPRJ);
-        ui->pushButtonPIHMgisProjectOpen->setDefault(boolOPENPRJ);
+        ui->pushButtonPIHMgisProjectInspect->setDefault(boolOPENPRJ);
         ui->pushButtonPIHMgisProjectImport->setDefault(boolIMPORTPRJ);
         ui->pushButtonPIHMgisProjectClose->setDefault(boolCLOSEPRJ);
 
@@ -272,9 +285,9 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
     }
 }
 
-
-// **** START :: PIHMgis Project Management **** //
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// New Project Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
 {
     if(print_debug_messages)
@@ -302,7 +315,7 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
             {
                 ui->pushButtonPIHMgisProjectNew->setEnabled(false);
                 ui->pushButtonPIHMgisProjectClose->setEnabled(false);
-                ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
+                ui->pushButtonPIHMgisProjectInspect->setEnabled(false);
                 ui->pushButtonPIHMgisProjectImport->setEnabled(false);
                 enable_project_settings(false); //User needs to setup project
 
@@ -313,7 +326,7 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
             {
                 ui->pushButtonPIHMgisProjectNew->setEnabled(false);
                 ui->pushButtonPIHMgisProjectClose->setEnabled(false);
-                ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
+                ui->pushButtonPIHMgisProjectInspect->setEnabled(false);
                 ui->pushButtonPIHMgisProjectImport->setEnabled(false);
                 enable_project_settings(false); //User needs to setup project
 
@@ -324,7 +337,7 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
             {
                 ui->pushButtonPIHMgisProjectNew->setEnabled(false);
                 ui->pushButtonPIHMgisProjectClose->setEnabled(false);
-                ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
+                ui->pushButtonPIHMgisProjectInspect->setEnabled(false);
                 ui->pushButtonPIHMgisProjectImport->setEnabled(false);
                 enable_project_settings(false); //User needs to setup project
 
@@ -335,7 +348,7 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
             //Prevent user for using same settings
             ui->pushButtonPIHMgisProjectNew->setEnabled(false);
             ui->pushButtonPIHMgisProjectClose->setEnabled(true);
-            ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
+            ui->pushButtonPIHMgisProjectInspect->setEnabled(false);
             ui->pushButtonPIHMgisProjectImport->setEnabled(false);
             enable_project_settings(true); //User needs to setup project
 
@@ -350,9 +363,9 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
             //Assume nothing was created and do nothing for now
         }
 
-//        Log_Message(user_pihmgis_root_folder);
-//        Log_Message(user_pihmgis_project_folder);
-//        Log_Message(user_pihmgis_project_name);
+        //        Log_Message(user_pihmgis_root_folder);
+        //        Log_Message(user_pihmgis_project_folder);
+        //        Log_Message(user_pihmgis_project_name);
 
 
     } catch (...) {
@@ -360,16 +373,16 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
     }
 }
 
-void PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked()
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Inspect Project Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::on_pushButtonPIHMgisProjectInspect_clicked()
 {
     if(print_debug_messages)
-        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked";
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectInspect_clicked";
 
     try {
         QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + user_pihmgis_project_name;
-
-        //OpenProject *OpenProjectDialog = new OpenProject(this);
-        //OpenProjectDialog->show();
 
         InspectProject *iprj = new InspectProject(this, filename_open_project);
         iprj->setModal(true);
@@ -377,10 +390,33 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked()
 
 
     } catch (...) {
-        qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked is returning w/o checking";
+        qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectInspect_clicked is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Open Project Button Click Event
+// Keep until feed back from users
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//void PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked()
+//{
+//    if(print_debug_messages)
+//        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked";
+
+//    try {
+//        QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + user_pihmgis_project_name;
+
+//        OpenProject *OpenProjectDialog = new OpenProject(this);
+//        OpenProjectDialog->show();
+
+//    } catch (...) {
+//        qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectOpen_clicked is returning w/o checking";
+//    }
+//}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Import Project Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked()
 {
     if(print_debug_messages)
@@ -397,6 +433,9 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close Project (Different from closing main window) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked()
 {
     if(print_debug_messages)
@@ -422,7 +461,7 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked()
 
             ui->pushButtonPIHMgisProjectNew->setEnabled(false);
             ui->pushButtonPIHMgisProjectClose->setEnabled(false);
-            ui->pushButtonPIHMgisProjectOpen->setEnabled(false);
+            ui->pushButtonPIHMgisProjectInspect->setEnabled(false);
             ui->pushButtonPIHMgisProjectImport->setEnabled(false);
 
             enable_project_settings(false); //User needs to setup project
@@ -436,9 +475,9 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked()
     }
 }
 
-// **** END   :: PIHMgis Project Management Slots **** //
-
-// **** START :: Raster Processing Slots **** //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Fill Pits (RasterProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked()
 {
     if(print_debug_messages)
@@ -458,6 +497,9 @@ void PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Flow Grids (RasterProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonRasterProcessingFlowGrids_clicked()
 {
     if(print_debug_messages)
@@ -470,11 +512,15 @@ void PIHMgisDialog::on_pushButtonRasterProcessingFlowGrids_clicked()
         FlowGrids *FlowGridsDialog = new FlowGrids(this, filename_open_project);
         FlowGridsDialog->setModal(true);
         FlowGridsDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonRasterProcessingFlowGrids_clicked is returning w/o checking";
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Stream Grids (RasterProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked()
 {
     if(print_debug_messages)
@@ -492,6 +538,9 @@ void PIHMgisDialog::on_pushButtonRasterProcessingStreamGrids_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Link Grids (RasterProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonRasterProcessingLinkGrids_clicked()
 {
     if(print_debug_messages)
@@ -509,6 +558,9 @@ void PIHMgisDialog::on_pushButtonRasterProcessingLinkGrids_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Catchment Grids (RasterProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonRasterProcessingCatchmentGrids_clicked()
 {
     if(print_debug_messages)
@@ -526,6 +578,9 @@ void PIHMgisDialog::on_pushButtonRasterProcessingCatchmentGrids_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// StreamPolyline Grids (RasterProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonRasterProcessingStreamPolyline_clicked()
 {
     if(print_debug_messages)
@@ -542,6 +597,9 @@ void PIHMgisDialog::on_pushButtonRasterProcessingStreamPolyline_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CatchmentPolygon Grids (RasterProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonRasterProcessingCatchmentPolygon_clicked()
 {
     if(print_debug_messages)
@@ -558,12 +616,9 @@ void PIHMgisDialog::on_pushButtonRasterProcessingCatchmentPolygon_clicked()
     }
 }
 
-// **** END   :: Raster Processing Slots **** //
-
-// ************************************************************************** //
-
-// **** START :: Vector Processing Slots **** //
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DissolvePolygons (VectorProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonVectorProcessingDissolvePolygons_clicked()
 {
     if(print_debug_messages)
@@ -585,6 +640,9 @@ void PIHMgisDialog::on_pushButtonVectorProcessingDissolvePolygons_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PolygonToPolylines (VectorProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonVectorProcessingPolygonToPolylines_clicked()
 {
     if(print_debug_messages)
@@ -602,6 +660,9 @@ void PIHMgisDialog::on_pushButtonVectorProcessingPolygonToPolylines_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SimplifyPolylines (VectorProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked()
 {
     if(print_debug_messages)
@@ -618,6 +679,9 @@ void PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PolylineToLines (VectorProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked()
 {
     if(print_debug_messages)
@@ -634,6 +698,9 @@ void PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// VectorLayers (VectorProcessing Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonVectorProcessingMergeVectorLayers_clicked()
 {
     if(print_debug_messages)
@@ -651,12 +718,9 @@ void PIHMgisDialog::on_pushButtonVectorProcessingMergeVectorLayers_clicked()
     }
 }
 
-// **** END   :: Vector Processing Slots **** //
-
-// ************************************************************************** //
-
-// **** START :: Domain Decomposition Slots **** //
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ReadTopology (DomainDecomposition Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDomainDecompositionReadTopology_clicked()
 {
     if(print_debug_messages)
@@ -674,6 +738,9 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionReadTopology_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Triangulation (DomainDecomposition Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked()
 {
     if(print_debug_messages)
@@ -690,6 +757,9 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TINShapeLayer (DomainDecomposition Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked()
 {
     if(print_debug_messages)
@@ -707,12 +777,9 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionTINShapeLayer_clicked()
     }
 }
 
-// **** END   :: Domain Decomposition Slots **** //
-
-// ************************************************************************** //
-
-// **** START :: Data Model Loader Slots **** //
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MeshData (DataModel Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked()
 {
     if(print_debug_messages)
@@ -722,7 +789,6 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked()
 
         QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
 
-
         MeshDataFile *MeshDataFileDialog = new MeshDataFile(this, filename_open_project);
         MeshDataFileDialog->setModal(true);
         MeshDataFileDialog->show();
@@ -731,6 +797,9 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// AttData (DataModel Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked()
 {
     if(print_debug_messages)
@@ -748,6 +817,9 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// RivData (DataModel Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked()
 {
     if(print_debug_messages)
@@ -765,6 +837,9 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SoilData (DataModel Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked()
 {
     if(print_debug_messages)
@@ -782,6 +857,9 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// GeolData (DataModel Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked()
 {
     if(print_debug_messages)
@@ -798,6 +876,9 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// LcData (DataModel Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked()
 {
     if(print_debug_messages)
@@ -814,6 +895,9 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// InitData (DataModel Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked()
 {
     if(print_debug_messages)
@@ -830,6 +914,9 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IbcData (DataModel Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked()
 {
     if(print_debug_messages)
@@ -846,6 +933,9 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ParamData (DataModel Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDataModelLoaderParamDataFile_clicked()
 {
     if(print_debug_messages)
@@ -863,6 +953,9 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderParamDataFile_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CalibData (DataModel Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDataModelLoaderCalibDataFile_clicked()
 {
     if(print_debug_messages)
@@ -881,6 +974,10 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderCalibDataFile_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ForcData (DataModel Group) Button Click Event
+// TODO cataract.cee.psu.edu is offline
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonDataModelLoaderForcDataFile_clicked()
 {
     if(print_debug_messages)
@@ -895,12 +992,9 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderForcDataFile_clicked()
     }
 }
 
-// **** END   :: Data Model Loader Slots **** //
-
-// ************************************************************************** //
-
-// **** START :: PIHM Simulation Slots **** //
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Run PIHMSimulation Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonPIHMSimulation_clicked()
 {
     if(print_debug_messages)
@@ -911,7 +1005,6 @@ void PIHMgisDialog::on_pushButtonPIHMSimulation_clicked()
 
         PIHMSimulation *PIHMSimulationDialog = new PIHMSimulation(this, filename_open_project);
         PIHMSimulationDialog->setModal(true);
-        //PIHMSimulationDialog->ModelVersion = ui->comboBoxPIHMVersion->currentText();
         PIHMSimulationDialog->show();
 
     } catch (...) {
@@ -919,12 +1012,9 @@ void PIHMgisDialog::on_pushButtonPIHMSimulation_clicked()
     }
 }
 
-// **** END   :: PIHM Simulation Slots **** //
-
-// ************************************************************************** //
-
-// **** START :: Visual Analytics Slots **** //
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SpatialWatershed (VisualAnalytics Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked()
 {
     if(print_debug_messages)
@@ -942,6 +1032,9 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialWatershed_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TemporalWatershed (VisualAnalytics Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalWatershed_clicked()
 {
     if(print_debug_messages)
@@ -959,6 +1052,9 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalWatershed_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// RiverNetwork (VisualAnalytics Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked()
 {
     if(print_debug_messages)
@@ -976,6 +1072,9 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TemporalRiverNetwork (VisualAnalytics Group) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
 {
     if(print_debug_messages)
@@ -992,11 +1091,12 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
     }
 }
 
-// **** END   :: Visual Analytics Slots **** //
-
-// ************************************************************************** //
-
-//FOW NOW USE GLOBAL VARIABLES
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PIHMgis relies on folder structure per group action/types
+// This function creates the necessary folder structure.
+// You will need to keep this function and the same ones in NewProject and Check functions in sync.
+// Note: Remove this version latter. After running checks. It is not used here, but kept for reference.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool PIHMgisDialog::create_default_project_workspace()
 {
     if(print_debug_messages)
@@ -1116,104 +1216,142 @@ bool PIHMgisDialog::create_default_project_workspace()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to upload project label.
+// To help users remember which folder and data they are using.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::update_project_file_label()
 {
-    QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::update_project_file_label";
 
-    bool exists = QFileInfo(filename_open_project).exists();
-    ui->label_project_found->setVisible(exists);
+    try {
 
+        QString filename_open_project = user_pihmgis_root_folder+user_pihmgis_project_folder + user_pihmgis_project_name;
+
+        bool exists = QFileInfo(filename_open_project).exists();
+        ui->label_project_found->setVisible(exists);
+
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::update_project_file_label is returning w/o checking";
+    }
 }
 
-//Return value indicates the number of folders (total of 7) required for pihm gis
-//Warning not checking if files exist in folder. As users should be able to stop/start project components
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to check if PIHMgis folders (required by group steps) exist.
+// Return value indicates the number of folders (total of 7) required for PIHMgis
+// Warning not checking if files exist in folder. As users should be able to stop/start project components
+// Need to keep in sync with new project and check project dialogs
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int PIHMgisDialog::check_pihmgis_project_exists(QString folder)
 {
-
     int result = 0;
-    QString project_folder = folder + user_pihmgis_project_folder;
-    QDir dir(project_folder);
-    if (!dir.exists())
-    {
-        result = 0;
-        return result; //No point checking any further
-    }
-    else
-    {
-        result++;
-    }
 
-    QString gisfolder = folder + "/1RasterProcessing";
-    QDir dir1(gisfolder);
-    if (dir1.exists())
-    {
-        result++;
-    }
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::check_pihmgis_project_exists";
 
-    gisfolder = folder + "/2VectorProcessing";
-    QDir dir2(gisfolder);
-    if (dir2.exists())
-    {
-        result++;
-    }
+    try {
+        QString project_folder = folder + user_pihmgis_project_folder;
+        QDir dir(project_folder);
+        if (!dir.exists())
+        {
+            result = 0;
+            return result; //No point checking any further
+        }
+        else
+        {
+            result++;
+        }
 
-    gisfolder = folder + "/3DomainDecomposition";
-    QDir dir3(gisfolder);
-    if (dir3.exists())
-    {
-        result++;
-    }
+        QString gisfolder = folder + "/1RasterProcessing";
+        QDir dir1(gisfolder);
+        if (dir1.exists())
+        {
+            result++;
+        }
 
-    gisfolder = folder + "/4DataModelLoader";
-    QDir dir4(gisfolder);
-    if (dir4.exists())
-    {
-        result++;
-    }
+        gisfolder = folder + "/2VectorProcessing";
+        QDir dir2(gisfolder);
+        if (dir2.exists())
+        {
+            result++;
+        }
 
-    gisfolder = folder + "/5PIHMSimulation";
-    QDir dir5(gisfolder);
-    if (dir5.exists())
-    {
-        result++;
-    }
+        gisfolder = folder + "/3DomainDecomposition";
+        QDir dir3(gisfolder);
+        if (dir3.exists())
+        {
+            result++;
+        }
 
-    gisfolder = folder + "/6VisualAnalytics";
-    QDir dir6(gisfolder);
-    if (dir6.exists())
-    {
-        result++;
-    }
+        gisfolder = folder + "/4DataModelLoader";
+        QDir dir4(gisfolder);
+        if (dir4.exists())
+        {
+            result++;
+        }
 
+        gisfolder = folder + "/5PIHMSimulation";
+        QDir dir5(gisfolder);
+        if (dir5.exists())
+        {
+            result++;
+        }
+
+        gisfolder = folder + "/6VisualAnalytics";
+        QDir dir6(gisfolder);
+        if (dir6.exists())
+        {
+            result++;
+        }
+
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::check_pihmgis_project_exists is returning w/o checking";
+    }
     return result;
+
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to enable groups of steps/buttons
+// Need to keep in sync with new project and check project dialogs
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool PIHMgisDialog::enable_project_settings(bool enabled)
 {
-    //ui->pushButtonPIHMgisProjectNew->setEnabled(enabled);
-    //ui->pushButtonPIHMgisProjectClose->setEnabled(enabled);
-    //ui->pushButtonPIHMgisProjectOpen->setEnabled(enabled);
-    //ui->pushButtonPIHMgisProjectImport->setEnabled(enabled);
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::update_project_file_label";
 
-    ui->PIHMgisToolBox_RasterProcessing->setEnabled(enabled);
-    ui->PIHMgisToolBox_VectorProcessing->setEnabled(enabled);
-    ui->PIHMgisToolBox_DomainDecomposition->setEnabled(enabled);
-    ui->PIHMgisToolBox_DataModelLoader->setEnabled(enabled);
-    ui->PIHMgisToolBox_PIHMSimulation->setEnabled(enabled);
-    ui->PIHMgisToolBox_VisualAnalytics->setEnabled(enabled);
+    try {
+        ui->PIHMgisToolBox_RasterProcessing->setEnabled(enabled);
+        ui->PIHMgisToolBox_VectorProcessing->setEnabled(enabled);
+        ui->PIHMgisToolBox_DomainDecomposition->setEnabled(enabled);
+        ui->PIHMgisToolBox_DataModelLoader->setEnabled(enabled);
+        ui->PIHMgisToolBox_PIHMSimulation->setEnabled(enabled);
+        ui->PIHMgisToolBox_VisualAnalytics->setEnabled(enabled);
 
-    update_project_file_label();
+        update_project_file_label();
 
-    return true;
+        return true;
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::update_project_file_label is returning w/o checking";
+        return false;
+    }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to check if folder is empty or not.
+// Used to decide if PIHMgis project has started or not.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool PIHMgisDialog::check_directory_IsEmpty(const QDir& _dir)
 {
     QFileInfoList infoList = _dir.entryInfoList(QDir::AllEntries | QDir::System | QDir::NoDotAndDotDot | QDir::Hidden );
     return infoList.isEmpty();
 }
 
-//Issue with default project name
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to check if folder is empty or not.
+// Used to decide if PIHMgis project has started or not.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool PIHMgisDialog::check_if_pihmgis_project_exists()
 {
     if(print_debug_messages)
@@ -1222,20 +1360,18 @@ bool PIHMgisDialog::check_if_pihmgis_project_exists()
     try {
 
         QString project_folder = user_pihmgis_root_folder + user_pihmgis_project_folder;
-        //Default name
         QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + user_pihmgis_project_name;
-        qDebug() << filename_open_project;
 
         if(check_directory_IsEmpty(project_folder))
         {
-            Log_Message("Did not find PIHMgis project file. ");
+            Log_Message("Did not find PIHMgis project file. " + project_folder);
         }
 
         bool exists = QFile::exists(filename_open_project);
         if(exists)
-            Log_Message("Found PIHMgis project file. ");
+            Log_Message("Found PIHMgis project file. " + filename_open_project);
         else
-            Log_Message("Did not find PIHMgis project file. ");
+            Log_Message("Did not find PIHMgis project file. " + filename_open_project);
 
         return exists;
 
@@ -1246,7 +1382,10 @@ bool PIHMgisDialog::check_if_pihmgis_project_exists()
     return false;
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PICK Workspace Button Click Event
+// This function looks for a project file in provided workspace. Then sets up GUI based on whether the project has started or not.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 {
     if(print_debug_messages)
@@ -1256,24 +1395,25 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 
         Clear_Log();
 
-        QString ProjectHome = QFileDialog::getExistingDirectory(this, "Specify Home Folder", user_pihmgis_root_folder, 0);
-        qDebug() << "ProjectHome = " << ProjectHome;
+        QString ProjectHome = QFileDialog::getExistingDirectory(this, "Specify Workspace/Home Folder", user_pihmgis_root_folder, 0);
 
         if(ProjectHome.length() > 0 )
         {
             int folder_count = check_pihmgis_project_exists(ProjectHome);
-            qDebug() << "folder_count = " << folder_count;
+
+            if(print_debug_messages)
+                qDebug() << "folder_count = " << folder_count;
 
             if(folder_count == 0)
             {
                 //Need to create workspace
                 user_pihmgis_root_folder = ProjectHome;
-//KEEP create_default_project_workspace();
+                //KEEP create_default_project_workspace();
                 update_current_workspace_label();
 
                 ui->pushButtonPIHMgisProjectNew->setEnabled(true);
                 ui->pushButtonPIHMgisProjectClose->setEnabled(false);  //No need
-                ui->pushButtonPIHMgisProjectOpen->setEnabled(true);
+                ui->pushButtonPIHMgisProjectInspect->setEnabled(true);
                 ui->pushButtonPIHMgisProjectImport->setEnabled(true);
 
                 enable_project_settings(false); //User needs to setup project
@@ -1298,7 +1438,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                 }
 
                 ui->pushButtonPIHMgisProjectClose->setEnabled(true);
-                ui->pushButtonPIHMgisProjectOpen->setEnabled(true);
+                ui->pushButtonPIHMgisProjectInspect->setEnabled(true);
 
                 enable_project_settings(true);
                 Log_Message("Found PIHMgis workspace. All folders exist. ");
@@ -1324,7 +1464,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
 
                     ui->pushButtonPIHMgisProjectNew->setEnabled(true);
                     ui->pushButtonPIHMgisProjectClose->setEnabled(false);
-                    ui->pushButtonPIHMgisProjectOpen->setEnabled(true);
+                    ui->pushButtonPIHMgisProjectInspect->setEnabled(true);
                     ui->pushButtonPIHMgisProjectImport->setEnabled(true);
 
                     enable_project_settings(false); //User needs to setup project
@@ -1351,7 +1491,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                     }
 
                     ui->pushButtonPIHMgisProjectClose->setEnabled(true);
-                    ui->pushButtonPIHMgisProjectOpen->setEnabled(true);
+                    ui->pushButtonPIHMgisProjectInspect->setEnabled(true);
 
                     enable_project_settings(true);
                     Log_Message("Found PIHMgis workspace. All folders exist. ");
@@ -1369,80 +1509,6 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
         qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Helper Function to Check if value is Numeric
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool Is_String_Integer(QString input)
-{
-    if(print_debug_messages)
-        qDebug() << "INFO: Is_String_Numeric()";
-
-    bool result = false;
-
-    try {
-
-        bool integer_check = false;
-        bool double_check = false;
-        bool float_check = false;
-        bool long_check = false;
-
-        //input.toDouble(&result);
-        input.toInt(&integer_check);
-        input.toDouble(&double_check);
-        input.toFloat(&float_check);
-        input.toLong(&long_check);
-
-        if(integer_check)
-            result = true;
-        if(double_check)
-            result = true;
-        if(float_check)
-            result = true;
-        if(long_check)
-            result = true;
-
-    }
-    catch (...) {
-        qDebug() << "Error: Is_String_Numeric. Assuming value is false;";
-        result = false;
-    }
-
-    return result;
-}
-
-
-bool fileExists(QString path) {
-
-    // QString tmp = path.replace("/","\\");
-    QFileInfo check_file(path);
-
-    //if(Is_String_Integer(path))
-    //    return false;
-
-
-    // check if file exists and if yes: Is it really a file and no directory?
-    if (check_file.exists() && check_file.isFile()) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-qint64 file_Size(QString path){
-
-    QFileInfo check_file(path);
-
-    // check if file exists and if yes: Is it really a file and no directory?
-    if (check_file.exists() && check_file.isFile())
-    {
-        return check_file.size();
-    } else {
-        return -1;
-    }
-}
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to clear message log
@@ -1491,20 +1557,16 @@ void PIHMgisDialog::Log_Message(QString message)
     }
 }
 
-//void PIHMgisDialog::on_pushButtonWorkFlow7_clicked()
-//{
-//    qDebug() << "Error: PIHMgisDialog::on_pushButtonWorkFlow7_clicked is returning w/o checking";
-
-//}
-
-
-void PIHMgisDialog::on_pushButton_PickWorkspace_clicked(bool checked)
-{
-//    qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
-
-}
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Finished Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonFinished_clicked()
 {
-    close();
+    try {
+        Print_Message_To_Main_Dialog("Bye from PIHMgis v3.5....");
+        close();
+    } catch (...) {
+        qDebug() << "Error: on_pushButtonFinished_clicked is returning w/o checking";
+    }
 }
+

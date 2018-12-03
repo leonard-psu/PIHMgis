@@ -168,7 +168,7 @@ void CloseProject::on_pushButtonHelp_clicked()
 void CloseProject::on_pushButtonCloseProject_clicked()
 {
     if(print_debug_messages)
-        qDebug() << "INFO: Start CloseProject::on_pushButtonOpen_clicked()";
+        qDebug() << "INFO: Start CloseProject::on_pushButtonCloseProject_clicked()";
 
     try {
 
@@ -188,6 +188,6 @@ void CloseProject::on_pushButtonCloseProject_clicked()
         ui->pushButtonClose->setFocus();
 
     } catch (...) {
-        qDebug() << "Error: CloseProject::on_pushButtonOpen_clicked()";
+        qDebug() << "Error: CloseProject::on_pushButtonCloseProject_clicked()";
     }
 }
