@@ -9,7 +9,7 @@ Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015
 
 ### General Steps to compile code using Qt Creator 
 1. Open Qt Project file/folder with this github code repository
-2. Clean All. Make sure no moc files etc automatically created by github exist in folders.
+2. Clean All. Make sure no moc files etc automatically created by Qt exist in folders.
 3. Run qmake. Fix any error issues found.
 4. Build. Fix any error issues found.
 5. Run.
