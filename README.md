@@ -2,8 +2,8 @@
 Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015) on "windows" 
 
 ### These libraries are required
-gdal-2.3.1 or higher
-sundials 2.7.0 solver. This code will need modification to use higher versions of sundials.
+1. gdal-2.3.1 or higher
+2. sundials 2.7.0 solver. This code will need modification to use higher versions of sundials.
 
 ### Note this code has been developed and tested on windows environment only.
 
