@@ -1,7 +1,7 @@
-#### **PIHMgis v3.5 developed using windows Qt Creator 
+#### ** PIHMgis v3.5 developed using windows Qt Creator 
 Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015) on "windows" 
 
-### **General Steps to compile code using Qt Creator 
+### ** General Steps to compile code using Qt Creator 
 1. Open Qt Project file/folder with this github code repository
 2. Clean All. Make sure no moc files etc automatically created by github exist in folders.
 3. Run qmake. Fix any error issues found.
