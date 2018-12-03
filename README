@@ -1,5 +1,15 @@
+##PIHMgis v3.5 developed using windows Qt Creator 
+Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015) on "windows" 
 
-Code changes to PIHMgis reflect research discussed here:
+#General Steps to compile code using Qt Creator 
+(1) Open Qt Project file/folder with this github code repository
+(2) Clean All. Make sure no moc files etc automatically created by github exist in folders.
+(3) Run qmake. Fix any error issues found.
+(4) Build. Fix any error issues found.
+(5) Run.
+
+
+##Code changes to PIHMgis reflect research discussed here:
 
 • Leonard, L., Duffy, C., 2016. Visualization Workflows for Level-12 HUC Scales: Towards an Expert System for Watershed Analysis in a Distributed Computing Environment”, Environmental Modelling & Software, Vol 78, pp 163-178. http://dx.doi.org/10.1016/j.envsoft.2016.01.001
 
@@ -8,17 +18,17 @@ Code changes to PIHMgis reflect research discussed here:
 • Leonard, L., Duffy, C., 2013. Essential Terrestrial Variable Data Workflows for Distributed Water Resources Modeling. Vol 50, pp 85-96. http://dx.doi.org/10.1016/j.envsoft.2013.09.003
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-PIHMgis Version 3.0
+##PIHMgis Version 3.0
 Software Author:
 Gopal Bhatt
 Penn State University
 
+##Bhatt, G., Kumar, M., Duffy, C., 2014. A Tightly Coupled GIS and Distributed Hydrologic Modeling Framework, Environmental Modelling & Software, Vol. 62, pp. 70–84. https://doi.org/10.1016/j.envsoft.2014.08.003
 
-Bhatt, G., Kumar, M., Duffy, C., 2014. A Tightly Coupled GIS and Distributed Hydrologic Modeling Framework, Environmental Modelling & Software, Vol. 62, pp. 70–84. https://doi.org/10.1016/j.envsoft.2014.08.003
 
-
-Highlights
+##Highlights
 • A coupled GIS and distributed hydrologic modeling framework, PIHMgis was developed.
 • PIHMgis uses national geospatial dataset to setup, execute, and analyze simulations.
 • Procedural framework improves model-data integration using shared geodata model.
