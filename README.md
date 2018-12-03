@@ -16,6 +16,7 @@ Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015
 
 ### Problems you will encounter, as they are dependent on your compute environment
 You will need to modify the (1) include paths (2) depenency paths (3) LIBs locations for this project. These are in the PIHMgis.pro project file. It is recommended to update these via the Qt Creator interface.
+Sometimes Qt Creator will find code errors when building. Especially for code/functions that exist and are fine. When this happens, clean all, run qmake, and rebuild all.
 
 ### Code changes to PIHMgis reflect research discussed here:
 
