@@ -12,6 +12,14 @@
 
 using namespace std;
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Important function to create PIHM mesh file
+// This function has not been tested rigously.
+// Known issues include the following:
+// (1) GDAL versions behaviour slightly differently.
+// (2) No extent checking
+// (3) No checking of values. Are they reasonable?
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString EleFileName, QString NodeFileName, QString NeighFileName, QString MeshDataFileName, bool CheckBoxSubSurface)
 {
     if(print_debug_messages)
@@ -37,9 +45,8 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
         QFile MeshDataFile(MeshDataFileName);
         if ( ! MeshDataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
             return 32;
+
         QTextStream MeshDataFileTextStream(&MeshDataFile);
-
-
 
         GDALDataset *SurfElev, *SubSurfElev;
         double sRanges[6], bRanges[6];
@@ -58,7 +65,6 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
             getExtent(SubSurfElev, bRanges);
         }
 
-
         int temp;
         int NumEle, NumNode, NumNeigh;
 
@@ -75,6 +81,7 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
             NeighFileTextStream>>temp; NeighFileTextStream>>nabr0; NeighFileTextStream>>nabr1; NeighFileTextStream>>nabr2;
             MeshDataFileTextStream<<index<<"\t"<<node0<<"\t"<<node1<<"\t"<<node2<<"\t"<<(nabr0<0?0:nabr0)<<"\t"<<(nabr1<0?0:nabr1)<<"\t"<<(nabr2<0?0:nabr2)<<"\n";
         }
+
         double X, Y, Zmin, Zmax;
         for(int i=0; i<NumNode; i++){
             NodeFileTextStream>>index; NodeFileTextStream>>X; NodeFileTextStream>>Y; NodeFileTextStream>>temp;
@@ -106,7 +113,6 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
             MeshDataFileTextStream<<Zmax<<"\n"; //<<setprecision(15)
         }
 
-
         EleFile.close();
         NodeFile.close();
         NeighFile.close();
@@ -121,7 +127,6 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
         qDebug() << "Error: mesh_data_file is returning 0";
 
     }
-
 
     return 0;
 }

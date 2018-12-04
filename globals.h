@@ -3,6 +3,7 @@
 
 #include <QDir>
 #include <QDebug>
+#include "pihmgisdialog.h"
 
 
 static bool print_debug_messages = false;  //Print to console window
@@ -25,5 +26,6 @@ struct Time_Values
 };
 
 void Print_Message_To_Main_Dialog(QString message);
+
 
 #endif // GLOBALS_H

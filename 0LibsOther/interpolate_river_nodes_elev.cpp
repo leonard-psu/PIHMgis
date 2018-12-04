@@ -10,23 +10,16 @@
 #include "./../0LibsShape/shapefil.h"
 #include "globals.h"
 
-
 #define PI 3.14
 #define distPt(p1, p2) fabs(p1.x-p2.x)+fabs(p1.y-p2.y)
 #define distXY(x1, y1, x2, y2) fabs(x1-x2)+fabs(y1-y2)
 #define distPtXY(p, x, y) fabs(p.x-x)+fabs(p.y-y)
-//#define SLOPE(p1, p2) (180.0/PI)*atan((p2.y-p1.y+.0000001)/(p2.x-p1.x))
-
-
 
 using namespace std;
 
-/*
-typedef struct{
-    double x;
-    double y;
-}Point;*/
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Calculate Slope between two points
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 double SLOPEa(Point p1, Point p2)
 {
     //if(print_debug_messages)
@@ -44,8 +37,10 @@ double SLOPEa(Point p1, Point p2)
         return 0 + (180.0/PI)*atan(fabs(delY)/fabs(delX));
 }
 
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Function to adjust river nodes with mesh nodes and river slopes
+// This function has not been tested rigously.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QString EleFileName, QString NodeFileName, QString NeighFileName, QString OldMeshFileName, QString NewMeshFileName, QString DecompRiverFileNameShp, QString DecompRiverFileNameDbf)
 {
     if(print_debug_messages)

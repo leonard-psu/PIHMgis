@@ -1,14 +1,12 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2013-10-11T17:40:21
+# Project created by QtCreator
 #
 #-------------------------------------------------
 
 QT       += core gui
-#QT += widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += core
 greaterThan(QT_MAJOR_VERSION, 4): QT += gui
@@ -225,7 +223,7 @@ SOURCES += main.cpp\
     moc_tinshapelayer.cpp \
     #pihmgis_plugin_import.cpp \
     pihmgisdialog.cpp \
-    qrc_Icons.cpp \
+    #qrc_Icons.cpp \
     6PIHMSimulation/PIHMThread/MyThread.cpp \
     1ProjectManagement/1NewProject/newproject.cpp \
     1ProjectManagement/2OpenProject/openproject.cpp \
@@ -390,43 +388,6 @@ HEADERS  += pihmgisdialog.h \
     7VisualAnalytics/QCustomPlot/qcustomplot.h \
     7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.h \
     pihmgisdialog.h \
-#    ui_attdatafile.h \
-#    ui_calibdatafile.h \
-#    ui_catchmentgrids.h \
-#    ui_catchmentpolygon.h \
-#    ui_closeproject.h \
-#    ui_delaunaytriangulation.h \
-#    ui_dissolvepolygons.h \
-#    ui_fillpits.h \
-#    ui_flowgrids.h \
-#    ui_geoldatafile.h \
-#    ui_ibcdatafile.h \
-#    ui_importproject.h \
-#    ui_initdatafile.h \
-#    ui_lcdatafile.h \
-#    ui_linkgrids.h \
-#    ui_mergevectorlayers.h \
-#    ui_meshdatafile.h \
-#    ui_meshspatial.h \
-#    ui_meshtemporal.h \
-#    ui_newproject.h \
-#    ui_openproject.h \
-#    ui_paradatafile.h \
-#    #ui_pihm_v22.h \
-#    ui_pihmgisdialog.h \
-#    ui_pihmsimulation.h \
-#    ui_polygontopolylines.h \
-#    ui_polylinetolines.h \
-#    ui_qcustomplotmainwindow.h \
-#    ui_readtopology.h \
-#    ui_rivdatafile.h \
-#    ui_riverspatial.h \
-#    ui_rivertemporal.h \
-#    ui_simplifypolylines.h \
-#    ui_soildatafile.h \
-#    ui_streamgrids.h \
-#    ui_streampolyline.h \
-#    ui_tinshapelayer.h \
     main.h \
     globals.h \
     6PIHMSimulation/PIHMThread/MyThread.h \
@@ -485,10 +446,6 @@ OTHER_FILES +=
 RESOURCES += \
     Icons.qrc
 
-#ORG macx: LIBS += $$PWD/../../../GDAL/gdal-1.10.0-geos/lib/libgdal.1.dylib
-
-#ORG INCLUDEPATH += $$PWD/../../../GDAL/gdal-1.10.0-geos/include
-#ORG DEPENDPATH += $$PWD/../../../GDAL/gdal-1.10.0-geos/include
 INCLUDEPATH += $$PWD/../gdal-2.3.1/gcore
 DEPENDPATH += $$PWD/../gdal-2.3.1/gcore
 INCLUDEPATH += $$PWD/../gdal-2.3.1/port
@@ -498,26 +455,7 @@ DEPENDPATH += $$PWD/../gdal-2.3.1/ogr
 INCLUDEPATH += $$PWD/../gdal-2.3.1/ogr/ogrsf_frmts
 DEPENDPATH += $$PWD/../gdal-2.3.1/ogr/ogrsf_frmts
 
-#ORG macx: PRE_TARGETDEPS += $$PWD/../../../GDAL/gdal-1.10.0-geos/lib/libgdal.a
-
-#ORG INCLUDEPATH += $$PWD/../../../SUNDIALS/sundials-2.2.0/include $$PWD/../../../SUNDIALS/sundials-2.2.0/include/sundials $$PWD/../../../SUNDIALS/sundials-2.2.0/include/cvode
-#ORG macx: LIBS += $$PWD/../../../SUNDIALS/sundials-2.2.0/lib/libsundials_nvecserial.a
-#ORG macx: LIBS += $$PWD/../../../SUNDIALS/sundials-2.2.0/lib/libsundials_cvode.a
-
-
 ICON = Icons/PIHMgis000.icns
-
-#INCLUDEPATH += $$PWD/../../../QCUSTOMPLOT
-#macx: LIBS += $$PWD/../../../QCUSTOMPLOT/qcustomplot-sharedlib/sharedlib-compilation/libqcustomplot.1.dylib
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../gdal231/gdal-2.3.1/ -lgdal_i
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../gdal231/gdal-2.3.1/ -lgdal_id
-#else:unix: LIBS += -L$$PWD/../../../../gdal231/gdal-2.3.1/ -lgdal_i
-
-#INCLUDEPATH += $$PWD/../../../../gdal231/gdal-2.3.1
-#DEPENDPATH += $$PWD/../../../../gdal231/gdal-2.3.1
-
-
 
 win32: LIBS += -L$$PWD/../gdal-2.3.1/ -lgdal_i
 

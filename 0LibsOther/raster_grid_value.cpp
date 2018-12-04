@@ -1,21 +1,36 @@
 #include <QDebug>
 #include "raster_grid_value.h"
+#include "cpl_error.h"
 #include "globals.h"
 
 using namespace std;
 
 static double Xmax, Xmin, Ymax, Ymin;
 static double Xres, Yres;
+
+
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
 bool att_debug_messages = false; //Not a fan of doing this, but outputs too many values to be helpful.
 
-
-double readValue ( void *data, GDALDataType type, int index )
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to read value from GDAL dataset
+// WARNING: Every value is converted to a double.
+// Used for elevation values. PIHM uses doubles.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+double readValue( void *data, GDALDataType type, int index )
 {
     if(att_debug_messages)
         qDebug() << "INFO: Start readValue";
 
     try {
         double val = 0.0;
+
+        if(data == nullptr)
+        {
+            qDebug() << "readValue Error: data is null. Returning zero.";
+            return 0.0;
+        }
 
         switch ( type )
         {
@@ -47,19 +62,30 @@ double readValue ( void *data, GDALDataType type, int index )
 
     } catch (...) {
 
-        qDebug() << "Error: readValue is returning zero";
+        qDebug() << "readValue Error: readValue is returning zero";
 
     }
 
     return 0.0;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to get Extent from GDAL dataset
+// Used for elevation values and PIHM attribute file.
+// WARNING: No values assigned to extent with error. This will cause issues to the user!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void getExtent(GDALDataset *temp, double *ranges){
 
     if(att_debug_messages)
         qDebug() << "INFO: Start getExtent";
 
     try {
+        if(temp == nullptr)
+        {
+            main_window->Log_Message("[getExtent] Error finding extent");
+            qDebug() << "getExtent Error: data is null. Returning WITHOUT ASSIGN EXTENT.";
+            return;
+        }
 
         double adfGeoTransform[6];
         temp->GetGeoTransform(adfGeoTransform);
@@ -75,6 +101,19 @@ void getExtent(GDALDataset *temp, double *ranges){
 
         int rasterXDimInt = temp->GetRasterXSize();
         int rasterYDimInt = temp->GetRasterYSize();
+
+        if(rasterXDimInt < 1)
+        {
+            main_window->Log_Message("[getExtent] Error with rasterXDimInt");
+            qDebug() << "getExtent Error: rasterXDimInt. Returning WITHOUT ASSIGN EXTENT.";
+            return;
+        }
+        if(rasterYDimInt < 1)
+        {
+            main_window->Log_Message("[getExtent] Error with rasterYDimInt");
+            qDebug() << "getExtent Error: rasterYDimInt. Returning WITHOUT ASSIGN EXTENT.";
+            return;
+        }
 
         Xres = (Xmax - Xmin) / rasterXDimInt;
         Yres = (Ymax - Ymin) / rasterYDimInt;
@@ -102,13 +141,24 @@ void getExtent(GDALDataset *temp, double *ranges){
     return;
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to get GDAL dataset value at X Y Location
+// Used for elevation values and PIHM attribute file.
+// WARNING: Every value is converted to a double, regardless of type.
+// WARNING: No values assigned to extent with error. This will cause issues to the user!
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 double raster_grid_value(GDALDataset* layer, int bandNumber, double x, double y, double *ranges){
 
     if(att_debug_messages)
         qDebug() << "INFO: Start raster_grid_value";
 
     try {
+
+        if(layer == nullptr)
+        {
+            main_window->Log_Message("[raster_grid_value] Error layer is NULL. Returning zero.");
+            return 0.0;
+        }
 
         if(att_debug_messages)
         {
@@ -133,8 +183,17 @@ double raster_grid_value(GDALDataset* layer, int bandNumber, double x, double y,
         }
 
         //band->ReadBlock(col, row, data);
+        //https://www.gdal.org/cpl__error_8h.html
         CPLErr err = band->RasterIO(GF_Read, col, row, 1, 1, data, 1, 1, type, 0, 0);
-        return readValue(data, type, 0);
+        if( err == CPLE_None)
+        {
+            return readValue(data, type, 0);
+        }
+        else
+        {
+            main_window->Log_Message("[raster_grid_value] Error while reading Raster. Return zero.");
+            return 0.0;
+        }
 
     } catch (...) {
         qDebug() << "Error: raster_grid_value is returning w/o error checking";

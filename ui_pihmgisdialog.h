@@ -121,6 +121,7 @@ public:
     QLabel *PIHMgisLabel;
     QTextBrowser *textBrowserLogs;
     QPushButton *pushButtonFinished;
+    QPushButton *pushButtonClearLog;
 
     void setupUi(QWidget *PIHMgisDialog)
     {
@@ -1393,12 +1394,16 @@ public:
         font15.setItalic(true);
         font15.setWeight(75);
         pushButtonFinished->setFont(font15);
+        pushButtonClearLog = new QPushButton(PIHMgisDialog);
+        pushButtonClearLog->setObjectName(QStringLiteral("pushButtonClearLog"));
+        pushButtonClearLog->setGeometry(QRect(660, 610, 31, 23));
         frame->raise();
         PIHMgisToolBox->raise();
         BorderBottomLine->raise();
         BorderTopLine->raise();
         textBrowserLogs->raise();
         pushButtonFinished->raise();
+        pushButtonClearLog->raise();
 
         retranslateUi(PIHMgisDialog);
 
@@ -1448,15 +1453,30 @@ public:
         PIHMgisDialog->setWindowTitle(QApplication::translate("PIHMgisDialog", "PIHMgis version 3.5 for PIHMv2.2", nullptr));
         label_8->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#330099;\">Project management handles input/output options from grouped steps [2-6]. Each group has multiple sub-steps. </span></p></body></html>", nullptr));
         groupBox_5->setTitle(QApplication::translate("PIHMgisDialog", "PIHMgis Project", nullptr));
+#ifndef QT_NO_TOOLTIP
+        pushButtonPIHMgisProjectNew->setToolTip(QApplication::translate("PIHMgisDialog", "Start a new PIHMgis project at workspace location", nullptr));
+#endif // QT_NO_TOOLTIP
         pushButtonPIHMgisProjectNew->setText(QApplication::translate("PIHMgisDialog", "NEW ", nullptr));
+#ifndef QT_NO_TOOLTIP
+        pushButtonPIHMgisProjectClose->setToolTip(QApplication::translate("PIHMgisDialog", "Close current PIHMgis project", nullptr));
+#endif // QT_NO_TOOLTIP
         pushButtonPIHMgisProjectClose->setText(QApplication::translate("PIHMgisDialog", "CLOSE", nullptr));
         PIHMgisProjectLableNew->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Start a New Project</span></p></body></html>", nullptr));
         PIHMgisProjectLableClose->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Close Project</span></p></body></html>", nullptr));
+#ifndef QT_NO_TOOLTIP
+        pushButtonPIHMgisProjectImport->setToolTip(QApplication::translate("PIHMgisDialog", "Import existing PIHMgis project at workspace location", nullptr));
+#endif // QT_NO_TOOLTIP
         pushButtonPIHMgisProjectImport->setText(QApplication::translate("PIHMgisDialog", "IMPORT", nullptr));
+#ifndef QT_NO_TOOLTIP
+        pushButtonPIHMgisProjectInspect->setToolTip(QApplication::translate("PIHMgisDialog", "Inspect current PIHMgis project", nullptr));
+#endif // QT_NO_TOOLTIP
         pushButtonPIHMgisProjectInspect->setText(QApplication::translate("PIHMgisDialog", "INSPECT", nullptr));
         PIHMgisProjectLableInspect->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Inspect Project</span></p></body></html>", nullptr));
         PIHMgisProjectLableImport->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" color:#330099;\">Import Project</span></p></body></html>", nullptr));
         groupBox_6->setTitle(QApplication::translate("PIHMgisDialog", "PIHMgis workspace", nullptr));
+#ifndef QT_NO_TOOLTIP
+        pushButton_PickWorkspace->setToolTip(QApplication::translate("PIHMgisDialog", "Pick PIHMgis workspace. If project exists in folder, the project will automatically open", nullptr));
+#endif // QT_NO_TOOLTIP
         pushButton_PickWorkspace->setText(QApplication::translate("PIHMgisDialog", "Pick", nullptr));
         label_project_found->setText(QApplication::translate("PIHMgisDialog", "Found Project Settings", nullptr));
         label_home_workspace->setText(QApplication::translate("PIHMgisDialog", "Current Workspace", nullptr));
@@ -1532,7 +1552,14 @@ public:
         label_15->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Funding to port PIHMGIS to windows provided by: CZO Grant XXXX</span></p></body></html>", nullptr));
         PIHMgisToolBox->setItemText(PIHMgisToolBox->indexOf(PIHMgisToolBox_Help), QApplication::translate("PIHMgisDialog", "Help && Other Resources", nullptr));
         PIHMgisLabel->setText(QApplication::translate("PIHMgisDialog", "<html><head/><body><p>PIHMgis:<span style=\" font-style:italic;\"> for Penn State Integrated Hydrologic Modeling System (PIHM) v2.2</span></p></body></html>", nullptr));
+#ifndef QT_NO_TOOLTIP
+        pushButtonFinished->setToolTip(QApplication::translate("PIHMgisDialog", "Close PIHMgis dialog", nullptr));
+#endif // QT_NO_TOOLTIP
         pushButtonFinished->setText(QApplication::translate("PIHMgisDialog", "Finished", nullptr));
+#ifndef QT_NO_TOOLTIP
+        pushButtonClearLog->setToolTip(QApplication::translate("PIHMgisDialog", "Clear Log", nullptr));
+#endif // QT_NO_TOOLTIP
+        pushButtonClearLog->setText(QApplication::translate("PIHMgisDialog", "X", nullptr));
     } // retranslateUi
 
 };

@@ -112,6 +112,8 @@ private slots:
 
     void on_pushButtonPIHMgisProjectInspect_clicked();
 
+    void on_pushButtonClearLog_clicked();
+
 private:
     void Clear_Log();
     void Log_Error_Message(QString message);

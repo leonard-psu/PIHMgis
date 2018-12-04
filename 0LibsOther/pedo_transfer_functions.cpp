@@ -6,8 +6,14 @@
 #include <qmath.h>
 #include "globals.h"
 
-
-int Soil_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Important function to Assign Soil PedoTransfer Function
+// This function has not been tested rigously.
+// Known issues include the following:
+// No error checking
+// Reference(s)?
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName )
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start Soil_PedoTransferFunction";
@@ -142,8 +148,13 @@ int Soil_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
     return 0;
 }
 
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Important function to Assign Geology PedoTransfer Function
+// This function has not been tested rigously.
+// Known issues include the following:
+// No error checking
+// Reference(s)?
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
 {
 
@@ -288,14 +299,22 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
     return 0;
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Important function to Assign Geology PedoTransfer Function
+// This function has not been tested rigously.
+// Known issues include the following:
+// No error checking
+// Reference:
+// (1) http://glcf.umiacs.umd.edu/data/landcover/ (DOESNT EXIST ANYMORE)
+// (2) http://www.epa.gov/mrlc/definitions.html#2001 (DOESNT EXIST ANYMORE)
+// (2*) Code values now here: http://www.landcover.org/data/landcover/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start Lc_PedoTransferFunction";
 
     try {
-
 
         //int MAXLC = 100;
         QFile ClassFile(ClassFileName);
@@ -434,8 +453,6 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
             {10, 0.20, 0, 0.80},  //99
         };
 
-
-
         int    NumClasses = 0;
         double LcClasses[100]; //MAXLC];
 
@@ -487,5 +504,4 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
     }
 
     return 0;
-
 }

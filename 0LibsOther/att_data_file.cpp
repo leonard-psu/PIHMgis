@@ -36,6 +36,15 @@
 // _GDAL_SOILCLASSES _GDAL_GEOLOGYCLASSES _GDAL_MACROPORES _GDAL_LANDCOVERCLASSES _GDAL_MELTREGIONS _GDAL_SOURCESSINKS
 // _GDAL_INTERCEPTION _GDAL_SNOWCOVER _GDAL_SURFACESTORAGE _GDAL_SOILMOISTURE _GDAL_GROUNDWATER _GDAL_BOUNDARYCONDITION
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Important function to Assign Attributes to PIHM TIN Triangles
+// This function has not been tested rigously.
+// Known issues include the following:
+// (1) GDAL versions behaviour slightly differently.
+// (2) No extent checking
+// (3) No checking of values. Are they reasonable?
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int att_data_file(
         QString PrecipitationFileName, bool PrecipitationFlag, QString TemperatureFileName,    bool TemperatureFlag,    QString RelativeHumidityFileName, bool RelativeHumidityFlag, QString WindVelocityFileName,     bool WindVelocityFlag,     QString SolarRadiationFileName, bool SolarRadiationFlag, QString VaporPressureFileName,     bool VaporPressureFlag,
         QString SoilClassesFileName,   bool SoilClassesFlag,   QString GeologyClassesFileName, bool GeologyClassesFlag, QString MacroporesFileName,       bool MacroporesFlag,       QString LandCoverClassesFileName, bool LandCoverClassesFlag, QString MeltRegionsFileName,    bool MeltRegionsFlag,    QString SourcesSinksFileName,      bool SourcesSinksFlag,

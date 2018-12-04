@@ -4,6 +4,13 @@
 #include "IOProjectFile.h"
 #include "globals.h"
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to READ/Search for content in project file
+// Note, Messages are reported to both main window and console, as these are serious errors.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QStringList ReadModuleLine(QString ProjectFileName, QString Module)
 {
     if(print_debug_messages)
@@ -11,10 +18,15 @@ QStringList ReadModuleLine(QString ProjectFileName, QString Module)
 
     try {
 
-        //qDebug() << "ProjectFileName " << ProjectFileName;
-
-
         QFile ProjectFile(ProjectFileName);
+        if( !ProjectFile.exists() )
+        {
+            main_window->Log_Message("[ReadModuleLine] Error opening file: " + ProjectFileName);
+            qDebug() << "[ReadModuleLine] Error opening file: " + ProjectFileName;
+            QStringList NullStringList;
+            return NullStringList;
+        }
+
         ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream ProjectFileTextStream(&ProjectFile);
 
@@ -25,7 +37,6 @@ QStringList ReadModuleLine(QString ProjectFileName, QString Module)
         {
             ProjectFileLineString     = ProjectFileTextStream.readLine();
             ProjectFileLineStringList = ProjectFileLineString.split(",");
-            //qDebug() << "ProjectFileLineString " << ProjectFileLineString;
 
             if ( ProjectFileLineStringList.at(0) == Module )
                 return ProjectFileLineStringList;
@@ -46,7 +57,11 @@ QStringList ReadModuleLine(QString ProjectFileName, QString Module)
     return NullStringList;
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to WRITE/Append for content in project file
+// Note use of temporary file creation
+// Note, Messages are reported to both main window and console, as these are serious errors.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool WriteModuleLine(QString ProjectFileName, QStringList WriteStringList)
 {
     if(print_debug_messages)
@@ -62,6 +77,7 @@ bool WriteModuleLine(QString ProjectFileName, QStringList WriteStringList)
         QFile::remove(TempProjectFileName);
         if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
         {
+            main_window->Log_Message("[WriteModuleLine] Unable to Copy Project File to Temporary Project File: " + TempProjectFileName);
             qDebug() << "ERROR: Unable to Copy Project File to Temporary Project File";
             return false;
         }
@@ -109,7 +125,10 @@ bool WriteModuleLine(QString ProjectFileName, QStringList WriteStringList)
 
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to DELETE content in project file
+// Note, Messages are reported to both main window and console, as these are serious errors.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool DeleteModuleLine(QString ProjectFileName, QString Module)
 {
     if(print_debug_messages)
@@ -122,6 +141,7 @@ bool DeleteModuleLine(QString ProjectFileName, QString Module)
         QFile::remove(TempProjectFileName);
         if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
         {
+            main_window->Log_Message("[DeleteModuleLine] Unable to Copy Project File to Temporary Project File: " + TempProjectFileName);
             qDebug() << "ERROR: Unable to Copy Project File to Temporary Project File";
             return false;
         }
@@ -158,7 +178,11 @@ bool DeleteModuleLine(QString ProjectFileName, QString Module)
     }
 }
 
-bool CheckFolderAccess (QString folderName, QString AccessMode)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to Check folder access
+// Note, Use of OS defines
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CheckFolderAccess(QString folderName, QString AccessMode)
 {
     bool result = false;
 
@@ -174,8 +198,8 @@ bool CheckFolderAccess (QString folderName, QString AccessMode)
             return true;
 #endif
         QFileInfo my_dir(folderName);
-        qDebug() << "isReadable " <<  my_dir.isReadable();
-        qDebug() << "isWritable " <<  my_dir.isWritable();
+        //qDebug() << "isReadable " <<  my_dir.isReadable();
+        //qDebug() << "isWritable " <<  my_dir.isWritable();
 
         if ( AccessMode == "ReadOnly" )
         {
@@ -198,7 +222,7 @@ bool CheckFolderAccess (QString folderName, QString AccessMode)
 
         }
 
-        qDebug() << "folderName " << folderName << " " << result;
+        //qDebug() << "folderName " << folderName << " " << result;
 
 
     } catch (...) {
@@ -210,6 +234,10 @@ bool CheckFolderAccess (QString folderName, QString AccessMode)
     return result;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to Check folder access from FILE PATH
+// Note, Use of OS defines
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CheckFolderAccessFromFilePath(QString filenameandpath, QString AccessMode)
 {
     bool result = false;
@@ -232,8 +260,8 @@ bool CheckFolderAccessFromFilePath(QString filenameandpath, QString AccessMode)
         QString folderName = fi.dir().canonicalPath();
 
         QFileInfo my_dir(folderName);
-        qDebug() << "isReadable " <<  my_dir.isReadable();
-        qDebug() << "isWritable " <<  my_dir.isWritable();
+        //qDebug() << "isReadable " <<  my_dir.isReadable();
+        //qDebug() << "isWritable " <<  my_dir.isWritable();
 
         if ( AccessMode == "ReadOnly" )
         {
@@ -256,7 +284,7 @@ bool CheckFolderAccessFromFilePath(QString filenameandpath, QString AccessMode)
 
         }
 
-        qDebug() << "folderName " << folderName << " " << result;
+        //qDebug() << "folderName " << folderName << " " << result;
 
 
     } catch (...) {
@@ -268,9 +296,10 @@ bool CheckFolderAccessFromFilePath(QString filenameandpath, QString AccessMode)
     return result;
 }
 
-
-
-bool CheckFileAccess (QString FileName, QString AccessMode)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to Check file access.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CheckFileAccess(QString FileName, QString AccessMode)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start CheckFileAccess";
@@ -310,7 +339,10 @@ bool CheckFileAccess (QString FileName, QString AccessMode)
 
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to Read Line Number.
+// Not used. Is this needed for future versions?
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QString readLineNumber(QString ProjectFileName, int LineNumber)
 {
     //if(print_debug_messages)
@@ -337,7 +369,10 @@ QString readLineNumber(QString ProjectFileName, int LineNumber)
     }
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to WRITE Line Number.
+// Not used. Is this needed for future versions?
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool writeLineNumber(QString ProjectFileName, int LineNumber, QString WriteString)
 {
     if(print_debug_messages)
@@ -346,7 +381,6 @@ bool writeLineNumber(QString ProjectFileName, int LineNumber, QString WriteStrin
     bool success = false;
 
     try {
-
 
         int lineCount=0;
         QString TempString;
