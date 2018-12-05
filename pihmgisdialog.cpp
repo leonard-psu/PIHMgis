@@ -6,6 +6,8 @@
 #include <QThread>
 #include <QFileDialog>
 #include <QPainter>
+#include <QMenu>
+#include <QMenuBar>
 
 #include <QException>
 #include <iostream>
@@ -67,7 +69,7 @@ QString user_pihmgis_project_name = "/OpenProject.txt";   //Note use of forward 
 // Main Dialog Constructor
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
-    QWidget(parent),
+    QMainWindow(parent),
     ui(new Ui::PIHMgisDialog)
 {
     if(print_debug_messages)
@@ -85,6 +87,7 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
         if(print_log_messages)
             Print_Message_To_Main_Dialog("Welcome to PIHMgis v3.5....");
 
+        Setup_Menu();
 
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog is returning w/o checking";
@@ -106,6 +109,184 @@ PIHMgisDialog::~PIHMgisDialog()
 
     } catch (...) {
         qDebug() << "Error: ~PIHMgisDialog is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to setup menu bar
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::Setup_Menu()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start Setup_Menu";
+
+    try {
+
+        mnu_quit = new QAction("&Quit", this);
+        mnu_quit->setStatusTip(tr("Quit PIHMgis Application"));
+        mnu_quit->setShortcut(tr("CTRL+Q"));
+        connect(mnu_quit, &QAction::triggered, this, &PIHMgisDialog::menu_quit);
+
+        QMenu *file;
+        file = menuBar()->addMenu("&File");
+        file->addAction(mnu_quit);
+
+
+        mnu_debug = new QAction("&Debug", this);
+        mnu_debug->setShortcut(tr("CTRL+D"));
+        mnu_debug->setCheckable(true);
+        mnu_debug->setChecked(false);
+        connect(mnu_debug, &QAction::triggered, this, &PIHMgisDialog::menu_debug_messages);
+
+        mnu_log_debug = new QAction("&Widget Log", this);
+        mnu_log_debug->setCheckable(true);
+        mnu_log_debug->setChecked(true);
+        connect(mnu_log_debug, &QAction::triggered, this, &PIHMgisDialog::menu_log_messages);
+
+        mnu_log_many = new QAction("&Many", this);
+        mnu_log_many->setCheckable(true);
+        mnu_log_many->setChecked(false);
+        connect(mnu_log_many, &QAction::triggered, this, &PIHMgisDialog::menu_log_many);
+
+        QMenu *log;
+        log = menuBar()->addMenu("&Log");
+        log->addAction(mnu_debug);
+        log->addAction(mnu_log_debug);
+        log->addAction(mnu_log_many);
+
+        mnu_help= new QAction("&Contact", this);
+        connect(mnu_help, &QAction::triggered, this, &PIHMgisDialog::menu_help);
+
+        QMenu *mainhelp;
+        mainhelp = menuBar()->addMenu("&Help");
+        mainhelp->addAction(mnu_help);
+
+    }
+    catch (...)
+    {
+        qDebug() << "Error: Setup_Menu is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_quit()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_quit";
+
+    try
+    {
+        if(mnu_quit != nullptr)
+        {
+            Print_Message_To_Main_Dialog("Bye from PIHMgis v3.5....");
+            close();
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_quit is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_debug_messages()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_debug_messages";
+
+    try
+    {
+        if(mnu_debug != nullptr)
+        {
+            if (mnu_debug->isChecked())
+            {
+                print_debug_messages = true;
+            }
+            else
+            {
+                print_debug_messages = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_debug_messages is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_log_messages()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_log_messages";
+
+    try
+    {
+        if(mnu_log_debug != nullptr)
+        {
+            if (mnu_log_debug->isChecked())
+            {
+                print_log_messages = true;
+            }
+            else
+            {
+                print_log_messages = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_log_messages is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_log_many()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_log_many";
+
+    try
+    {
+        if(mnu_log_many != nullptr)
+        {
+            if (mnu_log_many->isChecked())
+            {
+                print_many_messages = true;
+            }
+            else
+            {
+                print_many_messages = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_log_many is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_help()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_help";
+
+    try
+    {
+        if(mnu_help != nullptr)
+        {
+            QDesktopServices::openUrl(QUrl("http://www.pihm.psu.edu/team.html"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_help is returning w/o checking";
     }
 }
 
@@ -1554,19 +1735,6 @@ void PIHMgisDialog::Log_Message(QString message)
         ui->textBrowserLogs->repaint();
     } catch (...) {
         qDebug() << "Error: Log_Message is returning w/o checking";
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Finished Button Click Event
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void PIHMgisDialog::on_pushButtonFinished_clicked()
-{
-    try {
-        Print_Message_To_Main_Dialog("Bye from PIHMgis v3.5....");
-        close();
-    } catch (...) {
-        qDebug() << "Error: on_pushButtonFinished_clicked is returning w/o checking";
     }
 }
 

@@ -17,6 +17,9 @@
 
 using namespace std;
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Calculate Slope between two points
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,13 +78,34 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
 
 
         SHPHandle shp = SHPOpen(qPrintable(shpFileName), "rb");
+        if(shp == nullptr)
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error shpFileName is NULL. Returning 75.");
+            return 75;
+        }
         DBFHandle dbf = DBFOpen(qPrintable(dbfFileName), "rb");
+        if(dbf == nullptr)
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error dbfFileName is NULL. Returning 75.");
+            return 75;
+        }
 
         if ( shp == nullptr || dbf == nullptr )
             return 75;
 
         SHPHandle newshp = SHPCreate(qPrintable(DecompRiverFileNameShp), SHPT_ARC);
+        if(newshp == nullptr)
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error DecompRiverFileNameShp is NULL. Returning 81.");
+            return 81;
+        }
+
         DBFHandle newdbf = DBFCreate(qPrintable(DecompRiverFileNameDbf));
+        if(newdbf == nullptr)
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error DecompRiverFileNameDbf is NULL. Returning 81.");
+            return 81;
+        }
 
         if ( newshp == nullptr || newdbf == nullptr )
             return 81;

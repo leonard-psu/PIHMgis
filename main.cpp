@@ -123,6 +123,7 @@ int main(int argc, char *argv[])
         qDebug() << "Starting PIHMgis v3.5";
 
         QApplication a(argc, argv);
+
         main_window = new PIHMgisDialog();
         main_window->show();
 

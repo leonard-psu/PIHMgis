@@ -36,6 +36,8 @@
 // _GDAL_SOILCLASSES _GDAL_GEOLOGYCLASSES _GDAL_MACROPORES _GDAL_LANDCOVERCLASSES _GDAL_MELTREGIONS _GDAL_SOURCESSINKS
 // _GDAL_INTERCEPTION _GDAL_SNOWCOVER _GDAL_SURFACESTORAGE _GDAL_SOILMOISTURE _GDAL_GROUNDWATER _GDAL_BOUNDARYCONDITION
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Important function to Assign Attributes to PIHM TIN Triangles
@@ -65,7 +67,17 @@ int att_data_file(
         TINDbfFileName = TINDbfFileName.replace( QString(".shp"), QString(".dbf") );
 
         SHPHandle _ShpHandle = SHPOpen(qPrintable(TINShpFileName), "rb");
+        if(_ShpHandle == nullptr)
+        {
+            main_window->Log_Message("[att_data_file] Error TINShpFileName is NULL. Returning 27.");
+            return 27;
+        }
         DBFHandle _DbfHandle = DBFOpen(qPrintable(TINDbfFileName), "rb");
+        if(_DbfHandle == nullptr)
+        {
+            main_window->Log_Message("[att_data_file] Error TINDbfFileName is NULL. Returning 27.");
+            return 27;
+        }
 
         if ( _ShpHandle == nullptr || _DbfHandle == nullptr )
             return 27;

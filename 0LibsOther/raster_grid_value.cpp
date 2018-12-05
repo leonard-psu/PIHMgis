@@ -5,13 +5,15 @@
 
 using namespace std;
 
-static double Xmax, Xmin, Ymax, Ymin;
-static double Xres, Yres;
-
+static double Xmax = 0;
+static double Xmin = 0;
+static double Ymax = 0;
+static double Ymin = 0;
+static double Xres = 0;
+static double Yres = 0;
 
 // User interface to PIHMgis v3.5
 extern PIHMgisDialog *main_window;
-bool att_debug_messages = false; //Not a fan of doing this, but outputs too many values to be helpful.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to read value from GDAL dataset
@@ -20,7 +22,7 @@ bool att_debug_messages = false; //Not a fan of doing this, but outputs too many
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 double readValue( void *data, GDALDataType type, int index )
 {
-    if(att_debug_messages)
+    if(print_many_messages)
         qDebug() << "INFO: Start readValue";
 
     try {
@@ -76,7 +78,7 @@ double readValue( void *data, GDALDataType type, int index )
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void getExtent(GDALDataset *temp, double *ranges){
 
-    if(att_debug_messages)
+    if(print_many_messages)
         qDebug() << "INFO: Start getExtent";
 
     try {
@@ -118,7 +120,7 @@ void getExtent(GDALDataset *temp, double *ranges){
         Xres = (Xmax - Xmin) / rasterXDimInt;
         Yres = (Ymax - Ymin) / rasterYDimInt;
 
-        if(att_debug_messages)
+        if(print_many_messages)
         {
             qDebug() << "Xres= "<< Xres <<"\n";
             qDebug() << "Yres= "<< Yres <<"\n";
@@ -146,40 +148,81 @@ void getExtent(GDALDataset *temp, double *ranges){
 // Used for elevation values and PIHM attribute file.
 // WARNING: Every value is converted to a double, regardless of type.
 // WARNING: No values assigned to extent with error. This will cause issues to the user!
+// WARNING: return -9999 on error not zero
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 double raster_grid_value(GDALDataset* layer, int bandNumber, double x, double y, double *ranges){
 
-    if(att_debug_messages)
+    if(print_many_messages)
         qDebug() << "INFO: Start raster_grid_value";
 
     try {
 
         if(layer == nullptr)
         {
-            main_window->Log_Message("[raster_grid_value] Error layer is NULL. Returning zero.");
-            return 0.0;
+            main_window->Log_Message("[raster_grid_value] Error layer is NULL. Returning -9999.");
+            return -9999;
         }
 
-        if(att_debug_messages)
+        if(print_many_messages)
         {
             qDebug() << "Xres= " << Xres << "\n";
             qDebug() << "Yres= " << Yres << "\n";
         }
+        if(Xres == 0)
+        {
+            main_window->Log_Message("[raster_grid_value] Error Xres is zero. Returning -9999.");
+            return -9999;
+        }
+        if(Yres == 0)
+        {
+            main_window->Log_Message("[raster_grid_value] Error Yres is zero. Returning -9999.");
+            return -9999;
+        }
+        if(bandNumber < 0)
+        {
+            main_window->Log_Message("[raster_grid_value] Error bandNumber < 0. Returning -9999.");
+            return -9999;
+        }
 
-        //GDALDataset* layer;
-        //GDALAllRegister();
-        //layer = (GDALDataset*)GDALOpen(layerName, GA_ReadOnly);
         GDALRasterBand *band = layer->GetRasterBand(bandNumber); //starts with 1
+        if(band == nullptr)
+        {
+            main_window->Log_Message("[raster_grid_value] band is null. Returning -9999.");
+            return -9999;
+        }
+
         GDALDataType type = band->GetRasterDataType();
         int size = GDALGetDataTypeSize(type) / 8;
+        if(size < 1)
+        {
+            main_window->Log_Message("[raster_grid_value] size < 1. Returning -9999.");
+            return -9999;
+        }
+
         void *data = CPLMalloc(size);
+        if(data == nullptr)
+        {
+            main_window->Log_Message("[raster_grid_value] data is null. Returning -9999.");
+            return -9999;
+        }
+
         int col = (int) floor( (x-ranges[0])/ranges[4] );
         int row = (int) floor( (ranges[3]-y)/ranges[5] );
 
-        if(att_debug_messages)
+        if(print_many_messages)
         {
             qDebug() << "col = " << col << "\n";
             qDebug() << "row = " << row << "\n";
+        }
+        if(col < 1)
+        {
+            main_window->Log_Message("[raster_grid_value] col < 1. Returning -9999.");
+            return -9999;
+        }
+        if(row < 1)
+        {
+            main_window->Log_Message("[raster_grid_value] row < 1. Returning -9999.");
+            return -9999;
         }
 
         //band->ReadBlock(col, row, data);
@@ -191,15 +234,15 @@ double raster_grid_value(GDALDataset* layer, int bandNumber, double x, double y,
         }
         else
         {
-            main_window->Log_Message("[raster_grid_value] Error while reading Raster. Return zero.");
-            return 0.0;
+            main_window->Log_Message("[raster_grid_value] Error while reading Raster. Return -9999.");
+            return -9999;
         }
 
     } catch (...) {
-        qDebug() << "Error: raster_grid_value is returning w/o error checking";
+        qDebug() << "Error: raster_grid_value is returning w/o error checking. Return -9999.";
+        return -9999;
     }
 
-    return 0.0;
 } 
 
 

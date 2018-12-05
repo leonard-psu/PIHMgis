@@ -10,6 +10,9 @@
 
 using namespace std;
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
 int simplify_shape(const char *shpFileName, const char *dbfFileName, const char *newshpFileName, const char *newdbfFileName, double tolerance)
 {
     if(print_debug_messages)
@@ -20,7 +23,18 @@ int simplify_shape(const char *shpFileName, const char *dbfFileName, const char 
         cout<<"Simplifying "<<shpFileName<<"...";
 
         SHPHandle shp = SHPOpen(shpFileName, "rb");
+        if(shp == nullptr)
+        {
+            main_window->Log_Message("[simplify_shape] Error shpFileName is NULL. Returning 20.");
+            return 20;
+        }
+
         DBFHandle dbf = DBFOpen(dbfFileName, "rb");
+        if(dbf == nullptr)
+        {
+            main_window->Log_Message("[simplify_shape] Error dbfFileName is NULL. Returning 20.");
+            return 20;
+        }
 
         if ( shp == nullptr || dbf == nullptr )
             return 20;
@@ -47,7 +61,17 @@ int simplify_shape(const char *shpFileName, const char *dbfFileName, const char 
         //cout<<"shpType= "<<shpType<<"\n";
 
         SHPHandle newshp = SHPCreate(newshpFileName, shpType);
+        if(newshp == nullptr)
+        {
+            main_window->Log_Message("[simplify_shape] Error newshpFileName is NULL. Returning 46.");
+            return 46;
+        }
         DBFHandle newdbf = DBFCreate(newdbfFileName);
+        if(newdbf == nullptr)
+        {
+            main_window->Log_Message("[simplify_shape] Error newdbfFileName is NULL. Returning 46.");
+            return 46;
+        }
 
         if ( newshp == nullptr || newdbf == nullptr )
             return 46;

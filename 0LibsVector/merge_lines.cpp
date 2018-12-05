@@ -7,6 +7,9 @@
 
 using namespace std;
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
 int merge_lines(const char** shpFileNames, const char** dbfFileNames, int fileCount, const char *newshpFileName, const char *newdbfFileName)
 {
     if(print_debug_messages)
@@ -18,7 +21,17 @@ int merge_lines(const char** shpFileNames, const char** dbfFileNames, int fileCo
         SHPObject *obj;
 
         SHPHandle newshp = SHPCreate(newshpFileName, SHPT_ARC);
+        if(newshp == nullptr)
+        {
+            main_window->Log_Message("[merge_lines] Error newshpFileName is NULL. Returning 20.");
+            return 20;
+        }
         DBFHandle newdbf = DBFCreate(newdbfFileName);
+        if(newdbf == nullptr)
+        {
+            main_window->Log_Message("[merge_lines] Error newdbfFileName is NULL. Returning 20.");
+            return 20;
+        }
 
         if ( newshp == nullptr || newdbf == nullptr )
             return 20;
@@ -34,7 +47,18 @@ int merge_lines(const char** shpFileNames, const char** dbfFileNames, int fileCo
         {
             std::cout<<"\n-->"<<shpFileNames[i];
             SHPHandle shp = SHPOpen(shpFileNames[i], "rb");
+            if(shp == nullptr)
+            {
+                main_window->Log_Message("[merge_lines] Error shpFileName is NULL. Returning 36.");
+                return 36;
+            }
+
             DBFHandle dbf = DBFOpen(dbfFileNames[i], "rb");
+            if(dbf == nullptr)
+            {
+                main_window->Log_Message("[merge_lines] Error dbfFileNames is NULL. Returning 36.");
+                return 36;
+            }
 
             if ( shp == nullptr || dbf == nullptr )
                 return 36;

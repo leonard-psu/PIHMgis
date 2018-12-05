@@ -26,7 +26,8 @@ SHPObject *obj;
 int Att; 
 int recordNum;
 
-
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
 
 // Segments the rivers 
 int stream_shape(char *rivFile, char *fdrFile, char *rivShpFile, char *rivDbfFile)
@@ -49,21 +50,27 @@ int stream_shape(char *rivFile, char *fdrFile, char *rivShpFile, char *rivDbfFil
 
         shp = SHPCreate(rivShpFile, SHPT_ARC);
         if (shp == nullptr)
+        {
+            main_window->Log_Message("[stream_shape] Error rivShpFile is NULL. Returning 43.");
             return 43;
+        }
+
         dbf = DBFCreate(rivDbfFile);
         if (dbf == nullptr)
+        {
+            main_window->Log_Message("[stream_shape] Error rivDbfFile is NULL. Returning 44.");
             return 44;
+        }
+
         Att = DBFAddField(dbf, "SegNum", FTInteger, 5, 0);
-
         if ( Att == -1 )
+        {
+            main_window->Log_Message("[stream_shape] Error DBFAddField is NULL. Returning 46.");
             return 46;
+        }
 
-
-        //err1=gridread(fdrFile,(void ***)&dir,RPSHRDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
         err1=gridread(fdrFile,(void ***)&dir,RPSHRDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
-        //printf("%d %d %d %d\n",nx, ny, dir[1][2], dir[5][1]);
         err2=gridread(rivFile,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
-        //printf("%d %d %f %f\n",nx, ny, elev[4][2], elev[5][2]);
         err3=gridread(rivFile,(void ***)&slope,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
         printf("%d %d %f %f\n",nx, ny, slope[4][2], slope[2][5]); //getchar(); getchar();
 

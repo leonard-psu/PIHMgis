@@ -9,6 +9,9 @@
 
 using namespace std;
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
 int tin_shape(const char* eleFileName, const char* nodeFileName, const char* shpFileName, const char*dbfFileName, QString *tempLogString)
 {
     if(print_debug_messages)
@@ -65,7 +68,12 @@ int tin_shape(const char* eleFileName, const char* nodeFileName, const char* shp
         //Creates .shp and .shx files
         tempLogString->append(QObject::tr("Writing SHP File ... <br>"));
 
-        SHPHandle newShp=SHPCreate(shpFileName, SHPT_POLYGON);
+        SHPHandle newShp = SHPCreate(shpFileName, SHPT_POLYGON);
+        if(newShp == nullptr)
+        {
+            main_window->Log_Message("[tin_shape] Error shpFileName is NULL. Returning 60.");
+            return 60;
+        }
         if ( newShp == nullptr )
             return 60;
 
@@ -105,7 +113,10 @@ int tin_shape(const char* eleFileName, const char* nodeFileName, const char* shp
 
         DBFHandle newDbf = DBFCreate(dbfFileName);
         if ( newDbf == nullptr )
+        {
+            main_window->Log_Message("[tin_shape] Error dbfFileName is NULL. Returning 88.");
             return 88;
+        }
 
         temp = DBFAddField(newDbf, "Ele_ID", FTInteger, 9, 0);
         if ( temp == -1 )

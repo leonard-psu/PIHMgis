@@ -1,6 +1,7 @@
 #ifndef PIHMGISDIALOG_H
 #define PIHMGISDIALOG_H
 
+#include <QMainWindow>
 #include <QWidget>
 #include <QString>
 #include <QDir>
@@ -9,7 +10,7 @@ namespace Ui {
 class PIHMgisDialog;
 }
 
-class PIHMgisDialog : public QWidget
+class PIHMgisDialog : public QMainWindow
 {
     Q_OBJECT
 
@@ -108,13 +109,12 @@ private slots:
 
     void on_pushButton_PickWorkspace_clicked();
 
-    void on_pushButtonFinished_clicked();
-
     void on_pushButtonPIHMgisProjectInspect_clicked();
 
     void on_pushButtonClearLog_clicked();
 
 private:
+    void Setup_Menu();
     void Clear_Log();
     void Log_Error_Message(QString message);
 
@@ -128,8 +128,26 @@ private:
 
     int check_pihmgis_project_exists(QString folder);
 
+
     Ui::PIHMgisDialog *ui;
     QString LogsString;
+
+    //File menu
+    QAction *mnu_quit;
+    void menu_quit();
+
+    //Log menu
+    void menu_debug_messages();
+    void menu_log_messages();
+    void menu_log_many();
+
+    QAction *mnu_debug;     //static bool print_debug_messages = false;  //Print to console window
+    QAction *mnu_log_debug; //static bool print_log_messages = true;     //Print to widget log window (Only important messages)
+    QAction *mnu_log_many;  //static bool print_many_messages = false;
+
+    //Help menu
+    QAction *mnu_help;
+    void menu_help();
 
 };
 

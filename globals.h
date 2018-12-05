@@ -8,6 +8,7 @@
 
 static bool print_debug_messages = false;  //Print to console window
 static bool print_log_messages = true;     //Print to widget log window (Only important messages)
+static bool print_many_messages = false;   //Not a fan of doing this, but outputs too many values to be helpful. Once in a while it may be.
 
 static float epsilon = 0.000001f;
 

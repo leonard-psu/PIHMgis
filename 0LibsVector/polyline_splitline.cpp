@@ -7,6 +7,9 @@
 
 using namespace std;
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
 int polyline_splitlines(const char* shpFileName, const char* dbfFileName, const char* newshpFileName, const char* newdbfFileName)
 {
     if(print_debug_messages)
@@ -15,7 +18,18 @@ int polyline_splitlines(const char* shpFileName, const char* dbfFileName, const 
     try {
 
         SHPHandle shp = SHPOpen(shpFileName, "rb");
+        if(shp == nullptr)
+        {
+            main_window->Log_Message("[polyline_splitlines] Error shpFileName is NULL. Returning 14.");
+            return 14;
+        }
+
         DBFHandle dbf = DBFOpen(dbfFileName, "rb");
+        if(dbf == nullptr)
+        {
+            main_window->Log_Message("[polyline_splitlines] Error dbfFileName is NULL. Returning 14.");
+            return 14;
+        }
 
         if ( shp == nullptr || dbf == nullptr )
             return 14;
@@ -32,7 +46,17 @@ int polyline_splitlines(const char* shpFileName, const char* dbfFileName, const 
         }
 
         SHPHandle newshp = SHPCreate(newshpFileName, SHPT_ARC);
+        if(newshp == nullptr)
+        {
+            main_window->Log_Message("[polyline_splitlines] Error newshpFileName is NULL. Returning 30.");
+            return 30;
+        }
         DBFHandle newdbf = DBFCreate(newdbfFileName);
+        if(newdbf == nullptr)
+        {
+            main_window->Log_Message("[polyline_splitlines] Error newdbfFileName is NULL. Returning 30.");
+            return 30;
+        }
 
         if ( newshp == nullptr || newdbf == nullptr )
             return 30;

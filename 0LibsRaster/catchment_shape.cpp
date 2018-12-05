@@ -20,6 +20,9 @@ struct structure{
 
 typedef struct structure LINE;
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
 
 void sortLine(LINE *lines, int);
 
@@ -53,7 +56,18 @@ int catchment_shape(char *catFile, char *nodeFile, char *shpFile, char *dbfFile)
         SHPObject *tempobj;
 
         SHPHandle shp = SHPCreate(shpFile, SHPT_POLYGON);
+        if(shp == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error shpFile is NULL. Returning 51.");
+            return 51;
+        }
         DBFHandle dbf = DBFCreate(dbfFile);
+        if(dbf == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error dbfFile is NULL. Returning 51.");
+            return 51;
+        }
+
         if ( shp == nullptr || dbf == nullptr )
         {
             qDebug() << "ERROR: Start catchment_shape, BAD shp or dbf";
@@ -72,8 +86,19 @@ int catchment_shape(char *catFile, char *nodeFile, char *shpFile, char *dbfFile)
         TempString = user_pihmgis_root_folder + user_pihmgis_project_folder + "/temp.shp";
 
         SHPHandle tempshp = SHPCreate(qPrintable(TempString), SHPT_ARC);
+        if(tempshp == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error tempshp is NULL. Returning 65.");
+            return 65;
+        }
         TempString.replace(".shp",".dbf");
         DBFHandle tempdbf = DBFCreate(qPrintable(TempString));
+        if(tempdbf == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error tempdbf is NULL. Returning 65.");
+            return 65;
+        }
+
         if ( tempshp == nullptr || tempdbf == nullptr )
         {
             qDebug() << "ERROR: With temp shp and DBF file";

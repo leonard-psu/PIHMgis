@@ -8,8 +8,10 @@
 #include "./../0LibsShape/shapefil.h"
 #include "globals.h"
 
-
 using namespace std;
+
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
 
 int compareSlope(Lines *a, Lines *b)
 {
@@ -115,8 +117,19 @@ int dissolve(const char* shpFileName, const char* dbfFileName, const char *newsh
     try {
         int recordCount = 0;
 
-        SHPHandle shp = SHPOpen(shpFileName, "rb");
+        SHPHandle shp = SHPOpen(shpFileName, "rb");    
+        if(shp == nullptr)
+        {
+            main_window->Log_Message("[dissolve] Error shpFileName is NULL. Returning 79.");
+            return 79;
+        }
+
         DBFHandle dbf = DBFOpen(dbfFileName, "rb");
+        if(dbf == nullptr)
+        {
+            main_window->Log_Message("[dissolve] Error dbfFileName is NULL. Returning 79.");
+            return 79;
+        }
 
         if ( shp == nullptr || dbf == nullptr )
             return 79;
@@ -131,19 +144,24 @@ int dissolve(const char* shpFileName, const char* dbfFileName, const char *newsh
         }
 
         SHPHandle newshp = SHPCreate(newshpFileName, SHPT_POLYGON);
+        if(newshp == nullptr)
+        {
+            main_window->Log_Message("[dissolve] Error newshpFileName is NULL. Returning 94.");
+            return 94;
+        }
         DBFHandle newdbf = DBFCreate(newdbfFileName);
+        if(newdbf == nullptr)
+        {
+            main_window->Log_Message("[dissolve] Error newdbfFileName is NULL. Returning 94.");
+            return 94;
+        }
 
         if ( newshp == nullptr || newdbf == nullptr )
             return 94;
 
-        //SHPHandle ptshp = SHPCreate("C:\\Documents and Settings\\gxb913\\Desktop\\PolygonToPolyLine\\pt.shp", SHPT_POINT);
-        //DBFHandle ptdbf = DBFCreate("C:\\Documents and Settings\\gxb913\\Desktop\\PolygonToPolyLine\\pt.dbf");
-        //int pt = DBFAddField(ptdbf, "Point", FTInteger, 5, 0);
-
         int PolyID  = DBFAddField(newdbf,  "PolyID", FTInteger, 5, 0);
         if ( PolyID == -1 )
             return 97;
-        //int Right = DBFAddField(newdbf, "RightID", FTInteger, 5, 0);
 
         recordCount = DBFGetRecordCount(dbf);
 

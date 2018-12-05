@@ -13,6 +13,9 @@
 
 using namespace std;
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
 //#define dist(x1,y1,x2,y2) sqrt(pow((x1-x2),2) + pow((y1-y2),2))  
 #define dist(x1,y1,x2,y2) fabs(x1-x2)+fabs(y1-y2)  
 
@@ -130,10 +133,31 @@ int polygon_polylines(const char* shpFileName, const char* dbfFileName, const ch
 
         int recordCount = 0;
         SHPHandle shp = SHPOpen(shpFileName, "rb");
+        if(shp == nullptr)
+        {
+            main_window->Log_Message("[polygon_polylines] Error shpFileName is NULL. Returning 109.");
+            return 109;
+        }
+
         DBFHandle dbf = DBFOpen(dbfFileName, "rb");
+        if(dbf == nullptr)
+        {
+            main_window->Log_Message("[polygon_polylines] Error dbfFileName is NULL. Returning 109.");
+            return 109;
+        }
 
         SHPHandle newshp = SHPCreate(newshpFileName, SHPT_ARC);
+        if(newshp == nullptr)
+        {
+            main_window->Log_Message("[polygon_polylines] Error newshpFileName is NULL. Returning 111.");
+            return 111;
+        }
         DBFHandle newdbf = DBFCreate(newdbfFileName);
+        if(newdbf == nullptr)
+        {
+            main_window->Log_Message("[polygon_polylines] Error newdbfFileName is NULL. Returning 111.");
+            return 111;
+        }
 
         if ( shp == nullptr || dbf == nullptr )
             return 109;

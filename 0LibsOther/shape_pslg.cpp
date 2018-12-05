@@ -12,6 +12,9 @@
 
 using namespace std;
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
 struct Point{
     double x,y;
     int serialNum;
@@ -53,11 +56,14 @@ int shape_pslg(const char* constFileName, const char* outputFileName, QString *t
         if(print_debug_messages)
             qDebug() << "INFO: Start shape_pslg";
 
-        //tempLogString->append("Running Read Topology ... <br>");
-
-        //SHPInfo* currentHandle = SHPOpen("/root/Desktop/testData/q20.shp","r+");
-        cout<<"File: "<<constFileName<<"\n";
         SHPHandle thisObj = SHPOpen(constFileName,"r+");
+
+        if(thisObj == nullptr)
+        {
+            main_window->Log_Message("[shape_pslg] Error constFileName is NULL. Returning 53.");
+            return 53;
+        }
+
         if(thisObj == nullptr)
             return 53;
 

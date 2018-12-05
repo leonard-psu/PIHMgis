@@ -12,6 +12,9 @@
 
 using namespace std;
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Important function to create PIHM mesh file
 // This function has not been tested rigously.
@@ -82,16 +85,30 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
             MeshDataFileTextStream<<index<<"\t"<<node0<<"\t"<<node1<<"\t"<<node2<<"\t"<<(nabr0<0?0:nabr0)<<"\t"<<(nabr1<0?0:nabr1)<<"\t"<<(nabr2<0?0:nabr2)<<"\n";
         }
 
+        bool error_found = false;
         double X, Y, Zmin, Zmax;
-        for(int i=0; i<NumNode; i++){
+        for(int i=0; i<NumNode; i++)
+        {
             NodeFileTextStream>>index; NodeFileTextStream>>X; NodeFileTextStream>>Y; NodeFileTextStream>>temp;
             //Zmin = getRasterValue(bElev, 1, X, Y, bRanges);
             Zmax = raster_grid_value(SurfElev, 1, X, Y, sRanges);
+            if(Zmax == -9999)
+            {
+                error_found = true;
+            }
 
             if( CheckBoxSubSurface == false )
+            {
                 Zmin = raster_grid_value(SubSurfElev, 1, X, Y, bRanges);
+                if(Zmin == -9999)
+                {
+                    error_found = true;
+                }
+            }
             else
+            {
                 Zmin = Zmax-(SubsurfaceFileName).toDouble();
+            }
 
             MeshDataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
             MeshDataFileTextStream<<index<<"\t";
@@ -118,9 +135,10 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
         NeighFile.close();
         MeshDataFile.close();
 
-        ///////////////////////////////////////////////////////////////////////
-        //ADDING INTERPOLATION OF ELEVATION FOR NODE INSERTED ON RIVER SEGMENTS
-        ///////////////////////////////////////////////////////////////////////
+        if(error_found)
+        {
+            main_window->Log_Message("[mesh_data_file] Invalid mesh file created!");
+        }
 
     } catch (...) {
 
