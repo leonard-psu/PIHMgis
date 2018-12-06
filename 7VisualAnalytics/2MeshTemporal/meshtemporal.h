@@ -14,7 +14,7 @@ class MeshTemporal : public QDialog
     Q_OBJECT
 
 public:
-    explicit MeshTemporal(QWidget *parent = 0, QString filename_open_project = "");
+    explicit MeshTemporal(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~MeshTemporal();
 
     QString LogsString;

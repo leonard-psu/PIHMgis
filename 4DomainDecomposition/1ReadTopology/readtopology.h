@@ -12,11 +12,9 @@ class ReadTopology : public QDialog
     Q_OBJECT
 
 public:
-    explicit ReadTopology(QWidget *parent = 0, QString filename_open_project = "");
+    explicit ReadTopology(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~ReadTopology();
 
-    QString LogsString;
-    //QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonMerge_clicked();
@@ -35,18 +33,19 @@ private slots:
 private:
 
     void Clear_Log();
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Load_Project_Settings();
 
     bool Check_File_Valid(QString file);
-
     bool Check_MergeVector_Input(QString file);
-
     bool Check_PSLG_Output(QString file, bool message);
 
     Ui::ReadTopology *ui;
 
     QString filename_open_project;
+    QString LogsString;
 
 };
 

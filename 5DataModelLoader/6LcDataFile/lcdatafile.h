@@ -12,10 +12,8 @@ class LcDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit LcDataFile(QWidget *parent = 0, QString filename_open_project = "");
+    explicit LcDataFile(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~LcDataFile();
-
-    QString LogsString;
 
 private slots:
     void on_pushButtonLcClassFile_clicked();
@@ -39,6 +37,7 @@ private:
     void Clear_Log();
     void Log_Warning_Message(QString message);
     void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Load_Project_Settings();
 
@@ -48,6 +47,7 @@ private:
 
     Ui::LcDataFile *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

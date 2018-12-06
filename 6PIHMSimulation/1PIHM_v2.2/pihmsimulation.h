@@ -14,7 +14,7 @@ class PIHMSimulation : public QDialog
     Q_OBJECT
 
 public:
-    explicit PIHMSimulation(QWidget *parent = 0, QString filename_open_project = "");
+    explicit PIHMSimulation(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~PIHMSimulation();
 
 

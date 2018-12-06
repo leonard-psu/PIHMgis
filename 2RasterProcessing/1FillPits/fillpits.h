@@ -14,7 +14,6 @@ class FillPits : public QDialog
 public:
     explicit FillPits(QWidget *parent = 0, QString filename_open_project = "");
     ~FillPits();
-    QString LogsString;
 
 
 private slots:
@@ -34,15 +33,17 @@ private slots:
 private:
 
     bool Check_DEM_Input(QString dem);
-
     bool Check_Fillpit_Output(QString fillpits, bool message );
-
     void Clear_Log();
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Load_Project_Settings();
 
     Ui::FillPits *ui;
     QString filename_open_project;
+    QString LogsString;
+
 };
 
 #endif // FILLPITS_H

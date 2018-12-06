@@ -12,7 +12,6 @@
 #include "0LibsOther/interpolate_river_nodes_elev.h"
 #include "globals.h"
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MeshDataFile Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -33,9 +32,7 @@ MeshDataFile::MeshDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -186,7 +183,6 @@ bool MeshDataFile::Check_ElementFile_Input(QString file){
             result = false;
         }
 
-
     } catch (...) {
         qDebug() << "Error: Check_ElementFile_Input is returning w/o checking";
         result = false;
@@ -221,7 +217,6 @@ bool MeshDataFile::Check_NodeFile_Input(QString file){
             result = false;
         }
 
-
     } catch (...) {
         qDebug() << "Error: Check_NodeFile_Input is returning w/o checking";
         result = false;
@@ -252,7 +247,6 @@ bool MeshDataFile::Check_NeighbourFile_Input(QString file){
         {
             ui->lineEditNeighbourFile->setStyleSheet("color: red;");
             ui->lineEditNeighbourFile->setText(file);
-
             result = false;
         }
 
@@ -286,7 +280,6 @@ bool MeshDataFile::Check_RiverFile_Input(QString file){
         {
             ui->lineEditRiverFile->setStyleSheet("color: red;");
             ui->lineEditRiverFile->setText(file);
-
             result = false;
         }
 
@@ -320,7 +313,6 @@ bool MeshDataFile::Check_SurfaceElevationFile_Input(QString file){
         {
             ui->lineEditSurfaceElevationFile->setStyleSheet("color: red;");
             ui->lineEditSurfaceElevationFile->setText(file);
-
             result = false;
         }
 
@@ -355,7 +347,6 @@ bool MeshDataFile::Check_SubsurfaceThickness_Input(QString file){
         {
             ui->lineEditSubsurfaceThickness->setStyleSheet("color: red;");
             ui->lineEditSubsurfaceThickness->setText(file);
-
             result = false;
         }
 
@@ -384,9 +375,7 @@ bool MeshDataFile::Check_MeshData_Output(QString file, bool color_and_message_if
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: MeshData output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("<span style=\"color:#FF0000\">Warning: MeshData output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
             }
 
             ui->lineEditMeshDataFile->setStyleSheet("color: red;");
@@ -425,6 +414,46 @@ void MeshDataFile::Clear_Log()
 
     } catch (...) {
         qDebug() << "Error: MeshDataFile::Clear_Log() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void MeshDataFile::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void MeshDataFile::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
     }
 }
 
@@ -703,36 +732,28 @@ void MeshDataFile::on_pushButtonRun_clicked()
         bool checked_element = Check_ElementFile_Input(input_Element_filename);
         if(!checked_element)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Element (.1.ele) Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Element (.1.ele) Input File Missing </span>")+tr("<br>"));
             return;
         }
 
         bool checked_node = Check_NodeFile_Input(input_Node_filename);
         if(!checked_node)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Node (.1.node) Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Node (.1.node) Input File Missing </span>")+tr("<br>"));
             return;
         }
 
         bool checked_neighbour = Check_NeighbourFile_Input(input_Neighbour_filename);
         if(!checked_neighbour)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Neighbor (.1.Neigh) Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Neighbor (.1.Neigh) Input File Missing </span>")+tr("<br>"));
             return;
         }
 
         bool checked_river = Check_RiverFile_Input(input_River_filename);
         if(!checked_river)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: River Split ShapeFile (*.shp) Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: River Split ShapeFile (*.shp) Input File Missing </span>")+tr("<br>"));
             return;
         }
 
@@ -745,9 +766,7 @@ void MeshDataFile::on_pushButtonRun_clicked()
             bool checked_surface = Check_SurfaceElevationFile_Input(input_SurfaceElevation_filename);
             if(!checked_surface)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Surface Elevation Raster (*.adf *.asc) Input File Missing </span>")+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Surface Elevation Raster (*.adf *.asc) Input File Missing </span>")+tr("<br>"));
                 return;
             }
         }
@@ -768,55 +787,43 @@ void MeshDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_Element_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_Element_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_Element_filename + tr("<br>"));
             return;
         }
         if ( ! CheckFileAccess(input_Node_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_Node_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_Node_filename + tr("<br>"));
             return;
         }
         if ( ! CheckFileAccess(input_Neighbour_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_Neighbour_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_Neighbour_filename + tr("<br>"));
             return;
         }
         if ( ! CheckFileAccess(input_River_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_River_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_River_filename + tr("<br>"));
             return;
         }
         if(checkBoxSubsurfaceThickness == 0)
         {
             if ( ! CheckFileAccess(input_SurfaceElevation_filename, "ReadOnly") )
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_SurfaceElevation_filename + tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_SurfaceElevation_filename + tr("<br>"));
                 return;
             }
         }
 
         if ( ! CheckFileAccess(output_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_filename + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_filename + tr("<br>"));
             return;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Mesh Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Mesh Data File ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Mesh Data File ... <br>");
 
         int ErrorMesh = mesh_data_file(input_SurfaceElevation_filename,
                                        input_Subsurface_value,
@@ -827,10 +834,8 @@ void MeshDataFile::on_pushButtonRun_clicked()
                                        checkBoxSubsurfaceThickness);
         if( ErrorMesh != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Mesh Data File Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE MESH: ... </span>")+QString::number(ErrorMesh)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Mesh Data File Processing Failed ... </span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE MESH: ... </span>")+QString::number(ErrorMesh)+tr("<br>"));
             return;
         }
 
@@ -870,10 +875,8 @@ void MeshDataFile::on_pushButtonRun_clicked()
 
         if( ErrorInterp != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: River Data File Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE INTERP: ... </span>")+QString::number(ErrorInterp)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: River Data File Processing Failed ... </span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE INTERP: ... </span>")+QString::number(ErrorInterp)+tr("<br>"));
             return;
         }
 
@@ -885,8 +888,7 @@ void MeshDataFile::on_pushButtonRun_clicked()
         ProjectID = output_filename;
         ProjectID = ProjectID.right( ProjectID.length() - ProjectID.lastIndexOf("/") - 1);
         ProjectID.chop(5);
-        qDebug() << "Project ID = " << ProjectID << "\n";
-
+        //qDebug() << "Project ID = " << ProjectID << "\n";
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Project file
@@ -896,15 +898,12 @@ void MeshDataFile::on_pushButtonRun_clicked()
         WriteModuleLine(filename_open_project, ProjectIOStringList);
         ProjectIOStringList.clear();
 
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        LogsString.append(tr("<br><b>Mesh Data File Processing Completed.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<br><b>Mesh Data File Processing Completed.</b>")+tr("<br>"));
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

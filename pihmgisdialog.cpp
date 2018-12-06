@@ -60,9 +60,9 @@
 
 #include "globals.h"
 
-QString user_pihmgis_root_folder = "Please pick a workspace folder."; //QDir::homePath(); //Default for now, need to customize based on OS
-QString user_pihmgis_project_folder = "/.PIHMgis";        //Default for now, need to customize
-QString user_pihmgis_project_name = "/OpenProject.txt";   //Note use of forward characters
+QString user_pihmgis_root_folder = "Please pick a workspace folder.";   //QDir::homePath(); //Default for now, need to customize based on OS
+QString user_pihmgis_project_folder = "/.PIHMgis";                      //Default for now, need to customize
+QString user_pihmgis_project_name = "/OpenProject.txt";                 //Note use of forward characters
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,6 +122,36 @@ void PIHMgisDialog::Setup_Menu()
 
     try {
 
+        statusBar();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// File Menu
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        mnu_pick = new QAction("&Pick", this);
+        mnu_pick->setStatusTip(tr("Pick PIHMgis Workspace/Folder"));
+        mnu_pick->setToolTip(tr("Pick PIHMgis Workspace/Folder"));
+        mnu_pick->setShortcut(tr("CTRL+P"));
+        connect(mnu_pick, &QAction::triggered, this, &PIHMgisDialog::menu_pick_workspace);
+
+        mnu_new = new QAction("&New", this);
+        mnu_new->setStatusTip(tr("New"));
+        mnu_new->setShortcut(tr("CTRL+N"));
+        mnu_new->setEnabled(false);
+        connect(mnu_new, &QAction::triggered, this, &PIHMgisDialog::menu_new);
+
+        mnu_import = new QAction("&Import", this);
+        mnu_import->setStatusTip(tr("Import"));
+        mnu_import->setShortcut(tr("CTRL+I"));
+        mnu_import->setEnabled(false);
+        connect(mnu_import, &QAction::triggered, this, &PIHMgisDialog::menu_import);
+
+        mnu_close = new QAction("&Close", this);
+        mnu_close->setStatusTip(tr("Close"));
+        mnu_close->setShortcut(tr("CTRL+C"));
+        mnu_close->setEnabled(false);
+        connect(mnu_close, &QAction::triggered, this, &PIHMgisDialog::menu_close);
+
         mnu_quit = new QAction("&Quit", this);
         mnu_quit->setStatusTip(tr("Quit PIHMgis Application"));
         mnu_quit->setShortcut(tr("CTRL+Q"));
@@ -129,16 +159,27 @@ void PIHMgisDialog::Setup_Menu()
 
         QMenu *file;
         file = menuBar()->addMenu("&File");
+        file->addAction(mnu_pick);
+        file->addSeparator();
+        file->addAction(mnu_new);
+        file->addAction(mnu_import);
+        file->addAction(mnu_close);
+        file->addSeparator();
         file->addAction(mnu_quit);
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// Log Menu
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        mnu_debug = new QAction("&Debug", this);
+        mnu_debug = new QAction("&Debug Console", this);
         mnu_debug->setShortcut(tr("CTRL+D"));
+        mnu_debug->setStatusTip(tr("Messages displayed to console window"));
         mnu_debug->setCheckable(true);
         mnu_debug->setChecked(false);
         connect(mnu_debug, &QAction::triggered, this, &PIHMgisDialog::menu_debug_messages);
 
-        mnu_log_debug = new QAction("&Widget Log", this);
+        mnu_log_debug = new QAction("&Important Only Log", this);
+        mnu_log_debug->setStatusTip(tr("Important Messages displayed to application window"));
         mnu_log_debug->setCheckable(true);
         mnu_log_debug->setChecked(true);
         connect(mnu_log_debug, &QAction::triggered, this, &PIHMgisDialog::menu_log_messages);
@@ -148,11 +189,34 @@ void PIHMgisDialog::Setup_Menu()
         mnu_log_many->setChecked(false);
         connect(mnu_log_many, &QAction::triggered, this, &PIHMgisDialog::menu_log_many);
 
+        mnu_log_redirect = new QAction("Redirect Debug to Important Log", this);
+        mnu_log_redirect->setCheckable(true);
+        mnu_log_redirect->setChecked(true);
+        mnu_log_redirect->setStatusTip(tr("Use this to save all debug console messages"));
+        connect(mnu_log_redirect, &QAction::triggered, this, &PIHMgisDialog::menu_redirect_messages);
+
+        mnu_clear_log = new QAction("&Clear Important Log", this);
+        mnu_clear_log->setStatusTip(tr("Clear Important Messages displayed in application window"));
+        connect(mnu_clear_log, &QAction::triggered, this, &PIHMgisDialog::menu_clear_messages);
+
+        mnu_save_log = new QAction("&Save Important Log", this);
+        mnu_save_log->setStatusTip(tr("Save Important Log to text file"));
+        connect(mnu_save_log, &QAction::triggered, this, &PIHMgisDialog::menu_save_log);
+
         QMenu *log;
         log = menuBar()->addMenu("&Log");
         log->addAction(mnu_debug);
         log->addAction(mnu_log_debug);
         log->addAction(mnu_log_many);
+        log->addSeparator();
+        log->addAction(mnu_log_redirect);
+        log->addAction(mnu_clear_log);
+        log->addSeparator();
+        log->addAction(mnu_save_log);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// Help Menu
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         mnu_help= new QAction("&Contact", this);
         connect(mnu_help, &QAction::triggered, this, &PIHMgisDialog::menu_help);
@@ -169,7 +233,87 @@ void PIHMgisDialog::Setup_Menu()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Menu Item Action
+// Pick Workspace Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_pick_workspace()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_pick_workspace";
+
+    try
+    {
+        if(mnu_quit != nullptr)
+        {
+            PickWorkspace();
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_pick_workspace is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Pick Workspace Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_new()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_new_project";
+
+    try
+    {
+        if(mnu_new != nullptr)
+        {
+            New_Project();
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_new_project is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Import Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_import()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_import";
+
+    try
+    {
+        if(mnu_new != nullptr)
+        {
+            Import_Project();
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_import is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_close()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_close";
+
+    try
+    {
+        if(mnu_close != nullptr)
+        {
+            Close_Project();
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_close is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Quit Menu Item Action
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::menu_quit()
 {
@@ -190,7 +334,7 @@ void PIHMgisDialog::menu_quit()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Menu Item Action
+// Display console messages  Menu Item Action
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::menu_debug_messages()
 {
@@ -217,7 +361,7 @@ void PIHMgisDialog::menu_debug_messages()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Menu Item Action
+// Display Important messages Menu Item Action
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::menu_log_messages()
 {
@@ -244,7 +388,7 @@ void PIHMgisDialog::menu_log_messages()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Menu Item Action
+// Log Many Messages (from for loops etc) Menu Item Action
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::menu_log_many()
 {
@@ -267,6 +411,91 @@ void PIHMgisDialog::menu_log_many()
 
     } catch (...) {
         qDebug() << "Error: menu_log_many is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Redict log Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_redirect_messages()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_redirect_messages";
+
+    try
+    {
+        if(mnu_log_redirect != nullptr)
+        {
+            if (mnu_log_redirect->isChecked())
+            {
+                redirect_debug_messages_to_log = true;
+            }
+            else
+            {
+                redirect_debug_messages_to_log = false;
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_redirect_messages is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Clear log Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_clear_messages()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_clear_messages";
+
+    try
+    {
+        if(mnu_clear_log != nullptr)
+        {
+            Clear_Log();
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_clear_messages is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Save log Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_save_log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_save_log";
+
+    try
+    {
+        if(mnu_save_log != nullptr)
+        {
+            QString fileName = QFileDialog::getSaveFileName(this,tr("Save Log File"), "", tr("Log (*.txt);;All Files (*)"));
+            if (fileName.isEmpty())
+            {
+                //Do nothing
+                return;
+            }
+            else {
+                QFile file(fileName);
+                if (!file.open(QIODevice::WriteOnly))
+                {
+                    QMessageBox::information(this, tr("Unable to open file"),file.errorString());
+                    return;
+                }
+                QTextStream out(&file);
+                out << ui->textBrowserLogs->document()->toPlainText();
+                file.close();
+
+                Log_Message("Saved log message to :" + fileName);
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_save_log is returning w/o checking";
     }
 }
 
@@ -467,15 +696,82 @@ void PIHMgisDialog::set_defaults(QStringList DEFAULT_PARAM)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// New Project Button Click Event
+// Helper function to Set status of New Project Events (Button and Menu)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
+void PIHMgisDialog::set_New_Project_Status(bool status)
 {
     if(print_debug_messages)
-        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked";
+        qDebug() << "INFO: Start PIHMgisDialog::set_New_Project_Status";
 
     try {
+        ui->pushButtonPIHMgisProjectNew->setEnabled(status);
+        mnu_new->setEnabled(status);
+    } catch (...)
+    {
+        qDebug() << "Error: PIHMgisDialog::set_New_Project_Status is returning w/o checking";
+    }
+}
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to Set status of Close Project Events (Button and Menu)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::set_Close_Status(bool status)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::set_Close_Status";
+
+    try {
+        ui->pushButtonPIHMgisProjectClose->setEnabled(status);
+        mnu_close->setEnabled(status);
+    } catch (...)
+    {
+        qDebug() << "Error: PIHMgisDialog::set_Close_Status is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to Set status of Inspect Events (Button and Menu)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::set_Inspect_Status(bool status)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::set_Inspect_Status";
+
+    try {
+        ui->pushButtonPIHMgisProjectInspect->setEnabled(status);
+    } catch (...)
+    {
+        qDebug() << "Error: PIHMgisDialog::set_Inspect_Status is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to Set status of Import Events (Button and Menu)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::set_Import_Status(bool status)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::set_Import_Status";
+
+    try {
+        ui->pushButtonPIHMgisProjectImport->setEnabled(status);
+        mnu_import->setEnabled(status);
+    } catch (...)
+    {
+        qDebug() << "Error: PIHMgisDialog::set_Import_Status is returning w/o checking";
+    }
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// New Project
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::New_Project()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::new_project";
+
+    try {
         QString project_location = user_pihmgis_root_folder; // + user_pihmgis_project_folder;
         QString project_folder = ".PIHMgis";        //Default
         QString project_name = "OpenProject.txt";   //Default
@@ -494,10 +790,10 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
             //Check variables created by user
             if(newWfolder.length() < 1)
             {
-                ui->pushButtonPIHMgisProjectNew->setEnabled(false);
-                ui->pushButtonPIHMgisProjectClose->setEnabled(false);
-                ui->pushButtonPIHMgisProjectInspect->setEnabled(false);
-                ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+                set_New_Project_Status(false);
+                set_Close_Status(false);
+                set_Inspect_Status(false);
+                set_Import_Status(false);
                 enable_project_settings(false); //User needs to setup project
 
                 Log_Error_Message("Invalid workspace");
@@ -505,10 +801,11 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
             }
             if(newPrjFolder.length() < 1)
             {
-                ui->pushButtonPIHMgisProjectNew->setEnabled(false);
-                ui->pushButtonPIHMgisProjectClose->setEnabled(false);
-                ui->pushButtonPIHMgisProjectInspect->setEnabled(false);
-                ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+                set_New_Project_Status(false);
+                set_Close_Status(false);
+
+                set_Inspect_Status(false);
+                set_Import_Status(false);
                 enable_project_settings(false); //User needs to setup project
 
                 Log_Error_Message("Invalid project folder");
@@ -516,10 +813,11 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
             }
             if(newPrjName.length() < 1)
             {
-                ui->pushButtonPIHMgisProjectNew->setEnabled(false);
-                ui->pushButtonPIHMgisProjectClose->setEnabled(false);
-                ui->pushButtonPIHMgisProjectInspect->setEnabled(false);
-                ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+                set_New_Project_Status(false);
+                set_Close_Status(false);
+
+                set_Inspect_Status(false);
+                set_Import_Status(false);
                 enable_project_settings(false); //User needs to setup project
 
                 Log_Error_Message("Invalid project name");
@@ -527,10 +825,10 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
             }
 
             //Prevent user for using same settings
-            ui->pushButtonPIHMgisProjectNew->setEnabled(false);
-            ui->pushButtonPIHMgisProjectClose->setEnabled(true);
-            ui->pushButtonPIHMgisProjectInspect->setEnabled(false);
-            ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+            set_New_Project_Status(false);
+            set_Close_Status(true);
+            set_Inspect_Status(false);
+            set_Import_Status(false);
             enable_project_settings(true); //User needs to setup project
 
             //Update global variables. I suggest coming back here and add more checking
@@ -544,11 +842,22 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
             //Assume nothing was created and do nothing for now
         }
 
-        //        Log_Message(user_pihmgis_root_folder);
-        //        Log_Message(user_pihmgis_project_folder);
-        //        Log_Message(user_pihmgis_project_name);
+    } catch (...)
+    {
+        qDebug() << "Error: PIHMgisDialog::new_project is returning w/o checking";
+    }
+}
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// New Project Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked";
 
+    try {
+        New_Project();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectNew_clicked is returning w/o checking";
     }
@@ -596,6 +905,25 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectInspect_clicked()
 //}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Import
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::Import_Project()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::Import";
+
+    try {
+        ImportProject *ImportProjectDialog = new ImportProject(this);
+        ImportProjectDialog->setModal(true);
+        ImportProjectDialog->exec();
+
+
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::Import is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Import Project Button Click Event
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked()
@@ -604,10 +932,8 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked()
         qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked";
 
     try {
-        ImportProject *ImportProjectDialog = new ImportProject(this);
-        ImportProjectDialog->setModal(true);
-        ImportProjectDialog->exec();
 
+        Import_Project();
 
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked is returning w/o checking";
@@ -617,13 +943,12 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectImport_clicked()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Close Project (Different from closing main window) Button Click Event
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked()
+void PIHMgisDialog::Close_Project()
 {
     if(print_debug_messages)
-        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked";
+        qDebug() << "INFO: Start PIHMgisDialog::Close_Project";
 
     try {
-
         QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + user_pihmgis_project_name;
         CloseProject *CloseProjectDialog = new CloseProject(this, filename_open_project);
         CloseProjectDialog->setModal(true);
@@ -640,16 +965,34 @@ void PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked()
             //Reset user interface
             update_current_workspace_label();
 
-            ui->pushButtonPIHMgisProjectNew->setEnabled(false);
-            ui->pushButtonPIHMgisProjectClose->setEnabled(false);
-            ui->pushButtonPIHMgisProjectInspect->setEnabled(false);
-            ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+            set_New_Project_Status(false);
+            set_Close_Status(false);
+
+            set_Inspect_Status(false);
+            set_Import_Status(false);
 
             enable_project_settings(false); //User needs to setup project
             Log_Message("Closed Project");
 
         }
+    }
+    catch (...) {
+        qDebug() << "Error: PIHMgisDialog::Close_Project is returning w/o checking";
+    }
 
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Close Project (Different from closing main window) Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked";
+
+    try {
+
+        Close_Project();
 
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonPIHMgisProjectClose_clicked is returning w/o checking";
@@ -1564,16 +1907,15 @@ bool PIHMgisDialog::check_if_pihmgis_project_exists()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// PICK Workspace Button Click Event
+// PICK Workspace Button
 // This function looks for a project file in provided workspace. Then sets up GUI based on whether the project has started or not.
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
+void PIHMgisDialog::PickWorkspace()
 {
     if(print_debug_messages)
-        qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_PickWorkspace_clicked";
+        qDebug() << "INFO: Start PIHMgisDialog::PickWorkspace";
 
     try {
-
         Clear_Log();
 
         QString ProjectHome = QFileDialog::getExistingDirectory(this, "Specify Workspace/Home Folder", user_pihmgis_root_folder, 0);
@@ -1592,10 +1934,11 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                 //KEEP create_default_project_workspace();
                 update_current_workspace_label();
 
-                ui->pushButtonPIHMgisProjectNew->setEnabled(true);
-                ui->pushButtonPIHMgisProjectClose->setEnabled(false);  //No need
-                ui->pushButtonPIHMgisProjectInspect->setEnabled(true);
-                ui->pushButtonPIHMgisProjectImport->setEnabled(true);
+                set_New_Project_Status(true);
+                set_Close_Status(false);
+
+                set_Inspect_Status(true);
+                set_Import_Status(true);
 
                 enable_project_settings(false); //User needs to setup project
             }
@@ -1608,18 +1951,18 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                 if(prj)
                 {
                     //Dont want users overriding data
-                    ui->pushButtonPIHMgisProjectNew->setEnabled(false);
-                    ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+                    set_New_Project_Status(false);
+                    set_Import_Status(false);
                 }
                 else
                 {
                     //Assume user only has folders
-                    ui->pushButtonPIHMgisProjectNew->setEnabled(true);
-                    ui->pushButtonPIHMgisProjectImport->setEnabled(true);
+                    set_New_Project_Status(true);
+                    set_Import_Status(true);
                 }
 
-                ui->pushButtonPIHMgisProjectClose->setEnabled(true);
-                ui->pushButtonPIHMgisProjectInspect->setEnabled(true);
+                set_Close_Status(true);
+                set_Inspect_Status(true);
 
                 enable_project_settings(true);
                 Log_Message("Found PIHMgis workspace. All folders exist. ");
@@ -1643,10 +1986,11 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                     user_pihmgis_root_folder = ProjectHome;
                     update_current_workspace_label();
 
-                    ui->pushButtonPIHMgisProjectNew->setEnabled(true);
-                    ui->pushButtonPIHMgisProjectClose->setEnabled(false);
-                    ui->pushButtonPIHMgisProjectInspect->setEnabled(true);
-                    ui->pushButtonPIHMgisProjectImport->setEnabled(true);
+                    set_New_Project_Status(true);
+                    set_Close_Status(false);
+
+                    set_Inspect_Status(true);
+                    set_Import_Status(true);
 
                     enable_project_settings(false); //User needs to setup project
                     Log_Message("Invalid PIHMgis workspace. Check your file permissions or create new one.");
@@ -1661,18 +2005,18 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                     if(prj)
                     {
                         //Dont want users overriding data
-                        ui->pushButtonPIHMgisProjectNew->setEnabled(false);
-                        ui->pushButtonPIHMgisProjectImport->setEnabled(false);
+                        set_New_Project_Status(false);
+                        set_Import_Status(false);
                     }
                     else
                     {
                         //Assume user only has folders
-                        ui->pushButtonPIHMgisProjectNew->setEnabled(true);
-                        ui->pushButtonPIHMgisProjectImport->setEnabled(true);
+                        set_New_Project_Status(true);
+                        set_Import_Status(true);
                     }
 
-                    ui->pushButtonPIHMgisProjectClose->setEnabled(true);
-                    ui->pushButtonPIHMgisProjectInspect->setEnabled(true);
+                    set_Close_Status(true);
+                    set_Inspect_Status(true);
 
                     enable_project_settings(true);
                     Log_Message("Found PIHMgis workspace. All folders exist. ");
@@ -1686,6 +2030,24 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
                 }
             }
         }
+
+    } catch (...) {
+        qDebug() << "Error: PIHMgisDialog::PickWorkspace is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PICK Workspace Button Click Event
+// This function looks for a project file in provided workspace. Then sets up GUI based on whether the project has started or not.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start PIHMgisDialog::on_pushButton_PickWorkspace_clicked";
+
+    try {
+
+        PickWorkspace();
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
     }

@@ -13,10 +13,9 @@ class DissolvePolygons : public QDialog
     Q_OBJECT
 
 public:
-    explicit DissolvePolygons(QWidget *parent = 0, QString filename_open_project = "");
+    explicit DissolvePolygons(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~DissolvePolygons();
 
-    QString LogsString;
 
 private slots:
 
@@ -39,6 +38,8 @@ private slots:
 private:
 
     void Clear_Log();
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Check_File_Valid(QString file);
 
@@ -46,6 +47,7 @@ private:
 
     Ui::DissolvePolygons *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

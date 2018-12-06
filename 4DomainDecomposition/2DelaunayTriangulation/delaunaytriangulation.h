@@ -12,11 +12,8 @@ class DelaunayTriangulation : public QDialog
     Q_OBJECT
 
 public:
-    explicit DelaunayTriangulation(QWidget *parent = 0, QString filename_open_project = "");
+    explicit DelaunayTriangulation(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~DelaunayTriangulation();
-
-    QString LogsString;
-    //QStringList ProjectIOStringList;
 
 private slots:
     void on_pushButtonPSLG_clicked();
@@ -41,35 +38,30 @@ private slots:
 
     void pushButtonSetFocus();
 
-
     void on_pushButtonFIND_clicked(bool checked);
 
 private:
 
     void Clear_Log();
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Load_Project_Settings();
 
     bool Check_PSLG_Input(QString file);
-
     bool Check_Angle(QString file, bool message);
-
     bool Check_Area(QString file, bool message);
-
     bool Check_Others(QString file, bool message);
-
     bool Check_File_Valid(QString file);
+    bool Check_Triangle_Software_Input(QString file);
+    bool Check_TIN_Output(QString file, bool message);
 
     void on_pushButtonFIND_clicked();
-
-    bool Check_Triangle_Software_Input(QString file);
-
     void on_lineEditFIND_textChanged(const QString &arg1);
-
-    bool Check_TIN_Output(QString file, bool message);
 
     Ui::DelaunayTriangulation *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

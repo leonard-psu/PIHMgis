@@ -13,7 +13,7 @@ class RiverSpatial : public QDialog
     Q_OBJECT
 
 public:
-    explicit RiverSpatial(QWidget *parent = 0, QString filename_open_project = "");
+    explicit RiverSpatial(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~RiverSpatial();
 
     QString LogsString;

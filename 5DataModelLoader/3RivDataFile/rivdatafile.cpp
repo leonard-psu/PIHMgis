@@ -11,7 +11,6 @@
 #include "0LibsOther/riv_data_file.h"
 #include "globals.h"
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RivDataFile Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -32,9 +31,7 @@ RivDataFile::RivDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -83,7 +80,7 @@ bool RivDataFile::Load_Project_Settings()
 
         QStringList ModuleStringList;
 
-        // ** Data Model OUTPUT File Name
+        // Data Model OUTPUT File Name
         ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
@@ -124,15 +121,14 @@ bool RivDataFile::Load_Project_Settings()
         }
 
         ui->radioButtonZeroDepth->setChecked(true);
-        // ** End: Set Defaults
+        // End: Set Defaults
 
 
-        // ** Start: Fill Form If Module Has Been Run Previously
+        // Start: Fill Form If Module Has Been Run Previously
 
         ModuleStringList = ReadModuleLine(filename_open_project,tr("RivDataFile"));
         if ( ModuleStringList.length() > 0 )
         {
-
             Check_Element_Input(ModuleStringList.at(1));
             Check_Node_Input(ModuleStringList.at(2));
             Check_Neighbor_Input(ModuleStringList.at(3));
@@ -145,8 +141,7 @@ bool RivDataFile::Load_Project_Settings()
 
             Check_RiverData_Output(ModuleStringList.at(6), true);
         }
-        // ** End: Fill Form If Module Has Been Run Previously
-
+        // End: Fill Form If Module Has Been Run Previously
 
         pushButtonSetFocus();
 
@@ -258,7 +253,6 @@ bool RivDataFile::Check_Element_Input(QString file)
         {
             ui->lineEditElementFile->setStyleSheet("color: red;");
             ui->lineEditElementFile->setText(file);
-
             result = false;
         }
 
@@ -292,7 +286,6 @@ bool RivDataFile::Check_Node_Input(QString file)
         {
             ui->lineEditNodeFile->setStyleSheet("color: red;");
             ui->lineEditNodeFile->setText(file);
-
             result = false;
         }
 
@@ -326,7 +319,6 @@ bool RivDataFile::Check_Neighbor_Input(QString file)
         {
             ui->lineEditNeighbourFile->setStyleSheet("color: red;");
             ui->lineEditNeighbourFile->setText(file);
-
             result = false;
         }
 
@@ -360,7 +352,6 @@ bool RivDataFile::Check_RiverShape_Input(QString file)
         {
             ui->lineEditRiverFile->setStyleSheet("color: red;");
             ui->lineEditRiverFile->setText(file);
-
             result = false;
         }
 
@@ -389,9 +380,7 @@ bool RivDataFile::Check_RiverData_Output(QString file, bool color_and_message_if
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: RiverData output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Warning_Message(tr("<span style=\"color:#FF0000\">Warning: RiverData output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
             }
 
             ui->lineEditRivDataFile->setStyleSheet("color: red;");
@@ -402,7 +391,6 @@ bool RivDataFile::Check_RiverData_Output(QString file, bool color_and_message_if
         {
             ui->lineEditRivDataFile->setStyleSheet("color: black;");
             ui->lineEditRivDataFile->setText(file);
-
             result = false;
         }
 
@@ -433,7 +421,6 @@ void RivDataFile::on_pushButtonElementFile_clicked()
             Check_Element_Input(EleFileName);
             pushButtonSetFocus();
         }
-
 
     } catch (...) {
         qDebug() << "Error: RivDataFile::on_pushButtonElementFile_clicked() is returning w/o checking";
@@ -555,6 +542,12 @@ void RivDataFile::Log_Warning_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
     }
@@ -569,8 +562,34 @@ void RivDataFile::Log_Error_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void RivDataFile::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
     }
 }
 
@@ -674,9 +693,7 @@ void RivDataFile::on_pushButtonRun_clicked()
         // Running Riv Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        LogsString.append("Running Riv Data File ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Riv Data File ... <br>");
 
         QString RiverShpFileName, RiverDbfFileName, xRiverShpFileName, xRiverDbfFileName;
 
@@ -697,10 +714,8 @@ void RivDataFile::on_pushButtonRun_clicked()
                                       );
         if( ErrorRiv != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Riv Data File Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE RIV: ... </span>")+QString::number(ErrorRiv)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Riv Data File Processing Failed ... </span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE RIV: ... </span>")+QString::number(ErrorRiv)+tr("<br>"));
             return;
         }
 
@@ -718,9 +733,7 @@ void RivDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        LogsString.append(tr("<br><b>Riv Data File Processing Complete.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<br><b>Riv Data File Processing Complete.</b>")+tr("<br>"));
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

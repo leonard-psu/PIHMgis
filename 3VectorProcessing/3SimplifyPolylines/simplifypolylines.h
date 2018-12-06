@@ -12,10 +12,9 @@ class SimplifyPolylines : public QDialog
     Q_OBJECT
 
 public:
-    explicit SimplifyPolylines(QWidget *parent = 0, QString filename_open_project = "");
+    explicit SimplifyPolylines(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~SimplifyPolylines();
 
-    QString LogsString;
     int DEMResolution;
 
 public slots:
@@ -40,6 +39,8 @@ private slots:
 private:
 
     void Clear_Log();
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Load_Project_Settings();
 
@@ -47,6 +48,7 @@ private:
 
     Ui::SimplifyPolylines *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

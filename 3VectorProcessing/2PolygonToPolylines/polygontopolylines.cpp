@@ -32,9 +32,7 @@ PolygonToPolylines::PolygonToPolylines(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -105,7 +103,7 @@ bool PolygonToPolylines::Load_Project_Settings()
                             QTableWidgetItem *NewTableItem = new QTableWidgetItem(file1);
                             ui->tableWidget->setItem(rowlen,0,NewTableItem);
                             ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
-                            LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
+                            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
                         }
                     }
                 }
@@ -128,7 +126,7 @@ bool PolygonToPolylines::Load_Project_Settings()
                         }
                         else
                         {
-                            LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + OutPolylineFileName + tr(" Output already exist. </span>") +tr("<br>"));
+                            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: ") + OutPolylineFileName + tr(" Output already exist. </span>") +tr("<br>"));
                             QTableWidgetItem *NewTableItem = new QTableWidgetItem(OutPolylineFileName);
                             ui->tableWidget->setItem(rowlen,1,NewTableItem);
                             ui->tableWidget->item(rowlen,1)->setTextColor(Qt::red);
@@ -176,7 +174,7 @@ bool PolygonToPolylines::Load_Project_Settings()
                 ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
             ui->tableWidget->setRowCount(0);
 
-            qDebug() << "Length = " << ModuleStringList.length();
+            //qDebug() << "Length = " << ModuleStringList.length();
             for (int i=1; i+1<ModuleStringList.length(); i=i+2)
             {
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
@@ -200,7 +198,7 @@ bool PolygonToPolylines::Load_Project_Settings()
                         }
                         else
                         {
-                            LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
+                            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
                             ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
                         }
                         ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignRight);
@@ -217,7 +215,7 @@ bool PolygonToPolylines::Load_Project_Settings()
                         ui->tableWidget->setItem(rowlen,1,NewTableItem);
                         if(file2_check)
                         {
-                            LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + file2 + tr(" output already exists. </span>") +tr("<br>"));
+                            Log_Message(tr("<span style=\"color:#FF0000\">Warning: ") + file2 + tr(" output already exists. </span>") +tr("<br>"));
                             ui->tableWidget->item(rowlen,1)->setTextColor(Qt::red);
                         }
                         else
@@ -247,7 +245,6 @@ bool PolygonToPolylines::Load_Project_Settings()
 
     return true;
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to focus button selection (needed for users w/o mouse)
@@ -295,6 +292,47 @@ void PolygonToPolylines::Clear_Log()
         qDebug() << "Error: PolygonToPolylines::Clear_Log() is returning w/o checking";
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PolygonToPolylines::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PolygonToPolylines::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to assist if input file exists (returns true) or does not (returns false)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -312,14 +350,12 @@ bool PolygonToPolylines::Check_File_Valid(QString file)
             result = true;
 
             qint64 size = file_Size(file);
-            qDebug() << "size " << size;
+            //qDebug() << "size " << size;
 
             if( size < 1)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, file : </span>") + file +tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, invalid file size: </span>") + size +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, file : </span>") + file +tr("<br>"));
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, invalid file size: </span>") + size +tr("<br>"));
                 result = false;
             }
 
@@ -368,7 +404,7 @@ void PolygonToPolylines::on_pushButtonAdd_clicked()
                     }
                     else
                     {
-                        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file2 + tr(" input does not exist. </span>") +tr("<br>"));
+                        Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: ") + file2 + tr(" input does not exist. </span>") +tr("<br>"));
                         ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
                     }
                     ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignRight);
@@ -381,12 +417,12 @@ void PolygonToPolylines::on_pushButtonAdd_clicked()
                     ui->tableWidget->setItem(rowlen,1,NewTableItem);
                     if(file2_check)
                     {
-                        LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + file2 + tr(" output already exists. </span>") +tr("<br>"));
+                        Log_Message(tr("<span style=\"color:#FF0000\">Warning: ") + file2 + tr(" output already exists. </span>") +tr("<br>"));
                         ui->tableWidget->item(rowlen,1)->setTextColor(Qt::red);
                     }
                     else
                     {
-                        LogsString.append(tr("<span style=\"color:#FF0000\">INFO: ") + file2 + tr(" does not exist. </span>") +tr("<br>"));
+                        Log_Message(tr("<span style=\"color:#FF0000\">INFO: ") + file2 + tr(" does not exist. </span>") +tr("<br>"));
                         ui->tableWidget->item(rowlen,1)->setTextColor(Qt::black);
                     }
 
@@ -471,10 +507,9 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if( ui->tableWidget->rowCount() == 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Polygon Input File(s) Missing </span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Polygon Input File(s) Missing </span>")+tr("<br>"));
             return;
         }
-
 
         bool failure_found = false;
 
@@ -490,7 +525,7 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
             {
                 if ( ! CheckFileAccess(file1, "ReadOnly") )
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + file1 +tr("<br>"));
+                    Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + file1 +tr("<br>"));
                     failure_found = true;
                 }
             }
@@ -501,18 +536,14 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
 
             if(file2_check)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Polygon Output File already exists </span>")+ file2 + tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Polygon Output File already exists </span>")+ file2 + tr("<br>"));
                 failure_found = true;
             }
             else
             {
                 if ( ! CheckFolderAccessFromFilePath(file2, "WriteOnly") )
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + file2 +tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
+                    Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + file2 +tr("<br>"));
                     failure_found = true;
                 }
             }
@@ -520,18 +551,14 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
 
         if(failure_found)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Polygon Input and Output File issues </span>")+ tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Polygon Input and Output File issues </span>")+ tr("<br>"));
             return;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run Polygon to Polylines
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Polygon to Polylines ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Polygon to Polylines ... <br>");
 
         QStringList ProjectIOStringList;
         ProjectIOStringList << "PolygonToPolylines";
@@ -550,15 +577,15 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
             OutDbfFileName = OutShpFileName;
             OutDbfFileName.replace(QString(".shp"), QString(".dbf"));
 
-            qDebug() << InpShpFileName << " # " << InpDbfFileName;
-            qDebug() << OutShpFileName << " # " << OutDbfFileName;
+            //qDebug() << InpShpFileName << " # " << InpDbfFileName;
+            //qDebug() << OutShpFileName << " # " << OutDbfFileName;
 
             bool file1_check = Check_File_Valid(InpShpFileName); //Want to exist
             bool file2_check = Check_File_Valid(OutShpFileName); //Dont want to exist
             bool file3_check = Check_File_Valid(InpDbfFileName); //Want to exist
             bool file4_check = Check_File_Valid(OutDbfFileName); //Dont want to exist
 
-            qDebug() << file2_check << " # " << file4_check;
+            //qDebug() << file2_check << " # " << file4_check;
 
             bool valid_check = false;
             if( file1_check && file3_check) //Want to exist
@@ -569,17 +596,13 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
                 }
                 else
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: polygon_polylines Output already exist </span>")+OutShpFileName+tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
+                    Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: polygon_polylines Output already exist </span>")+OutShpFileName+tr("<br>"));
                     valid_check = false;
                 }
             }
             else
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: polygon_polylines Input does not exist </span>")+InpShpFileName+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: polygon_polylines Input does not exist </span>")+InpShpFileName+tr("<br>"));
                 valid_check = false;
             }
 
@@ -588,23 +611,17 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
                 int ErrorPln = polygon_polylines((char *)qPrintable(InpShpFileName), (char *)qPrintable(InpDbfFileName), (char *)qPrintable(OutShpFileName), (char *)qPrintable(OutDbfFileName));
                 if ( ErrorPln == 1 || ErrorPln == 3 || ErrorPln == 8 )
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Skipping Non-Polygon Layer ... </span>")+InpShpFileName+tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
+                    Log_Message(tr("<span style=\"color:#FF0000\">Warning: Skipping Non-Polygon Layer ... </span>")+InpShpFileName+tr("<br>"));
                 }
                 else if ( ErrorPln != 0 )
                 {
-                    LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Polygon to Polyline Processing Failed ... </span>")+tr("<br>"));
-                    LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorPln)+tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
+                    Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Polygon to Polyline Processing Failed ... </span>")+tr("<br>"));
+                    Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorPln)+tr("<br>"));
                     return;
                 }
                 else
                 {
-                    LogsString.append(tr("<span><b>Processing ... </span>")+InpShpFileName+tr("<br>"));
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
+                    Log_Message(tr("<span><b>Processing ... </span>")+InpShpFileName+tr("<br>"));
 
                     ProjectIOStringList << InpShpFileName << OutShpFileName;
                 }
@@ -626,7 +643,7 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        LogsString.append(tr("<br><b>Polygon to Polylines Processing Completed.</b>")+tr("<br>"));
+        Log_Message(tr("<br><b>Polygon to Polylines Processing Completed.</b>")+tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 

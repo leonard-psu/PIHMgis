@@ -70,12 +70,37 @@ CalibDataFile::~CalibDataFile()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Function to check Log_Error_Message
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void CalibDataFile::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CalibDataFile::Log_Warning_Message(QString message)
 {
     try {
         LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
     } catch (...) {
         qDebug() << "Error: Log_Warning_Message is returning w/o checking";
     }
@@ -90,6 +115,12 @@ void CalibDataFile::Log_Error_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
     }
@@ -163,7 +194,6 @@ bool CalibDataFile::Load_Project_Settings()
             ui->doubleSpinBoxF_ThruFall->setValue(ModuleStringList.at(30).toDouble());
             ui->doubleSpinBoxF_MeltFac->setValue(ModuleStringList.at(31).toDouble());
         }
-
 
     } catch (...) {
         qDebug() << "Error: TINShapeLayer::Load_Project_Settings is returning w/o checking";
@@ -343,7 +373,6 @@ int CalibDataFile::calib_data_file(QString filename)
         CalibFileTextStream << ui->doubleSpinBoxF_ThruFall->text() << "\t";
         CalibFileTextStream << ui->doubleSpinBoxF_MeltFac->text() << "\n";
 
-
         CalibFile.close();
 
     } catch (...) {
@@ -391,9 +420,7 @@ void CalibDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Catchment Polygon
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Calib Data File ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Calib Data File ... <br>");
 
         int ErrorCalib = calib_data_file(calib_filename);
 
@@ -448,20 +475,16 @@ void CalibDataFile::on_pushButtonRun_clicked()
         WriteModuleLine(filename_open_project, ProjectIOStringList);
         ProjectIOStringList.clear();
 
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        LogsString.append(tr("<br><b>Calib Data File Processing Complete.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<br><b>Calib Data File Processing Complete.</b>")+tr("<br>"));
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);
         ui->pushButtonClose->setFocus();
-
 
     } catch (...) {
         qDebug() << "Error: CalibDataFile::on_pushButtonRun_clicked() is returning w/o checking";

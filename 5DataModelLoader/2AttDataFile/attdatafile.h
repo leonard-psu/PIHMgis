@@ -12,10 +12,9 @@ class AttDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit AttDataFile(QWidget *parent = 0, QString filename_open_project = "");
+    explicit AttDataFile(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~AttDataFile();
 
-    QString LogsString;
 
 private slots:
 
@@ -153,6 +152,9 @@ private:
 
 
     void Clear_Log();
+    void Log_Warning_Message(QString message);
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Load_Project_Settings();
 
@@ -183,12 +185,11 @@ private:
 
     bool Is_String_Integer(QString file);
 
-    void Log_Warning_Message(QString message);
-    void Log_Error_Message(QString message);
 
 
     Ui::AttDataFile *ui;
     QString filename_open_project;
+    QString LogsString;
 
     int input_width_one = 300; //When user has specified file
     int input_width_two = 100; //When user has value

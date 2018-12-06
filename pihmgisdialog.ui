@@ -6003,9 +6003,9 @@ color: rgb(71, 71, 71);</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>734</y>
+     <y>715</y>
      <width>840</width>
-     <height>20</height>
+     <height>10</height>
     </rect>
    </property>
    <property name="baseSize">
@@ -6992,15 +6992,18 @@ color: rgb(71, 71, 71);</string>
    <property name="geometry">
     <rect>
      <x>5</x>
-     <y>634</y>
+     <y>631</y>
      <width>825</width>
-     <height>97</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>11</pointsize>
     </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOn</enum>
    </property>
    <property name="lineWrapMode">
     <enum>QTextEdit::NoWrap</enum>
@@ -7009,8 +7012,8 @@ color: rgb(71, 71, 71);</string>
   <widget class="QPushButton" name="pushButtonClearLog">
    <property name="geometry">
     <rect>
-     <x>793</x>
-     <y>638</y>
+     <x>780</x>
+     <y>633</y>
      <width>31</width>
      <height>23</height>
     </rect>

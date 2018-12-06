@@ -12,10 +12,8 @@ class RivDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit RivDataFile(QWidget *parent = 0, QString filename_open_project = "");
+    explicit RivDataFile(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~RivDataFile();
-
-    QString LogsString;
 
 private slots:
 
@@ -40,6 +38,9 @@ private slots:
 private:
 
     void Clear_Log();
+    void Log_Warning_Message(QString message);
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Load_Project_Settings();
 
@@ -50,11 +51,10 @@ private:
 
     bool Check_RiverData_Output(QString file, bool message);
 
-    void Log_Warning_Message(QString message);
-    void Log_Error_Message(QString message);
 
     Ui::RivDataFile *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

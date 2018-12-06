@@ -12,10 +12,9 @@ class CalibDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit CalibDataFile(QWidget *parent = 0, QString filename_open_project = "");
+    explicit CalibDataFile(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~CalibDataFile();
 
-    QString LogsString;
 
 private slots:
     void on_pushButtonCalibDataFile_clicked();
@@ -35,6 +34,7 @@ private:
     void Clear_Log();
     void Log_Warning_Message(QString message);
     void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Load_Project_Settings();
 
@@ -43,6 +43,7 @@ private:
 
     Ui::CalibDataFile *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

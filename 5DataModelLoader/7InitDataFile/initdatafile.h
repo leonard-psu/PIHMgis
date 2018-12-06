@@ -12,10 +12,8 @@ class InitDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit InitDataFile(QWidget *parent = 0, QString filename_open_project = "");
+    explicit InitDataFile(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~InitDataFile();
-
-    QString LogsString;
 
 private slots:
     void on_pushButtonMeshDataFile_clicked();
@@ -61,7 +59,7 @@ private:
     bool Load_Project_Settings();
     void Log_Warning_Message(QString message);
     void Log_Error_Message(QString message);
-
+    void Log_Message(QString message);
 
     bool Check_Interception_Input(QString value);
     bool Check_Snow_Input(QString value);
@@ -76,10 +74,9 @@ private:
 
     bool Check_InitData_Output(QString file, bool message);
 
-
-
     Ui::InitDataFile *ui;
     QString filename_open_project;
+    QString LogsString;
 
 
 };

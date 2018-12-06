@@ -13,8 +13,6 @@
 #include "0LibsRaster/aread8.h"
 #include "globals.h"
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FlowGrids Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -41,9 +39,7 @@ FlowGrids::FlowGrids(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open project file: </span>") + filename_open_project +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open project file: </span>") + filename_open_project +tr("<br>"));
         }
         else
         {
@@ -74,6 +70,7 @@ FlowGrids::~FlowGrids()
         qDebug() << "INFO: Start ~FlowGrids";
 
     try {
+
         delete ui;
 
     } catch (...) {
@@ -104,9 +101,7 @@ bool FlowGrids::Load_Project_Settings()
             bool fill_check = Check_Fillpit_Input(fillpits);
             if(!fill_check)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fillpit input does not exist. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Fillpit input does not exist. </span>") +tr("<br>"));
             }
 
             ui->lineEditFlowDirGrids->setText(flowdir);
@@ -158,9 +153,7 @@ bool FlowGrids::Check_Fillpit_Input(QString file )
             ui->lineEditFillPits->setStyleSheet("color: red;");
             ui->lineEditFillPits->setText(file);
 
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fillpit input does not exist: </span>") + file +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Fillpit input does not exist: </span>") + file +tr("<br>"));
             result = false;
         }
 
@@ -189,9 +182,7 @@ bool FlowGrids::Check_FlowDir_Output(QString file, bool color_and_message_if_exi
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Flow Direction output already exists: </span>") + file +tr(" You may need to delete this file(s).<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("<span style=\"color:#FF0000\">Warning: Flow Direction output already exists: </span>") + file +tr(" You may need to delete this file(s).<br>"));
             }
 
             ui->lineEditFlowDirGrids->setStyleSheet("color: red;");
@@ -232,9 +223,7 @@ bool FlowGrids::Check_FlowAcc_Output(QString file, bool color_and_message_if_exi
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Flow Accumulation already exist: </span>") + file +tr(" You may need to delete this file(s).<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("<span style=\"color:#FF0000\">Warning: Flow Accumulation already exist: </span>") + file +tr(" You may need to delete this file(s).<br>"));
             }
 
             ui->lineEditFlowAccGrids->setStyleSheet("color: red;");
@@ -322,6 +311,46 @@ void FlowGrids::Clear_Log()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void FlowGrids::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void FlowGrids::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Browse Button Clicked Event for Fill pits file
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FlowGrids::on_pushButtonFillPits_clicked()
@@ -345,7 +374,7 @@ void FlowGrids::on_pushButtonFillPits_clicked()
         }
         else
         {
-            qDebug() << "on_pushButtonFillPits_clicked: Invalid DEMFileName";
+           Log_Message("on_pushButtonFillPits_clicked: Invalid DEMFileName");
         }
 
     } catch (...) {
@@ -404,7 +433,7 @@ void FlowGrids::on_pushButtonFlowAccGrid_clicked()
         }
         else
         {
-            qDebug() << "on_pushButtonFlowAccGrid_clicked: Invalid FlowAccFileName";
+            Log_Message("on_pushButtonFlowAccGrid_clicked: Invalid FlowAccFileName");
         }
 
     } catch (...) {
@@ -438,9 +467,7 @@ void FlowGrids::on_pushButtonRun_clicked()
         bool fill_check = Check_Fillpit_Input(filename_fill);
         if(!fill_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Fill Pits Input File Missing: </span>") + filename_fill +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Fill Pits Input File Missing: </span>") + filename_fill +tr("<br>"));
             return;
         }
 
@@ -455,7 +482,7 @@ void FlowGrids::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(filename_flow, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + filename_flow + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + filename_flow + tr("<br>"));
             return;
         }
 
@@ -465,15 +492,13 @@ void FlowGrids::on_pushButtonRun_clicked()
         bool acc_check = Check_FlowAcc_Output(filename_acc, false);
         if(acc_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Fill acc output already exists: </span>") + filename_acc +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Fill acc output already exists: </span>") + filename_acc +tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(filename_acc, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + filename_acc + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + filename_acc + tr("<br>"));
             return;
         }
 
@@ -488,9 +513,8 @@ void FlowGrids::on_pushButtonRun_clicked()
             ASCFileName.truncate(ASCFileName.length()-3);
             ASCFileName.append("asc");
 
-            LogsString.append("Converting Arc Binary File to ASC File ... <br>");
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Message("Converting Arc Binary File to ASC File ... <br>");
+
             ADFFiletoASCFile(FillPitsFileName, ASCFileName);
         }
 
@@ -509,16 +533,14 @@ void FlowGrids::on_pushButtonRun_clicked()
         ASCFileTextStream>>TempString;
 
         ASCFileTextStream >> DEMResolution;
-        qDebug() << "DEM Resolution (Integer) = "<<DEMResolution<<"\n";
+        Log_Message("DEM Resolution (Integer) = " + QString::number(DEMResolution) + "\n");
         ASCFile.close();
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run Flow Dir
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Flow Acc Grids ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Flow Acc Grids ... <br>");
 
         QString SlopeFileName = filename_flow;
         SlopeFileName.truncate(SlopeFileName.length()-4);
@@ -528,10 +550,9 @@ void FlowGrids::on_pushButtonRun_clicked()
         int ErrorFDir = setdird8( (char *)qPrintable(ASCFileName), (char *)qPrintable(filename_flow), (char *)qPrintable(SlopeFileName) );
         if( ErrorFDir != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Flow Direction Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorFDir)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Flow Direction Processing Failed ... </span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorFDir)+tr("<br>"));
+
             return;
         }
 
@@ -542,10 +563,9 @@ void FlowGrids::on_pushButtonRun_clicked()
         int ErrorAcc = aread8( (char *)qPrintable(filename_flow), (char *)qPrintable(filename_acc), 0.0, 0.0, 1 );
         if( ErrorAcc != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Flow Accumulation Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorAcc)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Flow Accumulation Processing Failed ... </span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorAcc)+tr("<br>"));
+
             return;
         }
 
@@ -560,9 +580,8 @@ void FlowGrids::on_pushButtonRun_clicked()
         qint64 size = file_Size(filename_flow);
         if( size < 1)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Flow Direction failed, invalid file size: </span>") + size +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Flow Direction failed, invalid file size: </span>") + size +tr("<br>"));
+
             return;
         }
 
@@ -582,24 +601,22 @@ void FlowGrids::on_pushButtonRun_clicked()
         fill_check = Check_FlowAcc_Output(filename_acc, false);
         if(!fill_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Flow Accumulation failed, file does not exist: </span>") + filename_acc +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Flow Accumulation failed, file does not exist: </span>") + filename_acc +tr("<br>"));
+
             return;
         }
         size = file_Size(filename_acc);
         if( size < 1)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Flow Accumulation failed, invalid file size: </span>") + size +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Flow Accumulation failed, invalid file size: </span>") + size +tr("<br>"));
+
             return;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append(tr("<br><b>Flow Grids Processing Completed.</b>")+tr("<br>"));
+        Log_Message(tr("<br><b>Flow Grids Processing Completed.</b>")+tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 

@@ -11,7 +11,6 @@
 #include "0LibsVector/tin_shape.h"
 #include "globals.h"
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TINShapeLayer Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -33,9 +32,7 @@ TINShapeLayer::TINShapeLayer(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -122,7 +119,6 @@ bool TINShapeLayer::Load_Project_Settings()
             Check_TinShape_Output(TINFileName,true);
         }
 
-
     } catch (...) {
         qDebug() << "Error: TINShapeLayer::Load_Project_Settings is returning w/o checking";
         return false;
@@ -154,9 +150,7 @@ bool TINShapeLayer::Check_Element_Input(QString file){
             ui->lineEditElementFile->setStyleSheet("color: red;");
             ui->lineEditElementFile->setText(file);
 
-            LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Element input file missing: </span>") + file +tr(".<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Message(tr("<span style=\"color:#FF0000\">Warning: Element input file missing: </span>") + file +tr(".<br>"));
 
             result = false;
         }
@@ -193,13 +187,10 @@ bool TINShapeLayer::Check_Node_Input(QString file){
             ui->lineEditNodeFile->setStyleSheet("color: red;");
             ui->lineEditNodeFile->setText(file);
 
-            LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Node input file missing: </span>") + file +tr(".<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Message(tr("<span style=\"color:#FF0000\">Warning: Node input file missing: </span>") + file +tr(".<br>"));
 
             result = false;
         }
-
 
     } catch (...) {
         qDebug() << "Error: Check_Node_Input is returning w/o checking";
@@ -226,9 +217,7 @@ bool TINShapeLayer::Check_TinShape_Output(QString file, bool color_and_message_i
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Tinshape output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("<span style=\"color:#FF0000\">Warning: Tinshape output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
             }
 
             ui->lineEditTINFile->setStyleSheet("color: red;");
@@ -242,7 +231,6 @@ bool TINShapeLayer::Check_TinShape_Output(QString file, bool color_and_message_i
 
             result = false;
         }
-
 
     } catch (...) {
         qDebug() << "Error: Check_TinShape_Output is returning w/o checking";
@@ -268,6 +256,46 @@ void TINShapeLayer::Clear_Log()
 
     } catch (...) {
         qDebug() << "Error: TINShapeLayer::Clear_Log() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void TINShapeLayer::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void TINShapeLayer::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
     }
 }
 
@@ -421,17 +449,13 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         bool ElementCheck = Check_Element_Input(element_input_filename);
         if(!ElementCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Element (.1.ele) Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Element (.1.ele) Input File Missing </span>")+tr("<br>"));
             return;
         }
         bool NodeCheck = Check_Node_Input(node_input_filename);
         if(!NodeCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Node (.1.node) Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Node (.1.node) Input File Missing </span>")+tr("<br>"));
             return;
         }
 
@@ -441,9 +465,7 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         bool TinShapeCheck = Check_TinShape_Output(tinshape_input_filename, false);
         if(TinShapeCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: CatchmentPolygon TIN Shape already exists </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: CatchmentPolygon TIN Shape already exists </span>")+tr("<br>"));
             return;
         }
 
@@ -452,49 +474,45 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(element_input_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + element_input_filename + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + element_input_filename + tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(node_input_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + node_input_filename + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + node_input_filename + tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(tinshape_input_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + tinshape_input_filename + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + tinshape_input_filename + tr("<br>"));
             return;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Catchment Polygon
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running TIN Shape Layer ... <br>");
-        LogsString.append(element_input_filename + "<br>");
-        LogsString.append(node_input_filename + "<br>");
-
+        Log_Message("Running TIN Shape Layer ... <br>");
+        Log_Message(element_input_filename + "<br>");
+        Log_Message(node_input_filename + "<br>");
 
         QString TINShpFileName, TINDbfFileName;
         TINShpFileName = tinshape_input_filename;
         TINDbfFileName = TINShpFileName;
         TINDbfFileName.replace( QString(".shp"), QString(".dbf") );
 
-        LogsString.append(TINDbfFileName + "<br>");
-        LogsString.append(TINDbfFileName + "<br>");
+        Log_Message(TINDbfFileName + "<br>");
+        Log_Message(TINDbfFileName + "<br>");
 
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
-
         int ErrorTIN = tin_shape((char *)qPrintable(element_input_filename), (char *)qPrintable(node_input_filename), (char *)qPrintable(TINShpFileName), (char *)qPrintable(TINDbfFileName), &LogsString);
         if( ErrorTIN != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: TIN Shape Layer Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorTIN)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: TIN Shape Layer Processing Failed ... </span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorTIN)+tr("<br>"));
             return;
         }
 
@@ -504,18 +522,14 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         TinShapeCheck = Check_TinShape_Output(tinshape_input_filename, false);
         if(!TinShapeCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: TinShape failed, file does not exist: </span>") + TinShapeCheck +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: TinShape failed, file does not exist: </span>") + TinShapeCheck +tr("<br>"));
             return;
         }
 
         qint64 size = file_Size(tinshape_input_filename);
         if( size < 1)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: CatchmentPolygon failed, invalid file size: </span>") + size +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: CatchmentPolygon failed, invalid file size: </span>") + size +tr("<br>"));
             return;
         }
 
@@ -530,16 +544,11 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Clear_Log();
-
-        LogsString.append(tr("<br><b>TIN Shape Layer Processing Completed.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<br><b>TIN Shape Layer Processing Completed.</b>")+tr("<br>"));
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);
         ui->pushButtonClose->setFocus();
-
 
     } catch (...) {
         qDebug() << "Error:  TINShapeLayer::on_pushButtonRun_clicked() is returning w/o checking";

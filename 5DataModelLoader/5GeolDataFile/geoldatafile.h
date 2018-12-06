@@ -12,10 +12,9 @@ class GeolDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit GeolDataFile(QWidget *parent = 0, QString filename_open_project = "");
+    explicit GeolDataFile(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~GeolDataFile();
 
-    QString LogsString;
 
 private slots:
     void on_pushButtonGeolTextureFile_clicked();
@@ -40,6 +39,7 @@ private:
     void Clear_Log(); 
     void Log_Warning_Message(QString message);
     void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Load_Project_Settings();
 
@@ -49,6 +49,7 @@ private:
 
     Ui::GeolDataFile *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

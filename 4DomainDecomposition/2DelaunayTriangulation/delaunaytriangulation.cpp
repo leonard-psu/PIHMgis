@@ -11,7 +11,6 @@
 #include "0LibsOther/triangle_shewchuk.h"
 #include "globals.h"
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DelaunayTriangulation Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -32,9 +31,7 @@ DelaunayTriangulation::DelaunayTriangulation(QWidget *parent, QString filename) 
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -47,7 +44,6 @@ DelaunayTriangulation::DelaunayTriangulation(QWidget *parent, QString filename) 
 
         ui->lineEditAngle->setValidator(Angle_validator);
         ui->lineEditArea->setValidator(Area_validator);
-
 
         if(found_file)
         {
@@ -105,7 +101,6 @@ bool DelaunayTriangulation::Load_Project_Settings()
             bool PSLG_check = Check_PSLG_Input(filename);
         }
 
-
         ModuleStringList = ReadModuleLine(filename_open_project,tr("DelaunayTriangulation"));
         if ( ModuleStringList.length() > 0 )
         {
@@ -162,6 +157,46 @@ void DelaunayTriangulation::Clear_Log()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void DelaunayTriangulation::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void DelaunayTriangulation::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper function for PSLG (INPUT)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool DelaunayTriangulation::Check_PSLG_Input(QString file)
@@ -184,13 +219,9 @@ bool DelaunayTriangulation::Check_PSLG_Input(QString file)
             ui->lineEditPSLG->setStyleSheet("color: red;");
             ui->lineEditPSLG->setText(file);
 
-            LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Poly input does not exist </span>") + file +tr(".<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
-
+            Log_Message(tr("<span style=\"color:#FF0000\">Warning: Poly input does not exist </span>") + file +tr(".<br>"));
             result = false;
         }
-
 
     } catch (...) {
         qDebug() << "Error: Check_PSLG_Input is returning w/o checking";
@@ -224,13 +255,10 @@ bool DelaunayTriangulation::Check_Angle(QString value, bool message){
         {
             if(message)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">WARNING: Invalid Angle value. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("<span style=\"color:#FF0000\">WARNING: Invalid Angle value. </span>") +tr("<br>"));
             }
             result = false;
         }
-
 
     } catch (...) {
         qDebug() << "Error: Check_Angle is returning w/o checking";
@@ -265,9 +293,7 @@ bool DelaunayTriangulation::Check_Area(QString value, bool message){
         {
             if(message)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">WARNING: Invalid Area value. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("<span style=\"color:#FF0000\">WARNING: Invalid Area value. </span>") +tr("<br>"));
             }
             result = false;
         }
@@ -305,10 +331,8 @@ bool DelaunayTriangulation::Check_Others(QString value, bool message)
         {
             if(message)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">WARNING: Invalid Others value. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
-            }
+                Log_Message(tr("<span style=\"color:#FF0000\">WARNING: Invalid Others value. </span>") +tr("<br>"));
+             }
             result = false;
         }
 
@@ -366,7 +390,6 @@ void DelaunayTriangulation::on_pushButtonPSLG_clicked()
 
             pushButtonSetFocus();
         }
-
 
     } catch (...) {
         qDebug() << "Error: DelaunayTriangulation::on_pushButtonPSLG_clicked() is returning w/o checking";
@@ -492,7 +515,7 @@ bool DelaunayTriangulation::Check_File_Valid(QString file)
     bool result = false;
 
     try {
-        qDebug() << "INFO: Check_File_Valid() " << file;
+        //qDebug() << "INFO: Check_File_Valid() " << file;
 
         bool fileExists = QFileInfo::exists(file) && QFileInfo(file).isFile();
         return fileExists;
@@ -531,18 +554,14 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         bool TriangleCheck = Check_Triangle_Software_Input(filename_triangle_software);
         if(!TriangleCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: TRIANGLE Software Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: TRIANGLE Software Input File Missing </span>")+tr("<br>"));
             return;
         }
 
         bool PSLGCheck = Check_PSLG_Input(PSLG_filename);
         if(!PSLGCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: PSLG Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: PSLG Input File Missing </span>")+tr("<br>"));
             return;
         }
 
@@ -551,9 +570,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
             bool angle_check = Check_Angle(input_angle, true);
             if(!angle_check)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Missing Angle Quality Constraint ... </span>")+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Missing Angle Quality Constraint ... </span>")+tr("<br>"));
                 return;
             }
         }
@@ -563,9 +580,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
             bool area_check = Check_Area(input_area, true);
             if(!area_check)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Missing Area Quality Constraint ... </span>")+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Missing Area Quality Constraint ... </span>")+tr("<br>"));
                 return;
             }
         }
@@ -575,13 +590,10 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
             bool area_check = Check_Others(input_others, true);
             if(!area_check)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Missing Other Options ... </span>")+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Missing Other Options ... </span>")+tr("<br>"));
                 return;
             }
         }
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Does output already exist?
@@ -594,18 +606,14 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         bool file_exists = Check_File_Valid(output_filename);
         if(file_exists)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: PSLG Output File Exists </span>")+ output_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: PSLG Output File Exists </span>")+ output_filename + tr("<br>"));
             return;
         }
 
         file_exists = Check_File_Valid(output_filename2);
         if(file_exists)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: PSLG Output File Exists </span>")+ output_filename2 + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: PSLG Output File Exists </span>")+ output_filename2 + tr("<br>"));
             return;
         }
 
@@ -628,9 +636,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         // Running TRIANGLE
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        LogsString.append("Running Delaunay Triangulation ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Delaunay Triangulation ... <br>");
 
         QString ExecString, OptsString, NameString;
         ExecString = "TRIANGLE";
@@ -647,18 +653,15 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
 
         QProcess Triangle_Process;
         QString command = filename_triangle_software + " " + OptsString + " " + NameString;
-        LogsString.append(tr("<span style=\"color:#FF0000\">Input: </span>")+command+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+
+        Log_Message(tr("<span style=\"color:#FF0000\">Input: </span>")+command+tr("<br>"));
 
         Triangle_Process.start(command);
         Triangle_Process.waitForFinished();
         int ErrorTri = Triangle_Process.exitCode();
         QString output(Triangle_Process.readAllStandardOutput());
 
-        LogsString.append(tr("<span style=\"color:#FF0000\">Output: </span>")+output+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<span style=\"color:#FF0000\">Output: </span>")+output+tr("<br>"));
 
         if(ErrorTri != 0)
         {
@@ -671,36 +674,28 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         file_exists = Check_File_Valid(output_filename);
         if(!file_exists)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: PSLG Output File not generated </span>")+ output_filename + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: PSLG Output File not generated </span>")+ output_filename + tr("<br>"));
             return;
         }
 
         qint64 size = file_Size(output_filename);
         if( size < 1)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: PSLG Poly Output failed, invalid file size: </span>") + size +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: PSLG Poly Output failed, invalid file size: </span>") + size +tr("<br>"));
             return;
         }
 
         file_exists = Check_File_Valid(output_filename2);
         if(!file_exists)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: PSLG Output File not generated  </span>")+ output_filename2 + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: PSLG Output File not generated  </span>")+ output_filename2 + tr("<br>"));
             return;
         }
 
         size = file_Size(output_filename2);
         if( size < 1)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: PSLG Ele Output failed, invalid file size: </span>") + size +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: PSLG Ele Output failed, invalid file size: </span>") + size +tr("<br>"));
             return;
         }
 
@@ -726,7 +721,6 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         WriteModuleLine(filename_open_project, ProjectIOStringList);
         ProjectIOStringList.clear();
 
-
         // *** READ THE NUMBER OF TRIANGLES FROM .1.ELE FILE AND PRINT ON THE LOG
         int NumTINs;
         QString EleFileName;
@@ -738,7 +732,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         QTextStream EleFileTextStream(&EleFile);
         EleFileTextStream >> NumTINs;
         EleFile.close();
-        LogsString.append(tr("<br><b>Total Number of Triangular Elements: ")+QString::number(NumTINs)+tr("</b><br>"));
+        Log_Message(tr("<br><b>Total Number of Triangular Elements: ")+QString::number(NumTINs)+tr("</b><br>"));
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -746,7 +740,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Clear_Log();
 
-        LogsString.append(tr("<br><b>Delaunay Triangulation Processing Completed.</b>")+tr("<br>"));
+        Log_Message(tr("<br><b>Delaunay Triangulation Processing Completed.</b>")+tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
@@ -854,12 +848,9 @@ void DelaunayTriangulation::on_pushButtonFIND_clicked()
             pushButtonSetFocus();
         }
 
-
-
     } catch (...) {
         qDebug() << "Error: DelaunayTriangulation::on_pushButtonFIND_clicked() is returning w/o checking";
     }
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -898,9 +889,7 @@ bool DelaunayTriangulation::Check_TIN_Output(QString file, bool color_and_messag
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("<span style=\"color:#FF0000\">Warning: Output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
             }
 
             result = true;
@@ -918,7 +907,6 @@ bool DelaunayTriangulation::Check_TIN_Output(QString file, bool color_and_messag
 
     return result;
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Text Changed Event for TRIANGLE SOFTWARE (INPUT)
@@ -943,6 +931,5 @@ void DelaunayTriangulation::on_pushButtonFIND_clicked(bool checked)
     } catch (...) {
         qDebug() << "Error: DelaunayTriangulation::on_pushButtonFIND_clicked() is returning w/o checking";
     }
-
 }
 

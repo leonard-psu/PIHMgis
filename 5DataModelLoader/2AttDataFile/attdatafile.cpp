@@ -89,7 +89,7 @@ bool AttDataFile::Load_Project_Settings()
         QString TempFileName;
         bool already_displayed_message = false;
 
-        // ** Data Model OUTPUT File Name
+        // Data Model OUTPUT File Name
         ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
@@ -163,9 +163,9 @@ bool AttDataFile::Load_Project_Settings()
         ui->checkBoxGroundwater->setChecked(true);              ui->lineEditGroundwaterFile->setText( QString( "0" ) );
         ui->checkBoxBoundaryCondition->setChecked(true);        ui->lineEditBoundaryConditionFile->setText( QString( "0" ) );
 
-        // ** End: Set Defaults
+        // End: Set Defaults
 
-        // ** Start: Fill Form If Module Has Been Run Previously
+        // Start: Fill Form If Module Has Been Run Previously
 
         ModuleStringList = ReadModuleLine(filename_open_project,tr("AttDataFile"));
 
@@ -248,6 +248,46 @@ void AttDataFile::Clear_Log()
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::Clear_Log() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void AttDataFile::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void AttDataFile::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
     }
 }
 
@@ -726,7 +766,7 @@ bool AttDataFile::Check_RelativeHumidityFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditRelativeHumidityFile->setStyleSheet("color: black;");
                 ui->lineEditRelativeHumidityFile->setText(value);
@@ -749,7 +789,6 @@ bool AttDataFile::Check_RelativeHumidityFileorValue(QString value){
                         Log_Error_Message(" RelativeHumidity File not found: " + value  );
                     }
                 }
-
 
                 result = false;
             }
@@ -1432,8 +1471,8 @@ bool AttDataFile::Check_InterceptionFileorValue(QString value){
 
                 result = false;
             }
-
         }
+
     } catch (...) {
         qDebug() << "Error: Check_InterceptionFile is returning w/o checking";
         result = false;
@@ -1975,7 +2014,6 @@ void AttDataFile::on_pushButtonGeologyClassesFile_clicked()
 
         Clear_Log();
 
-
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Geology Classes Raster", user_pihmgis_root_folder, "Geology Classes Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
@@ -2182,7 +2220,6 @@ void AttDataFile::on_pushButtonSoilMoistureFile_clicked()
 
         Clear_Log();
 
-
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Soil Moisture Raster", user_pihmgis_root_folder, "Soil Moisture Raster(*.adf *.asc)");
 
         if ( RasterFileName != nullptr)
@@ -2287,7 +2324,6 @@ void AttDataFile::on_pushButtonAttDataFile_clicked()
     try {
 
         Clear_Log();
-
 
         QString DataFileName = QFileDialog::getSaveFileName(this, "Choose Att Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Att Data File(*.att)");
         QString tempString = DataFileName;
@@ -3238,20 +3274,12 @@ void AttDataFile::Log_Warning_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
-    } catch (...) {
-        qDebug() << "Error: Log_Error_Message is returning w/o checking";
-    }
-}
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Helper Function to check Log_Error_Message
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void AttDataFile::Log_Error_Message(QString message)
-{
-    try {
-        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
     }
@@ -3600,7 +3628,6 @@ void AttDataFile::on_pushButtonRun_clicked()
             }
         }
 
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check Outputs
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3615,10 +3642,7 @@ void AttDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Att Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Att Data File ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
+        Log_Message("Running Att Data File ... <br>");
 
         // *** ATT Function Calls
         //int att_data_file(
@@ -3656,10 +3680,8 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         if( ErrorAtt != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Att Data File Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE ATT: ... </span>")+QString::number(ErrorAtt)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Message(tr("<span style=\"color:#FF0000\">ERROR: Att Data File Processing Failed ... </span>")+tr("<br>"));
+            Log_Message(tr("<span style=\"color:#FF0000\">RETURN CODE ATT: ... </span>")+QString::number(ErrorAtt)+tr("<br>"));
             return;
         }
 
@@ -3700,9 +3722,7 @@ void AttDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        LogsString.append(tr("<br><b>Att Data File Processing Complete.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<br><b>Att Data File Processing Complete.</b>")+tr("<br>"));
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

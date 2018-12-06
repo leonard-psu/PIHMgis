@@ -11,8 +11,6 @@
 #include "0LibsRaster/stream_definition.h"
 #include "globals.h"
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StreamGrids Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -37,9 +35,7 @@ StreamGrids::StreamGrids(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -94,9 +90,7 @@ bool StreamGrids::Load_Project_Settings()
             bool flowacc_check = Check_FlowAccGrids_Input(FlowAccGrids);
             if(!flowacc_check)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowAcc input does not exist. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: FlowAcc input does not exist. </span>") +tr("<br>"));
             }
 
             ui->lineEditStreamGrids->setText(StreamGrids);
@@ -156,9 +150,7 @@ bool StreamGrids::Check_Threshold_Input(QString Threshold)
         }
         else
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Invalid threshold. </span>") +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Invalid threshold. </span>") +tr("<br>"));
         }
 
     } catch (...) {
@@ -185,9 +177,7 @@ bool StreamGrids::Check_StreamGrids_Output(QString file, bool color_and_message_
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: StreamGrids output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("<span style=\"color:#FF0000\">Warning: StreamGrids output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
             }
 
             ui->lineEditStreamGrids->setStyleSheet("color: red;");
@@ -234,9 +224,7 @@ bool StreamGrids::Check_FlowAccGrids_Input(QString file )
             ui->lineEditFlowAccGrids->setStyleSheet("color: red;");
             ui->lineEditFlowAccGrids->setText(file);
 
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowAcc input does not exist: </span>") + file +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: FlowAcc input does not exist: </span>") + file +tr("<br>"));
             result = false;
         }
 
@@ -310,6 +298,46 @@ void StreamGrids::Clear_Log()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void StreamGrids::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void StreamGrids::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Threshold
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void StreamGrids::on_lineEditThreshold_textChanged()
@@ -335,9 +363,7 @@ void StreamGrids::on_lineEditThreshold_textChanged()
 
         if(badcharfound)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Invalid threshold. </span>") +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Invalid threshold. </span>") +tr("<br>"));
         }
 
     } catch (...) {
@@ -372,7 +398,7 @@ void StreamGrids::on_pushButtonFlowAccGrids_clicked()
         }
         else
         {
-            qDebug() << "on_pushButtonFlowAccGrids_clicked: Invalid FlowAccFileName";
+            Log_Message("on_pushButtonFlowAccGrids_clicked: Invalid FlowAccFileName");
         }
 
     } catch (...) {
@@ -413,7 +439,7 @@ void StreamGrids::on_pushButtonStreamGrids_clicked()
         }
         else
         {
-            qDebug() << "on_pushButtonStreamGrids_clicked: Invalid StreamGridsFileName";
+            Log_Message("on_pushButtonStreamGrids_clicked: Invalid StreamGridsFileName");
         }
 
     } catch (...) {
@@ -436,24 +462,18 @@ void StreamGrids::on_pushButtonSuggestMe_clicked()
         QString FlowAccFileName = ui->lineEditFlowAccGrids->text();
         if ( FlowAccFileName == nullptr )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Missing Flow Acc Input File ... </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Missing Flow Acc Input File ... </span>")+tr("<br>"));
             return;
         }
 
         QFile FlowAccFile(FlowAccFileName);
         if ( ! FlowAccFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + FlowAccFileName + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + FlowAccFileName + tr("<br>"));
             return;
         }
 
-        LogsString.append(tr("<span style=\"color:#FF0000\">Started to calculate threshold ... </span>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<span style=\"color:#FF0000\">Started to calculate threshold ... </span>")+tr("<br>"));
 
         QTextStream FlowAccFileTextStream(&FlowAccFile);
 
@@ -471,7 +491,7 @@ void StreamGrids::on_pushButtonSuggestMe_clicked()
         FlowAccFileTextStream >> TempString; FlowAccFileTextStream >> tempDouble;
         FlowAccFileTextStream >> TempString; FlowAccFileTextStream >> NoData;
 
-        qDebug() <<"NumRows = " <<NumRows<<" NumColumns = "<<NumColumns<<" NoData = "<<NoData<<"\n";
+        //qDebug() <<"NumRows = " <<NumRows<<" NumColumns = "<<NumColumns<<" NoData = "<<NoData<<"\n";
 
         //FlowAccData = (int *)malloc(NumRows*NumColumns* sizeof(int));
         for(int i=0; i<NumRows*NumColumns; i++)
@@ -488,9 +508,9 @@ void StreamGrids::on_pushButtonSuggestMe_clicked()
         qSort(FlowAccData.begin(), FlowAccData.end());
         //qDebug() << FlowAccData;
 
-        qDebug() << "FlowAccData Length = " << FlowAccData.length();
-        qDebug() << "Num Threshold Grids = " << FlowAccData.length() - ( (int) (FlowAccData.length() * 0.9937) + 1 );
-        qDebug() << "Threshold Acc Value = " << FlowAccData.at( (int) (FlowAccData.length() * 0.9937) + 1);
+        //qDebug() << "FlowAccData Length = " << FlowAccData.length();
+        //qDebug() << "Num Threshold Grids = " << FlowAccData.length() - ( (int) (FlowAccData.length() * 0.9937) + 1 );
+        //qDebug() << "Threshold Acc Value = " << FlowAccData.at( (int) (FlowAccData.length() * 0.9937) + 1);
 
         ui->lineEditThreshold->setText(QString::number(FlowAccData.at( (int) (FlowAccData.length() * 0.9937) + 1)));
         ui->lineEditThreshold->setStyleSheet("color: black;");
@@ -499,9 +519,7 @@ void StreamGrids::on_pushButtonSuggestMe_clicked()
         FlowAccData.clear();
         FlowAccFile.close();
 
-        LogsString.append(tr("<span style=\"color:#FF0000\">Finished calculating threshold ... </span>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<span style=\"color:#FF0000\">Finished calculating threshold ... </span>")+tr("<br>"));
 
     } catch (...) {
         qDebug() << "Error: on_pushButtonSuggestMe_clicked is returning w/o checking";
@@ -534,18 +552,14 @@ void StreamGrids::on_pushButtonRun_clicked()
         bool flowacc_check = Check_FlowAccGrids_Input(FlowAccGrids);
         if(!flowacc_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Flow Acc Grid Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Flow Acc Grid Input File Missing </span>")+tr("<br>"));
             return;
         }
 
         bool threshold_check = Check_Threshold_Input(Threshold);
         if(!threshold_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Check Threshold Input (is it a number?) </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Check Threshold Input (is it a number?) </span>")+tr("<br>"));
             return;
         }
 
@@ -564,13 +578,13 @@ void StreamGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(FlowAccGrids, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + FlowAccGrids + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + FlowAccGrids + tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(StreamGrids, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + StreamGrids + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + StreamGrids + tr("<br>"));
             return;
         }
 
@@ -586,10 +600,8 @@ void StreamGrids::on_pushButtonRun_clicked()
         int ErrorStr = stream_definition((char *)qPrintable(FlowAccGrids), (char *)dummystr, (char *)qPrintable(StreamGrids), 1, Threshold.toInt() );
         if( ErrorStr != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Stream Grid Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorStr)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Stream Grid Processing Failed ... </span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorStr)+tr("<br>"));
             return;
         }
 
@@ -605,9 +617,7 @@ void StreamGrids::on_pushButtonRun_clicked()
         qint64 size = file_Size(StreamGrids);
         if( size < 1)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: StreamGrids failed, invalid file size: </span>") + size +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: StreamGrids failed, invalid file size: </span>") + size +tr("<br>"));
             return;
         }
 
@@ -625,7 +635,7 @@ void StreamGrids::on_pushButtonRun_clicked()
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
-        LogsString.append(tr("<br><b>Flow Grids Processing Completed.</b>")+tr("<br>"));
+        Log_Message(tr("<br><b>Flow Grids Processing Completed.</b>")+tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 

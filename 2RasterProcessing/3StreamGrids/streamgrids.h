@@ -12,10 +12,9 @@ class StreamGrids : public QDialog
     Q_OBJECT
 
 public:
-    explicit StreamGrids(QWidget *parent = 0, QString filename_open_project = "");
+    explicit StreamGrids(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~StreamGrids();
 
-    QString LogsString;
 
 private slots:
     void on_pushButtonFlowAccGrids_clicked();
@@ -36,13 +35,12 @@ private slots:
 
 private:
 
-
     void Clear_Log();
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Check_FlowAccGrids_Input(QString file);
-
     bool Check_Threshold_Input(QString threshold);
-
     bool Check_StreamGrids_Output(QString file, bool color_and_message_if_exists);
 
     bool Load_Project_Settings();
@@ -50,6 +48,8 @@ private:
     Ui::StreamGrids *ui;
 
     QString filename_open_project;
+    QString LogsString;
+
 
 };
 

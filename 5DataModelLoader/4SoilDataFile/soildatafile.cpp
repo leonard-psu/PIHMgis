@@ -11,7 +11,6 @@
 #include "0LibsOther/pedo_transfer_functions.h"
 #include "globals.h"
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SoilDataFile Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -48,11 +47,9 @@ SoilDataFile::SoilDataFile(QWidget *parent, QString filename) :
 
         pushButtonSetFocus();
 
-
     } catch (...) {
         qDebug() << "Error: SoilDataFile is returning w/o checking";
     }
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,6 +77,12 @@ void SoilDataFile::Log_Warning_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
     }
@@ -94,8 +97,33 @@ void SoilDataFile::Log_Error_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void SoilDataFile::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
     }
 }
 
@@ -126,7 +154,6 @@ bool SoilDataFile::Load_Project_Settings()
             Check_SoilData_Output(user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName+".soil", true);
         }
         //End: Set Defaults
-
 
         //Start: Fill Form If Module Has Been Run Previously
         ModuleStringList = ReadModuleLine(filename_open_project,tr("SoilDataFile"));
@@ -352,9 +379,7 @@ void SoilDataFile::on_pushButtonRun_clicked()
         bool checked_SoilTexture = Check_SoilTexture_Input(input_SoilTexture_filename);
         if(!checked_SoilTexture)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Soil Texture File (*.txt *.TXT) Input File Missing </span>")+input_SoilTexture_filename +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Soil Texture File (*.txt *.TXT) Input File Missing </span>")+input_SoilTexture_filename +tr("<br>"));
             return;
         }
 
@@ -387,9 +412,7 @@ void SoilDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Mesh Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Soil Data File ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Soil Data File ... <br>");
 
         int ErrorSoil = Soil_PedoTransferFunction( input_SoilTexture_filename, output_SoilData_filename );
 
@@ -413,9 +436,7 @@ void SoilDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        LogsString.append(tr("<br><b>Soil Data File Processing Complete.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<br><b>Soil Data File Processing Complete.</b>")+tr("<br>"));
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

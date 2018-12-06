@@ -13,7 +13,7 @@ class RiverTemporal : public QDialog
     Q_OBJECT
 
 public:
-    explicit RiverTemporal(QWidget *parent = 0, QString filename_open_project = "");
+    explicit RiverTemporal(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~RiverTemporal();
 
     QString LogsString;

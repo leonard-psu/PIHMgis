@@ -12,7 +12,7 @@ class IbcDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit IbcDataFile(QWidget *parent = 0, QString filename_open_project = "");
+    explicit IbcDataFile(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~IbcDataFile();
 
     QString LogsString;

@@ -12,10 +12,9 @@ class CatchmentPolygon : public QDialog
     Q_OBJECT
 
 public:
-    explicit CatchmentPolygon(QWidget *parent = 0, QString filename_open_project = "");
+    explicit CatchmentPolygon(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~CatchmentPolygon();
 
-    QString LogsString;
 
 private slots:
 
@@ -34,15 +33,17 @@ private slots:
 private:
 
     void Clear_Log();
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Check_CatchmentGrids_Input(QString file);
-
     bool Check_CatchmentPolygon_Output(QString file, bool color_and_message_if_exists);
 
     bool Load_Project_Settings();
 
     Ui::CatchmentPolygon *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

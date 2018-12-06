@@ -34,9 +34,7 @@ LinkGrids::LinkGrids(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -99,12 +97,8 @@ bool LinkGrids::Load_Project_Settings()
             bool StreamGrids_check = Check_StreamGrids_Input(StreamGrids);
             if(!StreamGrids_check)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids input does not exist. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids input does not exist. </span>") +tr("<br>"));
             }
-
-
         }
 
         ModuleStringList = ReadModuleLine(filename_open_project,tr("FlowGrids"));
@@ -115,9 +109,7 @@ bool LinkGrids::Load_Project_Settings()
             bool FlowDir_check = Check_FlowDirGrids_Input(FlowDirGrids);
             if(!FlowDir_check)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowDir input does not exist. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: FlowDir input does not exist. </span>") +tr("<br>"));
             }
         }
 
@@ -131,17 +123,13 @@ bool LinkGrids::Load_Project_Settings()
             bool StreamGrids_check = Check_StreamGrids_Input(StreamGrids);
             if(!StreamGrids_check)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids input does not exist. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids input does not exist. </span>") +tr("<br>"));
             }
 
             bool FlowDir_check = Check_FlowDirGrids_Input(FlowDirGrids);
             if(!FlowDir_check)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowDir input does not exist. </span>") +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: FlowDir input does not exist. </span>") +tr("<br>"));
             }
 
         }
@@ -175,6 +163,46 @@ void LinkGrids::Clear_Log()
         qDebug() << "Error: LinkGrids::Clear_Log() is returning w/o checking";
     }
 
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void LinkGrids::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void LinkGrids::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,9 +271,7 @@ bool LinkGrids::Check_StreamGrids_Input(QString file)
             ui->lineEditStreamGrids->setStyleSheet("color: red;");
             ui->lineEditStreamGrids->setText(file);
 
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids input does not exist: </span>") + file +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids input does not exist: </span>") + file +tr("<br>"));
             result = false;
         }
 
@@ -278,9 +304,7 @@ bool LinkGrids::Check_FlowDirGrids_Input(QString file)
             ui->lineEditFlowDirGrids->setStyleSheet("color: red;");
             ui->lineEditFlowDirGrids->setText(file);
 
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowDir Grids input does not exist: </span>") + file +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: FlowDir Grids input does not exist: </span>") + file +tr("<br>"));
             result = false;
         }
 
@@ -309,9 +333,7 @@ bool LinkGrids::Check_LinkGrids_Output(QString file, bool color_and_message_if_e
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: LinkGrids output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("<span style=\"color:#FF0000\">Warning: LinkGrids output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
             }
 
             ui->lineEditLinkGrids->setStyleSheet("color: red;");
@@ -355,7 +377,7 @@ void LinkGrids::on_pushButtonStreamGrids_clicked()
         }
         else
         {
-            qDebug() << "on_pushButtonStreamGrids_clicked: Invalid FlowAccFileName";
+            Log_Message("on_pushButtonStreamGrids_clicked: Invalid FlowAccFileName");
         }
 
     } catch (...) {
@@ -384,7 +406,7 @@ void LinkGrids::on_pushButtonFlowDirGrids_clicked()
         }
         else
         {
-            qDebug() << "on_pushButtonFlowDirGrids_clicked: Invalid FlowAccFileName";
+            Log_Message("on_pushButtonFlowDirGrids_clicked: Invalid FlowAccFileName");
         }
 
     } catch (...) {
@@ -450,18 +472,14 @@ void LinkGrids::on_pushButtonRun_clicked()
         bool StreamGrids_check = Check_StreamGrids_Input(StreamGridsFileName);
         if(!StreamGrids_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: StreamGrids Input File Missing </span>")+tr("<br>"));
             return;
         }
 
         bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGridsFileName);
         if(!FlowDirGrids_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrids Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrids Input File Missing </span>")+tr("<br>"));
             return;
         }
 
@@ -479,28 +497,26 @@ void LinkGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(StreamGridsFileName, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + StreamGridsFileName + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + StreamGridsFileName + tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(FlowDirGridsFileName, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + FlowDirGridsFileName + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + FlowDirGridsFileName + tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(LinkGridsFileName, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + LinkGridsFileName + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + LinkGridsFileName + tr("<br>"));
             return;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run Link Grids
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Link Grids ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Link Grids ... <br>");
 
         int ErrorLnk = stream_links((char *)qPrintable(
                                         StreamGridsFileName),
@@ -509,10 +525,8 @@ void LinkGrids::on_pushButtonRun_clicked()
                                     (char *)qPrintable(user_pihmgis_root_folder + "/1RasterProcessing/link_nodes.dat") );
         if( ErrorLnk != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Link Grid Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorLnk)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Link Grid Processing Failed ... </span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorLnk)+tr("<br>"));
             return;
         }
 
@@ -528,9 +542,7 @@ void LinkGrids::on_pushButtonRun_clicked()
         qint64 size = file_Size(LinkGridsFileName);
         if( size < 1)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: StreamGrids failed, invalid file size: </span>") + size +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: StreamGrids failed, invalid file size: </span>") + size +tr("<br>"));
             return;
         }
 
@@ -546,7 +558,7 @@ void LinkGrids::on_pushButtonRun_clicked()
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
-        LogsString.append(tr("<br><b>Link Grids Processing Completed.</b>")+tr("<br>"));
+        Log_Message(tr("<br><b>Link Grids Processing Completed.</b>")+tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 

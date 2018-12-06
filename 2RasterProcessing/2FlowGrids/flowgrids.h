@@ -12,10 +12,9 @@ class FlowGrids : public QDialog
     Q_OBJECT
 
 public:
-    explicit FlowGrids(QWidget *parent = 0, QString filename_open_project = "");
+    explicit FlowGrids(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~FlowGrids();
 
-    QString LogsString;
 
 private slots:
     void on_pushButtonFillPits_clicked();
@@ -36,17 +35,18 @@ private slots:
 private:
 
     bool Check_Fillpit_Input(QString file);
-
     bool Check_FlowDir_Output(QString file, bool color_and_message_if_exists );
-
     bool Check_FlowAcc_Output(QString file, bool color_and_message_if_exists );
 
     void Clear_Log();
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Load_Project_Settings();
 
     Ui::FlowGrids *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

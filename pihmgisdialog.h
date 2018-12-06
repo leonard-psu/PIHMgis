@@ -118,6 +118,11 @@ private:
     void Clear_Log();
     void Log_Error_Message(QString message);
 
+    void PickWorkspace();
+    void New_Project();
+    void Import_Project();
+    void Close_Project();
+
     void update_project_file_label();
     void update_current_workspace_label();
 
@@ -128,22 +133,41 @@ private:
 
     int check_pihmgis_project_exists(QString folder);
 
+    void set_New_Project_Status(bool status);
+    void set_Close_Status(bool status);
+    void set_Inspect_Status(bool status);
+    void set_Import_Status(bool status);
+
 
     Ui::PIHMgisDialog *ui;
     QString LogsString;
 
     //File menu
+    QAction *mnu_pick;
+    QAction *mnu_new;
+    QAction *mnu_import;
+    QAction *mnu_close;
     QAction *mnu_quit;
+    void menu_pick_workspace();
+    void menu_new();
+    void menu_import();
+    void menu_close();
     void menu_quit();
 
     //Log menu
     void menu_debug_messages();
     void menu_log_messages();
     void menu_log_many();
+    void menu_redirect_messages();
+    void menu_clear_messages();
+    void menu_save_log();
 
-    QAction *mnu_debug;     //static bool print_debug_messages = false;  //Print to console window
-    QAction *mnu_log_debug; //static bool print_log_messages = true;     //Print to widget log window (Only important messages)
-    QAction *mnu_log_many;  //static bool print_many_messages = false;
+    QAction *mnu_debug;        //print_debug_messages console window
+    QAction *mnu_log_debug;    //print_log_messages Print to widget log window (Only important messages)
+    QAction *mnu_log_many;     //print_many_messages
+    QAction *mnu_log_redirect; //redirect_debug_messages_to_log
+    QAction *mnu_clear_log;    //
+    QAction *mnu_save_log;     //save important log
 
     //Help menu
     QAction *mnu_help;

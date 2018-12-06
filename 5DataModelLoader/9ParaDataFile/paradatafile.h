@@ -12,7 +12,7 @@ class ParaDataFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit ParaDataFile(QWidget *parent = 0, QString filename_open_project = "");
+    explicit ParaDataFile(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~ParaDataFile();
 
     QString LogsString;

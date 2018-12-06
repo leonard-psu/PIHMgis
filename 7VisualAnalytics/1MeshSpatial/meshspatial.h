@@ -14,7 +14,7 @@ class MeshSpatial : public QDialog
     Q_OBJECT
 
 public:
-    explicit MeshSpatial(QWidget *parent = 0, QString filename_open_project = "");
+    explicit MeshSpatial(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~MeshSpatial();
 
     QString LogsString;

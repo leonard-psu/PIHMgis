@@ -10,7 +10,6 @@
 #include "0LibsIO/IOProjectFile.h"
 #include "globals.h"
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // InitDataFile Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -137,9 +136,7 @@ bool InitDataFile::Load_Project_Settings()
         }
         //End: Set Defaults
 
-
         //Start: Fill Form If Module Has Been Run Previously
-
         ModuleStringList = ReadModuleLine(filename_open_project,tr("InitDataFile"));
         if ( ModuleStringList.length() > 0 )
         {
@@ -681,7 +678,6 @@ void InitDataFile::on_pushButtonMeshDataFile_clicked()
             pushButtonSetFocus();
         }
 
-
     } catch (...) {
         qDebug() << "Error: InitDataFile::on_pushButtonMeshDataFile_clicked() is returning w/o checking";
     }
@@ -706,7 +702,6 @@ void InitDataFile::on_pushButtonRivDataFile_clicked()
             Check_RivData_Input(RivDataFileName);
             pushButtonSetFocus();
         }
-
 
     } catch (...) {
         qDebug() << "Error: InitDataFile::on_pushButtonRivDataFile_clicked is returning w/o checking";
@@ -908,14 +903,14 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
 
         if(print_debug_messages)
         {
-            qDebug() << "Interception = " << Interception;
-            qDebug() << "Snow = " << Snow;
-            qDebug() << "Surface = " << Surface;
-            qDebug() << "SoilMoisture = " << SoilMoisture;
-            qDebug() << "Groundwater = " << Groundwater;
-            qDebug() << "River = " << River;
-            qDebug() << "Riverbed = " << Riverbed;
-            qDebug() << "MetersOrPercent = " << MetersOrPercent;
+            Log_Message("Interception = " + Interception);
+            Log_Message("Snow = " + Snow);
+            Log_Message("Surface = " + Surface);
+            Log_Message("SoilMoisture = " + SoilMoisture);
+            Log_Message("Groundwater = " + Groundwater);
+            Log_Message("River = " + River);
+            Log_Message("Riverbed = " + Riverbed);
+            Log_Message("MetersOrPercent = " + MetersOrPercent);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1050,7 +1045,6 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
         }
         else
         {
-
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Using Meters
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1092,6 +1086,12 @@ void InitDataFile::Log_Warning_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
     }
@@ -1106,8 +1106,34 @@ void InitDataFile::Log_Error_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void InitDataFile::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
     }
 }
 
@@ -1234,10 +1260,7 @@ void InitDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running INIT Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Init Data File ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
+        Log_Message("Running Init Data File ... <br>");
 
         int ErrorInit = init_data_file(input_Interception,
                                        input_Snow_Input,
@@ -1288,9 +1311,7 @@ void InitDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        LogsString.append(tr("<br><b>Init Data File Processing Complete.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<br><b>Init Data File Processing Complete.</b>")+tr("<br>"));
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

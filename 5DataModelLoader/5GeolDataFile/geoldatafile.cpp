@@ -11,7 +11,6 @@
 #include "0LibsOther/pedo_transfer_functions.h"
 #include "globals.h"
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // GeolDataFile Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -33,9 +32,7 @@ GeolDataFile::GeolDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -81,6 +78,12 @@ void GeolDataFile::Log_Warning_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
     }
@@ -95,8 +98,33 @@ void GeolDataFile::Log_Error_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void GeolDataFile::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
     }
 }
 
@@ -110,7 +138,7 @@ bool GeolDataFile::Load_Project_Settings()
 
     try {
 
-        // ** Data Model OUTPUT File Name
+        // Data Model OUTPUT File Name
         QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
         if ( ModuleStringList.length() > 0  )
         {
@@ -128,10 +156,9 @@ bool GeolDataFile::Load_Project_Settings()
             QString output_filename =  user_pihmgis_root_folder+"/4DataModelLoader/"+TempFileName+".geol";
             Check_GeolData_Output(output_filename, true);
         }
-        // ** End: Set Defaults
+        // End: Set Defaults
 
-
-        // ** Start: Fill Form If Module Has Been Run Previously
+        // Start: Fill Form If Module Has Been Run Previously
 
         ModuleStringList = ReadModuleLine(filename_open_project,tr("GeolDataFile"));
         if ( ModuleStringList.length() > 0 )
@@ -139,7 +166,7 @@ bool GeolDataFile::Load_Project_Settings()
             Check_GeolTexture_Input(ModuleStringList.at(1));
             Check_GeolData_Output(ModuleStringList.at(2), true);
         }
-        // ** End: Fill Form If Module Has Been Run Previously
+        // End: Fill Form If Module Has Been Run Previously
 
         pushButtonSetFocus();
 
@@ -234,7 +261,6 @@ bool GeolDataFile::Check_GeolData_Output(QString file, bool color_and_message_if
         {
             ui->lineEditGeolDataFile->setStyleSheet("color: black;");
             ui->lineEditGeolDataFile->setText(file);
-
             result = false;
         }
 
@@ -331,7 +357,6 @@ void GeolDataFile::on_pushButtonGeolDataFile_clicked()
             pushButtonSetFocus();
         }
 
-
     } catch (...) {
         qDebug() << "Error: GeolDataFile::on_pushButtonGeolDataFile_clicked() is returning w/o checking";
     }
@@ -393,9 +418,7 @@ void GeolDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Mesh Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Geol Data File ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Geol Data File ... <br>");
 
         int ErrorGeol = Geol_PedoTransferFunction( input_GeolTexture_filename, output_GeolData_filename );
 
@@ -421,9 +444,7 @@ void GeolDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        LogsString.append(tr("<br><b>Geol Data File Processing Complete.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<br><b>Geol Data File Processing Complete.</b>")+tr("<br>"));
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

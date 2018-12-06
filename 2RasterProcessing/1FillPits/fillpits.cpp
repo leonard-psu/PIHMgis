@@ -133,9 +133,7 @@ bool FillPits::Check_DEM_Input(QString dem )
             ui->lineEditDEM->setStyleSheet("color: red;");
             ui->lineEditDEM->setText(dem);
 
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: DEM input does not exist: </span>") + dem +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: DEM input does not exist: </span>") + dem +tr("<br>"));
             result = false;
         }
 
@@ -165,9 +163,7 @@ bool FillPits::Check_Fillpit_Output(QString fillpits, bool color_and_message_if_
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: fillpits output already exists: </span>") + fillpits +tr(" You may need to delete this file(s).<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("<span style=\"color:#FF0000\">Warning: fillpits output already exists: </span>") + fillpits +tr(" You may need to delete this file(s).<br>"));
             }
 
             ui->lineEditFillPits->setStyleSheet("color: red;");
@@ -247,6 +243,46 @@ void FillPits::Clear_Log()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void FillPits::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void FillPits::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Browse Button Clicked Event for DEM
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FillPits::on_pushButtonDEM_clicked()
@@ -270,7 +306,7 @@ void FillPits::on_pushButtonDEM_clicked()
         }
         else
         {
-            qDebug() << "on_pushButtonDEM_clicked: Invalid DEMFileName";
+            Log_Message("on_pushButtonDEM_clicked: Invalid DEMFileName");
         }
 
     } catch (...) {
@@ -299,7 +335,7 @@ void FillPits::on_pushButtonFillPits_clicked()
         }
         else
         {
-            qDebug() << "on_pushButtonFillPits_clicked: Invalid FillPitFileName";
+            Log_Message("on_pushButtonFillPits_clicked: Invalid FillPitFileName");
         }
 
     } catch (...) {
@@ -331,9 +367,7 @@ void FillPits::on_pushButtonRun_clicked()
         bool dem_check = Check_DEM_Input(filename_dem);
         if(!dem_check)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: DEM input does not exist: </span>") + filename_dem +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: DEM input does not exist: </span>") + filename_dem +tr("<br>"));
             return;
         }
 
@@ -348,7 +382,7 @@ void FillPits::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(filename_fill, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Write Access ... </span>") + filename_fill + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access ... </span>") + filename_fill + tr("<br>"));
             return;
         }
 
@@ -364,9 +398,7 @@ void FillPits::on_pushButtonRun_clicked()
             ASCFileName.truncate(ASCFileName.length()-3);
             ASCFileName.append("asc");
 
-            LogsString.append("Converting Arc Binary File to ASC File ... <br>");
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Message("Converting Arc Binary File to ASC File ... <br>");
             ADFFiletoASCFile(DEMFileName, ASCFileName);
         }
 
@@ -385,25 +417,21 @@ void FillPits::on_pushButtonRun_clicked()
         ASCFileTextStream>>TempString;
 
         ASCFileTextStream >> DEMResolution;
-        qDebug() << "DEM Resolution (Integer) = "<<DEMResolution<<"\n";
+        Log_Message("DEM Resolution (Integer) = " + QString::number(DEMResolution) + "\n");
         ASCFile.close();
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run pit fill
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Fill Pits ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Fill Pits ... <br>");
 
         const char *dummystr = "dummy";
 
         int ErrorFill = flood( (char *)qPrintable(ASCFileName), (char *)dummystr, (char *)qPrintable(filename_fill) );
         if( ErrorFill != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Fill Pits Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorFill)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Fill Pits Processing Failed ... </span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorFill)+tr("<br>"));
             return;
         }
 
@@ -418,9 +446,7 @@ void FillPits::on_pushButtonRun_clicked()
         qint64 size = file_Size(filename_fill);
         if( size < 1)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Fillpit failed, invalid file size: </span>") + size +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Fillpit failed, invalid file size: </span>") + size +tr("<br>"));
             return;
         }
 
@@ -437,7 +463,7 @@ void FillPits::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append(tr("<br><b>Fill Pits Processing Completed.</b>")+tr("<br>"));
+        Log_Message(tr("<br><b>Fill Pits Processing Completed.</b>")+tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
@@ -483,7 +509,7 @@ void FillPits::on_pushButtonHelp_clicked()
 
     try {
 
-        LogsString = tr("");
+        //LogsString = tr("");
         //        if ( ! QDesktopServices::openUrl(QUrl("http://cataract.cee.psu.edu/PIHM/index.php/PIHMgis_3.0#Fill_Pits")) )
         //            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Load HTTP Link ... </span>")+tr("<br>"));
         //        ui->textBrowserLogs->setHtml(LogsString);

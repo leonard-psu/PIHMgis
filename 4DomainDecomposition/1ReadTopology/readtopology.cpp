@@ -11,7 +11,6 @@
 #include "0LibsOther/shape_pslg.h"
 #include "globals.h"
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ReadTopology Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -32,9 +31,7 @@ ReadTopology::ReadTopology(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -85,16 +82,12 @@ bool ReadTopology::Load_Project_Settings()
         {
 
             QString MergeVectorFileName = ModuleStringList.at(2);
-            qDebug() << "MergeVectorFileName 1 = " << MergeVectorFileName;
             Check_MergeVector_Input(MergeVectorFileName);
 
-
-            //ui->lineEditMerge->setText(ModuleStringList.at(2));
-            //QString file1 = ModuleStringList.at(2);
-            bool file1_check = Check_File_Valid(MergeVectorFileName); //file1);
+            bool file1_check = Check_File_Valid(MergeVectorFileName);
             if(file1_check)
             {
-                QString file2 = MergeVectorFileName; //file1;
+                QString file2 = MergeVectorFileName;
                 file2.replace(QString(".shp"),QString(".poly"));
                 bool file2_check = Check_File_Valid(file2);
                 Check_PSLG_Output(file2,true);
@@ -106,21 +99,7 @@ bool ReadTopology::Load_Project_Settings()
         if ( ModuleStringList.length() > 0 )
         {
             QString file1 = ModuleStringList.at(1);
-//            bool file1_check = Check_File_Valid(file1);
-//            ui->lineEditMerge->setText(file1);
-//            if(file1_check)
-//            {
-//                ui->lineEditMerge->setStyleSheet("Qt::black");
-//            }
-//            else
-//            {
-//                LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
-//                ui->lineEditMerge->setStyleSheet("Qt::red");
-//            }
-
-            qDebug() << "MergeVectorFileName 2 = " << file1;
             Check_MergeVector_Input(file1);
-
 
             QString file2 = ModuleStringList.at(2);
             bool file2_check = Check_File_Valid(file2);
@@ -160,13 +139,10 @@ bool ReadTopology::Check_File_Valid(QString file)
 
             if( size < 1)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, file : </span>") + file +tr("<br>"));
-                LogsString.append(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, invalid file size: </span>") + size +tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, file : </span>") + file +tr("<br>"));
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, invalid file size: </span>") + size +tr("<br>"));
                 result = false;
             }
-
         }
 
     } catch (...) {
@@ -193,6 +169,46 @@ void ReadTopology::Clear_Log()
 
     } catch (...) {
         qDebug() << "Error: ReadTopology::Clear_Log() is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void ReadTopology::Log_Error_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void ReadTopology::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
     }
 }
 
@@ -251,13 +267,10 @@ bool ReadTopology::Check_MergeVector_Input(QString file)
         {
             ui->lineEditMerge->setStyleSheet("color: red;");
             ui->lineEditMerge->setText(file);
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: MergeVector input does not exist: </span>") + file +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: MergeVector input does not exist: </span>") + file +tr("<br>"));
             result = false;
         }
-
-
     } catch (...) {
         qDebug() << "Error: Check_MergeVector_Input is returning w/o checking";
         result = false;
@@ -283,9 +296,7 @@ bool ReadTopology::Check_PSLG_Output(QString file, bool color_and_message_if_exi
         {
             if(color_and_message_if_exists)
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">Warning: Tinshape output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">Warning: Tinshape output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
             }
 
             ui->lineEditPSLG->setStyleSheet("color: red;");
@@ -297,10 +308,8 @@ bool ReadTopology::Check_PSLG_Output(QString file, bool color_and_message_if_exi
             ui->lineEditPSLG->setStyleSheet("color: black;");
             ui->lineEditPSLG->setText(file);
 
-
             result = false;
         }
-
 
     } catch (...) {
         qDebug() << "Error: Check_PSLG_Output is returning w/o checking";
@@ -395,12 +404,9 @@ void ReadTopology::on_pushButtonRun_clicked()
         bool input_filenameCheck = Check_MergeVector_Input(input_filename);
         if(!input_filenameCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: MergeVector Input File Missing </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: MergeVector Input File Missing </span>")+tr("<br>"));
             return;
         }
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Does output already exist?
@@ -409,9 +415,7 @@ void ReadTopology::on_pushButtonRun_clicked()
         bool output_filenameCheck = Check_PSLG_Output(output_filename, false);
         if(output_filenameCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: PSLG Output already exists </span>")+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: PSLG Output already exists </span>")+tr("<br>"));
             return;
         }
 
@@ -420,33 +424,28 @@ void ReadTopology::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_filename, "ReadOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_filename + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_filename + tr("<br>"));
             return;
         }
 
         if ( ! CheckFileAccess(output_filename, "WriteOnly") )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + output_filename +tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + output_filename +tr("<br>"));
             return;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Read Topology
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Read Topology ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Read Topology ... <br>");
 
         int ErrorPSLG = shape_pslg((char *)qPrintable(input_filename), (char *)qPrintable(output_filename), &LogsString);
         if( ErrorPSLG != 0 )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Read Topology Processing Failed ... </span>")+tr("<br>"));
-            LogsString.append(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorPSLG)+tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Read Topology Processing Failed ... </span>")+tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorPSLG)+tr("<br>"));
             return;
         }
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check output filenames
@@ -454,21 +453,16 @@ void ReadTopology::on_pushButtonRun_clicked()
         output_filenameCheck = Check_PSLG_Output(output_filename, false);
         if(!output_filenameCheck)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: CatchmentPolygon failed, file does not exist: </span>") + output_filename +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: CatchmentPolygon failed, file does not exist: </span>") + output_filename +tr("<br>"));
             return;
         }
 
         qint64 size = file_Size(output_filename);
         if( size < 1)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: CatchmentPolygon failed, invalid file size: </span>") + size +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: CatchmentPolygon failed, invalid file size: </span>") + size +tr("<br>"));
             return;
         }
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Project file
@@ -478,15 +472,12 @@ void ReadTopology::on_pushButtonRun_clicked()
         WriteModuleLine(filename_open_project, ProjectIOStringList);
         ProjectIOStringList.clear();
 
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        LogsString.append(tr("<br><b>Read Topology Processing Completed.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<br><b>Read Topology Processing Completed.</b>")+tr("<br>"));
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);
