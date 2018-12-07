@@ -83,6 +83,7 @@ PIHMgisDialog::PIHMgisDialog(QWidget *parent) :
         ui->label_project_found->setVisible(false);
 
         update_current_workspace_label();
+        Setup_ToolBox_Icons();
 
         if(print_log_messages)
             Print_Message_To_Main_Dialog("Welcome to PIHMgis v3.5....");
@@ -477,11 +478,52 @@ void PIHMgisDialog::menu_clear_messages()
     {
         if(mnu_clear_log != nullptr)
         {
-            Clear_Log();
+            QMessageBox::StandardButton response = QMessageBox::question(this, "Clear Log", "Are you sure?", QMessageBox::Yes|QMessageBox::No);
+            if (response == QMessageBox::Yes)
+            {
+                Clear_Log();
+            }
         }
 
     } catch (...) {
         qDebug() << "Error: menu_clear_messages is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Save log Menu Item Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::Save_log()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start Save_log";
+
+    try
+    {
+
+        QString fileName = QFileDialog::getSaveFileName(this,tr("Save Log File"), "", tr("Log (*.txt);;All Files (*)"));
+        if (fileName.isEmpty())
+        {
+            //Do nothing
+            return;
+        }
+        else {
+            QFile file(fileName);
+            if (!file.open(QIODevice::WriteOnly))
+            {
+                QMessageBox::information(this, tr("Unable to open file"),file.errorString());
+                return;
+            }
+            QTextStream out(&file);
+            out << ui->textBrowserLogs->document()->toPlainText();
+            file.close();
+
+            Log_Message("Saved log message to :" + fileName);
+        }
+
+
+    } catch (...) {
+        qDebug() << "Error: Save_log is returning w/o checking";
     }
 }
 
@@ -497,25 +539,7 @@ void PIHMgisDialog::menu_save_log()
     {
         if(mnu_save_log != nullptr)
         {
-            QString fileName = QFileDialog::getSaveFileName(this,tr("Save Log File"), "", tr("Log (*.txt);;All Files (*)"));
-            if (fileName.isEmpty())
-            {
-                //Do nothing
-                return;
-            }
-            else {
-                QFile file(fileName);
-                if (!file.open(QIODevice::WriteOnly))
-                {
-                    QMessageBox::information(this, tr("Unable to open file"),file.errorString());
-                    return;
-                }
-                QTextStream out(&file);
-                out << ui->textBrowserLogs->document()->toPlainText();
-                file.close();
-
-                Log_Message("Saved log message to :" + fileName);
-            }
+            Save_log();
         }
 
     } catch (...) {
@@ -2086,7 +2110,6 @@ void PIHMgisDialog::Clear_Log()
         qDebug() << "INFO: Start PIHMgisDialog::Clear_Log()";
 
     try {
-
         LogsString = tr("");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
@@ -2129,5 +2152,95 @@ void PIHMgisDialog::Log_Message(QString message)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void PIHMgisDialog::on_pushButtonClearLog_clicked()
 {
-    Clear_Log();
+    if(print_debug_messages)
+        qDebug() << "INFO: Start on_pushButtonClearLog_clicked";
+
+    try
+    {
+        QMessageBox::StandardButton response = QMessageBox::question(this, "Clear Log", "Are you sure?", QMessageBox::Yes|QMessageBox::No);
+        if (response == QMessageBox::Yes)
+        {
+            LogsString = tr("");
+            ui->textBrowserLogs->setHtml(LogsString);
+            ui->textBrowserLogs->repaint();
+
+        }
+        else
+        {
+            //Do nothing
+        };
+
+    } catch (...) {
+        qDebug() << "Error: on_pushButtonClearLog_clicked is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Save Log Button Click Event
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::on_pushButtonSaveLog_clicked()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start on_pushButtonSaveLog_clicked";
+
+    try
+    {
+        Save_log();
+
+    } catch (...) {
+        qDebug() << "Error: on_pushButtonSaveLog_clicked is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Setup icons for tool box clicks
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::Setup_ToolBox_Icons()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start Setup_ToolBox_Icons";
+
+    try
+    {
+        for(int i = 0; i < ui->PIHMgisToolBox->count(); i++)
+        {
+            if( i == 0)
+            {
+                ui->PIHMgisToolBox->setItemIcon(i, QIcon("Icons/icons8-double-up-filled-50.png"));
+            }
+            else
+            {
+                ui->PIHMgisToolBox->setItemIcon(i, QIcon("Icons/icons8-double-down-filled-50.png"));
+            }
+        }
+    } catch (...) {
+        qDebug() << "Error: Setup_ToolBox_Icons is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Change Selected Toolbox icon
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::on_PIHMgisToolBox_currentChanged(int index)
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start on_PIHMgisToolBox_currentChanged";
+
+    try
+    {
+        for(int i = 0; i < ui->PIHMgisToolBox->count(); i++)
+        {
+            if( i == index)
+            {
+                ui->PIHMgisToolBox->setItemIcon(index, QIcon("Icons/icons8-double-up-filled-50.png"));
+            }
+            else
+            {
+                ui->PIHMgisToolBox->setItemIcon(i, QIcon("Icons/icons8-double-down-filled-50.png"));
+            }
+        }
+
+    } catch (...) {
+        qDebug() << "Error: on_PIHMgisToolBox_currentChanged is returning w/o checking";
+    }
 }

@@ -113,10 +113,15 @@ private slots:
 
     void on_pushButtonClearLog_clicked();
 
+    void on_pushButtonSaveLog_clicked();
+
+    void on_PIHMgisToolBox_currentChanged(int index);
+
 private:
     void Setup_Menu();
     void Clear_Log();
     void Log_Error_Message(QString message);
+    void Save_log();
 
     void PickWorkspace();
     void New_Project();
@@ -137,6 +142,7 @@ private:
     void set_Close_Status(bool status);
     void set_Inspect_Status(bool status);
     void set_Import_Status(bool status);
+    void Setup_ToolBox_Icons();
 
 
     Ui::PIHMgisDialog *ui;

@@ -4,6 +4,7 @@ Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015
 ### These libraries are required
 1. gdal-2.3.1 or higher
 2. sundials 2.7.0 solver. This code will need modification to use higher versions of sundials.
+3. triangle by Jonathan Richard Shewchuk, see note below.
 
 ### Note this code has been developed and tested on windows environment only.
 
@@ -29,7 +30,6 @@ Sometimes Qt Creator will find code errors when building. Especially for code/fu
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 #### PIHMgis Version 3.0
 Software Author:
 Gopal Bhatt
@@ -45,3 +45,15 @@ Penn State University
 
 
 PIHMgis is an open-source, platform independent, tightly coupled GIS and distributed hydrologic modeling framework (www.pihm.psu.edu). PIHMgis improves model-data integration, and provides functionalities for watershed delineation, domain decomposition, parameter assignment, simulation, visualization and analyses.
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+### Other Software 
+
+Triangle is required to create PIHM meshes.
+The version supplied with PIHMgis v3.0 has been removed from this version. Users are required to copy/compile Shewchuk's triangle software into the Software directory. The Software directory is created in their PIHMgis workspace.
+
+/*  A Two-Dimensional Quality Mesh Generator and Delaunay Triangulator.      */
+/*  (triangle.c)                                                             */
+/*  								             */
+/*  Copyright 1993, 1995, 1997, 1998, 2002, 2005                             */
+/*  Jonathan Richard Shewchuk                                                */

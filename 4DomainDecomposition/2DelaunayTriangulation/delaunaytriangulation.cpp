@@ -8,7 +8,8 @@
 #include "ui_delaunaytriangulation.h"
 
 #include "0LibsIO/IOProjectFile.h"
-#include "0LibsOther/triangle_shewchuk.h"
+//#include "0LibsOther/triangle_shewchuk.h"
+//Triangle software (compiled) must be provided by user.
 #include "globals.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

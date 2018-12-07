@@ -14,6 +14,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
 
 TARGET = PIHMgis
 TEMPLATE = app
+RESOURCES = Icons.qrc
 
 QMAKE_CFLAGS += -std=c99
 
@@ -63,7 +64,6 @@ SOURCES += main.cpp\
     0LibsOther/shape_pslg.cpp \
     4DomainDecomposition/2DelaunayTriangulation/delaunaytriangulation.cpp \
     4DomainDecomposition/3TINShapeLayer/tinshapelayer.cpp \
-    0LibsOther/triangle_shewchuk.cpp \
     0LibsVector/tin_shape.cpp \
     5DataModelLoader/1MeshDataFile/meshdatafile.cpp \
     0LibsOther/mesh_data_file.cpp \
@@ -103,7 +103,6 @@ SOURCES += main.cpp\
     0LibsOther/raster_grid_value.cpp \
     0LibsOther/riv_data_file.cpp \
     0LibsOther/shape_pslg.cpp \
-    0LibsOther/triangle_shewchuk.cpp \
     0LibsRaster/ADFFiletoASCFile.cpp \
     0LibsRaster/aread8.cpp \
     0LibsRaster/avcalls_null.cpp \
@@ -223,7 +222,7 @@ SOURCES += main.cpp\
 #    moc_tinshapelayer.cpp \
     #pihmgis_plugin_import.cpp \
     pihmgisdialog.cpp \
-    #qrc_Icons.cpp \
+    qrc_Icons.cpp \
     1ProjectManagement/1NewProject/newproject.cpp \
     1ProjectManagement/2OpenProject/openproject.cpp \
     1ProjectManagement/3ImportProject/importproject.cpp \
@@ -279,7 +278,6 @@ HEADERS  += pihmgisdialog.h \
     0LibsOther/shape_pslg.h \
     4DomainDecomposition/2DelaunayTriangulation/delaunaytriangulation.h \
     4DomainDecomposition/3TINShapeLayer/tinshapelayer.h \
-    0LibsOther/triangle_shewchuk.h \
     0LibsVector/tin_shape.h \
     5DataModelLoader/1MeshDataFile/meshdatafile.h \
     0LibsOther/mesh_data_file.h \
@@ -315,7 +313,6 @@ HEADERS  += pihmgisdialog.h \
     0LibsOther/raster_grid_value.h \
     0LibsOther/riv_data_file.h \
     0LibsOther/shape_pslg.h \
-    0LibsOther/triangle_shewchuk.h \
     0LibsRaster/ADFFiletoASCFile.h \
     0LibsRaster/aread8.h \
     0LibsRaster/avexec32.h \
@@ -443,8 +440,6 @@ FORMS    += pihmgisdialog.ui \
 
 OTHER_FILES +=
 
-RESOURCES += \
-    Icons.qrc
 
 INCLUDEPATH += $$PWD/../gdal-2.3.1/gcore
 DEPENDPATH += $$PWD/../gdal-2.3.1/gcore

@@ -9,6 +9,8 @@
         <file>Icons/icons8-add-48.png</file>
         <file>Icons/icons8-cancel-52.png</file>
         <file>Icons/icons8-import-filled-64.png</file>
+        <file>Icons/icons8-double-up-filled-50.png</file>
+        <file>Icons/icons8-double-down-filled-50.png</file>
     </qresource>
     <qresource prefix="/misc"/>
 </RCC>
