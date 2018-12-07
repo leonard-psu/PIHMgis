@@ -8,7 +8,6 @@ namespace Ui {
 class MeshSpatial;
 }
 
-
 class MeshSpatial : public QDialog
 {
     Q_OBJECT
@@ -16,8 +15,6 @@ class MeshSpatial : public QDialog
 public:
     explicit MeshSpatial(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~MeshSpatial();
-
-    QString LogsString;
 
 private slots:
     void on_pushButtonOutputDataFolder_clicked();
@@ -44,11 +41,9 @@ private slots:
 
 private:
 
-
     void Clear_Log();
     void Log_Error_Message(QString message);
     void Log_Message(QString message);
-
 
     void verifyInputOutputFile();
 
@@ -67,6 +62,7 @@ private:
 
     Ui::MeshSpatial *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

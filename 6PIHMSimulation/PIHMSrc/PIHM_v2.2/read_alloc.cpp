@@ -35,7 +35,7 @@
 
 extern QMutex stop_mutex; //Used to check thread stop status
 
-bool read_alloc(MyThread *thread, Model_Data DS, Control_Data *CS)
+bool read_alloc(PIHMThread *thread, Model_Data DS, Control_Data *CS)
 {
 
     //-----------------------------------------------------------------------------------------------/

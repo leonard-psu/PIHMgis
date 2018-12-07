@@ -130,7 +130,7 @@ bool RiverTemporal::Load_Project_Settings()
             Check_Project_Name_Input(TempFileName);
         }
 
-        // ** Start: Fill Form If Module Has Been Run Previously
+        // Start: Fill Form If Module Has Been Run Previously
         ModuleStringList = ReadModuleLine(filename_open_project,tr("RiverTemporal"));
 
         if ( ModuleStringList.length() > 0 )
@@ -337,9 +337,11 @@ void RiverTemporal::on_lineEditOutputDataFolder_textChanged(const QString &arg1)
         qDebug() << "INFO: Start RiverTemporal::on_lineEditOutputDataFolder_textChanged()";
 
     try {
+
         bool checked = Check_OutputFolder_Location(arg1);
         if(checked)
             verifyInputOutputFile();
+
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_lineEditOutputDataFolder_textChanged() is returning w/o checking";
     }
@@ -354,9 +356,11 @@ void RiverTemporal::on_lineEditDataKey_textChanged(const QString &arg1)
         qDebug() << "INFO: Start RiverTemporal::on_lineEditDataKey_textChanged()";
 
     try {
+
         bool checked = Check_Project_Name_Input(arg1);
         if(checked)
             verifyInputOutputFile();
+
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_lineEditDataKey_textChanged() is returning w/o checking";
     }
@@ -371,9 +375,11 @@ void RiverTemporal::on_lineEditModelSegments_textChanged(const QString &arg1)
         qDebug() << "INFO: Start RiverTemporal::on_lineEditModelSegments_textChanged()";
 
     try {
+
         bool checked = Check_ModelSegments_Input(arg1);
         if(checked)
             verifyInputOutputFile();
+
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_lineEditModelSegments_textChanged() is returning w/o checking";
     }
@@ -419,7 +425,7 @@ void RiverTemporal::verifyInputOutputFile()
 
         if ( !exists)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>") + output_data_folder + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>") + output_data_folder + tr("<br>"));
         }
         else
         {
@@ -432,7 +438,7 @@ void RiverTemporal::verifyInputOutputFile()
 
         if ( ! QFile(para_filename).exists() )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ para_filename +tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ para_filename +tr("<br>"));
         }
         else
         {
@@ -467,16 +473,13 @@ void RiverTemporal::verifyInputOutputFile()
             QString tmp_filename = FileName + Extensions.at(i);
             if ( ! QFile(tmp_filename).exists() )
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>") + tmp_filename +tr("<br>"));
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>") + tmp_filename +tr("<br>"));
             }
             else
             {
-                LogsString.append(tr("Output File Exists ... ") + tmp_filename +tr("<br>"));
+                Log_Message(tr("Output File Exists ... ") + tmp_filename +tr("<br>"));
             }
         }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: RiverTemporal::verifyInputOutputFile() is returning w/o checking";
@@ -546,15 +549,13 @@ int RiverTemporal::Get_Element_Count(QString element_filename, bool message)
 
         if(message)
         {
-            LogsString.append(tr("Number of Elements = ")+QString::number(element_count)+tr("<br>"));
+            Log_Message(tr("Number of Elements = ") + QString::number(element_count) + tr("<br>"));
         }
-
     }
     catch (...)
     {
         element_count = -1;
         qDebug() << "Error: RiverTemporal::Get_Element_Count() is returning w/o checking";
-
     }
 
     return element_count;
@@ -582,7 +583,7 @@ int RiverTemporal::Get_River_Count(QString river_filename, bool message)
 
         if(message)
         {
-            LogsString.append(tr("Number of River Segments = ")+QString::number(river_count)+tr("<br>"));
+            Log_Message(tr("Number of River Segments = ") + QString::number(river_count) + tr("<br>"));
         }
 
     }
@@ -590,7 +591,6 @@ int RiverTemporal::Get_River_Count(QString river_filename, bool message)
     {
         river_count = -1;
         qDebug() << "Error: RiverTemporal::Get_River_Count() is returning w/o checking";
-
     }
 
     return river_count;
@@ -946,7 +946,7 @@ void RiverTemporal::on_pushButtonRun_clicked()
                 {
                     datax[j][k] = Data.at(0).toDouble() / time_step;
                     datay[j][k] = datay[j][k] + Data.at(ModelSegments.at(j).toInt()).toDouble();
-                    qDebug() << i << "," << j << "," << k << "," << ModelSegments.at(j).toInt() << ", "<< datax[j][k] << "," << datay[j][k] << "\n";
+                    //qDebug() << i << "," << j << "," << k << "," << ModelSegments.at(j).toInt() << ", "<< datax[j][k] << "," << datay[j][k] << "\n";
                 }
                 k++;
             }

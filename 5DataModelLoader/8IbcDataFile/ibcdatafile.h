@@ -15,7 +15,6 @@ public:
     explicit IbcDataFile(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~IbcDataFile();
 
-    QString LogsString;
 
 private slots:
     void on_pushButtonIbcDataFile_clicked();
@@ -34,13 +33,16 @@ private:
     int  ibc_data_file( QString );
 
     void Clear_Log();
-    bool Load_Project_Settings();
     void Log_Error_Message(QString message);
+    void Log_Message(QString message);
+
+    bool Load_Project_Settings();
 
     bool Check_IbcData_Output(QString file, bool message); //lineEditIbcDataFile
 
     Ui::IbcDataFile *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

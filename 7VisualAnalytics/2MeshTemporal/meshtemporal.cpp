@@ -418,7 +418,7 @@ void MeshTemporal::verifyInputOutputFile()
 
         if ( !exists)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>") + output_data_folder + tr("<br>"));
+            Log_Message(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>") + output_data_folder + tr("<br>"));
         }
         else
         {
@@ -431,7 +431,7 @@ void MeshTemporal::verifyInputOutputFile()
 
         if ( ! QFile(para_filename).exists() )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ para_filename +tr("<br>"));
+            Log_Message(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ para_filename +tr("<br>"));
         }
         else
         {
@@ -458,11 +458,11 @@ void MeshTemporal::verifyInputOutputFile()
             QString tmp_filename = FileName + Extensions.at(i);
             if ( ! QFile(tmp_filename).exists() )
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>") + tmp_filename +tr("<br>"));
+                Log_Message(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>") + tmp_filename +tr("<br>"));
             }
             else
             {
-                LogsString.append(tr("Output File Exists ... ") + tmp_filename +tr("<br>"));
+                Log_Message(tr("Output File Exists ... ") + tmp_filename +tr("<br>"));
             }
         }
 
@@ -537,7 +537,7 @@ int MeshTemporal::Get_Element_Count(QString element_filename, bool message)
 
         if(message)
         {
-            LogsString.append(tr("Number of Elements = ")+QString::number(element_count)+tr("<br>"));
+            Log_Message(tr("Number of Elements = ")+QString::number(element_count)+tr("<br>"));
         }
 
     }
@@ -573,7 +573,7 @@ int MeshTemporal::Get_River_Count(QString river_filename, bool message)
 
         if(message)
         {
-            LogsString.append(tr("Number of River Segments = ")+QString::number(river_count)+tr("<br>"));
+            Log_Message(tr("Number of River Segments = ")+QString::number(river_count)+tr("<br>"));
         }
 
     }
@@ -611,17 +611,20 @@ Time_Values MeshTemporal::Get_Time_Steps(QString filename, int num_elements, boo
 
         TempFileTextStream >> TIMESTEP1;
 
-        if(message) qDebug() << "Time Step1 = " << TIMESTEP1 << "\n";
+        if(message)
+            qDebug() << "Time Step1 = " << TIMESTEP1 << "\n";
 
         for (int i=0; i < num_elements+1; i++)
         {
             TempFileTextStream >> TempDouble;
-            if(message) qDebug() << TempDouble << ", ";
+            if(message)
+                qDebug() << TempDouble << ", ";
         }
         TempFileTextStream >> TIMESTEP2;
         TempFile.close();
 
-        if(message) qDebug() << "\nTime Step2 = " << TIMESTEP2 << "\n";
+        if(message)
+            qDebug() << "\nTime Step2 = " << TIMESTEP2 << "\n";
 
         //time_step = TIMESTEP2 - TIMESTEP1;
         //if(message) qDebug() << "Time Step = " << time_step << "\n";

@@ -116,6 +116,7 @@ bool MeshSpatial::Load_Project_Settings()
 
     try {
 
+        // Start: Set Defaults
         QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("PIHMSimulation"));
         if ( ModuleStringList.length() > 0  )
         {
@@ -137,11 +138,9 @@ bool MeshSpatial::Load_Project_Settings()
             QString TempFileName = ModuleStringList.at(3);
             Check_Mesh_Input(TempFileName);
         }
-        // ** End: Set Defaults
+        // End: Set Defaults
 
-
-        // ** Start: Fill Form If Module Has Been Run Previously
-
+        // Start: Fill Form If Module Has Been Run Previously
         ModuleStringList = ReadModuleLine(filename_open_project,tr("MeshSpatial"));
 
         if ( ModuleStringList.length() > 0 )
@@ -150,6 +149,7 @@ bool MeshSpatial::Load_Project_Settings()
             Check_Project_Name_Input(ModuleStringList.at(2));
             Check_Mesh_Input(ModuleStringList.at(8));
         }
+        // End: Fill Form If Module Has Been Run Previously
 
         verifyInputOutputFile();
         pushButtonSetFocus();
@@ -489,7 +489,7 @@ void MeshSpatial::verifyInputOutputFile()
 
         if ( ! QFile(para_filename).exists() )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ para_filename +tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ para_filename +tr("<br>"));
         }
         else
         {
@@ -516,11 +516,11 @@ void MeshSpatial::verifyInputOutputFile()
             QString tmp_filename = FileName + Extensions.at(i);
             if ( ! QFile(tmp_filename).exists() )
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>") + tmp_filename +tr("<br>"));
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>") + tmp_filename +tr("<br>"));
             }
             else
             {
-                LogsString.append(tr("Output File Exists ... ") + tmp_filename +tr("<br>"));
+                Log_Message(tr("Output File Exists ... ") + tmp_filename +tr("<br>"));
             }
         }
 
@@ -645,7 +645,7 @@ int MeshSpatial::Get_Element_Count(QString element_filename, bool message)
 
         if(message)
         {
-            LogsString.append(tr("Number of Elements = ")+QString::number(element_count)+tr("<br>"));
+            Log_Message(tr("Number of Elements = ")+QString::number(element_count)+tr("<br>"));
         }
 
     }
@@ -681,7 +681,7 @@ int MeshSpatial::Get_River_Count(QString river_filename, bool message)
 
         if(message)
         {
-            LogsString.append(tr("Number of River Segments = ")+QString::number(river_count)+tr("<br>"));
+            Log_Message(tr("Number of River Segments = ")+QString::number(river_count)+tr("<br>"));
         }
 
     }
@@ -1127,9 +1127,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
             }
             else
             {
-                LogsString.append(tr("Added New Attribute #")+QString::number(fields[i+1])+ tr(" ")+Legends[i]+tr(" To DBF File... </span>")+dbfFileName+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("Added New Attribute #")+QString::number(fields[i+1])+ tr(" ")+Legends[i]+tr(" To DBF File... </span>")+dbfFileName+tr("<br>"));
             }
         }
 
@@ -1177,9 +1175,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        LogsString.append(tr("<br><b>Mesh Spatial Analysis Processing Completed.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<br><b>Mesh Spatial Analysis Processing Completed.</b>")+tr("<br>"));
 
         ui->pushButtonRun->setText("Run");
         ui->pushButtonRun->setDefault(false);

@@ -134,7 +134,7 @@ bool RiverSpatial::Load_Project_Settings()
             Check_RiverShapeFile_Input(TempFileName);
         }
 
-        // ** Start: Fill Form If Module Has Been Run Previously
+        // Start: Fill Form If Module Has Been Run Previously
         ModuleStringList = ReadModuleLine(filename_open_project,tr("RiverSpatial"));
 
         if ( ModuleStringList.length() > 0 )
@@ -345,7 +345,7 @@ bool RiverSpatial::Load_BasedOnProjectName_Input()
 
         if( ui->lineEditDataKey->text() == nullptr )
         {
-            // ** Data Model INPUT File Name
+            // Data Model INPUT File Name
             QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("TINShapeLayer"));
             if ( ModuleStringList.length() > 0  )
             {
@@ -360,7 +360,6 @@ bool RiverSpatial::Load_BasedOnProjectName_Input()
                 {
                     ui->lineEditDataKey->setText(TempFileName);
                 }
-
             }
 
             ModuleStringList = ReadModuleLine(filename_open_project,tr("MeshDataFile"));
@@ -501,7 +500,7 @@ void RiverSpatial::verifyInputOutputFile()
 
         if ( !exists)
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>") + output_data_folder + tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>") + output_data_folder + tr("<br>"));
         }
         else
         {
@@ -515,7 +514,7 @@ void RiverSpatial::verifyInputOutputFile()
 
         if ( ! QFile(para_filename).exists() )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ para_filename +tr("<br>"));
+            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ para_filename +tr("<br>"));
         }
         else
         {
@@ -544,16 +543,13 @@ void RiverSpatial::verifyInputOutputFile()
             QString tmp_filename = FileName + Extensions.at(i);
             if ( ! QFile(tmp_filename).exists() )
             {
-                LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>") + tmp_filename +tr("<br>"));
+                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>") + tmp_filename +tr("<br>"));
             }
             else
             {
-                LogsString.append(tr("Output File Exists ... ") + tmp_filename +tr("<br>"));
+                Log_Message(tr("Output File Exists ... ") + tmp_filename +tr("<br>"));
             }
         }
-
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: RiverSpatial::verifyInputOutputFile() is returning w/o checking";
@@ -670,15 +666,13 @@ int RiverSpatial::Get_Element_Count(QString element_filename, bool message)
 
         if(message)
         {
-            LogsString.append(tr("Number of Elements = ")+QString::number(element_count)+tr("<br>"));
+            Log_Message(tr("Number of Elements = ")+QString::number(element_count)+tr("<br>"));
         }
-
     }
     catch (...)
     {
         element_count = -1;
         qDebug() << "Error: RiverSpatial::Get_Element_Count() is returning w/o checking";
-
     }
 
     return element_count;
@@ -706,7 +700,7 @@ int RiverSpatial::Get_River_Count(QString river_filename, bool message)
 
         if(message)
         {
-            LogsString.append(tr("Number of River Segments = ")+QString::number(river_count)+tr("<br>"));
+            Log_Message(tr("Number of River Segments = ")+QString::number(river_count)+tr("<br>"));
         }
 
     }
@@ -1164,9 +1158,7 @@ void RiverSpatial::on_pushButtonRun_clicked()
             }
             else
             {
-                LogsString.append(tr("Added New Attribute #")+QString::number(fields[i+1])+ tr(" ")+Legends[i]+tr(" To DBF File... </span>")+dbfFileName+tr("<br>"));
-                ui->textBrowserLogs->setHtml(LogsString);
-                ui->textBrowserLogs->repaint();
+                Log_Message(tr("Added New Attribute #")+QString::number(fields[i+1])+ tr(" ")+Legends[i]+tr(" To DBF File... </span>")+dbfFileName+tr("<br>"));
             }
         }
 
@@ -1214,9 +1206,7 @@ void RiverSpatial::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        LogsString.append(tr("<br><b>River Spatial Analysis Processing Completed.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("<br><b>River Spatial Analysis Processing Completed.</b>")+tr("<br>"));
 
         ui->pushButtonRun->setText("Run");
         ui->pushButtonRun->setDefault(false);

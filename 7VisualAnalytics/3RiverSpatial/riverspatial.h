@@ -16,8 +16,6 @@ public:
     explicit RiverSpatial(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~RiverSpatial();
 
-    QString LogsString;
-
 private slots:
     void on_pushButtonOutputDataFolder_clicked();
 
@@ -64,6 +62,7 @@ private:
 
     Ui::RiverSpatial *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

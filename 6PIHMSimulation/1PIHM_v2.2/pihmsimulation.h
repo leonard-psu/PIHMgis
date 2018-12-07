@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "6PIHMSimulation/PIHMThread/MyThread.h"
+#include "6PIHMSimulation/PIHMThread/PIHMThread.h"
 
 namespace Ui {
 class PIHMSimulation;
@@ -60,6 +60,7 @@ private:
     bool Load_Project_Settings();
     void Log_Error_Message(QString message);
     void Log_Warning_Message(QString message);
+    void Log_Message(QString message);
 
     bool Check_InputDataFolder(QString folder);
     bool Check_DataKey(QString value);
@@ -73,7 +74,7 @@ private:
 
     void PIHMThread_Delete();
 
-    MyThread *mThread;
+    PIHMThread *mThread;
 
     Ui::PIHMSimulation *ui;
     QString LogsString;

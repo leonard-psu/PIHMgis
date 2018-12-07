@@ -224,7 +224,6 @@ SOURCES += main.cpp\
     #pihmgis_plugin_import.cpp \
     pihmgisdialog.cpp \
     #qrc_Icons.cpp \
-    6PIHMSimulation/PIHMThread/MyThread.cpp \
     1ProjectManagement/1NewProject/newproject.cpp \
     1ProjectManagement/2OpenProject/openproject.cpp \
     1ProjectManagement/3ImportProject/importproject.cpp \
@@ -234,7 +233,8 @@ SOURCES += main.cpp\
     1ProjectManagement/3ImportProject/importproject.cpp \
     1ProjectManagement/4CloseProject/closeproject.cpp \
     1ProjectManagement/CheckProject/checkproject.cpp \
-    1ProjectManagement/InspectProject/inspectproject.cpp
+    1ProjectManagement/InspectProject/inspectproject.cpp \
+    6PIHMSimulation/PIHMThread/PIHMThread.cpp
 
 HEADERS  += pihmgisdialog.h \
     1ProjectManagement/1NewProject/newproject.h \
@@ -390,7 +390,6 @@ HEADERS  += pihmgisdialog.h \
     pihmgisdialog.h \
     main.h \
     globals.h \
-    6PIHMSimulation/PIHMThread/MyThread.h \
     1ProjectManagement/1NewProject/newproject.h \
     1ProjectManagement/2OpenProject/openproject.h \
     1ProjectManagement/3ImportProject/importproject.h \
@@ -400,7 +399,8 @@ HEADERS  += pihmgisdialog.h \
     1ProjectManagement/3ImportProject/importproject.h \
     1ProjectManagement/4CloseProject/closeproject.h \
     1ProjectManagement/CheckProject/checkproject.h \
-    1ProjectManagement/InspectProject/inspectproject.h
+    1ProjectManagement/InspectProject/inspectproject.h \
+    6PIHMSimulation/PIHMThread/PIHMThread.h
 
 FORMS    += pihmgisdialog.ui \
     1ProjectManagement/1NewProject/newproject.ui \
@@ -455,7 +455,7 @@ DEPENDPATH += $$PWD/../gdal-2.3.1/ogr
 INCLUDEPATH += $$PWD/../gdal-2.3.1/ogr/ogrsf_frmts
 DEPENDPATH += $$PWD/../gdal-2.3.1/ogr/ogrsf_frmts
 
-ICON = Icons/PIHMgis000.icns
+ICON =
 
 win32: LIBS += -L$$PWD/../gdal-2.3.1/ -lgdal_i
 

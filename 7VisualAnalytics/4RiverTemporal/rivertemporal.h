@@ -16,8 +16,6 @@ public:
     explicit RiverTemporal(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~RiverTemporal();
 
-    QString LogsString;
-
 private slots:
     void on_pushButtonRun_clicked();
 
@@ -59,6 +57,7 @@ private:
 
     Ui::RiverTemporal *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

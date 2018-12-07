@@ -1,24 +1,14 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>Icons/ArrowCurlLeft80x.png</file>
-        <file>Icons/ArrowCurlLeft40x.png</file>
-        <file>Icons/ArrowCurlLeft60x.png</file>
-        <file>Icons/ArrowCurlDown60x.png</file>
-        <file>Icons/ArrowRight40x.png</file>
-        <file>Icons/ArrowRight60x.png</file>
-        <file>Icons/ArrowLeft40x.png</file>
-        <file>Icons/ArrowLeft60x.png</file>
-        <file>Icons/ArrowCurlDownRight60x.png</file>
-        <file>Icons/ArrowDown60x.png</file>
-        <file>Icons/PIHMSimulation.png</file>
-        <file>Icons/PIHMSimulation2.png</file>
-        <file>Icons/PIHMgis001.icns</file>
-        <file>Icons/PIHMgis001.png</file>
-        <file>Icons/PIHMgisFlat.icns</file>
-        <file>Icons/PIHMgis3D.icns</file>
-        <file>Icons/Add32.png</file>
         <file>Icons/PIHM_B_64x64.png</file>
         <file>Icons/PIHM_64x64.png</file>
+        <file>Icons/icons8-save-as-50.png</file>
+        <file>Icons/icons8-opened-folder-50.png</file>
+        <file>Icons/icons8-close-window-48.png</file>
+        <file>Icons/icons8-empty-trash-50.png</file>
+        <file>Icons/icons8-add-48.png</file>
+        <file>Icons/icons8-cancel-52.png</file>
+        <file>Icons/icons8-import-filled-64.png</file>
     </qresource>
     <qresource prefix="/misc"/>
 </RCC>

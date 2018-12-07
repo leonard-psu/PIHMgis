@@ -2,21 +2,20 @@
 #define MYTHREAD_H
 #include <QThread>
 
-class MyThread : public QThread
+class PIHMThread : public QThread
 {
         Q_OBJECT
 public:
-    explicit MyThread(QObject *parent = 0, bool b = false);
+    explicit PIHMThread(QObject *parent = 0, bool b = false);
     void run();
 
     bool set_Output_Folder(QString output_folder);
     bool set_Project_Name(QString project_name);
-    void kill_from_PIHM(int);
+    void Log_Message(QString message);
 
 
     //Log file is automatically generated for users to debug issues
     std::string get_LogFile_FileName();
-
 
     std::string get_Groundwater_Output_FileName();
     std::string get_infil_Output_FileName();

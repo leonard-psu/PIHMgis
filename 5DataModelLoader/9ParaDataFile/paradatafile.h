@@ -15,8 +15,6 @@ public:
     explicit ParaDataFile(QWidget *parent = 0, QString filename_open_project = "No Project Provided");
     ~ParaDataFile();
 
-    QString LogsString;
-
 private slots:
     void on_pushButtonParaDataFile_clicked();
 
@@ -28,20 +26,20 @@ private slots:
 
     void pushButtonSetFocus();
 
-
-
 private:
     int para_data_file(QString filename);
 
     bool Check_Para_Output(QString file, bool message);
 
     void Clear_Log();
+    void Log_Error_Message(QString message);
+    void Log_Message(QString message);
 
     bool Load_Project_Settings();
-    void Log_Error_Message(QString message);
 
     Ui::ParaDataFile *ui;
     QString filename_open_project;
+    QString LogsString;
 
 };
 

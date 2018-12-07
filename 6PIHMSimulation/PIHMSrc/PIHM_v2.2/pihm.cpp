@@ -73,20 +73,20 @@
 #include "initialize.h"
 #include "is_sm_et.h"
 
-#include "6PIHMSimulation/PIHMThread/MyThread.h"
+#include "6PIHMSimulation/PIHMThread/PIHMThread.h"
 
 #define UNIT_C 1440		/* Unit Conversions */
 #define Ith(v,i)    NV_Ith_S(v,i-1)       /* Ith numbers components 1..NEQ */
 
 void  initialize(std::string, Model_Data, Control_Data *, N_Vector);
 int   f(realtype, N_Vector, N_Vector, void *);
-bool  read_alloc(MyThread *thread, Model_Data, Control_Data *);	/* Variable definition */
+bool  read_alloc(PIHMThread *thread, Model_Data, Control_Data *);	/* Variable definition */
 void  PrintData(FILE **, Control_Data *, Model_Data, N_Vector, realtype);
 void  FreeData(Model_Data, Control_Data *);
 
 QMutex stop_mutex; //Used to check thread stop status
 
-int PIHM_v2_2(MyThread *thread)
+int PIHM_v2_2(PIHMThread *thread)
 {
     if(thread == NULL)
         return 100;

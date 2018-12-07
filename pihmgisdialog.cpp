@@ -129,31 +129,40 @@ void PIHMgisDialog::Setup_Menu()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         mnu_pick = new QAction("&Pick", this);
+        mnu_pick->setIcon(QIcon("Icons/icons8-opened-folder-50.png"));
         mnu_pick->setStatusTip(tr("Pick PIHMgis Workspace/Folder"));
         mnu_pick->setToolTip(tr("Pick PIHMgis Workspace/Folder"));
         mnu_pick->setShortcut(tr("CTRL+P"));
         connect(mnu_pick, &QAction::triggered, this, &PIHMgisDialog::menu_pick_workspace);
 
         mnu_new = new QAction("&New", this);
-        mnu_new->setStatusTip(tr("New"));
+        mnu_new->setIcon(QIcon("Icons/icons8-add-48.png"));
+        mnu_new->setStatusTip(tr("New PIHMgis project"));
+        mnu_new->setToolTip(tr("New PIHMgis project"));
         mnu_new->setShortcut(tr("CTRL+N"));
         mnu_new->setEnabled(false);
         connect(mnu_new, &QAction::triggered, this, &PIHMgisDialog::menu_new);
 
         mnu_import = new QAction("&Import", this);
-        mnu_import->setStatusTip(tr("Import"));
+        mnu_import->setIcon(QIcon("Icons/icons8-import-filled-64.png"));
+        mnu_import->setStatusTip(tr("Import PIHMgis project"));
+        mnu_import->setToolTip(tr("Import PIHMgis project"));
         mnu_import->setShortcut(tr("CTRL+I"));
         mnu_import->setEnabled(false);
         connect(mnu_import, &QAction::triggered, this, &PIHMgisDialog::menu_import);
 
         mnu_close = new QAction("&Close", this);
-        mnu_close->setStatusTip(tr("Close"));
+        mnu_close->setIcon(QIcon("Icons/icons8-cancel-52.png"));
+        mnu_close->setStatusTip(tr("Close PIHMgis project"));
+        mnu_close->setToolTip(tr("Close PIHMgis project"));
         mnu_close->setShortcut(tr("CTRL+C"));
         mnu_close->setEnabled(false);
         connect(mnu_close, &QAction::triggered, this, &PIHMgisDialog::menu_close);
 
         mnu_quit = new QAction("&Quit", this);
+        mnu_quit->setIcon(QIcon("Icons/icons8-close-window-48.png"));
         mnu_quit->setStatusTip(tr("Quit PIHMgis Application"));
+        mnu_quit->setToolTip(tr("Quit PIHMgis Application"));
         mnu_quit->setShortcut(tr("CTRL+Q"));
         connect(mnu_quit, &QAction::triggered, this, &PIHMgisDialog::menu_quit);
 
@@ -166,41 +175,51 @@ void PIHMgisDialog::Setup_Menu()
         file->addAction(mnu_close);
         file->addSeparator();
         file->addAction(mnu_quit);
+        file->setToolTipsVisible(true);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Log Menu
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         mnu_debug = new QAction("&Debug Console", this);
-        mnu_debug->setShortcut(tr("CTRL+D"));
         mnu_debug->setStatusTip(tr("Messages displayed to console window"));
+        mnu_debug->setToolTip(tr("Messages displayed to console window"));
+        mnu_debug->setShortcut(tr("CTRL+D"));
         mnu_debug->setCheckable(true);
         mnu_debug->setChecked(false);
         connect(mnu_debug, &QAction::triggered, this, &PIHMgisDialog::menu_debug_messages);
 
         mnu_log_debug = new QAction("&Important Only Log", this);
-        mnu_log_debug->setStatusTip(tr("Important Messages displayed to application window"));
+        mnu_log_debug->setStatusTip(tr("Important messages displayed to application window"));
+        mnu_log_debug->setToolTip(tr("Important messages displayed to application window"));
         mnu_log_debug->setCheckable(true);
         mnu_log_debug->setChecked(true);
         connect(mnu_log_debug, &QAction::triggered, this, &PIHMgisDialog::menu_log_messages);
 
-        mnu_log_many = new QAction("&Many", this);
+        mnu_log_many = new QAction("Many", this);
+        mnu_log_many->setStatusTip(tr("Use this to redirect many messages from **recursive** steps to application window (above)"));
+        mnu_log_many->setToolTip(tr("Use this to redirect many messages from **recursive** steps to application window"));
         mnu_log_many->setCheckable(true);
         mnu_log_many->setChecked(false);
         connect(mnu_log_many, &QAction::triggered, this, &PIHMgisDialog::menu_log_many);
 
         mnu_log_redirect = new QAction("Redirect Debug to Important Log", this);
+        mnu_log_redirect->setStatusTip(tr("Use this to redirect messages from steps to application window (above)"));
+        mnu_log_redirect->setToolTip(tr("Use this to redirect messages from steps to application window"));
         mnu_log_redirect->setCheckable(true);
         mnu_log_redirect->setChecked(true);
-        mnu_log_redirect->setStatusTip(tr("Use this to save all debug console messages"));
         connect(mnu_log_redirect, &QAction::triggered, this, &PIHMgisDialog::menu_redirect_messages);
 
         mnu_clear_log = new QAction("&Clear Important Log", this);
-        mnu_clear_log->setStatusTip(tr("Clear Important Messages displayed in application window"));
+        mnu_clear_log->setIcon(QIcon("Icons/icons8-empty-trash-50.png"));
+        mnu_clear_log->setStatusTip(tr("Clear log messages displayed in application window"));
+        mnu_clear_log->setToolTip(tr("Clear log messages displayed in application window"));
         connect(mnu_clear_log, &QAction::triggered, this, &PIHMgisDialog::menu_clear_messages);
 
         mnu_save_log = new QAction("&Save Important Log", this);
-        mnu_save_log->setStatusTip(tr("Save Important Log to text file"));
+        mnu_save_log->setIcon(QIcon("Icons/icons8-save-as-50.png"));
+        mnu_save_log->setStatusTip(tr("Save important Log to text file (Suggested for debugging)"));
+        mnu_save_log->setToolTip(tr("Save important Log to text file (Suggested for debugging)"));
         connect(mnu_save_log, &QAction::triggered, this, &PIHMgisDialog::menu_save_log);
 
         QMenu *log;
@@ -213,17 +232,22 @@ void PIHMgisDialog::Setup_Menu()
         log->addAction(mnu_clear_log);
         log->addSeparator();
         log->addAction(mnu_save_log);
+        log->setToolTipsVisible(true);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Help Menu
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        mnu_help= new QAction("&Contact", this);
+        mnu_help= new QAction("PIHM website", this);
+        mnu_help->setStatusTip(tr("Open PIHM web site"));
+        mnu_help->setToolTip(tr("Open PIHM web site"));
+
         connect(mnu_help, &QAction::triggered, this, &PIHMgisDialog::menu_help);
 
         QMenu *mainhelp;
         mainhelp = menuBar()->addMenu("&Help");
         mainhelp->addAction(mnu_help);
+        mainhelp->setToolTipsVisible(true);
 
     }
     catch (...)

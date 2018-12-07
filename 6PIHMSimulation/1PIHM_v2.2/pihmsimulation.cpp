@@ -16,7 +16,7 @@
 #include "0LibsIO/IOProjectFile.h"
 #include "globals.h"
 
-#include "6PIHMSimulation/PIHMThread/MyThread.h"
+#include "6PIHMSimulation/PIHMThread/PIHMThread.h"
 
 Q_DECLARE_METATYPE(std::string)
 
@@ -167,6 +167,11 @@ void PIHMSimulation::Log_Warning_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Warning: ") + message + " </span>")+tr("<br>");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
     }
@@ -181,8 +186,34 @@ void PIHMSimulation::Log_Error_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+        }
+
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper Function to check Log_Error_Message
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMSimulation::Log_Message(QString message)
+{
+    try {
+        LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        ui->textBrowserLogs->setHtml(LogsString);
+        ui->textBrowserLogs->repaint();
+
+        if(redirect_debug_messages_to_log)
+        {
+            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+        }
+
+    } catch (...) {
+        qDebug() << "Error: Log_Message is returning w/o checking";
     }
 }
 
@@ -398,9 +429,7 @@ int PIHMSimulation::CheckInputFileAccess(QString folder, QString project_name, Q
 
         if(message)
         {
-            LogsString.append(FileNamewithExtension + " ... <br>");
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Message(FileNamewithExtension + " ... <br>");
         }
 
     } catch (...) {
@@ -430,8 +459,6 @@ int PIHMSimulation::CopyInputFile( QString output_folder, QString input_folder, 
                 if ( ! QFile::remove(output_FileName) )
                 {
                     Log_Error_Message("Unable to remove file " + output_FileName  );
-                    ui->textBrowserLogs->setHtml(LogsString);
-                    ui->textBrowserLogs->repaint();
                     return -9;
                 }
             }
@@ -614,10 +641,7 @@ void PIHMSimulation::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Simulation
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString = tr("");
-        LogsString.append(tr("PIHM Simulation Starting ... <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message(tr("PIHM Simulation Starting ... <br>"));
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Project file
@@ -641,7 +665,7 @@ void PIHMSimulation::on_pushButtonRun_clicked()
         QString project_name2  = ui->lineEditDataKey->text();
         QString output_folder2 = user_pihmgis_root_folder + "/5PIHMSimulation";
 
-        mThread = new MyThread(this);
+        mThread = new PIHMThread(this);
         mThread->set_Output_Folder(output_folder2);
         mThread->set_Project_Name(project_name2);
 
@@ -672,7 +696,7 @@ void PIHMSimulation::on_pushButtonClose_clicked()
 
     try {
 
-        qDebug() << "pihm_running " << pihm_running;
+        //qDebug() << "pihm_running " << pihm_running;
 
         if(pihm_running)
         {
@@ -698,7 +722,8 @@ void PIHMSimulation::on_pushButtonClose_clicked()
         {
             ui->label_PIHM_Status->setText("PIHM Thread not null" );
 
-            qDebug() << "Killing PIHM thread";
+            Log_Message("Killing PIHM thread");
+            //qDebug() << "Killing PIHM thread";
             mThread->quit();
             mThread->wait();
             close();
@@ -706,7 +731,7 @@ void PIHMSimulation::on_pushButtonClose_clicked()
         }
         else
         {
-            qDebug() << "PIHM Thread is null ";
+            //qDebug() << "PIHM Thread is null ";
             close();
         }
 
@@ -781,11 +806,9 @@ void PIHMSimulation::PIHMThreadFinished()
 
         this->setCursor(Qt::ArrowCursor);
 
-        LogsString.append(tr("<b>PIHM Simulation Complete.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-        ui->pushButtonRun->setText("Run");
+        Log_Message(tr("<b>PIHM Simulation Complete.</b>")+tr("<br>"));
 
+        ui->pushButtonRun->setText("Run");
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);
         ui->pushButtonClose->setFocus();
@@ -846,7 +869,7 @@ void PIHMSimulation::verifyInputOutputFile()
         }
         else
         {
-            LogsString.append(tr("Output Folder Exists ... ")+ui->lineEditInputDataFolder->text() );
+            Log_Message(tr("Output Folder Exists ... ")+ui->lineEditInputDataFolder->text() );
 
         }
 
@@ -876,13 +899,13 @@ void PIHMSimulation::verifyInputOutputFile()
             }
             else
             {
-                LogsString.append(tr("Input File Exists ... ")+ FileName + Extensions.at(i) );
+                Log_Message(tr("Input File Exists ... ")+ FileName + Extensions.at(i) );
             }
         }
 
         if(!missing_files)
         {
-            LogsString.append(tr("All PIHM input files found ") +tr("<br>"));
+            Log_Message(tr("All PIHM input files found ") +tr("<br>"));
             ui->pushButtonRun->setEnabled(true);
         }
         else
@@ -890,8 +913,6 @@ void PIHMSimulation::verifyInputOutputFile()
             ui->pushButtonRun->setEnabled(false);
         }
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
     } catch (...) {
         qDebug() << "Error: PIHMSimulation::verifyInputOutputFile() is returning w/o checking";
@@ -929,6 +950,9 @@ void PIHMSimulation::on_pushButton_Stop_clicked()
         {
             mThread->Stop = true;
             ui->pushButton_Stop->setEnabled(false);
+
+            Log_Message("Stop PIHM");
+
         }
 
     } catch (...) {
@@ -965,10 +989,7 @@ void PIHMSimulation::onPIHM_StatusChanged(std::string value)
 
         ui->label_PIHM_Status->setText(value.c_str());
 
-        LogsString.append( value.c_str() + tr(" <br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
+        Log_Message( value.c_str() + tr(" <br>"));
 
     } catch (...) {
         qDebug() << "Error: PIHMSimulation::onPIHM_StatusChanged() is returning w/o checking";
@@ -990,6 +1011,8 @@ void PIHMSimulation::onPIHM_Finished(bool status)
             this->setCursor(Qt::ArrowCursor);
             ui->pushButton_Stop->setEnabled(false);
             pihm_running = false;
+            Log_Message("PIHM Finished");
+
         }
         else
         {
@@ -1016,6 +1039,7 @@ void PIHMSimulation::onPIHM_Failed()
     try {
 
         ui->pushButton_Stop->setEnabled(false);
+        Log_Message("PIHM Failed");
 
     } catch (...) {
         qDebug() << "Error: PIHMSimulation::onPIHM_Failed() is returning w/o checking";
