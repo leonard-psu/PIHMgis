@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QString>
 #include <QDir>
+#include <QPalette>
 
 namespace Ui {
 class PIHMgisDialog;

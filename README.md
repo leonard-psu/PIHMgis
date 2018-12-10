@@ -1,5 +1,6 @@
 ### PIHMgis v3.5 developed using windows Qt Creator 
-Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015) on "windows" 
+[Latest] Qt 5.12.0 (MSVC 2015, 32 bit) Based on Qt 5.12.0 (MSVC 2015, 32 bit) Built on Dec 3 2018 13:08:01 From revision d51ddbb8f0 Copyright 2008-2018 The Qt Company Ltd. All rights reserved.
+[Worked with] Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015) on "windows" 
 
 ### These libraries are required
 1. gdal-2.3.1 or higher
