@@ -128,16 +128,12 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
         int left = DBFAddField(newdbf, "LeftEle", FTInteger, 10, 0);
         int right= DBFAddField(newdbf, "RightEle", FTInteger, 10, 0);
 
-        if ( left == -1 || right == -1 )
+        if ( left < 0 || right < 0 )
         {
             main_window->Log_Message("[interpolate_river_nodes_elev] Error[87] Add field count (left, right) don't match. ");
             return 87;
         }
-        if ( left == 0 || right == 0 )
-        {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[87] Add field count (left, right equal zero). ");
-            return 87;
-        }
+
 
         int temp;
 

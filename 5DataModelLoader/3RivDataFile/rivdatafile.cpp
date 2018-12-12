@@ -11,6 +11,8 @@
 #include "0LibsOther/riv_data_file.h"
 #include "globals.h"
 
+extern QString riv_temp_fname; // "/rivtemp.dbf";  //Note keep forward slash
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RivDataFile Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -712,6 +714,14 @@ void RivDataFile::on_pushButtonRun_clicked()
                                       BoundaryCondition,
                                       output_RivData_filename
                                       );
+
+        if(ErrorRiv == -9000) //This means the temp file already exists
+        {
+            QString TempDbfFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + riv_temp_fname;
+            QMessageBox::information(this, tr("User must correct"), tr("A temporary file already exists. ""The file was *NOT* removed as the file maybe in use."));
+            return;
+        }
+
         if( ErrorRiv != 0 )
         {
             Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Riv Data File Processing Failed ... </span>")+tr("<br>"));

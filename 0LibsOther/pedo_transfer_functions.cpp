@@ -6,6 +6,9 @@
 #include <qmath.h>
 #include "globals.h"
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Important function to Assign Soil PedoTransfer Function
 // This function has not been tested rigously.
@@ -24,12 +27,19 @@ int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName )
 
         QFile TextureFile(TextureFileName);
         if ( ! TextureFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        {
+            main_window->Log_Message("[Soil_PedoTransferFunction] Error[11] opening Texture file.");
             return 11;
+        }
         QTextStream TextureFileTextStream(&TextureFile);
 
         QFile DataFile(DataFileName);
         if ( ! DataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        {
+            main_window->Log_Message("[Soil_PedoTransferFunction] Error[16] opening Data file.");
             return 16;
+        }
+
         QTextStream DataFileTextStream(&DataFile);
 
         QString TempString;
@@ -55,7 +65,10 @@ int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName )
         DataFileTextStream << NumClasses << "\n";
 
         if ( NumClasses < 1 )
+        {
+            main_window->Log_Message("[Soil_PedoTransferFunction] Error[44] Invalid NumClasses.");
             return 44;
+        }
 
         double S, C, OM, D; //S=SILT, C=CLAY, OM=ORGANIC MATTER, D=BULK DENSITY,
         int TopSoil; //TopSoil
@@ -67,15 +80,15 @@ int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName )
         {
             HydraulicParameter[i] = (double *)malloc(NUMCOL*sizeof(double));
             for(int j=0; j<NUMCOL; j++)
+            {
                 HydraulicParameter[i][j]=0.0;
+            }
 
             S       = TextureData[i][1];
             C       = TextureData[i][2];
             OM      = TextureData[i][3];
             D       = TextureData[i][4];
             TopSoil = (int) TextureData[i][5];
-
-            //? DataFileTextStream<<"-> "<<S<<"\t"<<C<<"\t"<<OM<<"\t"<<D<<"\t"<<TopSoil<<" <-  \n";
 
             // ** Index
             HydraulicParameter[i][0]=i+1;
@@ -135,10 +148,22 @@ int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName )
             DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
             DataFileTextStream.setRealNumberPrecision(4);
             DataFileTextStream << HydraulicParameter[i][8] << "\n";
-        }
+
+        } //End of for(int i=0; i<NumClasses; i++)
 
         TextureFile.close();
         DataFile.close();
+
+        //Clean up
+        for(int i=0; i<NumClasses; i++)
+        {
+            for(int i=0; i<NumClasses; i++)
+            {
+                free(HydraulicParameter[i]);
+            }
+        }
+        free(HydraulicParameter);
+
 
     } catch (...) {
 
@@ -167,12 +192,20 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
 
         QFile TextureFile(TextureFileName);
         if ( ! TextureFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        {
+            main_window->Log_Message("[Geol_PedoTransferFunction] Error[134] opening TextureFile.");
             return 134;
+        }
+
         QTextStream TextureFileTextStream(&TextureFile);
 
         QFile DataFile(DataFileName);
         if ( ! DataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        {
+            main_window->Log_Message("[Geol_PedoTransferFunction] Error[139] opening DataFile.");
             return 139;
+        }
+
         QTextStream DataFileTextStream(&DataFile);
 
         QString TempString;
@@ -198,7 +231,10 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
         DataFileTextStream << NumClasses << "\n";
 
         if ( NumClasses < 1 )
+        {
+            main_window->Log_Message("[Geol_PedoTransferFunction] Error[165] Invalid NumClasses.");
             return 165;
+        }
 
         double S, C, OM, D; //S=SILT, C=CLAY, OM=ORGANIC MATTER, D=BULK DENSITY,
         int TopSoil; //TopSoil
@@ -210,7 +246,9 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
         {
             HydraulicParameter[i] = (double *)malloc(NUMCOL*sizeof(double));
             for(int j=0; j<NUMCOL; j++)
+            {
                 HydraulicParameter[i][j]=0.0;
+            }
 
             S       = TextureData[i][1];
             C       = TextureData[i][2];
@@ -290,6 +328,16 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
         TextureFile.close();
         DataFile.close();
 
+        //Clean up
+        for(int i=0; i<NumClasses; i++)
+        {
+            for(int i=0; i<NumClasses; i++)
+            {
+                free(HydraulicParameter[i]);
+            }
+        }
+        free(HydraulicParameter);
+
 
     } catch (...) {
 
@@ -319,14 +367,21 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
         //int MAXLC = 100;
         QFile ClassFile(ClassFileName);
         if ( ! ClassFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        {
+            main_window->Log_Message("[Geol_PedoTransferFunction] Error[267] Invalid Class file.");
             return 267;
+        }
+
         QTextStream ClassFileTextStream(&ClassFile);
 
         QFile DataFile(DataFileName);
         if ( ! DataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        {
+            main_window->Log_Message("[Geol_PedoTransferFunction] Error[272] Invalid Data file.");
             return 272;
-        QTextStream DataFileTextStream(&DataFile);
+        }
 
+        QTextStream DataFileTextStream(&DataFile);
 
         double UMD[][7] = {
             // http://glcf.umiacs.umd.edu/data/landcover/
@@ -479,7 +534,10 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
             qDebug() << nlcd << ": [" << umd1 << "] x " << frac1 << " + [" << umd2 << "] x " << frac2 << "\n";
 
             if ( umd1 + umd2 == 0 ) // NLCD Class not defined
+            {
+                main_window->Log_Message("[Geol_PedoTransferFunction] Error[423] Invalid NLCD Class.");
                 return 423;
+            }
 
             DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
             DataFileTextStream << i+1 << "\t";
