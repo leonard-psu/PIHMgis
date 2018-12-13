@@ -192,6 +192,12 @@ double raster_grid_value(GDALDataset* layer, int bandNumber, double x, double y,
         }
 
         GDALDataType type = band->GetRasterDataType();
+        if(type == GDT_Unknown)
+        {
+            main_window->Log_Message("[raster_grid_value] Unknown Raster Type. Returning -9999.");
+            return -9999;
+        }
+
         int size = GDALGetDataTypeSize(type) / 8;
         if(size < 1)
         {

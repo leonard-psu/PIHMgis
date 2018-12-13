@@ -515,7 +515,71 @@ void FlowGrids::on_pushButtonRun_clicked()
 
             Log_Message("Converting Arc Binary File to ASC File ... <br>");
 
-            ADFFiletoASCFile(FillPitsFileName, ASCFileName);
+            int check = ADFFiletoASCFile(FillPitsFileName, ASCFileName);
+            if(check == 0 ) // no errors
+            {
+                Log_Message("Success converting Arc binary file");
+            }
+            else if (check == -9999) //Something else went wrong
+            {
+                Log_Error_Message("Error reading Arc binary file. Check Logs.");
+                return;
+            }
+            else if (check == -1000)
+            {
+                Log_Error_Message("Error reading Arc binary file. Check Logs.");
+                return;
+            }
+            else if (check == -1001)
+            {
+                Log_Error_Message("WARNING, Issues found parsing values. Recommend checking with GIS tool.");
+                int ret = QMessageBox::warning(this, tr("Issues found converting file"),
+                                               tr("Closing this window will not stop the PIHM thread.\n"
+                                                  "Click Ok to continue. Cancel to stop."),
+                                               QMessageBox::Ok | QMessageBox::Cancel,
+                                               QMessageBox::Ok);
+
+                bool clicked_cancel = true; //Make it default
+                switch(ret)
+                {
+                case QMessageBox::Ok:
+                    clicked_cancel = false;
+                    break;
+                case QMessageBox::Cancel:
+                    clicked_cancel = true;
+                    break;
+                }
+
+                if(clicked_cancel)
+                    return;
+            }
+            else if (check > 0 ) //Positive numbers mean setup problem
+            {
+                Log_Error_Message("Error reading Arc binary file. Check Logs.");
+                return;
+            }
+            else
+            {
+                int ret = QMessageBox::warning(this, tr("Issues found converting file"),
+                                               tr("Closing this window will not stop the PIHM thread.\n"
+                                                  "Click Ok to continue. Cancel to stop."),
+                                               QMessageBox::Ok | QMessageBox::Cancel,
+                                               QMessageBox::Ok);
+
+                bool clicked_cancel = true; //Make it default
+                switch(ret)
+                {
+                case QMessageBox::Ok:
+                    clicked_cancel = false;
+                    break;
+                case QMessageBox::Cancel:
+                    clicked_cancel = true;
+                    break;
+                }
+
+                if(clicked_cancel)
+                    return;
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

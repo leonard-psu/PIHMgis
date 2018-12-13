@@ -5,7 +5,7 @@
 #include <QString>
 
 
-void ADFFiletoASCFile(QString ADFFileName, QString ASCFileName);
+int ADFFiletoASCFile(QString ADFFileName, QString ASCFileName);
 
 
 #endif
