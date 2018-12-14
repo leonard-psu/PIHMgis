@@ -777,7 +777,7 @@ void setdf2(void )
         dd=(float)sqrt(dx*dx+dy*dy);
         for(i=1; i<ny-1; i++)
         {
-            SetWorkingStatus();
+            //SetWorkingStatus();
             for(j=1; j<nx-1; j++)
             {
                 if(dir[j][i]>0 )

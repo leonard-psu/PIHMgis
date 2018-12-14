@@ -91,6 +91,9 @@ int readline(FILE *fp,char *fline)
   Modification of matrixalloc by DGT to not use so many pointers
   7/1/97
 */
+
+//NEED TO ADD NULL rather than exit
+
 void **matalloc(int nx,int ny,int datatype)
 {
     if(print_debug_messages)

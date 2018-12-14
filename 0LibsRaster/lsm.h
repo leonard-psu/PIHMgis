@@ -84,7 +84,7 @@ extern int *d2;
 
 /* prototypes for functions in AVCalls.c */
 
-void SetWorkingStatus(void);
+//void SetWorkingStatus(void);
 
 /*  Grid bound variables   */
 extern double bndbox[4],csize;

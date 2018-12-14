@@ -197,7 +197,7 @@ void PIHMgisDialog::Setup_Menu()
         mnu_log_debug->setChecked(true);
         connect(mnu_log_debug, &QAction::triggered, this, &PIHMgisDialog::menu_log_messages);
 
-        mnu_log_many = new QAction("Many", this);
+        mnu_log_many = new QAction("Many Messages", this);
         mnu_log_many->setStatusTip(tr("Use this to redirect many messages from **recursive** steps to application window (above)"));
         mnu_log_many->setToolTip(tr("Use this to redirect many messages from **recursive** steps to application window"));
         mnu_log_many->setCheckable(true);

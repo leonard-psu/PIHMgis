@@ -515,7 +515,9 @@ void CatchmentGrids::on_pushButtonRun_clicked()
                                  (LinkGrids_filename),
                                  (char *)qPrintable(FlowDirGrids_filename),
                                  (char *)qPrintable(CatchmentGrids_filename) );
+
         qDebug()<<tr("ErrorCat = ") << QString::number(ErrorCat);
+
         if( ErrorCat != 0 )
         {
             Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Catchment Grid Processing Failed ... </span>")+tr("<br>"));

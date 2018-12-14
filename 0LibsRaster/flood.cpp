@@ -168,7 +168,7 @@ int setdf(float mval)
 
         nflat=nis;
         /* routine to drain flats to neighbors  */
-        SetWorkingStatus();
+        //SetWorkingStatus();
         imin=vdn(nflat);
         n=nis;
 
@@ -356,7 +356,7 @@ int vdn(int n)
                 if(elev[js[nis]][is[nis]] < elev[js[imin]][is[imin]])imin=nis;
             }
         }
-        SetWorkingStatus();
+        //SetWorkingStatus();
     }while(nis < n);
 
     return(imin);
