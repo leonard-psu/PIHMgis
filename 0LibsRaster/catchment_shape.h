@@ -1,6 +1,8 @@
 #ifndef CATCHMENT_SHAPE
 #define CATCHMENT_SHAPE
 
-int catchment_shape(char *catFile, char *nodeFile, char *shpFile, char *dbfFile);
+#include <QString>
+
+int catchment_shape(QString catFile, QString nodeFile, QString shpFile, QString dbfFile);
 
 #endif

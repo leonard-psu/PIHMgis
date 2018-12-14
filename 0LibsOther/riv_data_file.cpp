@@ -1956,6 +1956,8 @@ int riv_data_file( QString EleFileName, QString NodeFileName, QString NeighFileN
         QString TempDbfFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + riv_temp_fname;
         if(QFile::exists(TempDbfFileName))
         {
+            main_window->Log_Message("[riv_data_file] WARNING/ERROR Temp file already exists " + TempDbfFileName);
+
             //If the file exists, could mean a few problems. Hence, user must decide on how to proceed outside PIHMgis.
             //For example, does the user have multiple PIHMgis sessions running?
             //Did a previous execution failed?

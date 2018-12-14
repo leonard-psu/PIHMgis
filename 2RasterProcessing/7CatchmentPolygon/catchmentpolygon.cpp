@@ -407,13 +407,53 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         ShpFileName = CatchmentPolygon_filename;
         DbfFileName = ShpFileName;
         DbfFileName.replace(QString(".shp"), QString(".dbf"));
-        const char *dummystr = "dummy";
-        int ErrorCat = catchment_shape((char *)qPrintable(
-                                           CatchmentGrids_filename),
-                                       (char *)dummystr,
-                                       (char *)qPrintable(ShpFileName),
-                                       (char *)qPrintable(DbfFileName));
-        if( ErrorCat != 0 )
+        QString dummystr("dummy");
+        int ErrorCat = catchment_shape(CatchmentGrids_filename,dummystr, ShpFileName,DbfFileName);
+
+        bool clicked_cancel = true; //Make it default
+        if( ErrorCat == -9000 )
+        {
+            Log_Error_Message("WARNING/ERROR Catchment temporary file already exists.");
+            Log_Error_Message("Error return code: ... " + QString::number(ErrorCat) );
+
+            int ret = QMessageBox::warning(this, tr("Temorary Catchment shape file found"),
+                                           tr("This process has been stopped due to existing temporary shapefile.\n"
+                                              "User must decide to remove the file(s) or not. Maybe another PIHMgis instance running."),
+                                           QMessageBox::Ok | QMessageBox::Cancel,
+                                           QMessageBox::Ok);
+
+            return; //do nothing
+        }
+        else if ( ErrorCat > 0 ) //Positive numbers means setup problem
+        {
+            Log_Error_Message("WARNING/ERROR Catchment setup issue(s). Check logs for help.");
+            Log_Error_Message("Error return code: ... " + QString::number(ErrorCat) );
+            return;
+        }
+        else if (ErrorCat == -1000 || ErrorCat == -1001 || ErrorCat == -1002)
+        {
+            Log_Error_Message("Error return code: ... " + QString::number(ErrorCat) );
+            Log_Error_Message("WARNING, Issues found parsing values. Recommend checking with GIS tool.");
+            int ret = QMessageBox::warning(this, tr("Issues found converting file"),
+                                           tr("Click Ok to continue. Cancel to stop."),
+                                           QMessageBox::Ok | QMessageBox::Cancel,
+                                           QMessageBox::Ok);
+
+            bool clicked_cancel = true; //Make it default
+            switch(ret)
+            {
+            case QMessageBox::Ok:
+                clicked_cancel = false;
+                break;
+            case QMessageBox::Cancel:
+                clicked_cancel = true;
+                break;
+            }
+
+            if(clicked_cancel)
+                return;
+        }
+        else if( ErrorCat != 0 )
         {
             Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Stream Polyline Processing Failed ... </span>")+tr("<br>"));
             Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorCat)+tr("<br>"));

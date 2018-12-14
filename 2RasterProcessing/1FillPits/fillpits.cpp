@@ -418,8 +418,7 @@ void FillPits::on_pushButtonRun_clicked()
             {
                 Log_Error_Message("WARNING, Issues found parsing values. Recommend checking with GIS tool.");
                 int ret = QMessageBox::warning(this, tr("Issues found converting file"),
-                                               tr("Closing this window will not stop the PIHM thread.\n"
-                                                  "Click Ok to continue. Cancel to stop."),
+                                               tr("Click Ok to continue. Cancel to stop."),
                                                QMessageBox::Ok | QMessageBox::Cancel,
                                                QMessageBox::Ok);
 
@@ -445,8 +444,7 @@ void FillPits::on_pushButtonRun_clicked()
             else
             {
                 int ret = QMessageBox::warning(this, tr("Issues found converting file"),
-                                               tr("Closing this window will not stop the PIHM thread.\n"
-                                                  "Click Ok to continue. Cancel to stop."),
+                                               tr("Click Ok to continue. Cancel to stop."),
                                                QMessageBox::Ok | QMessageBox::Cancel,
                                                QMessageBox::Ok);
 
