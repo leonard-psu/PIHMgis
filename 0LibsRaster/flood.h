@@ -1,1 +1,1 @@
-int flood(char *demfile, char *pointfile, char *newfile);
+int flood(QString demfile, QString pointfile, QString newfile);

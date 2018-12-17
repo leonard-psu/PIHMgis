@@ -487,9 +487,9 @@ void FillPits::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Log_Message("Running Fill Pits ... <br>");
 
-        const char *dummystr = "dummy";
+        QString dummystr("dummy");
 
-        int ErrorFill = flood( (char *)qPrintable(ASCFileName), (char *)dummystr, (char *)qPrintable(filename_fill) );
+        int ErrorFill = flood( ASCFileName, dummystr, filename_fill );
         if( ErrorFill != 0 )
         {
             Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Fill Pits Processing Failed ... </span>")+tr("<br>"));
