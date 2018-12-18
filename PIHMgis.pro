@@ -29,9 +29,7 @@ SOURCES += main.cpp\
     0LibsRaster/ADFFiletoASCFile.cpp \
     0LibsRaster/flood.cpp \
     0LibsRaster/gridio.cpp \
-    0LibsRaster/gridio_null.cpp \
     0LibsRaster/lsmcom.cpp \
-    0LibsRaster/callocate.cpp \
     ##0LibsRaster/avcalls_null.cpp \
     2RasterProcessing/2FlowGrids/flowgrids.cpp \
     0LibsRaster/setdir.cpp \
@@ -106,12 +104,10 @@ SOURCES += main.cpp\
     0LibsRaster/ADFFiletoASCFile.cpp \
     0LibsRaster/aread8.cpp \
     ##0LibsRaster/avcalls_null.cpp \
-    0LibsRaster/callocate.cpp \
     0LibsRaster/catchment.cpp \
     0LibsRaster/catchment_shape.cpp \
     0LibsRaster/flood.cpp \
     0LibsRaster/gridio.cpp \
-    0LibsRaster/gridio_null.cpp \
     0LibsRaster/lsmcom.cpp \
     0LibsRaster/setdir.cpp \
     0LibsRaster/stream_definition.cpp \
@@ -246,7 +242,6 @@ HEADERS  += pihmgisdialog.h \
     0LibsRaster/flood.h \
     0LibsRaster/lsm.h \
     0LibsRaster/gridio.h \
-    0LibsRaster/gioapi.h \
     ##0LibsRaster/avexec32.h \
     2RasterProcessing/2FlowGrids/flowgrids.h \
     0LibsRaster/setdir.h \
@@ -319,7 +314,6 @@ HEADERS  += pihmgisdialog.h \
     0LibsRaster/catchment.h \
     0LibsRaster/catchment_shape.h \
     0LibsRaster/flood.h \
-    0LibsRaster/gioapi.h \
     0LibsRaster/gridio.h \
     0LibsRaster/lsm.h \
     0LibsRaster/setdir.h \

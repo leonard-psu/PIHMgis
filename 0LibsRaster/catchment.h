@@ -1,7 +1,8 @@
 #ifndef CATCHMENT_H
 #define CATCHMENT_H
 
+#include <QString>
 
-int catchment(char *segFile, char *fdrFile, char *catFile);
+int catchment(QString segFile, QString fdrFile, QString catFile);
 
 #endif

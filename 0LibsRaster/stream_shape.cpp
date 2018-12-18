@@ -30,7 +30,7 @@ int recordNum;
 extern PIHMgisDialog *main_window;
 
 // Segments the rivers 
-int stream_shape(char *rivFile, char *fdrFile, char *rivShpFile, char *rivDbfFile)
+int stream_shape(QString qrivFile, QString qfdrFile, QString qrivShpFile, QString qrivDbfFile)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start stream_shape";
@@ -47,6 +47,16 @@ int stream_shape(char *rivFile, char *fdrFile, char *rivShpFile, char *rivDbfFil
         int mlocnVertices;
 
         //int num = 1;
+
+        QByteArray fname = qrivFile.toLatin1();
+        char *rivFile = fname.data();
+        QByteArray fname1 = qfdrFile.toLatin1();
+        char *fdrFile = fname1.data();
+        QByteArray fname2 = qrivShpFile.toLatin1();
+        char *rivShpFile = fname2.data();
+        QByteArray fname3 = qrivDbfFile.toLatin1();
+        char *rivDbfFile = fname3.data();
+
 
         shp = SHPCreate(rivShpFile, SHPT_ARC);
         if (shp == nullptr)

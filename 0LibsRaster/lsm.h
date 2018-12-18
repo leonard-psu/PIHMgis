@@ -1,3 +1,7 @@
+#ifndef lsm_H
+#define lsm_H
+
+
 /* lsm.h
    header file for C functions that are stored in avlib.dll and
    accessed from ArcView (Avenue) via DLL.Proc calls. 
@@ -26,18 +30,13 @@
 int		setdf(float mval);
 int		vdn(int n);					/* also used in setdir */
 int		pool(int i,int j);
-void	set(int i,int j,float *fact,float mval);		/* also used in setdir */
+int	    set(int i,int j,float *fact,float mval);		/* also used in setdir */
 float	min2(float e1,float e2);
 float	max2(float e1,float e2);
 
 /* used in setdir.c */
 int		setdfnoflood(float mval);
-void	SET2(int I, int J,float *DXX,float DD);
-void	setdf2(void );
-void	VSLOPE(float E0,float E1, float E2,
-             float D1,float D2,float DD,
-             float *S,float *A);
-int		setdir(char *demfile, char *angfile, char *slopefile, char *pfile);              
+
 
 /* used in area.c */
 float	prop();
@@ -90,3 +89,4 @@ extern int *d2;
 extern double bndbox[4],csize;
 extern float mval;
 
+#endif

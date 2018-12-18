@@ -609,7 +609,7 @@ void FlowGrids::on_pushButtonRun_clicked()
         SlopeFileName.append("Slope.asc");
         qDebug() << "Slope File Name: " << SlopeFileName;
 
-        int ErrorFDir = setdird8( (char *)qPrintable(ASCFileName), (char *)qPrintable(filename_flow), (char *)qPrintable(SlopeFileName) );
+        int ErrorFDir = setdird8( ASCFileName,filename_flow, SlopeFileName );
         if( ErrorFDir != 0 )
         {
             Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Flow Direction Processing Failed ... </span>")+tr("<br>"));

@@ -49,9 +49,7 @@ int flood(QString demfile, QString pointfile, QString newfile)
         d1[1]=0; d1[2]= -1; d1[3]= -1; d1[4]= -1; d1[5]=0; d1[6]=1; d1[7]=1; d1[8]=1;
         d2[1]=1; d2[2]=1; d2[3]=0; d2[4]= -1; d2[5]= -1; d2[6]= -1; d2[7]=0; d2[8]=1;
 
-        QByteArray fname = demfile.toLatin1();
-        char *demfile_char = fname.data();
-        int err = gridread(demfile_char,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
+        int err = gridread(demfile,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
 
         if(err != 0)
         {
@@ -231,6 +229,10 @@ int setdf(float mval)
             {
                 error_found = true;
             }
+            else if (isnan(bottom))
+            {
+                error_found = true;
+            }
             else
             {
                 fact[k] = (float)(1.0/bottom);
@@ -245,6 +247,7 @@ int setdf(float mval)
 
         //Set positive slope directions - store unresolved on stack
 
+        bool error_set = false;
         bool error_addstack = false;
         nis=0;
         for(int i = i2+1; i < n2-1; i++)
@@ -252,7 +255,11 @@ int setdf(float mval)
             for(int j = i1+1; j < n1-1; j++)
             {
                 if(elev[j][i] > mval)
-                    set(i,j,fact,mval);
+                {
+                    err = set(i,j,fact,mval);
+                    if(err != 0)
+                        error_set = true;
+                }
 
                 // Put unresolved pixels on stack
                 if(dir[j][i] == 0)
@@ -270,6 +277,11 @@ int setdf(float mval)
             return 1003;
         }
 
+        if(error_set)
+        {
+            main_window->Log_Message("[setdf] Error[1004] Set error. Aborting...  ");
+            return 1004;
+        }
 
         nflat = nis;
 
@@ -293,6 +305,7 @@ int setdf(float mval)
 
         bool pool_error_found = false;
         error_addstack = false;
+        error_set = false;
 
         while(nis > 0)
         {
@@ -389,7 +402,12 @@ int setdf(float mval)
                 ni=0;
                 for(ip = 1; ip <= nis; ip++)
                 {
-                    set(is[ip], js[ip], fact, mval);
+                    err = set(is[ip], js[ip], fact, mval);
+                    if(err != 0)
+                    {
+                        error_set = false;
+                        nis = -1;
+                    }
 
                     if(dir[js[ip]][is[ip]] == 0)  // still on stack
                     {
@@ -420,6 +438,11 @@ int setdf(float mval)
             return 1004;
         }
 
+        if(error_set)
+        {
+            main_window->Log_Message("[setdf] Error[1005] Set error. Aborting...  ");
+            return 1005;
+        }
 
 
     } catch (...)
@@ -502,23 +525,52 @@ int vdn(int n)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // set
-// Called by flood above
+// Called by flood above, setdir
 // Note uses global variables elev, dir
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void set(int i,int j,float *fact,float mval)
+int set(int i,int j,float *fact,float mval)
 {
     if(print_many_messages)
         qDebug() << "INFO: Start set";
 
     try {
 
+        if(dir == nullptr)
+        {
+            main_window->Log_Message("[set] Error[1000] dir is null ");
+            return 1000;
+        }
+
+        if(elev == nullptr)
+        {
+            main_window->Log_Message("[set] Error[1001] elev is null ");
+            return 1001;
+        }
+
+        if(fact == nullptr)
+        {
+            main_window->Log_Message("[set] Error[1002] fact is null ");
+            return 1002;
+        }
+
+        if(d1 == nullptr)
+        {
+            main_window->Log_Message("[set] Error[1003] d1 is null ");
+            return 1003;
+        }
+
+        if(d2 == nullptr)
+        {
+            main_window->Log_Message("[set] Error[1004] d2 is null ");
+            return 1004;
+        }
+
         float slope,smax = 0;
-        int k = 0;
 
         dir[j][i] = 0;  // This necessary for repeat passes after level raised
         smax = 0.0;
 
-        for(k=1; k<=8; k++)
+        for(int k=1; k <= 8; k++)
         {
             if(elev[j + d2[k]][i + d1[k]] <= mval)
                 dir[j][i] = -1;
@@ -534,7 +586,11 @@ void set(int i,int j,float *fact,float mval)
 
     } catch (...) {
         qDebug() << "Error: set is returning w/o checking";
+        return -9000;
+
     }
+
+    return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

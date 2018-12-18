@@ -1,15 +1,15 @@
-/***********************************************************/
-/*                                                         */
-/* gridio.c                                                */
-/*                                                         */
-/* I/O routines for terrain stability mapping              */
-/*                                                         */
-//David Tarboton
-//Utah Water Research Laboratory
-//Utah State University
-//Logan, UT, 84322-8200
-//U. S. A.
-/***********************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// gridio.c
+//
+// I/O routines for terrain stability mapping
+//
+// David Tarboton
+// Utah Water Research Laboratory
+// Utah State University
+// Logan, UT, 84322-8200
+// U. S. A.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <QDebug>
 #include <stdio.h>
@@ -19,44 +19,27 @@
 #include "globals.h"
 
 
-/*  Nameadd(..)  Utility for adding suffixes to file names prior to "." extension   */
-int nameadd(char *full,char *arg,char *suff)
-{
-    if(print_debug_messages)
-        qDebug() << "INFO: Start nameadd";
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
 
-    char *ext;
-    int nmain = 0;
-    try {
-
-        ext=strrchr(arg,'.');
-        if(ext == nullptr)
-        {
-            nmain=strlen(arg);
-            sprintf(full,"%s%s",arg,suff);
-        }
-        else
-        {
-            //TODO COME BACK AND FIX
-            nmain=strlen(arg)-strlen(ext);
-            strcpy(full,"");
-            strncat(full,arg,nmain);
-            strcat(full,suff);
-            strcat(full,ext);
-        }
-        return(nmain);
-
-    } catch (...) {
-        qDebug() << "Error: nameadd is returning w/o checking";
-    }
-}
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// readline from file
+// Used in gridread
+// Note uses '\n' as string determination
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int readline(FILE *fp,char *fline)
 {
-   // if(print_debug_messages)
-   //     qDebug() << "INFO: Start readline";
+    // if(print_many_messages)
+    //     qDebug() << "INFO: Start readline";
 
     try {
+
+        if(fp == nullptr)
+        {
+            main_window->Log_Message("[readline] Error[-100] fp = null");
+            return -100;
+        }
+
         int i = 0, ch;
 
         for(i=0; i< MAXLN; i++)
@@ -85,14 +68,14 @@ int readline(FILE *fp,char *fline)
     }
 }
 
-/*
-  matalloc(...) allocates memory for matrix navigation pointer
-  and for matrix data, then returns matrix navigation pointer
-  Modification of matrixalloc by DGT to not use so many pointers
-  7/1/97
-*/
-
-//NEED TO ADD NULL rather than exit
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// matalloc(...) allocates memory for matrix navigation pointer
+// and for matrix data, then returns matrix navigation pointer
+// Modification of matrixalloc by DGT to not use so many pointers
+// 7/1/97
+// Used in aread8, flood, gridio, setdir
+// Note: Modified to return nullptr on errors
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void **matalloc(int nx,int ny,int datatype)
 {
@@ -102,7 +85,24 @@ void **matalloc(int nx,int ny,int datatype)
     void **mat;
 
     try {
-        int i,arrsize = 0;
+
+        if(nx <= 0)
+        {
+            main_window->Log_Message("[matalloc] Invalid nx <= 0. Returning null pointer");
+            return nullptr;
+        }
+        if(ny <= 0)
+        {
+            main_window->Log_Message("[matalloc] Invalid ny <= 0. Returning null pointer");
+            return nullptr;
+        }
+        if(datatype <= 0)
+        {
+            main_window->Log_Message("[matalloc] Invalid datatype. Returning null pointer");
+            return nullptr;
+        }
+
+        int arrsize = 0;
         void *data;
         int **imat;
         short **smat;
@@ -126,63 +126,76 @@ void **matalloc(int nx,int ny,int datatype)
         }
         else
         {
-            qDebug() << "Error: matalloc unknown datatype and not handled";
+            main_window->Log_Message("[matalloc] Unhandled datatype. Returning null pointer");
+            return nullptr;
         }
 
         if(mat == nullptr)
         {
-            printf("\nError: Cannot allocate memory for matrix navigation pointers");
-            printf("\n       nx = %d, ny = %d\n\n",nx,ny);
-            exit(2);
+            main_window->Log_Message("[matalloc] Error: Cannot allocate memory for matrix navigation pointers.");
+            main_window->Log_Message("[matalloc] nx = " + QString::number(nx) + " ny = " + QString::number(ny));
+            return nullptr;
+        }
+
+        if(arrsize <= 0)
+        {
+            main_window->Log_Message("[matalloc] Error: Invalid arrsize.");
+            main_window->Log_Message("[matalloc] nx = " + QString::number(nx) + " ny = " + QString::number(ny));
+            return nullptr;
         }
 
         data = malloc(arrsize);
 
         if(data == nullptr)
         {
-            printf("\nError: Cannot allocate memory for matrix of dimension");
-            printf("\n       nx = %d, ny = %d\n\n",nx,ny);
-            exit(3);
+            main_window->Log_Message("[matalloc] Cannot allocate memory for matrix of dimension.");
+            main_window->Log_Message("[matalloc] nx = " + QString::number(nx) + " ny = " + QString::number(ny));
+            return nullptr;
         }
 
         switch(datatype)
         {
         case 1:
             smat = (short **)mat;
-            for(i=0; i<(nx); i++)
+            for(int i=0; i<(nx); i++)
             {
                 smat[i] = &(((short *)(data))[i*(ny)]);
             }
             break;
         case 2:
             imat = (int **)mat;
-            for(i=0; i<(nx); i++)
+            for(int i=0; i<(nx); i++)
             {
                 imat[i] = &(((int *)(data))[i*(ny)]);
             }
             break;
         case 3:
             fmat = (float **)mat;
-            for(i=0; i<(nx); i++)
+            for(int i=0; i<(nx); i++)
             {
                 fmat[i] = &(((float *)(data))[i*(ny)]);
             }
             break;
         default:
-            //What should this be?
-            qDebug() << "INFO: matalloc is reaching unknown case!!!!";
+            main_window->Log_Message("[matalloc] Unhandled datatype. Returning null pointer");
+            return nullptr;
             break;
         }
 
 
     } catch (...) {
-        qDebug() << "Error: matalloc is returning w/o checking";
+        qDebug() << "Error: matalloc is returning nullptr";
+        return nullptr;
     }
 
     return(mat);
 }
 
-int gridread(char *file, void ***data, int datatype, int *nx, int *ny,
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// gridread
+// Used in aread8, catchment, catchment_shape, flood, gridio, setdir, and others....
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int gridread(QString file, void ***data, int datatype, int *nx, int *ny,
              float *dx, float *dy, double bndbox[4], double *csize, float *nodata, int *filetype)
 {
 
@@ -190,184 +203,36 @@ int gridread(char *file, void ***data, int datatype, int *nx, int *ny,
         qDebug() << "INFO: Start gridread";
 
     try {
-        FILE *fp;
-        int channel1,type,iesri = 0;
 
-        int i, j, hdrlines = 0;
+        //Check input names
+        if(file.length() < 1)
+        {
+            main_window->Log_Message("[gridread] Invalid file " + file);
+            return -1000;
+        }
+
+        FILE *fp;
+
+        int hdrlines = 0;
         float value= 0;
         char fline[MAXLN], keyword[21], utmetag, utmntag;
         float **farr;
         int **iarr;
         short **sarr;
-        double adjbndbox[4],utme,utmn;
-        CELLTYPE *rowbuf;
-        float floatNull;
+        double utme,utmn;
 
-
-        if(iesri = GridIOSetup() >= 0)
-
-            /* Open input cell layer with no evaluation (5) */
-            if ((channel1 =
-                 CellLayerOpen(file,READONLY,ROWIO,
-                               &type,csize)) >= 0 )
-            {
-                /*  The success of these means the file could be opened as an ESRI grid file  */
-                *filetype=1;
-                /*  File types are
-    0=ASCII
-    1= ARCVIEW grid via the ESRI Application Programmers Interface  */
-                /*  here is the ESRI grid file read stuff - following copyrow example */
-                *dx = *dy = (float) *csize;
-                if(type == CELLINT && datatype == RPFLTDTYPE)
-                {
-                    printf("%s File contains integer data but was read as float\n",file);
-                }
-                if(type == CELLFLOAT && datatype != RPFLTDTYPE)
-                {
-                    printf("%s File contains Float data but was read as Integer\n",file);
-                }
-                /*
-        Get the bounding box of the input cell layer            (7)
-        */
-                if (BndCellRead (file, bndbox) < 0)
-                {
-                    printf ("could not read bounding box of input grid\n");
-                    CellLyrClose(channel1);
-                    GridIOExit();
-                    return(1);
-                }
-                /*        printf("%f %f %f %f %g\n",bndbox[0],bndbox[1],bndbox[2],bndbox[3],*nodata) */;
-                /*  Bounding box is xllcorner, yllcorner, xurcorner, yurcorner   */
-
-                /*
-        Set the Window to the output bounding box and cellsize  (9)
-        */
-                if (AccessWindowSet (bndbox, *csize, adjbndbox) < 0)
-                {
-                    printf ("Could not set Window\n");
-                    CellLyrClose(channel1);
-                    GridIOExit();
-                    return(2);
-                }
-                /*
-        Get the number of rows and columns                      (10)
-        in the window
-        */
-                *nx = WindowCols();
-                *ny = WindowRows();
-
-                /*  Allocate memory and set all type pointers  */
-                *data = matalloc(*nx, *ny, datatype);
-                farr = (float **) (*data);
-                iarr = (int **) (*data);
-                sarr = (short **) (*data);
-                GetMissingFloat(&floatNull);
-
-                *nodata = (datatype == RPFLTDTYPE) ? floatNull: -9999.;
-
-                /*
-        Allocate row buffer                                     (11)
-        */
-                if ((rowbuf = (CELLTYPE *)
-                     CAllocate1 ( *nx, sizeof(CELLTYPE)))
-                        == NULL )
-                {
-                    printf ("Could not allocate memory\n");
-                    CellLyrClose(channel1);
-                    GridIOExit();
-                    return(3);
-                }
-                /*
-        Now copy row into array                 (12)
-        */
-                for (i=0; i < *ny; i++)
-                {
-                    GetWindowRow (channel1, i, rowbuf);
-                    if(type == CELLINT)
-                    {
-                        register int *buf = (int *)rowbuf;
-                        if(datatype == RPSHRDTYPE)
-                        {
-                            for(j=0; j < *nx; j++)
-                            {
-                                sarr[j][i]=(buf[j] == MISSINGINT) ? (short) *nodata : (short) buf[j];
-                            }
-                        }
-                        else if(datatype == RPINTDTYPE)
-                        {
-                            for(j=0; j < *nx; j++)
-                            {
-                                iarr[j][i]=(buf[j] == MISSINGINT) ? (int) *nodata : buf[j];
-                            }
-                        }
-                        else
-                        {
-                            for(j=0; j < *nx; j++)
-                            {
-                                farr[j][i]=(buf[j] == MISSINGINT) ? *nodata: (float) buf[j];
-                            }
-                        }
-                    }
-                    else
-                    {
-                        register float *buf = (float *)rowbuf;
-
-                        /*     This is all repeated to get right the typecasting of data from ESRI file into the format
-       we want   */
-                        if(datatype == RPSHRDTYPE)
-                        {
-                            for(j=0; j < *nx; j++)
-                            {
-                                sarr[j][i]=(buf[j] == floatNull) ? (short) *nodata : (short) buf[j];
-                            }
-                        }
-                        else if(datatype == RPINTDTYPE)
-                        {
-                            for(j=0; j < *nx; j++)
-                            {
-                                iarr[j][i]=(buf[j] == floatNull) ? (int) *nodata : (int) buf[j];
-                            }
-                        }
-                        else
-                        {
-                            for(j=0; j < *nx; j++)
-                            {
-                                farr[j][i]= buf[j];
-                            }
-                        }
-                    }
-                }
-
-                /*
-        Free row buffer                                         (13)
-        */
-                CFree1 ((char *)rowbuf);
-                /*
-        Close handles                                           (14)
-        */
-                CellLyrClose(channel1);
-                /*
-        Done with the library                                   (15)
-        */
-                GridIOExit();
-                return(0);
-            }
-
-
-        /*  Here assume file is ASCII  Close ESRI stuff. */
-        CellLyrClose(channel1);
-        GridIOExit();
+        QByteArray fname = file.toLatin1();
+        char *file_char = fname.data();
 
         *filetype=0;
-        fp = fopen(file,"r");
-        printf("%s\n",file);
-        if(fp == NULL)
+        fp = fopen(file_char,"r");
+        if(fp == nullptr)
         {
-            printf("\nERROR: Cannot open input file (%s).\n\n",file);
-            return(1);
+            main_window->Log_Message("[gridread] Cannot open input file " + fname);
+            return -1001;
         }
 
-        /* read ARC-Info header */
+        // read ARC-Info header
         while(1)
         {
             readline(fp, fline);
@@ -379,9 +244,13 @@ int gridread(char *file, void ***data, int datatype, int *nx, int *ny,
             sscanf(fline,"%s %f",keyword,&value);
 
             if(strcmp(keyword,"ncols") == 0 || strcmp(keyword,"NCOLS") == 0)
+            {
                 *nx = (int)value;
+            }
             else if(strcmp(keyword,"nrows") == 0 || strcmp(keyword,"NROWS") == 0)
+            {
                 *ny = (int)value;
+            }
             else if(strcmp(keyword,"xllcenter") == 0 || strcmp(keyword,"XLLCENTER") == 0)
             {
                 utmetag = 'c';
@@ -407,54 +276,83 @@ int gridread(char *file, void ***data, int datatype, int *nx, int *ny,
                 *dx = *dy = value;
                 *csize = (double) value;
             }
-            else if(strcmp(keyword,"nodata_value") == 0 || strcmp(keyword,"NODATA_VALUE") == 0 ||
-                    strcmp(keyword,"NODATA_value") == 0)
+            else if(strcmp(keyword,"nodata_value") == 0 || strcmp(keyword,"NODATA_VALUE") == 0 || strcmp(keyword,"NODATA_value") == 0)
+            {
                 *nodata = value;
+            }
         }
 
-        /* adjust utme and utmn if necessary (we store center of reference cell) */
-        if(utmetag == 'e') utme = utme + *dx/2;
-        if(utmntag == 'e') utmn = utmn + *dy/2;
+        // Adjust utme and utmn if necessary (we store center of reference cell)
+        if(utmetag == 'e')
+            utme = utme + *dx/2;
+
+        if(utmntag == 'e')
+            utmn = utmn + *dy/2;
+
         bndbox[0] = utme - *csize/2.;
         bndbox[1] = utmn - *csize/2.;
         bndbox[2] = bndbox[0] + *csize * (*nx);
         bndbox[3] = bndbox[1] + *csize * (*ny);
-        /* position file pointer for ARC-Info file to beginning of image data */
-        rewind(fp);
-        for(i=0; i<hdrlines; i++) readline(fp, fline);
 
-        /* convert depending on datatype */
+        //Position file pointer for ARC-Info file to beginning of image data
+        rewind(fp);
+
+        for(int i=0; i<hdrlines; i++)
+        {
+            readline(fp, fline);
+        }
+
+        //Convert depending on datatype
         if(datatype == RPSHRDTYPE)
         {
             sarr = (short **) matalloc(*nx, *ny, datatype);
-
-            /* read in the ARC-Info file */
-            for(i=0; i< *ny; i++)
+            if(sarr == nullptr)
             {
-                for(j=0; j< *nx; j++)
+                main_window->Log_Message("[gridread] Error[-2001] matalloc failed.");
+                return -2001;
+            }
+
+            //Read in the ARC-Info file
+            for(int i=0; i< *ny; i++)
+            {
+                for(int j=0; j< *nx; j++)
+                {
                     fscanf(fp,"%hd",&sarr[j][i]);
+                }
             }
             *data = (void **) sarr;
         }
         else if(datatype == RPINTDTYPE)
         {
             iarr = (int **) matalloc(*nx, *ny, datatype);
-
-            for(i=0; i< *ny; i++)
+            if(iarr == nullptr)
             {
-                for(j=0; j< *nx; j++)
+                main_window->Log_Message("[gridread] Error[-2002] matalloc failed.");
+                return -2002;
+            }
+
+            for(int i=0; i< *ny; i++)
+            {
+                for(int j=0; j< *nx; j++)
+                {
                     fscanf(fp,"%d",&iarr[j][i]);
+                }
             }
             *data = (void **) iarr;
         }
         else if(datatype == RPFLTDTYPE)
         {
             farr = (float **) matalloc(*nx, *ny, datatype);
-
-            /* read in the ARC-Info file */
-            for(i=0; i< *ny; i++)
+            if(farr == nullptr)
             {
-                for(j=0; j< *nx; j++)
+                main_window->Log_Message("[gridread] Error[-2003] matalloc failed.");
+                return -2003;
+            }
+
+            // read in the ARC-Info file
+            for(int i=0; i< *ny; i++)
+            {
+                for(int j=0; j< *nx; j++)
                 {
 
                     fscanf(fp,"%f",&farr[j][i]);
@@ -464,50 +362,77 @@ int gridread(char *file, void ***data, int datatype, int *nx, int *ny,
         }
         else
         {
-            printf("\nERROR: unknown datatype (%s).\n\n",datatype);
+            main_window->Log_Message("[gridread] Error[1001] unknown datatype " + QString::number(datatype));
+            return(1001);
         }
-        fclose(fp);
 
-    } catch (...) {
+        fclose(fp);
+        fp = nullptr;
+
+    }
+    catch (...)
+    {
         qDebug() << "Error: gridread is returning w/o checking";
+        return(5000);
     }
 
     return(0);
 }
 
-int gridwrite(char *file, void **data, int datatype, int nx, int ny, float dx, 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// gridwrite
+// Used in aread8, catchment, flood, gridio, setdir, and others....
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int gridwrite(QString qfile, void **data, int datatype, int nx, int ny, float dx,
               float dy, double bndbox[4], double csize, float nodata, int filetype)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start gridwrite";
 
     try{
+
+        //Check input names
+        if(qfile.length() < 1)
+        {
+            main_window->Log_Message("[gridwrite] Invalid file " + qfile);
+            return -1000;
+        }
+        if(nx < 1)
+        {
+            main_window->Log_Message("[gridwrite] Invalid nx < 1 ");
+            return -1001;
+        }
+        if(ny < 1)
+        {
+            main_window->Log_Message("[gridwrite] Invalid ny < 1 ");
+            return -1002;
+        }
+
+
         FILE *fp;
 
-        int i, j = 0;
-        char fline[MAXLN];
+        QByteArray fname = qfile.toLatin1();
+        char *file = fname.data();
+
         float **farr;
         int **iarr;
         short **sarr;
-        double adjbndbox[4],utme,utmn;
-        int channel1,type;
-        CELLTYPE *rowbuf;
+        double utme,utmn;
+        bool error_found = false;
 
-        /*  File types are
-    0=ASCII
-    1= ARCVIEW grid via the ESRI Application Programmers Interface  */
-        if(filetype == 0)   /*  ASCII FILE  */
+        //  File types are 0=ASCII 1= ARCVIEW grid via the ESRI Application Programmers Interface
+        if(filetype == 0)   // ASCII FILE
         {
-            /* open ARC-Info file */
+            // open ARC-Info file
             fp = fopen(file,"w");
 
             if(fp == nullptr)
             {
-                printf("\nERROR: Cannot open output file (%s).\n\n",file);
-                return(4);
+                main_window->Log_Message("[gridwrite] Error[-5002] Cannot open output file   " + qfile);
+                return -5001;
             }
 
-            /* write ARC-Info header */
+            // write ARC-Info header
             fprintf(fp,"ncols         %d\n",nx);
             fprintf(fp,"nrows         %d\n",ny);
             utme=bndbox[0]+dx*0.5;
@@ -517,194 +442,109 @@ int gridwrite(char *file, void **data, int datatype, int nx, int ny, float dx,
             fprintf(fp,"cellsize      %f\n",csize);
             fprintf(fp,"nodata_value  %g\n",nodata);
 
-            /* write raster data to ARC/INFO file */
-            /* convert depending on datatype */
+            // write raster data to ARC/INFO file
+            // convert depending on datatype
             if(datatype == RPSHRDTYPE)
             {
                 sarr = (short **) data;
-                for(i=0; i< ny; i++)
+                if(sarr == nullptr)
                 {
-                    for(j=0; j< nx; j++)
+                    main_window->Log_Message("[gridwrite] Error[-2001] data is null.");
+                    error_found = true;
+                }
+
+                if(!error_found)
+                {
+                    for(int i=0; i< ny; i++)
                     {
-                        fprintf(fp,"%hd ",sarr[j][i]);
-                        if((j+1) % LINELEN == 0)
-                            fprintf(fp,"\n");
+                        for(int j=0; j< nx; j++)
+                        {
+                            fprintf(fp,"%hd ",sarr[j][i]);
+
+                            if((j+1) % LINELEN == 0)
+                                fprintf(fp,"\n");
+                        }
+                        fprintf(fp,"\n");
                     }
-                    fprintf(fp,"\n");
                 }
             }
             else if(datatype == RPINTDTYPE)
             {
                 iarr = (int **) data;
-                for(i=0; i< ny; i++)
+                if(iarr == nullptr)
                 {
-                    for(j=0; j< nx; j++)
+                    main_window->Log_Message("[gridwrite] Error[-2002] data is null.");
+                    error_found = true;
+                }
+
+                if(!error_found)
+                {
+                    for(int i=0; i< ny; i++)
                     {
-                        fprintf(fp,"%d ",iarr[j][i]);
-                        if((j+1) % LINELEN == 0)
-                            fprintf(fp,"\n");
+                        for(int j=0; j< nx; j++)
+                        {
+                            fprintf(fp,"%d ",iarr[j][i]);
+
+                            if((j+1) % LINELEN == 0)
+                                fprintf(fp,"\n");
+                        }
+                        fprintf(fp,"\n");
                     }
-                    fprintf(fp,"\n");
                 }
             }
             else if(datatype == RPFLTDTYPE)
             {
                 farr = (float **) data;
-                for(i=0; i< ny; i++)
+                if(farr == nullptr)
                 {
-                    for(j=0; j< nx; j++)
+                    main_window->Log_Message("[gridwrite] Error[-2003] data is null.");
+                    error_found = true;
+                }
+
+                if(!error_found)
+                {
+                    for(int i=0; i< ny; i++)
                     {
-                        fprintf(fp,"%g ",farr[j][i]);
-                        if((j+1) % LINELEN == 0)
-                            fprintf(fp,"\n");
+                        for(int j=0; j< nx; j++)
+                        {
+                            fprintf(fp,"%g ",farr[j][i]);
+
+                            if((j+1) % LINELEN == 0)
+                                fprintf(fp,"\n");
+                        }
+                        fprintf(fp,"\n");
                     }
-                    fprintf(fp,"\n");
                 }
             }
             else
             {
-                printf("\nERROR: unknown datatype (%s).\n\n",datatype);
+                main_window->Log_Message("[gridwrite] Error[-5001] Unknown datatype  " + QString::number(datatype));
+                return -5001;
             }
+
             fclose(fp);
         }
-        else
-        {
-            /*  ESRI grid file  */
-            GridIOSetup();
-            AccessWindowClear();  /*  Forget about any window it used to have  */
+        else {
 
-            if (CellLyrExists(file))
-            {
-                /*  Save old file as a backup and use new file name  */
-                sprintf(fline,"%s%s",file,"_b");
-
-                if (CellLyrExists(fline))
-                    GridDelete(fline);
-
-                GridRename(file,fline);
-                printf("Output grid %s exists and will be overwritten.\n",file);
-                printf("The old grid is preserved as %s\n",fline);
-                GridDelete(file);
-            }
-
-            if(datatype == RPSHRDTYPE || datatype == RPINTDTYPE)
-            {
-                type=CELLINT;
-            }
-            else
-            {
-                type= CELLFLOAT;
-            }
-
-            if((channel1 = CellLayerCreate(file,WRITEONLY,ROWIO,type,csize,bndbox)) < 0)
-            {
-                printf ("Could not cread output grid %s\n",file);
-                CellLyrClose(channel1);
-                GridIOExit();
-                return(5);
-            }
-            if(AccessWindowSet(bndbox, csize, adjbndbox) < 0)
-            {
-                printf ("Could not set Window\n");
-                CellLyrClose(channel1);
-                CellLyrDelete (file);
-                GridIOExit();
-                return(5);
-            }
-            /*  Allocate row buffer  */
-            if((rowbuf = (CELLTYPE *)CAllocate1(nx,sizeof(CELLTYPE))) == NULL)
-            {
-                printf("Could not allocate buffer memory\n");
-                CellLyrClose(channel1);
-                CellLyrDelete (file);
-                GridIOExit();
-                return(5);
-            }
-            if(type == CELLINT)
-            {
-                register int *buf = (int *)rowbuf;
-                if(datatype == RPSHRDTYPE)
-                {
-                    sarr = (short **)data;
-                    for(i=0; i < ny; i++)
-                    {
-                        for(j=0; j < nx; j++)
-                        {
-                            buf[j] = (int) sarr[j][i];
-                            if(buf[j] == (int) nodata)buf[j]=MISSINGINT;
-                        }
-                        PutWindowRow (channel1, i, rowbuf);
-                    }
-                }
-                else if(datatype == RPINTDTYPE)
-                {
-                    iarr = (int **)data;
-                    for(i=0; i< ny; i++)
-                    {
-                        for(j=0; j < nx; j++)
-                        {
-                            buf[j] = (int) iarr[j][i];
-                            if(buf[j] == (int) nodata)buf[j]=MISSINGINT;
-                        }
-                        PutWindowRow (channel1, i, rowbuf);
-                    }
-                }
-            }
-            else   /*  Here type is float   */
-            {
-                register float *buf = (float *)rowbuf;
-                float floatNull;
-
-                GetMissingFloat(&floatNull);
-                farr = (float **)data;
-                for(i=0; i < ny; i++)
-                {
-                    for(j=0; j < nx; j++)
-                    {
-                        buf[j] = farr[j][i];
-                        if(buf[j] == nodata)buf[j]=floatNull;
-                    }
-                    PutWindowRow (channel1, i, rowbuf);
-                }
-            }
-
-            CFree1 ((char *)rowbuf);
-            CellLyrClose(channel1);
-            GridIOExit();
+            main_window->Log_Message("[gridwrite] Error[-5000] Invalid file type ");
+            return -5000;
         }
+
+        if(error_found)
+        {
+            main_window->Log_Message("[gridwrite] Error[-5002] Error(s) found while wrting data ");
+            return -5001;
+        }
+
 
     } catch (...) {
         qDebug() << "Error: gridwrite is returning w/o checking";
+        return -9000;
     }
 
     return(0);
 }
 
-void eol(FILE *fp)
-{
-    if(print_debug_messages)
-        qDebug() << "INFO: Start eol";
-
-    try {
-
-        char ch;
-
-        while(1)
-        {
-            if((ch = getc(fp)) == '\n')
-                return;
-
-            if(ch == EOF)
-            {
-                fseek(fp, -1L, SEEK_CUR);
-                return;
-            }
-        }
-
-    } catch (...) {
-        qDebug() << "Error: eol is returning w/o checking";
-    }
-}
 
 
 

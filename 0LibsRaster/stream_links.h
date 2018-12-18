@@ -1,6 +1,8 @@
 #ifndef STREAM_LINKS
 #define STREAM_LINKS
 
-int stream_links(char *rivFile, char *fdrFile, char *segFile, char *nodeFile);
+#include <QString>
+
+int stream_links(QString rivFile, QString fdrFile, QString segFile, QString nodeFile);
 
 #endif

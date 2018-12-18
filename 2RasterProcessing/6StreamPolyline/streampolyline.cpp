@@ -508,10 +508,10 @@ void StreamPolyline::on_pushButtonRun_clicked()
         ShpFileName = StreamPolyline_filename;
         DbfFileName = ShpFileName;
         DbfFileName.replace(QString(".shp"), QString(".dbf"));
-        int ErrorStr = stream_shape((char *)qPrintable(
-                                        StreamGrids_filename),
-                                    (char *)qPrintable(FlowDirGrids_filename),
-                                    (char *)qPrintable(ShpFileName), (char *)qPrintable(DbfFileName));
+        int ErrorStr = stream_shape(StreamGrids_filename,
+                                    FlowDirGrids_filename,
+                                    ShpFileName,
+                                    DbfFileName);
         if( ErrorStr != 0 )
         {
             Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Stream Polyline Processing Failed ... </span>")+tr("<br>"));

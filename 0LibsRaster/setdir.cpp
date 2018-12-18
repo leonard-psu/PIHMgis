@@ -1,152 +1,53 @@
-/*  C version of setdir.c. This does not fill pits, it is intended for use AFTER
-    d8.c which fills pits.  Input is a dem file name.  Output is
-    slope and dinf angle files.   This version implements Garbrecht flow directions
-    for flats.
+// C version of setdir.c. This does not fill pits, it is intended for use AFTER
+// d8.c which fills pits.  Input is a dem file name.  Output is
+// slope and dinf angle files.   This version implements Garbrecht flow directions
+// for flats.
 
-  David G Tarboton
-  Utah State University
-     */
-
-/*
-This roughly follows the following pseudocode from my review of Garbrecht's paper
-
-Pseudocode to iteratively resolve flow directions
-
-Define arrays E(x), D(x), S1(x), S2(x), I(x) where x refers to grid location.
- where E is original elevation, D is total increment, S1 step 1 increment,
- S2 step 2 increment, I a flag to indicate whether flow direction has been set.
-
-Initialize  
-do for each x
-    read in E(x)
-    I(x) = 1
-enddo
-unresolved = 1
-while(unresolved > 0)
-    unresolved = 0
-    do for each x
-        if(I(x) > 0)then      /*  only apply to unresolved pixels
-            calculate slope to each neighbor using E(x)
-            if(max slope > 0)then
-                assign flow direction to appropriate neighbor
-                I(x) = 0   /*  flag it as resolved
-            else
-                unresolved=unresolved + 1
-                I(x) = 1   /* this flags the pixel as unresolved
-            endif
-        endif
-    enddo
-    if(unresolved > 0)then
-        for each x
-            D(x) = S2(x) = S2(x)= 0      /*  reset arrays for iteration
-        for each x with I(x) > 0
-            Calculate step 1 increment towards falling terrain, S1(x)
-        for each x with I(x) > 0
-            Calculate step 2 increment away from rising terrain, S2(x)
-        for each x with I(x) > 0
-            D(x) = S1(x) + S2(x)
-        for each x
-            E(x) = D(x)
-/*  overwrite original elevations since they are no longer needed from now 
-on slopes are based on D(x)  
-    endif
-endwhile
-output results
-end
-
-  */
+// David G Tarboton
+// Utah State University
 
 #include <QDebug>
 #include "lsm.h"
 #include "globals.h"
 
-/* This include declares all necessary global variables  */
-void incfall(int n, float *elev1, short *s1,int **spos, int iter, int *sloc);
-void incrise(int n, float *elev1, short *s2,int **spos, int iter, int *sloc);
-
-void set2(int i,int j,float *fact,float *elev1, float *elev2, int iter, int **spos, short *s);
-void flatrout(int n,int *sloc, short *s,int **spos,int iter,float *elev1,float *elev2, float *fact, int ns);
-void sloped8(void);
-
-
-int setdir(char *demfile, char *angfile, char *slopefile, char *pfile)
-{ 
-    if(print_debug_messages)
-        qDebug() << "INFO: Start setdir";
-
-    int err,filetype = 0;
-    float mval;
-    double bndbox[4],csize;
-
-    try {
-        /* define directions */
-        d1[1]=0; d1[2]= -1; d1[3]= -1; d1[4]= -1; d1[5]=0; d1[6]=1; d1[7]=1; d1[8]=1;
-        d2[1]=1; d2[2]=1; d2[3]=0; d2[4]= -1; d2[5]= -1; d2[6]= -1; d2[7]=0; d2[8]=1;
+// This include declares all necessary global variables
+int incfall(int n, float *elev1, short *s1,int **spos, int iter, int *sloc);
+int incrise(int n, float *elev1, short *s2,int **spos, int iter, int *sloc);
+int set2(int i,int j,float *fact,float *elev1, float *elev2, int iter, int **spos, short *s);
+int flatrout(int n,int *sloc, short *s,int **spos,int iter,float *elev1,float *elev2, float *fact, int ns);
+int sloped8(void);
 
 
-        err=gridread(demfile,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy, bndbox,&csize,&mval,&filetype);
-        if(err != 0)
-            goto ERROR2;
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
 
-        /*  allocate  dir and stack arrays  */
-        dir = (short **) matalloc(nx, ny, RPSHRDTYPE);
-
-        i1=0; i2=0; n1=nx; n2=ny;  /*  full grid  */
-        err=setdfnoflood(mval);
-        if(err != 0)
-            goto ERROR1;
-
-        /*  err = gridwrite(pfile,(void **)dir,RPSHRDTYPE,nx,ny,dx,dy,
-      bndbox,csize,-1,filetype);   */
-
-        /*  allocate memory for slope and angle  */
-        slope = (float **) matalloc(nx, ny, RPFLTDTYPE);
-        ang = (float **) matalloc(nx, ny, RPFLTDTYPE);
-        setdf2();
-        err = gridwrite(slopefile,(void **)slope,RPFLTDTYPE,nx,ny,dx,dy, bndbox,csize,-1.,filetype);
-        if (err != 0)
-            goto ERROR3;
-
-        err = gridwrite(angfile,(void **)ang,RPFLTDTYPE,nx,ny,dx,dy, bndbox,csize,-2.,filetype);
-        if (err != 0)
-            goto ERROR3;
-
-        /*  Wrapping up  */
-        err=0;
-ERROR3:
-        qDebug() << "Error: setdir ERROR3";
-        free(slope[0]);
-        free(slope);
-        free(ang[0]);
-        free(ang);
-        ang = nullptr;
-        slope = nullptr;
-ERROR1:
-        qDebug() << "Error: setdir ERROR1";
-        free(dir[0]);
-        free(dir);
-        dir = nullptr;
-ERROR2:
-        qDebug() << "Error: setdir ERROR2";
-        free(elev[0]);
-        free(elev);
-        elev = nullptr;
-
-    }
-    catch (...) {
-        qDebug() << "Error: setdir is returning w/o checking";
-    }
-
-    return(err);
-
-}
-
-int setdird8(char *demfile, char *pfile, char *slopefile)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// setdird8
+// Visit Taudem website for details.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int setdird8(QString demfile, QString pfile, QString slopefile)
 { 
     if(print_debug_messages)
         qDebug() << "INFO: Start setdird8";
 
     try {
+
+        //Check input names
+        if(demfile.length() < 1)
+        {
+            main_window->Log_Message("[setdird8] Invalid demfile " + demfile);
+            return -9001;
+        }
+        if(pfile.length() < 1)
+        {
+            main_window->Log_Message("[setdird8] Invalid pointfile " + pfile);
+            return -9002;
+        }
+        if(slopefile.length() < 1)
+        {
+            main_window->Log_Message("[setdird8] Invalid newfile " + slopefile);
+            return -9003;
+        }
 
         int err,filetype = 0;
         float mval;
@@ -156,173 +57,332 @@ int setdird8(char *demfile, char *pfile, char *slopefile)
         d1[1]=0; d1[2]= -1; d1[3]= -1; d1[4]= -1; d1[5]=0; d1[6]=1; d1[7]=1; d1[8]=1;
         d2[1]=1; d2[2]=1; d2[3]=0; d2[4]= -1; d2[5]= -1; d2[6]= -1; d2[7]=0; d2[8]=1;
 
-        err=gridread(demfile,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy, bndbox,&csize,&mval,&filetype);
+        err = gridread(demfile,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy, bndbox,&csize,&mval,&filetype);
 
-        qDebug() << "INFO: After gridread " << err;
-
-        if(err != 0) //goto ERROR2;
+        if(err != 0)
         {
-            qDebug() << "Error: setdird8 ERROR2";
+            main_window->Log_Message("[setdird8] Error[" + QString::number(err) + "] gridread Failed  ");
 
             free(elev[0]);
             free(elev);
             return(err);
         }
 
-        /*  allocate  dir and stack arrays  */
+        //  allocate  dir and stack arrays
         dir = (short **) matalloc(nx, ny, RPSHRDTYPE);
-
-        i1=0; i2=0; n1=nx; n2=ny;  /*  full grid  */
-        err=setdfnoflood(mval);
-        if(err != 0)//goto ERROR1;
+        if(dir == nullptr)
         {
-            qDebug() << "Error: setdird8 ERROR1";
+            main_window->Log_Message("[setdird8] Error[-1000] matalloc failed  ");
 
+            free(elev[0]);
+            free(elev);
+            return(err);
+        }
+
+        i1=0;
+        i2=0;
+        n1=nx;
+        n2=ny;  //full grid
+
+        err = setdfnoflood(mval);
+        if(err != 0)
+        {
+            main_window->Log_Message("[setdird8] Error[-1001] setdfnoflood failed  ");
+
+            free(elev[0]);
+            free(elev);
             free(dir[0]);
             free(dir);
             return(err);
         }
 
         err = gridwrite(pfile,(void **)dir,RPSHRDTYPE,nx,ny,dx,dy,bndbox,csize,-1,filetype);
-        qDebug() << "INFO: After gridwrite " << err;
+        if(err != 0)
+        {
+            main_window->Log_Message("[setdird8] Error[-1002] gridwrite failed  ");
 
-        /*  allocate memory for slope   */
+            free(elev[0]);
+            free(elev);
+            free(dir[0]);
+            free(dir);
+            return(err);
+        }
+
+        // allocate memory for slope
         slope = (float **) matalloc(nx, ny, RPFLTDTYPE);
-        sloped8();
+        if(slope == nullptr)
+        {
+            main_window->Log_Message("[setdird8] Error[-1003] slope failed  ");
+
+            free(elev[0]);
+            free(elev);
+            free(dir[0]);
+            free(dir);
+            return(err);
+        }
+
+        err = sloped8();
+        if(err != 0)
+        {
+            main_window->Log_Message("[setdird8] Error[-1004] sloped8 failed  ");
+
+            free(elev[0]);
+            free(elev);
+            free(dir[0]);
+            free(dir);
+            return(err);
+        }
 
         err = gridwrite(slopefile,(void **)slope,RPFLTDTYPE,nx,ny,dx,dy,bndbox,csize,-1.,filetype);
-        if (err != 0)//goto ERROR3;
+        if (err != 0)
         {
-            qDebug() << "Error: setdird8 ERROR3";
+            main_window->Log_Message("[setdird8] Error[-1005] gridwrite failed  ");
+            free(elev[0]);
+            free(elev);
+            free(dir[0]);
+            free(dir);
             free(slope[0]);
             free(slope);
             return(err);
         }
 
-        /*  Wrapping up  */
-        err=0;
+
+        //Clean up
+        free(elev[0]);
+        free(elev);
+        free(dir[0]);
+        free(dir);
+        free(slope[0]);
+        free(slope);
 
 
     } catch (...) {
         qDebug() << "Error: setdird8 is returning w/o checking";
+        return -9000;
     }
 
     return(0);
 }
 
-/*  This version is stripped of pit filling  */
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// This version is stripped of pit filling
+// Visit Taudem website for details.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int setdfnoflood(float mval)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start setdfnoflood";
 
     try {
-        int i,j,k,ip, n, iter = 0;
+        int ip, n, iter = 0;
         float fact[9];
-        short *s;  /*  variables for flat draining   */
+        short *s;  //  variables for flat draining
         int **spos, *sloc;
         float *elev2;
 
-
-        /*  Initialize boundaries  */
-        for(i=i1; i< n1; i++)
+        if(dir == nullptr)
         {
-            dir[i][0]= -1;
-            dir[i][n2-1]= -1;
+            main_window->Log_Message("[setdfnoflood] Error[-1000] gridwrite dir nullptr ");
+            return -1000;
+        }
+        if(elev == nullptr)
+        {
+            main_window->Log_Message("[setdfnoflood] Error[-1001] gridwrite elev nullptr ");
+            return -1001;
         }
 
-        for(i=i2; i< n2; i++)
+        // Initialize boundaries
+        for(int i = i1; i< n1; i++)
+        {
+            dir[i][0] = -1;
+            dir[i][n2-1] = -1;
+        }
+
+        for(int i = i2; i < n2; i++)
         {
             dir[0][i]= -1;
             dir[n1-1][i]= -1;
         }
 
-        /*  iup=0; */
-        /*  initialize internal pointers */
-        for(i=i2+1; i< n2-1; i++)for(j=i1+1; j<n1-1; j++)
+        // initialize internal pointers
+        for(int i = i2+1; i < n2-1; i++)
         {
-            if(elev[j][i] <= mval)
-                dir[j][i]= -1;
-            else
-                dir[j][i] = 0;
+            for(int j = i1+1; j < n1-1; j++)
+            {
+                if(elev[j][i] <= mval)
+                    dir[j][i]= -1;
+                else
+                    dir[j][i] = 0;
+            }
         }
 
-        /*  Direction factors  */
-        for(k=1; k<= 8; k++)
-            fact[k]= (float) (1./sqrt(d1[k]*dy*d1[k]*dy+d2[k]*d2[k]*dx*dx));
+        bool error_found = false;
+        // Direction factors
+        for(int k=1; k<= 8; k++)
+        {
+            float bottom = sqrt(d1[k]*dy*d1[k]*dy+d2[k]*d2[k]*dx*dx);
+            if(bottom <= 0)
+            {
+                error_found = true;
+            }
+            else if (isnan(bottom))
+            {
+                error_found = true;
+            }
+            else
+            {
+                fact[k] = (float)(1.0/bottom);
+            }
+        }
 
-        /*  Set positive slope directions   */
+        if(error_found)
+        {
+            main_window->Log_Message("[setdfnoflood] Error[-1002] error found calculating fact ");
+            return -1002;
+        }
+
+
+        error_found = false;
+        // Set positive slope directions
         n=0;
-        for(i=i2+1; i< n2-1; i++)
-            for(j=i1+1; j<n1-1; j++)
+        for(int i = i2+1; i < n2-1; i++)
+        {
+            for(int j = i1+1; j < n1-1; j++)
+            {
                 if(elev[j][i] > mval)
                 {
-                    set(i,j,fact,mval);
-                    if(dir[j][i] == 0)n++;
+                    int err = set(i,j,fact,mval);
+                    if( err != 0)
+                    {
+                        error_found = true;
+                    }
+
+                    if(dir[j][i] == 0)
+                        n++;
                 }
+            }
+        }
+
+        if(error_found)
+        {
+            main_window->Log_Message("[setdfnoflood] Error[-1003] error with set ");
+            return -1003;
+        }
 
         if(n > 0)
         {
-            /*  Now resolve flats following the Procedure of Garbrecht and Martz, Journal
-   of Hydrology, 1997.  */
 
-            /*  Memory is utilized as follows
-is, js, dn, s and elev2 are unidimensional arrays storing information for flats.
-sloc is a indirect addressing array for accessing these - used during
-recursive iteration
-spos is a grid of pointers for accessing these to facilitate finding neighbors
-
-The routine flatrout is recursive and at each recursion allocates a new sloc for
-addressing these arrays and a new elev for keeping track of the elevations
-for that recursion level.  
-  */
             iter=1;
-            printf("Resolving %d Flats, Iteration: %d \n",n,iter);
+
+            main_window->Log_Message("[setdfnoflood] Resolving " + QString::number(n) + "Flats, Iteration: " + QString::number(iter));
 
             spos = (int **) matalloc(nx, ny, RPINTDTYPE);
-            dn = (short *)malloc(sizeof(short) * n);
-            is = (short *)malloc(sizeof(short) * n);
-            js = (short *)malloc(sizeof(short) * n);
-            s = (short *)malloc(sizeof(short) * n);
-            sloc = (int *)malloc(sizeof(int) * n);
-            elev2 = (float *)malloc(sizeof(float) *n);
-
-            if(dn == nullptr || is == nullptr || js == nullptr || s == nullptr || spos == nullptr || elev2 == nullptr || sloc == nullptr)
+            if(spos == nullptr)
             {
-                printf("Unable to allocate at iteration %d\n",iter);
+                main_window->Log_Message("[setdfnoflood] Error[-1004] spos nullptr ");
+                return -1004;
             }
 
-            /*  Put unresolved pixels on stack  */
-            ip=0;
-            for(i=i2; i< n2; i++)
+            dn = (short *)malloc(sizeof(short) * n);
+            if(dn == nullptr)
             {
-                for(j=i1; j<n1; j++)
+                main_window->Log_Message("[setdfnoflood] Error[-1005] dn nullptr ");
+                return -1005;
+            }
+
+            is = (short *)malloc(sizeof(short) * n);
+            if(is == nullptr)
+            {
+                main_window->Log_Message("[setdfnoflood] Error[-1006] is nullptr ");
+                return -1006;
+            }
+
+            js = (short *)malloc(sizeof(short) * n);
+            if(js == nullptr)
+            {
+                main_window->Log_Message("[setdfnoflood] Error[-1007] js nullptr ");
+                return -1007;
+            }
+
+            s = (short *)malloc(sizeof(short) * n);
+            if(s == nullptr)
+            {
+                main_window->Log_Message("[setdfnoflood] Error[-1008] s nullptr ");
+                return -1008;
+            }
+
+            sloc = (int *)malloc(sizeof(int) * n);
+            if(sloc == nullptr)
+            {
+                main_window->Log_Message("[setdfnoflood] Error[-1009] sloc nullptr ");
+                return -1009;
+            }
+
+            elev2 = (float *)malloc(sizeof(float) *n);
+            if(elev2 == nullptr)
+            {
+                main_window->Log_Message("[setdfnoflood] Error[-1010] elev2 nullptr ");
+                return -1010;
+            }
+
+            //  Put unresolved pixels on stack
+            ip=0;
+            for(int i=i2; i< n2; i++)
+            {
+                for(int j=i1; j<n1; j++)
                 {
-                    spos[j][i]=-1;   /*  Initialize stack position  */
+                    spos[j][i]=-1;   // Initialize stack position
                     if(dir[j][i] == 0)
                     {
-                        is[ip]=i;
-                        js[ip]=j;
-                        dn[ip]=0;
-                        sloc[ip]=ip;
-                        /*   Initialize the stage 1 array for flat routing   */
+                        is[ip] = i;
+                        js[ip] = j;
+                        dn[ip] = 0;
+                        sloc[ip] = ip;
+
+                        // Initialize the stage 1 array for flat routing
                         s[ip] = 1;
-                        spos[j][i]=ip;  /*  pointer for back tracking  */
+                        spos[j][i] = ip;  // Pointer for back tracking
                         ip++;
-                        if(ip > n)printf("PROBLEM - Stack logic\n");
+
+                        if(ip > n)
+                        {
+                            main_window->Log_Message("[setdfnoflood] PROBLEM - Stack logic");
+                        }
+
                     }
                 }
             }
 
-            flatrout(n,sloc,s,spos,iter,elev2,elev2,fact,n);
+            int err = flatrout(n,sloc,s,spos,iter,elev2,elev2,fact,n);
+            if(err != 0)
+            {
+                main_window->Log_Message("[setdfnoflood] Error[-1011] flatrout failed ");
 
-            /*  The direction 9 was used to flag pits.  Set these to 0  */
-            for(i=i2; i< n2; i++)
-                for(j=i1; j<n1; j++)
+                free(spos[0]);
+                free(spos);
+                free(elev2);
+                free(dn);
+                free(is);
+                free(js);
+                free(s);
+                free(sloc);
+                return -1011;
+            }
+
+
+            //  The direction 9 was used to flag pits.  Set these to 0
+            for(int i = i2; i < n2; i++)
+            {
+                for(int j = i1; j < n1; j++)
+                {
                     if(dir[j][i] == 9)
                         dir[j][i]=0;
+                }
 
-            free(spos[0]); free(spos);
+            }
+
+            free(spos[0]);
+            free(spos);
             free(elev2);
             free(dn);
             free(is);
@@ -330,158 +390,257 @@ for that recursion level.
             free(s);
             free(sloc);
 
-            printf("Done iteration %d\nFlats resolved %d\n",iter,n);
-        } /*  End if n > 0  */
+            main_window->Log_Message("[setdfnoflood] Done iteration " + QString::number(iter) + " Flats resolved " + QString::number(n));
+
+        } // End if n > 0
 
     } catch (...) {
         qDebug() << "Error: setdir is returning w/o checking";
+        return -9000;
     }
 
-    return(0);   /*  OK exit from setdir  */
+    return(0);
 
-}  /*  End setdfnoflood  */
+}
 
-void flatrout(int n,int *sloc, short *s,int **spos,int iter,float *elev1,float *elev2, float *fact, int ns)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// flatrout
+// Visit Taudem website for details.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int flatrout(int n, int *sloc, short *s, int **spos, int iter, float *elev1, float *elev2, float *fact, int ns)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start flatrout";
 
     try {
 
+        if(sloc == nullptr)
+        {
+            main_window->Log_Message("[flatrout] Error[-1000] sloc nullptr ");
+            return -1000;
+        }
+        if(s == nullptr)
+        {
+            main_window->Log_Message("[flatrout] Error[-1001] s nullptr ");
+            return -1001;
+        }
+        if(spos == nullptr)
+        {
+            main_window->Log_Message("[flatrout] Error[-1002] spos nullptr ");
+            return -1002;
+        }
+        if(elev1 == nullptr)
+        {
+            main_window->Log_Message("[flatrout] Error[-1003] elev1 nullptr ");
+            return -1003;
+        }
+        if(elev2 == nullptr)
+        {
+            main_window->Log_Message("[flatrout] Error[-1004] elev2 nullptr ");
+            return -1004;
+        }
+        if(fact == nullptr)
+        {
+            main_window->Log_Message("[flatrout] Error[-1005] fact nullptr ");
+            return -1005;
+        }
+
         int ip,nu, *sloc2,ipp = 0;
         float *elev3;
 
-        incfall(n,elev1,s,spos,iter,sloc);
-        for(ip=0; ip < n; ip++)
+        int err = incfall(n,elev1,s,spos,iter,sloc);
+        if(err != 0)
         {
-            elev2[sloc[ip]]=(float)(s[sloc[ip]]);
-            s[sloc[ip]]=0;   /*  Initialize for pass 2  */
+            main_window->Log_Message("[flatrout] Error[-1006] incfall failed ");
+            return -1006;
         }
-        /*  Debug writes
+
+        for(ip = 0; ip < n; ip++)
         {
-            int err,i,j;
-            double bndbox[4],csize;
-            short ** sp;
-            float ** elevp;
-            elevp= (float **)matalloc(nx,ny,RPFLTDTYPE);
-            sp= (short **)matalloc(nx,ny,RPSHRDTYPE);
+            elev2[sloc[ip]] = (float)(s[sloc[ip]]);
+            s[sloc[ip]] = 0;   // Initialize for pass 2
+        }
 
-            for(i=0; i<ny; i++)for(j=0;j<nx;j++)
-            {
-                elevp[j][i]=0.;
-                sp[j][i]=0;
-            }
+        err = incrise(n,elev1,s,spos,iter,sloc);
+        if(err != 0)
+        {
+            main_window->Log_Message("[flatrout] Error[-1007] incrise failed ");
+            return -1007;
+        }
 
-            for(ip=0; ip<n; ip++)
-                elevp[js[sloc[ip]]][is[sloc[ip]]]=elev2[sloc[ip]];
-            err=gridwrite("elev.asc",(void **)elevp, RPFLTDTYPE,nx,ny,dx,dy,bndbox,
-                csize,-2.,0);
-            for(ip=0; ip<n; ip++)
-                sp[js[sloc[ip]]][is[sloc[ip]]]=s[sloc[ip]];
-            err=gridwrite("s.asc",(void **)sp, RPSHRDTYPE,nx,ny,dx,dy,bndbox,
-                csize,-2.,0);
-            free(sp[0]); free(sp);
-            free(elevp[0]); free(elevp);
-        }    */
-
-        incrise(n,elev1,s,spos,iter,sloc);
-        for(ip=0; ip < n; ip++)
+        for(ip = 0; ip < n; ip++)
         {
             elev2[sloc[ip]] += (float)(s[sloc[ip]]);
         }
 
-        /*  Debug writes
-        {
-            int err,i,j;
-            double bndbox[4],csize;
-            short ** sp;
-            float ** elevp;
-            elevp= (float **)matalloc(nx,ny,RPFLTDTYPE);
-            sp= (short **)matalloc(nx,ny,RPSHRDTYPE);
-
-            for(i=0; i<ny; i++)for(j=0;j<nx;j++)
-            {
-                elevp[j][i]=0.;
-                sp[j][i]=0;
-            }
-
-            for(ip=0; ip<n; ip++)
-                elevp[js[sloc[ip]]][is[sloc[ip]]]=elev2[sloc[ip]];
-            err=gridwrite("elev.asc",(void **)elevp, RPFLTDTYPE,nx,ny,dx,dy,bndbox,
-                csize,-2.,0);
-            for(ip=0; ip<n; ip++)
-                sp[js[sloc[ip]]][is[sloc[ip]]]=s[sloc[ip]];
-            err=gridwrite("s.asc",(void **)sp, RPSHRDTYPE,nx,ny,dx,dy,bndbox,
-                csize,-2.,0);
-            free(sp[0]); free(sp);
-            free(elevp[0]); free(elevp);
-        }   */
-
+        bool error_found = false;
         nu=0;
-        for(ip=0; ip < n; ip++)
+        for(ip = 0; ip < n; ip++)
         {
-            set2(is[sloc[ip]],js[sloc[ip]],fact,elev1,elev2,iter,spos,s);
-            if(dir[js[sloc[ip]]][is[sloc[ip]]] == 0)nu++;
+            err = set2(is[sloc[ip]],js[sloc[ip]],fact,elev1,elev2,iter,spos,s);
+            if( err != 0)
+            {
+                error_found = true;
+            }
+            if(dir[js[sloc[ip]]][is[sloc[ip]]] == 0)
+            {
+                nu++;
+            }
         }
+
+        if(error_found)
+        {
+            main_window->Log_Message("[flatrout] Error[-1007] incrise failed ");
+            return -1007;
+        }
+
 
         if(nu > 0)
         {
-            /*  Iterate Recursively   */
-            /*  Now resolve flats following the Procedure of Garbrecht and Martz, Journal of Hydrology, 1997.  */
-            iter=iter+1;
-            printf("Resolving %d Flats, Iteration: %d \n",nu,iter);
-            sloc2 = (int *)malloc(sizeof(int) * nu);
-            elev3 = (float *)malloc(sizeof(float) *ns);
+            //  Iterate Recursively
+            //  Now resolve flats following the Procedure of Garbrecht and Martz, Journal of Hydrology, 1997.
 
-            if(sloc2 == nullptr || elev3 == nullptr)
+            iter = iter+1;
+
+            main_window->Log_Message("[flatrout] Resolving " + QString::number(nu) + " Flats, Iteration: " + QString::number(iter));
+
+            sloc2 = (int *)malloc(sizeof(int) * nu);
+            if(sloc2 == nullptr)
             {
-                printf("Unable to allocate at iteration %d\n",iter);
+                main_window->Log_Message("[flatrout] Error[-1008] sloc2 nullptr ");
+                return -1008;
             }
-            /*  Initialize elev3  */
-            for(ip=0; ip < ns; ip++)elev3[ip]=0.;
-            /*  Put unresolved pixels on new stacks - keeping in same positions  */
+
+            elev3 = (float *)malloc(sizeof(float) *ns);
+            if(elev3 == nullptr)
+            {
+                main_window->Log_Message("[flatrout] Error[-1009] elev3 nullptr ");
+                return -1009;
+            }
+
+            //  Initialize elev3
+            for(ip = 0; ip < ns; ip++)
+            {
+                elev3[ip] = 0.0;
+            }
+
+            //  Put unresolved pixels on new stacks - keeping in same positions
+
             ipp=0;
             for(ip=0; ip<n; ip++)
             {
                 if(dir[js[sloc[ip]]][is[sloc[ip]]] == 0)
                 {
-                    sloc2[ipp]=sloc[ip];
-                    /*   Initialize the stage 1 array for flat routing   */
+                    sloc2[ipp] = sloc[ip];
+
+                    // Initialize the stage 1 array for flat routing
                     s[sloc[ip]] = 1;
                     ipp++;
-                    if(ipp > nu)printf("PROBLEM - Stack logic\n");
+
+                    if(ipp > nu)
+                    {
+                        main_window->Log_Message("[flatrout] PROBLEM - Stack logic ");
+                        error_found = true;
+                    }
+
                 }
                 else
                 {
-                    s[sloc[ip]] = -1;  /*  Used to designate out of remaining flat on
-                           higher iterations   */
+                    s[sloc[ip]] = -1;  // Used to designate out of remaining flat on higher iterations
                 }
-                dn[sloc[ip]]=0;  /*  Reinitialize for next time round.  */
+
+                dn[sloc[ip]] = 0;  //  Reinitialize for next time round.
             }
 
-            flatrout(nu,sloc2,s,spos,iter,elev2,elev3,fact,ns);
+            err = flatrout(nu,sloc2,s,spos,iter,elev2,elev3,fact,ns);
+
             free(sloc2);
             free(elev3);
 
-            printf("Done iteration %d\nFlats resolved %d\n",iter,n);
-        } /*  end if nu > 0  */
+            if(err != 0)
+            {
+                main_window->Log_Message("[flatrout] Error[-1008] flatrout failed ");
+                return -1008;
+            }
+
+            if(error_found)
+            {
+                main_window->Log_Message("[flatrout] Error[-1009] logic failure ");
+                return -1009;
+            }
+
+            main_window->Log_Message("[flatrout] Done iteration " + QString::number(iter) + " Flats resolved: " + QString::number(n));
+
+        } //  end if nu > 0
 
 
-    } catch (...) {
+    } catch (...)
+    {
         qDebug() << "Error: flatrout is returning w/o checking";
-
+        return -9000;
     }
 
-}   /*  End flatrout  */
+    return 0;
+}
 
-
-void incfall(int n, float *elev1, short *s1,int **spos,  int iter, int *sloc)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// incfall
+// Visit Taudem website for details.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int incfall(int n, float *elev1, short *s1, int **spos, int iter, int *sloc)
 {
-    //if(print_debug_messages)
-    //    qDebug() << "INFO: Start incfall";
+    if(print_many_messages)
+        qDebug() << "INFO: Start incfall";
 
     try {
-        /* This routine implements drainage towards lower areas - stage 1 */
+
+        if(elev1 == nullptr)
+        {
+            main_window->Log_Message("[incfall] Error[-1000] elev1 nullptr ");
+            return -1000;
+        }
+        if(s1 == nullptr)
+        {
+            main_window->Log_Message("[incfall] Error[-1001] s1 nullptr ");
+            return -1001;
+        }
+        if(spos == nullptr)
+        {
+            main_window->Log_Message("[incfall] Error[-1002] spos nullptr ");
+            return -1002;
+        }
+        if(sloc == nullptr)
+        {
+            main_window->Log_Message("[incfall] Error[-1003] sloc nullptr ");
+            return -1003;
+        }
+        if(d1 == nullptr)
+        {
+            main_window->Log_Message("[incfall] Error[-1004] d1 nullptr ");
+            return -1004;
+        }
+        if(d2 == nullptr)
+        {
+            main_window->Log_Message("[incfall] Error[-1005] d2 nullptr ");
+            return -1005;
+        }
+        if(elev == nullptr)
+        {
+            main_window->Log_Message("[incfall] Error[-1006] elev nullptr ");
+            return -1006;
+        }
+        if(is == nullptr)
+        {
+            main_window->Log_Message("[incfall] Error[-1007] is nullptr ");
+            return -1007;
+        }
+        if(is == nullptr)
+        {
+            main_window->Log_Message("[incfall] Error[-1008] is nullptr ");
+            return -1008;
+        }
+
+        // This routine implements drainage towards lower areas - stage 1
         int done=0,donothing,k,ip,ninc,nincold,spn = 0;
         short st=1,i,j,in,jn = 0;
         float ed = 0;
@@ -491,446 +650,448 @@ void incfall(int n, float *elev1, short *s1,int **spos,  int iter, int *sloc)
         {
             done=1;
             ninc=0;
-            for(ip=0; ip<n; ip++)
+
+            for(ip = 0; ip < n; ip++)
             {
-                /*			if 	adjacent to same level or lower that drains or
-                adjacent to pixel with s1 < st and dir not set
-                do nothing  */
-                donothing=0;
-                j=js[sloc[ip]];
-                i=is[sloc[ip]];
-                for(k=1; k<=8; k++)
+                // if adjacent to same level or lower that drains or adjacent to pixel with s1 < st and dir not set do nothing
+                donothing = 0;
+                j = js[sloc[ip]];
+                i = is[sloc[ip]];
+
+                for(k = 1; k <= 8; k++)
                 {
-                    jn=j+d2[k];
-                    in=i+d1[k];
-                    spn=spos[jn][in];
+                    jn = j + d2[k];
+                    in = i + d1[k];
+
+                    spn = spos[jn][in];
+
                     if(iter <= 1)
                     {
-                        ed=elev[j][i]-elev[jn][in];
+                        ed = elev[j][i] - elev[jn][in];
                     }
                     else
                     {
-                        ed=elev1[sloc[ip]]-
-                                elev1[spn];
+                        ed = elev1[sloc[ip]] - elev1[spn];
                     }
-                    if(ed >= 0. && dir[jn][in] != 0)donothing = 1;  /* If neighbor drains */
-                    if(spn >= 0)     /* if neighbor is in flat   */
-                        if(s1[spn] >= 0 && s1[spn] < st   /*  If neighbor is not being  */
-                                && dir[jn][in]  == 0)donothing = 1;   /*  Incremented  */
+
+                    if(ed >= 0.0 && dir[jn][in] != 0)
+                    {
+                        donothing = 1;  // If neighbor drains
+                    }
+
+                    if(spn >= 0)     // if neighbor is in flat
+                    {
+                        if(s1[spn] >= 0 && s1[spn] < st && dir[jn][in]  == 0)
+                        {
+                            donothing = 1;   //   Incremented
+                        }
+                    }
+
                 }
+
                 if(donothing == 0)
                 {
                     s1[sloc[ip]]++;
                     ninc++;
                     done=0;
                 }
-            }   /*  End of loop over all flats  */
+
+            }   // End of loop over all flats
 
             st=st+1;
-            printf("Incfall %d %d \n",ninc,n);
+
+            if(print_many_messages)
+            {
+                main_window->Log_Message("[flatrout] Incfall " + QString::number(ninc) + " " + QString::number(n));
+            }
 
             if(ninc == nincold)
             {
                 done = 1;
-                printf("There are pits remaining, direction will not be set\n");
-                /*  Set the direction of these pits to 9 to flag them   */
-                for(ip=0; ip<n; ip++)  /*  loop 2 over all flats  */
+                if(print_many_messages)
                 {
-                    /*			if 	adjacent to same level or lower that drains or
-                adjacent to pixel with s1 < st and dir not set
-                do nothing  */
-                    donothing=0;
-                    j=js[sloc[ip]];
-                    i=is[sloc[ip]];
-                    for(k=1; k<=8; k++)
+                    main_window->Log_Message("[flatrout] There are pits remaining, direction will not be set ");
+                }
+
+                // Set the direction of these pits to 9 to flag them
+                for(ip = 0; ip < n; ip++)  //  loop 2 over all flats
+                {
+                    // if adjacent to same level or lower that drains or adjacent to pixel with s1 < st and dir not set do nothing
+
+                    donothing = 0;
+                    j = js[sloc[ip]];
+                    i = is[sloc[ip]];
+
+                    for(k = 1; k <= 8; k++)
                     {
-                        jn=j+d2[k];
-                        in=i+d1[k];
-                        spn=spos[jn][in];
+                        jn = j + d2[k];
+                        in = i + d1[k];
+
+                        spn = spos[jn][in];
                         if(iter <= 1)
                         {
-                            ed=elev[j][i]-elev[jn][in];
+                            ed = elev[j][i] - elev[jn][in];
                         }
                         else
                         {
-                            ed=elev1[sloc[ip]]-
-                                    elev1[spn];
+                            ed = elev1[sloc[ip]] - elev1[spn];
                         }
-                        if(ed >= 0. && dir[jn][in] != 0)donothing = 1;  /* If neighbor drains */
-                        if(spn >= 0)     /* if neighbor is in flat   */
-                            if(s1[spn] >= 0 && s1[spn] < st   /*  If neighbor is not being  */
-                                    && dir[jn][in]  == 0)donothing = 1;   /*  Incremented  */
+
+                        if(ed >= 0.0 && dir[jn][in] != 0)
+                        {
+                            donothing = 1;  // If neighbor drains
+                        }
+
+                        if(spn >= 0)     // if neighbor is in flat   */
+                        {
+                            // If neighbor is not being Incremented
+                            if(s1[spn] >= 0 && s1[spn] < st && dir[jn][in]  == 0)
+                            {
+                                donothing = 1;
+                            }
+                        }
                     }
+
                     if(donothing == 0)
                     {
                         dir[j][i] = 9;
-                        /*				   printf("%d %d\n",i,j);    */
                     }
-                }   /*  End of loop 2 over all flats  */
-            }
-            nincold=ninc;
-        }  /*  End of while done loop  */
 
-    } catch (...) {
+                }   // End of loop 2 over all flats
+            }
+
+            nincold = ninc;
+
+        }  //  End of while done loop
+
+
+    } catch (...)
+    {
         qDebug() << "Error: incfall is returning w/o checking";
+        return -9000;
     }
+
+    return 0;
 
 }
 
-
-void incrise(int n, float *elev1, short *s2,int **spos, int iter, int *sloc)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// incrise
+// Visit Taudem website for details.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int incrise(int n, float *elev1, short *s2,int **spos, int iter, int *sloc)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start incrise";
 
     try {
-        /*  This routine implements stage 2 drainage away from higher ground
-    dn is used to flag pixels still being incremented */
+
+        if(elev1 == nullptr)
+        {
+            main_window->Log_Message("[incrise] Error[-1000] elev1 nullptr ");
+            return -1000;
+        }
+        if(s2 == nullptr)
+        {
+            main_window->Log_Message("[incrise] Error[-1001] s2 nullptr ");
+            return -1001;
+        }
+        if(spos == nullptr)
+        {
+            main_window->Log_Message("[incrise] Error[-1002] spos nullptr ");
+            return -1002;
+        }
+        if(sloc == nullptr)
+        {
+            main_window->Log_Message("[incrise] Error[-1003] sloc nullptr ");
+            return -1003;
+        }
+        if(is == nullptr)
+        {
+            main_window->Log_Message("[incrise] Error[-1004] is nullptr ");
+            return -1004;
+        }
+        if(js == nullptr)
+        {
+            main_window->Log_Message("[incrise] Error[-1005] js nullptr ");
+            return -1005;
+        }
+        if(elev == nullptr)
+        {
+            main_window->Log_Message("[incrise] Error[-1006] elev nullptr ");
+            return -1006;
+        }
+        if(dn == nullptr)
+        {
+            main_window->Log_Message("[incrise] Error[-1007] dn nullptr ");
+            return -1007;
+        }
+
+        // This routine implements stage 2 drainage away from higher ground dn is used to flag pixels still being incremented
+
         int done=0,ip,k,ninc,nincold,spn = 0;
         float ed;
         short i,j,in,jn;
         nincold=0;
+
         while(done < 1)
         {
             done=1;
             ninc=0;
-            for(ip=0; ip<n; ip++)
+
+            for(ip=0; ip < n; ip++)
             {
-                for(k=1; k<=8; k++)
+                for(k=1; k <= 8; k++)
                 {
-                    j=js[sloc[ip]];
-                    i=is[sloc[ip]];
-                    jn=j+d2[k];
-                    in=i+d1[k];
-                    spn=spos[jn][in];
+                    j = js[sloc[ip]];
+                    i = is[sloc[ip]];
+                    jn = j + d2[k];
+                    in = i + d1[k];
+                    spn = spos[jn][in];
 
                     if(iter <= 1)
                     {
-                        ed=elev[j][i]-elev[jn][in];
+                        ed = elev[j][i] - elev[jn][in];
                     }
                     else
                     {
-                        ed=elev1[sloc[ip]]-
-                                elev1[spn];
+                        ed = elev1[sloc[ip]] - elev1[spn];
                     }
-                    if(ed < 0.)dn[sloc[ip]]=1;
+
+                    if(ed < 0.0)
+                    {
+                        dn[sloc[ip]] = 1;
+                    }
+
                     if(spn >=0)
-                        if(s2[spn] > 0)dn[sloc[ip]] = 1;
+                    {
+                        if(s2[spn] > 0)
+                        {
+                            dn[sloc[ip]] = 1;
+                        }
+                    }
                 }
             }
-            for(ip=0; ip<n; ip++)
+
+            for(ip = 0; ip < n; ip++)
             {
-                s2[sloc[ip]]=s2[sloc[ip]]+dn[sloc[ip]];
-                ninc=ninc+dn[sloc[ip]];
-                if(dn[sloc[ip]] == 0)done=0;  /*  if still some not being incremented continue
-                                    looping  */
+                s2[sloc[ip]] = s2[sloc[ip]] + dn[sloc[ip]];
+                ninc = ninc + dn[sloc[ip]];
+
+                if(dn[sloc[ip]] == 0)
+                {
+                    done=0;  //  if still some not being incremented continue looping
+                }
             }
-            printf("incrise %d %d\n",ninc,n);
 
-            if(ninc == nincold)done=1;   /*  If there are no new cells incremented
-                                     stop - this is the case when a flat has
-                                     no higher ground around it.  */
+            if(print_many_messages)
+            {
+                main_window->Log_Message("[incrise] Progress " + QString::number(ninc) + " " + QString::number(n));
+            }
+
+            if(ninc == nincold)
+            {
+                done = 1;   // If there are no new cells incremented stop - this is the case when a flat has no higher ground around it.
+            }
+
             nincold=ninc;
+
         }
-    } catch (...) {
-
-        qDebug() << "Error: incrise is returning w/o checking";
-
 
     }
+    catch (...)
+    {
+        qDebug() << "Error: incrise is returning w/o checking";
+        return -9000;
+    }
+
+    return 0;
 }
 
-void set2(int i,int j,float *fact,float *elev1, float *elev2, int iter, 
-          int **spos, short *s)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// set2
+// Visit Taudem website for details.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int set2(int i,int j,float *fact,float *elev1, float *elev2, int iter, int **spos, short *s)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start set2";
 
     try {
-        /*  This function sets directions based upon secondary elevations for
-  assignment of flow directions across flats according to Garbrecht and Martz
-  scheme.  There are two possibilities:
-    A.  The neighbor is outside the flat set
-    B.  The neighbor is in the flat set.
-    In the case of A the elevation of the neighbor is set to 0 for the purposes
-    of computing slope.  Since the incremental elevations are all positive there is
-    always a downwards slope to such neighbors, and if the previous elevation
-    increment had 0 slope then a flow direction can be assigned.*/
-        float slope,slope2,smax,ed = 0;
-        int k,spn,sp,kflat=0;
-        short in,jn;
-        smax=0.;
-        sp=spos[j][i];
-        for(k=1; k<=8; k++)
+
+        if(fact == nullptr)
         {
-            jn=j+d2[k];
-            in=i+d1[k];
-            spn=spos[jn][in];
+            main_window->Log_Message("[set2] Error[-1000] fact nullptr ");
+            return -1000;
+        }
+        if(elev1 == nullptr)
+        {
+            main_window->Log_Message("[set2] Error[-1001] elev1 nullptr ");
+            return -1001;
+        }
+        if(elev2 == nullptr)
+        {
+            main_window->Log_Message("[set2] Error[-1002] elev2 nullptr ");
+            return -1002;
+        }
+        if(spos == nullptr)
+        {
+            main_window->Log_Message("[set2] Error[-1003] spos nullptr ");
+            return -1003;
+        }
+        if(s == nullptr)
+        {
+            main_window->Log_Message("[set2] Error[-1004] s nullptr ");
+            return -1004;
+        }
+        if(elev == nullptr)
+        {
+            main_window->Log_Message("[set2] Error[-1005] elev nullptr ");
+            return -1005;
+        }
+        if(dir == nullptr)
+        {
+            main_window->Log_Message("[set2] Error[-1006] dir nullptr ");
+            return -1006;
+        }
+
+        float slope,slope2,smax,ed = 0;
+        int k,spn,sp,kflat = 0;
+        short in,jn;
+        smax = 0.0;
+        sp = spos[j][i];
+
+        for(k = 1; k <= 8; k++)
+        {
+            jn = j + d2[k];
+            in = i + d1[k];
+            spn = spos[jn][in];
+
             if(iter <= 1)
             {
-                ed=elev[j][i]-elev[jn][in];
+                ed = elev[j][i] - elev[jn][in];
             }
             else
             {
-                ed=elev1[sp]-elev1[spn];
+                ed = elev1[sp] - elev1[spn];
             }
-            slope=fact[k]* ed;
+
+            slope = fact[k] * ed;
+
             if(spn < 0 || s[spn] < 0)
             {
-                /*  The neighbor is outside the flat set.  */
-                ed=0.;
+                //The neighbor is outside the flat set.
+                ed = 0.0;
             }
             else
             {
-                ed=elev2[spn];
+                ed = elev2[spn];
             }
-            slope2 =fact[k]*(elev2[sp]-ed);
-            if(slope2 > smax && slope >= 0.)  /*  Only if latest iteration slope is
-                                      positive and previous iteration slope flat  */
+
+            slope2 = fact[k] * (elev2[sp] - ed);
+
+            if(slope2 > smax && slope >= 0.0)  // Only if latest iteration slope is positive and previous iteration slope flat
             {
-                smax=slope2;
-                dir[j][i]=k;
+                smax = slope2;
+                dir[j][i] = k;
             }
-        }  /*  End of for  */
+        }
 
     } catch (...) {
 
         qDebug() << "Error: set2 is returning w/o checking";
+        return -9000;
     }
+
+    return 0;
 }
 
-
-/*
-
-Converted from FORTRAN July 05, 1997  K. Tarbet
-
-C
-C---SUBROUTINE TO SET VARIABLE DIRECTIONS.
-C    DIRECTIONS MEASURED ANTICLOCKWISE FROM EAST IN RADIANS.
-C
-*/
-void setdf2(void )
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// sloped8
+// Visit Taudem website for details.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int sloped8(void )
 {
-    if(print_debug_messages)
-        qDebug() << "INFO: Start setdf2";
-
-    try {
-        float FANG[9];
-        float dxx[3];
-        int i,j = 0;
-        float dd = 0;
-
-        /*       INITIALISE ANGLES and slopes */
-
-        for (i=0; i<nx; i++)
-        {
-            ang[i][0]=-2;
-            ang[i][ny-1]=-2;
-            slope[i][0]=-1;
-            slope[i][ny-1]=-1;
-        }
-
-        for(i=0; i<ny; i++)
-        {
-            ang[0][i]=-2;
-            ang[nx-1][i]=-2;
-            slope[0][i]=-1;
-            slope[nx-1][i]=-1;
-        }
-
-        FANG[1]=0.;
-        FANG[2]=(float)atan2(dy,dx);
-        FANG[3]=(float) PI2;
-        FANG[4]=2*FANG[3]-FANG[2];
-        FANG[5]=2*FANG[3];
-        FANG[6]=2*FANG[3]+FANG[2];
-        FANG[7]=3*FANG[3];
-        FANG[8]=4*FANG[3]-FANG[2];
-
-        /* --INITIALISE INTERNAL POINTERS (-VE POINTER INDICATES OUTSIDE DOMAIN) */
-
-        for(i=1; i<ny-1; i++)
-            for(j=1; j<nx-1; j++)
-            {
-                if(dir[j][i] <  0)
-
-                {
-                    ang[j][i]=-2.;
-                    slope[j][i]=-1.; /*  !  -1 slope indicates no data */
-                }
-                else if(dir[j][i] == 0)
-                {
-                    ang[j][i]=-1.;  /*  DGT 9/2/97 since without   */
-                    slope[j][i]=0.;  /*  pit filling dir = 0 is possible  */
-                    /*  ang = -1 designates unfilled pit, ang = -2 designates no data.  */
-                }
-                else
-                    ang[j][i]=0.;
-            }
-
-
-
-        /*    TEST ALL INTERNAL ELEVATIONS AND SET SLOPE AND ANGLE */
-
-        dxx[1]=dx;
-        dxx[2]=dy;
-        dd=(float)sqrt(dx*dx+dy*dy);
-        for(i=1; i<ny-1; i++)
-        {
-            //SetWorkingStatus();
-            for(j=1; j<nx-1; j++)
-            {
-                if(dir[j][i]>0 )
-                {
-                    SET2(i,j,dxx,dd);
-                    if(ang[j][i] < -0.5)
-                        ang[j][i]=FANG[dir[j][i]];
-                }
-            }
-        }
-
-    } catch (...) {
-
-        qDebug() << "Error: setdf2 is returning w/o checking";
-
-
-    }
-}
-
-/*     SUBROUTINE TO RETURN SLOPE AND ANGLE OF STEEPEST DECENT IF POSITIVE */
-
-void   SET2(int I, int J,float *DXX,float DD)
-{
-    if(print_debug_messages)
-        qDebug() << "INFO: Start SET2";
-
-    try {
-        float SK[9];
-        float ANGLE[9];
-        float SMAX = 0;
-        int K = 0;
-        int KD = 0;
-
-        /*    int ID1[]= {NULL,1,2,2,1,1,2,2,1 };
-      int ID2[]= {NULL,2,1,1,2,2,1,1,2};
-      int I1[] = {NULL,0,-1,-1,0,0,1,1,0 };
-      int I2[] = {NULL,-1,-1,-1,-1,1,1,1,1};
-      int J1[] = {NULL,1,0,0,-1,-1,0,0,1};
-      int J2[] = {NULL,1,1,-1,-1,-1,-1,1,1};
-   float  ANGC[]={NULL,0.,1.,1.,2.,2.,3.,3.,4.};
-   float  ANGF[]={NULL,1.,-1.,1.,-1.,1.,-1.,1.,-1.}; */
-        int ID1[]= {0,1,2,2,1,1,2,2,1 };
-        /*		int *ID1;  */
-        int ID2[]= {0,2,1,1,2,2,1,1,2};
-        int I1[] = {0,0,-1,-1,0,0,1,1,0 };
-        int I2[] = {0,-1,-1,-1,-1,1,1,1,1};
-        int J1[] = {0,1,0,0,-1,-1,0,0,1};
-        int J2[] = {0,1,1,-1,-1,-1,-1,1,1};
-        float  ANGC[]={0,0.,1.,1.,2.,2.,3.,3.,4.};
-        float  ANGF[]={0,1.,-1.,1.,-1.,1.,-1.,1.,-1.};
-        /*  ID1=ID1m-1;  */
-
-        for(K=1; K<=8; K++)
-            VSLOPE(elev[J][I],
-                   elev[J+J1[K]][I+I1[K]],
-                    elev[J+J2[K]][I+I2[K]],
-                    DXX[ID1[K]],DXX[ID2[K]],DD,&SK[K],&ANGLE[K]);
-
-        SMAX=0.;
-        KD=0;
-        ang[J][I]=-1.;  /* USE -1 TO INDICATE DIRECTION NOT YET SET */
-        for(K=1; K<=8; K++)
-        {
-            if(SK[K] >  SMAX)
-            {
-                SMAX=SK[K];
-                KD=K;
-            }
-        }
-
-        if(KD  > 0)
-            ang[J][I]= (float) (ANGC[KD]*PI2+ANGF[KD]*ANGLE[KD]);
-        slope[J][I]=SMAX;
-
-    } catch (...) {
-
-        qDebug() << "Error: SET2 is returning w/o checking";
-
-
-    }
-}
-
-
-
-void   VSLOPE(float E0,float E1, float E2,
-              float D1,float D2,float DD,
-              float *S,float *A)
-{
-    if(print_debug_messages)
-        qDebug() << "INFO: Start VSLOPE";
+    if(print_many_messages)
+        qDebug() << "INFO: Start sloped8";
 
     try {
 
-        /*    SUBROUTINE TO RETURN THE SLOPE AND ANGLE ASSOCIATED WITH A DEM PANEL */
-        float S1,S2,AD = 0;
-
-        if(D1!=0)
-            S1=(E0-E1)/D1;
-
-        if(D2!=0)
-            S2=(E1-E2)/D2;
-
-        if(S2==0 && S1==0) *A=0;
-        else
-            *A= (float) atan2(S2,S1);
-        AD= (float) atan2(D2,D1);
-        if(*A  <   0.)
+        if(d1 == nullptr)
         {
-            *A=0.;
-            *S=S1;
+            main_window->Log_Message("[sloped8] Error[-1000] d1 is null   ");
+            return -1000;
         }
-        else if(*A > AD)
+        if(d2 == nullptr)
         {
-            *A=AD;
-            *S=(E0-E2)/DD;
+            main_window->Log_Message("[sloped8] Error[-1001] d2 is null   ");
+            return -1001;
         }
-        else
-            *S= (float) sqrt(S1*S1+S2*S2);
+        if(elev == nullptr)
+        {
+            main_window->Log_Message("[sloped8] Error[-1002] elev is null   ");
+            return -1002;
+        }
+        if(dir == nullptr)
+        {
+            main_window->Log_Message("[sloped8] Error[-1003] dir is null   ");
+            return -1003;
+        }
+        if(slope == nullptr)
+        {
+            main_window->Log_Message("[sloped8] Error[-1004] slope is null   ");
+            return -1004;
+        }
 
-    } catch (...) {
-
-        qDebug() << "Error: VSLOPE is returning w/o checking";
-
-    }
-}
-
-void sloped8(void )
-{
-    //if(print_debug_messages)
-    //    qDebug() << "INFO: Start sloped8";
-
-    try {
-        int k,i,j,in,jn = 0;
+        int in,jn = 0;
         float fact[9],ed;
 
-        /*  Direction factors  */
-        for(k=1; k<= 8; k++)
-            fact[k]= (float) (1./sqrt(d1[k]*dy*d1[k]*dy+d2[k]*d2[k]*dx*dx));
-
-        for(i=i2; i< n2; i++)for(j=i1; j<n1; j++)
+        bool error_found = false;
+        //  Direction factors
+        for(int k=1; k<= 8; k++)
         {
-            if(dir[j][i] > 0)
+            float bottom = sqrt(d1[k]*dy*d1[k]*dy+d2[k]*d2[k]*dx*dx);
+            if(bottom <= 0)
             {
-                jn=j+d2[dir[j][i]];
-                in=i+d1[dir[j][i]];
-                ed=elev[j][i]-elev[jn][in];
-                slope[j][i]= ed*fact[dir[j][i]] ;
+                error_found = true;
+            }
+            else if (isnan(bottom))
+            {
+                error_found = true;
             }
             else
-                slope[j][i]= -1.;
+            {
+                fact[k]= (float) (1.0/bottom);
+            }
+        }
+
+        if(error_found)
+        {
+            main_window->Log_Message("[sloped8] Error[-1005] Invalid bottom value  ");
+            return -1005;
+        }
+
+        for(int i = i2; i< n2; i++)
+        {
+            for(int j = i1; j < n1; j++)
+            {
+                if(dir[j][i] > 0)
+                {
+                    jn = j + d2[dir[j][i]];
+                    in = i + d1[dir[j][i]];
+                    ed = elev[j][i] - elev[jn][in];
+                    slope[j][i]= ed * fact[dir[j][i]] ;
+                }
+                else
+                    slope[j][i]= -1.0;
+            }
         }
 
     } catch (...) {
         qDebug() << "Error: sloped8 is returning w/o checking";
+        main_window->Log_Message("[sloped8] Error[-9000] Invalid bottom value  ");
+        return -9000;
     }
+
+    return 0;
 }

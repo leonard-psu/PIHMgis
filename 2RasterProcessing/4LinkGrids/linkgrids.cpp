@@ -518,11 +518,10 @@ void LinkGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Log_Message("Running Link Grids ... <br>");
 
-        int ErrorLnk = stream_links((char *)qPrintable(
-                                        StreamGridsFileName),
-                                    (char *)qPrintable(FlowDirGridsFileName),
-                                    (char *)qPrintable(LinkGridsFileName),
-                                    (char *)qPrintable(user_pihmgis_root_folder + "/1RasterProcessing/link_nodes.dat") );
+        int ErrorLnk = stream_links(StreamGridsFileName,
+                                    FlowDirGridsFileName,
+                                    LinkGridsFileName,
+                                    QString(user_pihmgis_root_folder + "/1RasterProcessing/link_nodes.dat") );
         if( ErrorLnk != 0 )
         {
             Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Link Grid Processing Failed ... </span>")+tr("<br>"));

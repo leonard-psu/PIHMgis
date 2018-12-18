@@ -9,7 +9,7 @@
 // method = 1 => Area Threshold
 // method = 2 => strahler order Threshold
 
-int stream_definition(char *aread8File, char *orderFile, char *rivFile, int method, int threshold)
+int stream_definition(QString aread8File, QString orderFile, QString rivFile, int method, int threshold)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start stream_definition";

@@ -596,8 +596,9 @@ void StreamGrids::on_pushButtonRun_clicked()
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
-        const char *dummystr = "dummy";
-        int ErrorStr = stream_definition((char *)qPrintable(FlowAccGrids), (char *)dummystr, (char *)qPrintable(StreamGrids), 1, Threshold.toInt() );
+        QString dummystr("dummy");
+
+        int ErrorStr = stream_definition(FlowAccGrids, dummystr, StreamGrids, 1, Threshold.toInt() );
         if( ErrorStr != 0 )
         {
             Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Stream Grid Processing Failed ... </span>")+tr("<br>"));

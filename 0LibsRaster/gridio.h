@@ -1,3 +1,6 @@
+#ifndef GRID_H
+#define GRID_H
+
 /***********************************************************/
 /*                                                         */
 /* gridio.h                                                */
@@ -18,7 +21,9 @@
 #include <ctype.h>
 #include <limits.h>
 #include <math.h>
-#include "gioapi.h"
+
+#include <QString>
+
 
 /*  ESRI Application Programmers Interface include file  */
 
@@ -41,12 +46,6 @@
 #define RPINTSIZE (sizeof(int))
 #define RPFLTSIZE (sizeof(float))
 
-//#define DLL   /*  Toggle this definition depending upon whether functions are to be
-  //  exported or not   */
-
-//#ifdef DLL
-
-//#else
 
 void fgridread(char *file,void *dem, int *datatype, int *nx, int *ny,
 			   float *dx, float *dy, double bndbox[4],double *csize,
@@ -54,19 +53,17 @@ void fgridread(char *file,void *dem, int *datatype, int *nx, int *ny,
 void fgridwrite(char *file,void *dem, int *datatype, int *nx, int *ny,
 			   float *dx, float *dy, double bndbox[4],double *csize,
 			   float *ndv,int *filetype, int *igy);    
-int gridwrite(char *file, void **data, int datatype, int nx, int ny, float dx, 
+int gridwrite(QString file, void **data, int datatype, int nx, int ny, float dx,
  float dy, double bndbox[4], double csize, float ndv, int filetype);
 
-int gridread(char *file, void ***data, int datatype, int *nx, int *ny,
+int gridread(QString file, void ***data, int datatype, int *nx, int *ny,
  float *dx, float *dy, double bndbox[4], double *csize, float *ndv, int *filetype);
 
-void eol(FILE *fp);
 
-int readline(FILE *fp,char *fline);  
+int readline(FILE *fp,char *fline);
 
 void **matalloc(int nx,int ny,int datatype);
 
-int nameadd(char *full,char *arg,char *suff);  
 
-//#endif
+#endif
 

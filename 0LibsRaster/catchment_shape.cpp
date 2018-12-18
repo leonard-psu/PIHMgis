@@ -132,9 +132,8 @@ int catchment_shape(QString catFile, QString nodeFile, QString shpFile,  QString
         }
 
         double *ptx, *pty, *ptz;
-        QByteArray fname = catFile.toLatin1();
-        char *catFile_char = fname.data();
-        int result = gridread( catFile_char ,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
+
+        int result = gridread( catFile ,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
 
         if ( result != 0)
         {

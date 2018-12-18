@@ -14,12 +14,22 @@ int findCell(float **riv, short **fdr, int i, int j, int (*cell)[2]);
 FILE *fpNode_Seg;
 int numNodes_Seg=0;
 // Segments the rivers 
-int stream_links(char *rivFile, char *fdrFile, char *segFile, char *nodeFile)
+int stream_links(QString qrivFile, QString fdrFile, QString qsegFile, QString qnodeFile)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start stream_links";
 
     try {
+        QByteArray fname = qrivFile.toLatin1();
+        char *rivFile = fname.data();
+        QByteArray fname1 = fdrFile.toLatin1();
+        char *fdrFile = fname1.data();
+        QByteArray fname2 = qsegFile.toLatin1();
+        char *segFile = fname2.data();
+        QByteArray fname3 = qnodeFile.toLatin1();
+        char *nodeFile = fname3.data();
+
+
         int err, err1, err2, err3, err4 = 0;
         int i, j, fdr = 0;
         int mIJ[2];

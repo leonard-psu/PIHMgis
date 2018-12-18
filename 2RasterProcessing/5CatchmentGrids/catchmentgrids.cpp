@@ -511,10 +511,9 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Log_Message("Running Catchment Grids ... <br>");
 
-        int ErrorCat = catchment((char *)qPrintable
-                                 (LinkGrids_filename),
-                                 (char *)qPrintable(FlowDirGrids_filename),
-                                 (char *)qPrintable(CatchmentGrids_filename) );
+        int ErrorCat = catchment(LinkGrids_filename,
+                                 FlowDirGrids_filename,
+                                 CatchmentGrids_filename );
 
         qDebug()<<tr("ErrorCat = ") << QString::number(ErrorCat);
 
