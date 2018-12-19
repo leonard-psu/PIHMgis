@@ -37,6 +37,21 @@ int catchment(QString segFile, QString fdrFile, QString catFile){
             main_window->Log_Message("[catchment] Error[1002] Invalid catFile.");
             return 1002;
         }
+        if(segFile.length() < 1)
+        {
+            main_window->Log_Message("[catchment] Error[1000] Invalid segFile.");
+            return 1000;
+        }
+        if(fdrFile.length() < 1)
+        {
+            main_window->Log_Message("[catchment] Error[1001] Invalid fdrFile.");
+            return 1001;
+        }
+        if(catFile.length() < 1)
+        {
+            main_window->Log_Message("[catchment] Error[1002] Invalid catFile.");
+            return 1002;
+        }
 
         int mIJ[2];
         int err, err1, err2, err3, err4;

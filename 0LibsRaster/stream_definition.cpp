@@ -6,9 +6,15 @@
 #include "globals.h"
 
 
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// stream_definition
+// Used in streamgrids
 // method = 1 => Area Threshold
 // method = 2 => strahler order Threshold
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int stream_definition(QString aread8File, QString orderFile, QString rivFile, int method, int threshold)
 {
     if(print_debug_messages)
@@ -16,56 +22,59 @@ int stream_definition(QString aread8File, QString orderFile, QString rivFile, in
 
     try {
 
-        //FILE *fp;
-        int err=0;
-        int i, j;
-
         if(method==1)
         {
-            //*fp = fopen(aread8File, 'r');
-            printf("\nBefore grid read %d\n",err);
-            err=gridread(aread8File,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
-            printf("\nAfter grid read %d\n",err);
+
+            int err = gridread(aread8File,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
 
             if(err != 0)
-                return(err);
-
-            for(i=0; i<nx; i++)
             {
-                for(j=0; j<ny; j++)
+                main_window->Log_Message("[stream_definition] grid read failed " + aread8File);
+                return(err);
+            }
+
+            for(int i=0; i < nx; i++)
+            {
+                for(int j=0; j < ny; j++)
                 {
-                    if(elev[i][j]>=threshold)
+                    if(elev[i][j] >= threshold)
+                    {
                         elev[i][j]=1;
+                    }
                     else
+                    {
                         elev[i][j]=mval;
+                    }
                 }
             }
 
-            printf("Writing output ...");
-            printf("\nBefore grid write %d\n",err);
+            main_window->Log_Message("[stream_definition] Writing output " + aread8File);
+
             err = gridwrite(rivFile,(void **)elev,RPFLTDTYPE,nx,ny,dx,dy,bndbox,csize,mval,filetype);
-            printf("\nAfter grid write %d\n",err);
 
             if(err != 0)
+            {
+                main_window->Log_Message("[stream_definition] grid write failed " + aread8File);
                 return(err);
+            }
         }
 
         else if(method==2)
         {
-            printf("Method not yet implemented\n");
+            main_window->Log_Message("[stream_definition] Method 2 not yet implemented " + aread8File);
         }
-
         else
         {
-            printf("Method not found\n");
+            main_window->Log_Message("[stream_definition] Method 2 not found " + aread8File);
         }
 
-    } catch (...) {
-
-        qDebug() << "Error: stream_definition is returning w/o checking";
-
-
     }
+    catch (...)
+    {
+        qDebug() << "Error: stream_definition is returning w/o checking";
+        return -9000;
+    }
+
     return(0);
 }
 
