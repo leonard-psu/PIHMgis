@@ -58,7 +58,7 @@ void PIHMThread::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {

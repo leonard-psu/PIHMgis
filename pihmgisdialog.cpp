@@ -21,6 +21,7 @@
 #include "1ProjectManagement/4CloseProject/closeproject.h"
 #include "1ProjectManagement/CheckProject/checkproject.h"
 #include "1ProjectManagement/InspectProject/inspectproject.h"
+#include "1ProjectManagement/VariableSettings/variablesettings.h"
 
 #include "2RasterProcessing/1FillPits/fillpits.h"
 #include "2RasterProcessing/2FlowGrids/flowgrids.h"
@@ -64,6 +65,7 @@ QString user_pihmgis_root_folder = "Please pick a workspace folder.";   //QDir::
 QString user_pihmgis_project_folder = "/.PIHMgis";                      //Default for now, need to customize
 QString user_pihmgis_project_name = "/OpenProject.txt";                 //Note use of forward characters
 
+extern double dissolve_epsilon;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Main Dialog Constructor
@@ -235,6 +237,18 @@ void PIHMgisDialog::Setup_Menu()
         log->addAction(mnu_save_log);
         log->setToolTipsVisible(true);
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// Settings Menu
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QMenu *settings;
+        settings = menuBar()->addMenu("&Settings");
+        mnu_settings = new QAction("Variables", this);
+        mnu_settings->setIcon(QIcon("Icons/icons8-services-96.png"));
+        mnu_settings->setStatusTip(tr("Global variables (Suggested for debugging)"));
+        mnu_settings->setToolTip(tr("Global variables (Suggested for debugging)"));
+        connect(mnu_settings, &QAction::triggered, this, &PIHMgisDialog::menu_global_variables);
+
+        settings->addAction(mnu_settings);
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Help Menu
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -544,6 +558,32 @@ void PIHMgisDialog::menu_save_log()
 
     } catch (...) {
         qDebug() << "Error: menu_save_log is returning w/o checking";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Menu Global Variables Action
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PIHMgisDialog::menu_global_variables()
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start menu_global_variables";
+
+    try
+    {
+        if(mnu_settings != nullptr)
+        {
+
+            VariableSettings *vs = new VariableSettings(this);
+            vs->setModal(true);
+            vs->exec();
+
+            Log_Message("[menu_global_variables] dissolve epsilon set to : " + QString::number(dissolve_epsilon));
+
+        }
+
+    } catch (...) {
+        qDebug() << "Error: menu_global_variables is returning w/o checking";
     }
 }
 

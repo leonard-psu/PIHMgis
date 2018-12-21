@@ -81,7 +81,7 @@ void LcDataFile::Log_Warning_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -101,7 +101,7 @@ void LcDataFile::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -121,7 +121,7 @@ void LcDataFile::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -250,7 +250,7 @@ bool LcDataFile::Check_LCData_Output(QString file, bool color_and_message_if_exi
         {
             if(color_and_message_if_exists)
             {
-                Log_Error_Message("Warning: MeshData output already exists: " + file +tr(" You may need to delete this file."));
+                Log_Error_Message("Warning: MeshData output already exists: " + file + " You may need to delete this file.");
             }
 
             ui->lineEditLcDataFile->setStyleSheet("color: red;");
@@ -417,13 +417,13 @@ void LcDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Mesh Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Lc Data File ... <br>");
+        Log_Message("Running Lc Data File ... ");
 
         int ErrorLc = Lc_PedoTransferFunction( input_LCTexture_filename, output_LCData_filename );
 
         if( ErrorLc != 0 )
         {
-            Log_Error_Message("LC Data File Processing Failed ... </span>" );
+            Log_Error_Message("LC Data File Processing Failed ... " );
             Log_Error_Message("LC error return code: " + QString::number(ErrorLc) );
             return;
         }
@@ -441,7 +441,7 @@ void LcDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Lc Data File Processing Complete.</b>")+tr("<br>"));
+        Log_Message("Lc Data File Processing Complete.");
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

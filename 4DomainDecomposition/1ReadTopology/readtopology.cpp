@@ -31,7 +31,7 @@ ReadTopology::ReadTopology(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
         else
         {
@@ -135,12 +135,11 @@ bool ReadTopology::Check_File_Valid(QString file)
             result = true;
 
             qint64 size = file_Size(file);
-            qDebug() << "size " << size;
 
             if( size < 1)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, file : </span>") + file +tr("<br>"));
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, invalid file size: </span>") + size +tr("<br>"));
+                Log_Error_Message("Check_File_Valid failed, file : " + file );
+                Log_Error_Message("Check_File_Valid failed, invalid file size: " + size );
                 result = false;
             }
         }
@@ -184,7 +183,7 @@ void ReadTopology::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -204,7 +203,7 @@ void ReadTopology::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -268,7 +267,7 @@ bool ReadTopology::Check_MergeVector_Input(QString file)
             ui->lineEditMerge->setStyleSheet("color: red;");
             ui->lineEditMerge->setText(file);
 
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: MergeVector input does not exist: </span>") + file +tr("<br>"));
+            Log_Error_Message("MergeVector input does not exist: " + file );
             result = false;
         }
     } catch (...) {
@@ -296,7 +295,7 @@ bool ReadTopology::Check_PSLG_Output(QString file, bool color_and_message_if_exi
         {
             if(color_and_message_if_exists)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">Warning: Tinshape output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                Log_Error_Message("Tinshape output already exists: " + file + " You may need to delete these files.");
             }
 
             ui->lineEditPSLG->setStyleSheet("color: red;");
@@ -404,7 +403,7 @@ void ReadTopology::on_pushButtonRun_clicked()
         bool input_filenameCheck = Check_MergeVector_Input(input_filename);
         if(!input_filenameCheck)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: MergeVector Input File Missing </span>")+tr("<br>"));
+            Log_Error_Message("MergeVector Input File Missing ");
             return;
         }
 
@@ -415,7 +414,7 @@ void ReadTopology::on_pushButtonRun_clicked()
         bool output_filenameCheck = Check_PSLG_Output(output_filename, false);
         if(output_filenameCheck)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: PSLG Output already exists </span>")+tr("<br>"));
+            Log_Error_Message("PSLG Output already exists ");
             return;
         }
 
@@ -424,26 +423,26 @@ void ReadTopology::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_filename, "ReadOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + input_filename + tr("<br>"));
+            Log_Error_Message("No Read Access to ... " + input_filename);
             return;
         }
 
         if ( ! CheckFileAccess(output_filename, "WriteOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write Access ... </span>") + output_filename +tr("<br>"));
+            Log_Error_Message("Unable to Write Access ... " + output_filename );
             return;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Read Topology
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Read Topology ... <br>");
+        Log_Message("Running Read Topology ... ");
 
         int ErrorPSLG = shape_pslg((char *)qPrintable(input_filename), (char *)qPrintable(output_filename), &LogsString);
         if( ErrorPSLG != 0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Read Topology Processing Failed ... </span>")+tr("<br>"));
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorPSLG)+tr("<br>"));
+            Log_Error_Message("Read Topology Processing Failed ... ");
+            Log_Error_Message("RETURN CODE: ... " + QString::number(ErrorPSLG) );
             return;
         }
 
@@ -453,14 +452,14 @@ void ReadTopology::on_pushButtonRun_clicked()
         output_filenameCheck = Check_PSLG_Output(output_filename, false);
         if(!output_filenameCheck)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: CatchmentPolygon failed, file does not exist: </span>") + output_filename +tr("<br>"));
+            Log_Error_Message("CatchmentPolygon failed, file does not exist: " + output_filename );
             return;
         }
 
         qint64 size = file_Size(output_filename);
         if( size < 1)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: CatchmentPolygon failed, invalid file size: </span>") + size +tr("<br>"));
+            Log_Error_Message("CatchmentPolygon failed, invalid file size: " + size );
             return;
         }
 
@@ -477,7 +476,7 @@ void ReadTopology::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Read Topology Processing Completed.</b>")+tr("<br>"));
+        Log_Message("Read Topology Processing Completed.");
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

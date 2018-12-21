@@ -8671,7 +8671,7 @@
      </rect>
     </property>
     <attribute name="label">
-     <string>Optional : : Visual Analytics</string>
+     <string>Optional : : Hydro Informatics</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox">
      <property name="geometry">

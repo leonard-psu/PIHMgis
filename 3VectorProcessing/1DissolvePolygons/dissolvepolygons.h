@@ -35,6 +35,8 @@ private slots:
 
 
 
+    void on_pushButtonSettings_clicked();
+
 private:
 
     void Clear_Log();

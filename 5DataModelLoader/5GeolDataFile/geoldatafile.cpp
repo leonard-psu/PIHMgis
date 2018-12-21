@@ -32,7 +32,7 @@ GeolDataFile::GeolDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
         else
         {
@@ -81,7 +81,7 @@ void GeolDataFile::Log_Warning_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -101,7 +101,7 @@ void GeolDataFile::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
@@ -120,7 +120,7 @@ void GeolDataFile::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -250,7 +250,7 @@ bool GeolDataFile::Check_GeolData_Output(QString file, bool color_and_message_if
         {
             if(color_and_message_if_exists)
             {
-                Log_Warning_Message("Geology output already exists: " + file +tr(" You may need to delete this file.<br>"));
+                Log_Warning_Message("Geology output already exists: " + file + " You may need to delete this file.");
             }
 
             ui->lineEditGeolDataFile->setStyleSheet("color: red;");
@@ -424,7 +424,7 @@ void GeolDataFile::on_pushButtonRun_clicked()
 
         if( ErrorGeol != 0 )
         {
-            Log_Error_Message("Geol Data File Processing Failed "+tr("<br>"));
+            Log_Error_Message("Geol Data File Processing Failed ");
             Log_Error_Message("Geol error return code: " + QString::number(ErrorGeol) );
             return;
         }

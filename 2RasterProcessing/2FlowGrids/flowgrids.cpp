@@ -32,14 +32,10 @@ FlowGrids::FlowGrids(QWidget *parent, QString filename) :
         filename_open_project = filename;
         bool found_file = false;
 
-        if(print_debug_messages)
-            qDebug() << "INFO: filename -> " << filename_open_project;
-
-
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open project file: </span>") + filename_open_project +tr("<br>"));
+            Log_Error_Message("Unable to Open project file: " + filename_open_project);
         }
         else
         {
@@ -101,7 +97,7 @@ bool FlowGrids::Load_Project_Settings()
             bool fill_check = Check_Fillpit_Input(fillpits);
             if(!fill_check)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Fillpit input does not exist. </span>") +tr("<br>"));
+                Log_Error_Message("Fillpit input does not exist. ");
             }
 
             ui->lineEditFlowDirGrids->setText(flowdir);
@@ -153,7 +149,7 @@ bool FlowGrids::Check_Fillpit_Input(QString file )
             ui->lineEditFillPits->setStyleSheet("color: red;");
             ui->lineEditFillPits->setText(file);
 
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Fillpit input does not exist: </span>") + file +tr("<br>"));
+            Log_Error_Message("Fillpit input does not exist: " + file);
             result = false;
         }
 
@@ -182,7 +178,7 @@ bool FlowGrids::Check_FlowDir_Output(QString file, bool color_and_message_if_exi
         {
             if(color_and_message_if_exists)
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">Warning: Flow Direction output already exists: </span>") + file +tr(" You may need to delete this file(s).<br>"));
+                Log_Message("Warning: Flow Direction output already exists: " + file + " You may need to delete this file(s).");
             }
 
             ui->lineEditFlowDirGrids->setStyleSheet("color: red;");
@@ -223,7 +219,7 @@ bool FlowGrids::Check_FlowAcc_Output(QString file, bool color_and_message_if_exi
         {
             if(color_and_message_if_exists)
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">Warning: Flow Accumulation already exist: </span>") + file +tr(" You may need to delete this file(s).<br>"));
+                Log_Message("Warning: Flow Accumulation already exist: " + file + " You may need to delete this file(s).");
             }
 
             ui->lineEditFlowAccGrids->setStyleSheet("color: red;");
@@ -322,7 +318,7 @@ void FlowGrids::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -342,7 +338,7 @@ void FlowGrids::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -467,7 +463,7 @@ void FlowGrids::on_pushButtonRun_clicked()
         bool fill_check = Check_Fillpit_Input(filename_fill);
         if(!fill_check)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Fill Pits Input File Missing: </span>") + filename_fill +tr("<br>"));
+            Log_Error_Message("Fill Pits Input File Missing: " + filename_fill);
             return;
         }
 
@@ -482,7 +478,7 @@ void FlowGrids::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(filename_flow, "WriteOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + filename_flow + tr("<br>"));
+            Log_Error_Message("No Write Access to " + filename_flow);
             return;
         }
 
@@ -492,13 +488,13 @@ void FlowGrids::on_pushButtonRun_clicked()
         bool acc_check = Check_FlowAcc_Output(filename_acc, false);
         if(acc_check)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Fill acc output already exists: </span>") + filename_acc +tr("<br>"));
+            Log_Error_Message("Fill acc output already exists: " + filename_acc );
             return;
         }
 
         if ( ! CheckFileAccess(filename_acc, "WriteOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + filename_acc + tr("<br>"));
+            Log_Error_Message("No Write Access to ... " + filename_acc);
             return;
         }
 
@@ -522,12 +518,12 @@ void FlowGrids::on_pushButtonRun_clicked()
             }
             else if (check == -9999) //Something else went wrong
             {
-                Log_Error_Message("Error reading Arc binary file. Check Logs.");
+                Log_Error_Message("reading Arc binary file. Check Logs.");
                 return;
             }
             else if (check == -1000)
             {
-                Log_Error_Message("Error reading Arc binary file. Check Logs.");
+                Log_Error_Message("reading Arc binary file. Check Logs.");
                 return;
             }
             else if (check == -1001)
@@ -607,13 +603,12 @@ void FlowGrids::on_pushButtonRun_clicked()
         QString SlopeFileName = filename_flow;
         SlopeFileName.truncate(SlopeFileName.length()-4);
         SlopeFileName.append("Slope.asc");
-        qDebug() << "Slope File Name: " << SlopeFileName;
 
         int ErrorFDir = setdird8( ASCFileName,filename_flow, SlopeFileName );
         if( ErrorFDir != 0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Flow Direction Processing Failed ... </span>")+tr("<br>"));
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorFDir)+tr("<br>"));
+            Log_Error_Message("Flow Direction Processing Failed ... ");
+            Log_Error_Message("RETURN CODE: ... " +QString::number(ErrorFDir));
 
             return;
         }
@@ -625,8 +620,8 @@ void FlowGrids::on_pushButtonRun_clicked()
         int ErrorAcc = aread8( (char *)qPrintable(filename_flow), (char *)qPrintable(filename_acc), 0.0, 0.0, 1 );
         if( ErrorAcc != 0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Flow Accumulation Processing Failed ... </span>")+tr("<br>"));
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorAcc)+tr("<br>"));
+            Log_Error_Message("Flow Accumulation Processing Failed ... ");
+            Log_Error_Message("RETURN CODE: ... "+QString::number(ErrorAcc));
 
             return;
         }
@@ -642,7 +637,7 @@ void FlowGrids::on_pushButtonRun_clicked()
         qint64 size = file_Size(filename_flow);
         if( size < 1)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Flow Direction failed, invalid file size: </span>") + size +tr("<br>"));
+            Log_Error_Message("Flow Direction failed, invalid file size: " + size);
 
             return;
         }
@@ -663,14 +658,14 @@ void FlowGrids::on_pushButtonRun_clicked()
         fill_check = Check_FlowAcc_Output(filename_acc, false);
         if(!fill_check)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Flow Accumulation failed, file does not exist: </span>") + filename_acc +tr("<br>"));
+            Log_Error_Message("Flow Accumulation failed, file does not exist: " + filename_acc);
 
             return;
         }
         size = file_Size(filename_acc);
         if( size < 1)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Flow Accumulation failed, invalid file size: </span>") + size +tr("<br>"));
+            Log_Error_Message("Flow Accumulation failed, invalid file size: " + size);
 
             return;
         }

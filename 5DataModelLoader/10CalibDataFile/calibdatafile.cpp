@@ -79,7 +79,7 @@ void CalibDataFile::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -99,7 +99,7 @@ void CalibDataFile::Log_Warning_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
     } catch (...) {
         qDebug() << "Error: Log_Warning_Message is returning w/o checking";
@@ -118,7 +118,7 @@ void CalibDataFile::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -420,7 +420,7 @@ void CalibDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Catchment Polygon
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Calib Data File ... <br>");
+        Log_Message("Running Calib Data File ... ");
 
         int ErrorCalib = calib_data_file(calib_filename);
 
@@ -480,7 +480,7 @@ void CalibDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Calib Data File Processing Complete.</b>")+tr("<br>"));
+        Log_Message("Calib Data File Processing Complete.");
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

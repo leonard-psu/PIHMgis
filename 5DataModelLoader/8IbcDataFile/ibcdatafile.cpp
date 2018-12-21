@@ -32,7 +32,7 @@ IbcDataFile::IbcDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
         else
         {
@@ -151,7 +151,7 @@ bool IbcDataFile::Check_IbcData_Output(QString file, bool color_and_message_if_e
         {
             if(color_and_message_if_exists)
             {
-                Log_Error_Message(" IBC output already exists: " + file +tr(" You may need to delete these files.<br>"));
+                Log_Error_Message(" IBC output already exists: " + file + " You may need to delete these files.");
             }
 
             ui->lineEditIbcDataFile->setStyleSheet("color: red;");
@@ -284,21 +284,21 @@ void IbcDataFile::on_pushButtonRun_clicked()
         }
         if ( ! CheckFileAccess(output_filename, "WriteOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + output_filename + tr("<br>"));
+            Log_Error_Message("No Write Access to ... " + output_filename );
             return;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Att Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running IBC Data File ... <br>");
+        Log_Message("Running IBC Data File ... ");
 
         int ErrorIbc = ibc_data_file( output_filename );
 
         if( ErrorIbc != 0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Ibc Data File Processing Failed ... </span>")+tr("<br>"));
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE IBC: ... </span>")+QString::number(ErrorIbc)+tr("<br>"));
+            Log_Error_Message("ERROR: Ibc Data File Processing Failed ");
+            Log_Error_Message("RETURN CODE IBC: ... " + QString::number(ErrorIbc) );
             return;
         }
 
@@ -316,7 +316,7 @@ void IbcDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Ibc Data File Processing Complete.</b>")+tr("<br>"));
+        Log_Message("Ibc Data File Processing Complete.");
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);
@@ -340,7 +340,7 @@ void IbcDataFile::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -360,7 +360,7 @@ void IbcDataFile::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {

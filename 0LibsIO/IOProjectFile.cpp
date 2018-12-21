@@ -22,7 +22,6 @@ QStringList ReadModuleLine(QString ProjectFileName, QString Module)
         if( !ProjectFile.exists() )
         {
             main_window->Log_Message("[ReadModuleLine] Error opening file: " + ProjectFileName);
-            qDebug() << "[ReadModuleLine] Error opening file: " + ProjectFileName;
             QStringList NullStringList;
             return NullStringList;
         }
@@ -44,14 +43,13 @@ QStringList ReadModuleLine(QString ProjectFileName, QString Module)
 
     } catch (...) {
 
-        qDebug() << "Error: ReadModuleLine is returning NullStringList";
-
+        main_window->Log_Message("Warning [ReadModuleLine] ReadModuleLine is returning NullStringList");
         QStringList NullStringList;
         return NullStringList;
     }
 
     if(print_debug_messages)
-        qDebug() << "Error: ReadModuleLine is returning NullStringList";
+        main_window->Log_Message("Warning [ReadModuleLine] ReadModuleLine is returning NullStringList");
 
     QStringList NullStringList;
     return NullStringList;
@@ -78,7 +76,6 @@ bool WriteModuleLine(QString ProjectFileName, QStringList WriteStringList)
         if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
         {
             main_window->Log_Message("[WriteModuleLine] Unable to Copy Project File to Temporary Project File: " + TempProjectFileName);
-            qDebug() << "ERROR: Unable to Copy Project File to Temporary Project File";
             return false;
         }
 
@@ -142,7 +139,6 @@ bool DeleteModuleLine(QString ProjectFileName, QString Module)
         if ( QFile::copy(ProjectFileName, TempProjectFileName) == false)
         {
             main_window->Log_Message("[DeleteModuleLine] Unable to Copy Project File to Temporary Project File: " + TempProjectFileName);
-            qDebug() << "ERROR: Unable to Copy Project File to Temporary Project File";
             return false;
         }
 
@@ -198,8 +194,6 @@ bool CheckFolderAccess(QString folderName, QString AccessMode)
             return true;
 #endif
         QFileInfo my_dir(folderName);
-        //qDebug() << "isReadable " <<  my_dir.isReadable();
-        //qDebug() << "isWritable " <<  my_dir.isWritable();
 
         if ( AccessMode == "ReadOnly" )
         {
@@ -222,7 +216,6 @@ bool CheckFolderAccess(QString folderName, QString AccessMode)
 
         }
 
-        //qDebug() << "folderName " << folderName << " " << result;
 
 
     } catch (...) {
@@ -260,8 +253,6 @@ bool CheckFolderAccessFromFilePath(QString filenameandpath, QString AccessMode)
         QString folderName = fi.dir().canonicalPath();
 
         QFileInfo my_dir(folderName);
-        //qDebug() << "isReadable " <<  my_dir.isReadable();
-        //qDebug() << "isWritable " <<  my_dir.isWritable();
 
         if ( AccessMode == "ReadOnly" )
         {
@@ -283,9 +274,6 @@ bool CheckFolderAccessFromFilePath(QString filenameandpath, QString AccessMode)
                         result = true;
 
         }
-
-        //qDebug() << "folderName " << folderName << " " << result;
-
 
     } catch (...) {
 
@@ -455,7 +443,6 @@ bool writeLineNumber(QString ProjectFileName, int LineNumber, QString WriteStrin
                 }
             }
         }
-        qDebug() << lineCount;
 
         if(lineCount < LineNumber)
         {

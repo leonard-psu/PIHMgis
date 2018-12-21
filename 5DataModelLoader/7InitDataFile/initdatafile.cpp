@@ -567,7 +567,7 @@ bool InitDataFile::Check_MeshData_Input(QString file)
             ui->lineEditMeshDataFile->setStyleSheet("color: red;");
             ui->lineEditMeshDataFile->setText(file);
 
-            Log_Error_Message("Missing Mesh input file: " + file +tr("<br>"));
+            Log_Error_Message("Missing Mesh input file: " + file );
 
             result = false;
         }
@@ -604,7 +604,7 @@ bool InitDataFile::Check_RivData_Input(QString file)
             ui->lineEditRivDataFile->setStyleSheet("color: red;");
             ui->lineEditRivDataFile->setText(file);
 
-            Log_Error_Message("Missing River input file: " + file +tr("<br>"));
+            Log_Error_Message("Missing River input file: " + file );
 
             result = false;
         }
@@ -635,7 +635,7 @@ bool InitDataFile::Check_InitData_Output(QString file, bool color_and_message_if
         {
             if(color_and_message_if_exists)
             {
-                Log_Warning_Message("InitData output already exists: " + file +tr(" You may need to delete thise file.<br>"));
+                Log_Warning_Message("InitData output already exists: " + file + " You may need to delete thise file.");
             }
 
             ui->lineEditInitDataFile->setStyleSheet("color: red;");
@@ -1015,10 +1015,10 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
             for (int i=0; i<NumTINs; i++)
             {
 
-                qDebug() << Interception << " " << Snow << " " << Surface << " " << SoilMoisture.toDouble();
-                qDebug() << NodeDepths[ TINnodes[i][0]-1 ];
-                qDebug() << NodeDepths[ TINnodes[i][1]-1 ];
-                qDebug() << NodeDepths[ TINnodes[i][2]-1 ];
+//                qDebug() << Interception << " " << Snow << " " << Surface << " " << SoilMoisture.toDouble();
+//                qDebug() << NodeDepths[ TINnodes[i][0]-1 ];
+//                qDebug() << NodeDepths[ TINnodes[i][1]-1 ];
+//                qDebug() << NodeDepths[ TINnodes[i][2]-1 ];
 
                 InitDataFileTextStream << Interception << "\t";
                 InitDataFileTextStream << Snow << "\t";
@@ -1089,7 +1089,7 @@ void InitDataFile::Log_Warning_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -1109,7 +1109,7 @@ void InitDataFile::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -1129,7 +1129,7 @@ void InitDataFile::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -1260,7 +1260,7 @@ void InitDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running INIT Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Init Data File ... <br>");
+        Log_Message("Running Init Data File ... ");
 
         int ErrorInit = init_data_file(input_Interception,
                                        input_Snow_Input,
@@ -1311,7 +1311,7 @@ void InitDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Init Data File Processing Complete.</b>")+tr("<br>"));
+        Log_Message("Init Data File Processing Complete.");
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

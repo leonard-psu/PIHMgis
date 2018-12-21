@@ -133,7 +133,7 @@ bool FillPits::Check_DEM_Input(QString dem )
             ui->lineEditDEM->setStyleSheet("color: red;");
             ui->lineEditDEM->setText(dem);
 
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: DEM input does not exist: </span>") + dem +tr("<br>"));
+            Log_Error_Message("DEM input does not exist: " + dem );
             result = false;
         }
 
@@ -163,7 +163,7 @@ bool FillPits::Check_Fillpit_Output(QString fillpits, bool color_and_message_if_
         {
             if(color_and_message_if_exists)
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">Warning: fillpits output already exists: </span>") + fillpits +tr(" You may need to delete this file(s).<br>"));
+                Log_Message("Warning: fillpits output already exists: " + fillpits + " You may need to delete this file(s).");
             }
 
             ui->lineEditFillPits->setStyleSheet("color: red;");
@@ -254,7 +254,7 @@ void FillPits::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -274,7 +274,7 @@ void FillPits::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -367,7 +367,7 @@ void FillPits::on_pushButtonRun_clicked()
         bool dem_check = Check_DEM_Input(filename_dem);
         if(!dem_check)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: DEM input does not exist: </span>") + filename_dem +tr("<br>"));
+            Log_Error_Message("DEM input does not exist: " + filename_dem);
             return;
         }
 
@@ -382,7 +382,7 @@ void FillPits::on_pushButtonRun_clicked()
 
         if ( ! CheckFileAccess(filename_fill, "WriteOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access ... </span>") + filename_fill + tr("<br>"));
+            Log_Error_Message(" No Write Access ... " + filename_fill);
             return;
         }
 
@@ -492,8 +492,8 @@ void FillPits::on_pushButtonRun_clicked()
         int ErrorFill = flood( ASCFileName, dummystr, filename_fill );
         if( ErrorFill != 0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Fill Pits Processing Failed ... </span>")+tr("<br>"));
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorFill)+tr("<br>"));
+            Log_Error_Message("Fill Pits Processing Failed ... " );
+            Log_Error_Message("RETURN CODE: ... " + QString::number(ErrorFill));
             return;
         }
 
@@ -508,7 +508,7 @@ void FillPits::on_pushButtonRun_clicked()
         qint64 size = file_Size(filename_fill);
         if( size < 1)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Fillpit failed, invalid file size: </span>") + size +tr("<br>"));
+            Log_Error_Message("Fillpit failed, invalid file size: " + QString::number(size) );
             return;
         }
 
@@ -525,7 +525,7 @@ void FillPits::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message(tr("<br><b>Fill Pits Processing Completed.</b>")+tr("<br>"));
+        Log_Message("Fill Pits Processing Completed.");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 

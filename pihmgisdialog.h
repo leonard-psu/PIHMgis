@@ -177,6 +177,10 @@ private:
     QAction *mnu_save_log;     //save important log
 
     //Help menu
+    QAction *mnu_settings;
+    void menu_global_variables();
+
+    //Help menu
     QAction *mnu_help;
     void menu_help();
 

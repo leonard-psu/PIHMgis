@@ -585,12 +585,12 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                         }
                         else {
 
-                            if(print_many_messages)
-                            {
-                                qDebug() << "[RiverFromTIN] NumNode " << NumNode;
-                                qDebug() << "[RiverFromTIN] The J value used is " << j <<" (" <<pt1.x << "," << pt1.y <<") ";
-                                qDebug() << "[RiverFromTIN] node[j] " << j <<" (" <<node[j].x << "," << node[j].y <<") ";
-                            }
+//                            if(print_many_messages)
+//                            {
+//                                qDebug() << "[RiverFromTIN] NumNode " << NumNode;
+//                                qDebug() << "[RiverFromTIN] The J value used is " << j <<" (" <<pt1.x << "," << pt1.y <<") ";
+//                                qDebug() << "[RiverFromTIN] node[j] " << j <<" (" <<node[j].x << "," << node[j].y <<") ";
+//                            }
                         }
 
                         if(!error_found)
@@ -602,16 +602,16 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                                 int j, k, l;
                                 for(j=0; j < neighNodeCount[numPt]; j++)
                                 {
-                                    if(print_many_messages)
-                                    {
-                                        qDebug() << "[RiverFromTIN] NumNode ";
-                                        qDebug() <<  "x= " << node[numPt].x << " y= " << node[numPt].y << "\n";
-                                        qDebug() <<  "x= " << node[neighNode[numPt][j]].x << " y= " << node[neighNode[numPt][j]].y << "\n";
-                                        qDebug() <<  "slope2= " << SLOPE(node[numPt], node[neighNode[numPt][j]]) << "\n";
-                                        qDebug() <<  "del slope= " << slope-SLOPE(node[numPt], node[neighNode[numPt][j]]) << "\n";
-                                        qDebug() <<  "=" << oldDist << "\n";
-                                        qDebug() <<  "=" << distPt(node[neighNode[numPt][j]], pt2) << "\n";
-                                    }
+//                                    if(print_many_messages)
+//                                    {
+//                                        qDebug() << "[RiverFromTIN] NumNode ";
+//                                        qDebug() <<  "x= " << node[numPt].x << " y= " << node[numPt].y << "\n";
+//                                        qDebug() <<  "x= " << node[neighNode[numPt][j]].x << " y= " << node[neighNode[numPt][j]].y << "\n";
+//                                        qDebug() <<  "slope2= " << SLOPE(node[numPt], node[neighNode[numPt][j]]) << "\n";
+//                                        qDebug() <<  "del slope= " << slope-SLOPE(node[numPt], node[neighNode[numPt][j]]) << "\n";
+//                                        qDebug() <<  "=" << oldDist << "\n";
+//                                        qDebug() <<  "=" << distPt(node[neighNode[numPt][j]], pt2) << "\n";
+//                                    }
 
                                     if(fabs(slope-SLOPE(node[numPt], node[neighNode[numPt][j]])) < 0.001)
                                         break;

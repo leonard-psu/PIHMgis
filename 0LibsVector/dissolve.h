@@ -11,6 +11,6 @@ int compareLines(Lines *a, Lines *b);
 
 inline int doesIntersect(Lines *l, double x1, double y1);
 
-int dissolve(const char* InShpFileName, const char* InDbfFileName, const char *OutShpFileName, const char *OutDbfFileName);
+int dissolve(QString InShpFileName, QString InDbfFileName, QString OutShpFileName, QString OutDbfFileName);
 
 #endif

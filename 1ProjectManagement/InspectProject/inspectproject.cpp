@@ -20,8 +20,6 @@ InspectProject::InspectProject(QWidget *parent, QString filename) : QDialog(pare
         filename_open_project = filename;
         bool found_file = false;
 
-        if(print_debug_messages)
-            qDebug() << "INFO: filename -> " << filename_open_project;
 
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )

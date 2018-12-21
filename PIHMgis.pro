@@ -229,7 +229,20 @@ SOURCES += main.cpp\
     1ProjectManagement/4CloseProject/closeproject.cpp \
     1ProjectManagement/CheckProject/checkproject.cpp \
     1ProjectManagement/InspectProject/inspectproject.cpp \
-    6PIHMSimulation/PIHMThread/PIHMThread.cpp
+    6PIHMSimulation/PIHMThread/PIHMThread.cpp \
+    1ProjectManagement/1NewProject/newproject.cpp \
+    1ProjectManagement/2OpenProject/openproject.cpp \
+    1ProjectManagement/3ImportProject/importproject.cpp \
+    1ProjectManagement/4CloseProject/closeproject.cpp \
+    1ProjectManagement/CheckProject/checkproject.cpp \
+    1ProjectManagement/InspectProject/inspectproject.cpp \
+    1ProjectManagement/1NewProject/newproject.cpp \
+    1ProjectManagement/2OpenProject/openproject.cpp \
+    1ProjectManagement/3ImportProject/importproject.cpp \
+    1ProjectManagement/4CloseProject/closeproject.cpp \
+    1ProjectManagement/CheckProject/checkproject.cpp \
+    1ProjectManagement/InspectProject/inspectproject.cpp \
+    1ProjectManagement/VariableSettings/variablesettings.cpp
 
 HEADERS  += pihmgisdialog.h \
     1ProjectManagement/1NewProject/newproject.h \
@@ -391,7 +404,20 @@ HEADERS  += pihmgisdialog.h \
     1ProjectManagement/4CloseProject/closeproject.h \
     1ProjectManagement/CheckProject/checkproject.h \
     1ProjectManagement/InspectProject/inspectproject.h \
-    6PIHMSimulation/PIHMThread/PIHMThread.h
+    6PIHMSimulation/PIHMThread/PIHMThread.h \
+    1ProjectManagement/1NewProject/newproject.h \
+    1ProjectManagement/2OpenProject/openproject.h \
+    1ProjectManagement/3ImportProject/importproject.h \
+    1ProjectManagement/4CloseProject/closeproject.h \
+    1ProjectManagement/CheckProject/checkproject.h \
+    1ProjectManagement/InspectProject/inspectproject.h \
+    1ProjectManagement/1NewProject/newproject.h \
+    1ProjectManagement/2OpenProject/openproject.h \
+    1ProjectManagement/3ImportProject/importproject.h \
+    1ProjectManagement/4CloseProject/closeproject.h \
+    1ProjectManagement/CheckProject/checkproject.h \
+    1ProjectManagement/InspectProject/inspectproject.h \
+    1ProjectManagement/VariableSettings/variablesettings.h
 
 FORMS    += pihmgisdialog.ui \
     1ProjectManagement/1NewProject/newproject.ui \
@@ -430,7 +456,8 @@ FORMS    += pihmgisdialog.ui \
     7VisualAnalytics/1MeshSpatial/meshspatial.ui \
     7VisualAnalytics/3RiverSpatial/riverspatial.ui \
     1ProjectManagement/CheckProject/checkproject.ui \
-    1ProjectManagement/InspectProject/inspectproject.ui
+    1ProjectManagement/InspectProject/inspectproject.ui \
+    1ProjectManagement/VariableSettings/variablesettings.ui
 
 OTHER_FILES +=
 

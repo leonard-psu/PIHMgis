@@ -34,7 +34,7 @@ MergeVectorLayers::MergeVectorLayers(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project);
         }
         else
         {
@@ -88,7 +88,7 @@ bool MergeVectorLayers::Load_Project_Settings()
                             QTableWidgetItem *NewTableItem = new QTableWidgetItem(file1);
                             ui->tableWidget->setItem(rowlen,0,NewTableItem);
                             ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
-                            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
+                            Log_Error_Message(file1 + " input does not exist. ");
                         }
                     }
                 }
@@ -124,13 +124,11 @@ bool MergeVectorLayers::Load_Project_Settings()
                     }
                     else
                     {
-                        Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
+                        Log_Error_Message( file1 + " input does not exist. ");
                         ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
                     }
                     ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignRight);
                     ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignVCenter);
-
-                    //qDebug() << i << " " << InpPolygonFileName << " <> " << OutPolygonFileName << "\n";
 
                 }
             }
@@ -151,7 +149,6 @@ bool MergeVectorLayers::Load_Project_Settings()
         QString outputfile = user_pihmgis_root_folder+"/2VectorProcessing/MergeVectorLayer" + ID_String + ".shp";
 */
 
-        //qDebug() << "outputfile -> " << outputfile ;
         bool outputfile_check = Check_File_Valid(outputfile);
         Check_MergeLayer_Output(outputfile, true);
 
@@ -217,7 +214,7 @@ void MergeVectorLayers::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -237,7 +234,7 @@ void MergeVectorLayers::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -262,12 +259,11 @@ bool MergeVectorLayers::Check_File_Valid(QString file)
             result = true;
 
             qint64 size = file_Size(file);
-            //qDebug() << "size " << size;
 
             if( size < 1)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, file : </span>") + file +tr("<br>"));
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Check_File_Valid failed, invalid file size: </span>") + size +tr("<br>"));
+                Log_Error_Message("Check_File_Valid failed, file : " + file );
+                Log_Error_Message("Check_File_Valid failed, invalid file size: " + size );
                 result = false;
             }
         }
@@ -347,7 +343,7 @@ void MergeVectorLayers::on_pushButtonAdd_clicked()
                     }
                     else
                     {
-                        Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: ") + file1 + tr(" input does not exist. </span>") +tr("<br>"));
+                        Log_Error_Message( file1 + " input does not exist. ");
                         ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
                     }
 
@@ -394,8 +390,6 @@ void MergeVectorLayers::on_pushButtonClear_clicked()
     try {
         while( ui->tableWidget->rowCount() )
             ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
-
-        //qDebug() << "Row Count = " << ui->tableWidget->rowCount();
 
         pushButtonSetFocus();
     } catch (...) {
@@ -460,7 +454,7 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if( ui->tableWidget->rowCount() == 0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Split-Line Input File(s) Missing </span>")+tr("<br>"));
+            Log_Error_Message("Split-Line Input File(s) Missing ");
             return;
         }
 
@@ -476,7 +470,7 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
             {
                 if ( ! CheckFileAccess(file1, "ReadOnly") )
                 {
-                    Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + file1 +tr("<br>"));
+                    Log_Error_Message("No Read Access to ... " + file1 );
                     failure_found = true;
                 }
             }
@@ -489,20 +483,20 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         QString file2 = ui->lineEditMergeLayer->text();
         if ( ! CheckFileAccess(file2, "WriteOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + file2 + tr("<br>"));
+            Log_Error_Message("No Write Access to ... " + file2);
             failure_found = true;
         }
 
         if(failure_found)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Input and Output File issues </span>")+ tr("<br>"));
+            Log_Error_Message("Input and Output File issues ");
             return;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run MergeVectorLayers
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Merge Vector Split Lines ... <br>");
+        Log_Message("Running Merge Vector Split Lines ... ");
 
         QStringList ProjectIOStringList;
         ProjectIOStringList << "MergeVectorLayers";
@@ -512,8 +506,6 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         OutShpFileName = ui->lineEditMergeLayer->text();
         OutDbfFileName = OutShpFileName;
         OutDbfFileName.replace(QString(".shp"), QString(".dbf"));
-
-        //qDebug() << "OutFileName: " << OutShpFileName << " # " << OutDbfFileName;
 
         int row_count = ui->tableWidget->rowCount();
         const char **shpFileNamesChar = new const char*[row_count];
@@ -525,15 +517,11 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
             QString InpDbfFileName = InpShpFileName;
             InpDbfFileName.replace(QString(".shp"), QString(".dbf"));
 
-            //qDebug() << InpShpFileName << " # " << InpDbfFileName;
-
             shpFileNamesChar[i] = new char[InpShpFileName.length()+1];
             dbfFileNamesChar[i] = new char[InpDbfFileName.length()+1];
 
             sprintf( (char *)shpFileNamesChar[i],"%s", qPrintable(InpShpFileName) );
             sprintf( (char *)dbfFileNamesChar[i],"%s", qPrintable(InpDbfFileName) );
-
-            //qDebug () << shpFileNamesChar[i];
 
             ProjectIOStringList << InpShpFileName;
         }
@@ -547,13 +535,13 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         int ErrorMrg = merge_lines( shpFileNamesChar, dbfFileNamesChar, ui->tableWidget->rowCount(), (char *)qPrintable(OutShpFileName), (char *)qPrintable(OutDbfFileName) );
         if ( ErrorMrg == 1 || ErrorMrg == 5 || ErrorMrg == 8 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: Non-Arc Layer specified... </span>")+tr("<br>"));
+            Log_Error_Message("Non-Arc Layer specified... ");
             return;
         }
         else if ( ErrorMrg != 0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Merge Vector Split Lines Processing Failed ... </span>")+tr("<br>"));
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorMrg)+tr("<br>"));
+            Log_Error_Message("Merge Vector Split Lines Processing Failed ... ");
+            Log_Error_Message("RETURN CODE: ... " + QString::number(ErrorMrg) );
             return;
         }
 
@@ -591,7 +579,7 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Merge Vector Split Lines Processing Completed.</b>")+tr("<br>"));
+        Log_Message("Merge Vector Split Lines Processing Completed.");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
@@ -659,7 +647,7 @@ bool MergeVectorLayers::Check_MergeLayer_Output(QString file, bool color_and_mes
         {
             if(color_and_message_if_exists)
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">Warning: MergeLayer output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                Log_Message("Warning: MergeLayer output already exists: " + file + " You may need to delete these files.");
             }
 
             ui->lineEditMergeLayer->setStyleSheet("color: red;");

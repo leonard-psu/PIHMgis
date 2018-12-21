@@ -32,7 +32,7 @@ DelaunayTriangulation::DelaunayTriangulation(QWidget *parent, QString filename) 
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
         else
         {
@@ -169,7 +169,7 @@ void DelaunayTriangulation::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -189,7 +189,7 @@ void DelaunayTriangulation::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -220,7 +220,7 @@ bool DelaunayTriangulation::Check_PSLG_Input(QString file)
             ui->lineEditPSLG->setStyleSheet("color: red;");
             ui->lineEditPSLG->setText(file);
 
-            Log_Message(tr("<span style=\"color:#FF0000\">Warning: Poly input does not exist </span>") + file +tr(".<br>"));
+            Log_Message("Warning: Poly input does not exist " + file );
             result = false;
         }
 
@@ -256,7 +256,7 @@ bool DelaunayTriangulation::Check_Angle(QString value, bool message){
         {
             if(message)
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">WARNING: Invalid Angle value. </span>") +tr("<br>"));
+                Log_Message("WARNING: Invalid Angle value. ");
             }
             result = false;
         }
@@ -294,7 +294,7 @@ bool DelaunayTriangulation::Check_Area(QString value, bool message){
         {
             if(message)
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">WARNING: Invalid Area value. </span>") +tr("<br>"));
+                Log_Message("WARNING: Invalid Area value. ");
             }
             result = false;
         }
@@ -332,7 +332,7 @@ bool DelaunayTriangulation::Check_Others(QString value, bool message)
         {
             if(message)
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">WARNING: Invalid Others value. </span>") +tr("<br>"));
+                Log_Message("WARNING: Invalid Others value. ");
              }
             result = false;
         }
@@ -516,7 +516,6 @@ bool DelaunayTriangulation::Check_File_Valid(QString file)
     bool result = false;
 
     try {
-        //qDebug() << "INFO: Check_File_Valid() " << file;
 
         bool fileExists = QFileInfo::exists(file) && QFileInfo(file).isFile();
         return fileExists;
@@ -555,14 +554,14 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         bool TriangleCheck = Check_Triangle_Software_Input(filename_triangle_software);
         if(!TriangleCheck)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: TRIANGLE Software Input File Missing </span>")+tr("<br>"));
+            Log_Error_Message("TRIANGLE Software Input File Missing ");
             return;
         }
 
         bool PSLGCheck = Check_PSLG_Input(PSLG_filename);
         if(!PSLGCheck)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: PSLG Input File Missing </span>")+tr("<br>"));
+            Log_Error_Message("PSLG Input File Missing ");
             return;
         }
 
@@ -571,7 +570,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
             bool angle_check = Check_Angle(input_angle, true);
             if(!angle_check)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Missing Angle Quality Constraint ... </span>")+tr("<br>"));
+                Log_Error_Message("Missing Angle Quality Constraint ... ");
                 return;
             }
         }
@@ -581,7 +580,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
             bool area_check = Check_Area(input_area, true);
             if(!area_check)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Missing Area Quality Constraint ... </span>")+tr("<br>"));
+                Log_Error_Message("Missing Area Quality Constraint ... ");
                 return;
             }
         }
@@ -591,7 +590,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
             bool area_check = Check_Others(input_others, true);
             if(!area_check)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Missing Other Options ... </span>")+tr("<br>"));
+                Log_Error_Message("Missing Other Options ... ");
                 return;
             }
         }
@@ -607,14 +606,14 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         bool file_exists = Check_File_Valid(output_filename);
         if(file_exists)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: PSLG Output File Exists </span>")+ output_filename + tr("<br>"));
+            Log_Error_Message("PSLG Output File Exists " + output_filename );
             return;
         }
 
         file_exists = Check_File_Valid(output_filename2);
         if(file_exists)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: PSLG Output File Exists </span>")+ output_filename2 + tr("<br>"));
+            Log_Error_Message("PSLG Output File Exists " + output_filename2 );
             return;
         }
 
@@ -637,7 +636,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         // Running TRIANGLE
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        Log_Message("Running Delaunay Triangulation ... <br>");
+        Log_Message("Running Delaunay Triangulation ... ");
 
         QString ExecString, OptsString, NameString;
         ExecString = "TRIANGLE";
@@ -655,14 +654,14 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         QProcess Triangle_Process;
         QString command = filename_triangle_software + " " + OptsString + " " + NameString;
 
-        Log_Message(tr("<span style=\"color:#FF0000\">Input: </span>")+command+tr("<br>"));
+        Log_Message("Input: " + command);
 
         Triangle_Process.start(command);
         Triangle_Process.waitForFinished();
         int ErrorTri = Triangle_Process.exitCode();
         QString output(Triangle_Process.readAllStandardOutput());
 
-        Log_Message(tr("<span style=\"color:#FF0000\">Output: </span>")+output+tr("<br>"));
+        Log_Message("Output: " + output);
 
         if(ErrorTri != 0)
         {
@@ -675,28 +674,28 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         file_exists = Check_File_Valid(output_filename);
         if(!file_exists)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: PSLG Output File not generated </span>")+ output_filename + tr("<br>"));
+            Log_Error_Message("PSLG Output File not generated " + output_filename );
             return;
         }
 
         qint64 size = file_Size(output_filename);
         if( size < 1)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: PSLG Poly Output failed, invalid file size: </span>") + size +tr("<br>"));
+            Log_Error_Message("PSLG Poly Output failed, invalid file size: " + size );
             return;
         }
 
         file_exists = Check_File_Valid(output_filename2);
         if(!file_exists)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: PSLG Output File not generated  </span>")+ output_filename2 + tr("<br>"));
+            Log_Error_Message("PSLG Output File not generated  " + output_filename2 );
             return;
         }
 
         size = file_Size(output_filename2);
         if( size < 1)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: PSLG Ele Output failed, invalid file size: </span>") + size +tr("<br>"));
+            Log_Error_Message("PSLG Ele Output failed, invalid file size: " + size  );
             return;
         }
 
@@ -733,7 +732,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         QTextStream EleFileTextStream(&EleFile);
         EleFileTextStream >> NumTINs;
         EleFile.close();
-        Log_Message(tr("<br><b>Total Number of Triangular Elements: ")+QString::number(NumTINs)+tr("</b><br>"));
+        Log_Message("Total Number of Triangular Elements: " + QString::number(NumTINs) );
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -741,7 +740,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Clear_Log();
 
-        Log_Message(tr("<br><b>Delaunay Triangulation Processing Completed.</b>")+tr("<br>"));
+        Log_Message("Delaunay Triangulation Processing Completed.");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
@@ -890,7 +889,7 @@ bool DelaunayTriangulation::Check_TIN_Output(QString file, bool color_and_messag
         {
             if(color_and_message_if_exists)
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">Warning: Output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                Log_Message("Warning: Output already exists: " + file + " You may need to delete these files.");
             }
 
             result = true;

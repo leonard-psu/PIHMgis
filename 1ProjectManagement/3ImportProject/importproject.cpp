@@ -91,7 +91,7 @@ void ImportProject::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -111,7 +111,7 @@ void ImportProject::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -167,15 +167,12 @@ QMap<QString,QString> ImportProject::Get_Map_Directories(QString input_file_name
                         {
                             for(int i = 1; i < slist.count(); i++)
                             {
-                                //qDebug() << "OLD Found 0 -> " << slist[i];
-
                                 QString str_value = slist[i];
 
                                 if( str_value.contains('/') || str_value.contains('\\'))
                                 {
                                     QFileInfo fi(slist[i]);
                                     QString dir = fi.absolutePath();
-                                    //qDebug() << "OLD Found 1 -> " << dir;
 
                                     if(result.contains(dir))
                                     {
@@ -190,13 +187,12 @@ QMap<QString,QString> ImportProject::Get_Map_Directories(QString input_file_name
                                         else
                                         {
                                             QStringList fslist = Get_Folder_List(dir);
-                                            //qDebug() << "OLD Found 2 -> " << fslist.at(1) << " " << fslist.length();
                                             QString value = dir;
 
                                             QString replace = dir.replace(fslist.at(1), new_base_folder);
                                             QFileInfo fi2(replace);
                                             bool exists = fi2.exists();
-                                            //qDebug() << "OLD Found 3 -> " << replace << " " << exists;
+
                                             if(exists)
                                             {
                                                 if(result.contains(replace))
@@ -397,7 +393,6 @@ bool ImportProject::Find_Replace_Only_Project_Directories(QString input_file_nam
                             if(line.contains(only_folder))
                             {
                                 new_line = new_line.replace(only_folder, replace_value);
-                                //qDebug() << new_line << '\n';
 
                                 //Keep original line
                                 output_text_stream << "#Import Replaced " << line << '\n';
@@ -641,19 +636,12 @@ void ImportProject::on_pushButtonProject_clicked()
             QString OldProjectFolder = OldOpenProjectFileTextStream.readLine();
             OldOpenProjectFile.close();
 
-            //qDebug()<<"OldProjectFolder   = "<<OldProjectFolder<<"\n";
-            //qDebug()<<"OldProjectFileName = "<<OldProjectFileName<<"\n";
-            //qDebug()<<"NewProjectFolder   = "<<NewProjectFolder<<"\n";
-            //qDebug()<<"NewProjectFileName = "<<NewProjectFileName<<"\n";
-
             ui->lineEdit->setText(OldProjectFileName);
             ui->lineEditOld->setText(OldProjectFolder);
             ui->lineEditNew->setText(NewProjectFolder);
 
             QFileInfo fi(OldProjectFileName);
             ui->lineEdit_Data_Base_Folder->setText( QString( fi.absolutePath()));
-
-            qDebug() << " fi.absolutePath() = " << fi.absolutePath() << "\n";
 
             Find_Project_Directories(OldProjectFileName, fi.absolutePath());
 
@@ -755,18 +743,13 @@ void ImportProject::on_pushButtonImport_clicked()
             }
         }
 
-        qDebug() <<  output_name << '\n';
         QFileInfo qfi2(output_name);
         QString given_suffix = qfi2.suffix();
-        qDebug() <<  given_suffix << '\n';
 
         if( !QString::compare("pihmgis", given_suffix, Qt::CaseInsensitive) == 0)
         {
-            qDebug() <<  output_name << '\n';
             output_name = output_name.append(".pihmgis");
-            qDebug() <<  output_name << '\n';
         }
-        qDebug() <<  output_name << '\n';
 
         if(qfi2.exists())
         {
@@ -817,8 +800,6 @@ void ImportProject::on_pushButtonImport_clicked()
         else
         {
             QString only_folder = replace_old_folders;
-            //qDebug() << "only_folder: " << only_folder;
-
             Find_Replace_Only_Project_Directories(old_ProjectFileName, data_base_folder, only_folder, new_ProjectFileName);
 
         }

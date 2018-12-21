@@ -46,7 +46,7 @@ PIHMSimulation::PIHMSimulation(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message("Unable to Open File: </span>" + filename_open_project  );
+            Log_Error_Message("Unable to Open File: " + filename_open_project  );
         }
         else
         {
@@ -170,7 +170,7 @@ void PIHMSimulation::Log_Warning_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
@@ -189,7 +189,7 @@ void PIHMSimulation::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -209,7 +209,7 @@ void PIHMSimulation::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -396,7 +396,7 @@ bool PIHMSimulation::Check_PIHM_Project_Inputs(QString base_folder, QString proj
         }
         else
         {
-            Log_Warning_Message("PIHM Version Not Supported " + tr("<br>"));
+            Log_Warning_Message("PIHM Version Not Supported ");
             result = false;
         }
 
@@ -429,7 +429,7 @@ int PIHMSimulation::CheckInputFileAccess(QString folder, QString project_name, Q
 
         if(message)
         {
-            Log_Message(FileNamewithExtension + " ... <br>");
+            Log_Message(FileNamewithExtension + " ... ");
         }
 
     } catch (...) {
@@ -463,7 +463,7 @@ int PIHMSimulation::CopyInputFile( QString output_folder, QString input_folder, 
                 }
             }
             else {
-                Log_Warning_Message("Not overwriting Input file that already exists in Output folder location. " + output_FileName + tr("<br>"));
+                Log_Warning_Message("Not overwriting Input file that already exists in Output folder location. " + output_FileName );
                 return -10;
             }
         }
@@ -641,7 +641,7 @@ void PIHMSimulation::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Simulation
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message(tr("PIHM Simulation Starting ... <br>"));
+        Log_Message(tr("PIHM Simulation Starting ... "));
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Project file
@@ -806,7 +806,7 @@ void PIHMSimulation::PIHMThreadFinished()
 
         this->setCursor(Qt::ArrowCursor);
 
-        Log_Message(tr("<b>PIHM Simulation Complete.</b>")+tr("<br>"));
+        Log_Message("PIHM Simulation Complete.");
 
         ui->pushButtonRun->setText("Run");
         ui->pushButtonRun->setDefault(false);
@@ -869,7 +869,7 @@ void PIHMSimulation::verifyInputOutputFile()
         }
         else
         {
-            Log_Message(tr("Output Folder Exists ... ")+ui->lineEditInputDataFolder->text() );
+            Log_Message("Output Folder Exists ... " + ui->lineEditInputDataFolder->text() );
 
         }
 
@@ -905,7 +905,7 @@ void PIHMSimulation::verifyInputOutputFile()
 
         if(!missing_files)
         {
-            Log_Message(tr("All PIHM input files found ") +tr("<br>"));
+            Log_Message( "All PIHM input files found ");
             ui->pushButtonRun->setEnabled(true);
         }
         else
@@ -989,7 +989,7 @@ void PIHMSimulation::onPIHM_StatusChanged(std::string value)
 
         ui->label_PIHM_Status->setText(value.c_str());
 
-        Log_Message( value.c_str() + tr(" <br>"));
+        Log_Message( value.c_str() );
 
     } catch (...) {
         qDebug() << "Error: PIHMSimulation::onPIHM_StatusChanged() is returning w/o checking";

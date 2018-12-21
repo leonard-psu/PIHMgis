@@ -77,7 +77,7 @@ void RiverSpatial::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
@@ -96,7 +96,7 @@ void RiverSpatial::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -310,8 +310,10 @@ bool RiverSpatial::Load_Para_Input(QString para_filename)
                 TempFileTextStream >> TempDouble;
                 //qDebug() << TempDouble << "\t";
             }
-            TempFileTextStream >> Start; qDebug() << "Start = " << Start << "\t";
-            TempFileTextStream >> Stop;  qDebug() << "Stop  = " << Stop  << "\t";
+            TempFileTextStream >> Start;
+            //qDebug() << "Start = " << Start << "\t";
+            TempFileTextStream >> Stop;
+            //qDebug() << "Stop  = " << Stop  << "\t";
             if      ( Stop / (60*24*365) >= 1 ) { Start = Start / (60*24*365); Stop = Stop / (60*24*365); ui->comboBoxStartStop->setCurrentIndex(5); }
             else if ( Stop / (60*24*30)  >= 1 ) { Start = Start / (60*24*30);  Stop = Stop / (60*24*30);  ui->comboBoxStartStop->setCurrentIndex(4); }
             else if ( Stop / (60*24*7)   >= 1 ) { Start = Start / (60*24*7);   Stop = Stop / (60*24*7);   ui->comboBoxStartStop->setCurrentIndex(3); }
@@ -738,17 +740,17 @@ Time_Values RiverSpatial::Get_Time_Steps(QString filename, int num_elements, boo
 
         TempFileTextStream >> TIMESTEP1;
 
-        if(message) qDebug() << "Time Step1 = " << TIMESTEP1 << "\n";
+        //if(message) qDebug() << "Time Step1 = " << TIMESTEP1 << "\n";
 
         for (int i=0; i < num_elements+1; i++)
         {
             TempFileTextStream >> TempDouble;
-            if(message) qDebug() << TempDouble << ", ";
+            //if(message) qDebug() << TempDouble << ", ";
         }
         TempFileTextStream >> TIMESTEP2;
         TempFile.close();
 
-        if(message) qDebug() << "\nTime Step2 = " << TIMESTEP2 << "\n";
+        //if(message) qDebug() << "\nTime Step2 = " << TIMESTEP2 << "\n";
 
         //time_step = TIMESTEP2 - TIMESTEP1;
         //if(message) qDebug() << "Time Step = " << time_step << "\n";

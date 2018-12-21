@@ -531,7 +531,7 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
             frac1 = NLCD[nlcd][1];
             umd2  = NLCD[nlcd][2];
             frac2 = NLCD[nlcd][3];
-            qDebug() << nlcd << ": [" << umd1 << "] x " << frac1 << " + [" << umd2 << "] x " << frac2 << "\n";
+            //qDebug() << nlcd << ": [" << umd1 << "] x " << frac1 << " + [" << umd2 << "] x " << frac2 << "\n";
 
             if ( umd1 + umd2 == 0 ) // NLCD Class not defined
             {

@@ -36,7 +36,7 @@ AttDataFile::AttDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message("ERROR: Unable to Open File: </span>" + filename_open_project );
+            Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
         else
         {
@@ -263,7 +263,7 @@ void AttDataFile::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -283,7 +283,7 @@ void AttDataFile::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -474,7 +474,7 @@ bool AttDataFile::Check_Att_Output(QString file, bool color_and_message_if_exist
         {
             if(color_and_message_if_exists)
             {
-                Log_Error_Message(" Att output already exists: " + file +tr(" You may need to delete these files.<br>"));
+                Log_Error_Message(" Att output already exists: " + file +tr(" You may need to delete these files."));
             }
 
             ui->lineEditAttDataFile->setStyleSheet("color: red;");
@@ -520,7 +520,7 @@ bool AttDataFile::Check_TINShape_Input(QString file){
             ui->lineEditTINShapeLayerFile->setStyleSheet("color: red;");
             ui->lineEditTINShapeLayerFile->setText(file);
 
-            Log_Error_Message(" Tin Shape file not found: " + file +tr(" <br>"));
+            Log_Error_Message(" Tin Shape file not found: " + file );
 
             result = false;
         }
@@ -3277,7 +3277,7 @@ void AttDataFile::Log_Warning_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -3642,7 +3642,7 @@ void AttDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Att Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Att Data File ... <br>");
+        Log_Message("Running Att Data File ... ");
 
         // *** ATT Function Calls
         //int att_data_file(
@@ -3680,8 +3680,8 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         if( ErrorAtt != 0 )
         {
-            Log_Message(tr("<span style=\"color:#FF0000\">ERROR: Att Data File Processing Failed ... </span>")+tr("<br>"));
-            Log_Message(tr("<span style=\"color:#FF0000\">RETURN CODE ATT: ... </span>")+QString::number(ErrorAtt)+tr("<br>"));
+            Log_Message("Att Data File Processing Failed ... ");
+            Log_Message("RETURN CODE ATT: ... " + QString::number(ErrorAtt));
             return;
         }
 
@@ -3722,7 +3722,7 @@ void AttDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Att Data File Processing Complete.</b>")+tr("<br>"));
+        Log_Message("Att Data File Processing Complete.");
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

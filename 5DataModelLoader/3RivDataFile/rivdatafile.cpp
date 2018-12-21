@@ -33,7 +33,7 @@ RivDataFile::RivDataFile(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
         else
         {
@@ -382,7 +382,7 @@ bool RivDataFile::Check_RiverData_Output(QString file, bool color_and_message_if
         {
             if(color_and_message_if_exists)
             {
-                Log_Warning_Message(tr("<span style=\"color:#FF0000\">Warning: RiverData output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                Log_Warning_Message("Warning: RiverData output already exists: " + file + " You may need to delete these files.");
             }
 
             ui->lineEditRivDataFile->setStyleSheet("color: red;");
@@ -547,7 +547,7 @@ void RivDataFile::Log_Warning_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -567,7 +567,7 @@ void RivDataFile::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -587,7 +587,7 @@ void RivDataFile::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -627,28 +627,28 @@ void RivDataFile::on_pushButtonRun_clicked()
         bool checked_element = Check_Element_Input(input_Element_filename);
         if(!checked_element)
         {
-            Log_Error_Message("Element (.1.ele) Input File Missing </span>");
+            Log_Error_Message("Element (.1.ele) Input File Missing ");
             return;
         }
 
         bool checked_node = Check_Node_Input(input_Node_filename);
         if(!checked_node)
         {
-            Log_Error_Message("Node (.1.node) Input File Missing </span>");
+            Log_Error_Message("Node (.1.node) Input File Missing ");
             return;
         }
 
         bool checked_neighbour = Check_Neighbor_Input(input_Neighbour_filename);
         if(!checked_neighbour)
         {
-            Log_Error_Message("Neighbor (.1.Neigh) Input File Missing </span>");
+            Log_Error_Message("Neighbor (.1.Neigh) Input File Missing ");
             return;
         }
 
         bool checked_river = Check_RiverShape_Input(input_River_filename);
         if(!checked_river)
         {
-            Log_Error_Message("River (*.shp) Input File Missing </span>");
+            Log_Error_Message("River (*.shp) Input File Missing ");
             return;
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -667,27 +667,27 @@ void RivDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(input_Element_filename, "ReadOnly") )
         {
-            Log_Error_Message("ERROR: No Read Access ... </span>" + input_Element_filename  );
+            Log_Error_Message("ERROR: No Read Access ... " + input_Element_filename  );
             return;
         }
         if ( ! CheckFileAccess(input_Node_filename, "ReadOnly") )
         {
-            Log_Error_Message("ERROR: No Read Access ... </span>" + input_Node_filename  );
+            Log_Error_Message("ERROR: No Read Access ... " + input_Node_filename  );
             return;
         }
         if ( ! CheckFileAccess(input_Neighbour_filename, "ReadOnly") )
         {
-            Log_Error_Message("ERROR: No Read Access ... </span>" + input_Neighbour_filename  );
+            Log_Error_Message("ERROR: No Read Access ... " + input_Neighbour_filename  );
             return;
         }
         if ( ! CheckFileAccess(input_River_filename, "ReadOnly") )
         {
-            Log_Error_Message("ERROR: No Read Access ... </span>" + input_River_filename  );
+            Log_Error_Message("ERROR: No Read Access ... " + input_River_filename  );
             return;
         }
         if ( ! CheckFileAccess(output_RivData_filename, "WriteOnly") )
         {
-            Log_Error_Message("ERROR: No Write Access ... </span>" + output_RivData_filename  );
+            Log_Error_Message("ERROR: No Write Access ... " + output_RivData_filename  );
             return;
         }
 
@@ -695,7 +695,7 @@ void RivDataFile::on_pushButtonRun_clicked()
         // Running Riv Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        Log_Message("Running Riv Data File ... <br>");
+        Log_Message("Running Riv Data File ... ");
 
         QString RiverShpFileName, RiverDbfFileName, xRiverShpFileName, xRiverDbfFileName;
 
@@ -724,8 +724,8 @@ void RivDataFile::on_pushButtonRun_clicked()
 
         if( ErrorRiv != 0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Riv Data File Processing Failed ... </span>")+tr("<br>"));
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE RIV: ... </span>")+QString::number(ErrorRiv)+tr("<br>"));
+            Log_Error_Message("Riv Data File Processing Failed ... ");
+            Log_Error_Message("RETURN CODE RIV: ... " + QString::number(ErrorRiv) );
             return;
         }
 
@@ -743,7 +743,7 @@ void RivDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Riv Data File Processing Complete.</b>")+tr("<br>"));
+        Log_Message("Riv Data File Processing Complete.");
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

@@ -82,7 +82,7 @@ void RiverTemporal::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -102,7 +102,7 @@ void RiverTemporal::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -620,17 +620,17 @@ Time_Values RiverTemporal::Get_Time_Steps(QString filename, int num_elements, bo
 
         TempFileTextStream >> TIMESTEP1;
 
-        if(message) qDebug() << "Time Step1 = " << TIMESTEP1 << "\n";
+        //if(message) qDebug() << "Time Step1 = " << TIMESTEP1 << "\n";
 
         for (int i=0; i < num_elements+1; i++)
         {
             TempFileTextStream >> TempDouble;
-            if(message) qDebug() << TempDouble << ", ";
+            //if(message) qDebug() << TempDouble << ", ";
         }
         TempFileTextStream >> TIMESTEP2;
         TempFile.close();
 
-        if(message) qDebug() << "\nTime Step2 = " << TIMESTEP2 << "\n";
+        //if(message) qDebug() << "\nTime Step2 = " << TIMESTEP2 << "\n";
 
         //time_step = TIMESTEP2 - TIMESTEP1;
         //if(message) qDebug() << "Time Step = " << time_step << "\n";

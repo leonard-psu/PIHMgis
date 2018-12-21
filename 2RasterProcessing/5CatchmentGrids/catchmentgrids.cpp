@@ -29,11 +29,11 @@ CatchmentGrids::CatchmentGrids(QWidget *parent, QString filename) :
         filename_open_project = filename;
         bool found_file = false;
 
-        // ** Start: Fill Form If Module Has Been Run Previously
+        // Start: Fill Form If Module Has Been Run Previously
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project);
         }
         else
         {
@@ -115,13 +115,13 @@ bool CatchmentGrids::Load_Project_Settings()
         bool LinkGrids_check = Check_LinkGrids_Input(LinkGrids_filename);
         if(!LinkGrids_check)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: LinkGrids input does not exist. </span>") +tr("<br>"));
+            Log_Error_Message("LinkGrids input does not exist. ");
         }
 
         bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGrids_filename);
         if(!FlowDirGrids_check)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrid input does not exist. </span>") +tr("<br>"));
+            Log_Error_Message("FlowDirGrid input does not exist. ");
         }
 
         bool CatchmentGrids_check = Check_CatchmentGrids_Output(CatchmentGrids_filename, true);
@@ -158,7 +158,7 @@ bool CatchmentGrids::Check_LinkGrids_Input(QString file)
             ui->lineEditLinkGrids->setStyleSheet("color: red;");
             ui->lineEditLinkGrids->setText(file);
 
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: LinkGrids input does not exist: </span>") + file +tr("<br>"));
+            Log_Error_Message("LinkGrids input does not exist: " + file );
             result = false;
         }
 
@@ -194,7 +194,7 @@ bool CatchmentGrids::Check_FlowDirGrids_Input(QString file)
             ui->lineEditFlowDirGrids->setStyleSheet("color: red;");
             ui->lineEditFlowDirGrids->setText(file);
 
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrids input does not exist: </span>") + file +tr("<br>"));
+            Log_Error_Message("FlowDirGrids input does not exist: " + file );
             result = false;
         }
 
@@ -223,7 +223,7 @@ bool CatchmentGrids::Check_CatchmentGrids_Output(QString file, bool color_and_me
         {
             if(color_and_message_if_exists)
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">Warning: CatchmentGrids output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                Log_Message("Warning: CatchmentGrids output already exists: " + file + " You may need to delete these files.");
             }
 
             ui->lineEditCatchmentGrids->setStyleSheet("color: red;");
@@ -322,7 +322,7 @@ void CatchmentGrids::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message(message);
         }
 
     } catch (...) {
@@ -342,7 +342,7 @@ void CatchmentGrids::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message(message);
         }
 
     } catch (...) {
@@ -368,7 +368,7 @@ void CatchmentGrids::on_pushButtonLinkGrids_clicked()
             bool LinkGrids_check = Check_LinkGrids_Input(LinkGridFileName);
             if(!LinkGrids_check)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: LinkGrids input does not exist. </span>") +tr("<br>"));
+                Log_Error_Message("LinkGrids input does not exist.");
             }
 
             pushButtonSetFocus();
@@ -397,7 +397,7 @@ void CatchmentGrids::on_pushButtonFlowDirGrids_clicked()
             bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGridFileName);
             if(!FlowDirGrids_check)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrids input does not exist. </span>") +tr("<br>"));
+                Log_Error_Message("FlowDirGrids input does not exist.");
             }
 
             pushButtonSetFocus();
@@ -466,14 +466,14 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         bool LinkGridsCheck = Check_LinkGrids_Input(LinkGrids_filename);
         if(!LinkGridsCheck)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: LinkGrids Input File Missing </span>")+tr("<br>"));
+            Log_Error_Message("LinkGrids Input File Missing");
             return;
         }
 
         bool FlowDirGridsCheck = Check_FlowDirGrids_Input(FlowDirGrids_filename);
         if(!FlowDirGridsCheck)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: FlowDirGrids Input File Missing </span>")+tr("<br>"));
+            Log_Error_Message("FlowDirGrids Input File Missing");
             return;
         }
 
@@ -491,18 +491,18 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(LinkGrids_filename, "ReadOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + LinkGrids_filename + tr("<br>"));
+            Log_Error_Message("No Read Access to ... " + LinkGrids_filename);
             return;
         }
         if ( ! CheckFileAccess(FlowDirGrids_filename, "ReadOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + FlowDirGrids_filename + tr("<br>"));
+            Log_Error_Message("No Read Access to ... " + FlowDirGrids_filename );
             return;
         }
 
         if ( ! CheckFileAccess(CatchmentGrids_filename, "WriteOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + CatchmentGrids_filename + tr("<br>"));
+            Log_Error_Message("No Write Access to ... " + CatchmentGrids_filename );
             return;
         }
 
@@ -515,12 +515,10 @@ void CatchmentGrids::on_pushButtonRun_clicked()
                                  FlowDirGrids_filename,
                                  CatchmentGrids_filename );
 
-        qDebug()<<tr("ErrorCat = ") << QString::number(ErrorCat);
-
         if( ErrorCat != 0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Catchment Grid Processing Failed ... </span>")+tr("<br>"));
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorCat)+tr("<br>"));
+            Log_Error_Message("Catchment Grid Processing Failed ... ");
+            Log_Error_Message("RETURN CODE: ... " + QString::number(ErrorCat));
             return;
         }
 
@@ -530,14 +528,14 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         CatchmentGridsCheck = Check_CatchmentGrids_Output(CatchmentGrids_filename, true);
         if(!CatchmentGridsCheck)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: CatchmentGrids failed : </span>") + tr("<br>"));
+            Log_Error_Message("Error: CatchmentGrids failed ");
             return;
         }
 
         qint64 size = file_Size(CatchmentGrids_filename);
         if( size < 1)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: CatchmentGrids failed, invalid file size: </span>") + size +tr("<br>"));
+            Log_Error_Message("CatchmentGrids failed, invalid file size: " + QString::number(size) );
             return;
         }
 
@@ -556,7 +554,7 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Catchment Grids Processing Completed.</b>")+tr("<br>"));
+        Log_Message("Catchment Grids Processing Completed.");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 

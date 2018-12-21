@@ -13,22 +13,32 @@ using namespace std;
 // User interface to PIHMgis v3.5
 extern PIHMgisDialog *main_window;
 
+// User can now change this value, which I observed is necessary.
+// As demonstrated here: https://doi.org/10.1016/j.envsoft.2014.07.015
+double dissolve_epsilon = 0.000001f;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// compare slopes of two lines
+// HAS been used in compareLines (commented out).
+// TODO Keeping code for now, until testing finished
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int compareSlope(Lines *a, Lines *b)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start compareSlope";
 
     try {
-        if(b->x2-b->x1 !=0 && a->x2-a->x1 !=0)
+
+        if(b->x2 - b->x1 != 0 && a->x2 - a->x1 != 0)
         {
-            if(fabs(fabs((b->y2-b->y1)/(b->x2-b->x1))-fabs((a->y2-a->y1)/(a->x2-a->x1))) < epsilon )
+            if(fabs(fabs((b->y2 - b->y1)/(b->x2 - b->x1)) - fabs((a->y2 - a->y1)/(a->x2 - a->x1))) < dissolve_epsilon )
                 return 1;
             else
                 return 0;
         }
         else
         {
-            if(fabs(b->x2-b->x1)-fabs(a->x2-a->x1) < epsilon)
+            if(fabs(b->x2 - b->x1) - fabs(a->x2 - a->x1) < dissolve_epsilon)
                 return 1;
             else
                 return 0;
@@ -36,31 +46,36 @@ int compareSlope(Lines *a, Lines *b)
 
     } catch (...) {
         qDebug() << "Error: compareSlope is returning w/o checking";
-        return -100;
+        return -9000;
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// compare lines
+// Used in dissolve below
+// TODO: Decide on Slope option
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int compareLines(Lines *a, Lines *b)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start compareLines";
 
     try {
-        if(fabs(a->x1-b->x1)<epsilon && fabs(a->y1-b->y1)<epsilon)
+        if(fabs(a->x1 - b->x1) < dissolve_epsilon && fabs(a->y1 - b->y1) < dissolve_epsilon)
         {
-            if(fabs(a->x2-b->x2)<epsilon && fabs(a->y2-b->y2)<epsilon)
+            if(fabs(a->x2 - b->x2) < dissolve_epsilon && fabs(a->y2 - b->y2) < dissolve_epsilon)
                 return 1;
             else
                 return 0;
         }
-        else if(fabs(a->x1-b->x2)<epsilon && fabs(a->y1-b->y2)<epsilon)
+        else if(fabs(a->x1 - b->x2) < dissolve_epsilon && fabs(a->y1 - b->y2) < dissolve_epsilon)
         {
-            if(fabs(a->x2-b->x1)<epsilon && fabs(a->y2-b->y1)<epsilon)
+            if(fabs(a->x2 - b->x1) < dissolve_epsilon && fabs(a->y2 - b->y1) < dissolve_epsilon)
                 return 1;
             else
                 return 0;
         }
-        /*
+        /* KEEP CODE FOR NOW
         else if(compareSlope(a,b)==1){
                 if(fabs(a->x1-b->x1)<0.0001 && fabs(a->y1-b->y1)<0.0001 && ((a->x1-a->x2)/(b->x1-b->x2)>0 || (a->y1-a->y2)/(b->y1-b->y2)>0))
                         return 1;
@@ -79,22 +94,26 @@ int compareLines(Lines *a, Lines *b)
 
     } catch (...) {
         qDebug() << "Error: compareLines is returning w/o checking";
-        return 0;
+        return -9000;
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Does point and line interesect?
+// Used in dissolve below
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 inline int doesIntersect(Lines *l, double x1, double y1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start doesIntersect";
 
     try {
-        double a=sqrt(pow(l->x1-l->x2,2)+pow(l->y1-l->y2,2));
-        double b=sqrt(pow(l->x1-x1,2)+pow(l->y1-y1,2));
-        double c=sqrt(pow(l->x2-x1,2)+pow(l->y2-y1,2));
-        double s=(a+b+c)/2;
+        double a = sqrt(pow(l->x1 - l->x2, 2) + pow(l->y1 - l->y2, 2));
+        double b = sqrt(pow(l->x1 - x1, 2) +    pow(l->y1 - y1, 2));
+        double c = sqrt(pow(l->x2 - x1, 2) +    pow(l->y2 - y1, 2));
+        double s = (a+b+c)/2;
 
-        if(fabs(a-b-c)<epsilon && b>epsilon && c>epsilon)
+        if(fabs(a-b-c) < dissolve_epsilon && b > dissolve_epsilon && c > dissolve_epsilon)
             return 1;
         else
             return 0;
@@ -109,277 +128,531 @@ inline int doesIntersect(Lines *l, double x1, double y1)
     }
 }
 
-int dissolve(const char* shpFileName, const char* dbfFileName, const char *newshpFileName, const char *newdbfFileName)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Dissolve
+// TODO Where does 20 come from???
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName, QString qnewdbfFileName)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start dissolve";
 
     try {
+
+
+        if(qshpFileName == nullptr)
+        {
+            main_window->Log_Message("[dissolve] Error[-1000] Invalid qshpFileName.");
+            return -1000;
+        }
+        if(qdbfFileName == nullptr)
+        {
+            main_window->Log_Message("[dissolve] Error[-1001] Invalid qdbfFileName.");
+            return -1001;
+        }
+        if(qnewshpFileName == nullptr)
+        {
+            main_window->Log_Message("[dissolve] Error[-1002] Invalid qnewshpFileName.");
+            return -1002;
+        }
+        if(qnewdbfFileName == nullptr)
+        {
+            main_window->Log_Message("[dissolve] Error[-1003] Invalid qnewdbfFileName.");
+            return -1003;
+        }
+
+        if(qshpFileName.length() < 1)
+        {
+            main_window->Log_Message("[dissolve] Error[-1000] Invalid qshpFileName.");
+            return -1000;
+        }
+        if(qdbfFileName.length() < 1)
+        {
+            main_window->Log_Message("[dissolve] Error[-1001] Invalid qdbfFileName.");
+            return -1001;
+        }
+        if(qnewshpFileName.length() < 1)
+        {
+            main_window->Log_Message("[dissolve] Error[-1002] Invalid qnewshpFileName.");
+            return -1002;
+        }
+        if(qnewdbfFileName.length() < 1)
+        {
+            main_window->Log_Message("[dissolve] Error[-1003] Invalid qnewdbfFileName.");
+            return -1003;
+        }
+
+        QByteArray fname = qshpFileName.toLatin1();
+        char *shpFileName = fname.data();
+        QByteArray fname1 = qdbfFileName.toLatin1();
+        char *dbfFileName = fname1.data();
+        QByteArray fname2 = qnewshpFileName.toLatin1();
+        char *newshpFileName = fname2.data();
+        QByteArray fname3 = qnewdbfFileName.toLatin1();
+        char *newdbfFileName = fname3.data();
+
         int recordCount = 0;
 
-        SHPHandle shp = SHPOpen(shpFileName, "rb");    
+        SHPHandle shp = SHPOpen(shpFileName, "rb");
         if(shp == nullptr)
         {
-            main_window->Log_Message("[dissolve] Error shpFileName is NULL. Returning 79.");
+            main_window->Log_Message("[dissolve] Error[79] shpFileName is NULL. ");
             return 79;
         }
 
         DBFHandle dbf = DBFOpen(dbfFileName, "rb");
         if(dbf == nullptr)
         {
-            main_window->Log_Message("[dissolve] Error dbfFileName is NULL. Returning 79.");
-            return 79;
+            main_window->Log_Message("[dissolve] Error[80] dbfFileName is NULL. ");
+            SHPClose(shp);
+            return 80;
         }
-
-        if ( shp == nullptr || dbf == nullptr )
-            return 79;
 
         int InfoShpType;
         SHPGetInfo (shp, nullptr, &InfoShpType, nullptr, nullptr);
         if ( InfoShpType != SHPT_POLYGON )
         {
-            cout << "Not a SHPT_POLYGON: ... " << shpFileName << "\n";
-            cout << "SHAPE TYPE = " << InfoShpType << "\n";
-            return InfoShpType;
+            main_window->Log_Message("[dissolve] Error[81] Not a SHPT_POLYGON. SHAPE TYPE = " + QString::number(InfoShpType));
+            SHPClose(shp);
+            DBFClose(dbf);
+            return 81;
         }
 
         SHPHandle newshp = SHPCreate(newshpFileName, SHPT_POLYGON);
         if(newshp == nullptr)
         {
-            main_window->Log_Message("[dissolve] Error newshpFileName is NULL. Returning 94.");
-            return 94;
+            main_window->Log_Message("[dissolve] Error[82] newshpFileName is NULL.");
+            SHPClose(shp);
+            DBFClose(dbf);
+            return 82;
         }
         DBFHandle newdbf = DBFCreate(newdbfFileName);
         if(newdbf == nullptr)
         {
-            main_window->Log_Message("[dissolve] Error newdbfFileName is NULL. Returning 94.");
-            return 94;
+            main_window->Log_Message("[dissolve] Error[83] newdbfFileName is NULL. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            return 83;
         }
 
-        if ( newshp == nullptr || newdbf == nullptr )
-            return 94;
-
         int PolyID  = DBFAddField(newdbf,  "PolyID", FTInteger, 5, 0);
-        if ( PolyID == -1 )
-            return 97;
+        if ( PolyID < 0 )
+        {
+            main_window->Log_Message("[dissolve] Error[84] Failed to add PolyID field. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 84;
+        }
+        if ( PolyID > 5000 ) //5000 is a guess
+        {
+            main_window->Log_Message("[dissolve] Error[85] Failed to add PolyID field. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 85;
+        }
 
         recordCount = DBFGetRecordCount(dbf);
+        if ( recordCount <= 0 )
+        {
+            main_window->Log_Message("[dissolve] Error[86] recordCount <= 0. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 86;
+        }
+        if ( recordCount > 500000 ) //500000 is a guess
+        {
+            main_window->Log_Message("[dissolve] Error[87] recordCount > 500000. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 87;
+        }
 
         SHPObject **obj = new SHPObject*[recordCount];
-        int vertices; int totalLines=0;
-        Lines **lines; int **lineFlag;
-        double *dfXMax, *dfXMin, *dfYMax, *dfYMin;
-        lines = (Lines **)malloc(recordCount*sizeof(Lines *));
-        lineFlag = (int **)malloc(recordCount*sizeof(int *));
-        dfXMax = (double *)malloc(recordCount*sizeof(double));
-        dfXMin = (double *)malloc(recordCount*sizeof(double));
-        dfYMax = (double *)malloc(recordCount*sizeof(double));
-        dfYMin = (double *)malloc(recordCount*sizeof(double));
+        recordCount = DBFGetRecordCount(dbf);
+        if ( obj == nullptr )
+        {
+            main_window->Log_Message("[dissolve] Error[88] SHPObject is null. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 88;
+        }
 
+        int vertices = -1;
+        int totalLines = 0;
+        Lines **lines;
+        int **lineFlag;
         int *numLines;
-        numLines=(int *)malloc(recordCount*sizeof(int));
+
+        double *dfXMax, *dfXMin, *dfYMax, *dfYMin;
+
+        lines = (Lines **)malloc(recordCount * sizeof(Lines *));
+        if ( lines == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error[89] lines is null" );
+            return 89;
+        }
+        lineFlag = (int **)malloc(recordCount * sizeof(int *));
+        if ( lineFlag == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error[90] lineFlag is null" );
+            return 90;
+        }
+        dfXMax = (double *)malloc(recordCount * sizeof(double));
+        if ( dfXMax == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error[91] dfXMax is null" );
+            return 91;
+        }
+        dfXMin = (double *)malloc(recordCount * sizeof(double));
+        if ( dfXMin == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error[92] dfXMin is null" );
+            return 92;
+        }
+        dfYMax = (double *)malloc(recordCount * sizeof(double));
+        if ( dfYMax == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error[93] dfYMax is null" );
+            return 93;
+        }
+        dfYMin = (double *)malloc(recordCount * sizeof(double));
+        if ( dfYMin == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error[94] dfYMin is null" );
+            return 94;
+        }
+        numLines = (int *)malloc(recordCount * sizeof(int));
+        if ( numLines == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error[95] numLines is null" );
+            return 95;
+        }
+
+        bool error_found = false;
+        bool line_error_found = false;
+        bool lineFlag_error_found = false;
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         //1 Read each polygon and store points in form of lines
-        for(int i=0; i<recordCount; i++)
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        for(int i=0; i < recordCount; i++)
         {
             vertices = 0;
             obj[i] = SHPReadObject(shp, i);
-            dfXMax[i]=obj[i]->dfXMax; dfXMin[i]=obj[i]->dfXMin;
-            dfYMax[i]=obj[i]->dfYMax; dfYMin[i]=obj[i]->dfYMin;
-            cout<<"poly= "<<i<<" vertices= "<<obj[i]->nVertices<<"\n";
-            vertices=obj[i]->nVertices;
-            numLines[i]=vertices-1;
-            totalLines+=numLines[i];
-            lines[i]= (Lines *)malloc(vertices*20*sizeof(Lines));
-            lineFlag[i]=(int *)malloc(vertices*20*sizeof(int));
-            for(int j=0; j<vertices-1; j++)
+            if( obj[i] == nullptr)
             {
-                lines[i][j].x1=obj[i]->padfX[j];
-                lines[i][j].y1=obj[i]->padfY[j];
-                lines[i][j].x2=obj[i]->padfX[j+1];
-                lines[i][j].y2=obj[i]->padfY[j+1];
-                lineFlag[i][j]=1;
+                error_found = true;
             }
+
+            if(!error_found)
+            {
+                dfXMax[i] = obj[i]->dfXMax;
+                dfXMin[i] = obj[i]->dfXMin;
+                dfYMax[i] = obj[i]->dfYMax;
+                dfYMin[i] = obj[i]->dfYMin;
+
+                vertices = obj[i]->nVertices;
+                numLines[i] = vertices-1;
+                totalLines += numLines[i];
+
+                lines[i] = (Lines *)malloc(vertices * 20 * sizeof(Lines)); //Where does 20 come from?
+                if ( lines[i] == nullptr)
+                {
+                    line_error_found = true;
+                }
+
+                if(!line_error_found)
+                {
+                    lineFlag[i] = (int *)malloc(vertices * 20 * sizeof(int));  //Where does 20 come from?
+
+                    if ( lineFlag[i] == nullptr)
+                    {
+                        lineFlag_error_found = true;
+                    }
+
+                    if(!line_error_found)
+                    {
+                        for(int j=0; j < vertices-1; j++)
+                        {
+                            lines[i][j].x1 = obj[i]->padfX[j];
+                            lines[i][j].y1 = obj[i]->padfY[j];
+                            lines[i][j].x2 = obj[i]->padfX[j+1];
+                            lines[i][j].y2 = obj[i]->padfY[j+1];
+                            lineFlag[i][j] = 1;
+                        }
+                    }
+
+                }
+            }
+
         } //1 done!
 
-        cout<<"vertices= "<<vertices<<"\n";
-        cout<<"totalLines1= "<<totalLines<<"\n";
-
-        //1.1 Find intersections and insert a line
-        //double fa, fb;
-        double minX, maxX, minY, maxY;
-        for(int i=0; i<recordCount; i++)
+        if ( error_found )
         {
-            cout<<"done 1.1 poly "<<i<<"\n";
-            for(int k=i+1; k<recordCount; k++)
+            main_window->Log_Message("[dissolve] Error[96] SHPReadObject null. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 96;
+        }
+        if ( line_error_found)
+        {
+            main_window->Log_Message("[dissolve] Error[97] line malloc null. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 97;
+        }
+        if ( lineFlag_error_found)
+        {
+            main_window->Log_Message("[dissolve] Error[98] line flag malloc null. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 98;
+        }
+        if ( vertices <= 0 )
+        {
+            main_window->Log_Message("[dissolve] Error[99] recordCount <= 0. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 99;
+        }
+        if ( recordCount > 500000 ) //500000 is a guess
+        {
+            main_window->Log_Message("[dissolve] Error[100] recordCount > 500000. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 100;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //1.1 Find intersections and insert a line
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        double minX, maxX, minY, maxY;
+
+        for(int i = 0; i < recordCount; i++)
+        {
+            for(int k = i+1; k < recordCount; k++)
             {
-                if(i==k) continue;
-                if((dfXMax[i]<dfXMin[k] || dfXMax[k]<dfXMin[i] || dfYMax[i]<dfYMin[k] || dfYMax[k]<dfYMin[i]))
+                if(i==k)
                     continue;
 
-                cout<<"k = "<<k<<"\n";
-                for(int j=0; j<numLines[i]; j++)
+                if((dfXMax[i] < dfXMin[k] || dfXMax[k] < dfXMin[i] || dfYMax[i] < dfYMin[k] || dfYMax[k] < dfYMin[i]))
+                    continue;
+
+                for(int j=0; j  <numLines[i]; j++)
                 {
                     for(int l=0; l<numLines[k]; l++)
                     {
-                        //if(compareLines(&(lines[i][j]), &(lines[k][l]))!=1){
-                        if(lines[i][j].x1>lines[i][j].x2)
+                        if(lines[i][j].x1 > lines[i][j].x2)
                         {
-                            minX=lines[i][j].x2;
-                            maxX=lines[i][j].x1;
+                            minX = lines[i][j].x2;
+                            maxX = lines[i][j].x1;
                         }
                         else
                         {
-                            minX=lines[i][j].x1;
-                            maxX=lines[i][j].x2;
+                            minX = lines[i][j].x1;
+                            maxX = lines[i][j].x2;
                         }
 
-                        if(lines[i][j].y1>lines[i][j].y2)
+                        if(lines[i][j].y1 > lines[i][j].y2)
                         {
-                            minY=lines[i][j].y2;
-                            maxY=lines[i][j].y1;
+                            minY = lines[i][j].y2;
+                            maxY = lines[i][j].y1;
                         }
                         else
                         {
-                            minY=lines[i][j].y1;
-                            maxY=lines[i][j].y2;
+                            minY = lines[i][j].y1;
+                            maxY = lines[i][j].y2;
                         }
 
-                        if(lines[k][l].x1>=minX && lines[k][l].x1<=maxX && lines[k][l].y1>=minY && lines[k][l].y1<=maxY)
+                        if(lines[k][l].x1 >= minX && lines[k][l].x1 <= maxX && lines[k][l].y1 >= minY && lines[k][l].y1 <= maxY)
                         {
-                            //if(lines[k][l].x1>dfXMin[i] && lines[k][l].x1<dfXMax[i] && lines[k][l].y1>dfYMin[i] && lines[k][l].y1<dfYMax[i]){
-                            if(doesIntersect(&(lines[i][j]), lines[k][l].x1, lines[k][l].y1)==1)
+                            if(doesIntersect(&(lines[i][j]), lines[k][l].x1, lines[k][l].y1) == 1)
                             {
-                                lines[i][numLines[i]].x1=lines[k][l].x1;
-                                lines[i][numLines[i]].y1=lines[k][l].y1;
-                                lines[i][numLines[i]].x2=lines[i][j].x2;
-                                lines[i][numLines[i]].y2=lines[i][j].y2;
-                                lineFlag[i][numLines[i]]=1;
-                                numLines[i]++; totalLines++;
-                                lines[i][j].x2=lines[k][l].x1;
-                                lines[i][j].y2=lines[k][l].y1;
-                                continue;
-                            }
-                        }
-                        if(lines[k][l].x2>=minX && lines[k][l].x2<=maxX && lines[k][l].y2>=minY && lines[k][l].y2<=maxY)
-                        {
-                            //if(lines[k][l].x2>dfXMin[i] && lines[k][l].x2<dfXMax[i] && lines[k][l].y2>dfYMin[i] && lines[k][l].y2<dfYMax[i]){
-                            if(doesIntersect(&(lines[i][j]), lines[k][l].x2, lines[k][l].y2)==1)
-                            {
-                                lines[i][numLines[i]].x1=lines[k][l].x2;
-                                lines[i][numLines[i]].y1=lines[k][l].y2;
-                                lines[i][numLines[i]].x2=lines[i][j].x2;
-                                lines[i][numLines[i]].y2=lines[i][j].y2;
-                                lineFlag[i][numLines[i]]=1;
-                                numLines[i]++; totalLines++;
-                                lines[i][j].x2=lines[k][l].x2;
-                                lines[i][j].y2=lines[k][l].y2;
+                                lines[i][numLines[i]].x1 = lines[k][l].x1;
+                                lines[i][numLines[i]].y1 = lines[k][l].y1;
+                                lines[i][numLines[i]].x2 = lines[i][j].x2;
+                                lines[i][numLines[i]].y2 = lines[i][j].y2;
+                                lineFlag[i][numLines[i]] = 1;
+                                numLines[i]++;
+                                totalLines++;
+                                lines[i][j].x2 = lines[k][l].x1;
+                                lines[i][j].y2 = lines[k][l].y1;
                                 continue;
                             }
                         }
 
-                        if(lines[k][l].x1>lines[k][l].x2)
+                        if(lines[k][l].x2 >= minX && lines[k][l].x2 <= maxX && lines[k][l].y2 >= minY && lines[k][l].y2 <= maxY)
                         {
-                            minX=lines[k][l].x2;
-                            maxX=lines[k][l].x1;
-                        }
-                        else
-                        {
-                            minX=lines[k][l].x1;
-                            maxX=lines[k][l].x2;
-                        }
-
-                        if(lines[k][l].y1>lines[k][l].y2)
-                        {
-                            minY=lines[k][l].y2;
-                            maxY=lines[k][l].y1;
-                        }
-                        else
-                        {
-                            minY=lines[k][l].y1;
-                            maxY=lines[k][l].y2;
-                        }
-
-                        if(lines[i][j].x1>=minX && lines[i][j].x1<=maxX && lines[i][j].y1>=minY && lines[i][j].y1<=maxY)
-                        {
-                            //if(lines[i][j].x1>dfXMin[k] && lines[i][j].x1<dfXMax[k] && lines[i][j].y1>dfYMin[k] && lines[i][j].y1<dfYMax[k]){
-                            if(doesIntersect(&(lines[k][l]), lines[i][j].x1, lines[i][j].y1)==1)
+                            if(doesIntersect(&(lines[i][j]), lines[k][l].x2, lines[k][l].y2) == 1)
                             {
-                                lines[k][numLines[k]].x1=lines[i][j].x1;
-                                lines[k][numLines[k]].y1=lines[i][j].y1;
-                                lines[k][numLines[k]].x2=lines[k][l].x2;
-                                lines[k][numLines[k]].y2=lines[k][l].y2;
-                                lineFlag[k][numLines[k]]=1;
-                                numLines[k]++; totalLines++;
-                                lines[k][l].x2=lines[i][j].x1;
-                                lines[k][l].y2=lines[i][j].y1;
+                                lines[i][numLines[i]].x1 = lines[k][l].x2;
+                                lines[i][numLines[i]].y1 = lines[k][l].y2;
+                                lines[i][numLines[i]].x2 = lines[i][j].x2;
+                                lines[i][numLines[i]].y2 = lines[i][j].y2;
+                                lineFlag[i][numLines[i]] = 1;
+                                numLines[i]++;
+                                totalLines++;
+                                lines[i][j].x2 = lines[k][l].x2;
+                                lines[i][j].y2 = lines[k][l].y2;
                                 continue;
                             }
                         }
-                        if(lines[i][j].x2>=minX && lines[i][j].x2<=maxX && lines[i][j].y2>=minY && lines[i][j].y2<=maxY)
+
+                        if(lines[k][l].x1 > lines[k][l].x2)
                         {
-                            //if(lines[i][j].x2>dfXMin[k] && lines[i][j].x2<dfXMax[k] && lines[i][j].y2>dfYMin[k] && lines[i][j].y2<dfYMax[k]){
+                            minX = lines[k][l].x2;
+                            maxX = lines[k][l].x1;
+                        }
+                        else
+                        {
+                            minX = lines[k][l].x1;
+                            maxX = lines[k][l].x2;
+                        }
+
+                        if(lines[k][l].y1 > lines[k][l].y2)
+                        {
+                            minY = lines[k][l].y2;
+                            maxY = lines[k][l].y1;
+                        }
+                        else
+                        {
+                            minY = lines[k][l].y1;
+                            maxY = lines[k][l].y2;
+                        }
+
+                        if(lines[i][j].x1 >= minX && lines[i][j].x1 <= maxX && lines[i][j].y1 >= minY && lines[i][j].y1 <= maxY)
+                        {
+                            if(doesIntersect(&(lines[k][l]), lines[i][j].x1, lines[i][j].y1) == 1)
+                            {
+                                lines[k][numLines[k]].x1 = lines[i][j].x1;
+                                lines[k][numLines[k]].y1 = lines[i][j].y1;
+                                lines[k][numLines[k]].x2 = lines[k][l].x2;
+                                lines[k][numLines[k]].y2 = lines[k][l].y2;
+                                lineFlag[k][numLines[k]] = 1;
+                                numLines[k]++;
+                                totalLines++;
+                                lines[k][l].x2 = lines[i][j].x1;
+                                lines[k][l].y2 = lines[i][j].y1;
+                                continue;
+                            }
+                        }
+
+                        if(lines[i][j].x2 >= minX && lines[i][j].x2 <= maxX && lines[i][j].y2 >= minY && lines[i][j].y2 <= maxY)
+                        {
                             if(doesIntersect(&(lines[k][l]), lines[i][j].x2, lines[i][j].y2)==1)
                             {
-                                lines[k][numLines[k]].x1=lines[i][j].x2;
-                                lines[k][numLines[k]].y1=lines[i][j].y2;
-                                lines[k][numLines[k]].x2=lines[k][l].x2;
-                                lines[k][numLines[k]].y2=lines[k][l].y2;
-                                lineFlag[k][numLines[k]]=1;
-                                numLines[k]++; totalLines++;
-                                lines[k][l].x2=lines[i][j].x2;
-                                lines[k][l].y2=lines[i][j].y2;
+                                lines[k][numLines[k]].x1 = lines[i][j].x2;
+                                lines[k][numLines[k]].y1 = lines[i][j].y2;
+                                lines[k][numLines[k]].x2 = lines[k][l].x2;
+                                lines[k][numLines[k]].y2 = lines[k][l].y2;
+                                lineFlag[k][numLines[k]] = 1;
+                                numLines[k]++;
+                                totalLines++;
+                                lines[k][l].x2 = lines[i][j].x2;
+                                lines[k][l].y2 = lines[i][j].y2;
                                 continue;
                             }
                         }
-                        //}
                     }
                 }
             }
         }
 
-        cout<<"totalLines2= "<<totalLines<<"\n";
-
-        //2 Delete common lines
-        int totalLines3=totalLines;
-        for(int i=0; i<recordCount; i++)
+        if ( totalLines <= 0 )
         {
-            cout<<"done 2 poly "<<i<<"\n";
-            for(int j=0; j<numLines[i]; j++)
+            main_window->Log_Message("[dissolve] Error[101] totalLines <= 0. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 101;
+        }
+        if ( totalLines > 500000 ) //500000 is a guess
+        {
+            main_window->Log_Message("[dissolve] Error[102] totalLines > 500000. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 102;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //2 Delete common lines
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        int totalLines3 = totalLines;
+        for(int i=0; i < recordCount; i++)
+        {
+            for(int j=0; j < numLines[i]; j++)
             {
-                for(int k=i+1; k<recordCount; k++)
+                for(int k=i+1; k < recordCount; k++)
                 {
-                    for(int l=0; l<numLines[k]; l++)
+                    for(int l=0; l < numLines[k]; l++)
                     {
                         if(compareLines(&(lines[i][j]), &(lines[k][l]))==1)
                         {
-                            lineFlag[i][j]=0;
-                            lineFlag[k][l]=0;
-                            totalLines3=totalLines3-2;
+                            lineFlag[i][j] = 0;
+                            lineFlag[k][l] = 0;
+                            totalLines3 = totalLines3-2;
                         }
                     }
                 }
             }
-        }// 2 done!
-        cout<<"totalLines3= "<<totalLines3<<"\n";
-
-        int tempCount;
-        for(int i=0; i<recordCount; i++)
-        {
-            tempCount=0;
-            for(int j=0; j<numLines[i]; j++)
-            {
-                if(lineFlag[i][j]!=0)
-                    tempCount++;
-            }
-            cout<<".poly= "<<i<<" lines= "<<tempCount<<"\n";
         }
 
-        //3 Store polygon's lines in one place
-        Lines *newlines; int count=0;
-        newlines = (Lines *)malloc(totalLines*2*sizeof(Lines));
-        for(int i=0; i<recordCount; i++)
+        int tempCount;
+        for(int i = 0; i < recordCount; i++)
         {
-            for(int j=0; j<numLines[i]; j++)
+            tempCount=0;
+            for(int j = 0; j < numLines[i]; j++)
+            {
+                if(lineFlag[i][j] != 0)
+                    tempCount++;
+            }
+            //cout<<".poly= "<<i<<" lines= "<<tempCount<<"\n";
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //3 Store polygon's lines in one place
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Lines *newlines;
+        int count=0;
+        newlines = (Lines *)malloc(totalLines * 2 * sizeof(Lines));
+        if ( newlines == nullptr )
+        {
+            main_window->Log_Message("[dissolve] Error[103] newlines is null ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 103;
+        }
+
+
+        for(int i = 0; i < recordCount; i++)
+        {
+            for(int j = 0; j < numLines[i]; j++)
             {
                 if(lineFlag[i][j]!=0)
                 {
@@ -390,46 +663,95 @@ int dissolve(const char* shpFileName, const char* dbfFileName, const char *newsh
                     count++;
                 }
             }
-        }//3 done!
-        cout<<"count= "<<count<<"\n";
+        }
 
+        if ( count <= 0 )
+        {
+            main_window->Log_Message("[dissolve] Error[104] count <= 0. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 104;
+        }
+        if ( count > 500000 ) //500000 is a guess
+        {
+            main_window->Log_Message("[dissolve] Error[105] count > 500000. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 105;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         //4 Collect all the points
-        double *X; X = (double *)malloc(count*3*sizeof(double));//new double[totalLines*2];
-        double *Y; Y = (double *)malloc(count*3*sizeof(double));//new double[totalLines*2];
-        double *Z; Z = (double *)malloc(count*3*sizeof(double));//new double[totalLines*2];
-        int numPoints=0;
-        cout<<"Assembling points... ";
-        //getchar(); getchar();
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        double *X;
+        double *Y;
+        double *Z;
 
-        X[0]=newlines[0].x1;
-        Y[0]=newlines[0].y1;
-        Z[0]=0.0;
+        X = (double *)malloc(count*3*sizeof(double));
+        if ( X == nullptr )
+        {
+            main_window->Log_Message("[dissolve] Error[106] X is null ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 106;
+        }
+        Y = (double *)malloc(count*3*sizeof(double));
+        if ( Y == nullptr )
+        {
+            main_window->Log_Message("[dissolve] Error[107] Y is null ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 107;
+        }
+        Z = (double *)malloc(count*3*sizeof(double));
+        if ( Z == nullptr )
+        {
+            main_window->Log_Message("[dissolve] Error[108] Z is null ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 108;
+        }
+
+        int numPoints = 0;
+        X[0] = newlines[0].x1;
+        Y[0] = newlines[0].y1;
+        Z[0] = 0.0;
         numPoints++;
-        X[1]=newlines[0].x2; Y[1]=newlines[0].y2; Z[1]=0.0;
+        X[1] = newlines[0].x2;
+        Y[1] = newlines[0].y2;
+        Z[1] = 0.0;
         numPoints++;
-        //cout<<X[0]<<","<<Y[0]<<" + "<<X[1]<<","<<Y[1]<<"\n";
-        int currentline=0;
-        double ptx=X[1];
-        double pty=Y[1];
+        int currentline = 0;
+        double ptx = X[1];
+        double pty = Y[1];
         int finished=1;
 
-        while(finished==1)
+        while(finished == 1)
         {
             finished=0;
-            for(int i=0; i<count; i++)
+            for(int i=0; i < count; i++)
             {
-                if (i!=currentline)
+                if (i != currentline)
                 {
-                    if(fabs(ptx-newlines[i].x1)<epsilon && fabs(pty-newlines[i].y1)<epsilon)
+                    if(fabs(ptx - newlines[i].x1) < dissolve_epsilon && fabs(pty - newlines[i].y1) < dissolve_epsilon)
                     {
-                        X[numPoints]=newlines[i].x2;
-                        Y[numPoints]=newlines[i].y2;
-                        //cout<<"currentline= "<<currentline<<" i= "<<i<<"n"; getchar(); getchar();
-                        ptx=newlines[i].x2;
-                        pty=newlines[i].y2;
-                        Z[numPoints]=0.0;
+                        X[numPoints] = newlines[i].x2;
+                        Y[numPoints] = newlines[i].y2;
+                        ptx = newlines[i].x2;
+                        pty = newlines[i].y2;
+                        Z[numPoints] = 0.0;
                         numPoints++;
-                        currentline=i;
+                        currentline = i;
                         if(i==0)
                         {
                             finished=0;
@@ -438,20 +760,17 @@ int dissolve(const char* shpFileName, const char* dbfFileName, const char *newsh
                         else
                             finished=1;
 
-                        //cout<<numPoints<<"\n";
-                        //cout<<"break\n";
                         break;
                     }
-                    else if(fabs(ptx-newlines[i].x2)<epsilon && fabs(pty-newlines[i].y2)<epsilon)
+                    else if(fabs(ptx-newlines[i].x2) < dissolve_epsilon && fabs(pty-newlines[i].y2) < dissolve_epsilon)
                     {
-                        X[numPoints]=newlines[i].x1;
-                        Y[numPoints]=newlines[i].y1;
-                        //cout<<"currentline= "<<currentline<<" i= "<<i<<"n"; getchar(); getchar();
-                        ptx=newlines[i].x1;
-                        pty=newlines[i].y1;
-                        Z[numPoints]=0.0;
+                        X[numPoints] = newlines[i].x1;
+                        Y[numPoints] = newlines[i].y1;
+                        ptx = newlines[i].x1;
+                        pty = newlines[i].y1;
+                        Z[numPoints] = 0.0;
                         numPoints++;
-                        currentline=i;
+                        currentline = i;
                         if(i==0)
                         {
                             finished=0;
@@ -459,33 +778,115 @@ int dissolve(const char* shpFileName, const char* dbfFileName, const char *newsh
                         }
                         else
                             finished=1;
-
-                        //cout<<numPoints<<"\n";
-                        //cout<<"break\n";
                         break;
                     }
                 }
             }
         }
-        cout<<"done\n";
 
-        SHPObject *newobj;
-        newobj = SHPCreateSimpleObject(SHPT_POLYGON, numPoints, X, Y, Z);
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        SHPObject *newobj = SHPCreateSimpleObject(SHPT_POLYGON, numPoints, X, Y, Z);
+        if ( newobj == nullptr )
+        {
+            main_window->Log_Message("[dissolve] Error[109] newobj is null ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 109;
+        }
+
         if ( SHPWriteObject(newshp, -1, newobj) < 0 )
-            return 503;
+        {
+            main_window->Log_Message("[dissolve] Error[110] SHPWriteObject failed ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 110;
+        }
+
         if ( ! DBFWriteIntegerAttribute(newdbf, 0,   PolyID,  1) )
-            return 505;
+        {
+            main_window->Log_Message("[dissolve] Error[111] DBFWriteIntegerAttribute failed ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return 111;
+        }
+
         SHPClose(shp);
         DBFClose(dbf);
-
         SHPClose(newshp);
         DBFClose(newdbf);
 
-        //SHPClose(ptshp);
-        //DBFClose(ptdbf);
+        //Clean up
+        if(Z != nullptr)
+        {
+            free(Z);
+            Z = nullptr;
+        }
+        if(Y != nullptr)
+        {
+            free(Y);
+            Y = nullptr;
+        }
+        if(X != nullptr)
+        {
+            free(X);
+            X = nullptr;
+        }
+        if(newlines != nullptr)
+        {
+            free(newlines);
+            newlines = nullptr;
+        }
+        for(int i=0; i < recordCount; i++)
+        {
+            free(lines[i]);
+            free(lineFlag[i]);
+        }
+        if(lines != nullptr)
+        {
+            free(lines);
+            lines = nullptr;
+        }
+        if(lineFlag != nullptr)
+        {
+            free(lineFlag);
+            lineFlag = nullptr;
+        }
+        if(numLines != nullptr)
+        {
+            free(numLines);
+            numLines = nullptr;
+        }
+        if(dfYMin != nullptr)
+        {
+            free(dfYMin);
+            dfYMin = nullptr;
+        }
+        if(dfXMax != nullptr)
+        {
+            free(dfXMax);
+            dfXMax = nullptr;
+        }
+        if(dfYMax != nullptr)
+        {
+            free(dfYMax);
+            dfYMax = nullptr;
+        }
+        if(dfXMin != nullptr)
+        {
+            free(dfXMin);
+            dfXMin = nullptr;
+        }
+
 
     } catch (...) {
         qDebug() << "Error: dissolve is returning w/o checking";
+        return -9000;
     }
 
     return 0;

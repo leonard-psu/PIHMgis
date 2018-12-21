@@ -34,7 +34,7 @@ CatchmentPolygon::CatchmentPolygon(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Unable to Open File: </span>") + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
         else
         {
@@ -108,7 +108,7 @@ bool CatchmentPolygon::Load_Project_Settings()
         bool CatchmentGrids_check = Check_CatchmentGrids_Input(CatchmentGrids_filename);
         if(!CatchmentGrids_check)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: CatchmentGrids input does not exist. </span>") +tr("<br>"));
+            Log_Error_Message("CatchmentGrids input does not exist. ");
         }
 
         bool CatchmentPolygon_check = Check_CatchmentPolygon_Output(CatchmentPolygon_filename, true);
@@ -189,7 +189,7 @@ void CatchmentPolygon::Log_Error_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -209,7 +209,7 @@ void CatchmentPolygon::Log_Message(QString message)
 
         if(redirect_debug_messages_to_log)
         {
-            ((PIHMgisDialog*)this->parent())->Log_Message(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
+            ((PIHMgisDialog*)this->parent())->Log_Message( message );
         }
 
     } catch (...) {
@@ -266,7 +266,7 @@ bool CatchmentPolygon::Check_CatchmentPolygon_Output(QString file, bool color_an
         {
             if(color_and_message_if_exists)
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">Warning: CatchmentPolygon output already exists: </span>") + file +tr(" You may need to delete these files.<br>"));
+                Log_Message("Warning: CatchmentPolygon output already exists: " + file + " You may need to delete these files.");
             }
 
             ui->lineEditCatchmentPolygon->setStyleSheet("color: red;");
@@ -370,7 +370,7 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         bool CatchmentGridsCheck = Check_CatchmentGrids_Input(CatchmentGrids_filename);
         if(!CatchmentGridsCheck)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: CatchmentGrids Input File Missing </span>")+tr("<br>"));
+            Log_Error_Message("CatchmentGrids Input File Missing ");
             return;
         }
 
@@ -388,20 +388,20 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ! CheckFileAccess(CatchmentGrids_filename, "ReadOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + CatchmentGrids_filename + tr("<br>"));
+            Log_Error_Message("No Read Access to ... " + CatchmentGrids_filename );
             return;
         }
 
         if ( ! CheckFileAccess(CatchmentPolygon_filename, "WriteOnly") )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Write Access to ... </span>") + CatchmentPolygon_filename + tr("<br>"));
+            Log_Error_Message("No Write Access to ... " + CatchmentPolygon_filename );
             return;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Catchment Polygon
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Catchment Polygon ... <br>");
+        Log_Message("Running Catchment Polygon ... ");
 
         QString ShpFileName, DbfFileName;
         ShpFileName = CatchmentPolygon_filename;
@@ -455,8 +455,8 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         }
         else if( ErrorCat != 0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Stream Polyline Processing Failed ... </span>")+tr("<br>"));
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">RETURN CODE: ... </span>")+QString::number(ErrorCat)+tr("<br>"));
+            Log_Error_Message("Stream Polyline Processing Failed ... " );
+            Log_Error_Message("RETURN CODE: ... " + QString::number(ErrorCat) );
             return;
         }
 
@@ -472,7 +472,7 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         qint64 size = file_Size(CatchmentPolygon_filename);
         if( size < 1)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: CatchmentPolygon failed, invalid file size: </span>") + size +tr("<br>"));
+            Log_Error_Message("CatchmentPolygon failed, invalid file size: " + size );
             return;
         }
 
@@ -517,7 +517,7 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Catchment Polyline Processing Completed.</b>")+tr("<br>"));
+        Log_Message("Catchment Polyline Processing Completed.");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 

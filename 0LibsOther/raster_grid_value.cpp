@@ -30,7 +30,7 @@ double readValue( void *data, GDALDataType type, int index )
 
         if(data == nullptr)
         {
-            qDebug() << "readValue Error: data is null. Returning zero.";
+            main_window->Log_Message("Error [readValue] Error: data is null. Returning zero.");
             return 0.0;
         }
 
@@ -59,7 +59,8 @@ double readValue( void *data, GDALDataType type, int index )
             return (double) ((double *)data)[index];
             break;
         default:
-            qDebug() <<"Data type "<< type <<" is not supported";
+            main_window->Log_Message("Error [readValue] Data type " + QString::number(type) + " is not supported");
+
         }
 
     } catch (...) {
@@ -85,7 +86,6 @@ void getExtent(GDALDataset *temp, double *ranges){
         if(temp == nullptr)
         {
             main_window->Log_Message("[getExtent] Error finding extent");
-            qDebug() << "getExtent Error: data is null. Returning WITHOUT ASSIGN EXTENT.";
             return;
         }
 
@@ -107,24 +107,16 @@ void getExtent(GDALDataset *temp, double *ranges){
         if(rasterXDimInt < 1)
         {
             main_window->Log_Message("[getExtent] Error with rasterXDimInt");
-            qDebug() << "getExtent Error: rasterXDimInt. Returning WITHOUT ASSIGN EXTENT.";
             return;
         }
         if(rasterYDimInt < 1)
         {
             main_window->Log_Message("[getExtent] Error with rasterYDimInt");
-            qDebug() << "getExtent Error: rasterYDimInt. Returning WITHOUT ASSIGN EXTENT.";
             return;
         }
 
         Xres = (Xmax - Xmin) / rasterXDimInt;
         Yres = (Ymax - Ymin) / rasterYDimInt;
-
-        if(print_many_messages)
-        {
-            qDebug() << "Xres= "<< Xres <<"\n";
-            qDebug() << "Yres= "<< Yres <<"\n";
-        }
 
         ranges[0]=Xmin;
         ranges[1]=Xmax;
@@ -163,11 +155,6 @@ double raster_grid_value(GDALDataset* layer, int bandNumber, double x, double y,
             return -9999;
         }
 
-        if(print_many_messages)
-        {
-            qDebug() << "Xres= " << Xres << "\n";
-            qDebug() << "Yres= " << Yres << "\n";
-        }
         if(Xres == 0)
         {
             main_window->Log_Message("[raster_grid_value] Error Xres is zero. Returning -9999.");
@@ -215,11 +202,6 @@ double raster_grid_value(GDALDataset* layer, int bandNumber, double x, double y,
         int col = (int) floor( (x-ranges[0])/ranges[4] );
         int row = (int) floor( (ranges[3]-y)/ranges[5] );
 
-        if(print_many_messages)
-        {
-            qDebug() << "col = " << col << "\n";
-            qDebug() << "row = " << row << "\n";
-        }
         if(col < 1)
         {
             main_window->Log_Message("[raster_grid_value] col < 1. Returning -9999.");

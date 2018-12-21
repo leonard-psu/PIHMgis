@@ -12,6 +12,7 @@ static bool print_many_messages = false;              //Not a fan of doing this,
 static bool redirect_debug_messages_to_log = true;
 
 static float epsilon = 0.000001f;
+//double dissolve_epsilon = 0.000001f;
 
 extern QString user_pihmgis_root_folder;
 extern QString user_pihmgis_project_folder;
