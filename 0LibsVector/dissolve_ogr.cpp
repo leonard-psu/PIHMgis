@@ -1,5 +1,7 @@
 //CREDIT: https://lists.osgeo.org/pipermail/discuss/2011-March/008642.html
 
+#include<QDebug>
+
 #include <assert.h>
 
 #include "gdal.h"
@@ -14,8 +16,12 @@
 #include "ogr_api.h"
 #include "gdal_priv.h"
 
+#include "globals.h"
 
-/************************************************************************/
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef struct s_attribute
 {
@@ -23,48 +29,91 @@ typedef struct s_attribute
     struct s_attribute *next;	// list link
 } t_attribute;
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// attributeNew
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 t_attribute *attributeNew()
 {
-    t_attribute *attribute;
-    attribute = (t_attribute *) malloc(sizeof(t_attribute));
-    attribute->value = nullptr;
-    attribute->next = nullptr;
+    if(print_debug_messages)
+        qDebug() << "INFO: Start attributeNew";
 
-    return(attribute);
-}
-
-void attributeInsert(t_attribute **head, const char* newValue )
-{
-    t_attribute *curr;
-    t_attribute *prev=nullptr;
-    t_attribute *item=nullptr;
-
-    curr = *head;
-    while(curr != nullptr)
-    {
-        if( strcmp( curr->value , newValue) >= 0 )
-            break;
-        prev = curr;
-        curr = curr->next;
-    }
-
-    if ( !curr || strcmp(curr->value, newValue) != 0 )	//insert a new node in the list
-    {
-        item = attributeNew();
-        item->value = newValue;
-        if(prev == nullptr)
+    try {
+        t_attribute *attribute;
+        attribute = (t_attribute *) malloc(sizeof(t_attribute));
+        if(attribute == nullptr)
         {
-            item->next = *head;	// new top
-            *head = item;		// link to old top
-        }else
-        {
-            prev->next = item;
-            item->next = curr;
+            main_window->Log_Message("[attributeNew] Malloc failed returning nullptr.");
+            return nullptr;
         }
+
+        attribute->value = nullptr;
+        attribute->next = nullptr;
+
+        return(attribute);
+
+    } catch (...) {
+        qDebug() << "Error: attributeNew is returning nullptr";
+        return nullptr;
     }
-    return;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// attributeInsert
+// Used in dissolve_ogr below
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int attributeInsert(t_attribute **head, const char* newValue )
+{
+    if(print_debug_messages)
+        qDebug() << "INFO: Start attributeInsert";
+
+    try {
+        t_attribute *curr;
+        t_attribute *prev=nullptr;
+        t_attribute *item=nullptr;
+
+        curr = *head;
+        while(curr != nullptr)
+        {
+            if( strcmp( curr->value , newValue) >= 0 )
+                break;
+            prev = curr;
+            curr = curr->next;
+        }
+
+        if ( !curr || strcmp(curr->value, newValue) != 0 )	//insert a new node in the list
+        {
+            item = attributeNew();
+            if(item == nullptr)
+            {
+                main_window->Log_Message("[attributeInsert] Failed to create new item.");
+                curr = nullptr;
+                return -1001;
+            }
+
+            item->value = newValue;
+            if(prev == nullptr)
+            {
+                item->next = *head;	// new top
+                *head = item;		// link to old top
+            }else
+            {
+                prev->next = item;
+                item->next = curr;
+            }
+        }
+        return 0 ;
+
+    } catch (...) {
+        qDebug() << "Error: attributeInsert is returning nullptr";
+        return -5000;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// attributePrint
+// Note used. Kept for debugging.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void attributePrint( t_attribute *head)
 {
     t_attribute *curr;
@@ -76,6 +125,11 @@ void attributePrint( t_attribute *head)
     }
     return;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// attributeCount
+// Used in dissolve_ogr below
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int attributeCount( t_attribute *head)
 {
     int i=0;
@@ -90,360 +144,406 @@ int attributeCount( t_attribute *head)
 
 }
 
-/************************************************************************/
-/************************************************************************/
-static void Usage()
-{
-    printf(
-                "ogrDissolve v1.0\n"
-                "Dissolves common boundaries between polygons with the same attribute value.\n"
-                "Usage: ogrDissolve [-a <attr name>] [-u] <input DS> <output DS>\n" );
-    exit( 1 );
-}
-
-/************************************************************************/
-/************************************************************************/
-void notice(const char *fmt, ...)
-{
-    va_list ap;
-
-    fprintf( stdout, "NOTICE: ");
-
-    va_start (ap, fmt);
-    vfprintf( stdout, fmt, ap);
-    va_end(ap);
-    fprintf( stdout, "\n" );
-}
-
-void log_and_exit(const char *fmt, ...)
-{
-    va_list ap;
-
-    fprintf( stdout, "ERROR: ");
-
-    va_start (ap, fmt);
-    vfprintf( stdout, fmt, ap);
-    va_end(ap);
-    fprintf( stdout, "\n" );
-    exit(1);
-}
-/************************************************************************/
-/*                                Main()                                */
-/************************************************************************/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// dissolve_ogr ogrDissolve v1.0
+// Dissolves common boundaries between polygons with the same attribute value.
+// "Usage: ogrDissolve [-a <attr name>] [-u] <input DS> <output DS>\n"
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int dissolve_ogr( int argc, char *argv[] )
 {
-    const char *pszUnionAttrib = nullptr;
-    const char *pszSrcFilename = nullptr;
-    const char *pszDstFilename = nullptr;
-    char *pzsDstFormat = nullptr;
-    const char *pzsDstFormatDefault = "ESRI Shapefile";
+    if(print_debug_messages)
+        qDebug() << "INFO: Start dissolve_ogr";
 
-    int i;
-    bool bUnpackMultiPolys = false;
-    bool bVerbose = false;
+    try {
 
-    char pszQuery[250];
+        const char *pszUnionAttrib = nullptr;
+        const char *pszSrcFilename = nullptr;
+        const char *pszDstFilename = nullptr;
+        char *pzsDstFormat = nullptr;
+        const char *pzsDstFormatDefault = "ESRI Shapefile";
 
-    /* -------------------------------------------------------------------- */
-    /*      Parse arguments.                                                */
-    /* -------------------------------------------------------------------- */
-    argc = GDALGeneralCmdLineProcessor( argc, &argv, 0 );
-    if( argc < 1 )
-        return( -argc );
+        bool bUnpackMultiPolys = false;
+        bool bVerbose = false;
 
-    if( argc == 1 )
-        Usage();
+        char pszQuery[250];
 
-    for( i = 1; i < argc; i++ )
-    {
-        if( EQUAL(argv[i],"-a") && i < argc-1 )
-            pszUnionAttrib = argv[++i];		// location (path) attribute name
-
-        else if( EQUAL(argv[i],"-u") )
-            bUnpackMultiPolys = true;
-
-        else if( EQUAL(argv[i],"-v") )
-            bVerbose = true;
-
-        else if( EQUAL(argv[i],"-of") && i < argc-1 )
-            pzsDstFormat = argv[++i];
-
-        else if( pszSrcFilename == nullptr )
+        // --------------------------------------------------------------------
+        //      Parse arguments.
+        // --------------------------------------------------------------------
+        argc = GDALGeneralCmdLineProcessor( argc, &argv, 0 );
+        if( argc <= 1 )
         {
-            pszSrcFilename = argv[i];
+            main_window->Log_Message("[dissolve_ogr] Error[-1000] Invalid arguments <= 1");
+            return -1000;
         }
-        else if( pszDstFilename == nullptr )
+
+
+        for( int i = 1; i < argc; i++ )
         {
-            pszDstFilename = argv[i];
-        }
-        else
-            Usage();
-    }
-
-    if( pszSrcFilename == nullptr )
-    {
-        CPLError( CE_Failure, CPLE_AppDefined, "An input DataSet is required." );
-        return(1);
-    }
-
-    if( pszDstFilename == nullptr )
-    {
-        CPLError( CE_Failure, CPLE_AppDefined, "An output DataSet is required." );
-        return(2);
-    }
-    if ( pzsDstFormat == nullptr )
-    {
-        pzsDstFormat = (char*)pzsDstFormatDefault;
-    }
-
-
-    /* -------------------------------------------------------------------- */
-    /*  Do requested Operations:                                            */
-    /* -------------------------------------------------------------------- */
-    //OGRDataSource	*poDS;
-
-    OGRLayer		*poLayer;
-    OGRFeature		*poFeature;
-    OGRFeatureDefn  *poFDefn;
-    OGRGeometry		*poGeometry;
-    OGRwkbGeometryType poGeomType;
-
-    //	OGRDataSource	*poUnionDS;
-    //	OGRLayer		*poUnionLayer;
-    //	OGRFeature		*poUnionFeature;
-
-    //	OGRDataSource	*poDSout;
-    OGRLayer		*poLayerOut;
-
-
-    char *pszGeom=nullptr;
-
-    long nLayers = 0;
-    long nFeatures = 0;
-    long iField = 0;
-
-    const char *pzOverlapLocation=nullptr;
-    const char *pzSidLocation=nullptr;
-
-    bool bFoundAttrib = FALSE;
-
-    /*-----------------------------------------------------------------------*/
-    /*  Open input, check for requirements:                                  */
-    /*-----------------------------------------------------------------------*/
-    OGRRegisterAll();
-
-    //poDS = OGRSFDriverRegistrar::Open( pszSrcFilename, FALSE );	// we will be updating the
-    GDALDataset *poDS = (GDALDataset*) GDALOpenEx(pszSrcFilename, GDAL_OF_READONLY, nullptr, nullptr, nullptr);
-
-    if( poDS == nullptr )
-    {
-        return(101);	//can't open dataset
-    }
-    nLayers = poDS->GetLayerCount();
-    if (nLayers == 0)
-    {
-        return(102);	//no layers in dataset
-    }
-
-    // TBD: allow mult layers:
-    poLayer = poDS->GetLayer( 0 );
-    poLayer->ResetReading();
-
-    nFeatures = poLayer->GetFeatureCount();
-
-    if ( (poFeature = poLayer->GetNextFeature()) != nullptr )
-    {
-        //--- Check Geometry type: ---//
-        poGeometry = poFeature->GetGeometryRef();
-        if( poGeometry != nullptr )
-        {
-            poGeomType = poGeometry->getGeometryType();	// TBD: check if polgon
-            if ( poGeomType != wkbMultiPolygon && poGeomType != wkbPolygon )
+            if( EQUAL(argv[i],"-a") && i < argc-1 )
             {
-                printf("Data must be polygons.\n");
+                pszUnionAttrib = argv[++i];		// location (path) attribute name
             }
-        }else
-        {
-            return(104);	//no geometry in feature
-        }
-
-        //--- Get Field of Union Attribute: ---//
-        OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-        for( iField = 0; iField < poFDefn->GetFieldCount(); iField++ )
-        {
-            OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField );
-            if ( EQUAL(poFieldDefn->GetNameRef(),pszUnionAttrib) )
+            else if( EQUAL(argv[i],"-u") )
             {
-                bFoundAttrib =  true;
-                break;
+                bUnpackMultiPolys = true;
+            }
+            else if( EQUAL(argv[i],"-v") )
+            {
+                bVerbose = true;
+            }
+            else if( EQUAL(argv[i],"-of") && i < argc-1 )
+            {
+                pzsDstFormat = argv[++i];
+            }
+            else if( pszSrcFilename == nullptr )
+            {
+                pszSrcFilename = argv[i];
+            }
+            else if( pszDstFilename == nullptr )
+            {
+                pszDstFilename = argv[i];
+            }
+            else
+            {
+                main_window->Log_Message("[dissolve_ogr] Error[-1001] Failed to parse arguments ");
+                return -1001;
             }
         }
-        if (!bFoundAttrib)
+
+        if( pszSrcFilename == nullptr )
         {
-            printf("Data must have a disolve field.\n");
-            return(105);
+            CPLError( CE_Failure, CPLE_AppDefined, "An input DataSet is required." );
+            main_window->Log_Message("[dissolve_ogr] Error[-1002] An input DataSet is required. ");
+            return -1002;
         }
 
-    }else
-    {
-        printf("No features in dataset.\n");
-        return(103);	//no features in dataset
-    }
-    /*-----------------------------------------------------------------------*/
-    /*  Create Attribute List:                                               */
-    /*-----------------------------------------------------------------------*/
-    poLayer->ResetReading();
-    i = 0;
-    const char *pszAttrValue;
-    t_attribute *attrList=nullptr;
-
-    while( (poFeature = poLayer->GetNextFeature()) != nullptr )
-    {
-        //		i++;
-        //		GDALTermProgress( ((double)i)/nFeatures, "", NULL);
-        pszAttrValue = poFeature->GetFieldAsString(iField);
-        attributeInsert( &attrList, pszAttrValue );
-    }
-
-    //	attributePrint(attrList);
-
-    /*-----------------------------------------------------------------------*/
-    /*  Create output:                                                       */
-    /*-----------------------------------------------------------------------*/
-    //OGRSFDriver *poDriver;
-    //poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName( pzsDstFormat );
-    GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pzsDstFormat);
-
-
-    if( poDriver == nullptr )
-    {
-        //        printf( "%s driver not available.\n", pszDriverName );
-        return(101);
-    }
-
-
-    //poDSout = poDriver->CreateDataSource( pszDstFilename, NULL );
-    GDALDataset *poDSout = poDriver->Create(pszDstFilename,0,0,0,GDT_Unknown,nullptr);
-
-    if( poDSout == nullptr )
-    {
-        //        printf( "Creation of output file failed.\n" );
-        return(102);
-    }
-
-    poLayerOut = poDSout->CreateLayer( "new_layer", NULL, poGeomType, nullptr );
-    if( poLayerOut == nullptr )
-    {
-        //        printf( "Layer creation failed.\n" );
-        return(103);
-    }
-
-    poFDefn = poLayer->GetLayerDefn();
-    for(int iField2 = 0; iField2 < poFDefn->GetFieldCount(); iField2++ )
-    {
-        OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField2 );
-
-        if( poLayerOut->CreateField( poFieldDefn ) != OGRERR_NONE )
+        if( pszDstFilename == nullptr )
         {
-            //        printf( "Creation of field failed.\n" );
-            return(104);
+            CPLError( CE_Failure, CPLE_AppDefined, "An output DataSet is required." );
+            main_window->Log_Message("[dissolve_ogr] Error[-1003] An output DataSet is required. ");
+            return -1003;
         }
-    }
 
-    /*-----------------------------------------------------------------------*/
-    /*  Process Features:                                                    */
-    /*-----------------------------------------------------------------------*/
-    poLayer->ResetReading();
-    i = 0;
-    t_attribute *curr = attrList;
-    int nAttrs = attributeCount(attrList);
+        if ( pzsDstFormat == nullptr )
+        {
+            pzsDstFormat = (char*)pzsDstFormatDefault;
+        }
 
-    OGRGeometryCollection *poCollection = new OGRGeometryCollection();
 
-    while ( curr )
-    {
-        i++;
-        if (!bVerbose )
-            GDALTermProgress( ((double)i)/nAttrs, "", nullptr);
-        else
-            printf("%d/%d. '%s'\n",i,nAttrs,curr->value);
-        //	    poLayer->ResetReading();
-        sprintf( pszQuery, "%s='%s'",pszUnionAttrib, curr->value );
-        poLayer->SetAttributeFilter( pszQuery );
+        // --------------------------------------------------------------------
+        //  Do requested Operations:
+        // --------------------------------------------------------------------
+        OGRLayer		*poLayer;
+        OGRFeature		*poFeature;
+        OGRFeatureDefn  *poFDefn;
+        OGRGeometry		*poGeometry;
+        OGRwkbGeometryType poGeomType;
+        OGRLayer		*poLayerOut;
+
+        long nLayers = 0;
+        long nFeatures = 0;
+        long iField = 0;
+        bool bFoundAttrib = FALSE;
+
+        //-----------------------------------------------------------------------
+        //  Open input, check for requirements:
+        //-----------------------------------------------------------------------
+        OGRRegisterAll();
+
+        GDALDataset *poDS = (GDALDataset*) GDALOpenEx(pszSrcFilename, GDAL_OF_READONLY, nullptr, nullptr, nullptr);
+        if( poDS == nullptr )
+        {
+            main_window->Log_Message("[dissolve_ogr] Error[-1004] can't open dataset. ");
+            return -1004;
+        }
+
+        nLayers = poDS->GetLayerCount();
+        if (nLayers == 0)
+        {
+            main_window->Log_Message("[dissolve_ogr] Error[-1005] no layers in dataset. ");
+            return -1005;
+        }
+
+        poLayer = poDS->GetLayer( 0 );
         poLayer->ResetReading();
-        int nFeatures = poLayer->GetFeatureCount();
-        OGRGeometry *poGeometryOut=nullptr;
-        //		poCollection->empty();
-        int k=0;
-        while ( (poFeature = poLayer->GetNextFeature()) )
+
+        nFeatures = poLayer->GetFeatureCount();
+
+        bool error_found = false;
+        if ( (poFeature = poLayer->GetNextFeature()) != nullptr )
         {
-            k++;
-            if (bVerbose )
-                GDALTermProgress( ((double)k)/nFeatures, "", nullptr);
-            OGRGeometry *poGeometryTemp=nullptr;
-            poGeometryTemp = poFeature->GetGeometryRef();
-            if (poGeometryTemp)
+            // Check Geometry type
+            poGeometry = poFeature->GetGeometryRef();
+            if( poGeometry != nullptr )
             {
-                //				if ( poGeometryTemp->IsValid() )
-                //				{
-                //					poCollection->addGeometry(poGeometryTemp);
-                //				}else
-                //				{
-                //					poCollection->addGeometry(poGeometryTemp->Buffer(0));
-                //				}
+                poGeomType = poGeometry->getGeometryType();	// TBD: check if polygon
+                if ( poGeomType != wkbMultiPolygon && poGeomType != wkbPolygon )
+                {
+                    //Data must be polygon.
+                    error_found = true;
+                }
+            }
+            else
+            {
+                //no geometry in feature
+                error_found = true;
+            }
+
+            //--- Get Field of Union Attribute: ---//
+            OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
+            for( iField = 0; iField < poFDefn->GetFieldCount(); iField++ )
+            {
+                OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField );
+                if ( EQUAL(poFieldDefn->GetNameRef(),pszUnionAttrib) )
+                {
+                    bFoundAttrib =  true;
+                    break;
+                }
+            }
+
+            if (!bFoundAttrib)
+            {
+                main_window->Log_Message("[dissolve_ogr] Error Data must have a disolve field. ");
+                error_found = true;
+            }
+
+        }
+        else
+        {
+            main_window->Log_Message("[dissolve_ogr] Error No features in dataset. ");
+            error_found = true;
+        }
+
+        if (error_found)
+        {
+            main_window->Log_Message("[dissolve_ogr] Error(s) [-1006] found parsing features. ");
+            return -1006;
+        }
+
+        //-----------------------------------------------------------------------
+        //  Create Attribute List:
+        //-----------------------------------------------------------------------
+        poLayer->ResetReading();
+        int i = 0;
+        const char *pszAttrValue;
+        t_attribute *attrList=nullptr;
+
+        error_found = false;
+        while( (poFeature = poLayer->GetNextFeature()) != nullptr )
+        {
+            pszAttrValue = poFeature->GetFieldAsString(iField);
+            int err = attributeInsert( &attrList, pszAttrValue );
+            if(err != 0)
+            {
+                error_found = true;
+            }
+        }
+        if (error_found)
+        {
+            main_window->Log_Message("[dissolve_ogr] Error(s) [-1007] found parsing features. ");
+            return -1007;
+        }
+
+        //-----------------------------------------------------------------------
+        //  Create output:
+        //-----------------------------------------------------------------------
+        GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pzsDstFormat);
+
+        if( poDriver == nullptr )
+        {
+            main_window->Log_Message("[dissolve_ogr] Error(s) [-1008]  driver not available. Are OGL dlls/so/a missing in PIHMgis installation directory?");
+            return -1008;
+        }
+
+        GDALDataset *poDSout = poDriver->Create(pszDstFilename,0,0,0,GDT_Unknown,nullptr);
+        if( poDSout == nullptr )
+        {
+            main_window->Log_Message("[dissolve_ogr] Error(s) [-1009] Creation of output file failed. ");
+            return -1009;
+        }
+
+        poLayerOut = poDSout->CreateLayer( "new_layer", NULL, poGeomType, nullptr );
+        if( poLayerOut == nullptr )
+        {
+            main_window->Log_Message("[dissolve_ogr] Error(s) [-1010] Layer creation failed. ");
+            return -1010;
+        }
+
+        error_found = false;
+        poFDefn = poLayer->GetLayerDefn();
+        for(int iField2 = 0; iField2 < poFDefn->GetFieldCount(); iField2++ )
+        {
+            OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField2 );
+
+            if( poLayerOut->CreateField( poFieldDefn ) != OGRERR_NONE )
+            {
+                error_found = true;
+            }
+        }
+
+        if(error_found )
+        {
+            main_window->Log_Message("[dissolve_ogr] Error(s) [-1011] Creation of field failed. ");
+            return -1011;
+        }
+
+        //-----------------------------------------------------------------------
+        //  Process Features:
+        //-----------------------------------------------------------------------
+        poLayer->ResetReading();
+
+        i = 0;
+        t_attribute *curr = attrList;
+        int nAttrs = attributeCount(attrList);
+
+        OGRGeometryCollection *poCollection = new OGRGeometryCollection();
+        if( poCollection == nullptr )
+        {
+            main_window->Log_Message("[dissolve_ogr] Error [-1012] poCollection is nullptr. ");
+            return -1012;
+        }
+
+        bool feature_error_found = false;
+        bool geometry_error_found = false;
+        while ( curr )
+        {
+            i++;
+            if (!bVerbose )
+            {
+                GDALTermProgress( ((double)i)/nAttrs, "", nullptr);
+            }
+            else
+            {
+                main_window->Log_Message("[dissolve_ogr] Progress " + QString::number(i) + "/" + QString::number(nAttrs) + " " + QString(curr->value));
+            }
+
+            sprintf( pszQuery, "%s='%s'",pszUnionAttrib, curr->value );
+            poLayer->SetAttributeFilter( pszQuery );
+            poLayer->ResetReading();
+
+            int nFeatures = poLayer->GetFeatureCount();
+            if(nFeatures <= 0)
+            {
+                feature_error_found = true;
+            }
+            else
+            {
+                OGRGeometry *poGeometryOut = nullptr;
+
+                int k=0;
+                while ( (poFeature = poLayer->GetNextFeature()) )
+                {
+                    k++;
+
+                    if (bVerbose )
+                    {
+                        GDALTermProgress( ((double)k)/nFeatures, "", nullptr);
+                    }
+
+                    OGRGeometry *poGeometryTemp = nullptr;
+                    poGeometryTemp = poFeature->GetGeometryRef();
+
+                    if (poGeometryTemp)
+                    {
+                        if (poGeometryOut)
+                        {
+                            poGeometryOut = poGeometryOut->Union( poGeometryTemp);
+                        }
+                        else
+                        {
+                            poGeometryOut = poGeometryTemp->clone();
+                        }
+                    }
+                }
+
+                if (bVerbose )
+                {
+                    GDALTermProgress( ((double)nFeatures)/nFeatures, "", nullptr);
+                }
 
                 if (poGeometryOut)
                 {
-                    poGeometryOut = poGeometryOut->Union( poGeometryTemp);
-                }else
-                {
-                    poGeometryOut = poGeometryTemp->clone();
+                    char * pszTemp = nullptr;
+
+                    if ( poGeometryOut->getGeometryType() == wkbMultiPolygon )	//it's a collection
+                    {
+                        int nPolys = ((OGRGeometryCollection *)poGeometryOut)->getNumGeometries();
+
+                        OGRGeometry *poGeometryTemp = nullptr;
+
+                        if(nPolys <= 0)
+                        {
+                            geometry_error_found = true; //Does this error matter? User has decide
+                        }
+                        else if(nPolys > 500000) //500000 is a guess too large
+                        {
+                            geometry_error_found = true;
+                        }
+                        else
+                        {
+                            for (int j = 0; j < nPolys; j++ )
+                            {
+                                poGeometryTemp = ((OGRGeometryCollection *)poGeometryOut)->getGeometryRef(j);
+
+                                OGRFeature *poFeatureOut = new OGRFeature( poLayer->GetLayerDefn() );
+
+                                if(poFeatureOut == nullptr)
+                                {
+                                    geometry_error_found = false;
+                                }
+                                else
+                                {
+                                    poFeatureOut->SetField( iField, curr->value );
+                                    poFeatureOut->SetGeometryDirectly(poGeometryTemp);
+                                    poLayerOut->CreateFeature(poFeatureOut);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        OGRFeature *poFeatureOut = new OGRFeature( poLayer->GetLayerDefn() );
+                        if(poFeatureOut == nullptr)
+                        {
+                            geometry_error_found = false;
+                        }
+                        else
+                        {
+                            poFeatureOut->SetField( iField, curr->value );
+                            poFeatureOut->SetGeometryDirectly(poGeometryOut);
+                            poLayerOut->CreateFeature(poFeatureOut);
+                        }
+                    }
                 }
+
             }
+            curr = curr->next;
         }
-        //		poGeometryOut = poCollection->Buffer(0);
-        // force to a collection of polygons
-        //poCollection->addGeometry( poGeometryOut );
-        if (bVerbose )
-            GDALTermProgress( ((double)nFeatures)/nFeatures, "", nullptr);
-        if (poGeometryOut)
+
+        GDALTermProgress( ((double)nAttrs)/nAttrs, "", nullptr);
+        GDALClose(poDS);
+        GDALClose(poDSout);
+
+        if( feature_error_found )
         {
-            char * pszTemp=nullptr;
-            //			poGeometryOut->exportToWkt(&pszTemp);
-
-            if ( poGeometryOut->getGeometryType() == wkbMultiPolygon )	//it's a collection
-            {
-                int nPolys = ((OGRGeometryCollection *)poGeometryOut)->getNumGeometries();
-                OGRGeometry *poGeometryTemp=nullptr;
-                for (int j=0;j<nPolys;j++ )
-                {
-                    poGeometryTemp = ((OGRGeometryCollection *)poGeometryOut)->getGeometryRef(j);
-
-                    OGRFeature *poFeatureOut = new OGRFeature( poLayer->GetLayerDefn() );
-                    poFeatureOut->SetField( iField, curr->value );
-                    poFeatureOut->SetGeometryDirectly(poGeometryTemp);
-                    poLayerOut->CreateFeature(poFeatureOut);
-                }
-            }else
-            {
-                OGRFeature *poFeatureOut = new OGRFeature( poLayer->GetLayerDefn() );
-                poFeatureOut->SetField( iField, curr->value );
-                poFeatureOut->SetGeometryDirectly(poGeometryOut);
-                poLayerOut->CreateFeature(poFeatureOut);
-            }
+            main_window->Log_Message("[dissolve_ogr] WARNING [5000]] Feature error found. User needs to check. ");
+            return 5000;
         }
-        curr = curr->next;
+        if( geometry_error_found )
+        {
+            main_window->Log_Message("[dissolve_ogr] WARNING [5000]] Geometry error found. User needs to check. ");
+            return 5000;
+        }
+
+        //Clean up
+
+
+        return(0);
+
     }
-    GDALTermProgress( ((double)nAttrs)/nAttrs, "", nullptr);
-    //	printf("\n-- Info: .\n" );
-
-    //OGRDataSource::DestroyDataSource( poDS );
-    //OGRDataSource::DestroyDataSource( poDSout );
-    GDALClose(poDS);
-    GDALClose(poDSout);
-
-    /* -------------------------------------------------------------------- */
-    /*  Exit:                                                               */
-    /* -------------------------------------------------------------------- */
-    return(0);
+    catch (...) {
+        qDebug() << "Error: attributeInsert is returning nullptr";
+        return -5000;
+    }
 }

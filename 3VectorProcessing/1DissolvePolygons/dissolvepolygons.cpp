@@ -642,8 +642,12 @@ void DissolvePolygons::on_pushButtonRun_clicked()
                 QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/new_layer.dbf", OutDbfFileName );
 
                 // *** DISSOLVE METHOD 2 : FINISH
-
-                if ( ErrorDis == 1 || ErrorDis == 3 || ErrorDis == 8 )
+                if( ErrorDis == 5000)
+                {
+                    Log_Message("Warning: Potential Feature/Geometry errors were discovered. ... " + InpShpFileName);
+                    Log_Message("Warning: It is recommened to check the shapefiles with GIS tools.... ");
+                }
+                else if ( ErrorDis == 1 || ErrorDis == 3 || ErrorDis == 8 )
                 {
                     Log_Message("Warning: Skipping Non-Polygon Layer ... " + InpShpFileName);
                 }
