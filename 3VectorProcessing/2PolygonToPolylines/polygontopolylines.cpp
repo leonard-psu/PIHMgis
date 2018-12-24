@@ -597,7 +597,8 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
 
             if(valid_check)
             {
-                int ErrorPln = polygon_polylines((char *)qPrintable(InpShpFileName), (char *)qPrintable(InpDbfFileName), (char *)qPrintable(OutShpFileName), (char *)qPrintable(OutDbfFileName));
+                int ErrorPln = polygon_polylines(InpShpFileName, InpDbfFileName,OutShpFileName, OutDbfFileName);
+
                 if ( ErrorPln == 1 || ErrorPln == 3 || ErrorPln == 8 )
                 {
                     Log_Message("Warning: Skipping Non-Polygon Layer ... "+InpShpFileName);

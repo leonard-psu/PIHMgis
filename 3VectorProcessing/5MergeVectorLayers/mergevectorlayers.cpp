@@ -508,8 +508,11 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         OutDbfFileName.replace(QString(".shp"), QString(".dbf"));
 
         int row_count = ui->tableWidget->rowCount();
-        const char **shpFileNamesChar = new const char*[row_count];
-        const char **dbfFileNamesChar = new const char*[row_count];
+        //const char **shpFileNamesChar = new const char*[row_count];
+       // const char **dbfFileNamesChar = new const char*[row_count];
+
+        QStringList shpFileNames;
+        QStringList dbfFileNames;
 
         for (int i=0; i < row_count; i++)
         {
@@ -517,11 +520,14 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
             QString InpDbfFileName = InpShpFileName;
             InpDbfFileName.replace(QString(".shp"), QString(".dbf"));
 
-            shpFileNamesChar[i] = new char[InpShpFileName.length()+1];
-            dbfFileNamesChar[i] = new char[InpDbfFileName.length()+1];
+            //shpFileNamesChar[i] = new char[InpShpFileName.length()+1];
+            //dbfFileNamesChar[i] = new char[InpDbfFileName.length()+1];
 
-            sprintf( (char *)shpFileNamesChar[i],"%s", qPrintable(InpShpFileName) );
-            sprintf( (char *)dbfFileNamesChar[i],"%s", qPrintable(InpDbfFileName) );
+            //sprintf( (char *)shpFileNamesChar[i],"%s", qPrintable(InpShpFileName) );
+            //sprintf( (char *)dbfFileNamesChar[i],"%s", qPrintable(InpDbfFileName) );
+
+            shpFileNames.append(InpShpFileName);
+            dbfFileNames.append(InpDbfFileName);
 
             ProjectIOStringList << InpShpFileName;
         }
@@ -532,7 +538,7 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         // Run merge_lines
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        int ErrorMrg = merge_lines( shpFileNamesChar, dbfFileNamesChar, ui->tableWidget->rowCount(), (char *)qPrintable(OutShpFileName), (char *)qPrintable(OutDbfFileName) );
+        int ErrorMrg = merge_lines( shpFileNames, dbfFileNames, OutShpFileName, OutDbfFileName );
         if ( ErrorMrg == 1 || ErrorMrg == 5 || ErrorMrg == 8 )
         {
             Log_Error_Message("Non-Arc Layer specified... ");

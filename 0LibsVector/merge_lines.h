@@ -1,8 +1,10 @@
 #ifndef MERGE_LINES
 #define MERGE_LINES
 
+#include <QString>
+#include <QStringList>
 
-int merge_lines(const char** shpFileNames, const char** dbfFileNames, int fileCount, const char *newshpFileName, const char *newdbfFileName);
+int merge_lines(QStringList shpFileNames, QStringList dbfFileNames, QString newshpFileName, QString newdbfFileName);
 
 
 #endif
