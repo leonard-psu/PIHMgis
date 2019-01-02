@@ -69,31 +69,39 @@ int att_data_file(
         SHPHandle _ShpHandle = SHPOpen(qPrintable(TINShpFileName), "rb");
         if(_ShpHandle == nullptr)
         {
-            main_window->Log_Message("[att_data_file] Error TINShpFileName is NULL. Returning 27.");
-            return 27;
+            main_window->Log_Message("[att_data_file] Error[-1000] TINShpFileName is NULL. ");
+            return -1000;
         }
+
         DBFHandle _DbfHandle = DBFOpen(qPrintable(TINDbfFileName), "rb");
         if(_DbfHandle == nullptr)
         {
-            main_window->Log_Message("[att_data_file] Error TINDbfFileName is NULL. Returning 27.");
-            return 27;
+            main_window->Log_Message("[att_data_file] Error[-1001] TINDbfFileName is NULL. ");
+            return -1001;
         }
-
-        if ( _ShpHandle == nullptr || _DbfHandle == nullptr )
-            return 27;
 
         int recordCount = DBFGetRecordCount( _DbfHandle );
 
         if ( recordCount < 1 )
-            return 32;
+        {
+            main_window->Log_Message("[att_data_file] Error[-1002] recordCount < 1 ");
+            return -1002;
+        }
 
-        SHPObject *_ShpObject;
+        if ( recordCount > 500000 ) //500000 is a guess
+        {
+            main_window->Log_Message("[att_data_file] Error[-1003] recordCount > 500000 ");
+            return -1003;
+        }
 
         QFile AttDataFile(AttDataFileName);
         if ( ! AttDataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
-            return 39;
-        QTextStream AttDataFileTextStream(&AttDataFile);
+        {
+            main_window->Log_Message("[att_data_file] Error[-1004] failed to open AttDataFile ");
+            return -1004;
+        }
 
+        QTextStream AttDataFileTextStream(&AttDataFile);
 
         GDALDataset *GDALPrecipitation, *GDALTemperature,    *GDALRelativeHumidity, *GDALWindVelocity,     *GDALSolarRadiation, *GDALVaporPressure;
         GDALDataset *GDALSoilClasses,   *GDALGeologyClasses, *GDALMacropores,       *GDALLandCoverClasses, *GDALMeltRegions,    *GDALSourcesSinks;
@@ -174,100 +182,99 @@ int att_data_file(
         int    GridValueInteger;
         double GridValueDouble;
 
-        //    if(CentroidRadioButton->isChecked() == TRUE)
-        //    {
-
-        for(int i=0; i<recordCount; i++)
+        for(int i = 0; i < recordCount; i++)
         {
-            _ShpObject = SHPReadObject(_ShpHandle, i);
+            SHPObject *_ShpObject = SHPReadObject(_ShpHandle, i);
 
-            // *** Centroid of the Triangle ( TIN )
-            X = ( _ShpObject->padfX[0] + _ShpObject->padfX[1] + _ShpObject->padfX[2] ) / 3;
-            Y = ( _ShpObject->padfY[0] + _ShpObject->padfY[1] + _ShpObject->padfY[2] ) / 3;
+            if(_ShpObject == nullptr)
+            {
+                main_window->Log_Message("[att_data_file] Warning/Error[-2000] ShapeObject null at index " + QString::number(i) );
+            }
+            else
+            {
+                // Centroid of the Triangle ( TIN )
+                X = ( _ShpObject->padfX[0] + _ShpObject->padfX[1] + _ShpObject->padfX[2] ) / 3;
+                Y = ( _ShpObject->padfY[0] + _ShpObject->padfY[1] + _ShpObject->padfY[2] ) / 3;
 
+                AttDataFileTextStream << i+1 << "\t";
+                _GDAL_SOILCLASSES       GridValueInteger = (int) raster_grid_value(GDALSoilClasses,         1, X, Y, SoilClassesRanges);
+                else                    GridValueInteger = SoilClassesFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t";
+                _GDAL_GEOLOGYCLASSES    GridValueInteger = (int) raster_grid_value(GDALGeologyClasses,      1, X, Y, GeologyClassesRanges);
+                else                    GridValueInteger = GeologyClassesFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t";
+                _GDAL_LANDCOVERCLASSES  GridValueInteger = (int) raster_grid_value(GDALLandCoverClasses,    1, X, Y, LandCoverClassesRanges);
+                else                    GridValueInteger = LandCoverClassesFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t";
+                _GDAL_INTERCEPTION      GridValueDouble =        raster_grid_value(GDALInterception,            1, X, Y, InterceptionRanges);
+                else                    GridValueDouble = InterceptionFileName.toDouble();
+                AttDataFileTextStream << GridValueDouble << "\t";
+                _GDAL_SNOWCOVER         GridValueDouble =        raster_grid_value(GDALSnowCover,               1, X, Y, SnowCoverRanges);
+                else                    GridValueDouble = SnowCoverFileFileName.toDouble();
+                AttDataFileTextStream << GridValueDouble << "\t";
+                _GDAL_SURFACESTORAGE    GridValueDouble =        raster_grid_value(GDALSurfaceStorage,          1, X, Y, SurfaceStorageRanges);
+                else                    GridValueDouble = SurfaceStorageFileName.toDouble();
+                AttDataFileTextStream << GridValueDouble << "\t";
+                _GDAL_SOILMOISTURE      GridValueDouble =        raster_grid_value(GDALSoilMoisture,            1, X, Y, SoilMoistureRanges);
+                else                    GridValueDouble = SoilMoistureFileName.toDouble();
+                AttDataFileTextStream << GridValueDouble << "\t";
+                _GDAL_GROUNDWATER       GridValueDouble =        raster_grid_value(GDALGroundwater,             1, X, Y, GroundwaterRanges);
+                else                    GridValueDouble = GroundwaterFileName.toDouble();
+                AttDataFileTextStream << GridValueDouble << "\t";
+                _GDAL_PRECIPITATION     GridValueInteger = (int) raster_grid_value(GDALPrecipitation,       1, X, Y, PrecipitationRanges);
+                else                    GridValueInteger = PrecipitationFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t";
+                _GDAL_TEMPERATURE       GridValueInteger = (int) raster_grid_value(GDALTemperature,         1, X, Y, TemperatureRanges);
+                else                    GridValueInteger = TemperatureFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t";
+                _GDAL_RELATIVEHUMIDITY  GridValueInteger = (int) raster_grid_value(GDALRelativeHumidity,    1, X, Y, RelativeHumidityRanges);
+                else                    GridValueInteger = RelativeHumidityFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t";
+                _GDAL_WINDVELOCITY      GridValueInteger = (int) raster_grid_value(GDALWindVelocity,        1, X, Y, WindVelocityRanges);
+                else                    GridValueInteger = WindVelocityFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t";
+                _GDAL_SOLARRADIATION    GridValueInteger = (int) raster_grid_value(GDALSolarRadiation,      1, X, Y, SolarRadiationRanges);
+                else                    GridValueInteger = SolarRadiationFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t";
 
-            AttDataFileTextStream << i+1 << "\t";
-            _GDAL_SOILCLASSES       GridValueInteger = (int) raster_grid_value(GDALSoilClasses,         1, X, Y, SoilClassesRanges);
-            else                    GridValueInteger = SoilClassesFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t";
-            _GDAL_GEOLOGYCLASSES    GridValueInteger = (int) raster_grid_value(GDALGeologyClasses,      1, X, Y, GeologyClassesRanges);
-            else                    GridValueInteger = GeologyClassesFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t";
-            _GDAL_LANDCOVERCLASSES  GridValueInteger = (int) raster_grid_value(GDALLandCoverClasses,    1, X, Y, LandCoverClassesRanges);
-            else                    GridValueInteger = LandCoverClassesFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t";
-            _GDAL_INTERCEPTION      GridValueDouble =        raster_grid_value(GDALInterception,            1, X, Y, InterceptionRanges);
-            else                    GridValueDouble = InterceptionFileName.toDouble();
-            AttDataFileTextStream << GridValueDouble << "\t";
-            _GDAL_SNOWCOVER         GridValueDouble =        raster_grid_value(GDALSnowCover,               1, X, Y, SnowCoverRanges);
-            else                    GridValueDouble = SnowCoverFileFileName.toDouble();
-            AttDataFileTextStream << GridValueDouble << "\t";
-            _GDAL_SURFACESTORAGE    GridValueDouble =        raster_grid_value(GDALSurfaceStorage,          1, X, Y, SurfaceStorageRanges);
-            else                    GridValueDouble = SurfaceStorageFileName.toDouble();
-            AttDataFileTextStream << GridValueDouble << "\t";
-            _GDAL_SOILMOISTURE      GridValueDouble =        raster_grid_value(GDALSoilMoisture,            1, X, Y, SoilMoistureRanges);
-            else                    GridValueDouble = SoilMoistureFileName.toDouble();
-            AttDataFileTextStream << GridValueDouble << "\t";
-            _GDAL_GROUNDWATER       GridValueDouble =        raster_grid_value(GDALGroundwater,             1, X, Y, GroundwaterRanges);
-            else                    GridValueDouble = GroundwaterFileName.toDouble();
-            AttDataFileTextStream << GridValueDouble << "\t";
-            _GDAL_PRECIPITATION     GridValueInteger = (int) raster_grid_value(GDALPrecipitation,       1, X, Y, PrecipitationRanges);
-            else                    GridValueInteger = PrecipitationFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t";
-            _GDAL_TEMPERATURE       GridValueInteger = (int) raster_grid_value(GDALTemperature,         1, X, Y, TemperatureRanges);
-            else                    GridValueInteger = TemperatureFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t";
-            _GDAL_RELATIVEHUMIDITY  GridValueInteger = (int) raster_grid_value(GDALRelativeHumidity,    1, X, Y, RelativeHumidityRanges);
-            else                    GridValueInteger = RelativeHumidityFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t";
-            _GDAL_WINDVELOCITY      GridValueInteger = (int) raster_grid_value(GDALWindVelocity,        1, X, Y, WindVelocityRanges);
-            else                    GridValueInteger = WindVelocityFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t";
-            _GDAL_SOLARRADIATION    GridValueInteger = (int) raster_grid_value(GDALSolarRadiation,      1, X, Y, SolarRadiationRanges);
-            else                    GridValueInteger = SolarRadiationFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t";
+                GridValueInteger = 0;
+                AttDataFileTextStream << GridValueInteger << "\t";
 
-            GridValueInteger = 0;
-            AttDataFileTextStream << GridValueInteger << "\t";
+                _GDAL_VAPORPRESSURE     GridValueInteger = (int) raster_grid_value(GDALVaporPressure,       1, X, Y, VaporPressureRanges);
+                else                    GridValueInteger = VaporPressureFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t";
 
-            _GDAL_VAPORPRESSURE     GridValueInteger = (int) raster_grid_value(GDALVaporPressure,       1, X, Y, VaporPressureRanges);
-            else                    GridValueInteger = VaporPressureFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t";
+                //TODO: DEAL TWO CASES: SHARED WITH TRIANGLES & INSIDE A TRIANGLE
+                //TODO: USE SHAPE FILE FOR SOURCE/SINK INFORMATION - DETERMINE IN WHICH TRIANGLE THAT SOURCE/SINK POINT LIES
+                _GDAL_SOURCESSINKS      GridValueInteger = (int) raster_grid_value(GDALSourcesSinks,        1, X, Y, SourcesSinksRanges);
+                else                    GridValueInteger = SourcesSinksFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t";
 
-            //TODO: DEAL TWO CASES: SHARED WITH TRIANGLES & INSIDE A TRIANGLE
-            //TODO: USE SHAPE FILE FOR SOURCE/SINK INFORMATION - DETERMINE IN WHICH TRIANGLE THAT SOURCE/SINK POINT LIES
-            _GDAL_SOURCESSINKS      GridValueInteger = (int) raster_grid_value(GDALSourcesSinks,        1, X, Y, SourcesSinksRanges);
-            else                    GridValueInteger = SourcesSinksFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t";
+                _GDAL_MELTREGIONS       GridValueInteger = (int) raster_grid_value(GDALMeltRegions,         1, X, Y, MeltRegionsRanges);
+                else                    GridValueInteger = MeltRegionsFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t";
 
-            _GDAL_MELTREGIONS       GridValueInteger = (int) raster_grid_value(GDALMeltRegions,         1, X, Y, MeltRegionsRanges);
-            else                    GridValueInteger = MeltRegionsFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t";
+                _GDAL_BOUNDARYCONDITION GridValueInteger = (int) raster_grid_value(GDALBoundaryCondition,   1, X, Y, BoundaryConditionRanges);
+                else                    GridValueInteger = BoundaryConditionFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\t"; //BC1  TODO : FIGURE OUT WAY TO TRANSFER INFORMATION ABOUT BOUNDARY CONDITION ACROSS THE EDGE
+                AttDataFileTextStream << GridValueInteger << "\t"; //BC2
+                AttDataFileTextStream << GridValueInteger << "\t"; //BC3
 
-            _GDAL_BOUNDARYCONDITION GridValueInteger = (int) raster_grid_value(GDALBoundaryCondition,   1, X, Y, BoundaryConditionRanges);
-            else                    GridValueInteger = BoundaryConditionFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\t"; //BC1  TODO : FIGURE OUT WAY TO TRANSFER INFORMATION ABOUT BOUNDARY CONDITION ACROSS THE EDGE
-            AttDataFileTextStream << GridValueInteger << "\t"; //BC2
-            AttDataFileTextStream << GridValueInteger << "\t"; //BC3
+                _GDAL_MACROPORES        GridValueInteger = (int) raster_grid_value(GDALMacropores,          1, X, Y, MacroporesRanges);
+                else                    GridValueInteger = MacroporesFileName.toInt();
+                AttDataFileTextStream << GridValueInteger << "\n";
 
-            _GDAL_MACROPORES        GridValueInteger = (int) raster_grid_value(GDALMacropores,          1, X, Y, MacroporesRanges);
-            else                    GridValueInteger = MacroporesFileName.toInt();
-            AttDataFileTextStream << GridValueInteger << "\n";
-
+            }
         }
-
-
-        //    }
 
         AttDataFile.close();
 
-    } catch (...) {
+    }
+    catch (...) {
 
         qDebug() << "Error: att_data_file";
-
-        return 32;
+        return -9000;
     }
-
 
     return 0;
 }

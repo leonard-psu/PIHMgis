@@ -54,102 +54,181 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
         QFile EleFile(EleFileName);
         if ( ! EleFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[47] opening Element file.");
-            return 47;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1000] opening Element file.");
+            return -1000;
         }
+
         QTextStream EleFileTextStream(&EleFile);
 
         QFile NodeFile(NodeFileName);
         if ( ! NodeFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[52] opening Node file. ");
-            return 52;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1001] opening Node file. ");
+            EleFile.close();
+            return -1001;
         }
+
         QTextStream NodeFileTextStream(&NodeFile);
 
         QFile NeighFile(NeighFileName);
         if ( ! NeighFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[57] opening Neigh file.");
-            return 57;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1002] opening Neigh file.");
+            EleFile.close();
+            NodeFile.close();
+            return -1002;
         }
+
         QTextStream NeighFileTextStream(&NeighFile);
 
         QFile OldMeshFile(OldMeshFileName);
         if ( ! OldMeshFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[62] opening OldMesh file.");
-            return 62;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1003] opening OldMesh file.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            return -1003;
         }
+
         QTextStream OldMeshFileTextStream(&OldMeshFile);
 
         QFile NewMeshFile(NewMeshFileName);
         if ( ! NewMeshFile.open(QIODevice::WriteOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[68] opening NewMesh file.");
-            return 68;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1004] opening NewMesh file.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            return -1004;
         }
+
         QTextStream NewMeshFileTextStream(&NewMeshFile);
-
-
         SHPHandle shp = SHPOpen(qPrintable(shpFileName), "rb");
         if(shp == nullptr)
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[75] shpFileName is NULL.");
-            return 75;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1005] shpFileName is NULL.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            return -1005;
         }
+
         DBFHandle dbf = DBFOpen(qPrintable(dbfFileName), "rb");
         if(dbf == nullptr)
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[75] dbfFileName is NULL.");
-            return 75;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1006] dbfFileName is NULL.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            return -1006;
         }
-
-        if ( shp == nullptr || dbf == nullptr )
-            return 75;
 
         SHPHandle newshp = SHPCreate(qPrintable(DecompRiverFileNameShp), SHPT_ARC);
         if(newshp == nullptr)
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[81] DecompRiverFileNameShp is NULL. ");
-            return 81;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1007] DecompRiverFileNameShp is NULL. ");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            return -1007;
         }
 
         DBFHandle newdbf = DBFCreate(qPrintable(DecompRiverFileNameDbf));
         if(newdbf == nullptr)
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[81] DecompRiverFileNameDbf is NULL. ");
-            return 81;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1008] DecompRiverFileNameDbf is NULL. ");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            return -1008;
         }
-
-        if ( newshp == nullptr || newdbf == nullptr )
-            return 81;
 
         int left = DBFAddField(newdbf, "LeftEle", FTInteger, 10, 0);
         int right= DBFAddField(newdbf, "RightEle", FTInteger, 10, 0);
 
         if ( left < 0 || right < 0 )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[87] Add field count (left, right) don't match. ");
-            return 87;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1009] Add field count (left, right) don't match. ");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return -1009;
         }
-
-
-        int temp;
 
         int NumNode;
         NodeFileTextStream >> NumNode;
+        bool error_found = false;
+
         if ( NumNode < 1 )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[88] Invalid Number of Nodes. ");
-            return 88;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1010] Invalid Number of Nodes < 1. ");
+            error_found = true;
         }
 
+        if ( NumNode > 500000 ) //500000 is a guess
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1011] Invalid Number of Nodes > 500000. ");
+            error_found = true;
+        }
+
+        if(error_found)
+        {
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return -1011;
+        }
+
+        int temp;
         Point* node = new Point[NumNode+1];
+        if( node == nullptr)
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1012] node is nullptr. ");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            return -1012;
+        }
+
         NodeFileTextStream >> temp;
         NodeFileTextStream >> temp;
         NodeFileTextStream >> temp;
-        for(int i=1; i<=NumNode; i++)
+
+        for(int i=1; i <= NumNode; i++)
         {
             NodeFileTextStream >> temp;
             NodeFileTextStream >> node[i].x;
@@ -159,39 +238,215 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
 
         int NumEle;
         EleFileTextStream >> NumEle;
+
+        error_found = false;
         if ( NumEle < 1 )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[89] Invalid Number of Elements. ");
-            return 89;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1013] Invalid Number of Elements < 1 ");
+            error_found = true;
         }
+
+        if ( NumEle > 500000 ) //500000 is a guess
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1014] Invalid Number of Elements > 500000 ");
+            error_found = true;
+        }
+
+        if ( error_found )
+        {
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+
+            return -1014;
+        }
+
         int** element = new int*[NumEle+1];
+        if(element == nullptr)
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1015] element is null ");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+
+            return -1015;
+        }
+
         EleFileTextStream >> temp;
         EleFileTextStream >> temp;
-        for(int i=1; i<=NumEle; i++)
+
+        error_found = false;
+        for(int i = 1; i <= NumEle; i++)
         {
             element[i] = new int[3];
-            EleFileTextStream >> temp;
-            EleFileTextStream >> element[i][0];
-            EleFileTextStream >> element[i][1];
-            EleFileTextStream >> element[i][2];
+
+            if(element[i] == nullptr)
+            {
+                error_found = true;
+            }
+            else
+            {
+                EleFileTextStream >> temp;
+                EleFileTextStream >> element[i][0];
+                EleFileTextStream >> element[i][1];
+                EleFileTextStream >> element[i][2];
+            }
+        }
+
+        if(error_found)
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1016] element is null ");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            delete [] element; //Note no attempt to delete all
+
+            return -1016;
         }
 
         int NumNeigh;
         NeighFileTextStream >> NumNeigh;
-        if ( NumEle < 1 )
+
+        error_found = false;
+        if ( NumNeigh < 1 )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[90] Invalid Number of Neigh nodes. ");
-            return 90;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1017] Invalid Number of Neigh nodes. ");
+            error_found = true;
         }
+        if ( NumNeigh > 500000 )
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1018] Invalid Number of Neigh nodes. ");
+            error_found = true;
+        }
+
+        if ( error_found )
+        {
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            return -1018;
+        }
+
+
         int** neighbour = new int*[NumNeigh+1];
+
+        if(neighbour == nullptr)
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1019] neighbour failed. ");
+
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            return -1018;
+        }
+
         NeighFileTextStream >> temp;
-        for(int i=1; i<=NumNeigh; i++)
+        error_found = false;
+
+        for(int i = 1; i <= NumNeigh; i++)
         {
             neighbour[i] = new int[3];
-            NeighFileTextStream >> temp;
-            NeighFileTextStream >> neighbour[i][0];
-            NeighFileTextStream >> neighbour[i][1];
-            NeighFileTextStream >> neighbour[i][2];
+
+            if(neighbour[i] == nullptr)
+            {
+                error_found = true;
+            }
+            else
+            {
+                NeighFileTextStream >> temp;
+                NeighFileTextStream >> neighbour[i][0];
+                NeighFileTextStream >> neighbour[i][1];
+                NeighFileTextStream >> neighbour[i][2];
+            }
+        }
+
+        if ( error_found )
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1020] neighbour failed. ");
+
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            //No attempt to delete neighbour[i]
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            return -1020;
         }
 
         int RIV_NumEle, RIV_NumNode;
@@ -199,42 +454,342 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
         OldMeshFileTextStream >> RIV_NumNode;
         NewMeshFileTextStream << RIV_NumEle << "\t" << RIV_NumNode;
 
+        error_found = false;
         if ( RIV_NumEle < 1 )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[91] Invalid Number of river elements. ");
-            return 91;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1021] Invalid Number of river elements < 1. ");
+            error_found = true;
         }
+
+        if ( RIV_NumEle > 500000 ) //500000 is a guess
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1021] Invalid Number of river elements > 500000. ");
+            error_found = true;
+        }
+
+        if ( error_found )
+        {
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            for(int i = 0; i < NumNeigh; i++)
+            {
+                delete[] neighbour[i];
+            }
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            return -1021;
+        }
+
+
         QString RIV_line;
-        for(int RIV_i=0; RIV_i<RIV_NumEle+1; RIV_i++)
+        for(int RIV_i = 0; RIV_i < RIV_NumEle+1; RIV_i++)
         {
             RIV_line = OldMeshFileTextStream.readLine();
             NewMeshFileTextStream << RIV_line << "\n";
         }
 
+        error_found = false;
         if ( RIV_NumNode < 1 )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[92] Invalid Number of river nodes. ");
-            return 92;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1022] Invalid Number of river nodes < 1. ");
+            error_found = true;
         }
+
+        if ( RIV_NumNode > 500000 ) //500000 is a guess
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1023] Invalid Number of river nodes > 500000. ");
+            error_found = true;
+        }
+
+        if ( error_found )
+        {
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            for(int i = 0; i < NumNeigh; i++)
+            {
+                delete[] neighbour[i];
+            }
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            return -1023;
+        }
+
         double** RIV_para = new double*[RIV_NumNode+1];
+
+        if ( RIV_para == nullptr )
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1024] RIV_para is null. ");
+
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            for(int i = 0; i < NumNeigh; i++)
+            {
+                delete[] neighbour[i];
+            }
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            return -1024;
+        }
+
         int RIV_dummy;
-        for(int RIV_i=1; RIV_i<=RIV_NumNode; RIV_i++)
+        error_found = false;
+
+        for(int RIV_i = 1; RIV_i <= RIV_NumNode; RIV_i++)
         {
             RIV_para[RIV_i] = new double[4];
-            OldMeshFileTextStream >> RIV_dummy;
-            for(int RIV_j=0; RIV_j<4; RIV_j++)
+
+            if( RIV_para[RIV_i] == nullptr)
             {
-                OldMeshFileTextStream >> RIV_para[RIV_i][RIV_j];
+                error_found = true;
+            }
+            else
+            {
+                OldMeshFileTextStream >> RIV_dummy;
+                for(int RIV_j=0; RIV_j<4; RIV_j++)
+                {
+                    OldMeshFileTextStream >> RIV_para[RIV_i][RIV_j];
+                }
             }
         }
 
+        if ( error_found )
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1025] RIV_para is null. ");
+
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            for(int i = 0; i < NumNeigh; i++)
+            {
+                delete[] neighbour[i];
+            }
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            //No attempt to delete riv par elements
+            delete[] RIV_para;
+
+            return -1025;
+        }
 
         int** nodeInEle = new int*[NumNode+1]; //tells you : this (node present in which elements)
-        int* nodeInEleCount = new int[NumNode+1];
-        for(int i=1; i<=NumNode; i++)
+
+        if ( nodeInEle == nullptr )
         {
-            nodeInEle[i] = new int[20];
-            nodeInEleCount[i]=0;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1026] nodeInEle is null. ");
+
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            for(int i = 0; i < NumNeigh; i++)
+            {
+                delete[] neighbour[i];
+            }
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            delete[] nodeInEle;
+            nodeInEle = nullptr;
+
+            return -1026;
+        }
+
+        int* nodeInEleCount = new int[NumNode+1];
+
+        if ( nodeInEleCount == nullptr )
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1027] nodeInEleCount is null. ");
+
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            for(int i = 0; i < NumNeigh; i++)
+            {
+                delete[] neighbour[i];
+            }
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            for(int i = 0; i < NumNode; i++)
+            {
+                delete[] nodeInEle[i];
+            }
+            delete[] nodeInEle;
+            nodeInEle = nullptr;
+
+            delete[] nodeInEleCount;
+
+            return -1027;
+        }
+
+        error_found = false;
+        for(int i=1; i <= NumNode; i++)
+        {
+            nodeInEle[i] = new int[20]; //TODO how was 20 decided?
+            if(nodeInEle[i] == nullptr)
+                error_found = true;
+
+            nodeInEleCount[i] = 0;
+        }
+
+        if ( error_found )
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1028] nodeInEle is null. ");
+
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            for(int i = 0; i < NumNeigh; i++)
+            {
+                delete[] neighbour[i];
+            }
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            for(int i = 0; i < RIV_NumNode; i++)
+            {
+                delete[] RIV_para[i];
+            }
+            delete[] RIV_para;
+            RIV_para = nullptr;
+
+            delete[] nodeInEle;
+            delete[] nodeInEleCount;
+
+
+            return -1028;
         }
 
         for(int i=1; i<=NumEle; i++)
@@ -246,18 +801,170 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
         }
 
         int** neighNode = new int*[NumNode+1]; //tells you which nodes are neighbours to i-th node
-        int* neighNodeCount = new int[NumNode+1];
-        for(int i=1; i<=NumNode; i++)
+
+        if ( neighNode == nullptr )
         {
-            neighNode[i] = new int[100];
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1029] neighNode is null. ");
+
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            for(int i = 0; i < NumNeigh; i++)
+            {
+                delete[] neighbour[i];
+            }
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            for(int i = 0; i < RIV_NumNode; i++)
+            {
+                delete[] RIV_para[i];
+            }
+            delete[] RIV_para;
+            RIV_para = nullptr;
+
+            delete[] nodeInEle;
+
+            return -1029;
+        }
+
+        int* neighNodeCount = new int[NumNode+1];
+
+        if ( neighNodeCount == nullptr )
+        {
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1030] neighNode is null. ");
+
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            for(int i = 0; i < NumNeigh; i++)
+            {
+                delete[] neighbour[i];
+            }
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            for(int i = 0; i < RIV_NumNode; i++)
+            {
+                delete[] RIV_para[i];
+            }
+            delete[] RIV_para;
+            RIV_para = nullptr;
+
+            for(int i = 0; i < NumNode; i++)
+            {
+                delete[] nodeInEle[i];
+            }
+            delete[] nodeInEle;
+            nodeInEle = nullptr;
+
+            delete[] nodeInEleCount;
+
+            return -1030;
+        }
+
+        error_found = false;
+        for(int i = 1; i <= NumNode; i++)
+        {
+            neighNode[i] = new int[100]; //TODO How was 100 decided?
+            if(neighNode[i] == nullptr)
+                error_found = true;
+
             neighNodeCount[i] = 0;
         }
 
-        for(int i=1; i<=NumNode; i++)
+        if ( error_found )
         {
-            for(int j=0; j<nodeInEleCount[i]; j++)
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1031] neighNode is null. ");
+
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
             {
-                for(int k=0; k<3; k++)
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            for(int i = 0; i < NumNeigh; i++)
+            {
+                delete[] neighbour[i];
+            }
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            for(int i = 0; i < RIV_NumNode; i++)
+            {
+                delete[] RIV_para[i];
+            }
+            delete[] RIV_para;
+            RIV_para = nullptr;
+
+            for(int i = 0; i < NumNode; i++)
+            {
+                delete[] nodeInEle[i];
+            }
+            delete[] nodeInEle;
+            nodeInEle = nullptr;
+
+            delete[] nodeInEleCount;
+
+            return -1031;
+        }
+
+        for(int i=1; i <= NumNode; i++)
+        {
+            for(int j=0; j < nodeInEleCount[i]; j++)
+            {
+                for(int k=0; k < 3; k++)
                 {
                     if(i != element[nodeInEle[i][j]][k])
                         neighNode[i][neighNodeCount[i]++]=element[nodeInEle[i][j]][k];
@@ -270,9 +977,60 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
 
         if ( recordCount < 1 )
         {
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[93] Invalid recordCount from DBFGetRecordCount. ");
-            return 93;
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1032] Invalid recordCount from DBFGetRecordCount. ");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+            OldMeshFile.close();
+            NewMeshFile.close();
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete [] node;
+            node = nullptr;
+
+            //Free each sub-array
+            for(int i = 0; i < NumEle; i++)
+            {
+                delete[] element[i];
+            }
+            //Free the array of pointers
+            delete[] element;
+            element = nullptr;
+
+            for(int i = 0; i < NumNeigh; i++)
+            {
+                delete[] neighbour[i];
+            }
+            delete[] neighbour;
+            neighbour = nullptr;
+
+            for(int i = 0; i < RIV_NumNode; i++)
+            {
+                delete[] RIV_para[i];
+            }
+            delete[] RIV_para;
+            RIV_para = nullptr;
+
+            for(int i = 0; i < NumNode; i++)
+            {
+                delete[] nodeInEle[i];
+            }
+            delete[] nodeInEle;
+            nodeInEle = nullptr;
+
+            for(int i = 0; i < NumNode; i++)
+            {
+                delete[] neighNode[i];
+            }
+            delete[] neighNode;
+            neighNode = nullptr;
+
+            delete[] nodeInEleCount;
+            return -1032;
         }
+
 
         int record = 0;
         double X[2], Y[2], Z[2];
@@ -281,183 +1039,195 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
         int numPt = 0;
         double oldDist, slope;
         int RIV_numPt1, RIV_numPt2 = 0;
-        bool error_found = false;
 
+        error_found = false;
 
-        for(int i=0; i<recordCount; i++)
+        for(int i = 0; i < recordCount; i++)
         {
             SHPObject* shpObj = SHPReadObject(shp, i);
             if(shpObj == nullptr)
             {
-                main_window->Log_Message("[interpolate_river_nodes_elev] Error[94] Invalid SHPReadObject. ");
+                main_window->Log_Message("[interpolate_river_nodes_elev] Error[2000] Invalid SHPReadObject. ");
                 error_found = true;
                 break;
             }
-
-            pt1.x = shpObj->padfX[0];
-            pt1.y = shpObj->padfY[0];
-            pt2.x = shpObj->padfX[shpObj->nVertices-1];
-            pt2.y = shpObj->padfY[shpObj->nVertices-1];
-            slope = SLOPEa(pt1, pt2);
-
-            int Val = -1;
-            for(int j=1; j<=NumNode; j++)
+            else
             {
-                //was here Val=j;
-                if(distPt(pt1, node[j]) < 0.001)
+                pt1.x = shpObj->padfX[0];
+                pt1.y = shpObj->padfY[0];
+                pt2.x = shpObj->padfX[shpObj->nVertices-1];
+                pt2.y = shpObj->padfY[shpObj->nVertices-1];
+                slope = SLOPEa(pt1, pt2);
+
+                int Val = -1;
+                for(int j=1; j<=NumNode; j++)
                 {
-                    Val=j;
-                    break;
-                }
-            }
-            if( Val < 0 )
-            {
-                main_window->Log_Message("[interpolate_river_nodes_elev] Error[95] Did not find pt1. ");
-                error_found = true;
-                break;
-            }
-
-            numPt = Val;
-            RIV_numPt1 = Val;
-            Val = -1;
-
-            for(int j=1; j<=NumNode; j++){
-                //Val=j;
-                if(distPt(pt2, node[j]) < 0.001)
-                {
-                    Val=j;
-                    break;
-                }
-            }
-
-            if( Val < 0 )
-            {
-                main_window->Log_Message("[interpolate_river_nodes_elev] Error[96] Did not find pt1. ");
-                error_found = true;
-                break;
-            }
-            RIV_numPt2 = Val;
-
-            //if(RIV_para[RIV_numPt1][3]<RIV_para[RIV_numPt2][3])
-            //{
-            //    qDebug() <<"\nSegment Number "<<i<<" Node# "<<RIV_numPt1<<","<<RIV_numPt2<<":"<<RIV_para[RIV_numPt1][3]-RIV_para[RIV_numPt2][3]<<"\n";
-            //}
-
-            if( numPt < 0 || numPt >= NumNode )
-            {
-                main_window->Log_Message("[interpolate_river_nodes_elev] Error[97] Did not find pt1. ");
-                error_found = true;
-                break;
-            }
-
-            oldDist = distPt(node[numPt], pt2);
-
-            while( distPt(pt2, node[numPt]) > 0.001 )
-            {
-                int j= -1, k= -1, l = -1;
-                bool found = false;
-                for(j=0; j<neighNodeCount[numPt]; j++)
-                {
-                    if(fabs(slope-SLOPEa(node[numPt], node[neighNode[numPt][j]])) < 0.01)
+                    //was here Val=j;
+                    if(distPt(pt1, node[j]) < 0.001)
                     {
-                        found = true;
+                        Val=j;
+                        break;
+                    }
+                }
+                if( Val < 0 )
+                {
+                    main_window->Log_Message("[interpolate_river_nodes_elev] Error[2001] Did not find pt1. ");
+                    error_found = true;
+                    break;
+                }
+
+                numPt = Val;
+                RIV_numPt1 = Val;
+                Val = -1;
+
+                for(int j=1; j<=NumNode; j++)
+                {
+                    if(distPt(pt2, node[j]) < 0.001)
+                    {
+                        Val=j;
                         break;
                     }
                 }
 
-                if ( found == false )
+                if( Val < 0 )
                 {
-                    main_window->Log_Message("[interpolate_river_nodes_elev] Error[290] Split River File Nodes Did *NOT* Match With The Mesh Nodes. ");
-                    main_window->Log_Message("[interpolate_river_nodes_elev] Error[290] Perhaps River File Was Edited But Not Used In Merge Vector Layers. ");
+                    main_window->Log_Message("[interpolate_river_nodes_elev] Error[2002] Did not find pt1. ");
                     error_found = true;
-                    return 290;
+                    break;
+                }
+                RIV_numPt2 = Val;
+
+                //if(RIV_para[RIV_numPt1][3]<RIV_para[RIV_numPt2][3])
+                //{
+                //    qDebug() <<"\nSegment Number "<<i<<" Node# "<<RIV_numPt1<<","<<RIV_numPt2<<":"<<RIV_para[RIV_numPt1][3]-RIV_para[RIV_numPt2][3]<<"\n";
+                //}
+
+                if( numPt < 0 || numPt >= NumNode )
+                {
+                    main_window->Log_Message("[interpolate_river_nodes_elev] Error[2003] Did not find pt1. ");
+                    error_found = true;
+                    break;
                 }
 
-                RIV_para[neighNode[numPt][j]][3]=((distPt(pt1,node[neighNode[numPt][j]]))/(distPt(pt1,pt2)))*(RIV_para[RIV_numPt2][3]-RIV_para[RIV_numPt1][3])+RIV_para[RIV_numPt1][3];
+                oldDist = distPt(node[numPt], pt2);
 
-                X[0] = node[numPt].x;
-                Y[0] = node[numPt].y;
-                X[1] = node[neighNode[numPt][j]].x;
-                Y[1] = node[neighNode[numPt][j]].y;
-                int m =0;
-                for(k=0; k<nodeInEleCount[numPt]; k++)
+                while( distPt(pt2, node[numPt]) > 0.001 )
                 {
-                    for(l=0; l<nodeInEleCount[neighNode[numPt][j]]; l++)
+                    int j= -1, k= -1, l = -1;
+                    bool found = false;
+                    for(j=0; j<neighNodeCount[numPt]; j++)
                     {
-                        if(nodeInEle[numPt][k] == nodeInEle[neighNode[numPt][j]][l])
-                            LeftRight[m++] = nodeInEle[numPt][k];
+                        if(fabs(slope-SLOPEa(node[numPt], node[neighNode[numPt][j]])) < 0.01)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if ( found == false )
+                    {
+                        main_window->Log_Message("[interpolate_river_nodes_elev] Error[3000] Split River File Nodes Did *NOT* Match With The Mesh Nodes. ");
+                        main_window->Log_Message("[interpolate_river_nodes_elev] Error[3000] Perhaps River File Was Edited But Not Used In Merge Vector Layers. ");
+                        error_found = true;
+                    }
+                    else
+                    {
+                        RIV_para[neighNode[numPt][j]][3]=((distPt(pt1,node[neighNode[numPt][j]]))/(distPt(pt1,pt2)))*(RIV_para[RIV_numPt2][3]-RIV_para[RIV_numPt1][3])+RIV_para[RIV_numPt1][3];
+
+                        X[0] = node[numPt].x;
+                        Y[0] = node[numPt].y;
+                        X[1] = node[neighNode[numPt][j]].x;
+                        Y[1] = node[neighNode[numPt][j]].y;
+                        int m =0;
+                        for(k=0; k<nodeInEleCount[numPt]; k++)
+                        {
+                            for(l=0; l<nodeInEleCount[neighNode[numPt][j]]; l++)
+                            {
+                                if(nodeInEle[numPt][k] == nodeInEle[neighNode[numPt][j]][l])
+                                    LeftRight[m++] = nodeInEle[numPt][k];
+                            }
+                        }
+
+                        SHPObject* newobj = SHPCreateSimpleObject(SHPT_ARC, 2, X, Y, Z);
+                        if(newobj == nullptr)
+                        {
+                            main_window->Log_Message("[interpolate_river_nodes_elev] Error[3001] SHPCreateSimpleObject failed. ");
+                            error_found = true;
+                        }
+                        else
+                        {
+                            if ( SHPWriteObject(newshp, -1, newobj) < 0 )
+                            {
+                                main_window->Log_Message("[interpolate_river_nodes_elev] Error[3002] SHPWriteObject failed. ");
+                                error_found = true;
+                            }
+
+                            if ( ! DBFWriteIntegerAttribute(newdbf, record, left, LeftRight[0]) )
+                            {
+                                main_window->Log_Message("[interpolate_river_nodes_elev] Error[3003] DBFWriteIntegerAttribute left failed. ");
+                                error_found = true;
+                            }
+
+                            if ( ! DBFWriteIntegerAttribute(newdbf, record, right, LeftRight[1]) )
+                            {
+                                main_window->Log_Message("[interpolate_river_nodes_elev] Error[3004] DBFWriteIntegerAttribute right failed. ");
+                                error_found = true;
+                            }
+                        }
+
+                        record++;
+
+                        if(j < 0)
+                        {
+                            main_window->Log_Message("[interpolate_river_nodes_elev] Error[3005] Invalid j value. ");
+                            error_found = true;
+                        }
+
+                        if(j > 500000) //500000 is a guess
+                        {
+                            main_window->Log_Message("[interpolate_river_nodes_elev] Error[3006] Invalid j value. ");
+                            error_found = true;
+                        }
+
+                        if(!error_found)
+                        {
+                            numPt = neighNode[numPt][j];
+                            oldDist = distPt(node[numPt], pt2);
+                        }
                     }
                 }
-
-                SHPObject* newobj = SHPCreateSimpleObject(SHPT_ARC, 2, X, Y, Z);
-                if(newobj == nullptr)
-                {
-                    main_window->Log_Message("[interpolate_river_nodes_elev] Error[98] SHPCreateSimpleObject failed. ");
-                    error_found = true;
-                    return 98;
-                }
-                if ( SHPWriteObject(newshp, -1, newobj) < 0 )
-                {
-                    main_window->Log_Message("[interpolate_river_nodes_elev] Error[311] SHPWriteObject failed. ");
-                    error_found = true;
-                    return 311;
-                }
-                if ( ! DBFWriteIntegerAttribute(newdbf, record, left, LeftRight[0]) )
-                {
-                    main_window->Log_Message("[interpolate_river_nodes_elev] Error[313] DBFWriteIntegerAttribute left failed. ");
-                    error_found = true;
-                    return 313;
-                }
-                if ( ! DBFWriteIntegerAttribute(newdbf, record, right, LeftRight[1]) )
-                {
-                    main_window->Log_Message("[interpolate_river_nodes_elev] Error[315] DBFWriteIntegerAttribute right failed. ");
-                    error_found = true;
-                    return 315;
-                }
-
-                record++;
-
-                if(j < 0)
-                {
-                    main_window->Log_Message("[interpolate_river_nodes_elev] Error[316] Invalid j value. ");
-                    error_found = true;
-                    return 316;
-                }
-
-                numPt = neighNode[numPt][j];
-                oldDist = distPt(node[numPt], pt2);
             }
 
         } //End of for(int i=0; i<recordCount; i++)
 
         if(error_found)
         {
-            //Shouldn't get here, but will use in case code changes latter
-            main_window->Log_Message("[interpolate_river_nodes_elev] Error[317] in while loop. ");
+            main_window->Log_Message("[interpolate_river_nodes_elev] Error(s) [3007] in while loop. ");
             error_found = true;
-            return 317;
         }
+        else {
 
-        for(int RIV_i=1; RIV_i<=RIV_NumNode; RIV_i++)
-        {
-            NewMeshFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            NewMeshFileTextStream << RIV_i << "\t";
+            for(int RIV_i = 1; RIV_i <= RIV_NumNode; RIV_i++)
+            {
+                NewMeshFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                NewMeshFileTextStream << RIV_i << "\t";
 
-            NewMeshFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            NewMeshFileTextStream.setRealNumberPrecision(20);
-            NewMeshFileTextStream << RIV_para[RIV_i][0] << "\t"; // << setprecision(20)
+                NewMeshFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                NewMeshFileTextStream.setRealNumberPrecision(20);
+                NewMeshFileTextStream << RIV_para[RIV_i][0] << "\t"; // << setprecision(20)
 
-            NewMeshFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            NewMeshFileTextStream.setRealNumberPrecision(20);
-            NewMeshFileTextStream << RIV_para[RIV_i][1] << "\t"; // << setprecision(20)
+                NewMeshFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                NewMeshFileTextStream.setRealNumberPrecision(20);
+                NewMeshFileTextStream << RIV_para[RIV_i][1] << "\t"; // << setprecision(20)
 
-            NewMeshFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            NewMeshFileTextStream.setRealNumberPrecision(15);
-            NewMeshFileTextStream << RIV_para[RIV_i][2] << "\t"; // << setprecision(15)
+                NewMeshFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                NewMeshFileTextStream.setRealNumberPrecision(15);
+                NewMeshFileTextStream << RIV_para[RIV_i][2] << "\t"; // << setprecision(15)
 
-            NewMeshFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            NewMeshFileTextStream.setRealNumberPrecision(15);
-            NewMeshFileTextStream << RIV_para[RIV_i][3] << "\n"; // << setprecision(15)
+                NewMeshFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                NewMeshFileTextStream.setRealNumberPrecision(15);
+                NewMeshFileTextStream << RIV_para[RIV_i][3] << "\n"; // << setprecision(15)
+            }
         }
 
         //Close Files
