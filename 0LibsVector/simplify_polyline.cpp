@@ -7,53 +7,40 @@
 
 using namespace std;
 
+
+// User interface to PIHMgis v3.5
+extern PIHMgisDialog *main_window;
+bool simplify_polyline_success = true; //Not ideal, need to use to keep simple
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// dPointToLine
+// Used in simplify_polyline below
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 double dPointToLine(Point L1, Point L2, Point P)
 {
-    double dist;
-    dist = (L1.y-L2.y)*P.x + (L2.x-L1.x)*P.y + (L1.x*L2.y - L2.x*L1.y);
-    dist = dist / sqrt(pow((L2.x-L1.x),2) + pow((L2.y-L1.y),2));
+    double dist = (L1.y-L2.y)*P.x + (L2.x-L1.x)*P.y + (L1.x*L2.y - L2.x*L1.y);
+    double botdist = sqrt(pow((L2.x-L1.x),2) + pow((L2.y-L1.y),2));
+
+    if(botdist == 0) //to avoid divide by zero
+    {
+        dist = 0;
+    }
+    else
+    {
+        dist = dist / botdist;
+    }
+
     if(L1.x==L2.x && L1.y==L2.y)
         dist = sqrt(pow((L1.x-P.x),2) + pow((L1.y-P.y),2));
 
-    return (dist>0?dist:(-dist));
+    return (dist > 0 ? dist:(-dist));
 }
 
-/*
-void simplify_Polyline(Point *poly, int start, int end, double tolerance, int *marker, int flag)
-{   //
-    // Flag accounts if the function is called for the first time.. 0=>first time; 1=>otherwise
-    if (end < start+1)
-        return;
-    cout<<start<<"\t"<<end<<"\n";
-    static int count=0;
-    if(flag == 0)
-        count = 0;
-    int     maxIndex = start;      // index of vertex farthest from S
-    double   maxDistance = 0;       // distance squared of farthest vertex
-    
-    for (int i=start+1; i<end; i++)
-    {
-        double dist = dPointToLine(poly[start], poly[end], poly[i]);
-        if(dist > maxDistance)
-        {
-            maxDistance = dist;
-            maxIndex = i;
-        }
-    }
-
-    if(maxDistance>tolerance)
-    {
-        marker[count] = maxIndex;
-        cout<<"count= "<<count<<"\n";
-        cout<<"marker="<<marker[count]<<"\n";
-        count++;
-        simplify_Polyline(poly, start, maxIndex, tolerance, marker, 1);
-        simplify_Polyline(poly, maxIndex, end, tolerance, marker, 1);
-    }
-    return;
-}
-*/
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// simplify_polyline
+// Used in Vector Processing
+// Is a recursive function, using global boolean for error checking
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void simplify_polyline(Point *poly, int start, int end, double tolerance, int *marker)
 {
 
@@ -61,19 +48,22 @@ void simplify_polyline(Point *poly, int start, int end, double tolerance, int *m
         qDebug() << "INFO: Start simplify_polyline";
 
     try {
-        //, int flag){ //
+
+        if(poly == nullptr)
+        {
+            main_window->Log_Message("[polyline_splitlines] Error[-1000] poly is null.");
+            simplify_polyline_success = false;
+            return;
+        }
+
         // Flag accounts if the function is called for the first time.. 0=>first time; 1=>otherwise
         if (end < start+1)
-            return;// 0;
-        //cout<<start<<"\t"<<end<<"\n";
-        /*static int count=1;
-    if(flag == 0)
-        count = 1; */
+            return;
 
-        int     maxIndex = start;      // index of vertex farthest from S
-        double   maxDistance = 0;       // distance squared of farthest vertex
+        int     maxIndex = start;   // index of vertex farthest from S
+        double   maxDistance = 0;   // distance squared of farthest vertex
 
-        for (int i=start+1; i<end; i++)
+        for (int i = start+1; i < end; i++)
         {
             double dist = dPointToLine(poly[start], poly[end], poly[i]);
             if(dist > maxDistance)
@@ -83,21 +73,20 @@ void simplify_polyline(Point *poly, int start, int end, double tolerance, int *m
             }
         }
 
-        if(maxDistance>tolerance)
+        if(maxDistance > tolerance)
         {
-            //marker[count] = maxIndex;
-            marker[maxIndex]=1;
-            //cout<<"count= "<<count<<"\n";
-            //cout<<"marker="<<marker[count]<<"\n";
-            //count++;
+            marker[maxIndex] = 1;
             simplify_polyline(poly, start, maxIndex, tolerance, marker);
             simplify_polyline(poly, maxIndex, end, tolerance, marker);
         }
 
-        return;// count;
+        return;
 
-    } catch (...) {
-        qDebug() << "Error: AddFID is returning w/o checking";
+    }
+    catch (...)
+    {
+        qDebug() << "Error: simplify_polyline is returning w/o checking";
+        simplify_polyline_success = false;
         return;
     }
 

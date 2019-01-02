@@ -4,7 +4,7 @@
 #include <QString>
 
 
-int tin_shape(const char* eleFileName, const char* nodeFileName, const char* shpFileName, const char*dbfFileName, QString *tempLogString);
+int tin_shape(QString eleFileName, QString nodeFileName, QString shpFileName,QString dbfFileName);
 
 
 #endif

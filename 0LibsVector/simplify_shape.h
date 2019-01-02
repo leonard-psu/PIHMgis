@@ -1,9 +1,9 @@
 #ifndef SIMPLIFY_SHAPE
 #define SIMPLIFY_SHAPE
 
+#include <QString>
 
-int simplify_shape(const char *shpFileName, const char *dbfFileName, const char *newshpFileName, const char *newdbfFileName, double tolerance);
-
+int simplify_shape(QString shpFileName, QString dbfFileName, QString newshpFileName, QString newdbfFileName, double tolerance);
 
 #endif
 

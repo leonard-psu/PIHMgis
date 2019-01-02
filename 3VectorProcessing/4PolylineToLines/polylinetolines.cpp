@@ -552,7 +552,8 @@ void PolylineToLines::on_pushButtonRun_clicked()
 
             if(valid_check)
             {
-                int ErrorXln = polyline_splitlines((char *)qPrintable(InpShpFileName), (char *)qPrintable(InpDbfFileName), (char *)qPrintable(OutShpFileName), (char *)qPrintable(OutDbfFileName));
+                int ErrorXln = polyline_splitlines(InpShpFileName, InpDbfFileName, OutShpFileName, OutDbfFileName);
+
                 if ( ErrorXln == 1 || ErrorXln == 5 || ErrorXln == 8 )
                 {
                     Log_Message("Warning: Skipping Non-Polyline Layer ... " + InpShpFileName );

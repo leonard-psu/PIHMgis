@@ -590,7 +590,7 @@ void SimplifyPolylines::on_pushButtonRun_clicked()
             OutDbfFileName = OutShpFileName;
             OutDbfFileName.replace(QString(".shp"), QString(".dbf"));
 
-            int ErrorSln = simplify_shape((char *)qPrintable(InpShpFileName), (char *)qPrintable(InpDbfFileName), (char *)qPrintable(OutShpFileName), (char *)qPrintable(OutDbfFileName), Tolerance);
+            int ErrorSln = simplify_shape(InpShpFileName, InpDbfFileName, OutShpFileName, OutDbfFileName, Tolerance);
             if ( ErrorSln == 1 || ErrorSln == 5 || ErrorSln == 8 )
             {
                 Log_Message(tr("<span style=\"color:#FF0000\">Warning: Skipping Non-Polyline Layer ... </span>")+InpShpFileName+tr("<br>"));

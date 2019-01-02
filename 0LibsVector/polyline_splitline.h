@@ -1,8 +1,8 @@
 #ifndef POLYLINE_SPLITLINE
 #define POLYLINE_SPLITLINE
 
+#include<QString>
 
-int polyline_splitlines(const char* shpFileName, const char* dbfFileName, const char* newshpFileName, const char* newdbfFileName);
-
+int polyline_splitlines(QString shpFileName, QString dbfFileName, QString newshpFileName, QString newdbfFileName);
 
 #endif

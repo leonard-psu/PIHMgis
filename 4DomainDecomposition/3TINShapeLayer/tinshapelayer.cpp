@@ -508,7 +508,7 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 
-        int ErrorTIN = tin_shape((char *)qPrintable(element_input_filename), (char *)qPrintable(node_input_filename), (char *)qPrintable(TINShpFileName), (char *)qPrintable(TINDbfFileName), &LogsString);
+        int ErrorTIN = tin_shape(element_input_filename, node_input_filename,TINShpFileName, TINDbfFileName);
         if( ErrorTIN != 0 )
         {
             Log_Error_Message("TIN Shape Layer Processing Failed ... " );
