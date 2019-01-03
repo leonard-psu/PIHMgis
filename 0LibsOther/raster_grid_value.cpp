@@ -60,7 +60,6 @@ double readValue( void *data, GDALDataType type, int index )
             break;
         default:
             main_window->Log_Message("Error [readValue] Data type " + QString::number(type) + " is not supported");
-
         }
 
     } catch (...) {
@@ -76,8 +75,9 @@ double readValue( void *data, GDALDataType type, int index )
 // Helper Function to get Extent from GDAL dataset
 // Used for elevation values and PIHM attribute file.
 // WARNING: No values assigned to extent with error. This will cause issues to the user!
+// GDALDataset is not closed here.
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void getExtent(GDALDataset *temp, double *ranges){
+bool getExtent(GDALDataset *temp, double *ranges){
 
     if(print_many_messages)
         qDebug() << "INFO: Start getExtent";
@@ -85,8 +85,8 @@ void getExtent(GDALDataset *temp, double *ranges){
     try {
         if(temp == nullptr)
         {
-            main_window->Log_Message("[getExtent] Error finding extent");
-            return;
+            main_window->Log_Message("[getExtent] Error [-1001] GDALDataset is null");
+            return false;
         }
 
         double adfGeoTransform[6];
@@ -107,12 +107,12 @@ void getExtent(GDALDataset *temp, double *ranges){
         if(rasterXDimInt < 1)
         {
             main_window->Log_Message("[getExtent] Error with rasterXDimInt");
-            return;
+            return false;
         }
         if(rasterYDimInt < 1)
         {
             main_window->Log_Message("[getExtent] Error with rasterYDimInt");
-            return;
+            return false;
         }
 
         Xres = (Xmax - Xmin) / rasterXDimInt;
@@ -125,14 +125,15 @@ void getExtent(GDALDataset *temp, double *ranges){
         ranges[4]=Xres;
         ranges[5]=Yres;
 
-        return;
+        return true;
 
     } catch (...) {
 
         qDebug() << "Error: getExtent is returning w/o error checking";
+        return false;
     }
 
-    return;
+    return false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,7 +141,8 @@ void getExtent(GDALDataset *temp, double *ranges){
 // Used for elevation values and PIHM attribute file.
 // WARNING: Every value is converted to a double, regardless of type.
 // WARNING: No values assigned to extent with error. This will cause issues to the user!
-// WARNING: return -9999 on error not zero
+// WARNING: return -9999 on error not zero (more likely reasonable value than -9999)
+// GDALDataset is not closed here.
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 double raster_grid_value(GDALDataset* layer, int bandNumber, double x, double y, double *ranges){
 
@@ -210,6 +212,16 @@ double raster_grid_value(GDALDataset* layer, int bandNumber, double x, double y,
         if(row < 1)
         {
             main_window->Log_Message("[raster_grid_value] row < 1. Returning -9999.");
+            return -9999;
+        }
+        if(col > 500000) //500000 is a guess
+        {
+            main_window->Log_Message("[raster_grid_value] col > 500000. Returning -9999.");
+            return -9999;
+        }
+        if(row > 500000) //500000 is a guess
+        {
+            main_window->Log_Message("[raster_grid_value] row > 500000. Returning -9999.");
             return -9999;
         }
 

@@ -1,7 +1,7 @@
 #ifndef PEDO_TRANSFER_FUNCTIONS_H
 #define PEDO_TRANSFER_FUNCTIONS_H
 
-
+#include <QString>
 
 int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName );
 

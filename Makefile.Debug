@@ -20725,6 +20725,7 @@ debug\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt5_12\5.12.0\
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsVector\polygon_polylines.h \
 		0LibsShape\shapefil.h \
+		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QString \
 		globals.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QDir \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\qdir.h \
@@ -20774,7 +20775,6 @@ debug\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt5_12\5.12.0\
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtWidgets\qtabwidget.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtGui\qicon.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtWidgets\QWidget \
-		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QString \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtGui\QPalette
 
 debug\simplifypolylines.obj: 3VectorProcessing\3SimplifyPolylines\simplifypolylines.cpp G:\Qt5_12\5.12.0\msvc2017_64\include\QtWidgets\QFileDialog \
@@ -21195,6 +21195,7 @@ debug\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt5_12\5.12.0\msvc20
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsVector\simplify_polyline.h \
 		0LibsVector\simplify_shape.h \
+		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QString \
 		0LibsShape\shapefil.h \
 		globals.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QDir \
@@ -21245,7 +21246,6 @@ debug\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt5_12\5.12.0\msvc20
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtWidgets\qtabwidget.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtGui\qicon.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtWidgets\QWidget \
-		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QString \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtGui\QPalette
 
 debug\simplify_polyline.obj: 0LibsVector\simplify_polyline.cpp G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QDebug \
@@ -34641,6 +34641,7 @@ debug\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt5_12\5.12.0\
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsVector\polygon_polylines.h \
 		0LibsShape\shapefil.h \
+		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QString \
 		globals.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QDir \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\qdir.h \
@@ -34690,7 +34691,6 @@ debug\polygon_polylines.obj: 0LibsVector\polygon_polylines.cpp G:\Qt5_12\5.12.0\
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtWidgets\qtabwidget.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtGui\qicon.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtWidgets\QWidget \
-		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QString \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtGui\QPalette
 
 debug\polyline_splitline.obj: 0LibsVector\polyline_splitline.cpp G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QDebug \
@@ -34993,6 +34993,7 @@ debug\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt5_12\5.12.0\msvc20
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
 		0LibsVector\simplify_polyline.h \
 		0LibsVector\simplify_shape.h \
+		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QString \
 		0LibsShape\shapefil.h \
 		globals.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QDir \
@@ -35043,7 +35044,6 @@ debug\simplify_shape.obj: 0LibsVector\simplify_shape.cpp G:\Qt5_12\5.12.0\msvc20
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtWidgets\qtabwidget.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtGui\qicon.h \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtWidgets\QWidget \
-		G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QString \
 		G:\Qt5_12\5.12.0\msvc2017_64\include\QtGui\QPalette
 
 debug\tin_shape.obj: 0LibsVector\tin_shape.cpp G:\Qt5_12\5.12.0\msvc2017_64\include\QtCore\QString \

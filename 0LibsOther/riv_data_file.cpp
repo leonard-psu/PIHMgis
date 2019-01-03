@@ -86,6 +86,7 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         if ( ! NodeFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
             main_window->Log_Message("[RiverFromTIN] Error[39] opening Node file.");
+            EleFile.close();
             return 39;
         }
 
@@ -95,6 +96,8 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         if ( ! NeighFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
             main_window->Log_Message("[RiverFromTIN] Error[44] opening Neigh file.");
+            EleFile.close();
+            NodeFile.close();
             return 44;
         }
 
@@ -104,77 +107,102 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         if(RiverShpHandle == nullptr)
         {
             main_window->Log_Message("[RiverFromTIN] Error[51] RiverShpFileName is NULL.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             return 51;
         }
 
         DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
         if(RiverDbfHandle == nullptr)
         {
-            SHPClose(RiverShpHandle);
             main_window->Log_Message("[RiverFromTIN] Error[51] RiverDbfHandle is NULL.");
+            SHPClose(RiverShpHandle);
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
+
             return 51;
         }
 
         SHPHandle xRiverShpHandle = SHPCreate(qPrintable(xRiverShpFileName), SHPT_ARC);
         if(xRiverShpHandle == nullptr)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[57] xRiverShpHandle is NULL.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
-            main_window->Log_Message("[RiverFromTIN] Error[57] xRiverShpHandle is NULL.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             return 57;
         }
 
         DBFHandle xRiverDbfHandle = DBFCreate(qPrintable(xRiverDbfFileName));
         if(xRiverDbfHandle == nullptr)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[57] xRiverDbfHandle is NULL.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
-            main_window->Log_Message("[RiverFromTIN] Error[57] xRiverDbfHandle is NULL.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             return 57;
         }
 
         int LeftEle = DBFAddField(xRiverDbfHandle, "LeftEle",     FTInteger, 10, 0);
         if(LeftEle < 0)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[58] DBFAddField LeftEle.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
-            main_window->Log_Message("[RiverFromTIN] Error[58] DBFAddField LeftEle.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             return 58;
         }
 
         int RightEle = DBFAddField(xRiverDbfHandle, "RightEle",    FTInteger, 10, 0);
         if(RightEle < 0)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[59] DBFAddField RightEle.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
-            main_window->Log_Message("[RiverFromTIN] Error[59] DBFAddField RightEle.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             return 59;
         }
 
         int FrmEleNode = DBFAddField(xRiverDbfHandle, "FrmEleNode",  FTInteger, 10, 0);
         if(FrmEleNode < 0)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[60] DBFAddField FrmEleNode.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
-            main_window->Log_Message("[RiverFromTIN] Error[60] DBFAddField FrmEleNode.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             return 60;
         }
 
         int ToEleNode = DBFAddField(xRiverDbfHandle, "ToEleNode",   FTInteger, 10, 0);
         if(ToEleNode < 0)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[61] DBFAddField ToEleNode.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
-            main_window->Log_Message("[RiverFromTIN] Error[61] DBFAddField ToEleNode.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             return 61;
         }
 
@@ -185,20 +213,26 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
 
         if(NumNode < 1)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[62] NumNode < 1.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
-            main_window->Log_Message("[RiverFromTIN] Error[62] NumNode < 1.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             return 62;
         }
         if(NumNode > 250000) //250000 is a guess
         {
+            main_window->Log_Message("[RiverFromTIN] Error[62] NumNode > 250000.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
-            main_window->Log_Message("[RiverFromTIN] Error[62] NumNode > 250000.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             return 62;
         }
 
@@ -208,11 +242,14 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         Point* node = new Point[NumNode+1];
         if(node == nullptr)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[63] node.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
-            main_window->Log_Message("[RiverFromTIN] Error[63] node.");
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             return 63;
         }
 
@@ -233,25 +270,31 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         EleFileTextStream >> NumEle;
         if(NumEle < 1)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[64] Invalid NumEle < 1.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
 
             delete [] node;
-            main_window->Log_Message("[RiverFromTIN] Error[64] Invalid NumEle < 1.");
 
             return 64;
         }
         if(NumEle > 250000) //250000 is a guess
         {
+            main_window->Log_Message("[RiverFromTIN] Error[64] Invalid NumEle > 250000.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
 
             delete [] node;
-            main_window->Log_Message("[RiverFromTIN] Error[64] Invalid NumEle > 250000.");
 
             return 64;
         }
@@ -263,13 +306,15 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         int** element = new int*[NumEle+1];
         if(element == nullptr)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[65] element is NULL");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
-
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             delete [] node;
-            main_window->Log_Message("[RiverFromTIN] Error[65] element is NULL");
 
             return 65;
         }
@@ -293,28 +338,34 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         NeighFileTextStream >> NumNeigh;
         if(NumNeigh < 1)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[66] Invalid NumNeigh < 1.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
-
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             delete [] node;
             for(int i=1; i <= NumEle; i++)
             {
                 delete [] element[i];
             }
             delete [] element;
-            main_window->Log_Message("[RiverFromTIN] Error[66] Invalid NumNeigh < 1.");
 
             return 66;
         }
 
         if(NumNeigh > 250000) //250000 is a guess
         {
+            main_window->Log_Message("[RiverFromTIN] Error[66] Invalid NumNeigh > 250000.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
 
             delete [] node;
             for(int i=1; i <= NumEle; i++)
@@ -322,7 +373,6 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                 delete [] element[i];
             }
             delete [] element;
-            main_window->Log_Message("[RiverFromTIN] Error[66] Invalid NumNeigh > 250000.");
 
             return 66;
         }
@@ -333,18 +383,20 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         int** neighbour = new int*[NumNeigh+1];
         if(neighbour == nullptr)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[67] neighbour is NULL");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
-
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             delete [] node;
             for(int i=1; i <= NumEle; i++)
             {
                 delete [] element[i];
             }
             delete [] element;
-            main_window->Log_Message("[RiverFromTIN] Error[67] neighbour is NULL");
 
             return 67;
         }
@@ -373,10 +425,15 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         int*  nodeInEleCount = new int[NumNode+1];
         if(nodeInEle == nullptr)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[68] nodeInEle is NULL");
+
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
 
             delete [] node;
             for(int i=1; i <= NumEle; i++)
@@ -390,17 +447,20 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                 delete [] neighbour[i];
             }
             delete [] neighbour;
-            main_window->Log_Message("[RiverFromTIN] Error[68] nodeInEle is NULL");
 
             return 68;
         }
         if(nodeInEleCount == nullptr)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[69] nodeInEleCount is NULL");
+
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
-
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
             delete [] node;
             for(int i=1; i <= NumEle; i++)
             {
@@ -413,7 +473,6 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                 delete [] neighbour[i];
             }
             delete [] neighbour;
-            main_window->Log_Message("[RiverFromTIN] Error[69] nodeInEleCount is NULL");
 
             return 69;
         }
@@ -442,10 +501,15 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         int* neighNodeCount = new int[NumNode+1];
         if(neighNode == nullptr)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[70] neighNode is NULL");
+
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
 
             delete [] node;
             for(int i=1; i <= NumEle; i++)
@@ -466,17 +530,21 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
             }
             delete [] nodeInEle;
             delete [] nodeInEleCount;
-            main_window->Log_Message("[RiverFromTIN] Error[70] neighNode is NULL");
 
             return 70;
         }
 
         if(neighNodeCount == nullptr)
         {
+            main_window->Log_Message("[RiverFromTIN] Error[71] neighNodeCount is NULL");
+
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             SHPClose(xRiverShpHandle);
             DBFClose(xRiverDbfHandle);
+            EleFile.close();
+            NodeFile.close();
+            NeighFile.close();
 
             delete [] node;
             for(int i=1; i <= NumEle; i++)
@@ -497,7 +565,6 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
             }
             delete [] nodeInEle;
             delete [] nodeInEleCount;
-            main_window->Log_Message("[RiverFromTIN] Error[71] neighNodeCount is NULL");
 
             return 71;
         }
@@ -585,12 +652,12 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                         }
                         else {
 
-//                            if(print_many_messages)
-//                            {
-//                                qDebug() << "[RiverFromTIN] NumNode " << NumNode;
-//                                qDebug() << "[RiverFromTIN] The J value used is " << j <<" (" <<pt1.x << "," << pt1.y <<") ";
-//                                qDebug() << "[RiverFromTIN] node[j] " << j <<" (" <<node[j].x << "," << node[j].y <<") ";
-//                            }
+                            //                            if(print_many_messages)
+                            //                            {
+                            //                                qDebug() << "[RiverFromTIN] NumNode " << NumNode;
+                            //                                qDebug() << "[RiverFromTIN] The J value used is " << j <<" (" <<pt1.x << "," << pt1.y <<") ";
+                            //                                qDebug() << "[RiverFromTIN] node[j] " << j <<" (" <<node[j].x << "," << node[j].y <<") ";
+                            //                            }
                         }
 
                         if(!error_found)
@@ -602,16 +669,16 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                                 int j, k, l;
                                 for(j=0; j < neighNodeCount[numPt]; j++)
                                 {
-//                                    if(print_many_messages)
-//                                    {
-//                                        qDebug() << "[RiverFromTIN] NumNode ";
-//                                        qDebug() <<  "x= " << node[numPt].x << " y= " << node[numPt].y << "\n";
-//                                        qDebug() <<  "x= " << node[neighNode[numPt][j]].x << " y= " << node[neighNode[numPt][j]].y << "\n";
-//                                        qDebug() <<  "slope2= " << SLOPE(node[numPt], node[neighNode[numPt][j]]) << "\n";
-//                                        qDebug() <<  "del slope= " << slope-SLOPE(node[numPt], node[neighNode[numPt][j]]) << "\n";
-//                                        qDebug() <<  "=" << oldDist << "\n";
-//                                        qDebug() <<  "=" << distPt(node[neighNode[numPt][j]], pt2) << "\n";
-//                                    }
+                                    //                                    if(print_many_messages)
+                                    //                                    {
+                                    //                                        qDebug() << "[RiverFromTIN] NumNode ";
+                                    //                                        qDebug() <<  "x= " << node[numPt].x << " y= " << node[numPt].y << "\n";
+                                    //                                        qDebug() <<  "x= " << node[neighNode[numPt][j]].x << " y= " << node[neighNode[numPt][j]].y << "\n";
+                                    //                                        qDebug() <<  "slope2= " << SLOPE(node[numPt], node[neighNode[numPt][j]]) << "\n";
+                                    //                                        qDebug() <<  "del slope= " << slope-SLOPE(node[numPt], node[neighNode[numPt][j]]) << "\n";
+                                    //                                        qDebug() <<  "=" << oldDist << "\n";
+                                    //                                        qDebug() <<  "=" << distPt(node[neighNode[numPt][j]], pt2) << "\n";
+                                    //                                    }
 
                                     if(fabs(slope-SLOPE(node[numPt], node[neighNode[numPt][j]])) < 0.001)
                                         break;
@@ -643,16 +710,16 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                                     if(check < 0)
                                         error_found = true;
                                     check = DBFWriteIntegerAttribute(xRiverDbfHandle, record, LeftEle,  LeftRight[0]);
-                                    if(check < 0)
+                                    if(check == false)
                                         error_found = true;
                                     check = DBFWriteIntegerAttribute(xRiverDbfHandle, record, RightEle, LeftRight[1]);
-                                    if(check < 0)
+                                    if(check == false)
                                         error_found = true;
                                     check = DBFWriteIntegerAttribute(xRiverDbfHandle, record, FrmEleNode, FromTo[0]);
-                                    if(check < 0)
+                                    if(check == false)
                                         error_found = true;
                                     check = DBFWriteIntegerAttribute(xRiverDbfHandle, record, ToEleNode,   FromTo[1]);
-                                    if(check < 0)
+                                    if(check == false)
                                         error_found = true;
                                 }
                                 else {
@@ -679,6 +746,9 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         DBFClose(RiverDbfHandle);
         SHPClose(xRiverShpHandle);
         DBFClose(xRiverDbfHandle);
+        EleFile.close();
+        NodeFile.close();
+        NeighFile.close();
 
         ///////////////////////////////////////////////////////////////
         // Clean up
@@ -757,27 +827,27 @@ int AddFID(QString RiverDbfFileName)
 
         if ( fieldCount  <= 0 )
         {
-            DBFClose(RiverDbfHandle);
             main_window->Log_Message("[AddFID] Error[284] Invalid field count <= 0. ");
+            DBFClose(RiverDbfHandle);
             return 284;
         }
         if ( fieldCount  > 1000 ) //1000 is a guess
         {
-            DBFClose(RiverDbfHandle);
             main_window->Log_Message("[AddFID] Error[284] Invalid field count > 1000. ");
+            DBFClose(RiverDbfHandle);
             return 284;
         }
 
         if ( recordCount  <= 0 )
         {
-            DBFClose(RiverDbfHandle);
             main_window->Log_Message("[AddFID] Error[285] Invalid record count <= 0. ");
+            DBFClose(RiverDbfHandle);
             return 285;
         }
         if ( recordCount > 250000 ) //250000 is a guess
         {
-            DBFClose(RiverDbfHandle);
             main_window->Log_Message("[AddFID] Error[285] Invalid record count > 250000. ");
+            DBFClose(RiverDbfHandle);
             return 285;
         }
 
@@ -787,6 +857,8 @@ int AddFID(QString RiverDbfFileName)
         if ( TempDbfHandle == nullptr )
         {
             main_window->Log_Message("[AddFID] Error[293] TempDbfFileName is NULL. ");
+            DBFClose(RiverDbfHandle);
+
             return 293;
         }
 
@@ -797,9 +869,9 @@ int AddFID(QString RiverDbfFileName)
         int RivIDField = DBFAddField(TempDbfHandle, "RivID", FTInteger, 6, 0);
         if ( RivIDField  < 0 )
         {
+            main_window->Log_Message("[AddFID] Error[293] Unable to create RivID field. ");
             DBFClose(RiverDbfHandle);
             DBFClose(TempDbfHandle);
-            main_window->Log_Message("[AddFID] Error[293] Unable to create RivID field. ");
             return 293;
         }
 
@@ -807,19 +879,27 @@ int AddFID(QString RiverDbfFileName)
         for (int i=0; i<fieldCount; i++)
         {
             fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
-            TempInt = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
-
-            if(TempInt < 0)
+            if( fieldType == FTInvalid)
             {
                 error_found = true;
+            }
+            else
+            {
+                TempInt = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
+
+                if(TempInt < 0)
+                {
+                    error_found = true;
+                }
+
             }
         }
 
         if(error_found)
         {
+            main_window->Log_Message("[AddFID] Error[294] Issues with adding fields to " + RiverDbfFileName);
             DBFClose(RiverDbfHandle);
             DBFClose(TempDbfHandle);
-            main_window->Log_Message("[AddFID] Error[294] Issues with adding fields to " + RiverDbfFileName);
             return 294;
         }
 
@@ -845,7 +925,7 @@ int AddFID(QString RiverDbfFileName)
                 {
                     iValue = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
                     TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j+1, iValue);
-                    if(TempInt < 0)
+                    if(TempInt == false)
                     {
                         error_found = true;
                     }
@@ -861,7 +941,7 @@ int AddFID(QString RiverDbfFileName)
                 }
             }
             TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, 0, i+1);
-            if(TempInt < 0)
+            if(TempInt == false)
             {
                 error_found = true;
             }
@@ -885,7 +965,7 @@ int AddFID(QString RiverDbfFileName)
             return -9999;
         }
 
-        check =QFile::remove(TempDbfFileName);
+        check = QFile::remove(TempDbfFileName);
         if(check)
         {
             main_window->Log_Message("[AddFID] Error Unable to remove " + TempDbfFileName );
@@ -931,8 +1011,8 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
         DBFHandle RiverDbfHandle = DBFOpen( qPrintable(RiverDbfFileName), "rb");
         if(RiverDbfHandle == nullptr)
         {
-            SHPClose(RiverShpHandle);
             main_window->Log_Message("[AddToFromNode] Error RiverDbfFileName is NULL. Returning 365.");
+            SHPClose(RiverShpHandle);
             return 365;
         }
 
@@ -941,9 +1021,9 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
         DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
         if ( TempDbfHandle == nullptr )
         {
+            main_window->Log_Message("[AddToFromNode] Error TempDbfFileName is NULL. Returning 372.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
-            main_window->Log_Message("[AddToFromNode] Error TempDbfFileName is NULL. Returning 372.");
             return 372;
         }
 
@@ -952,38 +1032,38 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
         int fieldCount  = DBFGetFieldCount(RiverDbfHandle);
         if(fieldCount < 1)
         {
+            main_window->Log_Message("[AddToFromNode] Error[373] fieldCount < 1. ");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             DBFClose(TempDbfHandle);
-            main_window->Log_Message("[AddToFromNode] Error[373] fieldCount < 1. ");
             return 373;
         }
 
         if(fieldCount > 1000)
         {
+            main_window->Log_Message("[AddToFromNode] Error[373] fieldCount > 1000. ");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             DBFClose(TempDbfHandle);
-            main_window->Log_Message("[AddToFromNode] Error[373] fieldCount > 1000. ");
             return 373;
         }
 
         int recordCount = DBFGetRecordCount(RiverDbfHandle);
         if(recordCount < 1)
         {
+            main_window->Log_Message("[AddToFromNode] Error[374] recordCount < 1. ");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             DBFClose(TempDbfHandle);
-            main_window->Log_Message("[AddToFromNode] Error[374] recordCount < 1. ");
             return 374;
         }
 
         if(recordCount > 250000)
         {
+            main_window->Log_Message("[AddToFromNode] Error[374] recordCount > 250000. ");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             DBFClose(TempDbfHandle);
-            main_window->Log_Message("[AddToFromNode] Error[374] recordCount > 250000. ");
             return 374;
         }
 
@@ -1000,42 +1080,51 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
         for (int i=0; i < fieldCount; i++)
         {
             fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
-            TempInt   = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
-            if(TempInt < 0)
+            if( fieldType == FTInvalid)
             {
-                main_window->Log_Message("[AddToFromNode] Issue with value generated by Field type " + QString(fieldName));
+                main_window->Log_Message("[AddToFromNode] Not a recognised field type " + QString(fieldName));
                 error_found = true;
             }
+            else
+            {
+                TempInt = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
+                if(TempInt < 0)
+                {
+                    main_window->Log_Message("[AddToFromNode] Issue with value generated by Field type " + QString(fieldName));
+                    error_found = true;
+                }
+            }
+
         }
 
         if(error_found)
         {
+            main_window->Log_Message("[AddToFromNode] Error[375] Issues with adding fields to " + RiverDbfFileName);
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             DBFClose(TempDbfHandle);
-            main_window->Log_Message("[AddToFromNode] Error[375] Issues with adding fields to " + RiverDbfFileName);
             return 375;
         }
 
         int fromField = DBFAddField(TempDbfHandle, "FromNode", FTInteger, 6, 0);
         if ( fromField < 0 )
         {
+            main_window->Log_Message("[AddToFromNode] Error[376] fromField < 0. " + RiverDbfFileName);
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             DBFClose(TempDbfHandle);
 
-            main_window->Log_Message("[AddToFromNode] Error[376] fromField < 0. " + RiverDbfFileName);
             return 376;
         }
 
         int toField   = DBFAddField(TempDbfHandle, "ToNode",   FTInteger, 6, 0);
         if ( toField < 0 )
         {
+            main_window->Log_Message("[AddToFromNode] Error[377] Error toField < 0. " + RiverDbfFileName);
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             DBFClose(TempDbfHandle);
 
-            main_window->Log_Message("[AddToFromNode] Error[377] Error toField < 0. " + RiverDbfFileName);
             return 377;
         }
 
@@ -1060,13 +1149,16 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
                 {
                     iValue  = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
                     TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j, iValue);
+                    if(TempInt == false)
+                        error_found = true;
                 }
                 else if(fieldType == FTDouble)
                 {
                     fValue  = DBFReadDoubleAttribute(RiverDbfHandle, i, j);
                     TempInt = DBFWriteDoubleAttribute(TempDbfHandle, i, j, fValue);
                 }
-                else {
+                else
+                {
                     main_window->Log_Message("[AddToFromNode] Field type ignored (may not be bad) " + QString(fieldName));
                     TempInt = 1; //So warning below is not generated
                 }
@@ -1090,13 +1182,13 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
             main_window->Log_Message("[AddToFromNode] Computing FromNode and ToNode ...");
         }
 
-        Point *nodes = new Point[recordCount*2];
+        Point *nodes = new Point[recordCount*2]; //TODO Check *2 logic
         if ( nodes == nullptr )
         {
+            main_window->Log_Message("[AddToFromNode] nodes == nullptr. Returning 398.");
             SHPClose(RiverShpHandle);
             DBFClose(RiverDbfHandle);
             DBFClose(TempDbfHandle);
-            main_window->Log_Message("[AddToFromNode] nodes == nullptr. Returning 398.");
             return 398;
         }
 
@@ -1104,7 +1196,7 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
         TempInt = -1;
         error_found = false;
 
-        for(int i=0; i<recordCount; i++)
+        for(int i = 0; i < recordCount; i++)
         {
             SHPObject *obj = SHPReadObject(RiverShpHandle, i);
             if( obj != nullptr)
@@ -1118,34 +1210,79 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
                     TempPoint.y = obj->padfY[k];
                     int j = ptCount-1;
 
-                    while( IsEqualPoint(TempPoint, nodes[j]) != 1 && j >= 0 )
-                        j--;
-
-                    if(j == -1)
+                    //Check index to nodes
+                    if(j < 0)
                     {
-                        nodes[ptCount].x=obj->padfX[k];
-                        nodes[ptCount].y=obj->padfY[k];
-                        ptCount++;
-
-                        if(k == 0)
-                            TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,fromField,ptCount);
-                        else
-                            TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,toField,ptCount);
+                        main_window->Log_Message("[AddToFromNode] Error Invalid J index value at " + QString::number(i) );
+                        error_found = true;
+                    }
+                    else if ( ptCount  < 0 || ptCount >= (recordCount*2) )
+                    {
+                        main_window->Log_Message("[AddToFromNode] Error Invalid ptCount value at " + QString::number(i) );
+                        error_found = true;
                     }
                     else
                     {
-                        if(k == 0)
-                            TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,fromField,j+1);
-                        else
-                            TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,toField,j+1);
-                    }
+                        while( IsEqualPoint(TempPoint, nodes[j]) != 1 && j >= 0 )
+                            j--;
 
-                    if ( TempInt < 1 )
-                    {
-                        error_found = true;
-                        main_window->Log_Message("[AddToFromNode] WARNING with writing from and to fields at " + QString::number(i) );
+                        if(j == -1)
+                        {
+                            nodes[ptCount].x=obj->padfX[k];
+                            nodes[ptCount].y=obj->padfY[k];
+                            ptCount++;
+
+                            if(k == 0)
+                            {
+                                TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,fromField,ptCount);
+                                if(TempInt == false)
+                                {
+                                    main_window->Log_Message("[AddToFromNode] Error DBFWriteIntegerAttribute at " + QString::number(i) );
+                                    error_found = true;
+                                }
+                            }
+                            else
+                            {
+                                TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,toField,ptCount);
+                                if(TempInt == false)
+                                {
+                                    main_window->Log_Message("[AddToFromNode] Error DBFWriteIntegerAttribute at " + QString::number(i) );
+                                    error_found = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if(k == 0)
+                            {
+                                TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,fromField,j+1);
+                                if(TempInt == false)
+                                {
+                                    main_window->Log_Message("[AddToFromNode] Error DBFWriteIntegerAttribute at " + QString::number(i) );
+                                    error_found = true;
+                                }
+                            }
+                            else
+                            {
+                                TempInt = DBFWriteIntegerAttribute(TempDbfHandle,i,toField,j+1);
+                                if(TempInt == false)
+                                {
+                                    main_window->Log_Message("[AddToFromNode] Error DBFWriteIntegerAttribute at " + QString::number(i) );
+                                    error_found = true;
+                                }
+                            }
+                        }
+
+                        if ( TempInt < 1 )
+                        {
+                            error_found = true;
+                            main_window->Log_Message("[AddToFromNode] WARNING with writing from and to fields at " + QString::number(i) );
+                        }
                     }
                 }
+            }
+            else {
+                main_window->Log_Message("[AddToFromNode] Failed to read shape object at " + QString::number(i) );
             }
         }
 
@@ -1219,15 +1356,16 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
         SHPHandle RiverShpHandle = SHPOpen(qPrintable(RiverShpFileName), "rb");
         if(RiverShpHandle == nullptr)
         {
-            main_window->Log_Message("[AddStrahlerStreamOrder] Error RiverShpHandle is NULL. Returning 521.");
-            return 521;
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1000] RiverShpHandle is NULL.");
+            return -1000;
         }
 
         DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
         if(RiverDbfHandle == nullptr)
         {
-            main_window->Log_Message("[AddStrahlerStreamOrder] Error RiverDbfFileName is NULL. Returning 521.");
-            return 521;
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1001] RiverDbfFileName is NULL. ");
+            SHPClose(RiverShpHandle);
+            return -1001;
         }
 
         if(print_debug_messages)
@@ -1236,17 +1374,21 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
         }
 
         int fromField = DBFGetFieldIndex(RiverDbfHandle, "FromNode");
-        if (fromField == -1)
+        if (fromField < 0)
         {
-            main_window->Log_Message("[AddStrahlerStreamOrder] Error[513]: FromNode field does *NOT* exist");
-            return 513;
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1002] FromNode field does *NOT* exist");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            return -1002;
         }
 
         int toField = DBFGetFieldIndex(RiverDbfHandle, "ToNode");
-        if (toField == -1)
+        if (toField < 0)
         {
-            main_window->Log_Message("[AddStrahlerStreamOrder] Error[520]: ToNode field does *NOT* exist");
-            return 520;
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1003]: ToNode field does *NOT* exist");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            return -1003;
         }
 
         QString TempDbfFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + riv_temp_fname;
@@ -1254,13 +1396,50 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
         DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
         if(TempDbfHandle == nullptr)
         {
-            main_window->Log_Message("[AddStrahlerStreamOrder] Error[521] TempDbfHandle is NULL.");
-            return 521;
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1004] TempDbfHandle is NULL.");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            return -1004;
         }
 
         int TempInt = -1;
         int fieldCount  = DBFGetFieldCount(RiverDbfHandle);
+
+        if(fieldCount <= 0)
+        {
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1005] fieldCount <= 0");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            DBFClose(TempDbfHandle);
+            return -1005;
+        }
+        if(fieldCount > 1000) //1000 is a guess
+        {
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1006] fieldCount > 1000");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            DBFClose(TempDbfHandle);
+            return -1006;
+        }
+
         int recordCount = DBFGetRecordCount(RiverDbfHandle);
+
+        if(recordCount <= 0)
+        {
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1007] recordCount <= 0");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            DBFClose(TempDbfHandle);
+            return -1007;
+        }
+        if(recordCount > 500000) //500000 is a guess
+        {
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1008] recordCount > 500000");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            DBFClose(TempDbfHandle);
+            return -1008;
+        }
 
         if(print_debug_messages)
         {
@@ -1275,26 +1454,39 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
         for (int i=0; i < fieldCount; i++)
         {
             fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
-            TempInt   = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
-
-            if ( TempInt < 1 )
+            if( fieldType == FTInvalid)
             {
-                main_window->Log_Message("[AddStrahlerStreamOrder] Issue with value generated by Field type " + QString(fieldName));
                 error_found = true;
+            }
+            else
+            {
+                TempInt = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
+
+                if ( TempInt < 0 )
+                {
+                    main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1009] Issue with value generated by Field type " + QString(fieldName));
+                    error_found = true;
+                }
             }
         }
 
         if(error_found)
         {
-            main_window->Log_Message("[AddStrahlerStreamOrder] Error[522] Errors found creating dbf fields in " + TempDbfFileName);
-            return 522;
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1010] Errors found creating dbf fields in " + TempDbfFileName);
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            DBFClose(TempDbfHandle);
+            return -1010;
         }
 
         int StrahlerStreamOrder = DBFAddField(TempDbfHandle, "StrOrder", FTInteger, 6, 0);
-        if ( StrahlerStreamOrder < 1 )
+        if ( StrahlerStreamOrder < 0 )
         {
-            main_window->Log_Message("[AddStrahlerStreamOrder] Issue with adding StrOrderField in " + QString(fieldName));
-            return 523;
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1011] Issue with adding StrOrderField in " + QString(fieldName));
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            DBFClose(TempDbfHandle);
+            return -1011;
         }
 
 
@@ -1304,7 +1496,7 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
         const char * cValue;
         for (int i=0; i < recordCount; i++)
         {
-            for (int j=0; j<fieldCount; j++)
+            for (int j=0; j < fieldCount; j++)
             {
                 TempInt = -1;
                 fieldType = DBFGetFieldInfo(RiverDbfHandle, j, fieldName, width, decimals);
@@ -1312,30 +1504,42 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
                 {
                     cValue = DBFReadStringAttribute(RiverDbfHandle, i, j);
                     TempInt = DBFWriteStringAttribute(TempDbfHandle, i, j, cValue);
+                    if(TempInt == false)
+                        error_found = true;
                 }
                 else if(fieldType == FTInteger)
                 {
                     iValue = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
                     TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j, iValue);
+                    if(TempInt == false)
+                        error_found = true;
                 }
                 else if(fieldType == FTDouble)
                 {
                     fValue = DBFReadDoubleAttribute(RiverDbfHandle, i, j);
                     TempInt = DBFWriteDoubleAttribute(TempDbfHandle, i, j, fValue);
+                    if(TempInt == false)
+                        error_found = true;
+                }
+                else
+                {
+                    main_window->Log_Message("[AddStrahlerStreamOrder] Warning unknown field type. Ignoring at " + QString::number(j));
                 }
 
-                if ( TempInt < 1 )
+                if ( error_found )
                 {
-                    main_window->Log_Message("[AddStrahlerStreamOrder] Issue with value generated by Field type " + QString(fieldName));
-                    error_found = true;
+                    main_window->Log_Message("[AddStrahlerStreamOrder] Issue(s) writing value generated by Field type " + QString(fieldName));
                 }
             }
         }
 
         if(error_found)
         {
-            main_window->Log_Message("[AddStrahlerStreamOrder] WARNING Issues found writing StrahlerStreamOrder shapefile. Check logs ...");
-            //return 524; Are they serious errors???
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1012] Writing Issues found to StrahlerStreamOrder shapefile. Check logs ...");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            DBFClose(TempDbfHandle);
+            return -1012;
         }
 
         if(print_debug_messages)
@@ -1344,18 +1548,40 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
         }
 
         int (*toArray)[5] = new int[2*recordCount][5];
-        int *count = new int [2*recordCount];
+        if(toArray == nullptr)
+        {
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1013] Failed to allocate toArray ");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            DBFClose(TempDbfHandle);
+            return -1013;
+        }
 
-        for (int i=0; i<2*recordCount; i++)
-            count[i]=0;
+        int *count = new int [2*recordCount];
+        if(count == nullptr)
+        {
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1014] Failed to allocate count ");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            DBFClose(TempDbfHandle);
+            delete [] toArray;
+            return -1014;
+        }
+
+        for (int i=0; i < 2*recordCount; i++)
+        {
+            count[i] = 0;
+        }
 
         for(int i=0; i < recordCount; i++)
         {
             TempInt = DBFReadIntegerAttribute(RiverDbfHandle, i, toField);
 
-            if ( TempInt < 0 )
+            //http://shapelib.maptools.org/dbf_api.html
+            // Zero is returned if not interpretable as a number
+            if ( TempInt < 0 ) //Needs to be greater than zero for array index
             {
-                main_window->Log_Message("[AddStrahlerStreamOrder] Invalid Index with ToField ");
+                main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1015] TempInt < 0 ");
                 error_found = true;
             }
             else
@@ -1367,17 +1593,24 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
 
         if(error_found)
         {
-            main_window->Log_Message("[AddStrahlerStreamOrder] WARNING Strahler Stream Order issues with ToField check logs...");
+            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1016] Strahler Stream Order issues with ToField check logs...");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            DBFClose(TempDbfHandle);
+            delete [] count;
+            delete [] toArray;
+            return -1016;
         }
+
         error_found = false;
 
-        for(int i=recordCount-1; i>=0; i--)
+        for(int i = recordCount-1; i>=0; i--)
         {
             TempInt = DBFReadIntegerAttribute(RiverDbfHandle, i, toField);
 
-            if ( TempInt < 0 )
+            if ( TempInt < 0 ) //Needs to be greater than zero for array index
             {
-                main_window->Log_Message("[AddStrahlerStreamOrder] Invalid Index with ToField ");
+                main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1017] TempInt < 0 ");
                 error_found = true;
             }
             else
@@ -1390,6 +1623,12 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
         if(error_found)
         {
             main_window->Log_Message("[AddStrahlerStreamOrder] WARNING Strahler Stream Order issues with ToField check logs...");
+            SHPClose(RiverShpHandle);
+            DBFClose(RiverDbfHandle);
+            DBFClose(TempDbfHandle);
+            delete [] count;
+            delete [] toArray;
+            return -1017;
         }
 
         error_found = false;
@@ -1411,7 +1650,7 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
                     if(count[TempInt] == 0)
                     {
                         int dwrite = DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, 1);
-                        if(dwrite < 0)
+                        if(dwrite == false)
                             error_found = true;
                     }
                     else if(count[TempInt] == 1)
@@ -1425,11 +1664,12 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
                                 UPDATE = 1;
 
                             int dwrite = DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, DBFReadIntegerAttribute(TempDbfHandle, TempInt, StrahlerStreamOrder));
-                            if(dwrite < 0)
+                            if(dwrite == false)
                                 error_found = true;
                         }
                         else
                         {
+                            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1018] TempInt < 0 ");
                             error_found = true;
                         }
                     }
@@ -1444,7 +1684,7 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
                             for(int j=0; j<count[TempInt]; j++)
                             {
                                 to = toArray[from][j]; //cout<<"  to = "<<to<<"\t";
-                                so = DBFReadIntegerAttribute(TempDbfHandle, to, StrahlerStreamOrder);// cout<<"  so = "<<so<<"\n";
+                                so = DBFReadIntegerAttribute(TempDbfHandle, to, StrahlerStreamOrder);
                                 if(so >= max1)
                                 {
                                     max2=max1;
@@ -1457,7 +1697,7 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
                                     UPDATE = 1;
 
                                 int dwrite = DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, max1+1);
-                                if(dwrite < 0)
+                                if(dwrite == false)
                                     error_found = true;
                             }
                             else
@@ -1466,19 +1706,21 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
                                     UPDATE = 1;
 
                                 int dwrite = DBFWriteIntegerAttribute(TempDbfHandle, i, StrahlerStreamOrder, max1);
-                                if(dwrite < 0)
+                                if(dwrite == false)
                                     error_found = true;
                             }
                         }
                         else
                         {
+                            main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1019] from < 0 ");
                             error_found = true;
                         }
                     }
-
                 }
-                else {
+                else
+                {
                     error_found = true;
+                    main_window->Log_Message("[AddStrahlerStreamOrder] Error[-1020] TempInt < 0 ");
                 }
             }
         }
@@ -1542,65 +1784,71 @@ int AddDownSegment(QString RiverDbfFileName, QString BoundaryCondition)
         DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
         if ( RiverDbfHandle == nullptr )
         {
-            main_window->Log_Message("[AddDownSegment] Error[692] RiverDbfFileName is NULL.");
-            return 692;
+            main_window->Log_Message("[AddDownSegment] Error[-1000] RiverDbfFileName is NULL.");
+            return -1000;
         }
 
         int RivID = DBFGetFieldIndex(RiverDbfHandle, "RivID");
         if( RivID < 0)
         {
-            main_window->Log_Message("[AddDownSegment] Error[695] RivID field does *NOT* exist.");
-            return 695;
+            main_window->Log_Message("[AddDownSegment] Error[-1001] RivID field does *NOT* exist.");
+            DBFClose(RiverDbfHandle);
+            return -1001;
         }
 
         int FROM_NODE = DBFGetFieldIndex(RiverDbfHandle, "FromNode");
         if( FROM_NODE < 0)
         {
-            main_window->Log_Message("[AddDownSegment] Error[704] RivID FromNode does *NOT* exist.");
-            return 704;
-        }
+            main_window->Log_Message("[AddDownSegment] Error[-1002] RivID FromNode does *NOT* exist.");
+            DBFClose(RiverDbfHandle);
+            return -1002;        }
 
         int TO_NODE = DBFGetFieldIndex(RiverDbfHandle, "ToNode");
         if( TO_NODE == -1)
         {
-            main_window->Log_Message("[AddDownSegment] Error[711] RivID ToNode does *NOT* exist.");
-            return 711;
+            main_window->Log_Message("[AddDownSegment] Error[-1003] RivID ToNode does *NOT* exist.");
+            DBFClose(RiverDbfHandle);
+            return -1003;
         }
-
 
         QString TempDbfFileName = user_pihmgis_root_folder + user_pihmgis_project_folder + riv_temp_fname;
 
         DBFHandle TempDbfHandle = DBFCreate( qPrintable(TempDbfFileName) );
         if ( TempDbfHandle == nullptr )
         {
-            main_window->Log_Message("[AddDownSegment] Error[723] TempDbfHandle is NULL. " + TempDbfFileName);
-            return 723;
+            main_window->Log_Message("[AddDownSegment] Error[-1004] TempDbfHandle is NULL. " + TempDbfFileName);
+            DBFClose(RiverDbfHandle);
+            return -1004;
         }
 
         int fieldCount  = DBFGetFieldCount(RiverDbfHandle);
         if ( fieldCount <= 0 )
         {
-            main_window->Log_Message("[AddDownSegment] Error[724] Invalid field count <= 0. " + RiverDbfFileName);
-            return 724;
+            main_window->Log_Message("[AddDownSegment] Error[-1005] Invalid field count <= 0. " + RiverDbfFileName);
+            DBFClose(RiverDbfHandle);
+            return -1005;
         }
 
-        if ( fieldCount > 1000 )
+        if ( fieldCount > 1000 ) // 1000 is a guess
         {
-            main_window->Log_Message("[AddDownSegment] Error[724] Invalid field count > 1000. " + RiverDbfFileName);
-            return 724;
+            main_window->Log_Message("[AddDownSegment] Error[-1006] Invalid field count > 1000. " + RiverDbfFileName);
+            DBFClose(RiverDbfHandle);
+            return -1006;
         }
 
         int recordCount = DBFGetRecordCount(RiverDbfHandle);
         if ( recordCount <= 0 )
         {
-            main_window->Log_Message("[AddDownSegment] Error[725] Invalid record count.  <= 0" + RiverDbfFileName);
-            return 725;
+            main_window->Log_Message("[AddDownSegment] Error[-1007] Invalid record count.  <= 0" + RiverDbfFileName);
+            DBFClose(RiverDbfHandle);
+            return -1007;
         }
 
         if ( recordCount > 250000 ) //250000 is a guess
         {
-            main_window->Log_Message("[AddDownSegment] Error[725] Invalid record count > 250000. " + RiverDbfFileName);
-            return 725;
+            main_window->Log_Message("[AddDownSegment] Error[-1008] Invalid record count > 250000. " + RiverDbfFileName);
+            DBFClose(RiverDbfHandle);
+            return -1008;
         }
 
         if(print_debug_messages)
@@ -1616,36 +1864,43 @@ int AddDownSegment(QString RiverDbfFileName, QString BoundaryCondition)
         for (int i=0; i < fieldCount; i++)
         {
             fieldType = DBFGetFieldInfo(RiverDbfHandle, i, fieldName, width, decimals);
-            TempInt   = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
-
-            if ( TempInt < 0 )
+            if( fieldType == FTInvalid)
             {
+                main_window->Log_Message("[AddDownSegment] Error[-1009] Issue with getting field info at " + QString(fieldName));
                 error_found = true;
-                main_window->Log_Message("[AddDownSegment] Issue with value generated by Field type " + QString(fieldName));
-
+            }
+            else
+            {
+                TempInt = DBFAddField(TempDbfHandle, fieldName, fieldType, width[0], decimals[0]);
+                if ( TempInt < 0 )
+                {
+                    main_window->Log_Message("[AddDownSegment] Error[-1010] Issue with value generated by Field type " + QString(fieldName));
+                    error_found = true;
+                }
             }
         }
 
         if ( error_found )
         {
-            main_window->Log_Message("[AddDownSegment] Error[726] Issues with adding fields to " + TempDbfFileName);
-            return 726;
+            main_window->Log_Message("[AddDownSegment] Error[-1011] Issues with adding fields to " + TempDbfFileName);
+            DBFClose(RiverDbfHandle);
+            return -1011;
         }
 
         int DownSegmt = DBFAddField(TempDbfHandle, "DownSegmt", FTInteger, 6, 0);
 
         if ( DownSegmt < 0 )
         {
-            main_window->Log_Message("[AddDownSegment] Error[726] Issues with adding DownSegmt to " + TempDbfFileName);
-            return 744;
+            main_window->Log_Message("[AddDownSegment] Error[-1012] Issues with adding DownSegmt to " + TempDbfFileName);
+            return -1012;
         }
 
         int iValue;
         double fValue;
         const char * cValue;
-        for (int i=0; i<recordCount; i++)
+        for (int i=0; i < recordCount; i++)
         {
-            for (int j=0; j<fieldCount; j++)
+            for (int j=0; j < fieldCount; j++)
             {
                 TempInt = -1;
                 fieldType = DBFGetFieldInfo(RiverDbfHandle, j, fieldName, width, decimals);
@@ -1653,34 +1908,40 @@ int AddDownSegment(QString RiverDbfFileName, QString BoundaryCondition)
                 {
                     cValue = DBFReadStringAttribute(RiverDbfHandle, i, j);
                     TempInt = DBFWriteStringAttribute(TempDbfHandle, i, j, cValue);
+                    if(TempInt == false)
+                    {
+                        error_found = true;
+                    }
                 }
                 else if(fieldType == FTInteger)
                 {
                     iValue = DBFReadIntegerAttribute(RiverDbfHandle, i, j);
                     TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, j, iValue);
+                    if(TempInt == false)
+                    {
+                        error_found = true;
+                    }
                 }
                 else if(fieldType == FTDouble)
                 {
                     fValue = DBFReadDoubleAttribute(RiverDbfHandle, i, j);
                     TempInt = DBFWriteDoubleAttribute(TempDbfHandle, i, j, fValue);
+                    if(TempInt == false)
+                    {
+                        error_found = true;
+                    }
                 }
-                else {
-                    main_window->Log_Message("[AddDownSegment] WARNING Ignoring field " + QString(fieldName));
-                    TempInt = 1; //So warning below is not generated
-                }
-
-                if ( TempInt < 1 )
+                else
                 {
-                    main_window->Log_Message("[AddDownSegment] Issue with value generated by Field type " + QString(fieldName));
-                    error_found = true;
+                    main_window->Log_Message("[AddDownSegment] WARNING Ignoring field " + QString(fieldName));
                 }
             }
         }
 
         if(error_found)
         {
-            main_window->Log_Message("[AddDownSegment] WARNING Issues found parsing shapefile. Check logs ...");
-            //return 745; Are they serious errors???
+            main_window->Log_Message("[AddDownSegment] Error[-1013] Issues found parsing shapefile. Check logs ...");
+            return -1013;
         }
 
         if(print_debug_messages)
@@ -1690,7 +1951,7 @@ int AddDownSegment(QString RiverDbfFileName, QString BoundaryCondition)
 
         error_found = false;
         int j = 0;
-        for(int i=0; i < recordCount; i++)
+        for(int i = 0; i < recordCount; i++)
         {
             TempInt = -1;
             j=0;
@@ -1702,27 +1963,29 @@ int AddDownSegment(QString RiverDbfFileName, QString BoundaryCondition)
             if( j < recordCount)
             {
                 TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, fieldCount, DBFReadIntegerAttribute(RiverDbfHandle, j, RivID));
+                if(TempInt == false)
+                {
+                    error_found = true;
+                }
             }
             else
             {
                 int BC = BoundaryCondition.toInt();
                 TempInt = DBFWriteIntegerAttribute(TempDbfHandle, i, fieldCount, BC);
-            }
-
-            if ( TempInt < 0 )
-            {
-                main_window->Log_Message("[AddDownSegment] Invalid Index with ToField ");
-                error_found = true;
+                if(TempInt == false)
+                {
+                    error_found = true;
+                }
             }
         }
-
 
         DBFClose(RiverDbfHandle);
         DBFClose(TempDbfHandle);
 
         if(error_found)
         {
-            main_window->Log_Message("[AddDownSegment] WARNING Issues found Computing Down Segments. Check logs...");
+            main_window->Log_Message("[AddDownSegment] Error[-1014] Issues found Computing Down Segments. Check logs...");
+            return -1014;
         }
 
         if(print_debug_messages)
@@ -1772,24 +2035,36 @@ int Riv_File( QString RiverDbfFileName, QString RivDataFileName )
 
     try {
 
+        if(RiverDbfFileName == nullptr)
+        {
+            main_window->Log_Message("[Riv_File] Error[-1000] Invalid RiverDbfFileName " + RiverDbfFileName);
+            return -1000;
+        }
+
+        if(RivDataFileName == nullptr)
+        {
+            main_window->Log_Message("[Riv_File] Error[-1001] Invalid RivDataFileName " + RivDataFileName);
+            return -1001;
+        }
+
         if(RiverDbfFileName.length() < 1)
         {
-            main_window->Log_Message("[Riv_File] Invalid RiverDbfFileName " + RiverDbfFileName);
-            return 800;
+            main_window->Log_Message("[Riv_File] Error[-1002] Invalid RiverDbfFileName " + RiverDbfFileName);
+            return -1002;
         }
 
         if(RivDataFileName.length() < 1)
         {
-            main_window->Log_Message("[Riv_File] Invalid RiverDbfFileName " + RivDataFileName);
-            return 801;
+            main_window->Log_Message("[Riv_File] Error[-1003] Invalid RiverDbfFileName " + RivDataFileName);
+            return -1003;
         }
 
         DBFHandle RiverDbfHandle = DBFOpen(qPrintable(RiverDbfFileName), "rb");
 
-        if ( RiverDbfHandle == NULL )
+        if ( RiverDbfHandle == nullptr )
         {
-            main_window->Log_Message("[Riv_File] Error[827] RiverDbfFileName is NULL.");
-            return 827;
+            main_window->Log_Message("[Riv_File] Error[-1004] RiverDbfFileName is NULL.");
+            return -1004;
         }
 
         if(print_debug_messages)
@@ -1800,57 +2075,65 @@ int Riv_File( QString RiverDbfFileName, QString RivDataFileName )
         int RivID = DBFGetFieldIndex(RiverDbfHandle, "RivID");
         if( RivID < 0 )
         {
-            main_window->Log_Message("[Riv_File] Error[835]: RivID field does *NOT* exist ...");
-            return 835;
+            main_window->Log_Message("[Riv_File] Error[-1005]: RivID field does *NOT* exist ...");
+            DBFClose(RiverDbfHandle);
+            return -1005;
         }
 
         int LeftEle = DBFGetFieldIndex(RiverDbfHandle, "LeftEle");
         if( LeftEle < 0 )
         {
-            main_window->Log_Message("[Riv_File] Error[842]: LeftEle field does *NOT* exist ...");
-            return 842;
+            main_window->Log_Message("[Riv_File] Error[-1006]: LeftEle field does *NOT* exist ...");
+            DBFClose(RiverDbfHandle);
+            return -1006;
         }
 
         int RightEle = DBFGetFieldIndex(RiverDbfHandle, "RightEle");
         if( RightEle == -1)
         {
-            main_window->Log_Message("[Riv_File] Error[849]: RightEle field does *NOT* exist ...");
-            return 849;
+            main_window->Log_Message("[Riv_File] Error[-1007]: RightEle field does *NOT* exist ...");
+            DBFClose(RiverDbfHandle);
+            return -1007;
         }
 
         int FrmEleNode = DBFGetFieldIndex(RiverDbfHandle, "FrmEleNode");
         if( FrmEleNode == -1)
         {
-            main_window->Log_Message("[Riv_File] Error[856]: FrmEleNode field does *NOT* exist ...");
-            return 856;
+            main_window->Log_Message("[Riv_File] Error[-1008]: FrmEleNode field does *NOT* exist ...");
+            DBFClose(RiverDbfHandle);
+            return -1008;
         }
 
         int ToEleNode = DBFGetFieldIndex(RiverDbfHandle, "ToEleNode");
         if( ToEleNode == -1)
         {
-            main_window->Log_Message("[Riv_File] Error[863]: ToEleNode field does *NOT* exist ...");
-            return 863;
+            main_window->Log_Message("[Riv_File] Error[-1009]: ToEleNode field does *NOT* exist ...");
+            DBFClose(RiverDbfHandle);
+            return -1009;
         }
 
         int DownSegmt = DBFGetFieldIndex(RiverDbfHandle, "DownSegmt");
         if( DownSegmt == -1)
         {
-            main_window->Log_Message("[Riv_File] Error[870]: DownSegmt field does *NOT* exist ...");
-            return 870;
+            main_window->Log_Message("[Riv_File] Error[-1010]: DownSegmt field does *NOT* exist ...");
+            DBFClose(RiverDbfHandle);
+            return -1010;
         }
 
         int StrOrder = DBFGetFieldIndex(RiverDbfHandle, "StrOrder");
         if( StrOrder == -1)
         {
-            main_window->Log_Message("[Riv_File] Error[877]: StrOrder field does *NOT* exist ...");
-            return 877;
+            main_window->Log_Message("[Riv_File] Error[-1011]: StrOrder field does *NOT* exist ...");
+            DBFClose(RiverDbfHandle);
+            return -1011;
         }
 
         QFile RivDataFile(RivDataFileName);
         if ( ! RivDataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[Riv_File] Error[882]: Unable to open riv data file " + RivDataFileName);
-            return 882;
+            main_window->Log_Message("[Riv_File] Error[-1012]: Unable to open riv data file " + RivDataFileName);
+            DBFClose(RiverDbfHandle);
+            return -1012;
         }
 
         QTextStream RivDataFileTextStream(&RivDataFile);
@@ -1860,16 +2143,18 @@ int Riv_File( QString RiverDbfFileName, QString RivDataFileName )
 
         if( NumRivSeg <= 0)
         {
+            main_window->Log_Message("[Riv_File] Error[-1013]: Invalid Number of River Segments <= 0 " + QString::number(NumRivSeg));
             RivDataFile.close();
-            main_window->Log_Message("[Riv_File] Error[883]: Invalid Number of River Segments <= 0 " + QString::number(NumRivSeg));
-            return 883;
+            DBFClose(RiverDbfHandle);
+            return -1013;
         }
 
         if( NumRivSeg > 250000) //250000 is a guess
         {
+            main_window->Log_Message("[Riv_File] Error[-1014]: Invalid Number of River Segments > 250000" + QString::number(NumRivSeg));
             RivDataFile.close();
-            main_window->Log_Message("[Riv_File] Error[883]: Invalid Number of River Segments > 250000" + QString::number(NumRivSeg));
-            return 883;
+            DBFClose(RiverDbfHandle);
+            return -1014;
         }
 
         int Order = -9999;
@@ -1895,7 +2180,7 @@ int Riv_File( QString RiverDbfFileName, QString RivDataFileName )
         }
 
         RivDataFileTextStream << "Shape\t" << maxOrder << "\n";
-        for(int c=1; c<=maxOrder; c++)
+        for(int c = 1; c <= maxOrder; c++)
         {
             RivDataFileTextStream << c << "\t" << //index
                                      0.5*c << "\t" << //depth
@@ -1904,7 +2189,7 @@ int Riv_File( QString RiverDbfFileName, QString RivDataFileName )
         }
 
         RivDataFileTextStream << "Material\t" << maxOrder << "\n";
-        for(int c=1; c<=maxOrder; c++)
+        for(int c = 1; c <= maxOrder; c++)
         {
             RivDataFileTextStream<< c << "\t" <<    //index
                                     "4.63E-07" << "\t" <<               //n
@@ -1925,6 +2210,7 @@ int Riv_File( QString RiverDbfFileName, QString RivDataFileName )
         RivDataFileTextStream<<"RES\t"     <<"0"     <<"\n";
 
         RivDataFile.close();
+        DBFClose(RiverDbfHandle);
 
     } catch (...) {
         qDebug() << "Error: Riv_File is returning w/o checking";
@@ -1965,40 +2251,76 @@ int riv_data_file( QString EleFileName, QString NodeFileName, QString NeighFileN
         }
 
         //Check input names
+        if(RiverShpFileName == nullptr)
+        {
+            main_window->Log_Message("[riv_data_file] Invalid RiverShpFileName " );
+            return -9001;
+        }
+        if(RiverDbfFileName == nullptr)
+        {
+            main_window->Log_Message("[riv_data_file] Invalid RiverDbfFileName " );
+            return -9002;
+        }
+        if(EleFileName == nullptr)
+        {
+            main_window->Log_Message("[riv_data_file] Invalid EleFileName " );
+            return -9003;
+        }
+        if(NodeFileName == nullptr)
+        {
+            main_window->Log_Message("[riv_data_file] Invalid NodeFileName " );
+            return -9004;
+        }
+        if(NeighFileName == nullptr)
+        {
+            main_window->Log_Message("[riv_data_file] Invalid NeighFileName " );
+            return -9005;
+        }
+        if(xRiverShpFileName == nullptr)
+        {
+            main_window->Log_Message("[riv_data_file] Invalid xRiverShpFileName " );
+            return -9006;
+        }
+        if(xRiverDbfFileName == nullptr)
+        {
+            main_window->Log_Message("[riv_data_file] Invalid xRiverDbfFileName " );
+            return -9007;
+        }
+
         if(RiverShpFileName.length() < 1)
         {
             main_window->Log_Message("[riv_data_file] Invalid RiverShpFileName " + RiverShpFileName);
-            return -9001;
+            return -9008;
         }
         if(RiverDbfFileName.length() < 1)
         {
             main_window->Log_Message("[riv_data_file] Invalid RiverDbfFileName " + RiverDbfFileName);
-            return -9002;
+            return -9009;
         }
         if(EleFileName.length() < 1)
         {
             main_window->Log_Message("[riv_data_file] Invalid EleFileName " + EleFileName);
-            return -9003;
+            return -9010;
         }
         if(NodeFileName.length() < 1)
         {
             main_window->Log_Message("[riv_data_file] Invalid NodeFileName " + NodeFileName);
-            return -9004;
+            return -9011;
         }
         if(NeighFileName.length() < 1)
         {
             main_window->Log_Message("[riv_data_file] Invalid NeighFileName " + NeighFileName);
-            return -9005;
+            return -9012;
         }
         if(xRiverShpFileName.length() < 1)
         {
             main_window->Log_Message("[riv_data_file] Invalid xRiverShpFileName " + xRiverShpFileName);
-            return -9006;
+            return -9013;
         }
         if(xRiverDbfFileName.length() < 1)
         {
             main_window->Log_Message("[riv_data_file] Invalid xRiverDbfFileName " + xRiverDbfFileName);
-            return -9007;
+            return -9014;
         }
 
         if(print_debug_messages)
@@ -2027,7 +2349,7 @@ int riv_data_file( QString EleFileName, QString NodeFileName, QString NeighFileN
         }
 
         /////////////////////////////////////////////////////////////////////////////////
-        // ** River IDs
+        // River IDs
         if(print_debug_messages)
         {
             main_window->Log_Message("[riv_data_file] Adding River IDs ... ");
@@ -2046,7 +2368,7 @@ int riv_data_file( QString EleFileName, QString NodeFileName, QString NeighFileN
         }
 
         /////////////////////////////////////////////////////////////////////////////////
-        // ** River FromNode and ToNode
+        // River FromNode and ToNode
         if(print_debug_messages)
         {
             main_window->Log_Message("[riv_data_file] Processing River FromNode & ToNodes ... ");
@@ -2065,7 +2387,7 @@ int riv_data_file( QString EleFileName, QString NodeFileName, QString NeighFileN
         }
 
         /////////////////////////////////////////////////////////////////////////////////
-        // ** Strahler Stream Order
+        // Strahler Stream Order
         if(print_debug_messages)
         {
             main_window->Log_Message("[riv_data_file] Processing Strahler Stream Order ... ");
@@ -2084,7 +2406,7 @@ int riv_data_file( QString EleFileName, QString NodeFileName, QString NeighFileN
         }
 
         /////////////////////////////////////////////////////////////////////////////////
-        // ** Down Segment
+        // Down Segment
         if(print_debug_messages)
         {
             main_window->Log_Message("[riv_data_file] Processing Down Segment ... ");
@@ -2103,7 +2425,7 @@ int riv_data_file( QString EleFileName, QString NodeFileName, QString NeighFileN
         }
 
         /////////////////////////////////////////////////////////////////////////////////
-        // ** Riv File
+        // Riv File
         if(print_debug_messages)
         {
             main_window->Log_Message("[riv_data_file] Processing Riv File ... ");

@@ -28,16 +28,17 @@ int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName )
         QFile TextureFile(TextureFileName);
         if ( ! TextureFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[Soil_PedoTransferFunction] Error[11] opening Texture file.");
-            return 11;
+            main_window->Log_Message("[Soil_PedoTransferFunction] Error[-1000] opening Texture file.");
+            return -1000;
         }
         QTextStream TextureFileTextStream(&TextureFile);
 
         QFile DataFile(DataFileName);
         if ( ! DataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[Soil_PedoTransferFunction] Error[16] opening Data file.");
-            return 16;
+            main_window->Log_Message("[Soil_PedoTransferFunction] Error[-1001] opening Data file.");
+            TextureFile.close();
+            return -1001;
         }
 
         QTextStream DataFileTextStream(&DataFile);
@@ -48,26 +49,44 @@ int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName )
         // (1) MUKEY (2) SILT (3) CLAY (4) ORGANIC_MATTER (5) BULK_DENSITY //(6) TopSoil = 1
 
         TempString = TextureFileTextStream.readLine(); // Read Header Line
+        bool error_found = false;
 
         while ( ! TextureFileTextStream.atEnd() )
         {
-            TextureFileTextStream >> TextureData[NumClasses][0]; //MUKEY
-            TextureFileTextStream >> TextureData[NumClasses][1]; //SILT
-            TextureFileTextStream >> TextureData[NumClasses][2]; //CLAY
-            TextureFileTextStream >> TextureData[NumClasses][3]; if(TextureData[NumClasses][3]<0) TextureData[NumClasses][3]=2.5; //ORGANIC MATTER
-            TextureFileTextStream >> TextureData[NumClasses][4]; if(TextureData[NumClasses][4]<0) TextureData[NumClasses][4]=1.3; //BULK DENSITY (g/cm3)
-            //TextureFileTextStream>>TextureData[NumClasses][5]; //TOP SOIL
-            TextureData[NumClasses][5] = 1;
-            //? DataFileTextStream<<"-$ "<<TextureData[NumClasses][0]<<"\t"<<TextureData[NumClasses][1]<<"\t"<<TextureData[NumClasses][2]<<"\t"<<TextureData[NumClasses][3]<<"\t"<<TextureData[NumClasses][4]<<"\t"<<TextureData[NumClasses][5]<<" $-  \n";
+            if(NumClasses < 1000)
+            {
+                TextureFileTextStream >> TextureData[NumClasses][0]; //MUKEY
+                TextureFileTextStream >> TextureData[NumClasses][1]; //SILT
+                TextureFileTextStream >> TextureData[NumClasses][2]; //CLAY
+                TextureFileTextStream >> TextureData[NumClasses][3]; if(TextureData[NumClasses][3] < 0) TextureData[NumClasses][3]=2.5; //ORGANIC MATTER
+                TextureFileTextStream >> TextureData[NumClasses][4]; if(TextureData[NumClasses][4] < 0) TextureData[NumClasses][4]=1.3; //BULK DENSITY (g/cm3)
+                //TextureFileTextStream>>TextureData[NumClasses][5]; //TOP SOIL
+                TextureData[NumClasses][5] = 1;
+                //? DataFileTextStream<<"-$ "<<TextureData[NumClasses][0]<<"\t"<<TextureData[NumClasses][1]<<"\t"<<TextureData[NumClasses][2]<<"\t"<<TextureData[NumClasses][3]<<"\t"<<TextureData[NumClasses][4]<<"\t"<<TextureData[NumClasses][5]<<" $-  \n";
+            }
+            else
+            {
+                error_found = true;
+            }
             NumClasses++;
         }
         NumClasses--;
         DataFileTextStream << NumClasses << "\n";
 
-        if ( NumClasses < 1 )
+        if(error_found)
         {
-            main_window->Log_Message("[Soil_PedoTransferFunction] Error[44] Invalid NumClasses.");
-            return 44;
+            main_window->Log_Message("[Soil_PedoTransferFunction] Error[-1002] Invalid NumClasses.");
+            TextureFile.close();
+            DataFile.close();
+            return -1002;
+        }
+
+        if ( NumClasses < 1 || NumClasses > 1000) //1000 is a guess
+        {
+            main_window->Log_Message("[Soil_PedoTransferFunction] Error[-1003] Invalid NumClasses.");
+            TextureFile.close();
+            DataFile.close();
+            return -1003;
         }
 
         double S, C, OM, D; //S=SILT, C=CLAY, OM=ORGANIC MATTER, D=BULK DENSITY,
@@ -75,99 +94,122 @@ int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName )
 
         double **HydraulicParameter;
         HydraulicParameter = (double **)malloc(NumClasses*sizeof(double *));
+        if(HydraulicParameter == nullptr)
+        {
+            main_window->Log_Message("[Soil_PedoTransferFunction] Error[-1004] Failed to allocate HydraulicParameter.");
+            TextureFile.close();
+            DataFile.close();
+            return -1004;
+        }
 
-        for(int i=0; i<NumClasses; i++)
+        error_found = false;
+        for(int i=0; i < NumClasses; i++)
         {
             HydraulicParameter[i] = (double *)malloc(NUMCOL*sizeof(double));
-            for(int j=0; j<NUMCOL; j++)
+            if(HydraulicParameter[i] == nullptr)
             {
-                HydraulicParameter[i][j]=0.0;
+                error_found = true;
             }
+            else
+            {
+                for(int j=0; j<NUMCOL; j++)
+                {
+                    HydraulicParameter[i][j]=0.0;
+                }
 
-            S       = TextureData[i][1];
-            C       = TextureData[i][2];
-            OM      = TextureData[i][3];
-            D       = TextureData[i][4];
-            TopSoil = (int) TextureData[i][5];
+                S       = TextureData[i][1];
+                C       = TextureData[i][2];
+                OM      = TextureData[i][3];
+                D       = TextureData[i][4];
+                TopSoil = (int) TextureData[i][5];
 
-            // ** Index
-            HydraulicParameter[i][0]=i+1;
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream << (int) HydraulicParameter[i][0] << "\t";
+                // ** Index
+                HydraulicParameter[i][0]=i+1;
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream << (int) HydraulicParameter[i][0] << "\t";
 
-            // ** KsatV
-            //HydraulicParameter[i][1]= (7.755+0.03252*S+0.93*TopSoil-0.967*D*D-0.000484*C*C-0.000322*S*S+0.001/S-0.0748/OM-0.643*log(S)-0.01398*D*C-0.1673*D*OM+0.02986*TopSoil*C-0.03305*TopSoil*S);
-            HydraulicParameter[i][1]=exp(7.755+0.03252*S+0.93*TopSoil-0.967*D*D-0.000484*C*C-0.000322*S*S+0.001/S-0.0748/OM-0.643*log(S)-0.01398*D*C-0.1673*D*OM+0.02986*TopSoil*C-0.03305*TopSoil*S);
-            HydraulicParameter[i][1]=HydraulicParameter[i][1]/100; //UNIT CONVERSION cm/d to m/day
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(8);
-            //DataFileTextStream << 10.0 * HydraulicParameter[i][1] << "\t";
-            DataFileTextStream << HydraulicParameter[i][1] << "\t";
+                // ** KsatV
+                //HydraulicParameter[i][1]= (7.755+0.03252*S+0.93*TopSoil-0.967*D*D-0.000484*C*C-0.000322*S*S+0.001/S-0.0748/OM-0.643*log(S)-0.01398*D*C-0.1673*D*OM+0.02986*TopSoil*C-0.03305*TopSoil*S);
+                HydraulicParameter[i][1]=exp(7.755+0.03252*S+0.93*TopSoil-0.967*D*D-0.000484*C*C-0.000322*S*S+0.001/S-0.0748/OM-0.643*log(S)-0.01398*D*C-0.1673*D*OM+0.02986*TopSoil*C-0.03305*TopSoil*S);
+                HydraulicParameter[i][1]=HydraulicParameter[i][1]/100; //UNIT CONVERSION cm/d to m/day
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(8);
+                //DataFileTextStream << 10.0 * HydraulicParameter[i][1] << "\t";
+                DataFileTextStream << HydraulicParameter[i][1] << "\t";
 
-            // ** ThetaS
-            //HydraulicParameter[i][2]=(0.7919+0.001691*C-0.29619*D-0.000001491*S*S+0.0000821*OM*OM+0.02427/C+0.01113/S+0.01472*log(S)-0.0000733*OM*C-0.000619*D*C-0.001183*D*OM-0.0001664*TopSoil*S);
-            HydraulicParameter[i][2]=  (0.7919+0.001691*C-0.29619*D-0.000001491*S*S+0.0000821*OM*OM+0.02427/C+0.01113/S+0.01472*log(S)-0.0000733*OM*C-0.000619*D*C-0.001183*D*OM-0.0001664*TopSoil*S);
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(8);
-            DataFileTextStream << HydraulicParameter[i][2] << "\t";
+                // ** ThetaS
+                //HydraulicParameter[i][2]=(0.7919+0.001691*C-0.29619*D-0.000001491*S*S+0.0000821*OM*OM+0.02427/C+0.01113/S+0.01472*log(S)-0.0000733*OM*C-0.000619*D*C-0.001183*D*OM-0.0001664*TopSoil*S);
+                HydraulicParameter[i][2]=  (0.7919+0.001691*C-0.29619*D-0.000001491*S*S+0.0000821*OM*OM+0.02427/C+0.01113/S+0.01472*log(S)-0.0000733*OM*C-0.000619*D*C-0.001183*D*OM-0.0001664*TopSoil*S);
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(8);
+                DataFileTextStream << HydraulicParameter[i][2] << "\t";
 
-            // ** ThetaR
-            HydraulicParameter[i][3]=0.01;
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(2);
-            DataFileTextStream << HydraulicParameter[i][3] << "\t";
+                // ** ThetaR
+                HydraulicParameter[i][3]=0.01;
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(2);
+                DataFileTextStream << HydraulicParameter[i][3] << "\t";
 
-            // ** InfD
-            HydraulicParameter[i][4]=0.10;
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(2);
-            DataFileTextStream << HydraulicParameter[i][4] << "\t";
+                // ** InfD
+                HydraulicParameter[i][4]=0.10;
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(2);
+                DataFileTextStream << HydraulicParameter[i][4] << "\t";
 
-            // ** ALPHA
-            //HydraulicParameter[i][5]=log(-14.96+0.03135*C+0.0351*S+0.646*OM+15.29*D-0.192*TopSoil-4.671*D*D-0.000781*C*C-0.00687*OM*OM+0.0449/OM+0.0663*log(S)+0.1482*log(OM)-0.04546*D*S-0.4852*D*OM+0.00673*TopSoil*C);
-            HydraulicParameter[i][5]=  exp(-14.96+0.03135*C+0.0351*S+0.646*OM+15.29*D-0.192*TopSoil-4.671*D*D-0.000781*C*C-0.00687*OM*OM+0.0449/OM+0.0663*log(S)+0.1482*log(OM)-0.04546*D*S-0.4852*D*OM+0.00673*TopSoil*C);
-            HydraulicParameter[i][5]= 100 * HydraulicParameter[i][5]; //UNIT CONVERSION 1/cm TO 1/m
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(5);
-            DataFileTextStream << HydraulicParameter[i][5] << "\t";
+                // ** ALPHA
+                //HydraulicParameter[i][5]=log(-14.96+0.03135*C+0.0351*S+0.646*OM+15.29*D-0.192*TopSoil-4.671*D*D-0.000781*C*C-0.00687*OM*OM+0.0449/OM+0.0663*log(S)+0.1482*log(OM)-0.04546*D*S-0.4852*D*OM+0.00673*TopSoil*C);
+                HydraulicParameter[i][5]=  exp(-14.96+0.03135*C+0.0351*S+0.646*OM+15.29*D-0.192*TopSoil-4.671*D*D-0.000781*C*C-0.00687*OM*OM+0.0449/OM+0.0663*log(S)+0.1482*log(OM)-0.04546*D*S-0.4852*D*OM+0.00673*TopSoil*C);
+                HydraulicParameter[i][5]= 100 * HydraulicParameter[i][5]; //UNIT CONVERSION 1/cm TO 1/m
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(5);
+                DataFileTextStream << HydraulicParameter[i][5] << "\t";
 
-            // ** BETA
-            HydraulicParameter[i][6]=1+exp(-25.23-0.02195*C+0.0074*S-0.1940*OM+45.5*D-7.24*D*D+0.0003658*C*C+0.002885*OM*OM-12.81/D-0.1524/S-0.01958/OM-0.2876*log(S)-0.0709*log(OM)-44.6*log(D)-0.02264*D*C+0.0896*D*OM+0.00718*TopSoil*C);
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(5);
-            DataFileTextStream << HydraulicParameter[i][6] << "\t";
+                // ** BETA
+                HydraulicParameter[i][6]=1+exp(-25.23-0.02195*C+0.0074*S-0.1940*OM+45.5*D-7.24*D*D+0.0003658*C*C+0.002885*OM*OM-12.81/D-0.1524/S-0.01958/OM-0.2876*log(S)-0.0709*log(OM)-44.6*log(D)-0.02264*D*C+0.0896*D*OM+0.00718*TopSoil*C);
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(5);
+                DataFileTextStream << HydraulicParameter[i][6] << "\t";
 
-            // ** hAreaF
-            HydraulicParameter[i][7]=0.01;
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(2);
-            DataFileTextStream << HydraulicParameter[i][7] << "\t";
+                // ** hAreaF
+                HydraulicParameter[i][7]=0.01;
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(2);
+                DataFileTextStream << HydraulicParameter[i][7] << "\t";
 
-            // ** macKsatV
-            HydraulicParameter[i][8]=100*HydraulicParameter[i][1];
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(4);
-            DataFileTextStream << HydraulicParameter[i][8] << "\n";
+                // ** macKsatV
+                HydraulicParameter[i][8]=100*HydraulicParameter[i][1];
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(4);
+                DataFileTextStream << HydraulicParameter[i][8] << "\n";
+
+            }
 
         } //End of for(int i=0; i<NumClasses; i++)
 
         TextureFile.close();
         DataFile.close();
 
-        //Clean up
-        for(int i=0; i<NumClasses; i++)
+        if(error_found)
         {
-            for(int i=0; i<NumClasses; i++)
+            main_window->Log_Message("[Soil_PedoTransferFunction] Error[-5000] Error(s) occurred allocating memory.");
+            free(HydraulicParameter); //Leak
+            return -5000;
+        }
+
+        //Clean up
+        for(int i = 0; i < NumClasses; i++)
+        {
+            for(int i=0; i < NumClasses; i++)
             {
                 free(HydraulicParameter[i]);
             }
         }
         free(HydraulicParameter);
 
-
     } catch (...) {
 
         qDebug() << "Error: Soil_PedoTransferFunction is returning zero";
+        return -9000;
     }
 
     return 0;
@@ -193,8 +235,8 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
         QFile TextureFile(TextureFileName);
         if ( ! TextureFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[Geol_PedoTransferFunction] Error[134] opening TextureFile.");
-            return 134;
+            main_window->Log_Message("[Geol_PedoTransferFunction] Error[-1000] opening TextureFile.");
+            return -1000;
         }
 
         QTextStream TextureFileTextStream(&TextureFile);
@@ -202,8 +244,9 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
         QFile DataFile(DataFileName);
         if ( ! DataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[Geol_PedoTransferFunction] Error[139] opening DataFile.");
-            return 139;
+            main_window->Log_Message("[Geol_PedoTransferFunction] Error[-1001] opening DataFile.");
+            TextureFile.close();
+            return -1001;
         }
 
         QTextStream DataFileTextStream(&DataFile);
@@ -215,118 +258,159 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
 
         TempString = TextureFileTextStream.readLine(); // Read Header Line
 
+        bool error_found = false;
         while ( ! TextureFileTextStream.atEnd() )
         {
-            TextureFileTextStream >> TextureData[NumClasses][0]; //MUKEY
-            TextureFileTextStream >> TextureData[NumClasses][1]; //SILT
-            TextureFileTextStream >> TextureData[NumClasses][2]; //CLAY
-            TextureFileTextStream >> TextureData[NumClasses][3]; if(TextureData[NumClasses][3]<0) TextureData[NumClasses][3]=2.5; //ORGANIC MATTER
-            TextureFileTextStream >> TextureData[NumClasses][4]; if(TextureData[NumClasses][4]<0) TextureData[NumClasses][4]=1.3; //BULK DENSITY (g/cm3)
-            //TextureFileTextStream>>TextureData[NumClasses][5]; //TOP SOIL
-            TextureData[NumClasses][5] = 0;
-            //? DataFileTextStream<<"-$ "<<TextureData[NumClasses][0]<<"\t"<<TextureData[NumClasses][1]<<"\t"<<TextureData[NumClasses][2]<<"\t"<<TextureData[NumClasses][3]<<"\t"<<TextureData[NumClasses][4]<<"\t"<<TextureData[NumClasses][5]<<" $-  \n";
+            if(NumClasses < 1000)
+            {
+                TextureFileTextStream >> TextureData[NumClasses][0]; //MUKEY
+                TextureFileTextStream >> TextureData[NumClasses][1]; //SILT
+                TextureFileTextStream >> TextureData[NumClasses][2]; //CLAY
+                TextureFileTextStream >> TextureData[NumClasses][3]; if(TextureData[NumClasses][3]<0) TextureData[NumClasses][3]=2.5; //ORGANIC MATTER
+                TextureFileTextStream >> TextureData[NumClasses][4]; if(TextureData[NumClasses][4]<0) TextureData[NumClasses][4]=1.3; //BULK DENSITY (g/cm3)
+                //TextureFileTextStream>>TextureData[NumClasses][5]; //TOP SOIL
+                TextureData[NumClasses][5] = 0;
+                //? DataFileTextStream<<"-$ "<<TextureData[NumClasses][0]<<"\t"<<TextureData[NumClasses][1]<<"\t"<<TextureData[NumClasses][2]<<"\t"<<TextureData[NumClasses][3]<<"\t"<<TextureData[NumClasses][4]<<"\t"<<TextureData[NumClasses][5]<<" $-  \n";
+            }
+            else {
+                error_found = true;
+            }
+
             NumClasses++;
         }
+
+        if(error_found)
+        {
+            main_window->Log_Message("[Geol_PedoTransferFunction] Error[-1002] Invalid NumClasses.");
+            TextureFile.close();
+            DataFile.close();
+            return -1002;
+        }
+
+        if ( NumClasses < 1 || NumClasses > 1000) //1000 is a guess
+        {
+            main_window->Log_Message("[Geol_PedoTransferFunction] Error[-1003] Invalid NumClasses.");
+            TextureFile.close();
+            DataFile.close();
+            return -1003;
+        }
+
         NumClasses--;
         DataFileTextStream << NumClasses << "\n";
-
-        if ( NumClasses < 1 )
-        {
-            main_window->Log_Message("[Geol_PedoTransferFunction] Error[165] Invalid NumClasses.");
-            return 165;
-        }
 
         double S, C, OM, D; //S=SILT, C=CLAY, OM=ORGANIC MATTER, D=BULK DENSITY,
         int TopSoil; //TopSoil
 
         double **HydraulicParameter;
         HydraulicParameter = (double **)malloc(NumClasses*sizeof(double *));
-
-        for(int i=0; i<NumClasses; i++)
+        if(HydraulicParameter == nullptr)
         {
-            HydraulicParameter[i] = (double *)malloc(NUMCOL*sizeof(double));
-            for(int j=0; j<NUMCOL; j++)
-            {
-                HydraulicParameter[i][j]=0.0;
-            }
-
-            S       = TextureData[i][1];
-            C       = TextureData[i][2];
-            OM      = TextureData[i][3];
-            D       = TextureData[i][4];
-            TopSoil = (int) TextureData[i][5];
-
-            //? DataFileTextStream<<"-> "<<S<<"\t"<<C<<"\t"<<OM<<"\t"<<D<<"\t"<<TopSoil<<" <-  \n";
-
-            // ** Index
-            HydraulicParameter[i][0]=i+1;
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream << (int) HydraulicParameter[i][0] << "\t";
-
-            // ** KsatV
-            //HydraulicParameter[i][1]= (7.755+0.03252*S+0.93*TopSoil-0.967*D*D-0.000484*C*C-0.000322*S*S+0.001/S-0.0748/OM-0.643*log(S)-0.01398*D*C-0.1673*D*OM+0.02986*TopSoil*C-0.03305*TopSoil*S);
-            HydraulicParameter[i][1]=exp(7.755+0.03252*S+0.93*TopSoil-0.967*D*D-0.000484*C*C-0.000322*S*S+0.001/S-0.0748/OM-0.643*log(S)-0.01398*D*C-0.1673*D*OM+0.02986*TopSoil*C-0.03305*TopSoil*S);
-            HydraulicParameter[i][1]=HydraulicParameter[i][1]/100; //UNIT CONVERSION cm/d to m/day
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(8);
-            DataFileTextStream << 10.0 * HydraulicParameter[i][1] << "\t";
-            DataFileTextStream << HydraulicParameter[i][1] << "\t";
-
-            // ** ThetaS
-            //HydraulicParameter[i][2]=(0.7919+0.001691*C-0.29619*D-0.000001491*S*S+0.0000821*OM*OM+0.02427/C+0.01113/S+0.01472*log(S)-0.0000733*OM*C-0.000619*D*C-0.001183*D*OM-0.0001664*TopSoil*S);
-            HydraulicParameter[i][2]=  (0.7919+0.001691*C-0.29619*D-0.000001491*S*S+0.0000821*OM*OM+0.02427/C+0.01113/S+0.01472*log(S)-0.0000733*OM*C-0.000619*D*C-0.001183*D*OM-0.0001664*TopSoil*S);
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(8);
-            DataFileTextStream << HydraulicParameter[i][2] << "\t";
-
-            // ** ThetaR
-            HydraulicParameter[i][3]=0.01;
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(2);
-            DataFileTextStream << HydraulicParameter[i][3] << "\t";
-
-            // ** InfD
-            //HydraulicParameter[i][4]=0.10;
-            //DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            //DataFileTextStream.setRealNumberPrecision(2);
-            //DataFileTextStream << HydraulicParameter[i][4] << "\t";
-
-            // ** ALPHA
-            //HydraulicParameter[i][5]=log(-14.96+0.03135*C+0.0351*S+0.646*OM+15.29*D-0.192*TopSoil-4.671*D*D-0.000781*C*C-0.00687*OM*OM+0.0449/OM+0.0663*log(S)+0.1482*log(OM)-0.04546*D*S-0.4852*D*OM+0.00673*TopSoil*C);
-            HydraulicParameter[i][5]=  exp(-14.96+0.03135*C+0.0351*S+0.646*OM+15.29*D-0.192*TopSoil-4.671*D*D-0.000781*C*C-0.00687*OM*OM+0.0449/OM+0.0663*log(S)+0.1482*log(OM)-0.04546*D*S-0.4852*D*OM+0.00673*TopSoil*C);
-            HydraulicParameter[i][5]= 100 * HydraulicParameter[i][5]; //UNIT CONVERSION 1/cm TO 1/m
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(5);
-            DataFileTextStream << HydraulicParameter[i][5] << "\t";
-
-            // ** BETA
-            HydraulicParameter[i][6]=1+exp(-25.23-0.02195*C+0.0074*S-0.1940*OM+45.5*D-7.24*D*D+0.0003658*C*C+0.002885*OM*OM-12.81/D-0.1524/S-0.01958/OM-0.2876*log(S)-0.0709*log(OM)-44.6*log(D)-0.02264*D*C+0.0896*D*OM+0.00718*TopSoil*C);
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(5);
-            DataFileTextStream << HydraulicParameter[i][6] << "\t";
-
-            // ** hAreaF
-            HydraulicParameter[i][7]=0.01;
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(2);
-            DataFileTextStream << HydraulicParameter[i][7] << "\t";
-
-            // ** macKsatV
-            HydraulicParameter[i][8]=100000*HydraulicParameter[i][1];
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(4);
-            DataFileTextStream << HydraulicParameter[i][8] << "\t";
-
-            // ** macD
-            HydraulicParameter[i][9]=1.0;
-            DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
-            DataFileTextStream.setRealNumberPrecision(2);
-            DataFileTextStream << HydraulicParameter[i][9]<<"\n";
+            main_window->Log_Message("[Geol_PedoTransferFunction] Error[-1004] Failed to allocate HydraulicParameter.");
+            TextureFile.close();
+            DataFile.close();
+            return -1004;
         }
 
+        error_found = false;
+
+        for(int i = 0; i < NumClasses; i++)
+        {
+            HydraulicParameter[i] = (double *)malloc(NUMCOL*sizeof(double));
+            if(HydraulicParameter[i] == nullptr)
+            {
+                error_found = true;
+            }
+            else
+            {
+                for(int j=0; j<NUMCOL; j++)
+                {
+                    HydraulicParameter[i][j]=0.0;
+                }
+
+                S       = TextureData[i][1];
+                C       = TextureData[i][2];
+                OM      = TextureData[i][3];
+                D       = TextureData[i][4];
+                TopSoil = (int) TextureData[i][5];
+
+                //? DataFileTextStream<<"-> "<<S<<"\t"<<C<<"\t"<<OM<<"\t"<<D<<"\t"<<TopSoil<<" <-  \n";
+
+                // ** Index
+                HydraulicParameter[i][0]=i+1;
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream << (int) HydraulicParameter[i][0] << "\t";
+
+                // ** KsatV
+                //HydraulicParameter[i][1]= (7.755+0.03252*S+0.93*TopSoil-0.967*D*D-0.000484*C*C-0.000322*S*S+0.001/S-0.0748/OM-0.643*log(S)-0.01398*D*C-0.1673*D*OM+0.02986*TopSoil*C-0.03305*TopSoil*S);
+                HydraulicParameter[i][1]=exp(7.755+0.03252*S+0.93*TopSoil-0.967*D*D-0.000484*C*C-0.000322*S*S+0.001/S-0.0748/OM-0.643*log(S)-0.01398*D*C-0.1673*D*OM+0.02986*TopSoil*C-0.03305*TopSoil*S);
+                HydraulicParameter[i][1]=HydraulicParameter[i][1]/100; //UNIT CONVERSION cm/d to m/day
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(8);
+                DataFileTextStream << 10.0 * HydraulicParameter[i][1] << "\t";
+                DataFileTextStream << HydraulicParameter[i][1] << "\t";
+
+                // ** ThetaS
+                //HydraulicParameter[i][2]=(0.7919+0.001691*C-0.29619*D-0.000001491*S*S+0.0000821*OM*OM+0.02427/C+0.01113/S+0.01472*log(S)-0.0000733*OM*C-0.000619*D*C-0.001183*D*OM-0.0001664*TopSoil*S);
+                HydraulicParameter[i][2]=  (0.7919+0.001691*C-0.29619*D-0.000001491*S*S+0.0000821*OM*OM+0.02427/C+0.01113/S+0.01472*log(S)-0.0000733*OM*C-0.000619*D*C-0.001183*D*OM-0.0001664*TopSoil*S);
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(8);
+                DataFileTextStream << HydraulicParameter[i][2] << "\t";
+
+                // ** ThetaR
+                HydraulicParameter[i][3]=0.01;
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(2);
+                DataFileTextStream << HydraulicParameter[i][3] << "\t";
+
+                // ** InfD
+                //HydraulicParameter[i][4]=0.10;
+                //DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                //DataFileTextStream.setRealNumberPrecision(2);
+                //DataFileTextStream << HydraulicParameter[i][4] << "\t";
+
+                // ** ALPHA
+                //HydraulicParameter[i][5]=log(-14.96+0.03135*C+0.0351*S+0.646*OM+15.29*D-0.192*TopSoil-4.671*D*D-0.000781*C*C-0.00687*OM*OM+0.0449/OM+0.0663*log(S)+0.1482*log(OM)-0.04546*D*S-0.4852*D*OM+0.00673*TopSoil*C);
+                HydraulicParameter[i][5]=  exp(-14.96+0.03135*C+0.0351*S+0.646*OM+15.29*D-0.192*TopSoil-4.671*D*D-0.000781*C*C-0.00687*OM*OM+0.0449/OM+0.0663*log(S)+0.1482*log(OM)-0.04546*D*S-0.4852*D*OM+0.00673*TopSoil*C);
+                HydraulicParameter[i][5]= 100 * HydraulicParameter[i][5]; //UNIT CONVERSION 1/cm TO 1/m
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(5);
+                DataFileTextStream << HydraulicParameter[i][5] << "\t";
+
+                // ** BETA
+                HydraulicParameter[i][6]=1+exp(-25.23-0.02195*C+0.0074*S-0.1940*OM+45.5*D-7.24*D*D+0.0003658*C*C+0.002885*OM*OM-12.81/D-0.1524/S-0.01958/OM-0.2876*log(S)-0.0709*log(OM)-44.6*log(D)-0.02264*D*C+0.0896*D*OM+0.00718*TopSoil*C);
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(5);
+                DataFileTextStream << HydraulicParameter[i][6] << "\t";
+
+                // ** hAreaF
+                HydraulicParameter[i][7] = 0.01;
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(2);
+                DataFileTextStream << HydraulicParameter[i][7] << "\t";
+
+                // ** macKsatV
+                HydraulicParameter[i][8] = 100000*HydraulicParameter[i][1];
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(4);
+                DataFileTextStream << HydraulicParameter[i][8] << "\t";
+
+                // ** macD
+                HydraulicParameter[i][9] = 1.0;
+                DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
+                DataFileTextStream.setRealNumberPrecision(2);
+                DataFileTextStream << HydraulicParameter[i][9]<<"\n";
+            }
+        }
 
         TextureFile.close();
         DataFile.close();
+
+        if(error_found)
+        {
+            main_window->Log_Message("[Geol_PedoTransferFunction] Error[-5000] Error(s) occurred allocating memory.");
+            free(HydraulicParameter); //Leak
+            return -5000;
+        }
 
         //Clean up
         for(int i=0; i<NumClasses; i++)
@@ -368,8 +452,8 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
         QFile ClassFile(ClassFileName);
         if ( ! ClassFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[Geol_PedoTransferFunction] Error[267] Invalid Class file.");
-            return 267;
+            main_window->Log_Message("[Lc_PedoTransferFunction] Error[-1000] Invalid Class file.");
+            return -1000;
         }
 
         QTextStream ClassFileTextStream(&ClassFile);
@@ -377,8 +461,9 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
         QFile DataFile(DataFileName);
         if ( ! DataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
         {
-            main_window->Log_Message("[Geol_PedoTransferFunction] Error[272] Invalid Data file.");
-            return 272;
+            main_window->Log_Message("[Lc_PedoTransferFunction] Error[-1001] Invalid Data file.");
+            ClassFile.close();
+            return -1001;
         }
 
         QTextStream DataFileTextStream(&DataFile);
@@ -511,20 +596,45 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
         int    NumClasses = 0;
         double LcClasses[100]; //MAXLC];
 
+        bool error_found = false;
         while ( ! ClassFileTextStream.atEnd() )
         {
-            ClassFileTextStream >> LcClasses[NumClasses];
+            if(NumClasses < 100 )
+            {
+                ClassFileTextStream >> LcClasses[NumClasses];
+            }
+            else {
+                error_found = true;
+            }
 
             NumClasses++;
         }
         NumClasses--;
+
+        if(error_found)
+        {
+            main_window->Log_Message("[Lc_PedoTransferFunction] Error[-1002] Invalid NumClasses.");
+            ClassFile.close();
+            DataFile.close();
+            return -1002;
+        }
+
+        if ( NumClasses < 1 || NumClasses > 1000) //1000 is a guess
+        {
+            main_window->Log_Message("[Lc_PedoTransferFunction] Error[-1003] Invalid NumClasses.");
+            ClassFile.close();
+            DataFile.close();
+            return -1003;
+        }
 
         DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
         DataFileTextStream << NumClasses << "\n";
 
         int nlcd, umd1, umd2;
         double frac1, frac2;
-        for(int i=0; i<NumClasses; i++)
+        error_found = false;
+
+        for(int i = 0; i < NumClasses; i++)
         {
             nlcd  = LcClasses[i];
             umd1  = NLCD[nlcd][0];
@@ -535,13 +645,14 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
 
             if ( umd1 + umd2 == 0 ) // NLCD Class not defined
             {
-                main_window->Log_Message("[Geol_PedoTransferFunction] Error[423] Invalid NLCD Class.");
-                return 423;
+                main_window->Log_Message("[Lc_PedoTransferFunction] Error[-2000] Invalid NLCD Class.");
+                main_window->Log_Message("[Lc_PedoTransferFunction] NLCD = " + QString::number(nlcd) + " umd1 = " + QString::number(umd1) + " umd2 = "+ QString::number(umd2) );
+                error_found = true;
             }
 
             DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
             DataFileTextStream << i+1 << "\t";
-            for(int j=1; j<7; j++)
+            for(int j = 1; j < 7; j++)
             {
                 DataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);
                 DataFileTextStream.setRealNumberPrecision(8);
@@ -555,10 +666,16 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
         ClassFile.close();
         DataFile.close();
 
+        if(error_found)
+        {
+            main_window->Log_Message("[Lc_PedoTransferFunction] Error[-5000] User needs to check NLCD values.");
+            return -5000;
+        }
+
     } catch (...) {
 
         qDebug() << "Error: Lc_PedoTransferFunction is returning zero ";
-
+        return -9000;
     }
 
     return 0;
