@@ -21,7 +21,7 @@ int addstack(int i, int j);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Called by Fillpits
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int flood(QString demfile, QString pointfile, QString newfile)
+int flood(QString demfile, QString newfile)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start flood";
@@ -29,20 +29,36 @@ int flood(QString demfile, QString pointfile, QString newfile)
     try {
 
         //Check input names
+        if(demfile == nullptr)
+        {
+            main_window->Log_Message("[flood] Error[-1000] Invalid demfile ");
+            return -1000;
+        }
+//        if(pointfile == nullptr)
+//        {
+//            main_window->Log_Message("[flood] Error[-1001] Invalid pointfile ");
+//            return -1001;
+//        }
+        if(newfile == nullptr)
+        {
+            main_window->Log_Message("[flood] Error[-1002] Invalid newfile ");
+            return -1002;
+        }
+
         if(demfile.length() < 1)
         {
-            main_window->Log_Message("[flood] Invalid demfile " + demfile);
-            return -9001;
+            main_window->Log_Message("[flood] Error[-1003] Invalid demfile " + demfile);
+            return -1003;
         }
-        if(pointfile.length() < 1)
-        {
-            main_window->Log_Message("[flood] Invalid pointfile " + pointfile);
-            return -9002;
-        }
+//        if(pointfile.length() < 1)
+//        {
+//            main_window->Log_Message("[flood] Error[-1004] Invalid pointfile " + pointfile);
+//            return -1004;
+//        }
         if(newfile.length() < 1)
         {
-            main_window->Log_Message("[flood] Invalid newfile " + newfile);
-            return -9003;
+            main_window->Log_Message("[flood] Error[-1005] Invalid newfile " + newfile);
+            return -1005;
         }
 
         // define directions
@@ -53,7 +69,7 @@ int flood(QString demfile, QString pointfile, QString newfile)
 
         if(err != 0)
         {
-            main_window->Log_Message("[flood] grid read failed " + demfile);
+            main_window->Log_Message("[flood] Error[-1006] grid read failed. Error code " + QString::number(err) + " for file " + demfile);
             return(err);
         }
 
@@ -61,58 +77,71 @@ int flood(QString demfile, QString pointfile, QString newfile)
         dir = (short **) matalloc(nx, ny, RPSHRDTYPE);
         if(dir == nullptr)
         {
-            main_window->Log_Message("[flood] Error[1000] dir failed ");
-            return 1000;
+            main_window->Log_Message("[flood] Error[-1007] dir failed ");
+            return -1007;
         }
 
         apool = (short **) matalloc(nx, ny, RPSHRDTYPE);
         if(apool == nullptr)
         {
-            main_window->Log_Message("[flood] Error[1001] apool failed ");
-            return 1001;
+            main_window->Log_Message("[flood] Error[-1008] apool failed ");
+            return -1008;
         }
 
         istack = (int) (nx * ny * 0.1);
         pstack=istack;
         if(istack <= 0)
         {
-            main_window->Log_Message("[flood] Error[1002] Invalid istack value of " + QString::number(istack) );
-            return 1002;
+            main_window->Log_Message("[flood] Error[-1009] Invalid istack value of " + QString::number(istack) );
+            return -1009;
         }
 
         dn = (short *)malloc(sizeof(short) * istack);
         if(dn == nullptr)
         {
-            main_window->Log_Message("[flood] Error[1003] dn failed ");
-            return 1003;
+            main_window->Log_Message("[flood] Error[-1010] dn failed ");
+            return -1010;
         }
 
         is = (short *)malloc(sizeof(short) * istack);
         if(is == nullptr)
         {
-            main_window->Log_Message("[flood] Error[1004] is failed ");
-            return 1004;
+            main_window->Log_Message("[flood] Error[-1011] is failed ");
+            free(dn);
+            return -1011;
         }
 
         js = (short *)malloc(sizeof(short) * istack);
         if(js == nullptr)
         {
-            main_window->Log_Message("[flood] Error[1005] js failed ");
-            return 1005;
+            main_window->Log_Message("[flood] Error[-1012] js failed ");
+            free(dn);
+            free(is);
+
+            return -1012;
         }
 
         ipool = (short *)malloc(sizeof(short) * pstack);
         if(ipool == nullptr)
         {
-            main_window->Log_Message("[flood] Error[1006] ipool failed ");
-            return 1006;
+            main_window->Log_Message("[flood] Error[-1013] ipool failed ");
+            free(dn);
+            free(is);
+            free(js);
+
+            return -1013;
         }
 
         jpool = (short *)malloc(sizeof(short) * pstack);
         if(jpool == nullptr)
         {
-            main_window->Log_Message("[flood] Error[1007] jpool failed ");
-            return 1007;
+            main_window->Log_Message("[flood] Error[-1014] jpool failed ");
+            free(dn);
+            free(is);
+            free(js);
+            free(ipool);
+
+            return -1014;
         }
 
         i1=0;
@@ -138,8 +167,8 @@ int flood(QString demfile, QString pointfile, QString newfile)
 
         if(setdf_result != 0)
         {
-            main_window->Log_Message("[flood] Error[1008] setdf failed ");
-            return 1008;
+            main_window->Log_Message("[flood] Error[-2000] setdf failed ");
+            return -2000;
         }
 
 
@@ -153,7 +182,7 @@ int flood(QString demfile, QString pointfile, QString newfile)
         err = gridwrite(newfile_char,(void **)elev,RPFLTDTYPE,nx,ny,dx,dy,bndbox,csize,mval,filetype);
         if(err != 0)
         {
-            main_window->Log_Message("[flood] Error[1009] gridwrite failed ");
+            main_window->Log_Message("[flood] Error[2001] gridwrite failed ");
             return(err);
         }
 
@@ -196,7 +225,7 @@ int setdf(float mval)
         float fact[9], per = 1.0;
 
         //  Initialize boundaries
-        for(int i = i1; i< n1; i++)
+        for(int i = i1; i < n1; i++)
         {
             dir[i][i2] = -1;
             dir[i][n2-1] = -1;
@@ -464,6 +493,49 @@ int vdn(int n)
     if(print_many_messages)
         qDebug() << "INFO: Start vdn";
 
+
+    if(elev == nullptr)
+    {
+        main_window->Log_Message("[vdn] Error[1000] elev is null ");
+        return 1000;
+    }
+
+    if(dir == nullptr)
+    {
+        main_window->Log_Message("[vdn] Error[1001] dir is null ");
+        return 1001;
+    }
+
+    if(dn == nullptr)
+    {
+        main_window->Log_Message("[vdn] Error[1002] dn is null ");
+        return 1002;
+    }
+
+    if(js == nullptr)
+    {
+        main_window->Log_Message("[vdn] Error[1003] js is null ");
+        return 1003;
+    }
+
+    if(is == nullptr)
+    {
+        main_window->Log_Message("[vdn] Error[1004] is is null ");
+        return 1004;
+    }
+
+    if(d1 == nullptr)
+    {
+        main_window->Log_Message("[vdn] Error[1005] d1 is null ");
+        return 1005;
+    }
+
+    if(d2 == nullptr)
+    {
+        main_window->Log_Message("[vdn] Error[1006] d2 is null ");
+        return 1006;
+    }
+
     int imin = 0;
     float ed = 0;
     nis = n;
@@ -474,7 +546,9 @@ int vdn(int n)
         nis = 0;
 
         for(int ip = 1; ip <= n; ip++)
+        {
             dn[ip] = 0;
+        }
 
         for(int k = 1; k <= 7; k = k+2)
         {
@@ -483,7 +557,9 @@ int vdn(int n)
                 ed = elev[js[ip]][is[ip]] - elev[js[ip] + d2[k]][is[ip] + d1[k]];
 
                 if(ed >= 0.0 && dir[js[ip] + d2[k]][is[ip] + d1[k]] != 0 && dn[ip] == 0)
+                {
                     dn[ip] = k;
+                }
             }
         }
 
@@ -494,7 +570,9 @@ int vdn(int n)
                 ed = elev[js[ip]][is[ip]] - elev[js[ip] + d2[k]][is[ip] + d1[k]];
 
                 if(ed >= 0.0 && dir[js[ip] + d2[k]][is[ip] + d1[k]] != 0 && dn[ip] == 0)
+                {
                     dn[ip]=k;
+                }
             }
         }
 
@@ -514,7 +592,9 @@ int vdn(int n)
                 js[nis] = js[ip];
 
                 if( elev[js[nis]][is[nis]] < elev[js[imin]][is[imin]] )
+                {
                     imin=nis;
+                }
             }
         }
 
@@ -565,6 +645,18 @@ int set(int i,int j,float *fact,float mval)
             return 1004;
         }
 
+        if(i < 0 )
+        {
+            main_window->Log_Message("[set] Error[1005] Invalid i < 0 ");
+            return 1005;
+        }
+
+        if(j < 0 )
+        {
+            main_window->Log_Message("[set] Error[1006] Invalid j < 0 ");
+            return 1006;
+        }
+
         float slope,smax = 0;
 
         dir[j][i] = 0;  // This necessary for repeat passes after level raised
@@ -573,7 +665,9 @@ int set(int i,int j,float *fact,float mval)
         for(int k=1; k <= 8; k++)
         {
             if(elev[j + d2[k]][i + d1[k]] <= mval)
+            {
                 dir[j][i] = -1;
+            }
 
             slope = fact[k] * (elev[j][i] - elev[j + d2[k]][ i + d1[k]]);
 
@@ -608,13 +702,38 @@ int pool(int i,int j)
 
         if(i < 0 )
         {
-            main_window->Log_Message("[pool] Error[100] Invalid i < 0 ");
-            return 100;
+            main_window->Log_Message("[pool] Error[1000] Invalid i < 0 ");
+            return 1000;
         }
         if(j < 0 )
         {
-            main_window->Log_Message("[pool] Error[101] Invalid j < 0 ");
-            return 101;
+            main_window->Log_Message("[pool] Error[1001] Invalid j < 0 ");
+            return 1001;
+        }
+        if(apool == nullptr )
+        {
+            main_window->Log_Message("[pool] Error[1002] apool is null ");
+            return 1002;
+        }
+        if(ipool == nullptr )
+        {
+            main_window->Log_Message("[pool] Error[1003] ipool is null ");
+            return 1003;
+        }
+        if(jpool == nullptr)
+        {
+            main_window->Log_Message("[pool] Error[1004] jpool is null ");
+            return 1004;
+        }
+        if(dir == nullptr )
+        {
+            main_window->Log_Message("[pool] Error[1005] dir is null ");
+            return 1005;
+        }
+        if(elev == nullptr)
+        {
+            main_window->Log_Message("[pool] Error[1006] elev is null ");
+            return 1006;
         }
 
         int in,jn,k = 0;
@@ -676,6 +795,7 @@ int pool(int i,int j)
 
     } catch (...) {
         qDebug() << "Error: pool is returning w/o checking";
+        return -5000;
     }
 
     return(0);
@@ -719,14 +839,14 @@ int addstack(int i, int j)
 
         if(i < 0 )
         {
-            main_window->Log_Message("[addstack] Error[100] Invalid i < 0 ");
-            return 100;
+            main_window->Log_Message("[addstack] Error[1000] Invalid i < 0 ");
+            return 1000;
         }
 
         if(j < 0 )
         {
-            main_window->Log_Message("[addstack] Error[101] Invalid j < 0 ");
-            return 101;
+            main_window->Log_Message("[addstack] Error[1001] Invalid j < 0 ");
+            return 1001;
         }
 
         // Routine to add entry to is, js stack, enlarging if necessary
@@ -734,8 +854,8 @@ int addstack(int i, int j)
 
         if(nis < 0)
         {
-            main_window->Log_Message("[addstack] ERROR[102] nis < 0 ");
-            return 102;
+            main_window->Log_Message("[addstack] ERROR[1002] nis < 0 ");
+            return 1002;
         }
 
         if(nis >= istack )
@@ -745,14 +865,14 @@ int addstack(int i, int j)
 
             if(istack > nx*ny)
             {
-                main_window->Log_Message("[addstack] ERROR[12] is,js stack too large, exiting ... ");
-                return(12);
+                main_window->Log_Message("[addstack] ERROR[1003] is,js stack too large, exiting ... ");
+                return(1003);
             }
 
             if(istack <= 0)
             {
-                main_window->Log_Message("[addstack] ERROR[13] istack <= 0 ");
-                return(13);
+                main_window->Log_Message("[addstack] ERROR[1004] istack <= 0 ");
+                return(1004);
             }
 
             main_window->Log_Message("[addstack] Enlarging is,js stack ");
@@ -760,35 +880,35 @@ int addstack(int i, int j)
             is = (short *)realloc(is, sizeof(short) * istack);
             if(is == nullptr)
             {
-                main_window->Log_Message("[addstack] ERROR[14] is null. Could not enlarge stack.");
-                return 14;
+                main_window->Log_Message("[addstack] ERROR[1005] is null. Could not enlarge stack.");
+                return 1005;
             }
 
             js = (short *)realloc(js, sizeof(short) * istack);
             if(js == nullptr)
             {
-                main_window->Log_Message("[addstack] ERROR[15] js null. Could not enlarge stack.");
-                return 15;
+                main_window->Log_Message("[addstack] ERROR[1006] js null. Could not enlarge stack.");
+                return 1006;
             }
 
             dn = (short *)realloc(dn, sizeof(short) * istack);
             if(dn == nullptr)
             {
-                main_window->Log_Message("[addstack] ERROR[16] dn null. Could not enlarge stack.");
-                return 16;
+                main_window->Log_Message("[addstack] ERROR[1007] dn null. Could not enlarge stack.");
+                return 1007;
             }
         }
 
         if(is == nullptr)
         {
-            main_window->Log_Message("[addstack] ERROR[103] is null ");
-            return 103;
+            main_window->Log_Message("[addstack] ERROR[1008] is null ");
+            return 1008;
         }
 
         if(js == nullptr)
         {
-            main_window->Log_Message("[addstack] ERROR[104] js null ");
-            return 104;
+            main_window->Log_Message("[addstack] ERROR[1009] js null ");
+            return 1009;
         }
 
         is[nis] = i;
@@ -797,6 +917,7 @@ int addstack(int i, int j)
 
     } catch (...) {
         qDebug() << "Error: addstack is returning w/o checking";
+        return -5000;
     }
 
     return(0);

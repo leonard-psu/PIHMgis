@@ -30,7 +30,7 @@ TINShapeLayer::TINShapeLayer(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -139,7 +139,7 @@ bool TINShapeLayer::Check_Element_Input(QString file){
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditElementFile->setStyleSheet("color: black;");
             ui->lineEditElementFile->setText(file);
@@ -176,7 +176,7 @@ bool TINShapeLayer::Check_Node_Input(QString file){
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditNodeFile->setStyleSheet("color: black;");
             ui->lineEditNodeFile->setText(file);
@@ -213,7 +213,7 @@ bool TINShapeLayer::Check_TinShape_Output(QString file, bool color_and_message_i
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {
@@ -406,7 +406,7 @@ void TINShapeLayer::on_pushButtonTINFile_clicked()
         if ( TINShapeFileName != nullptr)
         {
             QString tempString = TINShapeFileName;
-            if( ! (tempString.toLower()).endsWith(".shp") )
+            if( (tempString.toLower()).endsWith(".shp") == false)
             {
                 tempString.append(".shp");
                 TINShapeFileName = tempString;
@@ -441,19 +441,19 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check inputs
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QString element_input_filename = ui->lineEditElementFile->text();
-        QString node_input_filename = ui->lineEditNodeFile->text();
+        QString element_input_filename  = ui->lineEditElementFile->text();
+        QString node_input_filename     = ui->lineEditNodeFile->text();
         QString tinshape_input_filename = ui->lineEditTINFile->text();
 
 
         bool ElementCheck = Check_Element_Input(element_input_filename);
-        if(!ElementCheck)
+        if(ElementCheck == false)
         {
             Log_Error_Message("Element (.1.ele) Input File Missing ");
             return;
         }
         bool NodeCheck = Check_Node_Input(node_input_filename);
-        if(!NodeCheck)
+        if(NodeCheck == false)
         {
             Log_Error_Message("Node (.1.node) Input File Missing ");
             return;
@@ -472,19 +472,19 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(element_input_filename, "ReadOnly") )
+        if ( CheckFileAccess(element_input_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + element_input_filename );
             return;
         }
 
-        if ( ! CheckFileAccess(node_input_filename, "ReadOnly") )
+        if ( CheckFileAccess(node_input_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + node_input_filename );
             return;
         }
 
-        if ( ! CheckFileAccess(tinshape_input_filename, "WriteOnly") )
+        if ( CheckFileAccess(tinshape_input_filename, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to ... " + tinshape_input_filename);
             return;
@@ -505,9 +505,6 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         Log_Message(TINDbfFileName);
         Log_Message(TINDbfFileName);
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
-
         int ErrorTIN = tin_shape(element_input_filename, node_input_filename,TINShpFileName, TINDbfFileName);
         if( ErrorTIN != 0 )
         {
@@ -520,7 +517,7 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         // Check output filenames
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         TinShapeCheck = Check_TinShape_Output(tinshape_input_filename, false);
-        if(!TinShapeCheck)
+        if(TinShapeCheck == false)
         {
             Log_Error_Message("TinShape failed, file does not exist: " + TinShapeCheck );
             return;

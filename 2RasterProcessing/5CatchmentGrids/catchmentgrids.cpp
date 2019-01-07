@@ -183,7 +183,7 @@ bool CatchmentGrids::Check_FlowDirGrids_Input(QString file)
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditFlowDirGrids->setStyleSheet("color: black;");
             ui->lineEditFlowDirGrids->setText(file);
@@ -219,7 +219,7 @@ bool CatchmentGrids::Check_CatchmentGrids_Output(QString file, bool color_and_me
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {
@@ -509,7 +509,7 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run Stream Grids
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Catchment Grids ... <br>");
+        Log_Message("Running Catchment Grids ... ");
 
         int ErrorCat = catchment(LinkGrids_filename,
                                  FlowDirGrids_filename,
@@ -555,8 +555,6 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         Clear_Log();
 
         Log_Message("Catchment Grids Processing Completed.");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

@@ -20,16 +20,36 @@ void darea(int, int);
 // For Help and documentation visit http://hydrology.usu.edu/taudem/taudem5/index.html
 // Error checking added.
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int aread8(char *pfile,char *afile, double x, double y, int doall)
+int aread8(QString qpfile, QString qafile, double x, double y, int doall)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start aread8";
 
-    if(pfile == nullptr)
+    if(qpfile == nullptr)
     {
-        main_window->Log_Message("[aread8] Error[1000] Invalid file.");
+        main_window->Log_Message("[aread8] Error[1000] Invalid qpfile ");
         return 1000;
     }
+    if(qpfile.length() < 1)
+    {
+        main_window->Log_Message("[aread8] Error[1001] Invalid qpfile ");
+        return 1001;
+    }
+    if(qafile == nullptr)
+    {
+        main_window->Log_Message("[aread8] Error[1002] Invalid qafile ");
+        return 1002;
+    }
+    if(qafile.length() < 1)
+    {
+        main_window->Log_Message("[aread8] Error[1003] Invalid qafile ");
+        return 1003;
+    }
+
+    QByteArray fname = qpfile.toLatin1();
+    char *pfile = fname.data();
+    QByteArray fname1 = qafile.toLatin1();
+    char *afile = fname1.data();
 
     int i,j,err,row,col;
     err = 0;

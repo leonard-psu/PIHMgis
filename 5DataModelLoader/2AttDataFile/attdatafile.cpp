@@ -34,7 +34,7 @@ AttDataFile::AttDataFile(QWidget *parent, QString filename) :
         finished_loading_files = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -42,6 +42,7 @@ AttDataFile::AttDataFile(QWidget *parent, QString filename) :
         {
             found_file = true;
         }
+
         ProjectFile.close();
 
         if(found_file)
@@ -192,7 +193,6 @@ bool AttDataFile::Load_Project_Settings()
             ui->checkBoxGroundwater->setChecked(ModuleStringList.at(34).toInt());
             ui->checkBoxBoundaryCondition->setChecked(ModuleStringList.at(36).toInt());
 
-
             Check_PrecipitationFileorValue(ModuleStringList.at(1));
             Check_TemperatureFileorValue(ModuleStringList.at(3));
             Check_RelativeHumidityFileorValue(ModuleStringList.at(5));
@@ -217,9 +217,13 @@ bool AttDataFile::Load_Project_Settings()
             Check_TINShape_Input(ModuleStringList.at(37));
 
             if(already_displayed_message)
+            {
                 Check_Att_Output(ModuleStringList.at(38), false);
+            }
             else
+            {
                 Check_Att_Output(ModuleStringList.at(38), true);
+            }
         }
 
         pushButtonSetFocus();
@@ -300,6 +304,7 @@ void AttDataFile::pushButtonSetFocus()
         qDebug() << "INFO: Start AttDataFile::pushButtonSetFocus()";
 
     try {
+
         ui->pushButtonPrecipitationFile->setDefault(false);
         ui->pushButtonTemperatureFile->setDefault(false);
         ui->pushButtonRelativeHumidityFile->setDefault(false);
@@ -452,6 +457,7 @@ void AttDataFile::pushButtonSetFocus()
 
         ui->pushButtonRun->setDefault(true);
         ui->pushButtonRun->setFocus();
+
     } catch (...) {
         qDebug() << "Error: AttDataFile::pushButtonSetFocus() is returning w/o checking";
     }
@@ -470,7 +476,7 @@ bool AttDataFile::Check_Att_Output(QString file, bool color_and_message_if_exist
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {
@@ -509,7 +515,7 @@ bool AttDataFile::Check_TINShape_Input(QString file){
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditTINShapeLayerFile->setStyleSheet("color: black;");
             ui->lineEditTINShapeLayerFile->setText(file);
@@ -582,13 +588,24 @@ bool AttDataFile::Is_String_Integer(QString input)
         input.toLong(&long_check);
 
         if(integer_check)
+        {
             result = true;
+        }
+
         if(double_check)
+        {
             result = true;
+        }
+
         if(float_check)
+        {
             result = true;
+        }
+
         if(long_check)
+        {
             result = true;
+        }
 
     }
     catch (...) {
@@ -630,7 +647,7 @@ bool AttDataFile::Check_PrecipitationFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditPrecipitationFile->setStyleSheet("color: black;");
                 ui->lineEditPrecipitationFile->setText(value);
@@ -642,7 +659,7 @@ bool AttDataFile::Check_PrecipitationFileorValue(QString value){
                 ui->lineEditPrecipitationFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -698,7 +715,7 @@ bool AttDataFile::Check_TemperatureFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditTemperatureFile->setStyleSheet("color: black;");
                 ui->lineEditTemperatureFile->setText(value);
@@ -710,7 +727,7 @@ bool AttDataFile::Check_TemperatureFileorValue(QString value){
                 ui->lineEditTemperatureFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -778,7 +795,7 @@ bool AttDataFile::Check_RelativeHumidityFileorValue(QString value){
                 ui->lineEditRelativeHumidityFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -793,7 +810,9 @@ bool AttDataFile::Check_RelativeHumidityFileorValue(QString value){
                 result = false;
             }
         }
-    } catch (...) {
+
+    }
+    catch (...) {
         qDebug() << "Error: Check_RelativeHumidityFile is returning w/o checking";
         result = false;
     }
@@ -833,7 +852,7 @@ bool AttDataFile::Check_WindVelocityFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditWindVelocityFile->setStyleSheet("color: black;");
                 ui->lineEditWindVelocityFile->setText(value);
@@ -845,7 +864,7 @@ bool AttDataFile::Check_WindVelocityFileorValue(QString value){
                 ui->lineEditWindVelocityFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -901,7 +920,7 @@ bool AttDataFile::Check_SolarRadiationFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditSolarRadiationFile->setStyleSheet("color: black;");
                 ui->lineEditSolarRadiationFile->setText(value);
@@ -913,7 +932,7 @@ bool AttDataFile::Check_SolarRadiationFileorValue(QString value){
                 ui->lineEditSolarRadiationFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -969,7 +988,7 @@ bool AttDataFile::Check_VaporPressureFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditVaporPressureFile->setStyleSheet("color: black;");
                 ui->lineEditVaporPressureFile->setText(value);
@@ -981,7 +1000,7 @@ bool AttDataFile::Check_VaporPressureFileorValue(QString value){
                 ui->lineEditVaporPressureFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1037,7 +1056,7 @@ bool AttDataFile::Check_SoilClassesFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditSoilClassesFile->setStyleSheet("color: black;");
                 ui->lineEditSoilClassesFile->setText(value);
@@ -1049,7 +1068,7 @@ bool AttDataFile::Check_SoilClassesFileorValue(QString value){
                 ui->lineEditSoilClassesFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1105,7 +1124,7 @@ bool AttDataFile::Check_GeologyClassesFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditGeologyClassesFile->setStyleSheet("color: black;");
                 ui->lineEditGeologyClassesFile->setText(value);
@@ -1117,7 +1136,7 @@ bool AttDataFile::Check_GeologyClassesFileorValue(QString value){
                 ui->lineEditGeologyClassesFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1173,7 +1192,7 @@ bool AttDataFile::Check_MacroporesFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditMacroporesFile->setStyleSheet("color: black;");
                 ui->lineEditMacroporesFile->setText(value);
@@ -1185,7 +1204,7 @@ bool AttDataFile::Check_MacroporesFileorValue(QString value){
                 ui->lineEditMacroporesFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1241,7 +1260,7 @@ bool AttDataFile::Check_LandCoverClassesFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditLandCoverClassesFile->setStyleSheet("color: black;");
                 ui->lineEditLandCoverClassesFile->setText(value);
@@ -1253,7 +1272,7 @@ bool AttDataFile::Check_LandCoverClassesFileorValue(QString value){
                 ui->lineEditLandCoverClassesFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1309,7 +1328,7 @@ bool AttDataFile::Check_MeltRegionsFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditMeltRegionsFile->setStyleSheet("color: black;");
                 ui->lineEditMeltRegionsFile->setText(value);
@@ -1321,7 +1340,7 @@ bool AttDataFile::Check_MeltRegionsFileorValue(QString value){
                 ui->lineEditMeltRegionsFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1377,7 +1396,7 @@ bool AttDataFile::Check_SourcesSinksFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditSourcesSinksFile->setStyleSheet("color: black;");
                 ui->lineEditSourcesSinksFile->setText(value);
@@ -1389,7 +1408,7 @@ bool AttDataFile::Check_SourcesSinksFileorValue(QString value){
                 ui->lineEditSourcesSinksFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1445,7 +1464,7 @@ bool AttDataFile::Check_InterceptionFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditInterceptionFile->setStyleSheet("color: black;");
                 ui->lineEditInterceptionFile->setText(value);
@@ -1457,7 +1476,7 @@ bool AttDataFile::Check_InterceptionFileorValue(QString value){
                 ui->lineEditInterceptionFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1513,7 +1532,7 @@ bool AttDataFile::Check_SnowCoverFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditSnowCoverFile->setStyleSheet("color: black;");
                 ui->lineEditSnowCoverFile->setText(value);
@@ -1525,7 +1544,7 @@ bool AttDataFile::Check_SnowCoverFileorValue(QString value){
                 ui->lineEditSnowCoverFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1581,7 +1600,7 @@ bool AttDataFile::Check_SurfaceStorageFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditSurfaceStorageFile->setStyleSheet("color: black;");
                 ui->lineEditSurfaceStorageFile->setText(value);
@@ -1593,7 +1612,7 @@ bool AttDataFile::Check_SurfaceStorageFileorValue(QString value){
                 ui->lineEditSurfaceStorageFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1649,7 +1668,7 @@ bool AttDataFile::Check_SoilMoistureFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditSoilMoistureFile->setStyleSheet("color: black;");
                 ui->lineEditSoilMoistureFile->setText(value);
@@ -1661,7 +1680,7 @@ bool AttDataFile::Check_SoilMoistureFileorValue(QString value){
                 ui->lineEditSoilMoistureFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1717,7 +1736,7 @@ bool AttDataFile::Check_GroundwaterFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditGroundwaterFile->setStyleSheet("color: black;");
                 ui->lineEditGroundwaterFile->setText(value);
@@ -1729,7 +1748,7 @@ bool AttDataFile::Check_GroundwaterFileorValue(QString value){
                 ui->lineEditGroundwaterFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -1785,7 +1804,7 @@ bool AttDataFile::Check_BoundaryConditionFileorValue(QString value){
         }
         else //is a file name to check
         {
-            if(  fileExists(value) )
+            if( fileExists(value) )
             {
                 ui->lineEditBoundaryConditionFile->setStyleSheet("color: black;");
                 ui->lineEditBoundaryConditionFile->setText(value);
@@ -1797,7 +1816,7 @@ bool AttDataFile::Check_BoundaryConditionFileorValue(QString value){
                 ui->lineEditBoundaryConditionFile->setText(value);
 
                 bool num_check = Is_String_Integer(value);
-                if(!num_check)
+                if(num_check == false)
                 {
                     if(value.isNull() || value.isEmpty() )
                     {
@@ -2329,7 +2348,7 @@ void AttDataFile::on_pushButtonAttDataFile_clicked()
         QString tempString = DataFileName;
         if ( DataFileName != nullptr)
         {
-            if( ! (tempString.toLower()).endsWith(".att") )
+            if( (tempString.toLower()).endsWith(".att") == false )
             {
                 tempString.append(".att");
                 DataFileName = tempString;
@@ -3329,12 +3348,12 @@ void AttDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         QString input_filename_TINShape_Input = ui->lineEditTINShapeLayerFile->text();
         bool checked_input = Check_TINShape_Input(input_filename_TINShape_Input);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("TINShape Input File or Value Missing " + input_filename_TINShape_Input );
             return;
         }
-        if ( !CheckFileAccess(input_filename_TINShape_Input, "ReadOnly") )
+        if ( CheckFileAccess(input_filename_TINShape_Input, "ReadOnly") == false )
         {
             Log_Error_Message("No Read Access to TINShape Input File or Value Missing " + input_filename_TINShape_Input );
             return;
@@ -3342,14 +3361,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_PrecipitationFile = ui->lineEditPrecipitationFile->text();
         checked_input = Check_PrecipitationFileorValue(input_filename_PrecipitationFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("Precipitation Input File or Value Missing " + input_filename_PrecipitationFile );
             return;
         }
-        if ( !checked_PrecipitationFile )
+        if ( checked_PrecipitationFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_PrecipitationFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_PrecipitationFile, "ReadOnly") == false )
             {
                 Log_Error_Message("No Read Access to Precipitation Input File or Value Missing " + input_filename_PrecipitationFile );
                 return;
@@ -3358,14 +3377,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_TemperatureFile = ui->lineEditTemperatureFile->text();
         checked_input = Check_TemperatureFileorValue(input_filename_TemperatureFile);
-        if(!checked_input)
+        if( checked_input == false)
         {
             Log_Error_Message("Temperature Input File or Value Missing " + input_filename_PrecipitationFile );
             return;
         }
-        if ( !checked_TemperatureFile )
+        if ( checked_TemperatureFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_TemperatureFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_TemperatureFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to Temperature Input File or Value Missing " + input_filename_TemperatureFile );
                 return;
@@ -3374,14 +3393,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_RelativeHumidityFile = ui->lineEditRelativeHumidityFile->text();
         checked_input = Check_RelativeHumidityFileorValue(input_filename_RelativeHumidityFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("RelativeHumidity Input File or Value Missing " + input_filename_RelativeHumidityFile );
             return;
         }
-        if ( !checked_RelativeHumidityFile )
+        if ( checked_RelativeHumidityFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_RelativeHumidityFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_RelativeHumidityFile, "ReadOnly") == false )
             {
                 Log_Error_Message("NO Read Access to RelativeHumidity Input File or Value Missing " + input_filename_RelativeHumidityFile );
                 return;
@@ -3390,14 +3409,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_WindVelocityFile = ui->lineEditWindVelocityFile->text();
         checked_input = Check_WindVelocityFileorValue(input_filename_WindVelocityFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("WindVelocity Input File or Value Missing " + input_filename_WindVelocityFile );
             return;
         }
-        if ( !checked_WindVelocityFile )
+        if ( checked_WindVelocityFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_WindVelocityFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_WindVelocityFile, "ReadOnly") == false )
             {
                 Log_Error_Message("NO Read Access to WindVelocity Input File or Value Missing " + input_filename_WindVelocityFile );
                 return;
@@ -3406,14 +3425,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_SolarRadiationFile = ui->lineEditSolarRadiationFile->text();
         checked_input = Check_SolarRadiationFileorValue(input_filename_SolarRadiationFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("SolarRadiation Input File or Value Missing " + input_filename_SolarRadiationFile );
             return;
         }
-        if ( !checked_SolarRadiationFile )
+        if ( checked_SolarRadiationFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_SolarRadiationFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_SolarRadiationFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to SolarRadiation Input File or Value Missing " + input_filename_SolarRadiationFile );
                 return;
@@ -3422,14 +3441,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_VaporPressureFile = ui->lineEditVaporPressureFile->text();
         checked_input = Check_VaporPressureFileorValue(input_filename_VaporPressureFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("VaporPressure Input File or Value Missing " + input_filename_VaporPressureFile );
             return;
         }
-        if ( !checked_VaporPressureFile )
+        if ( checked_VaporPressureFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_VaporPressureFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_VaporPressureFile, "ReadOnly") == false )
             {
                 Log_Error_Message("NO Read Access to VaporPressure Input File or Value Missing " + input_filename_VaporPressureFile );
                 return;
@@ -3438,14 +3457,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_SoilClassesFile = ui->lineEditSoilClassesFile->text();
         checked_input = Check_SoilClassesFileorValue(input_filename_SoilClassesFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("SoilClasses Input File or Value Missing " + input_filename_SoilClassesFile );
             return;
         }
-        if ( !checked_SoilClassesFile )
+        if ( checked_SoilClassesFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_SoilClassesFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_SoilClassesFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to SoilClasses Input File or Value Missing " + input_filename_SoilClassesFile );
                 return;
@@ -3454,14 +3473,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_GeologyClassesFile = ui->lineEditGeologyClassesFile->text();
         checked_input = Check_GeologyClassesFileorValue(input_filename_GeologyClassesFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("GeologyClasses Input File or Value Missing " + input_filename_GeologyClassesFile );
             return;
         }
-        if ( !checked_GeologyClassesFile )
+        if ( checked_GeologyClassesFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_GeologyClassesFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_GeologyClassesFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to GeologyClasses Input File or Value Missing " + input_filename_GeologyClassesFile );
                 return;
@@ -3470,14 +3489,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_MacroporesFile = ui->lineEditMacroporesFile->text();
         checked_input = Check_MacroporesFileorValue(input_filename_MacroporesFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("Macropores Input File or Value Missing " + input_filename_MacroporesFile );
             return;
         }
-        if ( !checked_MacroporesFile )
+        if ( checked_MacroporesFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_MacroporesFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_MacroporesFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to Macropores Input File or Value Missing " + input_filename_MacroporesFile );
                 return;
@@ -3486,14 +3505,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_LandCoverClassesFile = ui->lineEditLandCoverClassesFile->text();
         checked_input = Check_LandCoverClassesFileorValue(input_filename_LandCoverClassesFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("LandCover Input File or Value Missing " + input_filename_LandCoverClassesFile );
             return;
         }
-        if ( !checked_LandCoverClassesFile )
+        if ( checked_LandCoverClassesFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_LandCoverClassesFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_LandCoverClassesFile, "ReadOnly") == false )
             {
                 Log_Error_Message("NO Read Access to LandCover Input File or Value Missing " + input_filename_LandCoverClassesFile );
                 return;
@@ -3502,14 +3521,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_MeltRegionsFile = ui->lineEditMeltRegionsFile->text();
         checked_input = Check_MeltRegionsFileorValue(input_filename_MeltRegionsFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("MeltRegions Input File or Value Missing " + input_filename_MeltRegionsFile );
             return;
         }
-        if ( !checked_MeltRegionsFile )
+        if ( checked_MeltRegionsFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_MeltRegionsFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_MeltRegionsFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to MeltRegions Input File or Value Missing " + input_filename_MeltRegionsFile );
                 return;
@@ -3518,14 +3537,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_SourcesSinksFile = ui->lineEditSourcesSinksFile->text();
         checked_input = Check_SourcesSinksFileorValue(input_filename_SourcesSinksFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("SourcesSinks Input File or Value Missing " + input_filename_SourcesSinksFile );
             return;
         }
-        if ( !checked_SourcesSinksFile)
+        if ( checked_SourcesSinksFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_SourcesSinksFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_SourcesSinksFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to SourcesSinks Input File or Value Missing " + input_filename_SourcesSinksFile );
                 return;
@@ -3534,14 +3553,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_InterceptionFile = ui->lineEditInterceptionFile->text();
         checked_input = Check_InterceptionFileorValue(input_filename_InterceptionFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("Interception Input File or Value Missing " + input_filename_InterceptionFile );
             return;
         }
-        if ( !checked_InterceptionFile )
+        if ( checked_InterceptionFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_InterceptionFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_InterceptionFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to Interception Input File or Value Missing " + input_filename_InterceptionFile );
                 return;
@@ -3550,14 +3569,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_SnowCoverFile = ui->lineEditSnowCoverFile->text();
         checked_input = Check_SnowCoverFileorValue(input_filename_SnowCoverFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("SnowCover Input File or Value Missing " + input_filename_SnowCoverFile );
             return;
         }
-        if ( !checked_SnowCoverFile )
+        if ( checked_SnowCoverFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_SnowCoverFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_SnowCoverFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to SnowCover Input File or Value Missing " + input_filename_SnowCoverFile );
                 return;
@@ -3566,14 +3585,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_SurfaceStorageFile = ui->lineEditSurfaceStorageFile->text();
         checked_input = Check_SurfaceStorageFileorValue(input_filename_SurfaceStorageFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("SurfaceStorage Input File or Value Missing " + input_filename_SurfaceStorageFile );
             return;
         }
-        if ( !checked_SurfaceStorageFile )
+        if ( checked_SurfaceStorageFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_SurfaceStorageFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_SurfaceStorageFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to SurfaceStorage Input File or Value Missing " + input_filename_SurfaceStorageFile );
                 return;
@@ -3582,14 +3601,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_SoilMoistureFile = ui->lineEditSoilMoistureFile->text();
         checked_input = Check_SoilMoistureFileorValue(input_filename_SoilMoistureFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("SoilMoisture Input File or Value Missing " + input_filename_SoilMoistureFile );
             return;
         }
-        if ( !checked_SoilMoistureFile )
+        if ( checked_SoilMoistureFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_SoilMoistureFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_SoilMoistureFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to SoilMoisture Input File or Value Missing " + input_filename_SoilMoistureFile );
                 return;
@@ -3598,14 +3617,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_GroundwaterFile = ui->lineEditGroundwaterFile->text();
         checked_input = Check_GroundwaterFileorValue(input_filename_GroundwaterFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("Groundwater Input File or Value Missing " + input_filename_GroundwaterFile );
             return;
         }
-        if ( !checked_GroundwaterFile )
+        if ( checked_GroundwaterFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_GroundwaterFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_GroundwaterFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to Groundwater Input File or Value Missing " + input_filename_GroundwaterFile );
                 return;
@@ -3614,14 +3633,14 @@ void AttDataFile::on_pushButtonRun_clicked()
 
         QString input_filename_BoundaryConditionFile = ui->lineEditBoundaryConditionFile->text();
         checked_input = Check_BoundaryConditionFileorValue(input_filename_BoundaryConditionFile);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("BoundaryCondition Input File or Value Missing " + input_filename_BoundaryConditionFile );
             return;
         }
-        if ( !checked_BoundaryConditionFile )
+        if ( checked_BoundaryConditionFile == false)
         {
-            if ( ! CheckFileAccess(input_filename_BoundaryConditionFile, "ReadOnly") )
+            if ( CheckFileAccess(input_filename_BoundaryConditionFile, "ReadOnly") == false)
             {
                 Log_Error_Message("NO Read Access to BoundaryCondition Input File or Value Missing " + input_filename_BoundaryConditionFile );
                 return;

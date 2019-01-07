@@ -30,7 +30,7 @@ IbcDataFile::IbcDataFile(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -216,7 +216,7 @@ void IbcDataFile::on_pushButtonIbcDataFile_clicked()
         QString tempString = IbcDataFileName;
         if ( IbcDataFileName != nullptr)
         {
-            if( ! (tempString.toLower()).endsWith(".ibc") )
+            if( (tempString.toLower()).endsWith(".ibc") == false)
             {
                 tempString.append(".ibc");
                 IbcDataFileName = tempString;
@@ -241,8 +241,10 @@ int IbcDataFile::ibc_data_file( QString IbcDataFileName )
 
     try {
         QFile IbcFile( IbcDataFileName );
-        if ( ! IbcFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        if ( IbcFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
+        {
             return 137;
+        }
 
         QTextStream IbcFileTextStream(&IbcFile);
 
@@ -282,7 +284,7 @@ void IbcDataFile::on_pushButtonRun_clicked()
         {
             return;
         }
-        if ( ! CheckFileAccess(output_filename, "WriteOnly") )
+        if ( CheckFileAccess(output_filename, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to ... " + output_filename );
             return;

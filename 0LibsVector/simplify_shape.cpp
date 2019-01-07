@@ -89,8 +89,8 @@ int simplify_shape(QString qshpFileName, QString qdbfFileName, QString qnewshpFi
         DBFHandle dbf = DBFOpen(dbfFileName, "rb");
         if(dbf == nullptr)
         {
-            SHPClose(shp);
             main_window->Log_Message("[simplify_shape] Error[-1010] dbfFileName is NULL.");
+            SHPClose(shp);
             return -1010;
         }
 
@@ -99,11 +99,12 @@ int simplify_shape(QString qshpFileName, QString qdbfFileName, QString qnewshpFi
 
         if ( InfoShpType != SHPT_ARC )
         {
+            main_window->Log_Message("[simplify_shape] Error[-1011] Not a SHPT_ARC: " + qshpFileName);
+            main_window->Log_Message("[simplify_shape] Error[-1011] SHAPE TYPE : " + QString::number(InfoShpType));
+
             SHPClose(shp);
             DBFClose(dbf);
 
-            main_window->Log_Message("[simplify_shape] Error[-1011] Not a SHPT_ARC: " + qshpFileName);
-            main_window->Log_Message("[simplify_shape] Error[-1011] SHAPE TYPE : " + QString::number(InfoShpType));
             return InfoShpType;
         }
 
@@ -113,9 +114,9 @@ int simplify_shape(QString qshpFileName, QString qdbfFileName, QString qnewshpFi
         SHPObject *obj1 = SHPReadObject(shp, 0);
         if(obj1 == nullptr)
         {
+            main_window->Log_Message("[simplify_shape] Error[-1012] SHPReadObject failed.");
             SHPClose(shp);
             DBFClose(dbf);
-            main_window->Log_Message("[simplify_shape] Error[-1012] SHPReadObject failed.");
             return -1012;
         }
 
@@ -123,57 +124,57 @@ int simplify_shape(QString qshpFileName, QString qdbfFileName, QString qnewshpFi
         recordCount = DBFGetRecordCount(dbf);
         if(recordCount <= 0)
         {
+            main_window->Log_Message("[simplify_shape] Error[-1013] recordCount <= 0");
             SHPClose(shp);
             DBFClose(dbf);
-            main_window->Log_Message("[simplify_shape] Error[-1013] recordCount <= 0");
             return -1013;
         }
 
         if(recordCount > 500000) //500000 is a guess
         {
+            main_window->Log_Message("[simplify_shape] Error[-1014] recordCount > 500000");
             SHPClose(shp);
             DBFClose(dbf);
-            main_window->Log_Message("[simplify_shape] Error[-1014] recordCount > 500000");
             return -1014;
         }
 
         int fld = DBFGetFieldIndex(dbf, "ARCID");
         if(fld < 0)
         {
+            main_window->Log_Message("[simplify_shape] Error[-1015] Invalid DBFGetFieldIndex < 0");
             SHPClose(shp);
             DBFClose(dbf);
-            main_window->Log_Message("[simplify_shape] Error[-1015] Invalid DBFGetFieldIndex < 0");
             return -1015;
         }
 
         SHPHandle newshp = SHPCreate(newshpFileName, shpType);
         if(newshp == nullptr)
         {
+            main_window->Log_Message("[simplify_shape] Error[-1016] SHPCreate failed");
             SHPClose(shp);
             DBFClose(dbf);
-            main_window->Log_Message("[simplify_shape] Error[-1016] SHPCreate failed");
             return -1016;
         }
 
         DBFHandle newdbf = DBFCreate(newdbfFileName);
         if(newdbf == nullptr)
         {
+            main_window->Log_Message("[simplify_shape] Error[-1017] DBFCreate failed");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
-            main_window->Log_Message("[simplify_shape] Error[-1017] DBFCreate failed");
             return -1017;
         }
 
         int arcidField = DBFAddField(newdbf, "ARCID", FTInteger, 5, 0);
         if(arcidField < 0)
         {
+            main_window->Log_Message("[simplify_shape] Error[-1018] DBFAddField failed");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
 
-            main_window->Log_Message("[simplify_shape] Error[-1018] DBFAddField failed");
             return -1018;
         }
 

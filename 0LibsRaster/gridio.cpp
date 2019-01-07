@@ -36,19 +36,25 @@ int readline(FILE *fp,char *fline)
 
         if(fp == nullptr)
         {
-            main_window->Log_Message("[readline] Error[-100] fp = null");
-            return -100;
+            main_window->Log_Message("[readline] Error[-1000] fp = null");
+            return -1000;
+        }
+        if(fline == nullptr)
+        {
+            main_window->Log_Message("[readline] Error[-1001] fline = null");
+            return -1001;
         }
 
         int i = 0, ch;
 
-        for(i=0; i< MAXLN; i++)
+        for(i = 0; i< MAXLN; i++)
         {
             ch = getc(fp);
 
             if(ch == EOF)
             {
-                *(fline+i) = '\0'; return(EOF);
+                *(fline+i) = '\0';
+                return(EOF);
             }
             else
             {
@@ -65,6 +71,7 @@ int readline(FILE *fp,char *fline)
 
     } catch (...) {
         qDebug() << "Error: readline is returning w/o checking [PROBLEM HERE]";
+        return -5000;
     }
 }
 
@@ -205,10 +212,16 @@ int gridread(QString file, void ***data, int datatype, int *nx, int *ny,
     try {
 
         //Check input names
+        if(file == nullptr)
+        {
+            main_window->Log_Message("[gridread] Error[-1000] file null" );
+            return -1000;
+        }
+
         if(file.length() < 1)
         {
-            main_window->Log_Message("[gridread] Invalid file " + file);
-            return -1000;
+            main_window->Log_Message("[gridread] Error[-1001] Invalid file " + file);
+            return -1001;
         }
 
         FILE *fp;
@@ -228,14 +241,15 @@ int gridread(QString file, void ***data, int datatype, int *nx, int *ny,
         fp = fopen(file_char,"r");
         if(fp == nullptr)
         {
-            main_window->Log_Message("[gridread] Cannot open input file " + fname);
-            return -1001;
+            main_window->Log_Message("[gridread] Error[-1002] Cannot open input file " + fname);
+            return -1002;
         }
 
         // read ARC-Info header
         while(1)
         {
             readline(fp, fline);
+
             if(!isalpha(*fline) || *fline == '-')
                 break;
 
@@ -309,6 +323,8 @@ int gridread(QString file, void ***data, int datatype, int *nx, int *ny,
             if(sarr == nullptr)
             {
                 main_window->Log_Message("[gridread] Error[-2001] matalloc failed.");
+                fclose(fp);
+                fp = nullptr;
                 return -2001;
             }
 
@@ -328,6 +344,8 @@ int gridread(QString file, void ***data, int datatype, int *nx, int *ny,
             if(iarr == nullptr)
             {
                 main_window->Log_Message("[gridread] Error[-2002] matalloc failed.");
+                fclose(fp);
+                fp = nullptr;
                 return -2002;
             }
 
@@ -346,6 +364,8 @@ int gridread(QString file, void ***data, int datatype, int *nx, int *ny,
             if(farr == nullptr)
             {
                 main_window->Log_Message("[gridread] Error[-2003] matalloc failed.");
+                fclose(fp);
+                fp = nullptr;
                 return -2003;
             }
 
@@ -362,8 +382,10 @@ int gridread(QString file, void ***data, int datatype, int *nx, int *ny,
         }
         else
         {
-            main_window->Log_Message("[gridread] Error[1001] unknown datatype " + QString::number(datatype));
-            return(1001);
+            main_window->Log_Message("[gridread] Error[1005] unknown datatype " + QString::number(datatype));
+            fclose(fp);
+            fp = nullptr;
+            return(1005);
         }
 
         fclose(fp);
@@ -392,20 +414,25 @@ int gridwrite(QString qfile, void **data, int datatype, int nx, int ny, float dx
     try{
 
         //Check input names
+        if(qfile == nullptr)
+        {
+            main_window->Log_Message("[gridwrite] Error[-1000] Invalid file ");
+            return -1000;
+        }
         if(qfile.length() < 1)
         {
-            main_window->Log_Message("[gridwrite] Invalid file " + qfile);
-            return -1000;
+            main_window->Log_Message("[gridwrite] Error[-1001] Invalid file " + qfile);
+            return -1001;
         }
         if(nx < 1)
         {
-            main_window->Log_Message("[gridwrite] Invalid nx < 1 ");
-            return -1001;
+            main_window->Log_Message("[gridwrite] Error[-1002] Invalid nx < 1 ");
+            return -1002;
         }
         if(ny < 1)
         {
-            main_window->Log_Message("[gridwrite] Invalid ny < 1 ");
-            return -1002;
+            main_window->Log_Message("[gridwrite] Error[-1003] Invalid ny < 1 ");
+            return -1003;
         }
 
 
@@ -428,15 +455,15 @@ int gridwrite(QString qfile, void **data, int datatype, int nx, int ny, float dx
 
             if(fp == nullptr)
             {
-                main_window->Log_Message("[gridwrite] Error[-5002] Cannot open output file   " + qfile);
-                return -5001;
+                main_window->Log_Message("[gridwrite] Error[-2000] Cannot open output file   " + qfile);
+                return -2000;
             }
 
             // write ARC-Info header
             fprintf(fp,"ncols         %d\n",nx);
             fprintf(fp,"nrows         %d\n",ny);
-            utme=bndbox[0]+dx*0.5;
-            utmn=bndbox[1]+dy*0.5;
+            utme = bndbox[0]+dx*0.5;
+            utmn = bndbox[1]+dy*0.5;
             fprintf(fp,"xllcenter     %f\n",utme);
             fprintf(fp,"yllcenter     %f\n",utmn);
             fprintf(fp,"cellsize      %f\n",csize);
@@ -518,22 +545,23 @@ int gridwrite(QString qfile, void **data, int datatype, int nx, int ny, float dx
             }
             else
             {
-                main_window->Log_Message("[gridwrite] Error[-5001] Unknown datatype  " + QString::number(datatype));
-                return -5001;
+                main_window->Log_Message("[gridwrite] Error[-2003] Unknown datatype  " + QString::number(datatype));
+                error_found = true;
             }
 
             fclose(fp);
         }
         else {
 
-            main_window->Log_Message("[gridwrite] Error[-5000] Invalid file type ");
-            return -5000;
+            main_window->Log_Message("[gridwrite] Error[-3000] Invalid file type ");
+            fclose(fp);
+            return -3000;
         }
 
         if(error_found)
         {
-            main_window->Log_Message("[gridwrite] Error[-5002] Error(s) found while wrting data ");
-            return -5001;
+            main_window->Log_Message("[gridwrite] Error[-3001] Error(s) found while wrting data ");
+            return -3001;
         }
 
 

@@ -30,7 +30,7 @@ DelaunayTriangulation::DelaunayTriangulation(QWidget *parent, QString filename) 
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -333,7 +333,7 @@ bool DelaunayTriangulation::Check_Others(QString value, bool message)
             if(message)
             {
                 Log_Message("WARNING: Invalid Others value. ");
-             }
+            }
             result = false;
         }
 
@@ -406,10 +406,16 @@ void DelaunayTriangulation::on_checkBoxAngle_toggled(bool checked)
         qDebug() << "INFO: Start DelaunayTriangulation::on_checkBoxAngle_toggled()";
 
     try {
+
         if ( checked )
+        {
             ui->lineEditAngle->setDisabled(false);
+        }
         else
+        {
             ui->lineEditAngle->setDisabled(true);
+        }
+
     } catch (...) {
         qDebug() << "Error: DelaunayTriangulation::on_checkBoxAngle_toggled() is returning w/o checking";
     }
@@ -425,9 +431,14 @@ void DelaunayTriangulation::on_checkBoxArea_toggled(bool checked)
 
     try {
         if ( checked )
+        {
             ui->lineEditArea->setDisabled(false);
+        }
         else
+        {
             ui->lineEditArea->setDisabled(true);
+        }
+
     } catch (...) {
         qDebug() << "Error: DelaunayTriangulation::on_checkBoxArea_toggled() is returning w/o checking";
     }
@@ -443,9 +454,14 @@ void DelaunayTriangulation::on_checkBoxOthers_toggled(bool checked)
 
     try {
         if ( checked )
+        {
             ui->lineEditOthers->setDisabled(false);
+        }
         else
+        {
             ui->lineEditOthers->setDisabled(true);
+        }
+
     } catch (...) {
         qDebug() << "Error: DelaunayTriangulation::on_checkBoxOthers_toggled() is returning w/o checking";
     }
@@ -552,14 +568,14 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         QString filename_triangle_software =  ui->lineEditFIND->text();
 
         bool TriangleCheck = Check_Triangle_Software_Input(filename_triangle_software);
-        if(!TriangleCheck)
+        if(TriangleCheck == false)
         {
             Log_Error_Message("TRIANGLE Software Input File Missing ");
             return;
         }
 
         bool PSLGCheck = Check_PSLG_Input(PSLG_filename);
-        if(!PSLGCheck)
+        if(PSLGCheck == false)
         {
             Log_Error_Message("PSLG Input File Missing ");
             return;
@@ -568,7 +584,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         if( ui->checkBoxAngle->isChecked() )
         {
             bool angle_check = Check_Angle(input_angle, true);
-            if(!angle_check)
+            if(angle_check == false)
             {
                 Log_Error_Message("Missing Angle Quality Constraint ... ");
                 return;
@@ -578,7 +594,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         if( ui->checkBoxArea->isChecked())
         {
             bool area_check = Check_Area(input_area, true);
-            if(!area_check)
+            if(area_check == false)
             {
                 Log_Error_Message("Missing Area Quality Constraint ... ");
                 return;
@@ -588,7 +604,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         if( ui->checkBoxOthers->isChecked())
         {
             bool area_check = Check_Others(input_others, true);
-            if(!area_check)
+            if(area_check == false)
             {
                 Log_Error_Message("Missing Other Options ... ");
                 return;
@@ -643,11 +659,19 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         OptsString = "-nV";
 
         if( ui->checkBoxAngle->isChecked() )
+        {
             OptsString.append(tr("q")+ui->lineEditAngle->text());
+        }
+
         if( ui->checkBoxArea->isChecked() )
+        {
             OptsString.append(tr("a")+ui->lineEditArea->text());
+        }
+
         if( ui->checkBoxOthers->isChecked() )
+        {
             OptsString.append(ui->lineEditOthers->text());
+        }
 
         NameString = PSLG_filename;
 
@@ -705,35 +729,55 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         QStringList ProjectIOStringList;
 
         ProjectIOStringList << "DelaunayTriangulation" << PSLG_filename;
+
         if( ui->checkBoxAngle->isChecked() )
+        {
             ProjectIOStringList << ui->lineEditAngle->text();
+        }
         else
+        {
             ProjectIOStringList << "";
+        }
+
         if( ui->checkBoxArea->isChecked() )
+        {
             ProjectIOStringList << ui->lineEditArea->text();
+        }
         else
+        {
             ProjectIOStringList << "";
+        }
+
         if( ui->checkBoxOthers->isChecked() )
+        {
             ProjectIOStringList << ui->lineEditOthers->text();
+        }
         else
+        {
             ProjectIOStringList << "";
+        }
 
         WriteModuleLine(filename_open_project, ProjectIOStringList);
         ProjectIOStringList.clear();
 
-        // *** READ THE NUMBER OF TRIANGLES FROM .1.ELE FILE AND PRINT ON THE LOG
-        int NumTINs;
-        QString EleFileName;
-        EleFileName = PSLG_filename;
+        // READ THE NUMBER OF TRIANGLES FROM .1.ELE FILE AND PRINT ON THE LOG
+        int NumTINs = -1;
+        QString EleFileName = PSLG_filename;
         EleFileName.replace(QString(".poly"), QString(".1.ele"));
+
         QFile EleFile(EleFileName);
-        EleFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        bool opened = EleFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        if(opened == false)
+        {
+            Log_Error_Message("Failed to open " + EleFileName);
+            return;
+        }
 
         QTextStream EleFileTextStream(&EleFile);
         EleFileTextStream >> NumTINs;
         EleFile.close();
-        Log_Message("Total Number of Triangular Elements: " + QString::number(NumTINs) );
 
+        Log_Message("Total Number of Triangular Elements: " + QString::number(NumTINs) );
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
@@ -741,8 +785,6 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         //Clear_Log();
 
         Log_Message("Delaunay Triangulation Processing Completed.");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

@@ -27,7 +27,6 @@ FillPits::FillPits(QWidget *parent, QString filename) :
 
     try {
 
-
         ui->setupUi(this);
 
         filename_open_project = filename;
@@ -39,9 +38,7 @@ FillPits::FillPits(QWidget *parent, QString filename) :
         QFile ProjectFile(filename_open_project);
         if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
-            LogsString.append(tr("<span style=\"color:#FF0000\">Error: Unable to Open project file: </span>") + filename_open_project +tr("<br>"));
-            ui->textBrowserLogs->setHtml(LogsString);
-            ui->textBrowserLogs->repaint();
+            Log_Error_Message("Unable to Open project file: " + filename_open_project);
         }
         else
         {
@@ -94,10 +91,8 @@ bool FillPits::Load_Project_Settings()
             QString dem = ModuleStringList.at(1);
             QString fillpits = ModuleStringList.at(2);
 
-            bool dem_check = Check_DEM_Input(dem);
-
+            bool dem_check  = Check_DEM_Input(dem);
             bool fill_check = Check_Fillpit_Output(fillpits, true);
-
         }
 
         pushButtonSetFocus();
@@ -122,7 +117,7 @@ bool FillPits::Check_DEM_Input(QString dem )
 
     try {
 
-        if(  fileExists(dem) )
+        if( fileExists(dem) )
         {
             ui->lineEditDEM->setStyleSheet("color: black;");
             ui->lineEditDEM->setText(dem);
@@ -217,7 +212,8 @@ void FillPits::pushButtonSetFocus()
         ui->pushButtonRun->setDefault(true);
         ui->pushButtonRun->setFocus();
 
-    } catch (...) {
+    } catch (...)
+    {
         qDebug() << "Error: FillPits::pushButtonSetFocus() is returning w/o checking";
     }
 }
@@ -399,6 +395,7 @@ void FillPits::on_pushButtonRun_clicked()
             ASCFileName.append("asc");
 
             Log_Message("Converting Arc Binary File to ASC File ... <br>");
+
             int check = ADFFiletoASCFile(DEMFileName, ASCFileName);
             if(check == 0 ) // no errors
             {
@@ -474,22 +471,20 @@ void FillPits::on_pushButtonRun_clicked()
         QTextStream ASCFileTextStream(&ASCFile);
 
         QString TempString;
-        ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;
-        ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;
-        ASCFileTextStream>>TempString;
+        ASCFileTextStream >> TempString;ASCFileTextStream >> TempString;ASCFileTextStream >> TempString;ASCFileTextStream >> TempString;
+        ASCFileTextStream >> TempString;ASCFileTextStream >> TempString;ASCFileTextStream >> TempString;ASCFileTextStream >> TempString;
+        ASCFileTextStream >> TempString;
 
         ASCFileTextStream >> DEMResolution;
-        Log_Message("DEM Resolution (Integer) = " + QString::number(DEMResolution) + "\n");
+        Log_Message("DEM Resolution (Integer) = " + QString::number(DEMResolution) );
         ASCFile.close();
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run pit fill
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Fill Pits ... <br>");
+        Log_Message("Running Fill Pits ... ");
 
-        QString dummystr("dummy");
-
-        int ErrorFill = flood( ASCFileName, dummystr, filename_fill );
+        int ErrorFill = flood( ASCFileName, filename_fill );
         if( ErrorFill != 0 )
         {
             Log_Error_Message("Fill Pits Processing Failed ... " );
@@ -505,6 +500,7 @@ void FillPits::on_pushButtonRun_clicked()
         {
             return;
         }
+
         qint64 size = file_Size(filename_fill);
         if( size < 1)
         {
@@ -526,8 +522,6 @@ void FillPits::on_pushButtonRun_clicked()
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Log_Message("Fill Pits Processing Completed.");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

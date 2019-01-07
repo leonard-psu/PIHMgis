@@ -3,7 +3,7 @@
 
 #include <QString>
 
-int flood(QString demfile, QString pointfile, QString newfile);
+int flood(QString demfile, QString newfile);
 
 #endif
 

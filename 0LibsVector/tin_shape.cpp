@@ -330,7 +330,7 @@ int tin_shape(QString qeleFileName, QString qnodeFileName, QString qshpFileName,
     catch (...) {
 
         qDebug() << "Error: tin_shape is returning w/o checking";
-        return -9000;
+        return -5000;
     }
 
     return 0;

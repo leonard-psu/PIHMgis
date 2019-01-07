@@ -529,6 +529,7 @@ bool NewProject::create_default_PIHMgis_project_file(QString pihmgis_root_folder
             return false;
         }
 
+        file.close();
         return true;
     }
     catch (...)

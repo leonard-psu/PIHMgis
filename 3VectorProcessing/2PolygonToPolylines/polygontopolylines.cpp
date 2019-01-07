@@ -30,7 +30,7 @@ PolygonToPolylines::PolygonToPolylines(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -85,11 +85,13 @@ bool PolygonToPolylines::Load_Project_Settings()
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
                 QString file1 = ModuleStringList.at(i+1);
+
                 if(file1.length() > 0 )
                 {
                     bool file1_check = Check_File_Valid(file1);
 
                     int rowlen = ui->tableWidget->rowCount()-1;
+
                     if(rowlen >= 0)
                     {
                         if(file1_check)
@@ -137,7 +139,7 @@ bool PolygonToPolylines::Load_Project_Settings()
                 OutPolylineFileName = "";
             }
         }
-        else // *** If DISSOLVE POLYGONS step is skipped
+        else // If DISSOLVE POLYGONS step is skipped
         {
             ModuleStringList = ReadModuleLine(filename_open_project,tr("CatchmentRasterVector"));
             if ( ModuleStringList.length() > 0  )
@@ -171,7 +173,10 @@ bool PolygonToPolylines::Load_Project_Settings()
         if ( ModuleStringList.length() > 0 )
         {
             while( ui->tableWidget->rowCount() )
+            {
                 ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+            }
+
             ui->tableWidget->setRowCount(0);
 
             for (int i=1; i+1<ModuleStringList.length(); i=i+2)
@@ -282,7 +287,6 @@ void PolygonToPolylines::Clear_Log()
         qDebug() << "INFO: Start PolygonToPolylines::Clear_Log()";
 
     try {
-
         LogsString = tr("");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
@@ -382,7 +386,7 @@ void PolygonToPolylines::on_pushButtonAdd_clicked()
         QStringList InputPolygonsFileNames = QFileDialog::getOpenFileNames(this, "Choose Shape Files", user_pihmgis_root_folder +tr("/2VectorProcessing"), "Shape File(*.shp *.SHP)");
         if ( InputPolygonsFileNames.length() > 0)
         {
-            for (int i=0; i<InputPolygonsFileNames.length(); i++)
+            for (int i = 0; i < InputPolygonsFileNames.length(); i++)
             {
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
@@ -472,7 +476,9 @@ void PolygonToPolylines::on_pushButtonClear_clicked()
 
     try {
         while( ui->tableWidget->rowCount() )
+        {
             ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+        }
 
         pushButtonSetFocus();
 
@@ -507,7 +513,7 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
 
         bool failure_found = false;
 
-        for (int i=0; i<ui->tableWidget->rowCount(); i++)
+        for (int i = 0; i < ui->tableWidget->rowCount(); i++)
         {
             QString file1 = ui->tableWidget->item(i,0)->text();
             QString file2 = ui->tableWidget->item(i,1)->text();
@@ -517,7 +523,7 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
 
             if(file1_check)
             {
-                if ( ! CheckFileAccess(file1, "ReadOnly") )
+                if ( CheckFileAccess(file1, "ReadOnly") == false)
                 {
                     Log_Error_Message("Error: No Read Access to ... " + file1 );
                     failure_found = true;
@@ -535,7 +541,7 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
             }
             else
             {
-                if ( ! CheckFolderAccessFromFilePath(file2, "WriteOnly") )
+                if ( CheckFolderAccessFromFilePath(file2, "WriteOnly") == false)
                 {
                     Log_Error_Message("Error: No Write Access to ... " + file2 );
                     failure_found = true;
@@ -557,7 +563,7 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
         QStringList ProjectIOStringList;
         ProjectIOStringList << "PolygonToPolylines";
 
-        for (int i=0; i<ui->tableWidget->rowCount(); i++)
+        for (int i = 0; i < ui->tableWidget->rowCount(); i++)
         {
             QString InpShpFileName, InpDbfFileName;
             QString OutShpFileName, OutDbfFileName;
@@ -579,7 +585,7 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
             bool valid_check = false;
             if( file1_check && file3_check) //Want to exist
             {
-                if( !file2_check && !file4_check) //Dont want to exist
+                if( file2_check == false && file4_check == false) //Dont want to exist
                 {
                     valid_check = true;
                 }
@@ -601,7 +607,7 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
 
                 if ( ErrorPln == 1 || ErrorPln == 3 || ErrorPln == 8 )
                 {
-                    Log_Message("Warning: Skipping Non-Polygon Layer ... "+InpShpFileName);
+                    Log_Message("Warning: Skipping Non-Polygon Layer ... " + InpShpFileName);
                 }
                 else if ( ErrorPln != 0 )
                 {
@@ -623,10 +629,11 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
         // Update Project file
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ProjectIOStringList.length() > 2)
+        {
             WriteModuleLine(filename_open_project, ProjectIOStringList);
+        }
 
         ProjectIOStringList.clear();
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
@@ -634,8 +641,6 @@ void PolygonToPolylines::on_pushButtonRun_clicked()
         Clear_Log();
 
         Log_Message("Polygon to Polylines Processing Completed.");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

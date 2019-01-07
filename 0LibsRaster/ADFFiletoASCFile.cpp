@@ -227,7 +227,7 @@ int ADFFiletoASCFile(QString ADFFileName, QString ASCFileName)
             return 113;
         }
 
-        void *data = CPLMalloc(size);
+        void *data = VSIMalloc(size);
         if(data == nullptr)
         {
             main_window->Log_Message("[ADFFiletoASCFile] Error[114] Data is NULL ");
@@ -289,6 +289,7 @@ int ADFFiletoASCFile(QString ADFFileName, QString ASCFileName)
         }
 
         ASCFile.close();
+        VSIFree(data);
         GDALClose(layer);
 
         if(raster_error_found) //Potentially Serious error  (user has to decide)

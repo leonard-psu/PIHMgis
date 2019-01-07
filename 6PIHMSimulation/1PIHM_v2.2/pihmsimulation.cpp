@@ -44,7 +44,7 @@ PIHMSimulation::PIHMSimulation(QWidget *parent, QString filename) :
         ui->progressBar->setValue(0);
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project  );
         }
@@ -231,7 +231,7 @@ bool PIHMSimulation::Check_InputDataFolder(QString folder){
 
         QDir check_dir(folder);
 
-        if(  check_dir.exists() )
+        if( check_dir.exists() )
         {
             ui->lineEditInputDataFolder->setStyleSheet("color: black;");
             ui->lineEditInputDataFolder->setText(folder);
@@ -421,7 +421,7 @@ int PIHMSimulation::CheckInputFileAccess(QString folder, QString project_name, Q
     try {
         QString FileNamewithExtension = folder + "/" + project_name + Extension;
 
-        if ( ! CheckFileAccess(FileNamewithExtension, "ReadOnly") )
+        if ( CheckFileAccess(FileNamewithExtension, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to " + FileNamewithExtension );
             return -9;
@@ -456,7 +456,7 @@ int PIHMSimulation::CopyInputFile( QString output_folder, QString input_folder, 
         {
             if(delete_existing_output_file)
             {
-                if ( ! QFile::remove(output_FileName) )
+                if ( QFile::remove(output_FileName) == false)
                 {
                     Log_Error_Message("Unable to remove file " + output_FileName  );
                     return -9;
@@ -468,7 +468,7 @@ int PIHMSimulation::CopyInputFile( QString output_folder, QString input_folder, 
             }
         }
 
-        if ( ! QFile::copy(input_FileName, output_FileName) )
+        if ( QFile::copy(input_FileName, output_FileName) == false )
         {
             Log_Error_Message("Unable to copy file " + input_FileName  );
             return -11;
@@ -503,11 +503,13 @@ bool PIHMSimulation::CopyInputFiles( QString output_folder, QString input_folder
                 Log_Error_Message("Unable to copy file mesh file");
                 result = false;
             }
+
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".att"),delete_existing_output_file) != 0 )
             {
                 Log_Error_Message("Unable to copy file att file");
                 result = false;
             }
+
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".riv"),delete_existing_output_file) != 0 )
             {
                 Log_Error_Message("Unable to copy file riv file");
@@ -519,11 +521,13 @@ bool PIHMSimulation::CopyInputFiles( QString output_folder, QString input_folder
                 Log_Error_Message("Unable to copy file soil file");
                 result = false;
             }
+
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".geol"),delete_existing_output_file) != 0 )
             {
                 Log_Error_Message("Unable to copy file geol file");
                 result = false;
             }
+
             if ( CopyInputFile(output_folder,input_folder, project_name,tr(".lc"),delete_existing_output_file) != 0 )
             {
                 Log_Error_Message("Unable to copy file lc file");
@@ -598,20 +602,20 @@ void PIHMSimulation::on_pushButtonRun_clicked()
         bool delete_existing_output_file = ui->checkBoxOverWriteFiles->isChecked();
 
         bool checked_input = Check_InputDataFolder(input_folder);
-        if(!checked_input)
+        if( checked_input == false)
         {
             Log_Error_Message("Invalid Project Input Folder or Value Missing" + input_folder );
             return;
         }
         checked_input = Check_DataKey(project_name);
-        if(!checked_input)
+        if( checked_input == false)
         {
             Log_Error_Message("Invalid Project Name or Value Missing " + project_name );
             return;
         }
 
         checked_input = Check_PIHM_Project_Inputs(input_folder, project_name, true);
-        if(!checked_input)
+        if( checked_input == false)
         {
             Log_Error_Message("Missing input file(s) for project: " + project_name );
             return;
@@ -621,7 +625,7 @@ void PIHMSimulation::on_pushButtonRun_clicked()
         // Check Output Location
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         QString output_folder = user_pihmgis_root_folder + "/5PIHMSimulation";
-        if (!QDir(output_folder).exists() )
+        if (QDir(output_folder).exists() == false)
         {
             Log_Error_Message("Project output folder is missing: " + output_folder );
             return;
@@ -632,7 +636,7 @@ void PIHMSimulation::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         bool checked_output = CopyInputFiles(output_folder, input_folder, project_name, delete_existing_output_file);
-        if(!checked_output)
+        if( checked_output == false)
         {
             Log_Error_Message("Issues with copying input file(s) to output folder: " + output_folder );
             return;
@@ -863,7 +867,7 @@ void PIHMSimulation::verifyInputOutputFile()
     try {
 
         LogsString = tr("");
-        if ( ! QDir(ui->lineEditInputDataFolder->text()).exists() )
+        if ( QDir(ui->lineEditInputDataFolder->text()).exists() == false)
         {
             Log_Error_Message("Folder Does Not Exist " + ui->lineEditInputDataFolder->text() );
         }
@@ -892,7 +896,7 @@ void PIHMSimulation::verifyInputOutputFile()
         bool missing_files = false;
         for( int i=0; i < Extensions.length(); i++)
         {
-            if ( ! QFile(FileName + Extensions.at(i)).exists() )
+            if ( QFile(FileName + Extensions.at(i)).exists() == false)
             {
                 Log_Error_Message("Input File Does Not Exist " + FileName + Extensions.at(i) );
                 missing_files = true;

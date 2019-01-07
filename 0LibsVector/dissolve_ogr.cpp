@@ -262,6 +262,7 @@ int dissolve_ogr( int argc, char *argv[] )
         if (nLayers == 0)
         {
             main_window->Log_Message("[dissolve_ogr] Error[-1005] no layers in dataset. ");
+            GDALClose(poDS);
             return -1005;
         }
 
@@ -312,12 +313,14 @@ int dissolve_ogr( int argc, char *argv[] )
         else
         {
             main_window->Log_Message("[dissolve_ogr] Error No features in dataset. ");
+            GDALClose(poDS);
             error_found = true;
         }
 
         if (error_found)
         {
             main_window->Log_Message("[dissolve_ogr] Error(s) [-1006] found parsing features. ");
+            GDALClose(poDS);
             return -1006;
         }
 
@@ -342,6 +345,7 @@ int dissolve_ogr( int argc, char *argv[] )
         if (error_found)
         {
             main_window->Log_Message("[dissolve_ogr] Error(s) [-1007] found parsing features. ");
+            GDALClose(poDS);
             return -1007;
         }
 
@@ -353,6 +357,7 @@ int dissolve_ogr( int argc, char *argv[] )
         if( poDriver == nullptr )
         {
             main_window->Log_Message("[dissolve_ogr] Error(s) [-1008]  driver not available. Are OGL dlls/so/a missing in PIHMgis installation directory?");
+            GDALClose(poDS);
             return -1008;
         }
 
@@ -360,6 +365,7 @@ int dissolve_ogr( int argc, char *argv[] )
         if( poDSout == nullptr )
         {
             main_window->Log_Message("[dissolve_ogr] Error(s) [-1009] Creation of output file failed. ");
+            GDALClose(poDS);
             return -1009;
         }
 
@@ -367,6 +373,8 @@ int dissolve_ogr( int argc, char *argv[] )
         if( poLayerOut == nullptr )
         {
             main_window->Log_Message("[dissolve_ogr] Error(s) [-1010] Layer creation failed. ");
+            GDALClose(poDS);
+            GDALClose(poDSout);
             return -1010;
         }
 
@@ -385,6 +393,8 @@ int dissolve_ogr( int argc, char *argv[] )
         if(error_found )
         {
             main_window->Log_Message("[dissolve_ogr] Error(s) [-1011] Creation of field failed. ");
+            GDALClose(poDS);
+            GDALClose(poDSout);
             return -1011;
         }
 
@@ -401,6 +411,8 @@ int dissolve_ogr( int argc, char *argv[] )
         if( poCollection == nullptr )
         {
             main_window->Log_Message("[dissolve_ogr] Error [-1012] poCollection is nullptr. ");
+            GDALClose(poDS);
+            GDALClose(poDSout);
             return -1012;
         }
 
@@ -522,28 +534,28 @@ int dissolve_ogr( int argc, char *argv[] )
         }
 
         GDALTermProgress( ((double)nAttrs)/nAttrs, "", nullptr);
+
+        //Clean up
         GDALClose(poDS);
         GDALClose(poDSout);
 
         if( feature_error_found )
         {
-            main_window->Log_Message("[dissolve_ogr] WARNING [5000]] Feature error found. User needs to check. ");
-            return 5000;
+            main_window->Log_Message("[dissolve_ogr] WARNING [-5000]] Feature error found. User needs to check. ");
+            return -5000;
         }
         if( geometry_error_found )
         {
-            main_window->Log_Message("[dissolve_ogr] WARNING [5000]] Geometry error found. User needs to check. ");
-            return 5000;
+            main_window->Log_Message("[dissolve_ogr] WARNING [-5001]] Geometry error found. User needs to check. ");
+            return -5001;
         }
-
-        //Clean up
-
 
         return(0);
 
     }
-    catch (...) {
-        qDebug() << "Error: attributeInsert is returning nullptr";
+    catch (...)
+    {
+        qDebug() << "Error: dissolve_ogr is returning w/o checking";
         return -5000;
     }
 }

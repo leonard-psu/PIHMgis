@@ -114,9 +114,7 @@ bool FlowGrids::Load_Project_Settings()
 
             bool flow_check = Check_FlowDir_Output(flowdir, true);
             bool acc_check = Check_FlowAcc_Output(flowacc, true);
-
         }
-
 
     } catch (...) {
         qDebug() << "Error: FlowGrids::Load_Project_Settings is returning w/o checking";
@@ -509,7 +507,7 @@ void FlowGrids::on_pushButtonRun_clicked()
             ASCFileName.truncate(ASCFileName.length()-3);
             ASCFileName.append("asc");
 
-            Log_Message("Converting Arc Binary File to ASC File ... <br>");
+            Log_Message("Converting Arc Binary File to ASC File ... ");
 
             int check = ADFFiletoASCFile(FillPitsFileName, ASCFileName);
             if(check == 0 ) // no errors
@@ -586,19 +584,19 @@ void FlowGrids::on_pushButtonRun_clicked()
         QTextStream ASCFileTextStream(&ASCFile);
 
         QString TempString;
-        ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;
-        ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;ASCFileTextStream>>TempString;
-        ASCFileTextStream>>TempString;
+        ASCFileTextStream >> TempString; ASCFileTextStream >> TempString; ASCFileTextStream >> TempString; ASCFileTextStream >> TempString;
+        ASCFileTextStream >> TempString; ASCFileTextStream >> TempString; ASCFileTextStream >> TempString; ASCFileTextStream >> TempString;
+        ASCFileTextStream >> TempString;
 
         ASCFileTextStream >> DEMResolution;
-        Log_Message("DEM Resolution (Integer) = " + QString::number(DEMResolution) + "\n");
+        Log_Message("DEM Resolution (Integer) = " + QString::number(DEMResolution) );
         ASCFile.close();
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run Flow Dir
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Flow Acc Grids ... <br>");
+        Log_Message("Running Flow Acc Grids ... ");
 
         QString SlopeFileName = filename_flow;
         SlopeFileName.truncate(SlopeFileName.length()-4);
@@ -613,11 +611,9 @@ void FlowGrids::on_pushButtonRun_clicked()
             return;
         }
 
-        LogsString.append("Running Flow Acc Grids ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Flow Acc Grids ... ");
 
-        int ErrorAcc = aread8( (char *)qPrintable(filename_flow), (char *)qPrintable(filename_acc), 0.0, 0.0, 1 );
+        int ErrorAcc = aread8( filename_flow, filename_acc, 0.0, 0.0, 1 );
         if( ErrorAcc != 0 )
         {
             Log_Error_Message("Flow Accumulation Processing Failed ... ");
@@ -673,7 +669,7 @@ void FlowGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message(tr("<br><b>Flow Grids Processing Completed.</b>")+tr("<br>"));
+        Log_Message("Flow Grids Processing Completed.");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
 

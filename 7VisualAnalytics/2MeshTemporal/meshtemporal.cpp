@@ -32,14 +32,15 @@ MeshTemporal::MeshTemporal(QWidget *parent, QString filename) :
         connect(PrintAction,SIGNAL(triggered()),this,SLOT(on_pushButtonRun_clicked()));
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
-            Log_Error_Message("Unable to Open File: </span>" + filename_open_project );
+            Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
         else
         {
             found_file = true;
         }
+
         ProjectFile.close();
 
         if(found_file)
@@ -317,11 +318,16 @@ void MeshTemporal::on_comboBoxModelSegments_currentIndexChanged(int index)
 
     try {
         if ( index == 2 || index == 4 )
+        {
             ui->lineEditModelSegments->hide();
+        }
         else
+        {
             ui->lineEditModelSegments->show();
+        }
 
         pushButtonSetFocus();
+
     } catch (...) {
         qDebug() << "Error: MeshTemporal::on_comboBoxModelSegments_currentIndexChanged() is returning w/o checking";
     }
@@ -338,7 +344,10 @@ void MeshTemporal::on_lineEditOutputDataFolder_textChanged(const QString &arg1)
     try {
         bool checked = Check_OutputFolder_Location(arg1);
         if(checked)
+        {
             verifyInputOutputFile();
+        }
+
     } catch (...) {
         qDebug() << "Error: MeshTemporal::on_lineEditOutputDataFolder_textChanged() is returning w/o checking";
     }
@@ -355,7 +364,10 @@ void MeshTemporal::on_lineEditDataKey_textChanged(const QString &arg1)
     try {
         bool checked = Check_Project_Name_Input(arg1);
         if(checked)
+        {
             verifyInputOutputFile();
+        }
+
     } catch (...) {
         qDebug() << "Error: MeshTemporal::on_lineEditDataKey_textChanged() is returning w/o checking";
     }
@@ -372,7 +384,9 @@ void MeshTemporal::on_lineEditModelSegments_textChanged(const QString &arg1)
     try {
         bool checked = Check_ModelSegments_Input(arg1);
         if(checked)
+        {
             verifyInputOutputFile();
+        }
     } catch (...) {
         qDebug() << "Error: MeshTemporal::on_lineEditModelSegments_textChanged() is returning w/o checking";
     }
@@ -416,9 +430,9 @@ void MeshTemporal::verifyInputOutputFile()
 
         bool exists = Check_OutputFolder_Location(output_data_folder);
 
-        if ( !exists)
+        if ( exists == false)
         {
-            Log_Message(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>") + output_data_folder + tr("<br>"));
+            Log_Message("ERROR: Folder Does Not Exist ... " + output_data_folder );
         }
         else
         {
@@ -429,9 +443,9 @@ void MeshTemporal::verifyInputOutputFile()
         QString Extension = tr(".para");
         QString para_filename = FileName + Extension;
 
-        if ( ! QFile(para_filename).exists() )
+        if ( QFile(para_filename).exists() == false)
         {
-            Log_Message(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ para_filename +tr("<br>"));
+            Log_Message("ERROR: Para File Does Not Exist ... " + para_filename );
         }
         else
         {
@@ -456,13 +470,13 @@ void MeshTemporal::verifyInputOutputFile()
         for( int i=0; i < Extensions.length(); i++)
         {
             QString tmp_filename = FileName + Extensions.at(i);
-            if ( ! QFile(tmp_filename).exists() )
+            if ( QFile(tmp_filename).exists() == false)
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>") + tmp_filename +tr("<br>"));
+                Log_Message("ERROR: Output File Does Not Exist ... " + tmp_filename );
             }
             else
             {
-                Log_Message(tr("Output File Exists ... ") + tmp_filename +tr("<br>"));
+                Log_Message("Output File Exists ... " + tmp_filename );
             }
         }
 
@@ -537,7 +551,7 @@ int MeshTemporal::Get_Element_Count(QString element_filename, bool message)
 
         if(message)
         {
-            Log_Message(tr("Number of Elements = ")+QString::number(element_count)+tr("<br>"));
+            Log_Message("Number of Elements = " + QString::number(element_count) );
         }
 
     }
@@ -573,7 +587,7 @@ int MeshTemporal::Get_River_Count(QString river_filename, bool message)
 
         if(message)
         {
-            Log_Message(tr("Number of River Segments = ")+QString::number(river_count)+tr("<br>"));
+            Log_Message("Number of River Segments = " + QString::number(river_count));
         }
 
     }
@@ -667,15 +681,15 @@ void MeshTemporal::on_pushButtonRun_clicked()
         QString mesh_filename = output_base_filename + ".mesh";
 
         bool checked = Check_OutputFolder_Location(project_folder);
-        if(!checked)
+        if(checked == false)
         {
-            Log_Error_Message("Issue with Input Folder : </span>" + project_folder  );
+            Log_Error_Message("Issue with Input Folder : " + project_folder  );
             return;
         }
         checked = Check_Project_Name_Input(project_name);
-        if(!checked)
+        if(checked == false)
         {
-            Log_Error_Message("Issue with Input Folder : </span>" + project_name  );
+            Log_Error_Message("Issue with Input Folder : " + project_name  );
             return;
         }
 
@@ -698,14 +712,14 @@ void MeshTemporal::on_pushButtonRun_clicked()
         if (current_index_comboBoxPlotVariable ==  9) extensions_list << ".infil.dat"; //infiltration
         if (current_index_comboBoxPlotVariable == 10) extensions_list << ".rech.dat";  //recharge
 
-        if ( ! CheckFileAccess(mesh_filename, "ReadOnly") )
+        if ( CheckFileAccess(mesh_filename, "ReadOnly") == false )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + mesh_filename  );
+            Log_Error_Message("No Read Access to ... " + mesh_filename  );
             return;
         }
-        if ( ! CheckFileAccess(river_filename, "ReadOnly") )
+        if ( CheckFileAccess(river_filename, "ReadOnly") == false )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + river_filename  );
+            Log_Error_Message("No Read Access to ... " + river_filename  );
             return;
         }
 
@@ -713,9 +727,9 @@ void MeshTemporal::on_pushButtonRun_clicked()
         for (int i=0; i< extensions_list.length(); i++)
         {
             QString tmp_fname = output_base_filename + extensions_list.at(i);
-            if ( ! CheckFileAccess(tmp_fname, "ReadOnly") )
+            if ( CheckFileAccess(tmp_fname, "ReadOnly") == false)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + tmp_fname  );
+                Log_Error_Message("Error: No Read Access to ... " + tmp_fname  );
                 error_found = true;
             }
         }
@@ -730,13 +744,13 @@ void MeshTemporal::on_pushButtonRun_clicked()
         int element_count = Get_Element_Count(mesh_filename,true);
         if(element_count <= 0)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with mesh geometry file, number of elements </span>") + element_count  );
+            Log_Error_Message("Problem with mesh geometry file, number of elements " + QString::number(element_count)  );
             return;
         }
         int river_count = Get_River_Count(river_filename,true);
         if(river_count <= 0)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with riv geometry file, number of river segments </span>") + river_count  );
+            Log_Error_Message("Problem with riv geometry file, number of river segments " + QString::number(river_count)  );
             return;
         }
 
@@ -769,7 +783,7 @@ void MeshTemporal::on_pushButtonRun_clicked()
         int time_step = time_step2 - time_step1;
         if( time_step <=0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with time_step </span>") + QString::number(time_step)  );
+            Log_Error_Message("Problem with time_step " + QString::number(time_step)  );
             return;
         }
 
@@ -789,7 +803,7 @@ void MeshTemporal::on_pushButtonRun_clicked()
         int num_time_steps = 999999999;
         int temp_int = 0;
 
-        for (int i=0; i<extensions_list.length(); i++)
+        for (int i=0; i < extensions_list.length(); i++)
         {
             QFile TempFile;
             QTextStream TempFileTextStream;
@@ -807,7 +821,9 @@ void MeshTemporal::on_pushButtonRun_clicked()
             }
 
             if (temp_int < num_time_steps)
+            {
                 num_time_steps = temp_int;
+            }
 
             TempFile.close();
         }
@@ -815,12 +831,12 @@ void MeshTemporal::on_pushButtonRun_clicked()
         Log_Message("Number Time Steps = " + QString::number(num_time_steps) );
         if (num_time_steps < 2)
         {
-            Log_Error_Message("Not enough data points to plot </span>" + QString::number(num_time_steps) );
+            Log_Error_Message("Not enough data points to plot " + QString::number(num_time_steps) );
             return;
         }
         if( num_time_steps >= 999999) //999999999  //TODO calculate available memory
         {
-            Log_Error_Message("Too many data points to plot </span>" + QString::number(num_time_steps) );
+            Log_Error_Message("Too many data points to plot " + QString::number(num_time_steps) );
             return;
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -833,7 +849,9 @@ void MeshTemporal::on_pushButtonRun_clicked()
         if ( index_model_segments == 2 || index_model_segments == 4 )
         {
             for (int i=1; i<= element_count; i++)
+            {
                 ModelSegments << QString::number(i);
+            }
         }
         else
         {
@@ -849,7 +867,7 @@ void MeshTemporal::on_pushButtonRun_clicked()
         int num_graphs = ModelSegments.length();
         if ( num_graphs < 1 )
         {
-            Log_Error_Message("Model Segments Input Missing </span>" );
+            Log_Error_Message("Model Segments Input Missing " );
             return;
         }
 
@@ -859,13 +877,13 @@ void MeshTemporal::on_pushButtonRun_clicked()
             int id = ModelSegments.at(i).toInt();
             if(id > element_count)
             {
-                Log_Error_Message("Segment ID " + QString::number(id) + " greater than Max Segments (" + QString::number(element_count)+tr(")</span>") );
+                Log_Error_Message("Segment ID " + QString::number(id) + " greater than Max Segments (" + QString::number(element_count) + ")" );
                 error_found = true;
             }
         }
         if ( error_found)
         {
-            Log_Error_Message("Issue(s) with Segments ID</span>" );
+            Log_Error_Message("Issue(s) with Segments ID" );
             return;
         }
 
@@ -897,10 +915,14 @@ void MeshTemporal::on_pushButtonRun_clicked()
         }
 
         for (int i=0; i < num_graphs; i++)
+        {
             Legends[i] = tr("Segment ") + ModelSegments.at(i);
+        }
 
         if(index_model_segments > 0)
+        {
             Legends[0] = ui->comboBoxModelSegments->currentText();
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Read Data
@@ -923,6 +945,7 @@ void MeshTemporal::on_pushButtonRun_clicked()
             {
                 DataString = DataFileTextStream.readLine();
                 Data = DataString.split(QRegExp("\\s+"),QString::SkipEmptyParts);
+
                 for (int j=0; j < num_graphs; j++)
                 {
                     datax[j][k] = Data.at(0).toDouble() / time_step;
@@ -944,8 +967,11 @@ void MeshTemporal::on_pushButtonRun_clicked()
                     {
                         datay[0][i] += datay[j][i];
                     }
+
                     if( index_model_segments == 1 || index_model_segments == 2)
+                    {
                         datay[0][i] = datay[0][i] / num_graphs;
+                    }
                 }
             }
             num_graphs = 1; //Why do this? As for loop below

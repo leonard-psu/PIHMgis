@@ -29,33 +29,44 @@ int stream_links(QString qrivFile, QString qfdrFile, QString qsegFile, QString q
 
         if(qrivFile == nullptr)
         {
-            main_window->Log_Message("[stream_links] Error[1000] Invalid qrivFile.");
-            return 1000;
+            main_window->Log_Message("[stream_links] Error[-1000] Invalid qrivFile.");
+            return -1000;
         }
         if(qfdrFile == nullptr)
         {
-            main_window->Log_Message("[stream_links] Error[1001] Invalid qfdrFile.");
-            return 1001;
+            main_window->Log_Message("[stream_links] Error[-1001] Invalid qfdrFile.");
+            return -1001;
+        }
+        if(qsegFile == nullptr)
+        {
+            main_window->Log_Message("[stream_links] Error[-1002] Invalid qsegFile.");
+            return -1002;
         }
         if(qnodeFile == nullptr)
         {
-            main_window->Log_Message("[stream_links] Error[1002] Invalid qnodeFile.");
-            return 1002;
+            main_window->Log_Message("[stream_links] Error[-1003] Invalid qnodeFile.");
+            return -1003;
         }
+
         if(qrivFile.length() < 1)
         {
-            main_window->Log_Message("[stream_links] Error[1000] Invalid qrivFile.");
-            return 1000;
+            main_window->Log_Message("[stream_links] Error[-1004] Invalid qrivFile.");
+            return -1004;
         }
         if(qfdrFile.length() < 1)
         {
-            main_window->Log_Message("[stream_links] Error[1001] Invalid qfdrFile.");
-            return 1001;
+            main_window->Log_Message("[stream_links] Error[-1005] Invalid qfdrFile.");
+            return -1005;
+        }
+        if(qsegFile.length() < 1)
+        {
+            main_window->Log_Message("[stream_links] Error[-1006] Invalid qsegFile.");
+            return -1006;
         }
         if(qnodeFile.length() < 1)
         {
-            main_window->Log_Message("[stream_links] Error[1002] Invalid qnodeFile.");
-            return 1002;
+            main_window->Log_Message("[stream_links] Error[-1007] Invalid qnodeFile.");
+            return -1007;
         }
 
         QByteArray fname = qrivFile.toLatin1();
@@ -73,49 +84,47 @@ int stream_links(QString qrivFile, QString qfdrFile, QString qsegFile, QString q
 
         if(dir == nullptr)
         {
-            main_window->Log_Message("[stream_links] dir is null ");
-            return -1000;
+            main_window->Log_Message("[stream_links] Error[-1008] dir is null ");
+            return -1008;
         }
         if(elev == nullptr)
         {
-            main_window->Log_Message("[stream_links] elev is null ");
-            return -1001;
-        }
-        if(mIJ == nullptr)
-        {
-            main_window->Log_Message("[stream_links] mIJ is null ");
-            return -1002;
+            main_window->Log_Message("[stream_links] Error[-1009] elev is null ");
+            return -1009;
         }
 
         fpNode_Seg = fopen(nodeFile, "w");
 
         if(fpNode_Seg == nullptr)
         {
-            main_window->Log_Message("[stream_links] Failed to open file " + qnodeFile);
-            return -1003;
+            main_window->Log_Message("[stream_links] Error[-1010] Failed to open file " + qnodeFile);
+            return -1010;
         }
 
         fprintf(fpNode_Seg, "\n");
 
-        int err1 = gridread(fdrFile,(void ***)&dir,RPSHRDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
+        int err1 = gridread(qfdrFile,(void ***)&dir,RPSHRDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
         if(err1 != 0)
         {
-            main_window->Log_Message("[stream_links] Error[-1004] Failed to open file " + qfdrFile);
-            return -1004;
+            main_window->Log_Message("[stream_links] Error[-1011] Failed to open file " + qfdrFile);
+            fclose(fpNode_Seg);
+            return -1011;
         }
 
-        int err2 = gridread(rivFile,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
+        int err2 = gridread(qrivFile,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
         if(err2 != 0)
         {
-            main_window->Log_Message("[stream_links] Error[-1005] Failed to open file " + qrivFile);
-            return -1005;
+            main_window->Log_Message("[stream_links] Error[-1012] Failed to open file " + qrivFile);
+            fclose(fpNode_Seg);
+            return -1012;
         }
 
-        int err3 = gridread(rivFile,(void ***)&slope,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
+        int err3 = gridread(qrivFile,(void ***)&slope,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
         if(err3 != 0)
         {
-            main_window->Log_Message("[stream_links] Error[-1006] Failed to open file " + qrivFile);
-            return -1006;
+            main_window->Log_Message("[stream_links] Error[-1013] Failed to open file " + qrivFile);
+            fclose(fpNode_Seg);
+            return -1013;
         }
 
         bool error_found = false;
@@ -131,25 +140,25 @@ int stream_links(QString qrivFile, QString qfdrFile, QString qsegFile, QString q
 
                     if( err < 0)
                     {
+                        main_window->Log_Message("[stream_links] Error[-2000] findIJ failed " + qsegFile);
                         fclose(fpNode_Seg);
-                        main_window->Log_Message("[stream_links] Error[-1007] findIJ failed " + qsegFile);
-                        return -1007;
+                        return -2000;
 
                     }
                     else
                     {
                         if(elev[mIJ[0]][mIJ[1]] != 1 ) // outlet found
                         {
-                            printf("Outlet -> %d %d\n",mIJ[0], mIJ[1]);
+                            //printf("Outlet -> %d %d\n",mIJ[0], mIJ[1]);
                             numNodes_Seg++;
 
                             fprintf(fpNode_Seg, "\n%d\t%d", i, j); // i => col :: j = > row
                             int err = streamGen(elev, dir, i, j, &num);
                             if( err < 0)
                             {
+                                main_window->Log_Message("[stream_links] Error[-2001] streamGen failed " + qsegFile);
                                 fclose(fpNode_Seg);
-                                main_window->Log_Message("[stream_links] Error[-1008] streamGen failed " + qsegFile);
-                                return -1008;
+                                return -2001;
                             }
                         }
                     } //else
@@ -161,12 +170,14 @@ int stream_links(QString qrivFile, QString qfdrFile, QString qsegFile, QString q
         fprintf(fpNode_Seg, "%d\n", numNodes_Seg);
         fclose(fpNode_Seg);
 
-        int err4 = gridwrite(segFile,(void **)slope,RPFLTDTYPE,nx,ny,dx,dy,bndbox,csize,mval,filetype);
+        int err4 = gridwrite(qsegFile,(void **)slope,RPFLTDTYPE,nx,ny,dx,dy,bndbox,csize,mval,filetype);
         if(err4 != 0)
         {
-            main_window->Log_Message("[stream_links] Error[-1009] Grid Write failed " + qsegFile);
-            return -1009;
+            main_window->Log_Message("[stream_links] Error[-2002] Grid Write failed " + qsegFile);
+            return -2002;
         }
+
+        free(slope);
 
         int err = err1 + err2 + err3 + err4;
 
@@ -193,8 +204,18 @@ int streamGen(float **riv, short **fdr, int i, int j, int *num)
 
         if(slope == nullptr)
         {
-            main_window->Log_Message("[streamGen] slope is null ");
+            main_window->Log_Message("[streamGen] Error[-1000] slope is null ");
             return -1000;
+        }
+        if(riv == nullptr)
+        {
+            main_window->Log_Message("[streamGen] Error[-1001] riv is null ");
+            return -1001;
+        }
+        if(fdr == nullptr)
+        {
+            main_window->Log_Message("[streamGen] Error[-1002] fdr is null ");
+            return -1002;
         }
 
         int stop = 0;
@@ -230,7 +251,7 @@ int streamGen(float **riv, short **fdr, int i, int j, int *num)
 
                 if(temp > 1)
                 {
-                    for(ii=0; ii<temp; ii++)
+                    for(ii=0; ii < temp; ii++)
                     {
                         numNodes_Seg++;
                         fprintf(fpNode_Seg, "\n%d\t%d", cell[ii][0], cell[ii][1]); // i => col :: j = > row
@@ -269,12 +290,12 @@ int findIJ(short **fdr, int i, int j, int *mIJ)
 
         if(fdr == nullptr)
         {
-            main_window->Log_Message("[findIJ] fdr is null ");
+            main_window->Log_Message("[findIJ] Error[-1000] fdr is null ");
             return -1000;
         }
         if(mIJ == nullptr)
         {
-            main_window->Log_Message("[findIJ] mIJ is null ");
+            main_window->Log_Message("[findIJ] Error[-1001] mIJ is null ");
             return -1001;
         }
 
@@ -329,12 +350,12 @@ int findCell(float **riv, short **dir, int i, int j, int (*cell)[2])
 
         if(riv == nullptr)
         {
-            main_window->Log_Message("[findCell] riv is null ");
+            main_window->Log_Message("[findCell] Error[-1000] riv is null ");
             return -1000;
         }
         if(dir == nullptr)
         {
-            main_window->Log_Message("[findCell] dir is null ");
+            main_window->Log_Message("[findCell] Error[-1001] dir is null ");
             return -1001;
         }
 
@@ -371,7 +392,7 @@ int findCell(float **riv, short **dir, int i, int j, int (*cell)[2])
 
         if(error_found)
         {
-            main_window->Log_Message("[findCell] Error found ");
+            main_window->Log_Message("[findCell] Error[-1002] found ");
             return -1002;
         }
 

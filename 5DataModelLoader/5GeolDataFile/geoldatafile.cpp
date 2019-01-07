@@ -30,7 +30,7 @@ GeolDataFile::GeolDataFile(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -246,7 +246,7 @@ bool GeolDataFile::Check_GeolData_Output(QString file, bool color_and_message_if
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {
@@ -347,7 +347,7 @@ void GeolDataFile::on_pushButtonGeolDataFile_clicked()
         QString tempString = GeolDataFileName;
         if ( GeolDataFileName != nullptr)
         {
-            if( ! (tempString.toLower()).endsWith(".geol") )
+            if( (tempString.toLower()).endsWith(".geol") == false)
             {
                 tempString.append(".geol");
                 GeolDataFileName = tempString;
@@ -383,7 +383,7 @@ void GeolDataFile::on_pushButtonRun_clicked()
         QString input_GeolTexture_filename = ui->lineEditGeolTextureFile->text();
 
         bool checked_GeolTexture = Check_GeolTexture_Input(input_GeolTexture_filename);
-        if(!checked_GeolTexture)
+        if(checked_GeolTexture == false)
         {
             Log_Error_Message("Geol Texture File (*.txt *.TXT) Input File Missing " + input_GeolTexture_filename  );
             return;
@@ -403,13 +403,13 @@ void GeolDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(input_GeolTexture_filename, "ReadOnly") )
+        if ( CheckFileAccess(input_GeolTexture_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to " + input_GeolTexture_filename  );
             return;
         }
 
-        if ( ! CheckFileAccess(output_GeolData_filename, "WriteOnly") )
+        if ( CheckFileAccess(output_GeolData_filename, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to " + output_GeolData_filename );
             return;
@@ -418,7 +418,7 @@ void GeolDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Mesh Data File
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Geol Data File ... <br>");
+        Log_Message("Running Geol Data File ... ");
 
         int ErrorGeol = Geol_PedoTransferFunction( input_GeolTexture_filename, output_GeolData_filename );
 
@@ -444,7 +444,7 @@ void GeolDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Geol Data File Processing Complete.</b>")+tr("<br>"));
+        Log_Message("Geol Data File Processing Complete.");
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

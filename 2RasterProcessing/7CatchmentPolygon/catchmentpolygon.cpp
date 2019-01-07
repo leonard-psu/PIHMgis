@@ -329,7 +329,7 @@ void CatchmentPolygon::on_pushButtonCatchmentPolygon_clicked()
         if ( CatchmentPolygonFileName != nullptr)
         {
             QString tempString = CatchmentPolygonFileName;
-            if( ! (tempString.toLower()).endsWith(".shp") )
+            if( (tempString.toLower()).endsWith(".shp") == false)
             {
                 tempString.append(".shp");
                 CatchmentPolygonFileName = tempString;
@@ -366,9 +366,8 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         QString CatchmentGrids_filename =  ui->lineEditCatchmentGrids->text();
         QString CatchmentPolygon_filename = ui->lineEditCatchmentPolygon->text();
 
-
         bool CatchmentGridsCheck = Check_CatchmentGrids_Input(CatchmentGrids_filename);
-        if(!CatchmentGridsCheck)
+        if(CatchmentGridsCheck == false)
         {
             Log_Error_Message("CatchmentGrids Input File Missing ");
             return;
@@ -378,7 +377,7 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         // Does output already exist?
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         bool CatchmentPolygonCheck = Check_CatchmentPolygon_Output(CatchmentPolygon_filename, true);
-        if(CatchmentPolygonCheck)
+        if(CatchmentPolygonCheck == true)
         {
             return;
         }
@@ -386,13 +385,13 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(CatchmentGrids_filename, "ReadOnly") )
+        if ( CheckFileAccess(CatchmentGrids_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + CatchmentGrids_filename );
             return;
         }
 
-        if ( ! CheckFileAccess(CatchmentPolygon_filename, "WriteOnly") )
+        if ( CheckFileAccess(CatchmentPolygon_filename, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to ... " + CatchmentPolygon_filename );
             return;
@@ -430,7 +429,7 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
             Log_Error_Message("Error return code: ... " + QString::number(ErrorCat) );
             return;
         }
-        else if (ErrorCat == -1000 || ErrorCat == -1001 || ErrorCat == -1002)
+        else if (ErrorCat == -3000 || ErrorCat == -3001 || ErrorCat == -3002)
         {
             Log_Error_Message("Error return code: ... " + QString::number(ErrorCat) );
             Log_Error_Message("WARNING, Issues found parsing values. Recommend checking with GIS tool.");
@@ -464,7 +463,7 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         // Check output filenames
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         CatchmentPolygonCheck = Check_CatchmentPolygon_Output(CatchmentPolygon_filename, true);
-        if(!CatchmentPolygonCheck)
+        if(CatchmentPolygonCheck== false)
         {
             return;
         }
@@ -497,20 +496,50 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         WriteModuleLine(filename_open_project, ProjectIOStringList);
         ProjectIOStringList.clear();
 
-        QFile::remove(CatchmentFileNameInVector);
-        QFile::copy(CatchmentFileNameInRaster,CatchmentFileNameInVector);
+        bool removed = QFile::remove(CatchmentFileNameInVector);
+        if(removed == false)
+        {
+            Log_Error_Message("Failed to remove " + CatchmentFileNameInVector);
+            return;
+        }
+        bool copied = QFile::copy(CatchmentFileNameInRaster,CatchmentFileNameInVector);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy " + CatchmentFileNameInVector);
+            return;
+        }
 
         CatchmentFileNameInRaster.replace(".shp",".shx");
         CatchmentFileNameInVector.replace(".shp",".shx");
-        QFile::remove(CatchmentFileNameInVector);
-        QFile::copy(CatchmentFileNameInRaster,CatchmentFileNameInVector);
+        removed = QFile::remove(CatchmentFileNameInVector);
+        if(removed == false)
+        {
+            Log_Error_Message("Failed to remove " + CatchmentFileNameInVector);
+            return;
+        }
+        copied = QFile::copy(CatchmentFileNameInRaster,CatchmentFileNameInVector);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy " + CatchmentFileNameInVector);
+            return;
+        }
 
         CatchmentFileNameInRaster.replace(".shx",".dbf");
         CatchmentFileNameInVector.replace(".shx",".dbf");
-        QFile::remove(CatchmentFileNameInVector);
-        QFile::copy(CatchmentFileNameInRaster,CatchmentFileNameInVector);
+        removed = QFile::remove(CatchmentFileNameInVector);
+        if(removed == false)
+        {
+            Log_Error_Message("Failed to remove " + CatchmentFileNameInVector);
+            return;
+        }
+        copied = QFile::copy(CatchmentFileNameInRaster,CatchmentFileNameInVector);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy " + CatchmentFileNameInVector);
+            return;
+        }
 
-        CatchmentFileNameInVector.replace(".dbf",".shp");  //TODO
+        CatchmentFileNameInVector.replace(".dbf",".shp");
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
@@ -518,8 +547,6 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         Clear_Log();
 
         Log_Message("Catchment Polyline Processing Completed.");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

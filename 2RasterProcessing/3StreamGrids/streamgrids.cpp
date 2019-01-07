@@ -568,7 +568,6 @@ void StreamGrids::on_pushButtonRun_clicked()
             return;
         }
 
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -584,17 +583,12 @@ void StreamGrids::on_pushButtonRun_clicked()
             return;
         }
 
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run Stream Grids
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        LogsString.append("Running Stream Grids ... <br>");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Running Stream Grids ... ");
 
-        QString dummystr("dummy");
-
-        int ErrorStr = stream_definition(FlowAccGrids, dummystr, StreamGrids, 1, Threshold.toInt() );
+        int ErrorStr = stream_definition(FlowAccGrids, StreamGrids, 1, Threshold.toInt() );
         if( ErrorStr != 0 )
         {
             Log_Error_Message("Stream Grid Processing Failed ... ");
@@ -633,8 +627,6 @@ void StreamGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
         Log_Message("Flow Grids Processing Completed.");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

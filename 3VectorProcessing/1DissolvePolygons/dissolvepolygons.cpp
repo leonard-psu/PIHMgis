@@ -14,6 +14,8 @@
 
 #include "globals.h"
 
+static QString dissolve_name = "new_layer";
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DissolvePolygons Constructor
 // Parent is Main Window, filename is the open project text file used to store project details
@@ -33,7 +35,7 @@ DissolvePolygons::DissolvePolygons(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project);
         }
@@ -41,6 +43,7 @@ DissolvePolygons::DissolvePolygons(QWidget *parent, QString filename) :
         {
             found_file = true;
         }
+
         ProjectFile.close();
 
         if(found_file)
@@ -48,13 +51,10 @@ DissolvePolygons::DissolvePolygons(QWidget *parent, QString filename) :
             Load_Project_Settings();
         }
 
-
     } catch (...) {
         qDebug() << "Error: DissolvePolygons is returning w/o checking";
     }
-
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Load_Project_Settings
@@ -77,7 +77,6 @@ bool DissolvePolygons::Load_Project_Settings()
 
                 if(file1_check)
                 {
-
                     QTableWidgetItem *NewTableItem = new QTableWidgetItem(file1);
                     if(NewTableItem != nullptr)
                     {
@@ -88,7 +87,6 @@ bool DissolvePolygons::Load_Project_Settings()
                             ui->tableWidget->item(rowlen,0)->setTextColor(Qt::black);
                         }
                     }
-
                 }
                 else
                 {
@@ -151,7 +149,10 @@ bool DissolvePolygons::Load_Project_Settings()
         if ( ModuleStringList.length() > 0 )
         {
             while( ui->tableWidget->rowCount() )
+            {
                 ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+            }
+
             ui->tableWidget->setRowCount(0);
 
             for (int i=1; i+1<ModuleStringList.length(); i=i+2)
@@ -284,7 +285,6 @@ void DissolvePolygons::Clear_Log()
         qDebug() << "INFO: Start DissolvePolygons::Clear_Log()";
 
     try {
-
         LogsString = tr("");
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
@@ -292,7 +292,6 @@ void DissolvePolygons::Clear_Log()
     } catch (...) {
         qDebug() << "Error: DissolvePolygons::Clear_Log() is returning w/o checking";
     }
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -392,7 +391,7 @@ void DissolvePolygons::on_pushButtonAdd_clicked()
         Clear_Log();
 
         QTableWidgetItem *NewTableItem;
-        ;
+
         QStringList InputPolygonsFileNames = QFileDialog::getOpenFileNames(this, "Choose Shape Files", user_pihmgis_root_folder +tr("/2VectorProcessing"), "Shape File(*.shp *.SHP)");
         if ( InputPolygonsFileNames.length() > 0)
         {
@@ -408,6 +407,7 @@ void DissolvePolygons::on_pushButtonAdd_clicked()
 
                 NewTableItem = new QTableWidgetItem(file1);
                 ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,NewTableItem);
+
                 if(file1_check)
                 {
                     ui->tableWidget->item(ui->tableWidget->rowCount()-1,0)->setTextColor("color: black;");
@@ -422,6 +422,7 @@ void DissolvePolygons::on_pushButtonAdd_clicked()
 
                 NewTableItem = new QTableWidgetItem(file2);
                 ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,1,NewTableItem);
+
                 if(file2_check)
                 {
                     Log_Message("Warning: " + file2 + " output already exists. ");
@@ -431,6 +432,7 @@ void DissolvePolygons::on_pushButtonAdd_clicked()
                 {
                     ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextColor("color: black;");
                 }
+
                 ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextAlignment(Qt::AlignRight);
                 ui->tableWidget->item(ui->tableWidget->rowCount()-1,1)->setTextAlignment(Qt::AlignVCenter);
             }
@@ -474,8 +476,11 @@ void DissolvePolygons::on_pushButtonClear_clicked()
         qDebug() << "INFO: Start DissolvePolygons::on_pushButtonClear_clicked()";
 
     try {
+
         while( ui->tableWidget->rowCount() )
+        {
             ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+        }
         //ui->tableWidget->setRowCount(0);
         //qDebug() << "Row Count = " << ui->tableWidget->rowCount();
 
@@ -512,11 +517,13 @@ void DissolvePolygons::on_pushButtonRun_clicked()
 
         bool dissolve_method_two = true;
         if( ui->radioButton_dissolve_method1->isChecked())
+        {
             dissolve_method_two = false;
+        }
 
         bool failure_found = false;
 
-        for (int i=0; i<ui->tableWidget->rowCount(); i++)
+        for (int i = 0; i < ui->tableWidget->rowCount(); i++)
         {
             QString file1 = ui->tableWidget->item(i,0)->text();
             QString file2 = ui->tableWidget->item(i,1)->text();
@@ -567,7 +574,7 @@ void DissolvePolygons::on_pushButtonRun_clicked()
         QStringList ProjectIOStringList;
         ProjectIOStringList << "DissolvePolygons";
 
-        for (int i=0; i<ui->tableWidget->rowCount(); i++)
+        for (int i=0; i < ui->tableWidget->rowCount(); i++)
         {
             QString InpShpFileName, InpDbfFileName;
             QString OutShpFileName, OutDbfFileName, OutShxFileName;
@@ -585,15 +592,11 @@ void DissolvePolygons::on_pushButtonRun_clicked()
             //qDebug() << InpShpFileName << " # " << InpDbfFileName;
             //qDebug() << OutShpFileName << " # " << OutDbfFileName;
 
-            if(!dissolve_method_two)
+            if(dissolve_method_two == false)
             {
-                // *** DISSOLVE METHOD 1 : START
-                int ErrorDis = dissolve(
-                            InpShpFileName,
-                            InpDbfFileName,
-                            OutShpFileName,
-                            OutDbfFileName);
-                // *** DISSOLVE METHOD 1 : FINISH
+                // DISSOLVE METHOD 1 : START
+                int ErrorDis = dissolve(InpShpFileName, InpDbfFileName, OutShpFileName, OutDbfFileName);
+                // DISSOLVE METHOD 1 : FINISH
 
                 if ( ErrorDis != 0 )
                 {
@@ -609,7 +612,7 @@ void DissolvePolygons::on_pushButtonRun_clicked()
             }
             else
             {
-                // *** DISSOLVE METHOD 2 : START
+                // DISSOLVE METHOD 2 : START
                 int my_argc = 5;
                 char **my_argv;
                 my_argv = (char ** ) malloc(my_argc*sizeof(char *));
@@ -627,21 +630,38 @@ void DissolvePolygons::on_pushButtonRun_clicked()
                 //qDebug() << "my_argv";
                 //qDebug() <<  my_argv[0] << my_argv[1] << my_argv[2] << my_argv[3] << my_argv[4];
 
-                QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/new_layer.shp" );
-                QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/new_layer.shx" );
-                QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/new_layer.dbf" );
+                //Not checking removed status as files may not exist
+                bool removed = QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shp" );
+                removed = QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shx" );
+                removed = QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".dbf" );
 
                 int ErrorDis = dissolve_ogr(my_argc, my_argv);
 
-                QFile::remove( OutShpFileName );
-                QFile::remove( OutShxFileName );
-                QFile::remove( OutDbfFileName );
+                //Not checking removed status as files may not exist
+                removed = QFile::remove( OutShpFileName );
+                removed = QFile::remove( OutShxFileName );
+                removed = QFile::remove( OutDbfFileName );
 
-                QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/new_layer.shp", OutShpFileName );
-                QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/new_layer.shx", OutShxFileName );
-                QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/new_layer.dbf", OutDbfFileName );
+                bool copied = QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shp", OutShpFileName );
+                if(copied == false)
+                {
+                    Log_Error_Message("Failed to copy " + OutShpFileName );
+                    return;
+                }
+                copied = QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shx", OutShxFileName );
+                if(copied == false)
+                {
+                    Log_Error_Message("Failed to copy " + OutShxFileName );
+                    return;
+                }
+                copied = QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".dbf", OutDbfFileName );
+                if(copied == false)
+                {
+                    Log_Error_Message("Failed to copy " + OutDbfFileName );
+                    return;
+                }
 
-                // *** DISSOLVE METHOD 2 : FINISH
+                // DISSOLVE METHOD 2 : FINISH
                 if( ErrorDis == 5000)
                 {
                     Log_Message("Warning: Potential Feature/Geometry errors were discovered. ... " + InpShpFileName);
@@ -678,8 +698,6 @@ void DissolvePolygons::on_pushButtonRun_clicked()
         Clear_Log();
 
         Log_Message("Dissolve Polygons Processing Completed.");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

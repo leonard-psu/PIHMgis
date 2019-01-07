@@ -32,7 +32,7 @@ MergeVectorLayers::MergeVectorLayers(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project);
         }
@@ -65,7 +65,7 @@ bool MergeVectorLayers::Load_Project_Settings()
 
         if ( ModuleStringList.length() > 0  )
         {
-            for (int i=1; i+1<ModuleStringList.length(); i=i+2)
+            for (int i=1; i+1 < ModuleStringList.length(); i=i+2)
             {
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
@@ -102,7 +102,10 @@ bool MergeVectorLayers::Load_Project_Settings()
         if ( ModuleStringList.length() > 0 )
         {
             while( ui->tableWidget->rowCount() )
+            {
                 ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+            }
+
             ui->tableWidget->setRowCount(0);
 
             for (int i=1; i < ModuleStringList.length()-2; i++)
@@ -127,9 +130,9 @@ bool MergeVectorLayers::Load_Project_Settings()
                         Log_Error_Message( file1 + " input does not exist. ");
                         ui->tableWidget->item(rowlen,0)->setTextColor(Qt::red);
                     }
+
                     ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignRight);
                     ui->tableWidget->item(rowlen,0)->setTextAlignment(Qt::AlignVCenter);
-
                 }
             }
 
@@ -137,7 +140,7 @@ bool MergeVectorLayers::Load_Project_Settings()
             outputfile = ModuleStringList.at(id);
         }
 
-        /*
+        /* //TODO make this user option. Disabled for now, so users don't get confused with auto name changing
         int ID = 0;
         QString ID_String = QString("%1").arg(QString::number(ID),3,'0');
         while ( QFile::exists(user_pihmgis_root_folder+"/2VectorProcessing/MergeVectorLayer"+ID_String+".shp") )
@@ -152,12 +155,9 @@ bool MergeVectorLayers::Load_Project_Settings()
         bool outputfile_check = Check_File_Valid(outputfile);
         Check_MergeLayer_Output(outputfile, true);
 
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
         ui->tableWidget->resizeColumnsToContents();
 
         pushButtonSetFocus();
-
 
     } catch (...) {
         qDebug() << "Error: MergeVectorLayers::Load_Project_Settings is returning w/o checking";
@@ -332,11 +332,13 @@ void MergeVectorLayers::on_pushButtonAdd_clicked()
                 QString file1 = InputLinesFileNames.at(i);
                 bool file1_check = Check_File_Valid(file1);
                 int rowlen = ui->tableWidget->rowCount()-1;
+
                 if(file1.length() > 0 )
                 {
                     QTableWidgetItem *NewTableItem = new QTableWidgetItem(file1);
                     ui->tableWidget->setItem(rowlen,0,NewTableItem);
                     ui->tableWidget->item(rowlen,0)->setTextColor(QColor(0,0,0));
+
                     if(file1_check)
                     {
                         ui->tableWidget->item(rowlen,0)->setTextColor(Qt::black);
@@ -369,6 +371,7 @@ void MergeVectorLayers::on_pushButtonRemove_clicked()
         qDebug() << "INFO: Start MergeVectorLayers::on_pushButtonRemove_clicked()";
 
     try {
+
         ui->tableWidget->removeRow(ui->tableWidget->currentRow());
 
         //qDebug() << "Row Count = " << ui->tableWidget->rowCount();
@@ -389,7 +392,9 @@ void MergeVectorLayers::on_pushButtonClear_clicked()
 
     try {
         while( ui->tableWidget->rowCount() )
+        {
             ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+        }
 
         pushButtonSetFocus();
     } catch (...) {
@@ -415,7 +420,7 @@ void MergeVectorLayers::on_pushButtonMergeLayer_clicked()
         {
             ui->lineEditMergeLayer->setStyleSheet("color: black;");
 
-            if( ! (tempString.toLower()).endsWith(".shp") )
+            if( (tempString.toLower()).endsWith(".shp") == false)
             {
                 tempString.append(".shp");
                 MergeVectorFileName = tempString;
@@ -427,7 +432,6 @@ void MergeVectorLayers::on_pushButtonMergeLayer_clicked()
 
             pushButtonSetFocus();
         }
-
 
     } catch (...) {
         qDebug() << "Error: MergeVectorLayers::on_pushButtonMergeLayer_clicked() is returning w/o checking";
@@ -460,7 +464,7 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
 
         bool failure_found = false;
 
-        for (int i=0; i<ui->tableWidget->rowCount(); i++)
+        for (int i=0; i < ui->tableWidget->rowCount(); i++)
         {
             QString file1 = ui->tableWidget->item(i,0)->text();
 
@@ -481,7 +485,7 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         }
 
         QString file2 = ui->lineEditMergeLayer->text();
-        if ( ! CheckFileAccess(file2, "WriteOnly") )
+        if ( CheckFileAccess(file2, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to ... " + file2);
             failure_found = true;
@@ -508,8 +512,6 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         OutDbfFileName.replace(QString(".shp"), QString(".dbf"));
 
         int row_count = ui->tableWidget->rowCount();
-        //const char **shpFileNamesChar = new const char*[row_count];
-       // const char **dbfFileNamesChar = new const char*[row_count];
 
         QStringList shpFileNames;
         QStringList dbfFileNames;
@@ -518,13 +520,8 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         {
             QString InpShpFileName = ui->tableWidget->item(i,0)->text();
             QString InpDbfFileName = InpShpFileName;
+
             InpDbfFileName.replace(QString(".shp"), QString(".dbf"));
-
-            //shpFileNamesChar[i] = new char[InpShpFileName.length()+1];
-            //dbfFileNamesChar[i] = new char[InpDbfFileName.length()+1];
-
-            //sprintf( (char *)shpFileNamesChar[i],"%s", qPrintable(InpShpFileName) );
-            //sprintf( (char *)dbfFileNamesChar[i],"%s", qPrintable(InpDbfFileName) );
 
             shpFileNames.append(InpShpFileName);
             dbfFileNames.append(InpDbfFileName);
@@ -556,7 +553,10 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if ( ProjectIOStringList.length() > 2)
+        {
             WriteModuleLine(filename_open_project, ProjectIOStringList);
+        }
+
         ProjectIOStringList.clear();
 
         QString MergeFileNameInVector = ui->lineEditMergeLayer->text();
@@ -567,27 +567,56 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         WriteModuleLine(filename_open_project, ProjectIOStringList);
         ProjectIOStringList.clear();
 
-        QFile::remove(MergeFileNameInDomainDecomposition);
-        QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
+        bool removed = QFile::remove(MergeFileNameInDomainDecomposition);
+        if(removed == false)
+        {
+            Log_Error_Message("Failed to remove file " + MergeFileNameInDomainDecomposition);
+            return;
+        }
+        bool copied = QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy file " + MergeFileNameInDomainDecomposition);
+            return;
+        }
 
         MergeFileNameInVector.replace(".shp",".shx");
         MergeFileNameInDomainDecomposition.replace(".shp",".shx");
-        QFile::remove(MergeFileNameInDomainDecomposition);
-        QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
+
+        removed = QFile::remove(MergeFileNameInDomainDecomposition);
+        if(removed == false)
+        {
+            Log_Error_Message("Failed to remove file " + MergeFileNameInDomainDecomposition);
+            return;
+        }
+        copied = QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy file " + MergeFileNameInDomainDecomposition);
+            return;
+        }
 
         MergeFileNameInVector.replace(".shx",".dbf");
         MergeFileNameInDomainDecomposition.replace(".shx",".dbf");
-        QFile::remove(MergeFileNameInDomainDecomposition);
-        QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
 
+        removed = QFile::remove(MergeFileNameInDomainDecomposition);
+        if(removed == false)
+        {
+            Log_Error_Message("Failed to remove file " + MergeFileNameInDomainDecomposition);
+            return;
+        }
+        copied = QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy file " + MergeFileNameInDomainDecomposition);
+            return;
+        }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Message box
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
         Log_Message("Merge Vector Split Lines Processing Completed.");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);
@@ -649,7 +678,7 @@ bool MergeVectorLayers::Check_MergeLayer_Output(QString file, bool color_and_mes
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {

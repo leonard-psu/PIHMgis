@@ -489,6 +489,7 @@ void LinkGrids::on_pushButtonRun_clicked()
         bool LinkGrids_check = Check_LinkGrids_Output(LinkGridsFileName,true);
         if(LinkGrids_check)
         {
+            Log_Message("LinkGrids Output File already exists ");
             return;
         }
 
@@ -516,7 +517,7 @@ void LinkGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run Link Grids
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Link Grids ... <br>");
+        Log_Message("Running Link Grids ... ");
 
         int ErrorLnk = stream_links(StreamGridsFileName,
                                     FlowDirGridsFileName,
@@ -559,8 +560,6 @@ void LinkGrids::on_pushButtonRun_clicked()
         Clear_Log();
 
         Log_Message("Link Grids Processing Completed.");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

@@ -48,28 +48,54 @@ int catchment_shape(QString catFile, QString nodeFile, QString shpFile,  QString
             return -9000;
         }
 
+        if(catFile == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error[-1000] Invalid catFile ");
+            return -1000;
+        }
+
+        if(nodeFile == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error[-1001] Invalid nodeFile ");
+            return -1001;
+        }
+
+        if(shpFile == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error[-1002] Invalid shpFile ");
+            return -1002;
+        }
+
+        if(dbfFile == nullptr)
+        {
+            main_window->Log_Message("[catchment_shape] Error[-1003] Invalid dbfFile ");
+            return -1003;
+        }
+
         //Check input names
         if(catFile.length() < 1)
         {
-            main_window->Log_Message("[catchment_shape] Invalid catFile " + catFile);
-            return -9001;
-        }
-        if(nodeFile.length() < 1)
-        {
-            main_window->Log_Message("[catchment_shape] Invalid nodeFile " + nodeFile);
-            return -9002;
-        }
-        if(shpFile.length() < 1)
-        {
-            main_window->Log_Message("[catchment_shape] Invalid shpFile " + shpFile);
-            return -9003;
-        }
-        if(dbfFile.length() < 1)
-        {
-            main_window->Log_Message("[catchment_shape] Invalid dbfFile " + dbfFile);
-            return -9004;
+            main_window->Log_Message("[catchment_shape] Error[-1004] Invalid catFile " + catFile);
+            return -1004;
         }
 
+        if(nodeFile.length() < 1)
+        {
+            main_window->Log_Message("[catchment_shape] Error[-1005] Invalid nodeFile " + nodeFile);
+            return -1005;
+        }
+
+        if(shpFile.length() < 1)
+        {
+            main_window->Log_Message("[catchment_shape] Error[-1006] Invalid shpFile " + shpFile);
+            return -1006;
+        }
+
+        if(dbfFile.length() < 1)
+        {
+            main_window->Log_Message("[catchment_shape] Error[-1007] Invalid dbfFile " + dbfFile);
+            return -1007;
+        }
 
         int i= 0, j = 0;
         int ShpEntryNumber = 0;
@@ -88,47 +114,63 @@ int catchment_shape(QString catFile, QString nodeFile, QString shpFile,  QString
         SHPHandle shp = SHPCreate( qPrintable(shpFile), SHPT_POLYGON);
         if(shp == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[51] shpFile is NULL. With file " + QString(shpFile));
-            return 51;
+            main_window->Log_Message("[catchment_shape] Error[-1008] shpFile is NULL. With file " + QString(shpFile));
+            return -1008;
         }
         DBFHandle dbf = DBFCreate( qPrintable(dbfFile) );
         if(dbf == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[52] dbfFile is NULL. With file " + QString(dbfFile));
-            return 52;
+            main_window->Log_Message("[catchment_shape] Error[-1009] dbfFile is NULL. With file " + QString(dbfFile));
+            SHPClose(shp);
+            return -1009;
         }
+
         int polyFld = DBFAddField(dbf, "catNum", FTInteger, 5, 0);
         if(polyFld < 0)
         {
-            main_window->Log_Message("[catchment_shape] Error[53] Failed to add field catNum");
-            return 53;
+            main_window->Log_Message("[catchment_shape] Error[-1010] Failed to add field catNum");
+            SHPClose(shp);
+            DBFClose(dbf);
+            return -1010;
         }
         int wshedID = DBFAddField(dbf, "Watershed", FTInteger, 5, 0);
         if(wshedID < 0)
         {
-            main_window->Log_Message("[catchment_shape] Error[54] Failed to add field Watershed");
-            return 54;
+            main_window->Log_Message("[catchment_shape] Error[-1011] Failed to add field Watershed");
+            SHPClose(shp);
+            DBFClose(dbf);
+            return -1011;
         }
 
         SHPHandle tempshp = SHPCreate(qPrintable(TempString), SHPT_ARC);
         if(tempshp == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[65] tempshp is NULL.");
-            return 65;
+            main_window->Log_Message("[catchment_shape] Error[-1012] tempshp is NULL.");
+            SHPClose(shp);
+            DBFClose(dbf);
+            return -1012;
         }
+
         TempString.replace(".shp",".dbf");
         DBFHandle tempdbf = DBFCreate(qPrintable(TempString));
         if(tempdbf == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[66] tempdbf is NULL.");
-            return 66;
+            main_window->Log_Message("[catchment_shape] Error[-1013] tempdbf is NULL.");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            return -1013;
         }
 
         int tempFld = DBFAddField(tempdbf, "lineNum", FTInteger, 5, 0);
         if(tempFld < 0)
         {
-            main_window->Log_Message("[catchment_shape] Error[67] Failed to add field lineNum.");
-            return 67;
+            main_window->Log_Message("[catchment_shape] Error[-1014] Failed to add field lineNum.");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1014;
         }
 
         double *ptx, *pty, *ptz;
@@ -137,76 +179,116 @@ int catchment_shape(QString catFile, QString nodeFile, QString shpFile,  QString
 
         if ( result != 0)
         {
-            main_window->Log_Message("[catchment_shape] Error[68] Failed to to Read Catchment Grid File.");
-            return 68;
+            main_window->Log_Message("[catchment_shape] Error[-1015] Failed to to Read Catchment Grid File.");
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1015;
         }
         if ( nx <= 0)
         {
-            main_window->Log_Message("[catchment_shape] Error[69] Invalid nx value of " + QString::number(nx) );
-            return 69;
+            main_window->Log_Message("[catchment_shape] Error[-1016] Invalid nx value of " + QString::number(nx) );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1016;
         }
         if ( nx > 250000) //250000 is a guess
         {
-            main_window->Log_Message("[catchment_shape] Error[70] Invalid nx value (250000 is a guess) of " + QString::number(nx) );
-            return 70;
+            main_window->Log_Message("[catchment_shape] Error[-1017] Invalid nx value (250000 is a guess) of " + QString::number(nx) );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1017;
         }
         if ( ny <= 0)
         {
-            main_window->Log_Message("[catchment_shape] Error[71] Invalid ny value of " + QString::number(ny) );
-            return 71;
+            main_window->Log_Message("[catchment_shape] Error[-1018] Invalid ny value of " + QString::number(ny) );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1018;
         }
         if ( ny > 250000) //250000 is a guess
         {
-            main_window->Log_Message("[catchment_shape] Error[72] Invalid ny value (250000 is a guess) of " + QString::number(ny) );
-            return 72;
+            main_window->Log_Message("[catchment_shape] Error[-1019] Invalid ny value (250000 is a guess) of " + QString::number(ny) );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1019;
         }
 
         ptx = (double *)malloc(sizeof(double) * nx * ny * 2);
         if ( ptx == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[73] ptx is null" );
-
-            return 73;
+            main_window->Log_Message("[catchment_shape] Error[-1020] ptx is null" );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1020;
         }
 
         pty = (double *)malloc(sizeof(double) * nx * ny * 2);
         if ( pty == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[74] pty is null" );
+            main_window->Log_Message("[catchment_shape] Error[-1021] pty is null" );
             free(ptx);
 
-            return 74;
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1021;
         }
 
         ptz = (double *)malloc(sizeof(double) * nx * ny * 2);
         if ( ptz == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[75] ptz is null" );
+            main_window->Log_Message("[catchment_shape] Error[-1022] ptz is null" );
             free(ptx);
             free(pty);
-            free(ptz);
 
-            return 75;
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1022;
         }
 
         line = (LINE *)malloc(sizeof(LINE) * 4 * nx * ny);
         if ( line == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[76] line is null" );
+            main_window->Log_Message("[catchment_shape] Error[-1023] line is null" );
             free(ptx);
             free(pty);
             free(ptz);
-            return 76;
+
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1023;
         }
+
         if ( elev == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[77] elev is null" );
+            main_window->Log_Message("[catchment_shape] Error[-1024] elev is null" );
             free(ptx);
             free(pty);
             free(ptz);
             free(line);
 
-            return 77;
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1024;
         }
 
         for(i = 0; i < nx; i++)
@@ -226,20 +308,27 @@ int catchment_shape(QString catFile, QString nodeFile, QString shpFile,  QString
             free(ptz);
             free(line);
 
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
             return 78;
         }
-
 
         linesInClass = (int *)malloc( (maxClass+1) * sizeof(int));
         if ( linesInClass == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[79] linesInClass is null" );
+            main_window->Log_Message("[catchment_shape] Error[-1025] linesInClass is null" );
             free(ptx);
             free(pty);
             free(ptz);
             free(line);
 
-            return 79;
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1025;
         }
 
 
@@ -308,13 +397,18 @@ int catchment_shape(QString catFile, QString nodeFile, QString shpFile,  QString
         int sort_result = sortLine(line, numLine);
         if( sort_result != 0)
         {
-            main_window->Log_Message("[catchment_shape] Error[80] sortLine failed" );
+            main_window->Log_Message("[catchment_shape] Error[-1026] sortLine failed" );
             free(ptx);
             free(pty);
             free(ptz);
             free(linesInClass);
             free(line);
-            return 80;
+
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(tempshp);
+            DBFClose(tempdbf);
+            return -1026;
         }
 
         int temprecordNum = 0;
@@ -335,13 +429,13 @@ int catchment_shape(QString catFile, QString nodeFile, QString shpFile,  QString
                 ShpEntryNumber = SHPWriteObject(tempshp, -1, tempobj);
                 if ( ShpEntryNumber < 0 )
                 {
-                    main_window->Log_Message("[catchment_shape] Error[81] SHPWriteObject Failed. Unable to Add Shape Entry to SHP/SHX file" );
+                    main_window->Log_Message("[catchment_shape] Error[-2000] SHPWriteObject Failed. Unable to Add Shape Entry to SHP/SHX file" );
                     error_found = true;
                 }
 
                 if ( ! DBFWriteIntegerAttribute(tempdbf, temprecordNum, tempFld, line[i].cl) )
                 {
-                    main_window->Log_Message("[catchment_shape] Error[82] SHPWriteObject Failed. Unable to Write Integer Attribute to DBF file" );
+                    main_window->Log_Message("[catchment_shape] Error[-2001] SHPWriteObject Failed. Unable to Write Integer Attribute to DBF file" );
                     error_found = true;
                 }
 
@@ -360,13 +454,16 @@ int catchment_shape(QString catFile, QString nodeFile, QString shpFile,  QString
 
         if( error_found )
         {
-            main_window->Log_Message("[catchment_shape] Error[83] Errors found while creating " + TempString );
+            main_window->Log_Message("[catchment_shape] Error[-1027] Errors found while creating " + TempString );
             free(ptx);
             free(pty);
             free(ptz);
             free(linesInClass);
             free(line);
-            return 83;
+
+            SHPClose(shp);
+            DBFClose(dbf);
+            return -1027;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -420,30 +517,38 @@ int catchment_shape(QString catFile, QString nodeFile, QString shpFile,  QString
                 //write polygon here
                 obj = SHPCreateSimpleObject(SHPT_POLYGON, numPt, ptx, pty, ptz);
 
-                if ( SHPWriteObject(shp, -1, obj) < 0 )
+                if(obj == nullptr)
                 {
                     error_found = true;
                 }
-
-                SHPDestroyObject( obj );
-
-                if ( ! DBFWriteIntegerAttribute(dbf, recordNum, polyFld, classNum))
+                else
                 {
-                    write_error_found = true;
+                    if ( SHPWriteObject(shp, -1, obj) < 0 )
+                    {
+                        error_found = true;
+                    }
+
+                    SHPDestroyObject( obj );
+
+                    if ( ! DBFWriteIntegerAttribute(dbf, recordNum, polyFld, classNum))
+                    {
+                        write_error_found = true;
+                    }
+
+                    if ( ! DBFWriteIntegerAttribute(dbf, recordNum, wshedID, 1))
+                    {
+                        write_error_found = true;
+                    }
+
+                    recordNum++;
+                    numPt = 0;
+
+                    classNum++;
+                    startPivot = endPivot;
+                    endPivot   = startPivot + linesInClass[classNum];
+                    i = startPivot;
+
                 }
-
-                if ( ! DBFWriteIntegerAttribute(dbf, recordNum, wshedID, 1))
-                {
-                    write_error_found = true;
-                }
-
-                recordNum++;
-                numPt = 0;
-
-                classNum++;
-                startPivot = endPivot;
-                endPivot   = startPivot + linesInClass[classNum];
-                i = startPivot;
             }
             else if(count == 2)
             {
@@ -477,30 +582,30 @@ int catchment_shape(QString catFile, QString nodeFile, QString shpFile,  QString
 
         if(error_found)
         {
-            main_window->Log_Message("[catchment_shape] Error[-1000] while writing to shapefile. It is recommended to use GIS tool to inspect results " );
-            return -1000;
+            main_window->Log_Message("[catchment_shape] Error[-3000] while writing to shapefile. It is recommended to use GIS tool to inspect results " );
+            return -3000;
         }
 
         if(write_error_found)
         {
-            main_window->Log_Message("[catchment_shape] Error[-1001] while writing shapefile. It is recommended to use GIS tool to inspect results " );
-            return -1001;
+            main_window->Log_Message("[catchment_shape] Error[-3001] while writing shapefile. It is recommended to use GIS tool to inspect results " );
+            return -3001;
         }
 
         if(logic_error_found)
         {
-            main_window->Log_Message("[catchment_shape] Error[-9002] Logic issue found. Something went wrong. It is recommended to use GIS tool to inspect results " );
-            return -1002;
+            main_window->Log_Message("[catchment_shape] Error[-3002] Logic issue found. Something went wrong. It is recommended to use GIS tool to inspect results " );
+            return -3002;
         }
 
         return 0;
 
-    } catch (...) {
-        qDebug() << "Error: catchment_shape [TODO More error checking required]";
     }
-
-   return -9003;
-
+    catch (...)
+    {
+        qDebug() << "Error: catchment_shape [TODO More error checking required]";
+        return -5000;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

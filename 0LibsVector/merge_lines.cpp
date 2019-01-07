@@ -132,7 +132,7 @@ int merge_lines(QStringList shpFileNames, QStringList dbfFileNames, QString qnew
                 error_found = true;
             }
 
-            if(!error_found) //Note any previous error means nothing will happen next
+            if(error_found == false) //Note any previous error means nothing will happen next
             {
                 DBFHandle dbf = DBFOpen(tmpdbfFileName, "rb");
                 if(dbf == nullptr)
@@ -142,7 +142,7 @@ int merge_lines(QStringList shpFileNames, QStringList dbfFileNames, QString qnew
                     error_found = true;
                 }
 
-                if(!error_found) //Note any previous error means nothing will happen next
+                if(error_found == false) //Note any previous error means nothing will happen next
                 {
                     int InfoShpType;
                     SHPGetInfo (shp, nullptr, &InfoShpType, nullptr, nullptr);
@@ -156,7 +156,7 @@ int merge_lines(QStringList shpFileNames, QStringList dbfFileNames, QString qnew
                         DBFClose(dbf);
                     }
 
-                    if(!error_found)
+                    if(error_found == false)
                     {
                         recordCount = DBFGetRecordCount(dbf);
 
@@ -167,7 +167,6 @@ int merge_lines(QStringList shpFileNames, QStringList dbfFileNames, QString qnew
                         }
                         else
                         {
-
                             for(int j = 0; j < recordCount; j++)
                             {
                                 obj = SHPReadObject(shp, j);
@@ -185,7 +184,7 @@ int merge_lines(QStringList shpFileNames, QStringList dbfFileNames, QString qnew
                                         record_error_found = true;
                                     }
 
-                                    if(!record_error_found)
+                                    if(record_error_found == false)
                                     {
                                         if ( SHPWriteObject(newshp, -1, obj) < 0 )
                                         {
@@ -193,7 +192,7 @@ int merge_lines(QStringList shpFileNames, QStringList dbfFileNames, QString qnew
                                             record_error_found = true;
                                         }
 
-                                        if(!record_error_found)
+                                        if(record_error_found == false)
                                         {
                                             if ( ! DBFWriteIntegerAttribute(newdbf, k++, fld, j+1) )
                                             {
@@ -213,12 +212,23 @@ int merge_lines(QStringList shpFileNames, QStringList dbfFileNames, QString qnew
             }
         }
 
-        if(!error_found)
+        if(error_found == false)
         {
             SHPClose(newshp);
             DBFClose(newdbf);
         }
 
+        if(record_error_found)
+        {
+            main_window->Log_Message("[merge_lines] Error[-3000] Record error(s). User needs to check with GIS");
+            return -9000;
+        }
+
+        if(error_found)
+        {
+            main_window->Log_Message("[merge_lines] Error[-3001] Found error(s). User needs to check with GIS");
+            return -9001;
+        }
 
         return 0;
 

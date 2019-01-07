@@ -187,6 +187,8 @@ void CloseProject::on_pushButtonCloseProject_clicked()
         ui->pushButtonClose->setDefault(true);
         ui->pushButtonClose->setFocus();
 
+        close();
+
     } catch (...) {
         qDebug() << "Error: CloseProject::on_pushButtonCloseProject_clicked()";
     }

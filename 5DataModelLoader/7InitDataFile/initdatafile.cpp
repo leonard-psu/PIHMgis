@@ -918,18 +918,32 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         QFile MeshDataFile(MeshDataFileName);
-        if ( ! MeshDataFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( MeshDataFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
+        {
             return 404;
+        }
+
         QTextStream MeshDataFileTextStream(&MeshDataFile);
 
         QFile RivDataFile(RivDataFileName);
-        if ( ! RivDataFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( RivDataFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
+        {
+            MeshDataFile.close();
+            Log_Error_Message("Failed to open " + RivDataFileName);
             return 409;
+        }
+
         QTextStream RivDataFileTextStream(&RivDataFile);
 
         QFile InitDataFile(InitDataFileName);
-        if ( ! InitDataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        if ( InitDataFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
+        {
+            MeshDataFile.close();
+            RivDataFile.close();
+            Log_Error_Message("Failed to open " + InitDataFileName);
             return 414;
+        }
+
         QTextStream InitDataFileTextStream(&InitDataFile);
 
         int NumTINs, NumNodes, NumRiverSegs, NumRiverShapes;
@@ -941,6 +955,7 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
         // Using Percent
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        bool error_found = false;
         if ( MetersOrPercent == 2 )
         {
             MeshDataFileTextStream >> NumTINs;
@@ -949,15 +964,15 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
             int **TINnodes;
             TINnodes = new int*[NumTINs];
             for (int i=0; i<NumTINs; i++)
+            {
                 TINnodes[i] = new int [3];
-
+            }
 
             double *NodeDepths, *TINDepths;
             NodeDepths = new double [NumNodes];
             TINDepths  = new double [NumTINs];
 
-
-            for (int i=0; i<NumTINs; i++)
+            for (int i = 0; i < NumTINs; i++)
             {
                 MeshDataFileTextStream >> TempInt;
                 MeshDataFileTextStream >> TINnodes[i][0];
@@ -967,7 +982,8 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
                 MeshDataFileTextStream >> TempInt;
                 MeshDataFileTextStream >> TempInt;
             }
-            for (int i=0; i<NumNodes; i++)
+
+            for (int i = 0; i < NumNodes; i++)
             {
                 MeshDataFileTextStream >> TempInt;
                 MeshDataFileTextStream >> TempDouble;
@@ -979,7 +995,26 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
                 NodeDepths[i] = SurfaceElevation - BedElevation;
 
                 if ( NodeDepths[i] < 0 )
-                    return 455;
+                {
+                    error_found = true;
+                }
+            }
+
+            if(error_found)
+            {
+                Log_Error_Message("Error: SurfaceElevation - BedElevation < 0 " );
+
+                MeshDataFile.close();
+                RivDataFile.close();
+                InitDataFile.close();
+
+                delete [] NodeDepths;
+                delete [] TINDepths;
+                for (int i=0; i<NumTINs; i++)
+                    delete [] TINnodes[i];
+                delete [] TINnodes;
+
+                return 455;
             }
 
             RivDataFileTextStream >> NumRiverSegs;
@@ -989,7 +1024,10 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
 
             RiverSegNodes = new int*[NumRiverSegs];
             for (int i=0; i<NumRiverSegs; i++)
+            {
                 RiverSegNodes[i] = new int [2];
+            }
+
             RiverSegShape = new int [NumRiverSegs];
 
             for (int i=0; i<NumRiverSegs; i++)
@@ -1002,6 +1040,7 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
                 RivDataFileTextStream >> TempInt; RivDataFileTextStream >> TempInt; RivDataFileTextStream >> RiverSegShape[i];
                 RivDataFileTextStream >> TempInt; RivDataFileTextStream >> TempInt;
             }
+
             RivDataFileTextStream >> TempString;
             RivDataFileTextStream >> NumRiverShapes;
 
@@ -1051,6 +1090,7 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
 
             MeshDataFileTextStream >> NumTINs;
             RivDataFileTextStream  >> NumRiverSegs;
+
             for (int i=0; i<NumTINs; i++)
             {
                 InitDataFileTextStream << Interception << "\t";
@@ -1059,6 +1099,7 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
                 InitDataFileTextStream << SoilMoisture << "\t";
                 InitDataFileTextStream << Groundwater << "\n";
             }
+
             for (int i=0; i<NumRiverSegs; i++)
             {
                 InitDataFileTextStream << River << "\t";
@@ -1169,30 +1210,35 @@ void InitDataFile::on_pushButtonRun_clicked()
 
         int MetersOrPercent = 2;
         if ( ui->radioButtonMeters->isChecked() )
+        {
             MetersOrPercent = 1;
+        }
+
         if ( ui->radioButtonPercent->isChecked() )
+        {
             MetersOrPercent = 2;
+        }
 
         bool checked_input = Check_Interception_Input(input_Interception);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("Interception Input File or Value Missing " + input_Interception );
             return;
         }
         checked_input = Check_Snow_Input(input_Interception);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("Snow Input File or Value Missing " + input_Snow_Input );
             return;
         }
         checked_input = Check_Surface_Input(input_Surface_Input);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("Surface Input File or Value Missing " + input_Surface_Input );
             return;
         }
         checked_input = Check_SoilMoisture_Input(input_SoilMoisture_Input);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("SoilMoisture Input File or Value Missing " + input_SoilMoisture_Input );
             return;
@@ -1204,25 +1250,25 @@ void InitDataFile::on_pushButtonRun_clicked()
             return;
         }
         checked_input = Check_River_Input(input_River_Input);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("Groundwater Input File or Value Missing " + input_River_Input );
             return;
         }
         checked_input = Check_Riverbed_Input(input_Riverbed_Input);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("Groundwater Input Riverbed or Value Missing " + input_Riverbed_Input );
             return;
         }
         checked_input = Check_MeshData_Input(input_MeshData_Input);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("MeshData Input Riverbed or Value Missing " + input_MeshData_Input );
             return;
         }
         checked_input = Check_RivData_Input(input_RivData_Input);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("MeshData Input Riverbed or Value Missing " + input_RivData_Input );
             return;
@@ -1231,12 +1277,12 @@ void InitDataFile::on_pushButtonRun_clicked()
         // CheckFileAccess
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if ( !CheckFileAccess(input_MeshData_Input, "ReadOnly") )
+        if ( CheckFileAccess(input_MeshData_Input, "ReadOnly") == false )
         {
             Log_Error_Message("No Read Access to MeshData Input File or Value Missing " + input_MeshData_Input );
             return;
         }
-        if ( !CheckFileAccess(input_RivData_Input, "ReadOnly") )
+        if ( CheckFileAccess(input_RivData_Input, "ReadOnly") == false )
         {
             Log_Error_Message("No Read Access to RivData Input File or Value Missing " + input_RivData_Input );
             return;
@@ -1251,7 +1297,7 @@ void InitDataFile::on_pushButtonRun_clicked()
         {
             return;
         }
-        if ( ! CheckFileAccess(output_InitData, "WriteOnly") )
+        if ( CheckFileAccess(output_InitData, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to " + output_InitData );
             return;
@@ -1296,10 +1342,14 @@ void InitDataFile::on_pushButtonRun_clicked()
                             << input_Riverbed_Input;
 
         if ( ui->radioButtonMeters->isChecked() )
+        {
             ProjectIOStringList << "1";
+        }
 
         if ( ui->radioButtonPercent->isChecked() )
+        {
             ProjectIOStringList << "2";
+        }
 
         ProjectIOStringList << input_MeshData_Input << input_RivData_Input << output_InitData;
 

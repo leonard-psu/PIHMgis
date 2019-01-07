@@ -3,7 +3,7 @@
 
 #include <QString>
 
-int shape_pslg(const char* constFileName, const char* outputFileName, QString *tempLogString);
+int shape_pslg(QString constFileName, QString outputFileName, QString *tempLogString);
 
 
 #endif

@@ -65,37 +65,55 @@ bool searchPoint(Point* pointArray, double coord1, double coord2, int *temp, int
 // Used in ReadTopology
 // Note use of LogString to return messages to use in modal dialog
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int shape_pslg(const char* constFileName, const char* outputFileName, QString *tempLogString)
+int shape_pslg(QString qconstFileName, QString qoutputFileName, QString *tempLogString)
 {
     try {
 
         if(print_debug_messages)
             qDebug() << "INFO: Start shape_pslg";
 
-        if(constFileName == nullptr)
+
+        if(qconstFileName == nullptr)
         {
-            main_window->Log_Message("[shape_pslg] Error[50] constFileName is NULL ");
-            return 50;
+            main_window->Log_Message("[shape_pslg] Error[-1000] Invalid FileName " );
+            return -1000;
         }
 
-        if(outputFileName == nullptr)
+        if(qoutputFileName == nullptr)
         {
-            main_window->Log_Message("[shape_pslg] Error[51] outputFileName is NULL ");
-            return 51;
+            main_window->Log_Message("[shape_pslg] Error[-1001] Invalid RivDataFileName " );
+            return -1001;
+        }
+
+        if(qconstFileName.length() < 1)
+        {
+            main_window->Log_Message("[shape_pslg] Error[-1002] Invalid RiverDbfFileName " + qconstFileName);
+            return -1002;
+        }
+
+        if(qoutputFileName.length() < 1)
+        {
+            main_window->Log_Message("[shape_pslg] Error[-1003] Invalid RiverDbfFileName " + qoutputFileName);
+            return -1003;
         }
 
         if(tempLogString == nullptr)
         {
-            main_window->Log_Message("[shape_pslg] Error[52] LogString is NULL ");
-            return 52;
+            main_window->Log_Message("[shape_pslg] Error[-1004] LogString is NULL ");
+            return -1004;
         }
 
-        SHPHandle thisObj = SHPOpen(constFileName,"r+");
+        QByteArray fname = qconstFileName.toLatin1();
+        char *constFileName = fname.data();
+        QByteArray fname1 = qoutputFileName.toLatin1();
+        char *outputFileName = fname1.data();
+
+        SHPHandle thisObj = SHPOpen(constFileName, "r+");
 
         if(thisObj == nullptr)
         {
-            main_window->Log_Message("[shape_pslg] Error[53] Failed to open shapefile " + QString(constFileName));
-            return 53;
+            main_window->Log_Message("[shape_pslg] Error[-1005] Failed to open shapefile " + qconstFileName);
+            return -1005;
         }
 
         int numEntities = -1;
@@ -103,11 +121,11 @@ int shape_pslg(const char* constFileName, const char* outputFileName, QString *t
         double minBound[4], maxBound[4];
 
         SHPGetInfo(thisObj, &numEntities, &shapeType, minBound, maxBound);
-
         if ( shapeType != SHPT_ARC )
         {
-            main_window->Log_Message("[shape_pslg] Error[54] Incorrect shapefile type (expecting SHPT_ARC) from " + QString(constFileName));
-            return shapeType;
+            main_window->Log_Message("[shape_pslg] Error[-1006] Incorrect shapefile type (expecting SHPT_ARC) from " + qconstFileName);
+            SHPClose(thisObj);
+            return -1006;
         }
 
         if (print_debug_messages)
@@ -126,19 +144,34 @@ int shape_pslg(const char* constFileName, const char* outputFileName, QString *t
 
         if ( numEntities < 1 )
         {
-            main_window->Log_Message("[shape_pslg] Error[55] Invalid number of entities, found " + QString::number(numEntities));
-            return 55;
+            main_window->Log_Message("[shape_pslg] Error[-1007] Invalid number of entities, found " + QString::number(numEntities));
+            SHPClose(thisObj);
+            return -1007;
         }
         if ( numEntities > 250000 ) //250000 is a guess
         {
-            main_window->Log_Message("[shape_pslg] Error[55] Too many entities, found " + QString::number(numEntities));
-            return 56;
+            main_window->Log_Message("[shape_pslg] Error[-1008] Too many entities, found " + QString::number(numEntities));
+            SHPClose(thisObj);
+            return -1008;
         }
 
         tempLogString->append("[shape_pslg] Reading Nodes ... <br>"+ QString(constFileName));
 
         Line* lineArray = new Line[numEntities];
+        if( lineArray == nullptr )
+        {
+            main_window->Log_Message("[shape_pslg] Error[-1009] Failed to allocate lineArray");
+            SHPClose(thisObj);
+            return -1009;
+        }
+
         Point* pointArray = new Point[2*numEntities];
+        if( pointArray == nullptr )
+        {
+            main_window->Log_Message("[shape_pslg] Error[-1010] Failed to allocate pointArray");
+            SHPClose(thisObj);
+            return -1010;
+        }
 
         int lineCounter=0;
         int pointCounter=0;
@@ -214,8 +247,8 @@ int shape_pslg(const char* constFileName, const char* outputFileName, QString *t
             delete [] lineArray;
             delete [] pointArray;
 
-            tempLogString->append("[shape_pslg] Error[93] SHPReadObject NULL object");
-            main_window->Log_Message("[shape_pslg] Error[93] SHPReadObject NULL object");
+            tempLogString->append("[shape_pslg] Error[-1011] SHPReadObject NULL object");
+            main_window->Log_Message("[shape_pslg] Error[-1011] SHPReadObject NULL object");
         }
 
         if(error_found_94 )
@@ -224,8 +257,8 @@ int shape_pslg(const char* constFileName, const char* outputFileName, QString *t
             delete [] lineArray;
             delete [] pointArray;
 
-            tempLogString->append("[shape_pslg] Error[94] Found Unsplit Lines. User needs to split lines.");
-            main_window->Log_Message("[shape_pslg] Error[94] Found Unsplit Lines. User needs to split lines.");
+            tempLogString->append("[shape_pslg] Error[-1012] Found Unsplit Lines. User needs to split lines.");
+            main_window->Log_Message("[shape_pslg] Error[-1012] Found Unsplit Lines. User needs to split lines.");
         }
 
         tempLogString->append("[shape_pslg] Writing PSLG (.poly) File ... <br>"+ QString(constFileName));

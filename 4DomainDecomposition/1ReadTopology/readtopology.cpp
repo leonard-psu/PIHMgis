@@ -29,7 +29,7 @@ ReadTopology::ReadTopology(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -106,7 +106,6 @@ bool ReadTopology::Load_Project_Settings()
             ui->lineEditPSLG->setText(file2);
             Check_PSLG_Output(file2, true);
         }
-
 
         pushButtonSetFocus();
 
@@ -256,7 +255,7 @@ bool ReadTopology::Check_MergeVector_Input(QString file)
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditMerge->setStyleSheet("color: black;");
             ui->lineEditMerge->setText(file);
@@ -291,7 +290,7 @@ bool ReadTopology::Check_PSLG_Output(QString file, bool color_and_message_if_exi
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {
@@ -333,7 +332,6 @@ void ReadTopology::on_pushButtonMerge_clicked()
         QString MergeVectorFileName = QFileDialog::getOpenFileName(this, "Choose Merge Vector File", user_pihmgis_root_folder+tr("/3DomainDecomposition"), "Vector Shape File(*.shp *.SHP)");
         if ( MergeVectorFileName != nullptr)
         {
-
             Check_MergeVector_Input(MergeVectorFileName);
 
             QString output = MergeVectorFileName;
@@ -364,12 +362,12 @@ void ReadTopology::on_pushButtonPSLG_clicked()
         {
 
             QString output = PSLGFileName;
-            if( ! (output.toLower()).endsWith(".shp") )
+            if( (output.toLower()).endsWith(".shp") == false )
             {
                 output.append(".shp");
                 PSLGFileName = output;
             }
-            Check_PSLG_Output(PSLGFileName,true);
+            Check_PSLG_Output(PSLGFileName, true);
 
             pushButtonSetFocus();
         }
@@ -394,14 +392,13 @@ void ReadTopology::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check inputs
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         QString input_filename =  ui->lineEditMerge->text();
 
         bool input_filenameCheck = Check_MergeVector_Input(input_filename);
-        if(!input_filenameCheck)
+        if(input_filenameCheck == false)
         {
             Log_Error_Message("MergeVector Input File Missing ");
             return;
@@ -421,13 +418,13 @@ void ReadTopology::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(input_filename, "ReadOnly") )
+        if ( CheckFileAccess(input_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + input_filename);
             return;
         }
 
-        if ( ! CheckFileAccess(output_filename, "WriteOnly") )
+        if ( CheckFileAccess(output_filename, "WriteOnly") == false)
         {
             Log_Error_Message("Unable to Write Access ... " + output_filename );
             return;
@@ -438,7 +435,8 @@ void ReadTopology::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Log_Message("Running Read Topology ... ");
 
-        int ErrorPSLG = shape_pslg((char *)qPrintable(input_filename), (char *)qPrintable(output_filename), &LogsString);
+        // Note using logstring here.
+        int ErrorPSLG = shape_pslg(input_filename, output_filename, &LogsString);
         if( ErrorPSLG != 0 )
         {
             Log_Error_Message("Read Topology Processing Failed ... ");
@@ -450,7 +448,7 @@ void ReadTopology::on_pushButtonRun_clicked()
         // Check output filenames
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         output_filenameCheck = Check_PSLG_Output(output_filename, false);
-        if(!output_filenameCheck)
+        if(output_filenameCheck == false)
         {
             Log_Error_Message("CatchmentPolygon failed, file does not exist: " + output_filename );
             return;

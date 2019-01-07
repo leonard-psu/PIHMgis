@@ -28,7 +28,7 @@ CalibDataFile::CalibDataFile(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false )
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -36,6 +36,7 @@ CalibDataFile::CalibDataFile(QWidget *parent, QString filename) :
         {
             found_file = true;
         }
+
         ProjectFile.close();
 
         if(found_file)
@@ -263,7 +264,7 @@ void CalibDataFile::on_pushButtonCalibDataFile_clicked()
         QString tempString = CalibDataFileName;
         if ( CalibDataFileName != nullptr)
         {
-            if( ! (tempString.toLower()).endsWith(".calib") )
+            if( (tempString.toLower()).endsWith(".calib") == false)
             {
                 tempString.append(".calib");
                 CalibDataFileName = tempString;
@@ -328,8 +329,10 @@ int CalibDataFile::calib_data_file(QString filename)
     try {
 
         QFile CalibFile( filename );
-        if ( ! CalibFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        if ( CalibFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
+        {
             return 129;
+        }
 
         QTextStream CalibFileTextStream(&CalibFile);
 
@@ -411,7 +414,7 @@ void CalibDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(calib_filename, "WriteOnly") )
+        if ( CheckFileAccess(calib_filename, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to " + calib_filename );
             return;

@@ -31,7 +31,7 @@ PolylineToLines::PolylineToLines(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -65,7 +65,7 @@ bool PolylineToLines::Load_Project_Settings()
         QStringList ModuleStringList = ReadModuleLine(filename_open_project,tr("SimplifyPolylines"));
         if ( ModuleStringList.length() > 0  )
         {
-            for (int i=1; i+1<ModuleStringList.length(); i=i+3)
+            for (int i=1; i+1 < ModuleStringList.length(); i=i+3)
             {
                 QString InpPolygonFileName, OutPolylineFileName;
 
@@ -123,11 +123,13 @@ bool PolylineToLines::Load_Project_Settings()
         if ( ModuleStringList.length() > 0 )
         {
             while( ui->tableWidget->rowCount() )
+            {
                 ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+            }
 
             ui->tableWidget->setRowCount(0);
 
-            for (int i=1; i+1<ModuleStringList.length(); i=i+2)
+            for (int i=1; i+1 < ModuleStringList.length(); i=i+2)
             {
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
@@ -338,9 +340,10 @@ void PolylineToLines::on_pushButtonAdd_clicked()
         Clear_Log();
 
         QStringList InputPolylinesFileNames = QFileDialog::getOpenFileNames(this, "Choose Shape Files", user_pihmgis_root_folder +tr("/2VectorProcessing"), "Shape File(*.shp *.SHP)");
+
         if ( InputPolylinesFileNames.length() > 0)
         {
-            for (int i=0; i<InputPolylinesFileNames.length(); i++)
+            for (int i=0; i < InputPolylinesFileNames.length(); i++)
             {
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
@@ -424,8 +427,11 @@ void PolylineToLines::on_pushButtonClear_clicked()
         qDebug() << "INFO: Start PolylineToLines::on_pushButtonClear_clicked()";
 
     try {
+
         while( ui->tableWidget->rowCount() )
+        {
             ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+        }
 
         pushButtonSetFocus();
     } catch (...) {
@@ -460,7 +466,7 @@ void PolylineToLines::on_pushButtonRun_clicked()
 
         bool failure_found = false;
 
-        for (int i=0; i<ui->tableWidget->rowCount(); i++)
+        for (int i = 0; i < ui->tableWidget->rowCount(); i++)
         {
             QString file1 = ui->tableWidget->item(i,0)->text();
             QString file2 = ui->tableWidget->item(i,1)->text();
@@ -470,7 +476,7 @@ void PolylineToLines::on_pushButtonRun_clicked()
 
             if(file1_check)
             {
-                if ( ! CheckFileAccess(file1, "ReadOnly") )
+                if ( CheckFileAccess(file1, "ReadOnly") == false)
                 {
                     Log_Error_Message("No Read Access to ... " + file1);
                     failure_found = true;
@@ -488,7 +494,7 @@ void PolylineToLines::on_pushButtonRun_clicked()
             }
             else
             {
-                if ( ! CheckFolderAccessFromFilePath(file2, "WriteOnly") )
+                if ( CheckFolderAccessFromFilePath(file2, "WriteOnly") == false)
                 {
                     Log_Error_Message("No Write Access to ... " + file2);
                     failure_found = true;
@@ -496,13 +502,11 @@ void PolylineToLines::on_pushButtonRun_clicked()
             }
         }
 
-
         if(failure_found)
         {
             Log_Error_Message("Polyline Input and Output File issues ");
             return;
         }
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run Polygon to Polylines
@@ -513,7 +517,7 @@ void PolylineToLines::on_pushButtonRun_clicked()
         QStringList ProjectIOStringList;
         ProjectIOStringList << "PolylineToLines";
 
-        for (int i=0; i<ui->tableWidget->rowCount(); i++)
+        for (int i = 0; i < ui->tableWidget->rowCount(); i++)
         {
             QString InpShpFileName, InpDbfFileName;
             QString OutShpFileName, OutDbfFileName;
@@ -534,7 +538,7 @@ void PolylineToLines::on_pushButtonRun_clicked()
             bool valid_check = false;
             if( file1_check && file3_check) //Want to exist
             {
-                if( !file2_check && !file4_check) //Dont want to exist
+                if( file2_check == false && file4_check == false) //Dont want to exist
                 {
                     valid_check = true;
                 }
@@ -578,7 +582,9 @@ void PolylineToLines::on_pushButtonRun_clicked()
         // Update Project file
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ProjectIOStringList.length() > 2)
+        {
             WriteModuleLine(filename_open_project, ProjectIOStringList);
+        }
 
         ProjectIOStringList.clear();
 
@@ -588,8 +594,6 @@ void PolylineToLines::on_pushButtonRun_clicked()
         Clear_Log();
 
         Log_Message("Polyline to Split Lines Processing Completed.");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

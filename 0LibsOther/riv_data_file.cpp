@@ -952,21 +952,21 @@ int AddFID(QString RiverDbfFileName)
         DBFClose(TempDbfHandle);
 
         bool check = QFile::remove(RiverDbfFileName);
-        if(check)
+        if(check == false)
         {
             main_window->Log_Message("[AddFID] Error Unable to remove " + RiverDbfFileName);
             return -9999;
         }
 
         check = QFile::copy(TempDbfFileName, RiverDbfFileName);
-        if(check)
+        if(check == false)
         {
             main_window->Log_Message("[AddFID] Error Unable to copy " + TempDbfFileName + " to " + RiverDbfFileName);
             return -9999;
         }
 
         check = QFile::remove(TempDbfFileName);
-        if(check)
+        if(check == false)
         {
             main_window->Log_Message("[AddFID] Error Unable to remove " + TempDbfFileName );
             return -9999;
@@ -1306,21 +1306,21 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
 
 
         bool check = QFile::remove(RiverDbfFileName);
-        if(check)
+        if(check == false)
         {
             main_window->Log_Message("[AddToFromNode] Error Unable to remove " + RiverDbfFileName);
             return -9999;
         }
 
         check = QFile::copy(TempDbfFileName, RiverDbfFileName);
-        if(check)
+        if(check == false)
         {
             main_window->Log_Message("[AddToFromNode] Error Unable to copy " + TempDbfFileName + " to " + RiverDbfFileName);
             return -9999;
         }
 
         check =QFile::remove(TempDbfFileName);
-        if(check)
+        if(check == false)
         {
             main_window->Log_Message("[AddToFromNode] Error Unable to remove " + TempDbfFileName );
             return -9999;
@@ -1739,21 +1739,21 @@ int AddStrahlerStreamOrder( QString RiverShpFileName, QString RiverDbfFileName )
         }
 
         bool check = QFile::remove(RiverDbfFileName);
-        if(check)
+        if(check == false)
         {
             main_window->Log_Message("[AddStrahlerStreamOrder] Error Unable to remove " + RiverDbfFileName);
             return -9999;
         }
 
         check = QFile::copy(TempDbfFileName, RiverDbfFileName);
-        if(check)
+        if(check == false)
         {
             main_window->Log_Message("[AddStrahlerStreamOrder] Error Unable to copy " + TempDbfFileName + " to " + RiverDbfFileName);
             return -9999;
         }
 
-        check =QFile::remove(TempDbfFileName);
-        if(check)
+        check = QFile::remove(TempDbfFileName);
+        if(check == false)
         {
             main_window->Log_Message("[AddStrahlerStreamOrder] Error Unable to remove " + TempDbfFileName );
             return -9999;
@@ -1994,21 +1994,21 @@ int AddDownSegment(QString RiverDbfFileName, QString BoundaryCondition)
         }
 
         bool check = QFile::remove(RiverDbfFileName);
-        if(check)
+        if(check == false)
         {
             main_window->Log_Message("[AddFID] Error Unable to remove " + RiverDbfFileName);
             return -9999;
         }
 
         check = QFile::copy(TempDbfFileName, RiverDbfFileName);
-        if(check)
+        if(check == false)
         {
             main_window->Log_Message("[AddFID] Error Unable to copy " + TempDbfFileName + " to " + RiverDbfFileName);
             return -9999;
         }
 
         check =QFile::remove(TempDbfFileName);
-        if(check)
+        if(check == false)
         {
             main_window->Log_Message("[AddFID] Error Unable to remove " + TempDbfFileName );
             return -9999;

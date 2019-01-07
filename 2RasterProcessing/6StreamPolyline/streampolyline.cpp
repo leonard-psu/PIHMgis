@@ -23,6 +23,7 @@ StreamPolyline::StreamPolyline(QWidget *parent, QString filename) :
         qDebug() << "INFO: Start StreamPolyline";
 
     try {
+
         ui->setupUi(this);
 
         filename_open_project = filename;
@@ -107,18 +108,22 @@ bool StreamPolyline::Load_Project_Settings()
         }
 
         bool StreamGrids_check = Check_StreamGrids_Input(StreamGrids_filename);
-        if(!StreamGrids_check)
+        if(StreamGrids_check == false)
         {
             Log_Error_Message( "StreamGrids input does not exist. ");
         }
 
         bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGrids_filename);
-        if(!FlowDirGrids_check)
+        if(FlowDirGrids_check == false)
         {
             Log_Error_Message("FlowDirGrid input does not exist. ");
         }
 
         bool StreamPolyline_check = Check_StreamPolyline_Output(StreamPolyline_filename, true);
+        if(StreamPolyline_check == true)
+        {
+            Log_Message("StreamPolyline already exists. ");
+        }
 
     } catch (...) {
         qDebug() << "Error: StreamPolyline::Load_Project_Settings is returning w/o checking";
@@ -457,14 +462,14 @@ void StreamPolyline::on_pushButtonRun_clicked()
         QString StreamPolyline_filename =  ui->lineEditStreamPolyline->text();
 
         bool StreamGridsCheck = Check_StreamGrids_Input(StreamGrids_filename);
-        if(!StreamGridsCheck)
+        if(StreamGridsCheck == false)
         {
             Log_Error_Message("StreamGrids Input File Missing ");
             return;
         }
 
         bool FlowDirGridsCheck = Check_FlowDirGrids_Input(FlowDirGrids_filename);
-        if(!FlowDirGridsCheck)
+        if(FlowDirGridsCheck == false)
         {
             Log_Error_Message("FlowDirGrids Input File Missing ");
             return;
@@ -474,7 +479,7 @@ void StreamPolyline::on_pushButtonRun_clicked()
         // Does output already exist?
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         bool StreamPolylineCheck = Check_StreamPolyline_Output(StreamPolyline_filename, true);
-        if(StreamPolylineCheck)
+        if(StreamPolylineCheck == true)
         {
             return;
         }
@@ -482,18 +487,18 @@ void StreamPolyline::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(StreamGrids_filename, "ReadOnly") )
+        if ( CheckFileAccess(StreamGrids_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + StreamGrids_filename );
             return;
         }
-        if ( ! CheckFileAccess(FlowDirGrids_filename, "ReadOnly") )
+        if ( CheckFileAccess(FlowDirGrids_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + FlowDirGrids_filename );
             return;
         }
 
-        if ( ! CheckFileAccess(StreamPolyline_filename, "WriteOnly") )
+        if ( CheckFileAccess(StreamPolyline_filename, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to ... " + StreamPolyline_filename );
             return;
@@ -508,10 +513,7 @@ void StreamPolyline::on_pushButtonRun_clicked()
         ShpFileName = StreamPolyline_filename;
         DbfFileName = ShpFileName;
         DbfFileName.replace(QString(".shp"), QString(".dbf"));
-        int ErrorStr = stream_shape(StreamGrids_filename,
-                                    FlowDirGrids_filename,
-                                    ShpFileName,
-                                    DbfFileName);
+        int ErrorStr = stream_shape(StreamGrids_filename, FlowDirGrids_filename, ShpFileName, DbfFileName);
         if( ErrorStr != 0 )
         {
             Log_Error_Message("Stream Polyline Processing Failed ... ");
@@ -523,7 +525,7 @@ void StreamPolyline::on_pushButtonRun_clicked()
         // Check output filenames
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         StreamPolylineCheck = Check_StreamPolyline_Output(StreamPolyline_filename, true);
-        if(!StreamPolylineCheck)
+        if(StreamPolylineCheck == false)
         {
             return;
         }
@@ -560,18 +562,48 @@ void StreamPolyline::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Shapefile renaming
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QFile::remove(StreamFileNameInVector);
-        QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
+        bool removed = QFile::remove(StreamFileNameInVector);
+        if(removed == false)
+        {
+            Log_Error_Message("Failed to remove " + StreamFileNameInVector);
+            return;
+        }
+        bool copied = QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy " + StreamFileNameInVector);
+            return;
+        }
 
         StreamFileNameInRaster.replace(".shp",".shx");
         StreamFileNameInVector.replace(".shp",".shx");
-        QFile::remove(StreamFileNameInVector);
-        QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
+        removed = QFile::remove(StreamFileNameInVector);
+        if(removed == false)
+        {
+            Log_Error_Message("Failed to remove " + StreamFileNameInVector);
+            return;
+        }
+        copied = QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy " + StreamFileNameInVector);
+            return;
+        }
 
         StreamFileNameInRaster.replace(".shx",".dbf");
         StreamFileNameInVector.replace(".shx",".dbf");
-        QFile::remove(StreamFileNameInVector);
-        QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
+        removed = QFile::remove(StreamFileNameInVector);
+        if(removed == false)
+        {
+            Log_Error_Message("Failed to remove " + StreamFileNameInVector);
+            return;
+        }
+        copied = QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy " + StreamFileNameInVector);
+            return;
+        }
 
         StreamFileNameInVector.replace(".dbf",".shp");
 
@@ -581,8 +613,6 @@ void StreamPolyline::on_pushButtonRun_clicked()
         Clear_Log();
 
         Log_Message("Stream Polyline Processing Completed.");
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

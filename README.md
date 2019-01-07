@@ -1,3 +1,8 @@
+### Windows Users
+Download latest executable PIHMGis v3.5 in the zip file called PIHM_GIS_01_07_19.zip
+### Linux Users
+Will need to compile code.
+
 ### PIHMgis v3.5 developed using windows Qt Creator 
 1. [Latest] Qt 5.12.0 (MSVC 2015, 32 bit) Based on Qt 5.12.0 (MSVC 2015, 32 bit) Built on Dec 3 2018 13:08:01 From revision d51ddbb8f0 Copyright 2008-2018 The Qt Company Ltd. All rights reserved.
 2. [Worked with] Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015) on "windows" 

@@ -33,20 +33,36 @@ int setdird8(QString demfile, QString pfile, QString slopefile)
     try {
 
         //Check input names
+        if(demfile == nullptr)
+        {
+            main_window->Log_Message("[setdird8] Error[-1000] Invalid demfile " );
+            return -1000;
+        }
+        if(pfile == nullptr)
+        {
+            main_window->Log_Message("[setdird8] Error[-1001] Invalid pointfile " );
+            return -1001;
+        }
+        if(slopefile == nullptr)
+        {
+            main_window->Log_Message("[setdird8] Error[-1002] Invalid newfile " );
+            return -1002;
+        }
+
         if(demfile.length() < 1)
         {
-            main_window->Log_Message("[setdird8] Invalid demfile " + demfile);
-            return -9001;
+            main_window->Log_Message("[setdird8] Error[-1003] Invalid demfile " + demfile);
+            return -1003;
         }
         if(pfile.length() < 1)
         {
-            main_window->Log_Message("[setdird8] Invalid pointfile " + pfile);
-            return -9002;
+            main_window->Log_Message("[setdird8] Error[-1004] Invalid pointfile " + pfile);
+            return -1004;
         }
         if(slopefile.length() < 1)
         {
-            main_window->Log_Message("[setdird8] Invalid newfile " + slopefile);
-            return -9003;
+            main_window->Log_Message("[setdird8] Error[-1005] Invalid newfile " + slopefile);
+            return -1005;
         }
 
         int err,filetype = 0;
@@ -72,7 +88,7 @@ int setdird8(QString demfile, QString pfile, QString slopefile)
         dir = (short **) matalloc(nx, ny, RPSHRDTYPE);
         if(dir == nullptr)
         {
-            main_window->Log_Message("[setdird8] Error[-1000] matalloc failed  ");
+            main_window->Log_Message("[setdird8] Error[-2000] matalloc failed  ");
 
             free(elev[0]);
             free(elev);
@@ -87,7 +103,7 @@ int setdird8(QString demfile, QString pfile, QString slopefile)
         err = setdfnoflood(mval);
         if(err != 0)
         {
-            main_window->Log_Message("[setdird8] Error[-1001] setdfnoflood failed  ");
+            main_window->Log_Message("[setdird8] Error[-2001] setdfnoflood failed  ");
 
             free(elev[0]);
             free(elev);
@@ -99,7 +115,7 @@ int setdird8(QString demfile, QString pfile, QString slopefile)
         err = gridwrite(pfile,(void **)dir,RPSHRDTYPE,nx,ny,dx,dy,bndbox,csize,-1,filetype);
         if(err != 0)
         {
-            main_window->Log_Message("[setdird8] Error[-1002] gridwrite failed  ");
+            main_window->Log_Message("[setdird8] Error[-2002] gridwrite failed  ");
 
             free(elev[0]);
             free(elev);
@@ -112,7 +128,7 @@ int setdird8(QString demfile, QString pfile, QString slopefile)
         slope = (float **) matalloc(nx, ny, RPFLTDTYPE);
         if(slope == nullptr)
         {
-            main_window->Log_Message("[setdird8] Error[-1003] slope failed  ");
+            main_window->Log_Message("[setdird8] Error[-2003] slope failed  ");
 
             free(elev[0]);
             free(elev);
@@ -124,7 +140,7 @@ int setdird8(QString demfile, QString pfile, QString slopefile)
         err = sloped8();
         if(err != 0)
         {
-            main_window->Log_Message("[setdird8] Error[-1004] sloped8 failed  ");
+            main_window->Log_Message("[setdird8] Error[-2004] sloped8 failed  ");
 
             free(elev[0]);
             free(elev);
@@ -136,7 +152,7 @@ int setdird8(QString demfile, QString pfile, QString slopefile)
         err = gridwrite(slopefile,(void **)slope,RPFLTDTYPE,nx,ny,dx,dy,bndbox,csize,-1.,filetype);
         if (err != 0)
         {
-            main_window->Log_Message("[setdird8] Error[-1005] gridwrite failed  ");
+            main_window->Log_Message("[setdird8] Error[-2005] gridwrite failed  ");
             free(elev[0]);
             free(elev);
             free(dir[0]);
@@ -182,13 +198,33 @@ int setdfnoflood(float mval)
 
         if(dir == nullptr)
         {
-            main_window->Log_Message("[setdfnoflood] Error[-1000] gridwrite dir nullptr ");
+            main_window->Log_Message("[setdfnoflood] Error[-1000] dir nullptr ");
             return -1000;
         }
         if(elev == nullptr)
         {
-            main_window->Log_Message("[setdfnoflood] Error[-1001] gridwrite elev nullptr ");
+            main_window->Log_Message("[setdfnoflood] Error[-1001] elev nullptr ");
             return -1001;
+        }
+        if(d1 == nullptr)
+        {
+            main_window->Log_Message("[setdfnoflood] Error[-1002] d1 nullptr ");
+            return -1002;
+        }
+        if(d2 == nullptr)
+        {
+            main_window->Log_Message("[setdfnoflood] Error[-1003] d2 nullptr ");
+            return -1003;
+        }
+        if(fact == nullptr)
+        {
+            main_window->Log_Message("[setdfnoflood] Error[-1004] fact nullptr ");
+            return -1004;
+        }
+        if(elev == nullptr)
+        {
+            main_window->Log_Message("[setdfnoflood] Error[-1005] elev nullptr ");
+            return -1005;
         }
 
         // Initialize boundaries
@@ -237,10 +273,9 @@ int setdfnoflood(float mval)
 
         if(error_found)
         {
-            main_window->Log_Message("[setdfnoflood] Error[-1002] error found calculating fact ");
-            return -1002;
+            main_window->Log_Message("[setdfnoflood] Error[-2000] error found calculating fact ");
+            return -2000;
         }
-
 
         error_found = false;
         // Set positive slope directions
@@ -265,8 +300,8 @@ int setdfnoflood(float mval)
 
         if(error_found)
         {
-            main_window->Log_Message("[setdfnoflood] Error[-1003] error with set ");
-            return -1003;
+            main_window->Log_Message("[setdfnoflood] Error[-3000] error with set ");
+            return -3000;
         }
 
         if(n > 0)
@@ -280,49 +315,67 @@ int setdfnoflood(float mval)
             if(spos == nullptr)
             {
                 main_window->Log_Message("[setdfnoflood] Error[-1004] spos nullptr ");
-                return -1004;
+                return -3004;
             }
 
             dn = (short *)malloc(sizeof(short) * n);
             if(dn == nullptr)
             {
                 main_window->Log_Message("[setdfnoflood] Error[-1005] dn nullptr ");
-                return -1005;
+                return -3005;
             }
 
             is = (short *)malloc(sizeof(short) * n);
             if(is == nullptr)
             {
                 main_window->Log_Message("[setdfnoflood] Error[-1006] is nullptr ");
-                return -1006;
+                free(dn);
+                return -3006;
             }
 
             js = (short *)malloc(sizeof(short) * n);
             if(js == nullptr)
             {
                 main_window->Log_Message("[setdfnoflood] Error[-1007] js nullptr ");
-                return -1007;
+                free(dn);
+                free(is);
+
+                return -3007;
             }
 
             s = (short *)malloc(sizeof(short) * n);
             if(s == nullptr)
             {
                 main_window->Log_Message("[setdfnoflood] Error[-1008] s nullptr ");
-                return -1008;
+                free(dn);
+                free(is);
+                free(js);
+
+                return -3008;
             }
 
             sloc = (int *)malloc(sizeof(int) * n);
             if(sloc == nullptr)
             {
                 main_window->Log_Message("[setdfnoflood] Error[-1009] sloc nullptr ");
-                return -1009;
+                free(dn);
+                free(is);
+                free(js);
+                free(s);
+                return -3009;
             }
 
             elev2 = (float *)malloc(sizeof(float) *n);
             if(elev2 == nullptr)
             {
                 main_window->Log_Message("[setdfnoflood] Error[-1010] elev2 nullptr ");
-                return -1010;
+                free(dn);
+                free(is);
+                free(js);
+                free(s);
+                free(sloc);
+
+                return -3010;
             }
 
             //  Put unresolved pixels on stack
@@ -366,7 +419,7 @@ int setdfnoflood(float mval)
                 free(js);
                 free(s);
                 free(sloc);
-                return -1011;
+                return -3011;
             }
 
 
@@ -515,6 +568,7 @@ int flatrout(int n, int *sloc, short *s, int **spos, int iter, float *elev1, flo
             if(elev3 == nullptr)
             {
                 main_window->Log_Message("[flatrout] Error[-1009] elev3 nullptr ");
+                free(sloc2);
                 return -1009;
             }
 
@@ -577,7 +631,7 @@ int flatrout(int n, int *sloc, short *s, int **spos, int iter, float *elev1, flo
     } catch (...)
     {
         qDebug() << "Error: flatrout is returning w/o checking";
-        return -9000;
+        return -5000;
     }
 
     return 0;
@@ -768,7 +822,7 @@ int incfall(int n, float *elev1, short *s1, int **spos, int iter, int *sloc)
     } catch (...)
     {
         qDebug() << "Error: incfall is returning w/o checking";
-        return -9000;
+        return -5000;
     }
 
     return 0;
@@ -825,6 +879,16 @@ int incrise(int n, float *elev1, short *s2,int **spos, int iter, int *sloc)
         {
             main_window->Log_Message("[incrise] Error[-1007] dn nullptr ");
             return -1007;
+        }
+        if(d1 == nullptr)
+        {
+            main_window->Log_Message("[incrise] Error[-1008] d1 nullptr ");
+            return -1008;
+        }
+        if(d2 == nullptr)
+        {
+            main_window->Log_Message("[incrise] Error[-1009] d2 nullptr ");
+            return -1009;
         }
 
         // This routine implements stage 2 drainage away from higher ground dn is used to flag pixels still being incremented
@@ -902,7 +966,7 @@ int incrise(int n, float *elev1, short *s2,int **spos, int iter, int *sloc)
     catch (...)
     {
         qDebug() << "Error: incrise is returning w/o checking";
-        return -9000;
+        return -5000;
     }
 
     return 0;
@@ -954,6 +1018,21 @@ int set2(int i,int j,float *fact,float *elev1, float *elev2, int iter, int **spo
             main_window->Log_Message("[set2] Error[-1006] dir nullptr ");
             return -1006;
         }
+        if(d1 == nullptr)
+        {
+            main_window->Log_Message("[set2] Error[-1007] d1 nullptr ");
+            return -1007;
+        }
+        if(d2 == nullptr)
+        {
+            main_window->Log_Message("[set2] Error[-1008] d2 nullptr ");
+            return -1008;
+        }
+        if(fact == nullptr)
+        {
+            main_window->Log_Message("[set2] Error[-1009] fact nullptr ");
+            return -1009;
+        }
 
         float slope,slope2,smax,ed = 0;
         int k,spn,sp,kflat = 0;
@@ -1000,7 +1079,7 @@ int set2(int i,int j,float *fact,float *elev1, float *elev2, int iter, int **spo
     } catch (...) {
 
         qDebug() << "Error: set2 is returning w/o checking";
-        return -9000;
+        return -5000;
     }
 
     return 0;
@@ -1042,6 +1121,17 @@ int sloped8(void )
             main_window->Log_Message("[sloped8] Error[-1004] slope is null   ");
             return -1004;
         }
+        if(d1 == nullptr)
+        {
+            main_window->Log_Message("[sloped8] Error[-1005] d1 nullptr ");
+            return -1005;
+        }
+        if(d2 == nullptr)
+        {
+            main_window->Log_Message("[sloped8] Error[-1006] d2 nullptr ");
+            return -1006;
+        }
+
 
         int in,jn = 0;
         float fact[9],ed;
@@ -1087,10 +1177,11 @@ int sloped8(void )
             }
         }
 
-    } catch (...) {
-        qDebug() << "Error: sloped8 is returning w/o checking";
-        main_window->Log_Message("[sloped8] Error[-9000] Invalid bottom value  ");
-        return -9000;
+    }
+    catch (...)
+    {
+        main_window->Log_Message("[sloped8] Error[-9000] sloped8 is returning w/o checking  ");
+        return -5000;
     }
 
     return 0;

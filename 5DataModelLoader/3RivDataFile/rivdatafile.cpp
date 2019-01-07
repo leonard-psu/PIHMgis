@@ -31,7 +31,7 @@ RivDataFile::RivDataFile(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -245,7 +245,7 @@ bool RivDataFile::Check_Element_Input(QString file)
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditElementFile->setStyleSheet("color: black;");
             ui->lineEditElementFile->setText(file);
@@ -278,7 +278,7 @@ bool RivDataFile::Check_Node_Input(QString file)
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditNodeFile->setStyleSheet("color: black;");
             ui->lineEditNodeFile->setText(file);
@@ -311,7 +311,7 @@ bool RivDataFile::Check_Neighbor_Input(QString file)
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditNeighbourFile->setStyleSheet("color: black;");
             ui->lineEditNeighbourFile->setText(file);
@@ -344,7 +344,7 @@ bool RivDataFile::Check_RiverShape_Input(QString file)
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditRiverFile->setStyleSheet("color: black;");
             ui->lineEditRiverFile->setText(file);
@@ -519,7 +519,7 @@ void RivDataFile::on_pushButtonRivDataFile_clicked()
         {
             ui->lineEditRivDataFile->setStyleSheet("color: black;");
 
-            if( ! (tempString.toLower()).endsWith(".riv") )
+            if( (tempString.toLower()).endsWith(".riv") == false)
             {
                 tempString.append(".riv");
                 RivDataFileName = tempString;
@@ -625,28 +625,28 @@ void RivDataFile::on_pushButtonRun_clicked()
         if ( ui->radioButtonCriticalDepth->isChecked() )    BoundaryCondition = QString("-4");
 
         bool checked_element = Check_Element_Input(input_Element_filename);
-        if(!checked_element)
+        if(checked_element == false)
         {
             Log_Error_Message("Element (.1.ele) Input File Missing ");
             return;
         }
 
         bool checked_node = Check_Node_Input(input_Node_filename);
-        if(!checked_node)
+        if(checked_node == false)
         {
             Log_Error_Message("Node (.1.node) Input File Missing ");
             return;
         }
 
         bool checked_neighbour = Check_Neighbor_Input(input_Neighbour_filename);
-        if(!checked_neighbour)
+        if(checked_neighbour == false)
         {
             Log_Error_Message("Neighbor (.1.Neigh) Input File Missing ");
             return;
         }
 
         bool checked_river = Check_RiverShape_Input(input_River_filename);
-        if(!checked_river)
+        if(checked_river == false)
         {
             Log_Error_Message("River (*.shp) Input File Missing ");
             return;
@@ -665,27 +665,27 @@ void RivDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(input_Element_filename, "ReadOnly") )
+        if ( CheckFileAccess(input_Element_filename, "ReadOnly") == false)
         {
             Log_Error_Message("ERROR: No Read Access ... " + input_Element_filename  );
             return;
         }
-        if ( ! CheckFileAccess(input_Node_filename, "ReadOnly") )
+        if ( CheckFileAccess(input_Node_filename, "ReadOnly") == false )
         {
             Log_Error_Message("ERROR: No Read Access ... " + input_Node_filename  );
             return;
         }
-        if ( ! CheckFileAccess(input_Neighbour_filename, "ReadOnly") )
+        if ( CheckFileAccess(input_Neighbour_filename, "ReadOnly") == false )
         {
             Log_Error_Message("ERROR: No Read Access ... " + input_Neighbour_filename  );
             return;
         }
-        if ( ! CheckFileAccess(input_River_filename, "ReadOnly") )
+        if ( CheckFileAccess(input_River_filename, "ReadOnly") == false )
         {
             Log_Error_Message("ERROR: No Read Access ... " + input_River_filename  );
             return;
         }
-        if ( ! CheckFileAccess(output_RivData_filename, "WriteOnly") )
+        if ( CheckFileAccess(output_RivData_filename, "WriteOnly") == false )
         {
             Log_Error_Message("ERROR: No Write Access ... " + output_RivData_filename  );
             return;

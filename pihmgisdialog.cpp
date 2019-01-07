@@ -915,7 +915,7 @@ void PIHMgisDialog::New_Project()
             //Prevent user for using same settings
             set_New_Project_Status(false);
             set_Close_Status(true);
-            set_Inspect_Status(false);
+            set_Inspect_Status(true);
             set_Import_Status(false);
             enable_project_settings(true); //User needs to setup project
 
@@ -2025,7 +2025,7 @@ void PIHMgisDialog::PickWorkspace()
                 set_New_Project_Status(true);
                 set_Close_Status(false);
 
-                set_Inspect_Status(true);
+                set_Inspect_Status(false);
                 set_Import_Status(true);
 
                 enable_project_settings(false); //User needs to setup project
@@ -2041,16 +2041,18 @@ void PIHMgisDialog::PickWorkspace()
                     //Dont want users overriding data
                     set_New_Project_Status(false);
                     set_Import_Status(false);
+                    set_Inspect_Status(true);
                 }
                 else
                 {
                     //Assume user only has folders
                     set_New_Project_Status(true);
                     set_Import_Status(true);
+                    set_Inspect_Status(false);
                 }
 
                 set_Close_Status(true);
-                set_Inspect_Status(true);
+
 
                 enable_project_settings(true);
                 Log_Message("Found PIHMgis workspace. All folders exist. ");
@@ -2077,7 +2079,7 @@ void PIHMgisDialog::PickWorkspace()
                     set_New_Project_Status(true);
                     set_Close_Status(false);
 
-                    set_Inspect_Status(true);
+                    set_Inspect_Status(false);
                     set_Import_Status(true);
 
                     enable_project_settings(false); //User needs to setup project
@@ -2095,16 +2097,18 @@ void PIHMgisDialog::PickWorkspace()
                         //Dont want users overriding data
                         set_New_Project_Status(false);
                         set_Import_Status(false);
+                        set_Inspect_Status(true);
                     }
                     else
                     {
                         //Assume user only has folders
                         set_New_Project_Status(true);
                         set_Import_Status(true);
+                        set_Inspect_Status(false);
                     }
 
                     set_Close_Status(true);
-                    set_Inspect_Status(true);
+
 
                     enable_project_settings(true);
                     Log_Message("Found PIHMgis workspace. All folders exist. ");

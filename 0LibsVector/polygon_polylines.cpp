@@ -1378,6 +1378,7 @@ int polygon_polylines(QString qshpFileName, QString qdbfFileName, QString qnewsh
 
     } catch (...) {
         qDebug() << "Error: polygon_polylines is returning w/o checking";
+        return -5000;
     }
 
     return(0);

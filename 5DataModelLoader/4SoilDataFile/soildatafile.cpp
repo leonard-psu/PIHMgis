@@ -30,7 +30,7 @@ SoilDataFile::SoilDataFile(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project  );
         }
@@ -206,7 +206,7 @@ bool SoilDataFile::Check_SoilTexture_Input(QString file){
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditSoilTextureFile->setStyleSheet("color: black;");
             ui->lineEditSoilTextureFile->setText(file);
@@ -242,7 +242,7 @@ bool SoilDataFile::Check_SoilData_Output(QString file, bool color_and_message_if
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {
@@ -342,7 +342,7 @@ void SoilDataFile::on_pushButtonSoilDataFile_clicked()
         QString tempString = SoilDataFileName;
         if ( SoilDataFileName != nullptr)
         {
-            if( ! (tempString.toLower()).endsWith(".soil") )
+            if( (tempString.toLower()).endsWith(".soil") == false)
             {
                 tempString.append(".soil");
                 SoilDataFileName = tempString;
@@ -377,7 +377,7 @@ void SoilDataFile::on_pushButtonRun_clicked()
         QString input_SoilTexture_filename = ui->lineEditSoilTextureFile->text();
 
         bool checked_SoilTexture = Check_SoilTexture_Input(input_SoilTexture_filename);
-        if(!checked_SoilTexture)
+        if(checked_SoilTexture == false)
         {
             Log_Error_Message("Soil Texture File (*.txt *.TXT) Input File Missing " + input_SoilTexture_filename );
             return;
@@ -397,13 +397,13 @@ void SoilDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(input_SoilTexture_filename, "ReadOnly") )
+        if ( CheckFileAccess(input_SoilTexture_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to " + input_SoilTexture_filename  );
             return;
         }
 
-        if ( ! CheckFileAccess(output_SoilData_filename, "WriteOnly") )
+        if ( CheckFileAccess(output_SoilData_filename, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to " + output_SoilData_filename  );
             return;

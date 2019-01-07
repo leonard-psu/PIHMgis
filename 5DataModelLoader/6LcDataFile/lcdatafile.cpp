@@ -31,7 +31,7 @@ LcDataFile::LcDataFile(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project  );
         }
@@ -246,7 +246,7 @@ bool LcDataFile::Check_LCData_Output(QString file, bool color_and_message_if_exi
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {
@@ -346,7 +346,7 @@ void LcDataFile::on_pushButtonLcDataFile_clicked()
         QString tempString = LcDataFileName;
         if ( LcDataFileName != nullptr)
         {
-            if( ! (tempString.toLower()).endsWith(".lc") )
+            if( (tempString.toLower()).endsWith(".lc") == false )
             {
                 tempString.append(".lc");
                 LcDataFileName = tempString;
@@ -382,7 +382,7 @@ void LcDataFile::on_pushButtonRun_clicked()
         QString input_LCTexture_filename = ui->lineEditLcClassFile->text();
 
         bool checked_LCTexture = Check_LCTexture_Input(input_LCTexture_filename);
-        if(!checked_LCTexture)
+        if( checked_LCTexture == false)
         {
             Log_Error_Message("LC Texture File (*.txt *.TXT) Input File Missing " + input_LCTexture_filename  );
             return;
@@ -402,13 +402,13 @@ void LcDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(input_LCTexture_filename, "ReadOnly") )
+        if ( CheckFileAccess(input_LCTexture_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to " + input_LCTexture_filename  );
             return;
         }
 
-        if ( ! CheckFileAccess(output_LCData_filename, "WriteOnly") )
+        if ( CheckFileAccess(output_LCData_filename, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to " + output_LCData_filename );
             return;

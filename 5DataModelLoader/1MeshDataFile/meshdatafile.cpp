@@ -859,8 +859,15 @@ void MeshDataFile::on_pushButtonRun_clicked()
         OldMeshFileName = NewMeshFileName;
         OldMeshFileName.replace( QString(".mesh"), QString(".mesh.0") );
 
-        QFile::remove(OldMeshFileName);
-        QFile::rename(NewMeshFileName, OldMeshFileName);
+        //We know it shouldn't exist from above check, so will ignore failure.
+        //TODO remove, but need to validate
+        bool removed = QFile::remove(OldMeshFileName);
+        bool renamed = QFile::rename(NewMeshFileName, OldMeshFileName);
+        if(renamed == false)
+        {
+            Log_Error_Message("Failed to rename file " + NewMeshFileName);
+            return;
+        }
 
         int ErrorInterp = interpolate_river_nodes_elev(
                     RiverFileNameShp,
@@ -882,10 +889,9 @@ void MeshDataFile::on_pushButtonRun_clicked()
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Get Project Value
-        // TODO Should this be a user paramter?
+        // TODO Should this be a user parameter?
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QString ProjectID;
-        ProjectID = output_filename;
+        QString ProjectID = output_filename;
         ProjectID = ProjectID.right( ProjectID.length() - ProjectID.lastIndexOf("/") - 1);
         ProjectID.chop(5);
 

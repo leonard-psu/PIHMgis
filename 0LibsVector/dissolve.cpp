@@ -29,6 +29,8 @@ int compareSlope(Lines *a, Lines *b)
 
     try {
 
+        //TODO check if lines are null
+
         if(b->x2 - b->x1 != 0 && a->x2 - a->x1 != 0)
         {
             if(fabs(fabs((b->y2 - b->y1)/(b->x2 - b->x1)) - fabs((a->y2 - a->y1)/(a->x2 - a->x1))) < dissolve_epsilon )
@@ -54,6 +56,7 @@ int compareSlope(Lines *a, Lines *b)
 // compare lines
 // Used in dissolve below
 // TODO: Decide on Slope option
+// TODO: Error checking on null lines
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int compareLines(Lines *a, Lines *b)
 {
@@ -101,13 +104,15 @@ int compareLines(Lines *a, Lines *b)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Does point and line interesect?
 // Used in dissolve below
+// TODO: Error checking on null lines
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 inline int doesIntersect(Lines *l, double x1, double y1)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start doesIntersect";
 
-    try {
+    try
+    {
         double a = sqrt(pow(l->x1 - l->x2, 2) + pow(l->y1 - l->y2, 2));
         double b = sqrt(pow(l->x1 - x1, 2) +    pow(l->y1 - y1, 2));
         double c = sqrt(pow(l->x2 - x1, 2) +    pow(l->y2 - y1, 2));
@@ -163,23 +168,23 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
 
         if(qshpFileName.length() < 1)
         {
-            main_window->Log_Message("[dissolve] Error[-1000] Invalid qshpFileName.");
-            return -1000;
+            main_window->Log_Message("[dissolve] Error[-1004] Invalid qshpFileName.");
+            return -1004;
         }
         if(qdbfFileName.length() < 1)
         {
-            main_window->Log_Message("[dissolve] Error[-1001] Invalid qdbfFileName.");
-            return -1001;
+            main_window->Log_Message("[dissolve] Error[-1005] Invalid qdbfFileName.");
+            return -1005;
         }
         if(qnewshpFileName.length() < 1)
         {
-            main_window->Log_Message("[dissolve] Error[-1002] Invalid qnewshpFileName.");
-            return -1002;
+            main_window->Log_Message("[dissolve] Error[-1006] Invalid qnewshpFileName.");
+            return -1006;
         }
         if(qnewdbfFileName.length() < 1)
         {
-            main_window->Log_Message("[dissolve] Error[-1003] Invalid qnewdbfFileName.");
-            return -1003;
+            main_window->Log_Message("[dissolve] Error[-1007] Invalid qnewdbfFileName.");
+            return -1007;
         }
 
         QByteArray fname = qshpFileName.toLatin1();
@@ -196,96 +201,96 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         SHPHandle shp = SHPOpen(shpFileName, "rb");
         if(shp == nullptr)
         {
-            main_window->Log_Message("[dissolve] Error[79] shpFileName is NULL. ");
-            return 79;
+            main_window->Log_Message("[dissolve] Error[-1008] shpFileName is NULL. ");
+            return -1008;
         }
 
         DBFHandle dbf = DBFOpen(dbfFileName, "rb");
         if(dbf == nullptr)
         {
-            main_window->Log_Message("[dissolve] Error[80] dbfFileName is NULL. ");
+            main_window->Log_Message("[dissolve] Error[-1009] dbfFileName is NULL. ");
             SHPClose(shp);
-            return 80;
+            return -1009;
         }
 
         int InfoShpType;
         SHPGetInfo (shp, nullptr, &InfoShpType, nullptr, nullptr);
         if ( InfoShpType != SHPT_POLYGON )
         {
-            main_window->Log_Message("[dissolve] Error[81] Not a SHPT_POLYGON. SHAPE TYPE = " + QString::number(InfoShpType));
+            main_window->Log_Message("[dissolve] Error[-1010] Not a SHPT_POLYGON. SHAPE TYPE = " + QString::number(InfoShpType));
             SHPClose(shp);
             DBFClose(dbf);
-            return 81;
+            return -1010;
         }
 
         SHPHandle newshp = SHPCreate(newshpFileName, SHPT_POLYGON);
         if(newshp == nullptr)
         {
-            main_window->Log_Message("[dissolve] Error[82] newshpFileName is NULL.");
+            main_window->Log_Message("[dissolve] Error[-1011] newshpFileName is NULL.");
             SHPClose(shp);
             DBFClose(dbf);
-            return 82;
+            return -1011;
         }
         DBFHandle newdbf = DBFCreate(newdbfFileName);
         if(newdbf == nullptr)
         {
-            main_window->Log_Message("[dissolve] Error[83] newdbfFileName is NULL. ");
+            main_window->Log_Message("[dissolve] Error[-1012] newdbfFileName is NULL. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
-            return 83;
+            return -1012;
         }
 
         int PolyID  = DBFAddField(newdbf,  "PolyID", FTInteger, 5, 0);
         if ( PolyID < 0 )
         {
-            main_window->Log_Message("[dissolve] Error[84] Failed to add PolyID field. ");
+            main_window->Log_Message("[dissolve] Error[-1013] Failed to add PolyID field. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 84;
+            return -1013;
         }
         if ( PolyID > 5000 ) //5000 is a guess
         {
-            main_window->Log_Message("[dissolve] Error[85] Failed to add PolyID field. ");
+            main_window->Log_Message("[dissolve] Error[-1014] Failed to add PolyID field. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 85;
+            return -1014;
         }
 
         recordCount = DBFGetRecordCount(dbf);
         if ( recordCount <= 0 )
         {
-            main_window->Log_Message("[dissolve] Error[86] recordCount <= 0. ");
+            main_window->Log_Message("[dissolve] Error[-1015] recordCount <= 0. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 86;
+            return -1015;
         }
         if ( recordCount > 500000 ) //500000 is a guess
         {
-            main_window->Log_Message("[dissolve] Error[87] recordCount > 500000. ");
+            main_window->Log_Message("[dissolve] Error[-1016] recordCount > 500000. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 87;
+            return -1016;
         }
 
         SHPObject **obj = new SHPObject*[recordCount];
         recordCount = DBFGetRecordCount(dbf);
         if ( obj == nullptr )
         {
-            main_window->Log_Message("[dissolve] Error[88] SHPObject is null. ");
+            main_window->Log_Message("[dissolve] Error[-2000] SHPObject is null. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 88;
+            return -2000;
         }
 
         int vertices = -1;
@@ -299,44 +304,105 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         lines = (Lines **)malloc(recordCount * sizeof(Lines *));
         if ( lines == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[89] lines is null" );
-            return 89;
+            main_window->Log_Message("[catchment_shape] Error[-2001] lines is null" );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete[] obj;
+            return -2001;
         }
         lineFlag = (int **)malloc(recordCount * sizeof(int *));
         if ( lineFlag == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[90] lineFlag is null" );
-            return 90;
+            main_window->Log_Message("[catchment_shape] Error[-2002] lineFlag is null" );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete[] obj;
+            free(lines);
+            return -2002;
         }
         dfXMax = (double *)malloc(recordCount * sizeof(double));
         if ( dfXMax == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[91] dfXMax is null" );
-            return 91;
+            main_window->Log_Message("[catchment_shape] Error[-2003] dfXMax is null" );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+
+            return -2003;
         }
         dfXMin = (double *)malloc(recordCount * sizeof(double));
         if ( dfXMin == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[92] dfXMin is null" );
-            return 92;
+            main_window->Log_Message("[catchment_shape] Error[-2004] dfXMin is null" );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+
+            return -2004;
         }
         dfYMax = (double *)malloc(recordCount * sizeof(double));
         if ( dfYMax == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[93] dfYMax is null" );
-            return 93;
+            main_window->Log_Message("[catchment_shape] Error[-2005] dfYMax is null" );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+
+            return -2005;
         }
         dfYMin = (double *)malloc(recordCount * sizeof(double));
         if ( dfYMin == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[94] dfYMin is null" );
-            return 94;
+            main_window->Log_Message("[catchment_shape] Error[-2006] dfYMin is null" );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+
+            return -2006;
         }
         numLines = (int *)malloc(recordCount * sizeof(int));
         if ( numLines == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[95] numLines is null" );
-            return 95;
+            main_window->Log_Message("[catchment_shape] Error[-2007] numLines is null" );
+            SHPClose(shp);
+            DBFClose(dbf);
+            SHPClose(newshp);
+            DBFClose(newdbf);
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+
+            return -2007;
         }
 
         bool error_found = false;
@@ -400,48 +466,83 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
 
         if ( error_found )
         {
-            main_window->Log_Message("[dissolve] Error[96] SHPReadObject null. ");
+            main_window->Log_Message("[dissolve] Error[-3000] SHPReadObject null. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 96;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -3000;
         }
         if ( line_error_found)
         {
-            main_window->Log_Message("[dissolve] Error[97] line malloc null. ");
+            main_window->Log_Message("[dissolve] Error[-3001] line malloc null. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 97;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -3001;
         }
         if ( lineFlag_error_found)
         {
-            main_window->Log_Message("[dissolve] Error[98] line flag malloc null. ");
+            main_window->Log_Message("[dissolve] Error[-3002] line flag malloc null. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 98;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -3002;
         }
         if ( vertices <= 0 )
         {
-            main_window->Log_Message("[dissolve] Error[99] recordCount <= 0. ");
+            main_window->Log_Message("[dissolve] Error[-3003] recordCount <= 0. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 99;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -3003;
         }
         if ( recordCount > 500000 ) //500000 is a guess
         {
-            main_window->Log_Message("[dissolve] Error[100] recordCount > 500000. ");
+            main_window->Log_Message("[dissolve] Error[-3004] recordCount > 500000. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 100;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -3004;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -581,30 +682,44 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
 
         if ( totalLines <= 0 )
         {
-            main_window->Log_Message("[dissolve] Error[101] totalLines <= 0. ");
+            main_window->Log_Message("[dissolve] Error[-4000] totalLines <= 0. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 101;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -4000;
         }
         if ( totalLines > 500000 ) //500000 is a guess
         {
-            main_window->Log_Message("[dissolve] Error[102] totalLines > 500000. ");
+            main_window->Log_Message("[dissolve] Error[-4001] totalLines > 500000. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 102;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -4001;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         //2 Delete common lines
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         int totalLines3 = totalLines;
-        for(int i=0; i < recordCount; i++)
+        for(int i = 0; i < recordCount; i++)
         {
-            for(int j=0; j < numLines[i]; j++)
+            for(int j = 0; j < numLines[i]; j++)
             {
                 for(int k=i+1; k < recordCount; k++)
                 {
@@ -641,12 +756,19 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         newlines = (Lines *)malloc(totalLines * 2 * sizeof(Lines));
         if ( newlines == nullptr )
         {
-            main_window->Log_Message("[dissolve] Error[103] newlines is null ");
+            main_window->Log_Message("[dissolve] Error[-4002] newlines is null ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 103;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -4002;
         }
 
 
@@ -667,21 +789,35 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
 
         if ( count <= 0 )
         {
-            main_window->Log_Message("[dissolve] Error[104] count <= 0. ");
+            main_window->Log_Message("[dissolve] Error[-4003] count <= 0. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 104;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -4003;
         }
         if ( count > 500000 ) //500000 is a guess
         {
-            main_window->Log_Message("[dissolve] Error[105] count > 500000. ");
+            main_window->Log_Message("[dissolve] Error[-4004] count > 500000. ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 105;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -4004;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -694,32 +830,53 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         X = (double *)malloc(count*3*sizeof(double));
         if ( X == nullptr )
         {
-            main_window->Log_Message("[dissolve] Error[106] X is null ");
+            main_window->Log_Message("[dissolve] Error[-4005] X is null ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 106;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -4005;
         }
         Y = (double *)malloc(count*3*sizeof(double));
         if ( Y == nullptr )
         {
-            main_window->Log_Message("[dissolve] Error[107] Y is null ");
+            main_window->Log_Message("[dissolve] Error[-4006] Y is null ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 107;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -4006;
         }
         Z = (double *)malloc(count*3*sizeof(double));
         if ( Z == nullptr )
         {
-            main_window->Log_Message("[dissolve] Error[108] Z is null ");
+            main_window->Log_Message("[dissolve] Error[-4007] Z is null ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 108;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -4007;
         }
 
         int numPoints = 0;
@@ -739,6 +896,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         while(finished == 1)
         {
             finished=0;
+
             for(int i=0; i < count; i++)
             {
                 if (i != currentline)
@@ -788,40 +946,64 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         SHPObject *newobj = SHPCreateSimpleObject(SHPT_POLYGON, numPoints, X, Y, Z);
         if ( newobj == nullptr )
         {
-            main_window->Log_Message("[dissolve] Error[109] newobj is null ");
+            main_window->Log_Message("[dissolve] Error[-5000] newobj is null ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 109;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -5000;
         }
 
         if ( SHPWriteObject(newshp, -1, newobj) < 0 )
         {
-            main_window->Log_Message("[dissolve] Error[110] SHPWriteObject failed ");
+            main_window->Log_Message("[dissolve] Error[-5001] SHPWriteObject failed ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 110;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -5001;
         }
 
         if ( ! DBFWriteIntegerAttribute(newdbf, 0,   PolyID,  1) )
         {
-            main_window->Log_Message("[dissolve] Error[111] DBFWriteIntegerAttribute failed ");
+            main_window->Log_Message("[dissolve] Error[-5002] DBFWriteIntegerAttribute failed ");
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
             DBFClose(newdbf);
-            return 111;
+            delete[] obj;
+            free(lines);
+            free(lineFlag);
+            free(dfXMax);
+            free(dfXMin);
+            free(dfYMin);
+            free(numLines);
+            return -5002;
         }
+
+        //Clean up
 
         SHPClose(shp);
         DBFClose(dbf);
         SHPClose(newshp);
         DBFClose(newdbf);
 
-        //Clean up
+        SHPDestroyObject(newobj);
+
         if(Z != nullptr)
         {
             free(Z);
@@ -882,9 +1064,15 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
             free(dfXMin);
             dfXMin = nullptr;
         }
+        if(obj != nullptr)
+        {
+            delete[] obj;
+            obj = nullptr;
+        }
 
-
-    } catch (...) {
+    }
+    catch (...)
+    {
         qDebug() << "Error: dissolve is returning w/o checking";
         return -9000;
     }

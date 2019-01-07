@@ -31,7 +31,7 @@ SimplifyPolylines::SimplifyPolylines(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -39,6 +39,7 @@ SimplifyPolylines::SimplifyPolylines(QWidget *parent, QString filename) :
         {
             found_file = true;
         }
+
         ProjectFile.close();
 
         if(found_file)
@@ -85,7 +86,6 @@ bool SimplifyPolylines::Load_Project_Settings()
         if ( ModuleStringList.length() > 0  )
         {
             DEMResolution = ModuleStringList.at(4).toInt();
-            //qDebug() << "DEM Resolution = " << DEMResolution;
         }
 
         ModuleStringList = ReadModuleLine(filename_open_project,tr("StreamRasterVector"));
@@ -120,13 +120,13 @@ bool SimplifyPolylines::Load_Project_Settings()
 
                 NewTableItem = new QTableWidgetItem(OutPolylineFileName);
                 ui->tableWidget->setItem(rowlen,2,NewTableItem);
-                if(!file2_check)
+                if(file2_check == false)
                 {
                     ui->tableWidget->item(rowlen,2)->setTextColor(Qt::black);
                 }
                 else
                 {
-                    Log_Message(tr("<span style=\"color:#FF0000\">Warning: ") + OutPolylineFileName + tr(" output already exists. </span>") +tr("<br>"));
+                    Log_Message("Warning: " + OutPolylineFileName + " output already exists. ");
                     ui->tableWidget->item(rowlen,2)->setTextColor(Qt::red);
                 }
             }
@@ -169,13 +169,13 @@ bool SimplifyPolylines::Load_Project_Settings()
                     NewTableItem = new QTableWidgetItem(OutPolylineFileName);
                     ui->tableWidget->setItem(rowlen,2,NewTableItem);
 
-                    if(!file2_check)
+                    if(file2_check == false)
                     {
                         ui->tableWidget->item(rowlen,2)->setTextColor(Qt::black);
                     }
                     else
                     {
-                        Log_Message(tr("<span style=\"color:#FF0000\">Warning: ") + OutPolylineFileName + tr(" output already exists. </span>") +tr("<br>"));
+                        Log_Message("Warning: " + OutPolylineFileName + " output already exists. ");
                         ui->tableWidget->item(rowlen,2)->setTextColor(Qt::red);
                     }
 
@@ -189,11 +189,13 @@ bool SimplifyPolylines::Load_Project_Settings()
         if ( ModuleStringList.length() > 0 )
         {
             while( ui->tableWidget->rowCount() )
+            {
                 ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+            }
 
             ui->tableWidget->setRowCount(0);
 
-            for (int i=1; i+1<ModuleStringList.length(); i=i+3)
+            for (int i=1; i+1 < ModuleStringList.length(); i=i+3)
             {
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
@@ -394,7 +396,7 @@ void SimplifyPolylines::on_pushButtonAdd_clicked()
 
         if ( InputPolygonsFileNames.length() > 0)
         {
-            for (int i=0; i<InputPolygonsFileNames.length(); i++)
+            for (int i = 0; i < InputPolygonsFileNames.length(); i++)
             {
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
@@ -428,12 +430,12 @@ void SimplifyPolylines::on_pushButtonAdd_clicked()
                     ui->tableWidget->setItem(rowlen,2,NewTableItem);
                     if(file2_check)
                     {
-                        Log_Message(tr("<span style=\"color:#FF0000\">Warning: ") + file2 + tr(" output already exists. </span>") +tr("<br>"));
+                        Log_Message("Warning: " + file2 + " output already exists. ");
                         ui->tableWidget->item(rowlen,2)->setTextColor(Qt::red);
                     }
                     else
                     {
-                        Log_Message(tr("<span style=\"color:#FF0000\">INFO: ") + file2 + tr(" does not exist. </span>") +tr("<br>"));
+                        Log_Message("INFO: " + file2 + " does not exist. ");
                         ui->tableWidget->item(rowlen,2)->setTextColor(Qt::black);
                     }
                     ui->tableWidget->item(rowlen,2)->setTextAlignment(Qt::AlignRight);
@@ -487,7 +489,9 @@ void SimplifyPolylines::on_pushButtonClear_clicked()
 
     try {
         while( ui->tableWidget->rowCount() )
+        {
             ui->tableWidget->removeRow( ui->tableWidget->rowCount()-1 );
+        }
 
         pushButtonSetFocus();
     } catch (...) {
@@ -521,7 +525,7 @@ void SimplifyPolylines::on_pushButtonRun_clicked()
 
         bool failure_found = false;
 
-        for (int i=0; i<ui->tableWidget->rowCount(); i++)
+        for (int i = 0; i < ui->tableWidget->rowCount(); i++)
         {
             QString file1 = ui->tableWidget->item(i,0)->text();
             QString file2 = ui->tableWidget->item(i,2)->text(); //Note 2 index not 1
@@ -531,7 +535,7 @@ void SimplifyPolylines::on_pushButtonRun_clicked()
 
             if(file1_check)
             {
-                if ( ! CheckFileAccess(file1, "ReadOnly") )
+                if ( CheckFileAccess(file1, "ReadOnly") == false)
                 {
                     Log_Error_Message("No Read Access to " + file1 );
                     failure_found = true;
@@ -549,7 +553,7 @@ void SimplifyPolylines::on_pushButtonRun_clicked()
             }
             else
             {
-                if ( ! CheckFolderAccessFromFilePath(file2, "WriteOnly") )
+                if ( CheckFolderAccessFromFilePath(file2, "WriteOnly") == false)
                 {
                     Log_Error_Message("No Write Access to ... " + file2 );
                     failure_found = true;
@@ -566,12 +570,12 @@ void SimplifyPolylines::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Run SimplifyPolylines
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message("Running Simplify Polylines ... <br>");
+        Log_Message("Running Simplify Polylines ... ");
 
         QStringList ProjectIOStringList;
         ProjectIOStringList << "SimplifyPolylines";
 
-        for (int i=0; i<ui->tableWidget->rowCount(); i++)
+        for (int i=0; i < ui->tableWidget->rowCount(); i++)
         {
             QString InpShpFileName, InpDbfFileName;
             QString OutShpFileName, OutDbfFileName;
@@ -593,7 +597,7 @@ void SimplifyPolylines::on_pushButtonRun_clicked()
             int ErrorSln = simplify_shape(InpShpFileName, InpDbfFileName, OutShpFileName, OutDbfFileName, Tolerance);
             if ( ErrorSln == 1 || ErrorSln == 5 || ErrorSln == 8 )
             {
-                Log_Message(tr("<span style=\"color:#FF0000\">Warning: Skipping Non-Polyline Layer ... </span>")+InpShpFileName+tr("<br>"));
+                Log_Message("Warning: Skipping Non-Polyline Layer ... " + InpShpFileName );
             }
             else if ( ErrorSln != 0 )
             {
@@ -603,7 +607,7 @@ void SimplifyPolylines::on_pushButtonRun_clicked()
             }
             else
             {
-                Log_Message(tr("<span><b>Processing ... </span>")+InpShpFileName+tr("<br>"));
+                Log_Message("Processing ... " + InpShpFileName );
 
                 ProjectIOStringList << InpShpFileName << OutShpFileName << QString::number(Tolerance);
             }
@@ -614,7 +618,9 @@ void SimplifyPolylines::on_pushButtonRun_clicked()
         // Update Project file
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if ( ProjectIOStringList.length() > 2)
+        {
             WriteModuleLine(filename_open_project, ProjectIOStringList);
+        }
 
         ProjectIOStringList.clear();
 
@@ -623,9 +629,7 @@ void SimplifyPolylines::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>Simplify Polylines Processing Completed.</b>")+tr("<br>"));
-        ui->textBrowserLogs->setHtml(LogsString);
-        ui->textBrowserLogs->repaint();
+        Log_Message("Simplify Polylines Processing Completed.");
 
         ui->pushButtonRun->setDefault(false);
         ui->pushButtonClose->setDefault(true);

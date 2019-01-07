@@ -3,6 +3,6 @@
 
 #include <QString>
 
-int stream_definition(QString aread8File, QString orderFile, QString rivFile, int method, int threshold);
+int stream_definition(QString aread8File, QString rivFile, int method, int threshold);
 
 #endif

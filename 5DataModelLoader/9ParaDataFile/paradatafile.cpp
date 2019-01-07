@@ -30,7 +30,7 @@ ParaDataFile::ParaDataFile(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -219,11 +219,11 @@ bool ParaDataFile::Check_Para_Output(QString file, bool color_and_message_if_exi
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {
-                Log_Error_Message(" Para output already exists: " + file +tr(" You may need to delete these files."));
+                Log_Error_Message(" Para output already exists: " + file + " You may need to delete these files.");
             }
 
             ui->lineEditParaDataFile->setStyleSheet("color: red;");
@@ -307,7 +307,7 @@ void ParaDataFile::on_pushButtonParaDataFile_clicked()
         QString tempString = ParaDataFileName;
         if ( ParaDataFileName != nullptr)
         {
-            if( ! (tempString.toLower()).endsWith(".para") )
+            if( (tempString.toLower()).endsWith(".para") == false)
             {
                 tempString.append(".para");
                 ParaDataFileName = tempString;
@@ -316,6 +316,7 @@ void ParaDataFile::on_pushButtonParaDataFile_clicked()
 
             pushButtonSetFocus();
         }
+
     } catch (...) {
         qDebug() << "Error:ParaDataFile::on_pushButtonParaDataFile_clicked() is returning w/o checking";
     }
@@ -332,21 +333,32 @@ int ParaDataFile::para_data_file(QString filename)
     try {
 
         QFile ParaFile( filename);
-        if ( ! ParaFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        if ( !ParaFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
+        {
             return 129;
+        }
+
         QTextStream ParaFileTextStream(&ParaFile);
 
         //Verbose
         if ( ui->checkBoxVerboseMode->isChecked() )
+        {
             ParaFileTextStream << "1\t";
+        }
         else
+        {
             ParaFileTextStream << "0\t";
+        }
 
         //Debug
         if ( ui->checkBoxDebugMode->isChecked() )
+        {
             ParaFileTextStream << "1\t";
+        }
         else
+        {
             ParaFileTextStream << "0\t";
+        }
 
         //Init Mode
         ParaFileTextStream << ui->comboBoxInitMode->currentIndex() + 1 << "\n";
@@ -477,7 +489,7 @@ void ParaDataFile::on_pushButtonRun_clicked()
             return;
         }
 
-        if ( ! CheckFileAccess(output_filename, "WriteOnly") )
+        if ( CheckFileAccess(output_filename, "WriteOnly") == false)
         {
             Log_Error_Message(" No Write Access to " + output_filename );
             return;

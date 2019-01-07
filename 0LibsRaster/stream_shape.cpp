@@ -60,23 +60,23 @@ int stream_shape(QString qrivFile, QString qfdrFile, QString qrivShpFile, QStrin
 
         if(qrivFile.length() < 1)
         {
-            main_window->Log_Message("[stream_shape] Error[-1000] Invalid qrivFile.");
-            return -1000;
+            main_window->Log_Message("[stream_shape] Error[-1004] Invalid qrivFile.");
+            return -1004;
         }
         if(qfdrFile.length() < 1)
         {
-            main_window->Log_Message("[stream_shape] Error[-1001] Invalid qfdrFile.");
-            return -1001;
+            main_window->Log_Message("[stream_shape] Error[-1005] Invalid qfdrFile.");
+            return -1005;
         }
         if(qrivShpFile.length() < 1)
         {
-            main_window->Log_Message("[stream_shape] Error[-1002] Invalid qrivShpFile.");
-            return -1002;
+            main_window->Log_Message("[stream_shape] Error[-1006] Invalid qrivShpFile.");
+            return -1006;
         }
         if(qrivDbfFile.length() < 1)
         {
-            main_window->Log_Message("[stream_shape] Error[-1003] Invalid qrivDbfFile.");
-            return -1003;
+            main_window->Log_Message("[stream_shape] Error[-1007] Invalid qrivDbfFile.");
+            return -1007;
         }
 
         QByteArray fname = qrivFile.toLatin1();
@@ -91,56 +91,69 @@ int stream_shape(QString qrivFile, QString qfdrFile, QString qrivShpFile, QStrin
         shp = SHPCreate(rivShpFile, SHPT_ARC);
         if (shp == nullptr)
         {
-            main_window->Log_Message("[stream_shape] Error[43] rivShpFile is NULL. ");
-            return 43;
+            main_window->Log_Message("[stream_shape] Error[-1008] SHPCreate failed. ");
+            return -1008;
         }
 
         dbf = DBFCreate(rivDbfFile);
         if (dbf == nullptr)
         {
-            main_window->Log_Message("[stream_shape] Error[44] rivDbfFile is NULL. ");
-            return 44;
+            main_window->Log_Message("[stream_shape] Error[-1009] DBFCreate failed. ");
+            SHPClose(shp);
+            return -1009;
         }
 
         global_Att_index= DBFAddField(dbf, "SegNum", FTInteger, 5, 0);
         if ( global_Att_index < 0 )
         {
-            main_window->Log_Message("[stream_shape] Error[46] DBFAddField is NULL. ");
-            return 46;
+            main_window->Log_Message("[stream_shape] Error[-1010] DBFAddField is NULL. ");
+            SHPClose(shp);
+            DBFClose(dbf);
+            return -1010;
         }
 
         int err1 = gridread(fdrFile,(void ***)&dir,RPSHRDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
         if(err1 != 0)
         {
-            main_window->Log_Message("[stream_shape] Error[-1004] Failed to open file " + qfdrFile);
-            return -1004;
+            main_window->Log_Message("[stream_shape] Error[-1011] Failed to open file " + qfdrFile);
+            SHPClose(shp);
+            DBFClose(dbf);
+            return -1011;
         }
 
         int err2 = gridread(rivFile,(void ***)&elev,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
         if(err2 != 0)
         {
-            main_window->Log_Message("[stream_shape] Error[-1005] Failed to open file " + qrivFile);
-            return -1005;
+            main_window->Log_Message("[stream_shape] Error[-1012] Failed to open file " + qrivFile);
+            SHPClose(shp);
+            DBFClose(dbf);
+            return -1012;
         }
 
         int err3 = gridread(rivFile,(void ***)&slope,RPFLTDTYPE,&nx,&ny,&dx,&dy,bndbox,&csize,&mval,&filetype);
         if(err3 != 0)
         {
-            main_window->Log_Message("[stream_shape] Error[-1006] Failed to open file " + qrivFile);
-            return -1006;
+            main_window->Log_Message("[stream_shape] Error[-1013] Failed to open file " + qrivFile);
+            SHPClose(shp);
+            DBFClose(dbf);
+            return -1013;
         }
 
         numPts = getNumPts(elev, nx, ny);
         if(numPts <= 0)
         {
-            main_window->Log_Message("[stream_shape] Error[-1007] Invalid number of points " + QString::number(numPts));
-            return -1007;
+            main_window->Log_Message("[stream_shape] Error[-1014] Invalid number of points " + QString::number(numPts));
+            SHPClose(shp);
+            DBFClose(dbf);
+            return -1014;
         }
 
         ptx = (double *)malloc(numPts * sizeof(double));
         if(ptx == nullptr)
         {
             main_window->Log_Message("[stream_shape] Error[-1008] ptx is  nullptr" );
+            SHPClose(shp);
+            DBFClose(dbf);
             return -1008;
         }
 
@@ -148,6 +161,8 @@ int stream_shape(QString qrivFile, QString qfdrFile, QString qrivShpFile, QStrin
         if(pty == nullptr)
         {
             main_window->Log_Message("[stream_shape] Error[-1009] pty is  nullptr" );
+            SHPClose(shp);
+            DBFClose(dbf);
             free(ptx);
             return -1009;
         }
@@ -156,6 +171,8 @@ int stream_shape(QString qrivFile, QString qfdrFile, QString qrivShpFile, QStrin
         if(ptz == nullptr)
         {
             main_window->Log_Message("[stream_shape] Error[-1010] ptz is  nullptr" );
+            SHPClose(shp);
+            DBFClose(dbf);
             free(ptx);
             free(pty);
             return -1010;
@@ -163,21 +180,41 @@ int stream_shape(QString qrivFile, QString qfdrFile, QString qrivShpFile, QStrin
         if(nx <= 0)
         {
             main_window->Log_Message("[stream_shape] Error[-1011] Invalid nx " + QString::number(nx));
+            SHPClose(shp);
+            DBFClose(dbf);
+            free(ptx);
+            free(pty);
+            free(ptz);
             return -1011;
         }
         if(ny <= 0)
         {
             main_window->Log_Message("[stream_shape] Error[-1012] Invalid ny " + QString::number(ny));
+            SHPClose(shp);
+            DBFClose(dbf);
+            free(ptx);
+            free(pty);
+            free(ptz);
             return -1012;
         }
         if(nx > 500000) //500000 is a guess
         {
             main_window->Log_Message("[stream_shape] Error[-1013] Invalid nx " + QString::number(nx));
+            SHPClose(shp);
+            DBFClose(dbf);
+            free(ptx);
+            free(pty);
+            free(ptz);
             return -1013;
         }
         if(ny > 500000) //500000 is a guess
         {
             main_window->Log_Message("[stream_shape] Error[-1014] Invalid ny " + QString::number(ny));
+            SHPClose(shp);
+            DBFClose(dbf);
+            free(ptx);
+            free(pty);
+            free(ptz);
             return -1014;
         }
 
@@ -187,7 +224,6 @@ int stream_shape(QString qrivFile, QString qfdrFile, QString qrivShpFile, QStrin
         int mIJ[2];
         int mcell[MAX][2];
         int mlocnVertices;
-        int recordNum;
 
         for(int i = 0; i < nx; i++) //i => Column : nx => col
         {
@@ -249,8 +285,15 @@ int stream_shape(QString qrivFile, QString qfdrFile, QString qrivShpFile, QStrin
 
         //Clean up
         free(ptx);
+        ptx = nullptr;
         free(pty);
+        pty = nullptr;
         free(ptz);
+        ptz = nullptr;
+        free(elev);
+        elev = nullptr;
+        free(dir);
+        dir = nullptr;
 
         if(error_findIJShp)
         {
@@ -272,7 +315,7 @@ int stream_shape(QString qrivFile, QString qfdrFile, QString qrivShpFile, QStrin
 
     } catch (...) {
         qDebug() << "Error: stream_shape is returning w/o checking";
-        return -9000;
+        return -5000;
     }
 
 }
@@ -313,6 +356,17 @@ int streamGenShp(float **riv, short **fdr, int i, int j)
             main_window->Log_Message("[streamGenShp] Error[-1004] ptz is null.");
             return -1004;
         }
+        if(i < 0)
+        {
+            main_window->Log_Message("[streamGenShp] Error[-1005] i < 0");
+            return -1005;
+        }
+        if(j < 0)
+        {
+            main_window->Log_Message("[streamGenShp] Error[-1006] j < 0");
+            return -1006;
+        }
+
 
         static int num = 1;
         int stop = 0;
@@ -323,6 +377,8 @@ int streamGenShp(float **riv, short **fdr, int i, int j)
 
         old2Fdr = 0;
         locnVertices = nVertices;
+
+        bool error_found = false;
 
         while(stop == 0)
         {
@@ -343,40 +399,61 @@ int streamGenShp(float **riv, short **fdr, int i, int j)
                     int err= swapPts(ptx, pty, ptz, locnVertices);
                     if(err != 0)
                     {
-                        main_window->Log_Message("[streamGenShp] Error[-1005] swapPts failed.");
-                        return -1005;
+                        main_window->Log_Message("[streamGenShp] Error[-2000] swapPts failed.");
+                        error_found = true;
+                        stop = 1;
                     }
 
-                    SHPObject *obj = SHPCreateSimpleObject(SHPT_ARC, locnVertices, ptx, pty, ptz);
-                    if(obj == nullptr)
+                    if(error_found == false)
                     {
-                        main_window->Log_Message("[streamGenShp] Error[-1006] SHPCreateSimpleObject failed.");
-                        return -1006;
-                    }
+                        SHPObject *obj = SHPCreateSimpleObject(SHPT_ARC, locnVertices, ptx, pty, ptz);
+                        if(obj == nullptr)
+                        {
+                            main_window->Log_Message("[streamGenShp] Error[-2001] SHPCreateSimpleObject failed.");
+                            error_found = true;
+                        }
+                        else
+                        {
+                            if ( SHPWriteObject(shp, -1, obj) < 0 )
+                            {
+                                main_window->Log_Message("[streamGenShp] Error[-2002] SHPWriteObject failed. ");
+                                error_found = true;
+                            }
 
-                    if ( SHPWriteObject(shp, -1, obj) < 0 )
+                            if( error_found == false )
+                            {
+                                int recordNum = num-1;
+
+                                if ( ! DBFWriteIntegerAttribute(dbf, recordNum, global_Att_index, num) )
+                                {
+                                    main_window->Log_Message("[streamGenShp] Error[-2003] Unable to Write Record " + QString::number(recordNum) + " " + QString::number(num));
+                                    error_found = true;
+                                }
+
+                                (num)++;
+                            }
+                        }
+
+                        //Cleanup
+                        SHPDestroyObject(obj);
+
+                        if(error_found)
+                            stop = 1;
+                    }
+                    else
                     {
-                        main_window->Log_Message("[streamGenShp] Error[-1007] SHPWriteObject failed. ");
-                        return -1007;
+                        main_window->Log_Message("[streamGenShp] Error[-2000] Error(s) found ");
+                        stop = 1;
+                        return -2000;
                     }
-
-                    int recordNum = num-1;
-
-                    if ( ! DBFWriteIntegerAttribute(dbf, recordNum, global_Att_index, num) )
-                    {
-                        main_window->Log_Message("[streamGenShp] Error[-1008] Unable to Write Record " + QString::number(recordNum) + " " + QString::number(num));
-                        return -1008;
-                    }
-
-                    (num)++;
 
                     return 0;
                 }
                 else if(temp==1)
                 {
                     old1Fdr = fdr[i][j];
-                    i=cell[0][0];
-                    j=cell[0][1];
+                    i = cell[0][0];
+                    j = cell[0][1];
 
                     old2Fdr = fdr[i][j];
 
@@ -387,67 +464,95 @@ int streamGenShp(float **riv, short **fdr, int i, int j)
                 }
                 else //write polyline
                 {
-                    int err=  swapPts(ptx, pty, ptz, locnVertices);
+                    int err = swapPts(ptx, pty, ptz, locnVertices);
                     if(err != 0)
                     {
-                        main_window->Log_Message("[streamGenShp] Error[-1009] swapPts failed.");
-                        return -1009;
+                        main_window->Log_Message("[streamGenShp] Error[-3000] swapPts failed.");
+                        return -3000;
                     }
-
-                    SHPObject *obj = SHPCreateSimpleObject(SHPT_ARC, locnVertices, ptx, pty, ptz);
-                    if(obj == nullptr)
+                    else
                     {
-                        main_window->Log_Message("[streamGenShp] Error[-1010] SHPCreateSimpleObject failed.");
-                        return -1010;
-                    }
 
-                    if ( SHPWriteObject(shp, -1, obj) < 0 )
-                    {
-                        main_window->Log_Message("[streamGenShp] Error[-1011] SHPCreateSimpleObject failed.");
-                        return -1011;
-                    }
-
-                    int recordNum = num-1;
-
-                    if ( ! DBFWriteIntegerAttribute(dbf, recordNum, global_Att_index, num) )
-                    {
-                        main_window->Log_Message("[streamGenShp] Error[-1012] DBFWriteIntegerAttribute failed.");
-                        return -1012;
-                    }
-
-                    stop = 1;
-                    (num)++;
-
-                    if(temp > 1 )
-                    {
-                        // Write polyline
-                        for(ii=0; ii<temp; ii++)
+                        SHPObject *obj = SHPCreateSimpleObject(SHPT_ARC, locnVertices, ptx, pty, ptz);
+                        if(obj == nullptr)
                         {
-                            // Add previous (junction) point to the list pos#0
-                            locnVertices=0;
-
-                            ptx[locnVertices] = bndbox[0] + (csize/2.0) + i*csize;
-                            pty[locnVertices] = bndbox[3] - (csize/2.0) - j*csize;
-                            ptz[locnVertices] = 0.0;
-
-                            old1Fdr = old2Fdr;
-                            old2Fdr = fdr[i][j];
-
-                            // set global # of vertices to 1
-                            nVertices=1;
-                            int err = streamGenShp(riv, fdr, cell[ii][0], cell[ii][1]);
-
-                            if ( err != 0 )
-                                return err;
+                            main_window->Log_Message("[streamGenShp] Error[-3001] SHPCreateSimpleObject failed.");
+                            error_found = true;
                         }
+
+                        if(error_found == false)
+                        {
+                            if ( SHPWriteObject(shp, -1, obj) < 0 )
+                            {
+                                main_window->Log_Message("[streamGenShp] Error[-3002] SHPCreateSimpleObject failed.");
+                                error_found = true;
+                            }
+
+                            if( error_found == false )
+                            {
+                                int recordNum = num-1;
+
+                                if ( ! DBFWriteIntegerAttribute(dbf, recordNum, global_Att_index, num) )
+                                {
+                                    main_window->Log_Message("[streamGenShp] Error[-3003] DBFWriteIntegerAttribute failed.");
+                                    error_found = true;
+                                }
+
+                                stop = 1;
+                                (num)++;
+
+                                if(error_found == false)
+                                {
+                                    if(temp > 1 )
+                                    {
+                                        // Write polyline
+                                        for(ii=0; ii<temp; ii++)
+                                        {
+                                            // Add previous (junction) point to the list pos#0
+                                            locnVertices=0;
+
+                                            ptx[locnVertices] = bndbox[0] + (csize/2.0) + i*csize;
+                                            pty[locnVertices] = bndbox[3] - (csize/2.0) - j*csize;
+                                            ptz[locnVertices] = 0.0;
+
+                                            old1Fdr = old2Fdr;
+                                            old2Fdr = fdr[i][j];
+
+                                            // set global # of vertices to 1
+                                            nVertices=1;
+                                            int err = streamGenShp(riv, fdr, cell[ii][0], cell[ii][1]);
+
+                                            if ( err != 0 )
+                                            {
+                                                main_window->Log_Message("[streamGenShp] Error[-3004] streamGenShp failed.");
+                                                error_found = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        //Cleanup
+                        SHPDestroyObject(obj);
+
+                        if(error_found)
+                            stop = 1;
                     }
                 }
 
             }
-            else {
-                main_window->Log_Message("[streamGenShp] findCellShp failed. ");
+            else
+            {
+                main_window->Log_Message("[streamGenShp] WARNING findCellShp failed. ");
                 //TODO validate
             }
+        }
+
+        if(error_found)
+        {
+            main_window->Log_Message("[streamGenShp] Error[-4000] Error(s) found. Check logs.");
+            return -4000;
         }
 
         return 0;

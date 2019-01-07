@@ -216,6 +216,7 @@ QMap<QString,QString> ImportProject::Get_Map_Directories(QString input_file_name
 
                 count++;
             }
+
             inputFile.close();
         }
 
@@ -318,6 +319,7 @@ bool ImportProject::Find_Replace_Only_Project_Directories(QString input_file_nam
         // Replace Directories
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         QFile outputFile(output_file_name);
+
         if (outputFile.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QTextStream output_text_stream(&outputFile);
@@ -410,6 +412,7 @@ bool ImportProject::Find_Replace_Only_Project_Directories(QString input_file_nam
 
                 inputFile.close();
             }
+
             outputFile.close();
         }
 
@@ -590,6 +593,7 @@ bool ImportProject::Find_Replace_All_Project_Directories(QString input_file_name
 
                 inputFile.close();
             }
+
             outputFile.close();
         }
 
@@ -737,9 +741,10 @@ void ImportProject::on_pushButtonImport_clicked()
         {
             Log_Message("Removing existing project file = " + new_ProjectFileName );
             bool success = QFile::remove(new_ProjectFileName);
-            if(!success)
+            if(success  == false)
             {
                 Log_Error_Message("Problems removing file = " + new_ProjectFileName );
+                return;
             }
         }
 
@@ -755,9 +760,10 @@ void ImportProject::on_pushButtonImport_clicked()
         {
             Log_Message("Removing existing project file = " + output_name  );
             bool success = QFile::remove(output_name);
-            if(!success)
+            if(success == false)
             {
                 Log_Error_Message("Problems removing file = " + output_name  );
+                return;
             }
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -782,7 +788,12 @@ void ImportProject::on_pushButtonImport_clicked()
 
         Log_Message("Opening Existing Project File = " + old_ProjectFileName  );
 
-        QFile::copy(old_ProjectFileName, new_ProjectFileName);
+        bool copied = QFile::copy(old_ProjectFileName, new_ProjectFileName);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy file = " + old_ProjectFileName  );
+            return;
+        }
         Log_Message("Copying temporary project tile = " + new_ProjectFileName  );
 
         if(replace_old_folders.length() < 1)
@@ -813,11 +824,20 @@ void ImportProject::on_pushButtonImport_clicked()
         {
             Log_Message("Removing existing project file = " + output_name  );
             bool success = QFile::remove(output_name);
+            if(success == false)
+            {
+                Log_Error_Message("Problems removing file = " + output_name );
+                return;
+            }
         }
 
         Log_Message("Copying edited project file = " + output_name  );
-        QFile::copy(new_ProjectFileName, output_name);
-
+        copied = QFile::copy(new_ProjectFileName, output_name);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy file = " + new_ProjectFileName  );
+            return;
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Copy open Project File to new location
@@ -828,11 +848,20 @@ void ImportProject::on_pushButtonImport_clicked()
         {
             Log_Message("Removing existing open project file = " + new_OpenProject  );
             bool success = QFile::remove(new_OpenProject);
+            if(success == false)
+            {
+                Log_Error_Message("Problems removing file = " + new_OpenProject  );
+                return;
+            }
         }
 
         Log_Message("Creating open project file = " + output_name  );
-        QFile::copy(new_ProjectFileName, new_OpenProject);
-
+        copied = QFile::copy(new_ProjectFileName, new_OpenProject);
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy file = " + new_ProjectFileName  );
+            return;
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Finished and let user know

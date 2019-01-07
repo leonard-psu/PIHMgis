@@ -71,6 +71,7 @@ bool InspectProject::Load_Project_Settings()
         QString text = in.readAll();
         ui->textBrowserLogs->setText(text);
 
+        inputFile.close();
 
     } catch (...) {
         qDebug() << "Error: InspectProject::Load_Project_Settings is returning w/o checking";

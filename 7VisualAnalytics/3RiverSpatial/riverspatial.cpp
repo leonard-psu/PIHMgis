@@ -26,9 +26,9 @@ RiverSpatial::RiverSpatial(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
-            Log_Error_Message("Unable to Open File: </span>" + filename_open_project + tr("<br>"));
+            Log_Error_Message("Unable to Open File: " + filename_open_project + tr("<br>"));
         }
         else
         {
@@ -323,6 +323,8 @@ bool RiverSpatial::Load_Para_Input(QString para_filename)
 
             ui->spinBoxStartTime->setValue( Start );
             ui->spinBoxStopTime->setValue( Stop );
+
+            TempFile.close();
         }
 
     } catch (...) {
@@ -424,7 +426,9 @@ void RiverSpatial::on_lineEditOutputDataFolder_textChanged(const QString &arg1)
     try {
         bool checked = Check_OutputFolder_Location(arg1);
         if(checked)
+        {
             verifyInputOutputFile();
+        }
     } catch (...) {
         qDebug() << "Error: RiverSpatial::on_lineEditOutputDataFolder_textChanged() is returning w/o checking";
     }
@@ -441,7 +445,9 @@ void RiverSpatial::on_lineEditDataKey_textChanged(const QString &arg1)
     try {
         bool checked = Check_Project_Name_Input(arg1);
         if(checked)
+        {
             verifyInputOutputFile();
+        }
     } catch (...) {
         qDebug() << "Error: RiverSpatial::on_lineEditDataKey_textChanged() is returning w/o checking";
     }
@@ -500,9 +506,9 @@ void RiverSpatial::verifyInputOutputFile()
 
         bool exists = Check_OutputFolder_Location(output_data_folder);
 
-        if ( !exists)
+        if ( exists == false)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Folder Does Not Exist ... </span>") + output_data_folder + tr("<br>"));
+            Log_Error_Message("ERROR: Folder Does Not Exist ... " + output_data_folder );
         }
         else
         {
@@ -514,9 +520,9 @@ void RiverSpatial::verifyInputOutputFile()
         QString Extension = tr(".para");
         QString para_filename = FileName + Extension;
 
-        if ( ! QFile(para_filename).exists() )
+        if ( QFile(para_filename).exists() == false)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Para File Does Not Exist ... </span>")+ para_filename +tr("<br>"));
+            Log_Error_Message("ERROR: Para File Does Not Exist ... " + para_filename );
         }
         else
         {
@@ -543,13 +549,13 @@ void RiverSpatial::verifyInputOutputFile()
         for( int i=0; i < Extensions.length(); i++)
         {
             QString tmp_filename = FileName + Extensions.at(i);
-            if ( ! QFile(tmp_filename).exists() )
+            if ( QFile(tmp_filename).exists() == false)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">ERROR: Output File Does Not Exist ... </span>") + tmp_filename +tr("<br>"));
+                Log_Error_Message("ERROR: Output File Does Not Exist ... " + tmp_filename );
             }
             else
             {
-                Log_Message(tr("Output File Exists ... ") + tmp_filename +tr("<br>"));
+                Log_Message("Output File Exists ... " + tmp_filename );
             }
         }
 
@@ -668,7 +674,7 @@ int RiverSpatial::Get_Element_Count(QString element_filename, bool message)
 
         if(message)
         {
-            Log_Message(tr("Number of Elements = ")+QString::number(element_count)+tr("<br>"));
+            Log_Message("Number of Elements = " + QString::number(element_count));
         }
     }
     catch (...)
@@ -702,7 +708,7 @@ int RiverSpatial::Get_River_Count(QString river_filename, bool message)
 
         if(message)
         {
-            Log_Message(tr("Number of River Segments = ")+QString::number(river_count)+tr("<br>"));
+            Log_Message("Number of River Segments = " + QString::number(river_count));
         }
 
     }
@@ -785,9 +791,9 @@ bool RiverSpatial::Check_ShapeFile_Output(QString file_name_without_extension, b
         {
             if(delete_files)
             {
-                if ( ! QFile::remove(file_name_without_extension + ".shp") )
+                if ( QFile::remove(file_name_without_extension + ".shp") == false)
                 {
-                    Log_Error_Message("Unable to delete file... </span>" + file_name_without_extension + ".shp"  );
+                    Log_Error_Message("Unable to delete file... " + file_name_without_extension + ".shp"  );
                 }
                 else
                 {
@@ -805,9 +811,9 @@ bool RiverSpatial::Check_ShapeFile_Output(QString file_name_without_extension, b
         {
             if(delete_files)
             {
-                if ( ! QFile::remove(file_name_without_extension + ".shx") )
+                if ( QFile::remove(file_name_without_extension + ".shx") == false)
                 {
-                    Log_Error_Message("Unable to delete file... </span>" + file_name_without_extension+".shx" );
+                    Log_Error_Message("Unable to delete file... " + file_name_without_extension+".shx" );
                 }
                 else
                 {
@@ -824,9 +830,9 @@ bool RiverSpatial::Check_ShapeFile_Output(QString file_name_without_extension, b
         {
             if(delete_files)
             {
-                if ( ! QFile::remove(file_name_without_extension + ".dbf") )
+                if ( QFile::remove(file_name_without_extension + ".dbf") == false)
                 {
-                    Log_Error_Message("Unable to delete file... </span>" + file_name_without_extension + ".dbf" );
+                    Log_Error_Message("Unable to delete file... " + file_name_without_extension + ".dbf" );
                 }
                 else
                 {
@@ -879,20 +885,20 @@ void RiverSpatial::on_pushButtonRun_clicked()
         int num_breaks = ui->spinBoxNumBreaks->value();
 
         bool checked = Check_OutputFolder_Location(project_folder);
-        if(!checked)
+        if(checked == false)
         {
-            Log_Error_Message("Issue with Input Folder : </span>" + project_folder  );
+            Log_Error_Message("Issue with Output Folder : " + project_folder  );
             return;
         }
         checked = Check_Project_Name_Input(project_name);
-        if(!checked)
+        if(checked == false)
         {
-            Log_Error_Message("Issue with Input Folder : </span>" + project_name  );
+            Log_Error_Message("Issue with Input Folder : " + project_name  );
             return;
         }
         if( stop_time - start_time <= 0 )
         {
-            Log_Error_Message("Issue with Start and Stop times : Duration calculated is zero or negative</span>"  );
+            Log_Error_Message("Issue with Start and Stop times : Duration calculated is zero or negative"  );
             return;
         }
 
@@ -923,29 +929,29 @@ void RiverSpatial::on_pushButtonRun_clicked()
         if (current_index_comboBoxPlotVariable == 15) extensions_list << ".rivFlx08.dat"; //bed baseflow right
 
 
-        if ( ! CheckFileAccess(mesh_filename, "ReadOnly") )
+        if ( CheckFileAccess(mesh_filename, "ReadOnly") == false)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + mesh_filename  );
+            Log_Error_Message("No Read Access to ... " + mesh_filename  );
             return;
         }
-        if ( ! CheckFileAccess(river_filename, "ReadOnly") )
+        if ( CheckFileAccess(river_filename, "ReadOnly") == false)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + river_filename  );
+            Log_Error_Message("No Read Access to ... " + river_filename  );
             return;
         }
-        if ( ! CheckFileAccess(river_shape_filename, "ReadOnly") )
+        if ( CheckFileAccess(river_shape_filename, "ReadOnly") == false)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">No Read Access to ... </span>") + river_shape_filename  );
+            Log_Error_Message("No Read Access to ... " + river_shape_filename  );
             return;
         }
 
         bool error_found = false;
-        for (int i=0; i< extensions_list.length(); i++)
+        for (int i = 0; i < extensions_list.length(); i++)
         {
             QString tmp_fname = output_base_filename + extensions_list.at(i);
-            if ( ! CheckFileAccess(tmp_fname, "ReadOnly") )
+            if ( CheckFileAccess(tmp_fname, "ReadOnly") == false)
             {
-                Log_Error_Message(tr("<span style=\"color:#FF0000\">Error: No Read Access to ... </span>") + tmp_fname );
+                Log_Error_Message("Error: No Read Access to ... " + tmp_fname );
                 error_found = true;
             }
         }
@@ -960,13 +966,13 @@ void RiverSpatial::on_pushButtonRun_clicked()
         int element_count = Get_Element_Count(mesh_filename,true);
         if(element_count <= 0)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with mesh geometry file, number of elements </span>") + element_count );
+            Log_Error_Message("Problem with mesh geometry file, number of elements " + element_count );
             return;
         }
         int river_count = Get_River_Count(river_filename,true);
         if(river_count <= 0)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with riv geometry file, number of river segments </span>") + river_count  );
+            Log_Error_Message("Problem with riv geometry file, number of river segments " + river_count  );
             return;
         }
 
@@ -1007,9 +1013,9 @@ void RiverSpatial::on_pushButtonRun_clicked()
         QString output_file_name_without_extension = project_folder + "/6VisualAnalytics/Spatial_"+ PlotParameter;
         bool delete_files = false; //Let user do for now;
         bool check_output = Check_ShapeFile_Output(output_file_name_without_extension,delete_files);
-        if( !check_output )
+        if( check_output == false)
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with Shapefile outputs already existing </span>") + output_file_name_without_extension  );
+            Log_Error_Message("Problem with Shapefile outputs already existing " + output_file_name_without_extension  );
             return;
         }
 
@@ -1024,7 +1030,7 @@ void RiverSpatial::on_pushButtonRun_clicked()
         int time_step = time_step2 - time_step1;
         if( time_step <=0 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">Problem with time_step </span>") + QString::number(time_step)  );
+            Log_Error_Message("Problem with time_step " + QString::number(time_step)  );
             return;
         }
 
@@ -1042,7 +1048,7 @@ void RiverSpatial::on_pushButtonRun_clicked()
 
         if ( break_steps < 1 )
         {
-            Log_Error_Message(tr("<span style=\"color:#FF0000\">:Skip Time Steps = ")+QString::number(skip_time_steps)+tr(" Number time steps = ")+QString::number(num_time_steps)+tr(" Break Steps = ")+QString::number(break_steps)+tr("</span>") );
+            Log_Error_Message("Skip Time Steps = " + QString::number(skip_time_steps) + " Number time steps = " + QString::number(num_time_steps) + " Break Steps = " + QString::number(break_steps) );
             return;
         }
 
@@ -1061,10 +1067,16 @@ void RiverSpatial::on_pushButtonRun_clicked()
 
         QString TempString;
         if(num_breaks > 1)
+        {
             for (int i=0; i < num_breaks; i++)
+            {
                 Legends[i] = PlotParameter + TempString.sprintf("_%03d",i+1);
+            }
+        }
         else
+        {
             Legends[0] = PlotParameter;
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Read Data
@@ -1073,6 +1085,7 @@ void RiverSpatial::on_pushButtonRun_clicked()
         QTextStream DataFileTextStream;
         QString DataString;
         QStringList Data;
+
         for (int i=0; i< extensions_list.length(); i++)
         {
             DataFile.setFileName(output_base_filename + extensions_list.at(i));
@@ -1084,29 +1097,36 @@ void RiverSpatial::on_pushButtonRun_clicked()
             {
                 if( DataFileTextStream.atEnd() )
                 {
-                    Log_Error_Message("Reached End of File... </span>"+output_base_filename+extensions_list.at(i) );
+                    Log_Error_Message("Reached End of File... " + output_base_filename+extensions_list.at(i) );
                     ui->pushButtonRun->setText("Run");
+                    DataFile.close();
                     return;
                 }
                 DataString = DataFileTextStream.readLine();
                 //qDebug() << "A Line Number = " << nline << "\n";
                 nline ++;
             }
+
             while ( nline <= skip_time_steps+num_time_steps )
             {
                 if( DataFileTextStream.atEnd() )
                 {
-                    Log_Error_Message("Reached End of File... </span>"+output_base_filename+extensions_list.at(i) );
+                    Log_Error_Message("Reached End of File... " + output_base_filename+extensions_list.at(i) );
                     ui->pushButtonRun->setText("Run");
+                    DataFile.close();
                     return;
                 }
                 DataString = DataFileTextStream.readLine();
                 if ( nline > skip_time_steps + nbreak*break_steps )
+                {
                     nbreak++;
+                }
+
                 //qDebug() << "B Line Number = " << nline << "\n";
                 nline++;
 
                 Data = DataString.split(QRegExp("\\s+"),QString::SkipEmptyParts);
+
                 for (int j=0; j < river_count; j++) //Note use of river_count
                 {
                     datax[nbreak-1][j] = Data.at(0).toDouble();
@@ -1123,16 +1143,25 @@ void RiverSpatial::on_pushButtonRun_clicked()
 
         TempString = river_shape_filename;
         TempString.replace(".shp",".shp");
-        QFile::copy(TempString, output_file_name_without_extension + ".shp");
+        bool copied = QFile::copy(TempString, output_file_name_without_extension + ".shp");
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy file " + TempString  );
+        }
+
         TempString.replace(".shp",".shx");
-        QFile::copy(TempString, output_file_name_without_extension + ".shx");
+        copied =  QFile::copy(TempString, output_file_name_without_extension + ".shx");
+        if(copied == false)
+        {
+            Log_Error_Message("Failed to copy file " + TempString  );
+        }
 
         QString dbfFileName = output_file_name_without_extension + ".dbf";
         DBFHandle DBF;
         DBF = DBFCreate((char *)qPrintable(dbfFileName));
         if ( DBF == nullptr )
         {
-            Log_Error_Message("Unable To Open DBF File... </span>"+ dbfFileName  );
+            Log_Error_Message("Unable To Open DBF File... " + dbfFileName  );
             ui->pushButtonRun->setText("Run");
             return;
         }
@@ -1141,35 +1170,39 @@ void RiverSpatial::on_pushButtonRun_clicked()
         char fieldName[11];
         QVector<int> fields(num_breaks+1);
         fields[0] = DBFAddField(DBF, "Ele", FTInteger, 9, 0);
-        if ( fields[0] == -1 )
+        if ( fields[0] < 0 )
         {
-            Log_Error_Message("Unable To Add New Attribute Ele To DBF File... </span>" + dbfFileName );
+            Log_Error_Message("Unable To Add New Attribute Ele To DBF File... " + dbfFileName );
             ui->pushButtonRun->setText("Run");
+            DBFClose(DBF);
             return;
         }
+
         for (int i=0; i < num_breaks; i++)
         {
             sprintf(fieldName,"%s",qPrintable(Legends[i]));
             //qDebug() << Legends[i] << fieldName;
             fields[i+1] = DBFAddField(DBF, fieldName, FTDouble, 16, 8);
-            if ( fields[i+1] == -1 )
+            if ( fields[i+1] < 0 )
             {
-                Log_Error_Message("Unable To Add New Attribute To DBF File... </span>" + dbfFileName );
+                Log_Error_Message("Unable To Add New Attribute To DBF File... " + dbfFileName );
                 ui->pushButtonRun->setText("Run");
+                DBFClose(DBF);
                 return;
             }
             else
             {
-                Log_Message(tr("Added New Attribute #")+QString::number(fields[i+1])+ tr(" ")+Legends[i]+tr(" To DBF File... </span>")+dbfFileName+tr("<br>"));
+                Log_Message("Added New Attribute #"  +QString::number(fields[i+1])+ " " + Legends[i] + " To DBF File... " + dbfFileName);
             }
         }
 
         for(int j=0; j < river_count; j++) //Note use of river_count
         {
             tempInt = DBFWriteIntegerAttribute(DBF, j, fields[0], j+1);
-            if ( tempInt == 0 )
+            if ( tempInt == false )
             {
-                Log_Error_Message("Unable To Write Attribute To DBF File... </span>" + dbfFileName  );
+                Log_Error_Message("Unable To Write Attribute To DBF File... " + dbfFileName  );
+                DBFClose(DBF);
                 return;
             }
         }
@@ -1179,9 +1212,10 @@ void RiverSpatial::on_pushButtonRun_clicked()
             for(int j=0; j < river_count; j++) //Note use of river_count
             {
                 tempInt = DBFWriteDoubleAttribute(DBF, j, fields[i+1], datay[i][j]);
-                if ( tempInt == 0 )
+                if ( tempInt == false )
                 {
-                    Log_Error_Message("Unable To Write Attribute To DBF File... </span>" + dbfFileName  );
+                    Log_Error_Message("Unable To Write Attribute To DBF File... " + dbfFileName  );
+                    DBFClose(DBF);
                     return;
                 }
             }
@@ -1208,7 +1242,7 @@ void RiverSpatial::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Clear_Log();
 
-        Log_Message(tr("<br><b>River Spatial Analysis Processing Completed.</b>")+tr("<br>"));
+        Log_Message("River Spatial Analysis Processing Completed.");
 
         ui->pushButtonRun->setText("Run");
         ui->pushButtonRun->setDefault(false);
