@@ -295,10 +295,13 @@ void FillPits::on_pushButtonDEM_clicked()
 
         if ( DEMFileName != nullptr)
         {
-            Check_DEM_Input(DEMFileName);
-            Check_Fillpit_Output(ui->lineEditFillPits->text(), true);
+            if( DEMFileName.isEmpty() == false)
+            {
+                Check_DEM_Input(DEMFileName);
+                Check_Fillpit_Output(ui->lineEditFillPits->text(), true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
         else
         {
@@ -325,9 +328,12 @@ void FillPits::on_pushButtonFillPits_clicked()
         QString FillPitFileName = QFileDialog::getSaveFileName(this, "Choose Fill Pit Grid", user_pihmgis_root_folder+"/1RasterProcessing","Fill Pit Grid File(*.asc)");
         if ( FillPitFileName != nullptr)
         {
-            Check_DEM_Input(ui->lineEditDEM->text());
-            Check_Fillpit_Output(FillPitFileName, true);
-            pushButtonSetFocus();
+            if( FillPitFileName.isEmpty() == false)
+            {
+                Check_DEM_Input(ui->lineEditDEM->text());
+                Check_Fillpit_Output(FillPitFileName, true);
+                pushButtonSetFocus();
+            }
         }
         else
         {
