@@ -130,7 +130,7 @@ bool MeshTemporal::Load_Project_Settings()
             Check_Project_Name_Input(TempFileName);
         }
 
-        // ** Start: Fill Form If Module Has Been Run Previously
+        // Start: Fill Form If Module Has Been Run Previously
 
         ModuleStringList = ReadModuleLine(filename_open_project,tr("MeshTemporal"));
 
@@ -296,11 +296,15 @@ void MeshTemporal::on_pushButtonOutputDataFolder_clicked()
 
         QString OutputDataFolder = QFileDialog::getExistingDirectory(this, "PIHM Input Data Folder", user_pihmgis_root_folder+"/5PIHMSimulation", 0);
 
-        if( OutputDataFolder != nullptr )
+        if ( OutputDataFolder.isNull() == false)
         {
-            Check_OutputFolder_Location(OutputDataFolder);
-            pushButtonSetFocus();
+            if( OutputDataFolder.isEmpty() == false)
+            {
+                Check_OutputFolder_Location(OutputDataFolder);
+                pushButtonSetFocus();
+            }
         }
+
 
     } catch (...) {
         qDebug() << "Error: MeshTemporal::on_pushButtonOutputDataFolder_clicked() is returning w/o checking";
@@ -426,7 +430,7 @@ void MeshTemporal::verifyInputOutputFile()
         // Check Input Values
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         QString output_data_folder = ui->lineEditOutputDataFolder->text();
-        QString project_name = ui->lineEditDataKey->text();
+        QString project_name       = ui->lineEditDataKey->text();
 
         bool exists = Check_OutputFolder_Location(output_data_folder);
 
@@ -674,11 +678,11 @@ void MeshTemporal::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check Inputs from GUI
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QString project_folder = ui->lineEditOutputDataFolder->text();
-        QString project_name = ui->lineEditDataKey->text();
+        QString project_folder       = ui->lineEditOutputDataFolder->text();
+        QString project_name         = ui->lineEditDataKey->text();
         QString output_base_filename = project_folder + "/" + project_name;
-        QString river_filename = output_base_filename + ".riv";
-        QString mesh_filename = output_base_filename + ".mesh";
+        QString river_filename       = output_base_filename + ".riv";
+        QString mesh_filename        = output_base_filename + ".mesh";
 
         bool checked = Check_OutputFolder_Location(project_folder);
         if(checked == false)

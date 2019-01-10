@@ -316,11 +316,15 @@ void SoilDataFile::on_pushButtonSoilTextureFile_clicked()
 
         QString SoilTextureFileName = QFileDialog::getOpenFileName(this, "Soil Texture File Name", user_pihmgis_root_folder, "Soil Texture File(*.txt *.TXT)");
 
-        if ( SoilTextureFileName != nullptr)
+        if ( SoilTextureFileName.isNull() == false)
         {
-            Check_SoilTexture_Input(SoilTextureFileName);
-            pushButtonSetFocus();
+            if( SoilTextureFileName.isEmpty() == false)
+            {
+                Check_SoilTexture_Input(SoilTextureFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
     } catch (...) {
         qDebug() << "Error: SoilDataFile::on_pushButtonSoilTextureFile_clicked() is returning w/o checking";
     }
@@ -340,16 +344,20 @@ void SoilDataFile::on_pushButtonSoilDataFile_clicked()
 
         QString SoilDataFileName = QFileDialog::getSaveFileName(this, "Choose Soil Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Soil Data File(*.soil)");
         QString tempString = SoilDataFileName;
-        if ( SoilDataFileName != nullptr)
+        if ( SoilDataFileName.isNull() == false)
         {
-            if( (tempString.toLower()).endsWith(".soil") == false)
+            if( SoilDataFileName.isEmpty() == false)
             {
-                tempString.append(".soil");
-                SoilDataFileName = tempString;
+                if( (tempString.toLower()).endsWith(".soil") == false)
+                {
+                    tempString.append(".soil");
+                    SoilDataFileName = tempString;
+                }
+                Check_SoilData_Output(SoilDataFileName, true);
+                pushButtonSetFocus();
             }
-            Check_SoilData_Output(SoilDataFileName, true);
-            pushButtonSetFocus();
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: SoilDataFile::on_pushButtonSoilDataFile_clicked() is returning w/o checking";

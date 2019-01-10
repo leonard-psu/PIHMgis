@@ -262,16 +262,20 @@ void CalibDataFile::on_pushButtonCalibDataFile_clicked()
 
         QString CalibDataFileName = QFileDialog::getSaveFileName(this, "Choose Calib Data File Name", user_pihmgis_root_folder +"/4DataModelLoader","Calib Data File(*.calib)");
         QString tempString = CalibDataFileName;
-        if ( CalibDataFileName != nullptr)
+        if ( CalibDataFileName.isNull() == false)
         {
-            if( (tempString.toLower()).endsWith(".calib") == false)
+            if( CalibDataFileName.isEmpty() == false)
             {
-                tempString.append(".calib");
-                CalibDataFileName = tempString;
+                if( (tempString.toLower()).endsWith(".calib") == false)
+                {
+                    tempString.append(".calib");
+                    CalibDataFileName = tempString;
+                }
+                Check_Calib_Output(CalibDataFileName,true);
+                pushButtonSetFocus();
             }
-            Check_Calib_Output(CalibDataFileName,true);
-            pushButtonSetFocus();
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: CalibDataFile::on_pushButtonCalibDataFile_clicked() is returning w/o checking";

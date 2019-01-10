@@ -263,7 +263,7 @@ bool MergeVectorLayers::Check_File_Valid(QString file)
             if( size < 1)
             {
                 Log_Error_Message("Check_File_Valid failed, file : " + file );
-                Log_Error_Message("Check_File_Valid failed, invalid file size: " + size );
+                Log_Error_Message("Check_File_Valid failed, invalid file size: " + QString::number(size) );
                 result = false;
             }
         }
@@ -416,22 +416,26 @@ void MergeVectorLayers::on_pushButtonMergeLayer_clicked()
 
         QString MergeVectorFileName = QFileDialog::getSaveFileName(this, "Choose Merge Layer", user_pihmgis_root_folder + "/2VectorProcessing","Merge Vector File(*.shp)");
         QString tempString = MergeVectorFileName;
-        if ( MergeVectorFileName != nullptr)
+        if ( MergeVectorFileName.isNull() == false)
         {
-            ui->lineEditMergeLayer->setStyleSheet("color: black;");
-
-            if( (tempString.toLower()).endsWith(".shp") == false)
+            if( MergeVectorFileName.isEmpty() == false)
             {
-                tempString.append(".shp");
-                MergeVectorFileName = tempString;
+                ui->lineEditMergeLayer->setStyleSheet("color: black;");
+
+                if( (tempString.toLower()).endsWith(".shp") == false)
+                {
+                    tempString.append(".shp");
+                    MergeVectorFileName = tempString;
+                }
+
+                bool file1_check = Check_File_Valid(MergeVectorFileName);
+
+                Check_MergeLayer_Output(MergeVectorFileName, true);
+
+                pushButtonSetFocus();
             }
-
-            bool file1_check = Check_File_Valid(MergeVectorFileName);
-
-            Check_MergeLayer_Output(MergeVectorFileName, true);
-
-            pushButtonSetFocus();
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: MergeVectorLayers::on_pushButtonMergeLayer_clicked() is returning w/o checking";
@@ -472,7 +476,7 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
 
             if(file1_check)
             {
-                if ( ! CheckFileAccess(file1, "ReadOnly") )
+                if ( CheckFileAccess(file1, "ReadOnly") == false)
                 {
                     Log_Error_Message("No Read Access to ... " + file1 );
                     failure_found = true;

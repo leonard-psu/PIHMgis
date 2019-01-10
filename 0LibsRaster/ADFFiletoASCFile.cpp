@@ -157,7 +157,7 @@ int ADFFiletoASCFile(QString ADFFileName, QString ASCFileName)
 
         QFile ASCFile(ASCFileName);
         bool opened = ASCFile.open(QIODevice::WriteOnly | QIODevice::Text);
-        if(!opened)
+        if(opened == false)
         {
             main_window->Log_Message("[ADFFiletoASCFile] Error[107] Unable to open " + ASCFileName);
             GDALClose(layer);

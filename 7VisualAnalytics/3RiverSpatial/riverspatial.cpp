@@ -403,11 +403,14 @@ void RiverSpatial::on_pushButtonOutputDataFolder_clicked()
 
         QString OutputDataFolder = QFileDialog::getExistingDirectory(this, "PIHM Input Data Folder", user_pihmgis_root_folder+"/5PIHMSimulation", 0);
 
-        if( OutputDataFolder != nullptr )
+        if ( OutputDataFolder.isNull() == false)
         {
-            Check_OutputFolder_Location(OutputDataFolder);
-            Load_BasedOnProjectName_Input();
-            pushButtonSetFocus();
+            if( OutputDataFolder.isEmpty() == false)
+            {
+                Check_OutputFolder_Location(OutputDataFolder);
+                Load_BasedOnProjectName_Input();
+                pushButtonSetFocus();
+            }
         }
 
     } catch (...) {
@@ -502,7 +505,7 @@ void RiverSpatial::verifyInputOutputFile()
         // Check Input Values
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         QString output_data_folder = ui->lineEditOutputDataFolder->text();
-        QString project_name = ui->lineEditDataKey->text();
+        QString project_name       = ui->lineEditDataKey->text();
 
         bool exists = Check_OutputFolder_Location(output_data_folder);
 
@@ -641,11 +644,15 @@ void RiverSpatial::on_pushButtonRiverShapeFile_clicked()
 
         QString RiverShapeFile = QFileDialog::getOpenFileName(this, "River Shape File", user_pihmgis_root_folder + "/2VectorProcessing", "River Shape File(*.shp)");
 
-        if( RiverShapeFile != nullptr )
+        if( RiverShapeFile.isNull() == false)
         {
-            Check_RiverShapeFile_Input(RiverShapeFile);
-            pushButtonSetFocus();
+            if( RiverShapeFile.isEmpty() == false)
+            {
+                Check_RiverShapeFile_Input(RiverShapeFile);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: RiverSpatial::on_pushButtonRiverShapeFile_clicked() is returning w/o checking";
@@ -873,12 +880,12 @@ void RiverSpatial::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check Inputs from GUI
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QString project_folder = ui->lineEditOutputDataFolder->text();
-        QString project_name = ui->lineEditDataKey->text();
+        QString project_folder       = ui->lineEditOutputDataFolder->text();
+        QString project_name         = ui->lineEditDataKey->text();
         QString river_shape_filename = ui->lineEditRiverShapeFile->text();
         QString output_base_filename = project_folder + "/" + project_name;
-        QString river_filename = output_base_filename + ".riv";
-        QString mesh_filename = output_base_filename + ".mesh";
+        QString river_filename       = output_base_filename + ".riv";
+        QString mesh_filename        = output_base_filename + ".mesh";
 
         int start_time = ui->spinBoxStartTime->value();
         int stop_time  = ui->spinBoxStopTime->value();
@@ -1037,8 +1044,8 @@ void RiverSpatial::on_pushButtonRun_clicked()
         start_time = ui->spinBoxStartTime->value() * timeunitfactor;
         stop_time  = ui->spinBoxStopTime->value()  * timeunitfactor;
         int skip_time_steps = ( start_time + time_step - time_step1 ) / time_step;
-        int num_time_steps    = ( stop_time  - start_time ) / time_step;
-        int break_steps    = num_time_steps / num_breaks;
+        int num_time_steps  = ( stop_time  - start_time ) / time_step;
+        int break_steps     = num_time_steps / num_breaks;
 
         Log_Message("Start Time = " + QString::number( start_time) );
         Log_Message("Stop Time  = " + QString::number(stop_time) );
@@ -1147,6 +1154,7 @@ void RiverSpatial::on_pushButtonRun_clicked()
         if(copied == false)
         {
             Log_Error_Message("Failed to copy file " + TempString  );
+            return;
         }
 
         TempString.replace(".shp",".shx");
@@ -1154,6 +1162,7 @@ void RiverSpatial::on_pushButtonRun_clicked()
         if(copied == false)
         {
             Log_Error_Message("Failed to copy file " + TempString  );
+            return;
         }
 
         QString dbfFileName = output_file_name_without_extension + ".dbf";

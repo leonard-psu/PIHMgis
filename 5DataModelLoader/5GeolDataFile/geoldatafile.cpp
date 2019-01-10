@@ -209,7 +209,7 @@ bool GeolDataFile::Check_GeolTexture_Input(QString file){
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditGeolTextureFile->setStyleSheet("color: black;");
             ui->lineEditGeolTextureFile->setText(file);
@@ -320,11 +320,15 @@ void GeolDataFile::on_pushButtonGeolTextureFile_clicked()
 
         QString GeolTextureFileName = QFileDialog::getOpenFileName(this, "Geol Texture File Name", user_pihmgis_root_folder, "Geol Texture File(*.txt *.TXT)");
 
-        if ( GeolTextureFileName != nullptr)
+        if ( GeolTextureFileName.isNull() == false)
         {
-            Check_GeolTexture_Input(GeolTextureFileName);
-            pushButtonSetFocus();
+            if( GeolTextureFileName.isEmpty() == false)
+            {
+                Check_GeolTexture_Input(GeolTextureFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: GeolDataFile::on_pushButtonGeolTextureFile_clicked() is returning w/o checking";
@@ -345,17 +349,21 @@ void GeolDataFile::on_pushButtonGeolDataFile_clicked()
 
         QString GeolDataFileName = QFileDialog::getSaveFileName(this, "Choose Geol Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Geol Data File(*.geol)");
         QString tempString = GeolDataFileName;
-        if ( GeolDataFileName != nullptr)
+        if ( GeolDataFileName.isNull() == false)
         {
-            if( (tempString.toLower()).endsWith(".geol") == false)
+            if( GeolDataFileName.isEmpty() == false)
             {
-                tempString.append(".geol");
-                GeolDataFileName = tempString;
-            }
-            Check_GeolData_Output(GeolDataFileName, true);
+                if( (tempString.toLower()).endsWith(".geol") == false)
+                {
+                    tempString.append(".geol");
+                    GeolDataFileName = tempString;
+                }
+                Check_GeolData_Output(GeolDataFileName, true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: GeolDataFile::on_pushButtonGeolDataFile_clicked() is returning w/o checking";

@@ -533,7 +533,7 @@ void DissolvePolygons::on_pushButtonRun_clicked()
 
             if(file1_check)
             {
-                if ( ! CheckFileAccess(file1, "ReadOnly") )
+                if ( CheckFileAccess(file1, "ReadOnly") == false)
                 {
                     Log_Error_Message("No Read Access to ... " + file1 );
                     failure_found = true;
@@ -551,7 +551,7 @@ void DissolvePolygons::on_pushButtonRun_clicked()
             }
             else
             {
-                if ( ! CheckFolderAccessFromFilePath(file2, "WriteOnly") )
+                if ( CheckFolderAccessFromFilePath(file2, "WriteOnly") == false)
                 {
                     Log_Error_Message("No Write Access to ... " + file2);
                     failure_found = true;

@@ -33,7 +33,7 @@ FlowGrids::FlowGrids(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open project file: " + filename_open_project);
         }
@@ -95,7 +95,7 @@ bool FlowGrids::Load_Project_Settings()
             QString flowacc = filename_open_project+"/1RasterProcessing/FlowAcc.asc";
 
             bool fill_check = Check_Fillpit_Input(fillpits);
-            if(!fill_check)
+            if(fill_check == false)
             {
                 Log_Error_Message("Fillpit input does not exist. ");
             }
@@ -358,18 +358,18 @@ void FlowGrids::on_pushButtonFillPits_clicked()
         Clear_Log();
 
         QString FillPitsFileName = QFileDialog::getOpenFileName(this, "Choose DEM File", user_pihmgis_root_folder + tr("/.."), "DEM Grid File(*.adf *.asc *.ASC)");
-        if ( FillPitsFileName != nullptr)
+        if ( FillPitsFileName.isNull() == false)
         {
-            Check_Fillpit_Input(FillPitsFileName);
-            Check_FlowDir_Output(ui->lineEditFlowDirGrids->text(), true);
-            Check_FlowAcc_Output(ui->lineEditFlowAccGrids->text(), true);
+            if( FillPitsFileName.isEmpty() == false)
+            {
+                Check_Fillpit_Input(FillPitsFileName);
+                Check_FlowDir_Output(ui->lineEditFlowDirGrids->text(), true);
+                Check_FlowAcc_Output(ui->lineEditFlowAccGrids->text(), true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
-        else
-        {
-           Log_Message("on_pushButtonFillPits_clicked: Invalid DEMFileName");
-        }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: FlowGrids::on_pushButtonFillPits_clicked is returning w/o checking";
@@ -389,14 +389,18 @@ void FlowGrids::on_pushButtonsFlowDirGrid_clicked()
         Clear_Log();
 
         QString FlowDirFileName = QFileDialog::getSaveFileName(this, "Choose Flow Dir Grid", user_pihmgis_root_folder + "/1RasterProcessing","Flow Dir Grid File(*.asc)");
-        if ( FlowDirFileName != nullptr)
+        if ( FlowDirFileName.isNull() == false)
         {
-            Check_Fillpit_Input(ui->lineEditFillPits->text());
-            Check_FlowDir_Output(FlowDirFileName, true);
-            Check_FlowAcc_Output(ui->lineEditFlowAccGrids->text(), true);
+            if( FlowDirFileName.isEmpty() == false)
+            {
+                Check_Fillpit_Input(ui->lineEditFillPits->text());
+                Check_FlowDir_Output(FlowDirFileName, true);
+                Check_FlowAcc_Output(ui->lineEditFlowAccGrids->text(), true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: FlowGrids::on_pushButtonsFlowDirGrid_clicked is returning w/o checking";
@@ -417,18 +421,18 @@ void FlowGrids::on_pushButtonFlowAccGrid_clicked()
         Clear_Log();
 
         QString FlowAccFileName = QFileDialog::getSaveFileName(this, "Choose Flow Acc Grid", user_pihmgis_root_folder + "/1RasterProcessing","Flwo Acc Grid File(*.asc)");
-        if ( FlowAccFileName != nullptr)
+        if ( FlowAccFileName.isNull() == false)
         {
-            Check_Fillpit_Input(ui->lineEditFillPits->text());
-            Check_FlowDir_Output(ui->lineEditFlowDirGrids->text(), true);
-            Check_FlowAcc_Output(FlowAccFileName, true);
+            if( FlowAccFileName.isEmpty() == false)
+            {
+                Check_Fillpit_Input(ui->lineEditFillPits->text());
+                Check_FlowDir_Output(ui->lineEditFlowDirGrids->text(), true);
+                Check_FlowAcc_Output(FlowAccFileName, true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
-        else
-        {
-            Log_Message("on_pushButtonFlowAccGrid_clicked: Invalid FlowAccFileName");
-        }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: FlowGrids::on_pushButtonFlowAccGrid_clicked is returning w/o checking";
@@ -459,7 +463,7 @@ void FlowGrids::on_pushButtonRun_clicked()
         QString filename_acc =  ui->lineEditFlowAccGrids->text();
 
         bool fill_check = Check_Fillpit_Input(filename_fill);
-        if(!fill_check)
+        if( fill_check == false)
         {
             Log_Error_Message("Fill Pits Input File Missing: " + filename_fill);
             return;
@@ -474,7 +478,7 @@ void FlowGrids::on_pushButtonRun_clicked()
             return;
         }
 
-        if ( ! CheckFileAccess(filename_flow, "WriteOnly") )
+        if ( CheckFileAccess(filename_flow, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to " + filename_flow);
             return;
@@ -490,7 +494,7 @@ void FlowGrids::on_pushButtonRun_clicked()
             return;
         }
 
-        if ( ! CheckFileAccess(filename_acc, "WriteOnly") )
+        if ( CheckFileAccess(filename_acc, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to ... " + filename_acc);
             return;
@@ -626,14 +630,14 @@ void FlowGrids::on_pushButtonRun_clicked()
         // Check output filename_flow
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         fill_check = Check_FlowDir_Output(filename_flow, true);
-        if(!fill_check)
+        if( fill_check == false)
         {
             return;
         }
         qint64 size = file_Size(filename_flow);
         if( size < 1)
         {
-            Log_Error_Message("Flow Direction failed, invalid file size: " + size);
+            Log_Error_Message("Flow Direction failed, invalid file size: " + QString::number(size) );
 
             return;
         }
@@ -652,7 +656,7 @@ void FlowGrids::on_pushButtonRun_clicked()
         // Check output filename_acc
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         fill_check = Check_FlowAcc_Output(filename_acc, false);
-        if(!fill_check)
+        if( fill_check == false)
         {
             Log_Error_Message("Flow Accumulation failed, file does not exist: " + filename_acc);
 
@@ -661,7 +665,7 @@ void FlowGrids::on_pushButtonRun_clicked()
         size = file_Size(filename_acc);
         if( size < 1)
         {
-            Log_Error_Message("Flow Accumulation failed, invalid file size: " + size);
+            Log_Error_Message("Flow Accumulation failed, invalid file size: " + QString::number(size) );
 
             return;
         }

@@ -36,7 +36,7 @@ FillPits::FillPits(QWidget *parent, QString filename) :
             qDebug() << "INFO: filename -> " << filename_open_project;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open project file: " + filename_open_project);
         }
@@ -293,7 +293,7 @@ void FillPits::on_pushButtonDEM_clicked()
 
         QString DEMFileName = QFileDialog::getOpenFileName(this, "Choose DEM File", user_pihmgis_root_folder +tr("/.."), "DEM Grid File(*.adf *.asc *.ASC)");
 
-        if ( DEMFileName != nullptr)
+        if ( DEMFileName.isNull() == false)
         {
             if( DEMFileName.isEmpty() == false)
             {
@@ -303,10 +303,8 @@ void FillPits::on_pushButtonDEM_clicked()
                 pushButtonSetFocus();
             }
         }
-        else
-        {
-            Log_Message("on_pushButtonDEM_clicked: Invalid DEMFileName");
-        }
+        //else do nothing
+
 
     } catch (...) {
         qDebug() << "Error: FillPits::on_pushButtonDEM_clicked() is returning w/o checking";
@@ -326,7 +324,7 @@ void FillPits::on_pushButtonFillPits_clicked()
         Clear_Log();
 
         QString FillPitFileName = QFileDialog::getSaveFileName(this, "Choose Fill Pit Grid", user_pihmgis_root_folder+"/1RasterProcessing","Fill Pit Grid File(*.asc)");
-        if ( FillPitFileName != nullptr)
+        if ( FillPitFileName.isNull() == false)
         {
             if( FillPitFileName.isEmpty() == false)
             {
@@ -335,10 +333,8 @@ void FillPits::on_pushButtonFillPits_clicked()
                 pushButtonSetFocus();
             }
         }
-        else
-        {
-            Log_Message("on_pushButtonFillPits_clicked: Invalid FillPitFileName");
-        }
+        //else do nothing
+
 
     } catch (...) {
         qDebug() << "Error: FillPits::on_pushButtonFillPits_clicked() is returning w/o checking";
@@ -367,7 +363,7 @@ void FillPits::on_pushButtonRun_clicked()
         QString filename_fill =  ui->lineEditFillPits->text();
 
         bool dem_check = Check_DEM_Input(filename_dem);
-        if(!dem_check)
+        if( dem_check == false)
         {
             Log_Error_Message("DEM input does not exist: " + filename_dem);
             return;
@@ -382,7 +378,7 @@ void FillPits::on_pushButtonRun_clicked()
             return;
         }
 
-        if ( ! CheckFileAccess(filename_fill, "WriteOnly") )
+        if ( CheckFileAccess(filename_fill, "WriteOnly") == false)
         {
             Log_Error_Message(" No Write Access ... " + filename_fill);
             return;
@@ -502,7 +498,7 @@ void FillPits::on_pushButtonRun_clicked()
         // Check output file
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         fill_check = Check_Fillpit_Output(filename_fill, true);
-        if(!fill_check)
+        if( fill_check == false)
         {
             return;
         }

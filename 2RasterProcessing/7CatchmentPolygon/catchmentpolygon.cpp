@@ -32,7 +32,7 @@ CatchmentPolygon::CatchmentPolygon(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -106,7 +106,7 @@ bool CatchmentPolygon::Load_Project_Settings()
         }
 
         bool CatchmentGrids_check = Check_CatchmentGrids_Input(CatchmentGrids_filename);
-        if(!CatchmentGrids_check)
+        if( CatchmentGrids_check == false)
         {
             Log_Error_Message("CatchmentGrids input does not exist. ");
         }
@@ -301,12 +301,16 @@ void CatchmentPolygon::on_pushButtonCatchmentGrids_clicked()
         Clear_Log();
 
         QString CatchmentGridFileName = QFileDialog::getOpenFileName(this, "Choose Catchment Grid File", user_pihmgis_root_folder + tr("/1RasterProcessing"), "Catchment Grid File(*.asc *.ASC)");
-        if ( CatchmentGridFileName != nullptr)
+        if ( CatchmentGridFileName.isNull() == false)
         {
-            Check_CatchmentGrids_Input(CatchmentGridFileName);
+            if( CatchmentGridFileName.isEmpty() == false)
+            {
+                Check_CatchmentGrids_Input(CatchmentGridFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: CatchmentPolygon::on_pushButtonCatchmentGrids_clicked() is returning w/o checking";
@@ -326,20 +330,24 @@ void CatchmentPolygon::on_pushButtonCatchmentPolygon_clicked()
         Clear_Log();
 
         QString CatchmentPolygonFileName = QFileDialog::getSaveFileName(this, "Choose Catchment Polygon", user_pihmgis_root_folder+"/1RasterProcessing","Catchment Polygon File(*.shp)");
-        if ( CatchmentPolygonFileName != nullptr)
+        if ( CatchmentPolygonFileName.isNull() == false)
         {
-            QString tempString = CatchmentPolygonFileName;
-            if( (tempString.toLower()).endsWith(".shp") == false)
+            if( CatchmentPolygonFileName.isEmpty() == false)
             {
-                tempString.append(".shp");
-                CatchmentPolygonFileName = tempString;
+                QString tempString = CatchmentPolygonFileName;
+                if( (tempString.toLower()).endsWith(".shp") == false)
+                {
+                    tempString.append(".shp");
+                    CatchmentPolygonFileName = tempString;
+                }
+
+                Check_CatchmentPolygon_Output(CatchmentPolygonFileName, true);
+
+                pushButtonSetFocus();
+
             }
-
-            Check_CatchmentPolygon_Output(CatchmentPolygonFileName, true);
-
-            pushButtonSetFocus();
-
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: CatchmentPolygon::on_pushButtonCatchmentPolygon_clicked() is returning w/o checking";
@@ -471,7 +479,7 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         qint64 size = file_Size(CatchmentPolygon_filename);
         if( size < 1)
         {
-            Log_Error_Message("CatchmentPolygon failed, invalid file size: " + size );
+            Log_Error_Message("CatchmentPolygon failed, invalid file size: " + QString::number(size) );
             return;
         }
 

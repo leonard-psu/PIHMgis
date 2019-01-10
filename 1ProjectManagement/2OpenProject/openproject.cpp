@@ -48,7 +48,7 @@ void OpenProject::on_pushButtonFile_clicked()
 
         QFile OpenProjectFile(user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt");
 
-        if (! OpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text))
+        if ( OpenProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             ProjectFolder = user_pihmgis_root_folder;
             qDebug() << "IF ProjectFolder = " << ProjectFolder;
@@ -127,7 +127,7 @@ void OpenProject::on_pushButtonOpen_clicked()
                 }
                 OpenProjectFile.close();
 
-                if( !OpenProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+                if( OpenProjectFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
                 {
                     LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Write to Current Project File: </span>") + user_pihmgis_root_folder + user_pihmgis_project_folder + "/OpenProject.txt"+tr("<br>"));
                     ui->textBrowserLogs->setHtml(LogsString);
@@ -142,7 +142,7 @@ void OpenProject::on_pushButtonOpen_clicked()
             }
 
             QFile ProjectFile(ui->lineEditFile->text());
-            if( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+            if( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
             {
                 LogsString.append(tr("<span style=\"color:#FF0000\">ERROR: Unable to Read Project File: </span>")+ui->lineEditFile->text()+tr("<br>"));
                 ui->textBrowserLogs->setHtml(LogsString);

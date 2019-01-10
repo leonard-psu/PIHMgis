@@ -418,11 +418,15 @@ void RivDataFile::on_pushButtonElementFile_clicked()
         Clear_Log();
 
         QString EleFileName = QFileDialog::getOpenFileName(this, "Ele (.1.ele) File", user_pihmgis_root_folder +tr("/3DomainDecomposition"), "Ele File(*.ele)");
-        if ( EleFileName != nullptr)
+        if ( EleFileName.isNull() == false)
         {
-            Check_Element_Input(EleFileName);
-            pushButtonSetFocus();
+            if( EleFileName.isEmpty() == false)
+            {
+                Check_Element_Input(EleFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: RivDataFile::on_pushButtonElementFile_clicked() is returning w/o checking";
@@ -442,11 +446,15 @@ void RivDataFile::on_pushButtonNodeFile_clicked()
         Clear_Log();
 
         QString NodeFileName = QFileDialog::getOpenFileName(this, "Node (.1.node) File", user_pihmgis_root_folder+tr("/3DomainDecomposition"), "Node File(*.node)");
-        if ( NodeFileName != nullptr)
+        if ( NodeFileName.isNull() == false)
         {
-            Check_Node_Input(NodeFileName);
-            pushButtonSetFocus();
+            if( NodeFileName.isEmpty() == false)
+            {
+                Check_Node_Input(NodeFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: RivDataFile::on_pushButtonNodeFile_clicked() is returning w/o checking";
@@ -466,11 +474,15 @@ void RivDataFile::on_pushButtonNeighbourFile_clicked()
         Clear_Log();
 
         QString NeighFileName = QFileDialog::getOpenFileName(this, "Neighbor (.1.Neigh) File", user_pihmgis_root_folder+tr("/3DomainDecomposition"), "Neigh File(*.neigh)");
-        if ( NeighFileName != nullptr)
+        if ( NeighFileName.isNull() == false)
         {
-            Check_Neighbor_Input(NeighFileName);
-            pushButtonSetFocus();
+            if( NeighFileName.isEmpty() == false)
+            {
+                Check_Neighbor_Input(NeighFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: RivDataFile::on_pushButtonNeighbourFile_clicked() is returning w/o checking";
@@ -490,11 +502,15 @@ void RivDataFile::on_pushButtonRiverFile_clicked()
         Clear_Log();
 
         QString RiverFileName = QFileDialog::getOpenFileName(this, "River Split ShapeFile", user_pihmgis_root_folder+tr("/2VectorProcessing"), "River Split ShapeFile(*.shp)");
-        if ( RiverFileName != nullptr)
+        if ( RiverFileName.isNull() == false)
         {
-            Check_RiverShape_Input(RiverFileName);
-            pushButtonSetFocus();
+            if( RiverFileName.isEmpty() == false)
+            {
+                Check_RiverShape_Input(RiverFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: RivDataFile::on_pushButtonRiverFile_clicked() is returning w/o checking";
@@ -515,19 +531,23 @@ void RivDataFile::on_pushButtonRivDataFile_clicked()
 
         QString RivDataFileName = QFileDialog::getSaveFileName(this, "Choose Riv Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Riv Data File(*.riv)");
         QString tempString = RivDataFileName;
-        if ( RivDataFileName != nullptr)
+        if ( RivDataFileName.isNull() == false)
         {
-            ui->lineEditRivDataFile->setStyleSheet("color: black;");
-
-            if( (tempString.toLower()).endsWith(".riv") == false)
+            if( RivDataFileName.isEmpty() == false)
             {
-                tempString.append(".riv");
-                RivDataFileName = tempString;
-            }
-            Check_RiverData_Output(RivDataFileName, true);
+                ui->lineEditRivDataFile->setStyleSheet("color: black;");
 
-            pushButtonSetFocus();
+                if( (tempString.toLower()).endsWith(".riv") == false)
+                {
+                    tempString.append(".riv");
+                    RivDataFileName = tempString;
+                }
+                Check_RiverData_Output(RivDataFileName, true);
+
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
 
     } catch (...) {
@@ -613,10 +633,10 @@ void RivDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check inputs
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QString input_Element_filename = ui->lineEditElementFile->text();
-        QString input_Node_filename = ui->lineEditNodeFile->text();
+        QString input_Element_filename   = ui->lineEditElementFile->text();
+        QString input_Node_filename      = ui->lineEditNodeFile->text();
         QString input_Neighbour_filename = ui->lineEditNeighbourFile->text();
-        QString input_River_filename = ui->lineEditRiverFile->text();
+        QString input_River_filename     = ui->lineEditRiverFile->text();
         QString BoundaryCondition;
 
         if ( ui->radioButtonDirichlet->isChecked() )        BoundaryCondition = QString("-1");

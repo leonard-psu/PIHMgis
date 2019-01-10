@@ -31,7 +31,7 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
     try {
 
         QFile EleFile(EleFileName);
-        if ( ! EleFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( EleFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[mesh_data_file] Error[-1000] opening Element file.");
             return -1000;
@@ -40,7 +40,7 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
         QTextStream EleFileTextStream(&EleFile);
 
         QFile NodeFile(NodeFileName);
-        if ( ! NodeFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( NodeFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[mesh_data_file] Error[-1001] opening Node file.");
             return -1001;
@@ -49,7 +49,7 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
         QTextStream NodeFileTextStream(&NodeFile);
 
         QFile NeighFile(NeighFileName);
-        if ( ! NeighFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( NeighFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[mesh_data_file] Error[-1002] opening Neigh file.");
             return -1002;
@@ -57,7 +57,7 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
         QTextStream NeighFileTextStream(&NeighFile);
 
         QFile MeshDataFile(MeshDataFileName);
-        if ( ! MeshDataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        if ( MeshDataFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[mesh_data_file] Error[-1003] opening Mesh file.");
             return -1003;

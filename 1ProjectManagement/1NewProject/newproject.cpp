@@ -199,6 +199,14 @@ void NewProject::on_pushButtonFile_clicked()
         Clear_Log();
 
         QString workspace_folder = QFileDialog::getExistingDirectory(this, "Workspace Folder", user_pihmgis_root_folder, 0);
+        if ( workspace_folder.isNull() == true)
+        {
+            return;
+        }
+        if( workspace_folder.isEmpty() == true)
+        {
+            return;
+        }
 
         if(workspace_folder.length() < 1)
             return;
@@ -263,7 +271,7 @@ int NewProject::check_pihmgis_project_exists(QString folder, QString project_loc
         int result = 0;
         QString project_folder = folder + "/" + project_location;
         QDir dir(project_folder);
-        if (!dir.exists())
+        if (dir.exists() == false)
         {
             result = 0;
             Log_Error_Message("Could not find  :" + project_folder);
@@ -370,10 +378,10 @@ bool NewProject::create_default_project_workspace(QString pihmgis_root_folder, Q
         QString make_folder = pihmgis_root_folder + "/" + project_folder;
         QDir dir(make_folder);
 
-        if (!dir.exists())
+        if ( dir.exists() == false)
         {
             bool created  = dir.mkpath(make_folder);
-            if(!created)
+            if( created == false)
             {
                 Log_Error_Message("Unable to create folder:  " + make_folder + " .Check your folder permissions and/or disk space.");
                 return false;
@@ -391,7 +399,8 @@ bool NewProject::create_default_project_workspace(QString pihmgis_root_folder, Q
         make_folder = pihmgis_root_folder +  + "/1RasterProcessing";
         QDir dir_1RasterProcessing(make_folder);
 
-        if (!dir_1RasterProcessing.exists()) {
+        if ( dir_1RasterProcessing.exists() == false)
+        {
             dir_1RasterProcessing.mkpath(make_folder);
             Log_Message("Creating 1RasterProcessing folder = " + make_folder);
         }
@@ -403,7 +412,8 @@ bool NewProject::create_default_project_workspace(QString pihmgis_root_folder, Q
         make_folder = pihmgis_root_folder + "/2VectorProcessing";
         QDir dir_2VectorProcessing(make_folder);
 
-        if (!dir_2VectorProcessing.exists()) {
+        if ( dir_2VectorProcessing.exists() == false)
+        {
             dir_2VectorProcessing.mkpath(make_folder);
             Log_Message("Creating 2VectorProcessing folder = " + make_folder);
         }
@@ -416,7 +426,8 @@ bool NewProject::create_default_project_workspace(QString pihmgis_root_folder, Q
         make_folder = pihmgis_root_folder + "/3DomainDecomposition";
         QDir dir_3DomainDecomposition(make_folder);
 
-        if (!dir_3DomainDecomposition.exists()) {
+        if ( dir_3DomainDecomposition.exists() == false)
+        {
             dir_3DomainDecomposition.mkpath(make_folder);
             Log_Message("Creating 3DomainDecomposition folder = " + make_folder);
         }
@@ -428,7 +439,8 @@ bool NewProject::create_default_project_workspace(QString pihmgis_root_folder, Q
         make_folder = pihmgis_root_folder + "/4DataModelLoader";
         QDir dir_4DataModelLoader(make_folder);
 
-        if (!dir_4DataModelLoader.exists()) {
+        if ( dir_4DataModelLoader.exists() == false)
+        {
             dir_4DataModelLoader.mkpath(make_folder);
             Log_Message("Creating 4DataModelLoader folder = " + make_folder);
         }
@@ -440,7 +452,8 @@ bool NewProject::create_default_project_workspace(QString pihmgis_root_folder, Q
         make_folder = pihmgis_root_folder + "/5PIHMSimulation";
         QDir dir_5PIHMSimulation(make_folder);
 
-        if (!dir_5PIHMSimulation.exists()) {
+        if ( dir_5PIHMSimulation.exists() == false)
+        {
             dir_5PIHMSimulation.mkpath(make_folder);
             Log_Message("Creating 5PIHMSimulation folder = " + make_folder);
         }
@@ -452,7 +465,8 @@ bool NewProject::create_default_project_workspace(QString pihmgis_root_folder, Q
         make_folder = pihmgis_root_folder + "/6VisualAnalytics";
         QDir dir_6VisualAnalytics(make_folder);
 
-        if (!dir_6VisualAnalytics.exists()) {
+        if ( dir_6VisualAnalytics.exists() == false)
+        {
             dir_6VisualAnalytics.mkpath(make_folder);
             Log_Message("Creating 6VisualAnalytics folder = " + make_folder);
         }
@@ -465,7 +479,8 @@ bool NewProject::create_default_project_workspace(QString pihmgis_root_folder, Q
         make_folder = pihmgis_root_folder + "/Software";
         QDir dir_Software(make_folder);
 
-        if (!dir_Software.exists()) {
+        if ( dir_Software.exists() == false)
+        {
             dir_Software.mkpath(make_folder);
             Log_Message("Creating Software folder = " + make_folder);
         }
@@ -588,7 +603,7 @@ void NewProject::on_pushButtonCreate_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         bool created = create_default_project_workspace(workspace_folder, project_folder);
-        if(!created)
+        if( created == false)
         {
             did_user_create_new_project = false;
             Log_Error_Message("Issues creating project folders. Check folder permissions and disk space.");
@@ -604,7 +619,7 @@ void NewProject::on_pushButtonCreate_clicked()
         }
 
         bool success = create_default_PIHMgis_project_file(workspace_folder, project_folder, project_name);
-        if( !success)
+        if( success == false)
         {
             did_user_create_new_project = false;
             Log_Error_Message("Creating PIHMgis project file failed. Check folder permissions and disk space.");

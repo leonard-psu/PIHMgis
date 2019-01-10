@@ -95,14 +95,14 @@ int tin_shape(QString qeleFileName, QString qnodeFileName, QString qshpFileName,
 
 
         eleFile.open(eleFileName);
-        if ( !eleFile.is_open())
+        if ( eleFile.is_open() == false)
         {
             main_window->Log_Message("[tin_shape] Error[-1009] failed to open eleFile");
             return -1009;
         }
 
         nodeFile.open(nodeFileName);
-        if ( !nodeFile.is_open())
+        if ( nodeFile.is_open() == false)
         {
             main_window->Log_Message("[tin_shape] Error[-1010] nodeFile to open nodeFile");
             eleFile.close();
@@ -237,7 +237,7 @@ int tin_shape(QString qeleFileName, QString qnodeFileName, QString qshpFileName,
             panPartStart[0]= 0;
             panPartType[0] = 5;
 
-            if(!error_found)
+            if(error_found == false)
             {
                 SHPObject* shpObj = SHPCreateObject(SHPT_POLYGON, i, 1, panPartStart, nullptr, 4, px, py, pz, pm);
                 if(shpObj == nullptr)

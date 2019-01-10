@@ -147,7 +147,7 @@ int CheckProject::check_pihmgis_project_exists(QString folder)
         int result = 0;
         QString project_folder = folder + user_pihmgis_project_folder;
         QDir dir(project_folder);
-        if (!dir.exists())
+        if ( dir.exists() == false)
         {
             result = 0;
             Log_Error_Message("Could not find  :" + project_folder );

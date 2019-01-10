@@ -22,7 +22,7 @@ InspectProject::InspectProject(QWidget *parent, QString filename) : QDialog(pare
 
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             LogsString.append(tr("<span style=\"color:#FF0000\">Error: Unable to Open project file: </span>") + filename_open_project +tr("<br>"));
             ui->textBrowserLogs->setHtml(LogsString);

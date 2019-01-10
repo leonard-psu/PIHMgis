@@ -521,9 +521,10 @@ void PIHMgisDialog::Save_log()
             //Do nothing
             return;
         }
-        else {
+        else
+        {
             QFile file(fileName);
-            if (!file.open(QIODevice::WriteOnly))
+            if (file.open(QIODevice::WriteOnly) == false)
             {
                 QMessageBox::information(this, tr("Unable to open file"),file.errorString());
                 return;
@@ -861,8 +862,8 @@ void PIHMgisDialog::New_Project()
 
     try {
         QString project_location = user_pihmgis_root_folder; // + user_pihmgis_project_folder;
-        QString project_folder = ".PIHMgis";        //Default
-        QString project_name = "OpenProject.txt";   //Default
+        QString project_folder   = ".PIHMgis";        //Default
+        QString project_name     = "OpenProject.txt";   //Default
 
         NewProject *NewProjectDialog = new NewProject(this, project_location, project_folder, project_name);
         NewProjectDialog->setModal(true);
@@ -1099,7 +1100,6 @@ void PIHMgisDialog::on_pushButtonRasterProcessingFillPits_clicked()
 
         QString filename_open_project = user_pihmgis_root_folder + user_pihmgis_project_folder + user_pihmgis_project_name;
 
-
         FillPits *FillPitsDialog = new FillPits(this, filename_open_project);
         FillPitsDialog->setModal(true);
         FillPitsDialog->exec();
@@ -1245,8 +1245,6 @@ void PIHMgisDialog::on_pushButtonVectorProcessingDissolvePolygons_clicked()
         DissolvePolygonsDialog->show();
 
 
-        //delete DissolvePolygonsDialog;
-
     } catch (QException ex) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingDissolvePolygons_clicked is returning w/o checking";
     }
@@ -1286,6 +1284,7 @@ void PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked()
         SimplifyPolylines *SimplifyPolylinesDialog = new SimplifyPolylines(this, filename_open_project);
         SimplifyPolylinesDialog->setModal(true);
         SimplifyPolylinesDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingSimplifyPolylines_clicked is returning w/o checking";
     }
@@ -1305,6 +1304,7 @@ void PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked()
         PolylineToLines *PolylineToLinesDialog = new PolylineToLines(this, filename_open_project);
         PolylineToLinesDialog->setModal(true);
         PolylineToLinesDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVectorProcessingPolylineToLines_clicked is returning w/o checking";
     }
@@ -1364,6 +1364,7 @@ void PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked()
         DelaunayTriangulation *DelaunayTriangulationDialog = new DelaunayTriangulation(this, filename_open_project);
         DelaunayTriangulationDialog->setModal(true);
         DelaunayTriangulationDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDomainDecompositionTriangulation_clicked is returning w/o checking";
     }
@@ -1404,6 +1405,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked()
         MeshDataFile *MeshDataFileDialog = new MeshDataFile(this, filename_open_project);
         MeshDataFileDialog->setModal(true);
         MeshDataFileDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderMeshDataFile_clicked0 is returning w/o checking";
     }
@@ -1422,8 +1424,8 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked()
 
         AttDataFile *AttDataFileDialog = new AttDataFile(this, filename_open_project);
         AttDataFileDialog->setModal(true);
-
         AttDataFileDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderAttDataFile_clicked is returning w/o checking";
     }
@@ -1442,8 +1444,8 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked()
 
         RivDataFile *RivDataFileDialog = new RivDataFile(this, filename_open_project);
         RivDataFileDialog->setModal(true);
-
         RivDataFileDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderRivDataFile_clicked is returning w/o checking";
     }
@@ -1462,8 +1464,8 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked()
 
         SoilDataFile *SoilDataFileDialog = new SoilDataFile(this, filename_open_project);
         SoilDataFileDialog->setModal(true);
-
         SoilDataFileDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderSoilDataFile_clicked is returning w/o checking";
     }
@@ -1483,6 +1485,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked()
         GeolDataFile *GeolDataFileDialog = new GeolDataFile(this, filename_open_project);
         GeolDataFileDialog->setModal(true);
         GeolDataFileDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderGeolDataFile_clicked is returning w/o checking";
     }
@@ -1502,6 +1505,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked()
         LcDataFile *LcDataFileDialog = new LcDataFile(this, filename_open_project);
         LcDataFileDialog->setModal(true);
         LcDataFileDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderLcDataFile_clicked is returning w/o checking";
     }
@@ -1521,6 +1525,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked()
         InitDataFile *InitDataFileDialog = new InitDataFile(this, filename_open_project);
         InitDataFileDialog->setModal(true);
         InitDataFileDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderInitDataFile_clicked is returning w/o checking";
     }
@@ -1540,6 +1545,7 @@ void PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked()
         IbcDataFile *IbcDataFileDialog = new IbcDataFile(this, filename_open_project);
         IbcDataFileDialog->setModal(true);
         IbcDataFileDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonDataModelLoaderIbcDataFile_clicked is returning w/o checking";
     }
@@ -1677,8 +1683,8 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked()
 
         RiverSpatial *RiverSpatialDialog = new RiverSpatial(this, filename_open_project);
         RiverSpatialDialog->setModal(true);
-
         RiverSpatialDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsSpatialRiverNetwork_clicked is returning w/o checking";
     }
@@ -1698,6 +1704,7 @@ void PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked()
         RiverTemporal *RiverTemporalDialog = new RiverTemporal(this, filename_open_project);
         RiverTemporalDialog->setModal(true);
         RiverTemporalDialog->show();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButtonVisualAnalyticsTemporalRiverNetwork_clicked is returning w/o checking";
     }
@@ -1719,7 +1726,8 @@ bool PIHMgisDialog::create_default_project_workspace()
         QString make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder;
         QDir dir(make_folder);
 
-        if (!dir.exists()) {
+        if ( dir.exists() == false)
+        {
             dir.mkpath(make_folder);
             qDebug() << "Creating folder = " << make_folder;
         }
@@ -1733,7 +1741,8 @@ bool PIHMgisDialog::create_default_project_workspace()
         make_folder = user_pihmgis_root_folder +  + "/1RasterProcessing";
         QDir dir_1RasterProcessing(make_folder);
 
-        if (!dir_1RasterProcessing.exists()) {
+        if (dir_1RasterProcessing.exists()  == false)
+        {
             dir_1RasterProcessing.mkpath(make_folder);
             qDebug() << "Creating 1RasterProcessing folder = " << make_folder;
         }
@@ -1745,7 +1754,8 @@ bool PIHMgisDialog::create_default_project_workspace()
         make_folder = user_pihmgis_root_folder + "/2VectorProcessing";
         QDir dir_2VectorProcessing(make_folder);
 
-        if (!dir_2VectorProcessing.exists()) {
+        if (dir_2VectorProcessing.exists() == false)
+        {
             dir_2VectorProcessing.mkpath(make_folder);
             qDebug() << "Creating 2VectorProcessing folder = " << make_folder;
         }
@@ -1758,7 +1768,8 @@ bool PIHMgisDialog::create_default_project_workspace()
         make_folder = user_pihmgis_root_folder + "/3DomainDecomposition";
         QDir dir_3DomainDecomposition(make_folder);
 
-        if (!dir_3DomainDecomposition.exists()) {
+        if (dir_3DomainDecomposition.exists() == false)
+        {
             dir_3DomainDecomposition.mkpath(make_folder);
             qDebug() << "Creating 3DomainDecomposition folder = " << make_folder;
         }
@@ -1770,7 +1781,8 @@ bool PIHMgisDialog::create_default_project_workspace()
         make_folder = user_pihmgis_root_folder + "/4DataModelLoader";
         QDir dir_4DataModelLoader(make_folder);
 
-        if (!dir_4DataModelLoader.exists()) {
+        if (dir_4DataModelLoader.exists() == false)
+        {
             dir_4DataModelLoader.mkpath(make_folder);
             qDebug() << "Creating 4DataModelLoader folder = " << make_folder;
         }
@@ -1782,7 +1794,8 @@ bool PIHMgisDialog::create_default_project_workspace()
         make_folder = user_pihmgis_root_folder + "/5PIHMSimulation";
         QDir dir_5PIHMSimulation(make_folder);
 
-        if (!dir_5PIHMSimulation.exists()) {
+        if (dir_5PIHMSimulation.exists() == false)
+        {
             dir_5PIHMSimulation.mkpath(make_folder);
             qDebug() << "Creating 5PIHMSimulation folder = " << make_folder;
         }
@@ -1794,7 +1807,8 @@ bool PIHMgisDialog::create_default_project_workspace()
         make_folder = user_pihmgis_root_folder + "/6VisualAnalytics";
         QDir dir_6VisualAnalytics(make_folder);
 
-        if (!dir_6VisualAnalytics.exists()) {
+        if (dir_6VisualAnalytics.exists() == false)
+        {
             dir_6VisualAnalytics.mkpath(make_folder);
             qDebug() << "Creating 6VisualAnalytics folder = " << make_folder;
         }
@@ -1807,7 +1821,8 @@ bool PIHMgisDialog::create_default_project_workspace()
         make_folder = user_pihmgis_root_folder + "/Software";
         QDir dir_Software(make_folder);
 
-        if (!dir_Software.exists()) {
+        if (dir_Software.exists()  == false)
+        {
             dir_Software.mkpath(make_folder);
             qDebug() << "Creating Software folder = " << make_folder;
         }
@@ -1815,8 +1830,6 @@ bool PIHMgisDialog::create_default_project_workspace()
         {
             qDebug() << "Software Folder already exists = " << make_folder;
         }
-
-
 
         return true;
 
@@ -1865,7 +1878,7 @@ int PIHMgisDialog::check_pihmgis_project_exists(QString folder)
     try {
         QString project_folder = folder + user_pihmgis_project_folder;
         QDir dir(project_folder);
-        if (!dir.exists())
+        if (dir.exists()  == false)
         {
             result = 0;
             return result; //No point checking any further
@@ -2007,6 +2020,14 @@ void PIHMgisDialog::PickWorkspace()
         Clear_Log();
 
         QString ProjectHome = QFileDialog::getExistingDirectory(this, "Specify Workspace/Home Folder", user_pihmgis_root_folder, 0);
+        if ( ProjectHome.isNull() == false)
+        {
+            return;
+        }
+        if( ProjectHome.isEmpty() == false)
+        {
+            return;
+        }
 
         if(ProjectHome.length() > 0 )
         {
@@ -2140,6 +2161,7 @@ void PIHMgisDialog::on_pushButton_PickWorkspace_clicked()
     try {
 
         PickWorkspace();
+
     } catch (...) {
         qDebug() << "Error: PIHMgisDialog::on_pushButton_PickWorkspace_clicked is returning w/o checking";
     }

@@ -28,7 +28,7 @@ InitDataFile::InitDataFile(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false )
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -401,7 +401,7 @@ bool InitDataFile::Check_SoilMoisture_Input(QString value)
 
         //TODO ui->lineEditSoilMoisture->setValidator( new QIntValidator(0,1,this) );
 
-        if(value.isNull() || value.isEmpty() )
+        if( value.isNull() || value.isEmpty() )
         {
             ui->lineEditSoilMoisture->setStyleSheet("color: red;");
             ui->lineEditSoilMoisture->setText("Missing");
@@ -439,7 +439,7 @@ bool InitDataFile::Check_Groundwater_Input(QString value){
 
         //TODO ui->lineEditGroundwater->setValidator( new QIntValidator(0,1,this) );
 
-        if(value.isNull() || value.isEmpty() )
+        if( value.isNull() || value.isEmpty() )
         {
             ui->lineEditGroundwater->setStyleSheet("color: red;");
             ui->lineEditGroundwater->setText("Missing");
@@ -476,10 +476,9 @@ bool InitDataFile::Check_River_Input(QString value)
 
     try {
 
-
         //TODO ui->lineEditRiver->setValidator( new QIntValidator(0,1,this) );
 
-        if(value.isNull() || value.isEmpty() )
+        if( value.isNull() || value.isEmpty() )
         {
             ui->lineEditRiver->setStyleSheet("color: red;");
             ui->lineEditRiver->setText("Missing");
@@ -518,7 +517,7 @@ bool InitDataFile::Check_Riverbed_Input(QString value)
 
         //TODO ui->lineEditRiverbed->setValidator( new QIntValidator(0,1,this) );
 
-        if(value.isNull() || value.isEmpty() )
+        if( value.isNull() || value.isEmpty() )
         {
             ui->lineEditRiverbed->setStyleSheet("color: red;");
             ui->lineEditRiverbed->setText("Missing");
@@ -556,7 +555,7 @@ bool InitDataFile::Check_MeshData_Input(QString file)
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditMeshDataFile->setStyleSheet("color: black;");
             ui->lineEditMeshDataFile->setText(file);
@@ -593,7 +592,7 @@ bool InitDataFile::Check_RivData_Input(QString file)
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditRivDataFile->setStyleSheet("color: black;");
             ui->lineEditRivDataFile->setText(file);
@@ -631,7 +630,7 @@ bool InitDataFile::Check_InitData_Output(QString file, bool color_and_message_if
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {
@@ -672,11 +671,15 @@ void InitDataFile::on_pushButtonMeshDataFile_clicked()
 
         QString MeshDataFileName = QFileDialog::getOpenFileName(this, "Mesh Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Mesh Data File(*.mesh)");
 
-        if ( MeshDataFileName != nullptr)
+        if ( MeshDataFileName.isNull() == false)
         {
-            Check_MeshData_Input(MeshDataFileName);
-            pushButtonSetFocus();
+            if( MeshDataFileName.isEmpty() == false)
+            {
+                Check_MeshData_Input(MeshDataFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: InitDataFile::on_pushButtonMeshDataFile_clicked() is returning w/o checking";
@@ -697,11 +700,15 @@ void InitDataFile::on_pushButtonRivDataFile_clicked()
 
         QString RivDataFileName = QFileDialog::getOpenFileName(this, "Riv Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Riv Data File(*.riv)");
 
-        if ( RivDataFileName != nullptr)
+        if ( RivDataFileName.isNull() == false)
         {
-            Check_RivData_Input(RivDataFileName);
-            pushButtonSetFocus();
+            if( RivDataFileName.isEmpty() == false)
+            {
+                Check_RivData_Input(RivDataFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: InitDataFile::on_pushButtonRivDataFile_clicked is returning w/o checking";
@@ -722,17 +729,21 @@ void InitDataFile::on_pushButtonInitDataFile_clicked()
 
         QString InitDataFileName = QFileDialog::getSaveFileName(this, "Choose Init Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Init Data File(*.init)");
         QString tempString = InitDataFileName;
-        if ( InitDataFileName != nullptr)
+        if ( InitDataFileName.isNull() == false)
         {
-            if( ! (tempString.toLower()).endsWith(".init") )
+            if( InitDataFileName.isEmpty() == false)
             {
-                tempString.append(".init");
-                InitDataFileName = tempString;
-            }
-            Check_InitData_Output(InitDataFileName, true);
+                if( (tempString.toLower()).endsWith(".init") == false)
+                {
+                    tempString.append(".init");
+                    InitDataFileName = tempString;
+                }
+                Check_InitData_Output(InitDataFileName, true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: InitDataFile::on_pushButtonInitDataFile_clicked is returning w/o checking";
@@ -1054,10 +1065,10 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
             for (int i=0; i<NumTINs; i++)
             {
 
-//                qDebug() << Interception << " " << Snow << " " << Surface << " " << SoilMoisture.toDouble();
-//                qDebug() << NodeDepths[ TINnodes[i][0]-1 ];
-//                qDebug() << NodeDepths[ TINnodes[i][1]-1 ];
-//                qDebug() << NodeDepths[ TINnodes[i][2]-1 ];
+                //                qDebug() << Interception << " " << Snow << " " << Surface << " " << SoilMoisture.toDouble();
+                //                qDebug() << NodeDepths[ TINnodes[i][0]-1 ];
+                //                qDebug() << NodeDepths[ TINnodes[i][1]-1 ];
+                //                qDebug() << NodeDepths[ TINnodes[i][2]-1 ];
 
                 InitDataFileTextStream << Interception << "\t";
                 InitDataFileTextStream << Snow << "\t";
@@ -1197,16 +1208,16 @@ void InitDataFile::on_pushButtonRun_clicked()
         // Check inputs
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        QString input_Interception = ui->lineEditInterception->text();
-        QString input_Snow_Input = ui->lineEditSnow->text();
-        QString input_Surface_Input = ui->lineEditSurface->text();
+        QString input_Interception       = ui->lineEditInterception->text();
+        QString input_Snow_Input         = ui->lineEditSnow->text();
+        QString input_Surface_Input      = ui->lineEditSurface->text();
         QString input_SoilMoisture_Input = ui->lineEditSoilMoisture->text();
-        QString input_Groundwater_Input = ui->lineEditGroundwater->text();
-        QString input_River_Input = ui->lineEditRiver->text();
-        QString input_Riverbed_Input = ui->lineEditRiverbed->text();
+        QString input_Groundwater_Input  = ui->lineEditGroundwater->text();
+        QString input_River_Input        = ui->lineEditRiver->text();
+        QString input_Riverbed_Input     = ui->lineEditRiverbed->text();
 
         QString input_MeshData_Input = ui->lineEditMeshDataFile->text();
-        QString input_RivData_Input = ui->lineEditRivDataFile->text();
+        QString input_RivData_Input  = ui->lineEditRivDataFile->text();
 
         int MetersOrPercent = 2;
         if ( ui->radioButtonMeters->isChecked() )
@@ -1244,7 +1255,7 @@ void InitDataFile::on_pushButtonRun_clicked()
             return;
         }
         checked_input = Check_Groundwater_Input(input_Groundwater_Input);
-        if(!checked_input)
+        if(checked_input == false)
         {
             Log_Error_Message("Groundwater Input File or Value Missing " + input_Groundwater_Input );
             return;

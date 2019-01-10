@@ -772,7 +772,7 @@ void ImportProject::on_pushButtonImport_clicked()
         QString make_folder = user_pihmgis_root_folder + user_pihmgis_project_folder;
         QDir dir(make_folder);
 
-        if (!dir.exists())
+        if (dir.exists() == false)
         {
             dir.mkpath(make_folder);
             //qDebug() << "Creating folder = " << make_folder;
@@ -912,7 +912,15 @@ void ImportProject::on_pushButtonProject_DataFolder_clicked()
     try {
 
         QString user_folder_location = QFileDialog::getExistingDirectory(this, "Specify Base Folder Location, where your data is", user_pihmgis_root_folder, 0);
-        ui->lineEdit_Data_Base_Folder->setText(user_folder_location);
+
+        if ( user_folder_location.isNull() == false)
+        {
+            if( user_folder_location.isEmpty() == false)
+            {
+                ui->lineEdit_Data_Base_Folder->setText(user_folder_location);
+            }
+        }
+
 
     } catch (...) {
         qDebug() << "Error: ImportProject::on_pushButtonProject_DataFolder_clicked()";

@@ -261,6 +261,7 @@ void AttDataFile::Clear_Log()
 void AttDataFile::Log_Error_Message(QString message)
 {
     try {
+
         LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
@@ -281,6 +282,7 @@ void AttDataFile::Log_Error_Message(QString message)
 void AttDataFile::Log_Message(QString message)
 {
     try {
+
         LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>" + tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
@@ -337,30 +339,35 @@ void AttDataFile::pushButtonSetFocus()
             ui->pushButtonPrecipitationFile->setFocus();
             return;
         }
+
         if (ui->lineEditTemperatureFile->text() == nullptr)
         {
             ui->pushButtonTemperatureFile->setDefault(true);
             ui->pushButtonTemperatureFile->setFocus();
             return;
         }
+
         if (ui->lineEditRelativeHumidityFile->text() == nullptr)
         {
             ui->pushButtonRelativeHumidityFile->setDefault(true);
             ui->pushButtonRelativeHumidityFile->setFocus();
             return;
         }
+
         if (ui->lineEditWindVelocityFile->text() == nullptr)
         {
             ui->pushButtonWindVelocityFile->setDefault(true);
             ui->pushButtonWindVelocityFile->setFocus();
             return;
         }
+
         if (ui->lineEditSolarRadiationFile->text() == nullptr)
         {
             ui->pushButtonSolarRadiationFile->setDefault(true);
             ui->pushButtonSolarRadiationFile->setFocus();
             return;
         }
+
         if (ui->lineEditVaporPressureFile->text() == nullptr)
         {
             ui->pushButtonVaporPressureFile->setDefault(true);
@@ -374,30 +381,35 @@ void AttDataFile::pushButtonSetFocus()
             ui->pushButtonSoilClassesFile->setFocus();
             return;
         }
+
         if (ui->lineEditGeologyClassesFile->text() == nullptr)
         {
             ui->pushButtonGeologyClassesFile->setDefault(true);
             ui->pushButtonGeologyClassesFile->setFocus();
             return;
         }
+
         if (ui->lineEditMacroporesFile->text() == nullptr)
         {
             ui->pushButtonMacroporesFile->setDefault(true);
             ui->pushButtonMacroporesFile->setFocus();
             return;
         }
+
         if (ui->lineEditLandCoverClassesFile->text() == nullptr)
         {
             ui->pushButtonLandCoverClassesFile->setDefault(true);
             ui->pushButtonLandCoverClassesFile->setFocus();
             return;
         }
+
         if (ui->lineEditMeltRegionsFile->text() == nullptr)
         {
             ui->pushButtonMeltRegionsFile->setDefault(true);
             ui->pushButtonMeltRegionsFile->setFocus();
             return;
         }
+
         if (ui->lineEditSourcesSinksFile->text() == nullptr)
         {
             ui->pushButtonSourcesSinksFile->setDefault(true);
@@ -411,30 +423,35 @@ void AttDataFile::pushButtonSetFocus()
             ui->pushButtonInterceptionFile->setFocus();
             return;
         }
+
         if (ui->lineEditSnowCoverFile->text() == nullptr)
         {
             ui->pushButtonSnowCoverFile->setDefault(true);
             ui->pushButtonSnowCoverFile->setFocus();
             return;
         }
+
         if (ui->lineEditSurfaceStorageFile->text() == nullptr)
         {
             ui->pushButtonSurfaceStorageFile->setDefault(true);
             ui->pushButtonSurfaceStorageFile->setFocus();
             return;
         }
+
         if (ui->lineEditSoilMoistureFile->text() == nullptr)
         {
             ui->pushButtonSoilMoistureFile->setDefault(true);
             ui->pushButtonSoilMoistureFile->setFocus();
             return;
         }
+
         if (ui->lineEditGroundwaterFile->text() == nullptr)
         {
             ui->pushButtonGroundwaterFile->setDefault(true);
             ui->pushButtonGroundwaterFile->setFocus();
             return;
         }
+
         if (ui->lineEditBoundaryConditionFile->text() == nullptr)
         {
             ui->pushButtonBoundaryConditionFile->setDefault(true);
@@ -448,6 +465,7 @@ void AttDataFile::pushButtonSetFocus()
             ui->pushButtonTINShapeLayerFile->setFocus();
             return;
         }
+
         if (ui->lineEditAttDataFile->text() == nullptr)
         {
             ui->pushButtonAttDataFile->setDefault(true);
@@ -1854,12 +1872,16 @@ void AttDataFile::on_pushButtonPrecipitationFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Precipitation Raster", user_pihmgis_root_folder, "Precipitation Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_PrecipitationFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_PrecipitationFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonPrecipitationFile_clicked() is returning w/o checking";
@@ -1881,12 +1903,16 @@ void AttDataFile::on_pushButtonTemperatureFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Temperature Raster", user_pihmgis_root_folder, "Temperature Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_TemperatureFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_TemperatureFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonTemperatureFile_clicked() is returning w/o checking";
@@ -1907,12 +1933,16 @@ void AttDataFile::on_pushButtonRelativeHumidityFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Relative Humidity Raster", user_pihmgis_root_folder, "Relative Humidity Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_RelativeHumidityFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_RelativeHumidityFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonRelativeHumidityFile_clicked() is returning w/o checking";
@@ -1933,12 +1963,16 @@ void AttDataFile::on_pushButtonWindVelocityFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Wind Velocity Raster", user_pihmgis_root_folder, "Wind Velocity Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_WindVelocityFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_WindVelocityFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonWindVelocityFile_clicked() is returning w/o checking";
@@ -1959,12 +1993,16 @@ void AttDataFile::on_pushButtonSolarRadiationFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Solar Radiation Raster", user_pihmgis_root_folder, "Solar Radiation Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_SolarRadiationFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_SolarRadiationFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSolarRadiationFile_clicked() is returning w/o checking";
@@ -1983,12 +2021,16 @@ void AttDataFile::on_pushButtonVaporPressureFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Vapor Pressure Raster", user_pihmgis_root_folder, "Vapor Pressure Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_VaporPressureFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_VaporPressureFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonVaporPressureFile_clicked() is returning w/o checking";
@@ -2009,12 +2051,16 @@ void AttDataFile::on_pushButtonSoilClassesFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Soil Classes Raster", user_pihmgis_root_folder, "Soil Classes Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_SoilClassesFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_SoilClassesFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSoilClassesFile_clicked() is returning w/o checking";
@@ -2035,12 +2081,16 @@ void AttDataFile::on_pushButtonGeologyClassesFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Geology Classes Raster", user_pihmgis_root_folder, "Geology Classes Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_GeologyClassesFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_GeologyClassesFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonGeologyClassesFile_clicked() is returning w/o checking";
@@ -2059,12 +2109,16 @@ void AttDataFile::on_pushButtonMacroporesFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Macropores Raster", user_pihmgis_root_folder, "Macropores Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_MacroporesFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_MacroporesFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonMacroporesFile_clicked() is returning w/o checking";
@@ -2085,12 +2139,16 @@ void AttDataFile::on_pushButtonLandCoverClassesFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Land-cover Raster", user_pihmgis_root_folder, "Land-cover Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_LandCoverClassesFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_LandCoverClassesFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonLandCoverClassesFile_clicked() is returning w/o checking";
@@ -2111,12 +2169,16 @@ void AttDataFile::on_pushButtonMeltRegionsFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Melt Regions Raster", user_pihmgis_root_folder, "Melt Regions Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_MeltRegionsFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_MeltRegionsFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonMeltRegionsFile_clicked() is returning w/o checking";
@@ -2137,12 +2199,16 @@ void AttDataFile::on_pushButtonSourcesSinksFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Sources-Sinks Raster", user_pihmgis_root_folder, "Sources-Sinks Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_SourcesSinksFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_SourcesSinksFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSourcesSinksFile_clicked() is returning w/o checking";
@@ -2163,12 +2229,16 @@ void AttDataFile::on_pushButtonInterceptionFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Interception Raster", user_pihmgis_root_folder, "Interception Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_InterceptionFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_InterceptionFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonInterceptionFile_clicked() is returning w/o checking";
@@ -2189,12 +2259,16 @@ void AttDataFile::on_pushButtonSnowCoverFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Snow Cover Raster", user_pihmgis_root_folder, "Snow Cover Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_SnowCoverFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_SnowCoverFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSnowCoverFile_clicked() is returning w/o checking";
@@ -2215,12 +2289,16 @@ void AttDataFile::on_pushButtonSurfaceStorageFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Surface-water Raster", user_pihmgis_root_folder, "Surface-water Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_SurfaceStorageFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_SurfaceStorageFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSurfaceStorageFile_clicked() is returning w/o checking";
@@ -2241,12 +2319,16 @@ void AttDataFile::on_pushButtonSoilMoistureFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Soil Moisture Raster", user_pihmgis_root_folder, "Soil Moisture Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_SoilMoistureFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_SoilMoistureFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonSoilMoistureFile_clicked() is returning w/o checking";
@@ -2267,12 +2349,16 @@ void AttDataFile::on_pushButtonGroundwaterFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Groundwater Raster", user_pihmgis_root_folder, "Groundwater Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_GroundwaterFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_GroundwaterFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonGroundwaterFile_clicked() is returning w/o checking";
@@ -2293,12 +2379,16 @@ void AttDataFile::on_pushButtonBoundaryConditionFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "Boundary Condition Raster", user_pihmgis_root_folder, "Boundary Condition Raster(*.adf *.asc)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_BoundaryConditionFileorValue(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_BoundaryConditionFileorValue(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
 
     } catch (...) {
@@ -2320,12 +2410,16 @@ void AttDataFile::on_pushButtonTINShapeLayerFile_clicked()
 
         QString RasterFileName = QFileDialog::getOpenFileName(this, "TIN Shape Layer", user_pihmgis_root_folder+"/3DomainDecomposition/", "TIN Shape Layer(*.shp *.SHP)");
 
-        if ( RasterFileName != nullptr)
+        if ( RasterFileName.isNull() == false)
         {
-            Check_TINShape_Input(RasterFileName);
+            if( RasterFileName.isEmpty() == false)
+            {
+                Check_TINShape_Input(RasterFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonTINShapeLayerFile_clicked() is returning w/o checking";
@@ -2346,17 +2440,21 @@ void AttDataFile::on_pushButtonAttDataFile_clicked()
 
         QString DataFileName = QFileDialog::getSaveFileName(this, "Choose Att Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Att Data File(*.att)");
         QString tempString = DataFileName;
-        if ( DataFileName != nullptr)
+        if ( DataFileName.isNull() == false)
         {
-            if( (tempString.toLower()).endsWith(".att") == false )
+            if( DataFileName.isEmpty() == false)
             {
-                tempString.append(".att");
-                DataFileName = tempString;
-            }
-            Check_Att_Output(DataFileName, true);
+                if( (tempString.toLower()).endsWith(".att") == false )
+                {
+                    tempString.append(".att");
+                    DataFileName = tempString;
+                }
+                Check_Att_Output(DataFileName, true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: AttDataFile::on_pushButtonAttDataFile_clicked() is returning w/o checking";
@@ -3322,25 +3420,25 @@ void AttDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Get CheckBox Input Values
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool checked_PrecipitationFile  = ui->checkBoxPrecipitation->isChecked();
-        bool checked_TemperatureFile  = ui->checkBoxTemperature->isChecked();
+        bool checked_PrecipitationFile    = ui->checkBoxPrecipitation->isChecked();
+        bool checked_TemperatureFile      = ui->checkBoxTemperature->isChecked();
         bool checked_RelativeHumidityFile = ui->checkBoxRelativeHumidity->isChecked();
-        bool checked_WindVelocityFile = ui->checkBoxWindVelocity->isChecked();
-        bool checked_SolarRadiationFile = ui->checkBoxSolarRadiation->isChecked();
-        bool checked_VaporPressureFile  = ui->checkBoxVaporPressure->isChecked();
+        bool checked_WindVelocityFile     = ui->checkBoxWindVelocity->isChecked();
+        bool checked_SolarRadiationFile   = ui->checkBoxSolarRadiation->isChecked();
+        bool checked_VaporPressureFile    = ui->checkBoxVaporPressure->isChecked();
 
-        bool checked_SoilClassesFile  = ui->checkBoxSoilClasses->isChecked();
-        bool checked_GeologyClassesFile = ui->checkBoxGeologyClasses->isChecked();
-        bool checked_MacroporesFile = ui->checkBoxMacropores->isChecked();
+        bool checked_SoilClassesFile      = ui->checkBoxSoilClasses->isChecked();
+        bool checked_GeologyClassesFile   = ui->checkBoxGeologyClasses->isChecked();
+        bool checked_MacroporesFile       = ui->checkBoxMacropores->isChecked();
         bool checked_LandCoverClassesFile = ui->checkBoxLandCoverClasses->isChecked();
-        bool checked_MeltRegionsFile  = ui->checkBoxMeltRegions->isChecked();
-        bool checked_SourcesSinksFile = ui->checkBoxSourcesSinks->isChecked();
+        bool checked_MeltRegionsFile      = ui->checkBoxMeltRegions->isChecked();
+        bool checked_SourcesSinksFile     = ui->checkBoxSourcesSinks->isChecked();
 
-        bool checked_InterceptionFile = ui->checkBoxInterception->isChecked();
-        bool checked_SnowCoverFile = ui->checkBoxSnowCover->isChecked();
-        bool checked_SurfaceStorageFile = ui->checkBoxSurfaceStorage->isChecked();
-        bool checked_SoilMoistureFile = ui->checkBoxSoilMoisture->isChecked();
-        bool checked_GroundwaterFile  = ui->checkBoxGroundwater->isChecked();
+        bool checked_InterceptionFile      = ui->checkBoxInterception->isChecked();
+        bool checked_SnowCoverFile         = ui->checkBoxSnowCover->isChecked();
+        bool checked_SurfaceStorageFile    = ui->checkBoxSurfaceStorage->isChecked();
+        bool checked_SoilMoistureFile      = ui->checkBoxSoilMoisture->isChecked();
+        bool checked_GroundwaterFile       = ui->checkBoxGroundwater->isChecked();
         bool checked_BoundaryConditionFile = ui->checkBoxBoundaryCondition->isChecked();
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3353,6 +3451,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("TINShape Input File or Value Missing " + input_filename_TINShape_Input );
             return;
         }
+
         if ( CheckFileAccess(input_filename_TINShape_Input, "ReadOnly") == false )
         {
             Log_Error_Message("No Read Access to TINShape Input File or Value Missing " + input_filename_TINShape_Input );
@@ -3382,6 +3481,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("Temperature Input File or Value Missing " + input_filename_PrecipitationFile );
             return;
         }
+
         if ( checked_TemperatureFile == false)
         {
             if ( CheckFileAccess(input_filename_TemperatureFile, "ReadOnly") == false)
@@ -3398,6 +3498,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("RelativeHumidity Input File or Value Missing " + input_filename_RelativeHumidityFile );
             return;
         }
+
         if ( checked_RelativeHumidityFile == false)
         {
             if ( CheckFileAccess(input_filename_RelativeHumidityFile, "ReadOnly") == false )
@@ -3414,6 +3515,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("WindVelocity Input File or Value Missing " + input_filename_WindVelocityFile );
             return;
         }
+
         if ( checked_WindVelocityFile == false)
         {
             if ( CheckFileAccess(input_filename_WindVelocityFile, "ReadOnly") == false )
@@ -3430,6 +3532,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("SolarRadiation Input File or Value Missing " + input_filename_SolarRadiationFile );
             return;
         }
+
         if ( checked_SolarRadiationFile == false)
         {
             if ( CheckFileAccess(input_filename_SolarRadiationFile, "ReadOnly") == false)
@@ -3446,6 +3549,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("VaporPressure Input File or Value Missing " + input_filename_VaporPressureFile );
             return;
         }
+
         if ( checked_VaporPressureFile == false)
         {
             if ( CheckFileAccess(input_filename_VaporPressureFile, "ReadOnly") == false )
@@ -3462,6 +3566,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("SoilClasses Input File or Value Missing " + input_filename_SoilClassesFile );
             return;
         }
+
         if ( checked_SoilClassesFile == false)
         {
             if ( CheckFileAccess(input_filename_SoilClassesFile, "ReadOnly") == false)
@@ -3478,6 +3583,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("GeologyClasses Input File or Value Missing " + input_filename_GeologyClassesFile );
             return;
         }
+
         if ( checked_GeologyClassesFile == false)
         {
             if ( CheckFileAccess(input_filename_GeologyClassesFile, "ReadOnly") == false)
@@ -3494,6 +3600,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("Macropores Input File or Value Missing " + input_filename_MacroporesFile );
             return;
         }
+
         if ( checked_MacroporesFile == false)
         {
             if ( CheckFileAccess(input_filename_MacroporesFile, "ReadOnly") == false)
@@ -3510,6 +3617,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("LandCover Input File or Value Missing " + input_filename_LandCoverClassesFile );
             return;
         }
+
         if ( checked_LandCoverClassesFile == false)
         {
             if ( CheckFileAccess(input_filename_LandCoverClassesFile, "ReadOnly") == false )
@@ -3526,6 +3634,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("MeltRegions Input File or Value Missing " + input_filename_MeltRegionsFile );
             return;
         }
+
         if ( checked_MeltRegionsFile == false)
         {
             if ( CheckFileAccess(input_filename_MeltRegionsFile, "ReadOnly") == false)
@@ -3542,6 +3651,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("SourcesSinks Input File or Value Missing " + input_filename_SourcesSinksFile );
             return;
         }
+
         if ( checked_SourcesSinksFile == false)
         {
             if ( CheckFileAccess(input_filename_SourcesSinksFile, "ReadOnly") == false)
@@ -3558,6 +3668,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("Interception Input File or Value Missing " + input_filename_InterceptionFile );
             return;
         }
+
         if ( checked_InterceptionFile == false)
         {
             if ( CheckFileAccess(input_filename_InterceptionFile, "ReadOnly") == false)
@@ -3574,6 +3685,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("SnowCover Input File or Value Missing " + input_filename_SnowCoverFile );
             return;
         }
+
         if ( checked_SnowCoverFile == false)
         {
             if ( CheckFileAccess(input_filename_SnowCoverFile, "ReadOnly") == false)
@@ -3590,6 +3702,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("SurfaceStorage Input File or Value Missing " + input_filename_SurfaceStorageFile );
             return;
         }
+
         if ( checked_SurfaceStorageFile == false)
         {
             if ( CheckFileAccess(input_filename_SurfaceStorageFile, "ReadOnly") == false)
@@ -3606,6 +3719,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("SoilMoisture Input File or Value Missing " + input_filename_SoilMoistureFile );
             return;
         }
+
         if ( checked_SoilMoistureFile == false)
         {
             if ( CheckFileAccess(input_filename_SoilMoistureFile, "ReadOnly") == false)
@@ -3622,6 +3736,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("Groundwater Input File or Value Missing " + input_filename_GroundwaterFile );
             return;
         }
+
         if ( checked_GroundwaterFile == false)
         {
             if ( CheckFileAccess(input_filename_GroundwaterFile, "ReadOnly") == false)
@@ -3638,6 +3753,7 @@ void AttDataFile::on_pushButtonRun_clicked()
             Log_Error_Message("BoundaryCondition Input File or Value Missing " + input_filename_BoundaryConditionFile );
             return;
         }
+
         if ( checked_BoundaryConditionFile == false)
         {
             if ( CheckFileAccess(input_filename_BoundaryConditionFile, "ReadOnly") == false)

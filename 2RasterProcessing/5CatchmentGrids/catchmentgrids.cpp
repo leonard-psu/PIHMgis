@@ -31,7 +31,7 @@ CatchmentGrids::CatchmentGrids(QWidget *parent, QString filename) :
 
         // Start: Fill Form If Module Has Been Run Previously
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project);
         }
@@ -113,13 +113,13 @@ bool CatchmentGrids::Load_Project_Settings()
         }
 
         bool LinkGrids_check = Check_LinkGrids_Input(LinkGrids_filename);
-        if(!LinkGrids_check)
+        if( LinkGrids_check == false)
         {
             Log_Error_Message("LinkGrids input does not exist. ");
         }
 
         bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGrids_filename);
-        if(!FlowDirGrids_check)
+        if( FlowDirGrids_check == false)
         {
             Log_Error_Message("FlowDirGrid input does not exist. ");
         }
@@ -363,16 +363,20 @@ void CatchmentGrids::on_pushButtonLinkGrids_clicked()
         Clear_Log();
 
         QString LinkGridFileName = QFileDialog::getOpenFileName(this, "Choose Link Grid File", user_pihmgis_root_folder+tr("/1RasterProcessing"), "Link Grid File(*.asc *.ASC)");
-        if ( LinkGridFileName != nullptr)
+        if ( LinkGridFileName.isNull() == false)
         {
-            bool LinkGrids_check = Check_LinkGrids_Input(LinkGridFileName);
-            if(!LinkGrids_check)
+            if( LinkGridFileName.isEmpty() == false)
             {
-                Log_Error_Message("LinkGrids input does not exist.");
-            }
+                bool LinkGrids_check = Check_LinkGrids_Input(LinkGridFileName);
+                if( LinkGrids_check == false)
+                {
+                    Log_Error_Message("LinkGrids input does not exist.");
+                }
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error:CatchmentGrids::on_pushButtonLinkGrids_clicked() is returning w/o checking";
@@ -392,16 +396,20 @@ void CatchmentGrids::on_pushButtonFlowDirGrids_clicked()
         Clear_Log();
 
         QString FlowDirGridFileName = QFileDialog::getOpenFileName(this, "Choose Flow Dir Grid File", user_pihmgis_root_folder+tr("/1RasterProcessing"), "Flow Dir Grid File(*.asc *.ASC)");
-        if ( FlowDirGridFileName != nullptr)
+        if ( FlowDirGridFileName.isNull() == false)
         {
-            bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGridFileName);
-            if(!FlowDirGrids_check)
+            if( FlowDirGridFileName.isEmpty() == false)
             {
-                Log_Error_Message("FlowDirGrids input does not exist.");
-            }
+                bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGridFileName);
+                if( FlowDirGrids_check == false)
+                {
+                    Log_Error_Message("FlowDirGrids input does not exist.");
+                }
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error:CatchmentGrids::on_pushButtonFlowDirGrids_clicked() is returning w/o checking";
@@ -421,20 +429,24 @@ void CatchmentGrids::on_pushButtonCatchmentGrids_clicked()
         Clear_Log();
 
         QString CatchmentGridsFileName = QFileDialog::getSaveFileName(this, "Choose Catchment Grid", user_pihmgis_root_folder+"/1RasterProcessing","Catchment Grid File(*.asc)");
-        if ( CatchmentGridsFileName != nullptr)
+        if ( CatchmentGridsFileName.isNull() == false)
         {
-            QString tempString = CatchmentGridsFileName;
-            if( ! (tempString.toLower()).endsWith(".asc") )
+            if( CatchmentGridsFileName.isEmpty() == false)
             {
-                tempString.append(".asc");
-                CatchmentGridsFileName = tempString;
+                QString tempString = CatchmentGridsFileName;
+                if( (tempString.toLower()).endsWith(".asc") == false)
+                {
+                    tempString.append(".asc");
+                    CatchmentGridsFileName = tempString;
+                }
+
+                Check_CatchmentGrids_Output(CatchmentGridsFileName, true);
+
+                pushButtonSetFocus();
+
             }
-
-            Check_CatchmentGrids_Output(CatchmentGridsFileName, true);
-
-            pushButtonSetFocus();
-
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error:CatchmentGrids::on_pushButtonCatchmentGrids_clicked() is returning w/o checking";
@@ -464,14 +476,14 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         QString CatchmentGrids_filename =  ui->lineEditCatchmentGrids->text();
 
         bool LinkGridsCheck = Check_LinkGrids_Input(LinkGrids_filename);
-        if(!LinkGridsCheck)
+        if( LinkGridsCheck == false)
         {
             Log_Error_Message("LinkGrids Input File Missing");
             return;
         }
 
         bool FlowDirGridsCheck = Check_FlowDirGrids_Input(FlowDirGrids_filename);
-        if(!FlowDirGridsCheck)
+        if( FlowDirGridsCheck == false)
         {
             Log_Error_Message("FlowDirGrids Input File Missing");
             return;
@@ -489,18 +501,18 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(LinkGrids_filename, "ReadOnly") )
+        if ( CheckFileAccess(LinkGrids_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + LinkGrids_filename);
             return;
         }
-        if ( ! CheckFileAccess(FlowDirGrids_filename, "ReadOnly") )
+        if ( CheckFileAccess(FlowDirGrids_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + FlowDirGrids_filename );
             return;
         }
 
-        if ( ! CheckFileAccess(CatchmentGrids_filename, "WriteOnly") )
+        if ( CheckFileAccess(CatchmentGrids_filename, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to ... " + CatchmentGrids_filename );
             return;
@@ -526,7 +538,7 @@ void CatchmentGrids::on_pushButtonRun_clicked()
         // Check output filenames
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         CatchmentGridsCheck = Check_CatchmentGrids_Output(CatchmentGrids_filename, true);
-        if(!CatchmentGridsCheck)
+        if( CatchmentGridsCheck == false)
         {
             Log_Error_Message("Error: CatchmentGrids failed ");
             return;

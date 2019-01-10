@@ -30,7 +30,7 @@ StreamPolyline::StreamPolyline(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -360,17 +360,20 @@ void StreamPolyline::on_pushButtonStreamGrids_clicked()
         Clear_Log();
 
         QString StreamGridFileName = QFileDialog::getOpenFileName(this, "Choose Stream Grid File", user_pihmgis_root_folder +tr("/1RasterProcessing"), "Stream Grid File(*.asc *.ASC)");
-        if ( StreamGridFileName != nullptr)
+        if ( StreamGridFileName.isNull() == false)
         {
-            bool StreamGrids_check = Check_StreamGrids_Input(StreamGridFileName);
-            if(!StreamGrids_check)
+            if( StreamGridFileName.isEmpty() == false)
             {
-                Log_Error_Message("StreamGrids input does not exist. ");
+                bool StreamGrids_check = Check_StreamGrids_Input(StreamGridFileName);
+                if( StreamGrids_check == false)
+                {
+                    Log_Error_Message("StreamGrids input does not exist. ");
+                }
+
+                pushButtonSetFocus();
             }
-
-            pushButtonSetFocus();
         }
-
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: StreamPolyline::on_pushButtonStreamGrids_clicked() is returning w/o checking";
@@ -389,16 +392,20 @@ void StreamPolyline::on_pushButtonFlowDirGrids_clicked()
         Clear_Log();
 
         QString FlowDirGridFileName = QFileDialog::getOpenFileName(this, "Choose Flow Dir Grid File", user_pihmgis_root_folder+tr("/1RasterProcessing"), "Flow Dir Grid File(*.asc *.ASC)");
-        if ( FlowDirGridFileName != nullptr)
+        if ( FlowDirGridFileName.isNull() == false)
         {
-            bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGridFileName);
-            if(!FlowDirGrids_check)
+            if( FlowDirGridFileName.isEmpty() == false)
             {
-                Log_Error_Message("FlowDirGrids input does not exist. ");
-            }
+                bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGridFileName);
+                if(FlowDirGrids_check == false)
+                {
+                    Log_Error_Message("FlowDirGrids input does not exist. ");
+                }
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: StreamPolyline::on_pushButtonFlowDirGrids_clicked() is returning w/o checking";
@@ -419,20 +426,24 @@ void StreamPolyline::on_pushButtonStreamPolyline_clicked()
 
         QString StreamPolylineFileName = QFileDialog::getSaveFileName(this, "Choose Stream Polyline", user_pihmgis_root_folder +"/1RasterProcessing","Stream Polyline File(*.shp)");
 
-        if ( StreamPolylineFileName != nullptr)
+        if ( StreamPolylineFileName.isNull() == false)
         {
-            QString tempString = StreamPolylineFileName;
-            if( ! (tempString.toLower()).endsWith(".shp") )
+            if( StreamPolylineFileName.isEmpty() == false)
             {
-                tempString.append(".shp");
-                StreamPolylineFileName = tempString;
+                QString tempString = StreamPolylineFileName;
+                if( (tempString.toLower()).endsWith(".shp") == false)
+                {
+                    tempString.append(".shp");
+                    StreamPolylineFileName = tempString;
+                }
+
+                Check_StreamPolyline_Output(StreamPolylineFileName, true);
+
+                pushButtonSetFocus();
+
             }
-
-            Check_StreamPolyline_Output(StreamPolylineFileName, true);
-
-            pushButtonSetFocus();
-
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: StreamPolyline::on_pushButtonStreamPolyline_clicked() is returning w/o checking";
@@ -533,7 +544,7 @@ void StreamPolyline::on_pushButtonRun_clicked()
         qint64 size = file_Size(StreamPolyline_filename);
         if( size < 1)
         {
-            Log_Error_Message("StreamPolyline failed, invalid file size: " + size );
+            Log_Error_Message("StreamPolyline failed, invalid file size: " + QString::number(size) );
             return;
         }
 

@@ -319,11 +319,15 @@ void LcDataFile::on_pushButtonLcClassFile_clicked()
 
         QString LcClassFileName = QFileDialog::getOpenFileName(this, "Lc class File Name", user_pihmgis_root_folder, "Lc Class File(*.txt *.TXT)");
 
-        if ( LcClassFileName != nullptr)
+        if ( LcClassFileName.isNull() == false)
         {
-            Check_LCTexture_Input(LcClassFileName);
-            pushButtonSetFocus();
+            if( LcClassFileName.isEmpty() == false)
+            {
+                Check_LCTexture_Input(LcClassFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: LcDataFile::on_pushButtonLcClassFile_clicked() is returning w/o checking";
@@ -344,16 +348,20 @@ void LcDataFile::on_pushButtonLcDataFile_clicked()
 
         QString LcDataFileName = QFileDialog::getSaveFileName(this, "Choose Lc Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Lc Data File(*.lc)");
         QString tempString = LcDataFileName;
-        if ( LcDataFileName != nullptr)
+        if ( LcDataFileName.isNull() == false)
         {
-            if( (tempString.toLower()).endsWith(".lc") == false )
+            if( LcDataFileName.isEmpty() == false)
             {
-                tempString.append(".lc");
-                LcDataFileName = tempString;
+                if( (tempString.toLower()).endsWith(".lc") == false )
+                {
+                    tempString.append(".lc");
+                    LcDataFileName = tempString;
+                }
+                Check_LCData_Output(LcDataFileName,true);
+                pushButtonSetFocus();
             }
-            Check_LCData_Output(LcDataFileName,true);
-            pushButtonSetFocus();
         }
+        //else do nothing
 
 
     } catch (...) {

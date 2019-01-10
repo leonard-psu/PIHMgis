@@ -209,7 +209,7 @@ bool DelaunayTriangulation::Check_PSLG_Input(QString file)
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditPSLG->setStyleSheet("color: black;");
             ui->lineEditPSLG->setText(file);
@@ -385,12 +385,17 @@ void DelaunayTriangulation::on_pushButtonPSLG_clicked()
         Clear_Log();
 
         QString PSLGFileName = QFileDialog::getOpenFileName(this, "PSLG (.poly) File", user_pihmgis_root_folder + tr("/3DomainDecomposition"), "PSLG File(*.poly *.POLY)");
-        if ( PSLGFileName != nullptr)
-        {
-            Check_PSLG_Input(PSLGFileName);
 
-            pushButtonSetFocus();
+        if ( PSLGFileName.isNull() == false)
+        {
+            if( PSLGFileName.isEmpty() == false)
+            {
+                Check_PSLG_Input(PSLGFileName);
+
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: DelaunayTriangulation::on_pushButtonPSLG_clicked() is returning w/o checking";
@@ -430,6 +435,7 @@ void DelaunayTriangulation::on_checkBoxArea_toggled(bool checked)
         qDebug() << "INFO: Start DelaunayTriangulation::on_checkBoxArea_toggled()";
 
     try {
+
         if ( checked )
         {
             ui->lineEditArea->setDisabled(false);
@@ -453,6 +459,7 @@ void DelaunayTriangulation::on_checkBoxOthers_toggled(bool checked)
         qDebug() << "INFO: Start DelaunayTriangulation::on_checkBoxOthers_toggled()";
 
     try {
+
         if ( checked )
         {
             ui->lineEditOthers->setDisabled(false);
@@ -553,6 +560,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         qDebug() << "INFO: Start DelaunayTriangulation::on_pushButtonRun_clicked()";
 
     try {
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Clear Log
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -561,11 +569,11 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check inputs
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QString PSLG_filename =  ui->lineEditPSLG->text();
-        QString input_angle =  ui->lineEditAngle->text();
-        QString input_area =  ui->lineEditArea->text();
-        QString input_others =  ui->lineEditOthers->text();
-        QString filename_triangle_software =  ui->lineEditFIND->text();
+        QString PSLG_filename              = ui->lineEditPSLG->text();
+        QString input_angle                = ui->lineEditAngle->text();
+        QString input_area                 = ui->lineEditArea->text();
+        QString input_others               = ui->lineEditOthers->text();
+        QString filename_triangle_software = ui->lineEditFIND->text();
 
         bool TriangleCheck = Check_Triangle_Software_Input(filename_triangle_software);
         if(TriangleCheck == false)
@@ -696,7 +704,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         // Check output filenames
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         file_exists = Check_File_Valid(output_filename);
-        if(!file_exists)
+        if(file_exists == false)
         {
             Log_Error_Message("PSLG Output File not generated " + output_filename );
             return;
@@ -705,12 +713,12 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         qint64 size = file_Size(output_filename);
         if( size < 1)
         {
-            Log_Error_Message("PSLG Poly Output failed, invalid file size: " + size );
+            Log_Error_Message("PSLG Poly Output failed, invalid file size: " + QString::number(size) );
             return;
         }
 
         file_exists = Check_File_Valid(output_filename2);
-        if(!file_exists)
+        if(file_exists == false)
         {
             Log_Error_Message("PSLG Output File not generated  " + output_filename2 );
             return;
@@ -719,7 +727,7 @@ void DelaunayTriangulation::on_pushButtonRun_clicked()
         size = file_Size(output_filename2);
         if( size < 1)
         {
-            Log_Error_Message("PSLG Ele Output failed, invalid file size: " + size  );
+            Log_Error_Message("PSLG Ele Output failed, invalid file size: " + QString::number(size) );
             return;
         }
 
@@ -846,7 +854,7 @@ bool DelaunayTriangulation::Check_Triangle_Software_Input(QString file)
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditFIND->setStyleSheet("color: black;");
             ui->lineEditFIND->setText(file);
@@ -883,12 +891,15 @@ void DelaunayTriangulation::on_pushButtonFIND_clicked()
         Clear_Log();
 
         QString fileName = QFileDialog::getOpenFileName(this, "Triangle (.exe) ", user_pihmgis_root_folder + tr("/Software"), "Triangle File(*.exe *.exe)");
-        if ( fileName != nullptr)
+        if ( fileName.isNull() == false)
         {
-            Check_Triangle_Software_Input(fileName);
-
-            pushButtonSetFocus();
+            if( fileName.isEmpty() == false)
+            {
+                Check_Triangle_Software_Input(fileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: DelaunayTriangulation::on_pushButtonFIND_clicked() is returning w/o checking";
@@ -927,7 +938,7 @@ bool DelaunayTriangulation::Check_TIN_Output(QString file, bool color_and_messag
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {
@@ -963,12 +974,16 @@ void DelaunayTriangulation::on_pushButtonFIND_clicked(bool checked)
         Clear_Log();
 
         QString fileName = QFileDialog::getOpenFileName(this, "Triangle (.exe) ", user_pihmgis_root_folder + tr("/Software"), "Triangle File(*.exe *.exe)");
-        if ( fileName != nullptr)
+        if ( fileName.isNull() == false)
         {
-            Check_Triangle_Software_Input(fileName);
+            if( fileName.isEmpty() == false)
+            {
+                Check_Triangle_Software_Input(fileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: DelaunayTriangulation::on_pushButtonFIND_clicked() is returning w/o checking";

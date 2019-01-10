@@ -120,7 +120,7 @@ bool PolygonToPolylines::Load_Project_Settings()
                     int rowlen = ui->tableWidget->rowCount()-1;
                     if(rowlen >= 0)
                     {
-                        if(!file2_check)
+                        if( file2_check == false)
                         {
                             QTableWidgetItem *NewTableItem = new QTableWidgetItem(OutPolylineFileName);
                             ui->tableWidget->setItem(rowlen,1,NewTableItem);
@@ -357,7 +357,7 @@ bool PolygonToPolylines::Check_File_Valid(QString file)
             if( size < 1)
             {
                 Log_Error_Message("Check_File_Valid failed, file : " + file );
-                Log_Error_Message("Check_File_Valid failed, invalid file size: " + size);
+                Log_Error_Message("Check_File_Valid failed, invalid file size: " + QString::number(size) );
                 result = false;
             }
 

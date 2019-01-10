@@ -30,7 +30,7 @@ MeshDataFile::MeshDataFile(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false )
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project);
         }
@@ -169,7 +169,7 @@ bool MeshDataFile::Check_ElementFile_Input(QString file){
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditElementFile->setStyleSheet("color: black;");
             ui->lineEditElementFile->setText(file);
@@ -203,7 +203,7 @@ bool MeshDataFile::Check_NodeFile_Input(QString file){
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditNodeFile->setStyleSheet("color: black;");
             ui->lineEditNodeFile->setText(file);
@@ -270,7 +270,7 @@ bool MeshDataFile::Check_RiverFile_Input(QString file){
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditRiverFile->setStyleSheet("color: black;");
             ui->lineEditRiverFile->setText(file);
@@ -303,7 +303,7 @@ bool MeshDataFile::Check_SurfaceElevationFile_Input(QString file){
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditSurfaceElevationFile->setStyleSheet("color: black;");
             ui->lineEditSurfaceElevationFile->setText(file);
@@ -337,7 +337,7 @@ bool MeshDataFile::Check_SubsurfaceThickness_Input(QString file){
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             ui->lineEditSubsurfaceThickness->setStyleSheet("color: black;");
             ui->lineEditSubsurfaceThickness->setText(file);
@@ -371,7 +371,7 @@ bool MeshDataFile::Check_MeshData_Output(QString file, bool color_and_message_if
 
     try {
 
-        if(  fileExists(file) )
+        if( fileExists(file) )
         {
             if(color_and_message_if_exists)
             {
@@ -466,6 +466,7 @@ void MeshDataFile::pushButtonSetFocus()
         qDebug() << "INFO: Start MeshDataFile::pushButtonSetFocus()";
 
     try {
+
         ui->pushButtonElementFile->setDefault(false);
         ui->pushButtonNodeFile->setDefault(false);
         ui->pushButtonNeighbourFile->setDefault(false);
@@ -518,6 +519,7 @@ void MeshDataFile::pushButtonSetFocus()
 
         ui->pushButtonRun->setDefault(true);
         ui->pushButtonRun->setFocus();
+
     } catch (...) {
         qDebug() << "Error: MeshDataFile::pushButtonSetFocus() is returning w/o checking";
     }
@@ -536,11 +538,15 @@ void MeshDataFile::on_pushButtonElementFile_clicked()
         Clear_Log();
 
         QString EleFileName = QFileDialog::getOpenFileName(this, "Ele (.1.ele) File", user_pihmgis_root_folder+tr("/3DomainDecomposition"), "Ele File(*.ele)");
-        if ( EleFileName != nullptr)
+        if ( EleFileName.isNull() == false)
         {
-            Check_ElementFile_Input(EleFileName);
-            pushButtonSetFocus();
+            if( EleFileName.isEmpty() == false)
+            {
+                Check_ElementFile_Input(EleFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: MeshDataFile::on_pushButtonElementFile_clicked() is returning w/o checking";
@@ -560,11 +566,15 @@ void MeshDataFile::on_pushButtonNodeFile_clicked()
         Clear_Log();
 
         QString NodeFileName = QFileDialog::getOpenFileName(this, "Node (.1.node) File", user_pihmgis_root_folder+tr("/3DomainDecomposition"), "Node File(*.node)");
-        if ( NodeFileName != nullptr)
+        if ( NodeFileName.isNull() == false)
         {
-            Check_NodeFile_Input(NodeFileName);
-            pushButtonSetFocus();
+            if( NodeFileName.isEmpty() == false)
+            {
+                Check_NodeFile_Input(NodeFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: SimplifyPolylines is returning w/o checking";
@@ -584,11 +594,15 @@ void MeshDataFile::on_pushButtonNeighbourFile_clicked()
         Clear_Log();
 
         QString NeighFileName = QFileDialog::getOpenFileName(this, "Neighbor (.1.Neigh) File", user_pihmgis_root_folder + tr("/3DomainDecomposition"), "Neigh File(*.neigh)");
-        if ( NeighFileName != nullptr)
+        if ( NeighFileName.isNull() == false)
         {
-            Check_NeighbourFile_Input(NeighFileName);
-            pushButtonSetFocus();
+            if( NeighFileName.isEmpty() == false)
+            {
+                Check_NeighbourFile_Input(NeighFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: SimplifyPolylines is returning w/o checking";
@@ -608,11 +622,15 @@ void MeshDataFile::on_pushButtonRiverFile_clicked()
         Clear_Log();
 
         QString RiverFileName = QFileDialog::getOpenFileName(this, "River Split ShapeFile", user_pihmgis_root_folder+tr("/2VectorProcessing"), "River Split ShapeFile(*.shp)");
-        if ( RiverFileName != nullptr)
+        if ( RiverFileName.isNull() == false)
         {
-            Check_RiverFile_Input(RiverFileName);
-            pushButtonSetFocus();
+            if( RiverFileName.isEmpty() == false)
+            {
+                Check_RiverFile_Input(RiverFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: on_pushButtonRiverFile_clicked is returning w/o checking";
@@ -633,11 +651,15 @@ void MeshDataFile::on_pushButtonSurfaceElevationFile_clicked()
 
         QString SurfaceElevationFileName = QFileDialog::getOpenFileName(this, "Surface Elevation Raster", user_pihmgis_root_folder +tr("/1RasterProcessing"), "Surface Elevation Raster(*.adf *.asc)");
 
-        if ( SurfaceElevationFileName != nullptr)
+        if ( SurfaceElevationFileName.isNull() == false)
         {
-            Check_SurfaceElevationFile_Input(SurfaceElevationFileName);
-            pushButtonSetFocus();
+            if( SurfaceElevationFileName.isEmpty() == false)
+            {
+                Check_SurfaceElevationFile_Input(SurfaceElevationFileName);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: on_pushButtonSurfaceElevationFile_clicked is returning w/o checking";
@@ -658,13 +680,17 @@ void MeshDataFile::on_pushButtonSubsurfaceThickness_clicked()
 
         QString SubsurfaceElevationFileName = QFileDialog::getOpenFileName(this, "Sub-surface Elevation Raster", user_pihmgis_root_folder, "Sub-surface Elevation Raster(*.adf *.asc)");
 
-        if ( SubsurfaceElevationFileName != nullptr)
+        if ( SubsurfaceElevationFileName.isNull() == false)
         {
-            ui->checkBoxSubsurfaceThickness->setChecked(false);
-            Check_SubsurfaceThickness_Input(SubsurfaceElevationFileName);
+            if( SubsurfaceElevationFileName.isEmpty() == false)
+            {
+                ui->checkBoxSubsurfaceThickness->setChecked(false);
+                Check_SubsurfaceThickness_Input(SubsurfaceElevationFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: on_pushButtonSubsurfaceThickness_clicked is returning w/o checking";
@@ -685,17 +711,21 @@ void MeshDataFile::on_pushButtonMeshDataFile_clicked()
 
         QString MeshDataFileName = QFileDialog::getSaveFileName(this, "Choose Mesh Data File Name", user_pihmgis_root_folder +"/4DataModelLoader","Mesh Data File(*.mesh)");
         QString tempString = MeshDataFileName;
-        if ( MeshDataFileName != nullptr)
+        if ( MeshDataFileName.isNull() == false)
         {
-            if( ! (tempString.toLower()).endsWith(".mesh") )
+            if( MeshDataFileName.isEmpty() == false)
             {
-                tempString.append(".mesh");
-                MeshDataFileName = tempString;
-            }
+                if( (tempString.toLower()).endsWith(".mesh") == false)
+                {
+                    tempString.append(".mesh");
+                    MeshDataFileName = tempString;
+                }
 
-            Check_MeshData_Output(MeshDataFileName, true);
-            pushButtonSetFocus();
+                Check_MeshData_Output(MeshDataFileName, true);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: on_pushButtonMeshDataFile_clicked is returning w/o checking";
@@ -720,38 +750,38 @@ void MeshDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check inputs
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QString input_Element_filename = ui->lineEditElementFile->text();
-        QString input_Node_filename = ui->lineEditNodeFile->text();
-        QString input_Neighbour_filename = ui->lineEditNeighbourFile->text();
-        QString input_River_filename = ui->lineEditRiverFile->text();
+        QString input_Element_filename          = ui->lineEditElementFile->text();
+        QString input_Node_filename             = ui->lineEditNodeFile->text();
+        QString input_Neighbour_filename        = ui->lineEditNeighbourFile->text();
+        QString input_River_filename            = ui->lineEditRiverFile->text();
         QString input_SurfaceElevation_filename = ui->lineEditSurfaceElevationFile->text();
 
         int checkBoxSubsurfaceThickness = ui->checkBoxSubsurfaceThickness->isChecked();
         QString input_Subsurface_value = ui->lineEditSubsurfaceThickness->text();
 
         bool checked_element = Check_ElementFile_Input(input_Element_filename);
-        if(!checked_element)
+        if(checked_element == false)
         {
             Log_Error_Message("Element (.1.ele) Input File Missing ");
             return;
         }
 
         bool checked_node = Check_NodeFile_Input(input_Node_filename);
-        if(!checked_node)
+        if(checked_node == false)
         {
             Log_Error_Message("Node (.1.node) Input File Missing ");
             return;
         }
 
         bool checked_neighbour = Check_NeighbourFile_Input(input_Neighbour_filename);
-        if(!checked_neighbour)
+        if(checked_neighbour == false)
         {
             Log_Error_Message("Neighbor (.1.Neigh) Input File Missing ");
             return;
         }
 
         bool checked_river = Check_RiverFile_Input(input_River_filename);
-        if(!checked_river)
+        if(checked_river == false)
         {
             Log_Error_Message("River Split ShapeFile (*.shp) Input File Missing ");
             return;
@@ -764,7 +794,7 @@ void MeshDataFile::on_pushButtonRun_clicked()
         else
         {
             bool checked_surface = Check_SurfaceElevationFile_Input(input_SurfaceElevation_filename);
-            if(!checked_surface)
+            if(checked_surface == false)
             {
                 Log_Error_Message("Surface Elevation Raster (*.adf *.asc) Input File Missing ");
                 return;
@@ -785,36 +815,40 @@ void MeshDataFile::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(input_Element_filename, "ReadOnly") )
+        if ( CheckFileAccess(input_Element_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + input_Element_filename);
             return;
         }
-        if ( ! CheckFileAccess(input_Node_filename, "ReadOnly") )
+
+        if ( CheckFileAccess(input_Node_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + input_Node_filename);
             return;
         }
-        if ( ! CheckFileAccess(input_Neighbour_filename, "ReadOnly") )
+
+        if ( CheckFileAccess(input_Neighbour_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + input_Neighbour_filename );
             return;
         }
-        if ( ! CheckFileAccess(input_River_filename, "ReadOnly") )
+
+        if ( CheckFileAccess(input_River_filename, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + input_River_filename );
             return;
         }
+
         if(checkBoxSubsurfaceThickness == 0)
         {
-            if ( ! CheckFileAccess(input_SurfaceElevation_filename, "ReadOnly") )
+            if ( CheckFileAccess(input_SurfaceElevation_filename, "ReadOnly") == false)
             {
                 Log_Error_Message("No Read Access to ... " + input_SurfaceElevation_filename );
                 return;
             }
         }
 
-        if ( ! CheckFileAccess(output_filename, "WriteOnly") )
+        if ( CheckFileAccess(output_filename, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to ... " + output_filename );
             return;

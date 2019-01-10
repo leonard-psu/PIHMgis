@@ -26,7 +26,7 @@ int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName )
         int NUMCOL = 9;
 
         QFile TextureFile(TextureFileName);
-        if ( ! TextureFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( TextureFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[Soil_PedoTransferFunction] Error[-1000] opening Texture file.");
             return -1000;
@@ -34,7 +34,7 @@ int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName )
         QTextStream TextureFileTextStream(&TextureFile);
 
         QFile DataFile(DataFileName);
-        if ( ! DataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        if ( DataFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[Soil_PedoTransferFunction] Error[-1001] opening Data file.");
             TextureFile.close();
@@ -233,7 +233,7 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
         int NUMCOL = 10;
 
         QFile TextureFile(TextureFileName);
-        if ( ! TextureFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( TextureFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[Geol_PedoTransferFunction] Error[-1000] opening TextureFile.");
             return -1000;
@@ -242,7 +242,7 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
         QTextStream TextureFileTextStream(&TextureFile);
 
         QFile DataFile(DataFileName);
-        if ( ! DataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        if ( DataFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[Geol_PedoTransferFunction] Error[-1001] opening DataFile.");
             TextureFile.close();
@@ -450,7 +450,7 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
 
         //int MAXLC = 100;
         QFile ClassFile(ClassFileName);
-        if ( ! ClassFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ClassFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[Lc_PedoTransferFunction] Error[-1000] Invalid Class file.");
             return -1000;
@@ -459,7 +459,7 @@ int Lc_PedoTransferFunction  ( QString ClassFileName,   QString DataFileName )
         QTextStream ClassFileTextStream(&ClassFile);
 
         QFile DataFile(DataFileName);
-        if ( ! DataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        if ( DataFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[Lc_PedoTransferFunction] Error[-1001] Invalid Data file.");
             ClassFile.close();

@@ -301,10 +301,13 @@ void MeshSpatial::on_pushButtonOutputDataFolder_clicked()
 
         QString OutputDataFolder = QFileDialog::getExistingDirectory(this, "PIHM Input Data Folder", user_pihmgis_root_folder + "/5PIHMSimulation", 0);
 
-        if( OutputDataFolder != nullptr )
+        if ( OutputDataFolder.isNull() == false)
         {
-            Check_OutputFolder_Location(OutputDataFolder);
-            pushButtonSetFocus();
+            if( OutputDataFolder.isEmpty() == false)
+            {
+                Check_OutputFolder_Location(OutputDataFolder);
+                pushButtonSetFocus();
+            }
         }
 
     } catch (...) {
@@ -625,11 +628,15 @@ void MeshSpatial::on_pushButtonMeshShapeFile_clicked()
 
         QString MeshShapeFile = QFileDialog::getOpenFileName(this, "Mesh Shape File", user_pihmgis_root_folder +"/3DomainDecomposition", "Mesh Shape File(*.shp)");
 
-        if( MeshShapeFile != nullptr )
+        if( MeshShapeFile.isNull() == false)
         {
-            Check_Mesh_Input(MeshShapeFile);
-            pushButtonSetFocus();
+            if( MeshShapeFile.isEmpty() == false)
+            {
+                Check_Mesh_Input(MeshShapeFile);
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: MeshSpatial::on_pushButtonMeshShapeFile_clicked() is returning w/o checking";
@@ -859,12 +866,12 @@ void MeshSpatial::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check Inputs from GUI
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QString project_folder = ui->lineEditOutputDataFolder->text();
-        QString project_name = ui->lineEditDataKey->text();
-        QString mesh_shape_filename = ui->lineEditMeshShapeFile->text();
+        QString project_folder       = ui->lineEditOutputDataFolder->text();
+        QString project_name         = ui->lineEditDataKey->text();
+        QString mesh_shape_filename  = ui->lineEditMeshShapeFile->text();
         QString output_base_filename = project_folder + "/" + project_name;
-        QString river_filename = output_base_filename + ".riv";
-        QString mesh_filename = output_base_filename + ".mesh";
+        QString river_filename       = output_base_filename + ".riv";
+        QString mesh_filename        = output_base_filename + ".mesh";
 
         int start_time = ui->spinBoxStartTime->value();
         int stop_time  = ui->spinBoxStopTime->value();
@@ -1118,6 +1125,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
         if( copied == false)
         {
             Log_Error_Message("Failed to copy file " + TempString  );
+            return;
         }
 
         TempString.replace(".shp",".shx");
@@ -1125,6 +1133,7 @@ void MeshSpatial::on_pushButtonRun_clicked()
         if( copied == false)
         {
             Log_Error_Message("Failed to copy file " + TempString  );
+            return;
         }
 
         QString dbfFileName = output_file_name_without_extension + ".dbf";

@@ -354,12 +354,16 @@ void TINShapeLayer::on_pushButtonElementFile_clicked()
         Clear_Log();
 
         QString EleFileName = QFileDialog::getOpenFileName(this, "Ele (.1.ele) File", user_pihmgis_root_folder +tr("/3DomainDecomposition"), "Ele File(*.ele)");
-        if ( EleFileName.length() > 0)
+        if ( EleFileName.isNull() == false)
         {
-            Check_Element_Input(EleFileName);
+            if( EleFileName.isEmpty() == false)
+            {
+                Check_Element_Input(EleFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error:  TINShapeLayer::on_pushButtonElementFile_clicked() is returning w/o checking";
@@ -377,12 +381,16 @@ void TINShapeLayer::on_pushButtonNodeFile_clicked()
     try {
 
         QString NodeFileName = QFileDialog::getOpenFileName(this, "Node (.1.node) File", user_pihmgis_root_folder+tr("/3DomainDecomposition"), "Node File(*.node)");
-        if ( NodeFileName != nullptr)
+        if ( NodeFileName.isNull() == false)
         {
-            Check_Node_Input(NodeFileName);
+            if( NodeFileName.isEmpty() == false)
+            {
+                Check_Node_Input(NodeFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error:  TINShapeLayer::on_pushButtonNodeFile_clicked() is returning w/o checking";
@@ -403,19 +411,23 @@ void TINShapeLayer::on_pushButtonTINFile_clicked()
 
         QString TINShapeFileName = QFileDialog::getSaveFileName(this, "Choose TIN Shape File Name", user_pihmgis_root_folder +"/3DomainDecomposition","Shape File(*.shp)");
 
-        if ( TINShapeFileName != nullptr)
+        if ( TINShapeFileName.isNull() == false)
         {
-            QString tempString = TINShapeFileName;
-            if( (tempString.toLower()).endsWith(".shp") == false)
+            if( TINShapeFileName.isEmpty() == false)
             {
-                tempString.append(".shp");
-                TINShapeFileName = tempString;
+                QString tempString = TINShapeFileName;
+                if( (tempString.toLower()).endsWith(".shp") == false)
+                {
+                    tempString.append(".shp");
+                    TINShapeFileName = tempString;
+                }
+
+                Check_TinShape_Output(TINShapeFileName, true);
+
+                pushButtonSetFocus();
             }
-
-            Check_TinShape_Output(TINShapeFileName, true);
-
-            pushButtonSetFocus();
         }
+        //else do nothing
 
 
     } catch (...) {
@@ -445,13 +457,13 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         QString node_input_filename     = ui->lineEditNodeFile->text();
         QString tinshape_input_filename = ui->lineEditTINFile->text();
 
-
         bool ElementCheck = Check_Element_Input(element_input_filename);
         if(ElementCheck == false)
         {
             Log_Error_Message("Element (.1.ele) Input File Missing ");
             return;
         }
+
         bool NodeCheck = Check_Node_Input(node_input_filename);
         if(NodeCheck == false)
         {
@@ -519,14 +531,14 @@ void TINShapeLayer::on_pushButtonRun_clicked()
         TinShapeCheck = Check_TinShape_Output(tinshape_input_filename, false);
         if(TinShapeCheck == false)
         {
-            Log_Error_Message("TinShape failed, file does not exist: " + TinShapeCheck );
+            Log_Error_Message("TinShape failed, file does not exist: " + tinshape_input_filename );
             return;
         }
 
         qint64 size = file_Size(tinshape_input_filename);
         if( size < 1)
         {
-            Log_Error_Message("CatchmentPolygon failed, invalid file size: " + size );
+            Log_Error_Message("CatchmentPolygon failed, invalid file size: " + QString::number(size) );
             return;
         }
 

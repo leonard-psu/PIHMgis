@@ -305,17 +305,21 @@ void ParaDataFile::on_pushButtonParaDataFile_clicked()
 
         QString ParaDataFileName = QFileDialog::getSaveFileName(this, "Choose Para Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","Para Data File(*.para)");
         QString tempString = ParaDataFileName;
-        if ( ParaDataFileName != nullptr)
+        if ( ParaDataFileName.isNull() == false)
         {
-            if( (tempString.toLower()).endsWith(".para") == false)
+            if( ParaDataFileName.isEmpty() == false)
             {
-                tempString.append(".para");
-                ParaDataFileName = tempString;
-            }
-            Check_Para_Output(ParaDataFileName, true);
+                if( (tempString.toLower()).endsWith(".para") == false)
+                {
+                    tempString.append(".para");
+                    ParaDataFileName = tempString;
+                }
+                Check_Para_Output(ParaDataFileName, true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error:ParaDataFile::on_pushButtonParaDataFile_clicked() is returning w/o checking";
@@ -333,7 +337,7 @@ int ParaDataFile::para_data_file(QString filename)
     try {
 
         QFile ParaFile( filename);
-        if ( !ParaFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
+        if ( ParaFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
         {
             return 129;
         }

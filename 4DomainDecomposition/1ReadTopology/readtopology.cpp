@@ -138,7 +138,7 @@ bool ReadTopology::Check_File_Valid(QString file)
             if( size < 1)
             {
                 Log_Error_Message("Check_File_Valid failed, file : " + file );
-                Log_Error_Message("Check_File_Valid failed, invalid file size: " + size );
+                Log_Error_Message("Check_File_Valid failed, invalid file size: " + QString::number(size) );
                 result = false;
             }
         }
@@ -330,17 +330,20 @@ void ReadTopology::on_pushButtonMerge_clicked()
         Clear_Log();
 
         QString MergeVectorFileName = QFileDialog::getOpenFileName(this, "Choose Merge Vector File", user_pihmgis_root_folder+tr("/3DomainDecomposition"), "Vector Shape File(*.shp *.SHP)");
-        if ( MergeVectorFileName != nullptr)
+        if ( MergeVectorFileName.isNull() == false)
         {
-            Check_MergeVector_Input(MergeVectorFileName);
+            if( MergeVectorFileName.isEmpty() == false)
+            {
+                Check_MergeVector_Input(MergeVectorFileName);
 
-            QString output = MergeVectorFileName;
-            output.replace(QString(".shp"),QString(".poly"));
-            Check_PSLG_Output(output,true);
+                QString output = MergeVectorFileName;
+                output.replace(QString(".shp"),QString(".poly"));
+                Check_PSLG_Output(output,true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
-
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: ReadTopology::on_pushButtonMerge_clicked() is returning w/o checking";
@@ -358,19 +361,22 @@ void ReadTopology::on_pushButtonPSLG_clicked()
     try {
 
         QString PSLGFileName = QFileDialog::getSaveFileName(this, "Choose Planar Straight Line Graph", user_pihmgis_root_folder +"/3DomainDecomposition","PSLG File(*.poly)");
-        if ( PSLGFileName != nullptr)
+        if ( PSLGFileName.isNull() == false)
         {
-
-            QString output = PSLGFileName;
-            if( (output.toLower()).endsWith(".shp") == false )
+            if( PSLGFileName.isEmpty() == false)
             {
-                output.append(".shp");
-                PSLGFileName = output;
-            }
-            Check_PSLG_Output(PSLGFileName, true);
+                QString output = PSLGFileName;
+                if( (output.toLower()).endsWith(".shp") == false )
+                {
+                    output.append(".shp");
+                    PSLGFileName = output;
+                }
+                Check_PSLG_Output(PSLGFileName, true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: ReadTopology::on_pushButtonPSLG_clicked() is returning w/o checking";
@@ -457,7 +463,7 @@ void ReadTopology::on_pushButtonRun_clicked()
         qint64 size = file_Size(output_filename);
         if( size < 1)
         {
-            Log_Error_Message("CatchmentPolygon failed, invalid file size: " + size );
+            Log_Error_Message("CatchmentPolygon failed, invalid file size: " + QString::number(size) );
             return;
         }
 

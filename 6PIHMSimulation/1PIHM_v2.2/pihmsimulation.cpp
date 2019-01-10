@@ -77,12 +77,12 @@ PIHMSimulation::~PIHMSimulation()
 
     try {
 
-//For now, let user not kill thread by closing window
-//        if(mThread != nullptr)
-//        {
-//            mThread->quit();
-//            mThread->wait();
-//        }
+        //For now, let user not kill thread by closing window
+        //        if(mThread != nullptr)
+        //        {
+        //            mThread->quit();
+        //            mThread->wait();
+        //        }
 
         delete ui;
 
@@ -303,10 +303,13 @@ void PIHMSimulation::on_pushButtonInputDataFolder_clicked()
 
         QString InputDataFolder = QFileDialog::getExistingDirectory(this, "PIHM Input Data Folder", user_pihmgis_root_folder+"/4DataModelLoader", 0);
 
-        if( InputDataFolder != nullptr )
+        if ( InputDataFolder.isNull() == false)
         {
-            Check_InputDataFolder(InputDataFolder);
-            pushButtonSetFocus();
+            if( InputDataFolder.isEmpty() == false)
+            {
+                Check_InputDataFolder(InputDataFolder);
+                pushButtonSetFocus();
+            }
         }
 
     } catch (...) {
@@ -597,8 +600,8 @@ void PIHMSimulation::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Get Input Values
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QString input_folder  = ui->lineEditInputDataFolder->text();
-        QString project_name  = ui->lineEditDataKey->text();
+        QString input_folder             = ui->lineEditInputDataFolder->text();
+        QString project_name             = ui->lineEditDataKey->text();
         bool delete_existing_output_file = ui->checkBoxOverWriteFiles->isChecked();
 
         bool checked_input = Check_InputDataFolder(input_folder);
@@ -607,6 +610,7 @@ void PIHMSimulation::on_pushButtonRun_clicked()
             Log_Error_Message("Invalid Project Input Folder or Value Missing" + input_folder );
             return;
         }
+
         checked_input = Check_DataKey(project_name);
         if( checked_input == false)
         {
@@ -645,7 +649,7 @@ void PIHMSimulation::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Running Simulation
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Log_Message(tr("PIHM Simulation Starting ... "));
+        Log_Message("PIHM Simulation Starting ... ");
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update Project file
@@ -903,11 +907,11 @@ void PIHMSimulation::verifyInputOutputFile()
             }
             else
             {
-                Log_Message(tr("Input File Exists ... ")+ FileName + Extensions.at(i) );
+                Log_Message("Input File Exists ... " + FileName + Extensions.at(i) );
             }
         }
 
-        if(!missing_files)
+        if(missing_files == false)
         {
             Log_Message( "All PIHM input files found ");
             ui->pushButtonRun->setEnabled(true);

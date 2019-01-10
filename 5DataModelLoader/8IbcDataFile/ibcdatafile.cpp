@@ -214,17 +214,21 @@ void IbcDataFile::on_pushButtonIbcDataFile_clicked()
 
         QString IbcDataFileName = QFileDialog::getSaveFileName(this, "Choose IBC Data File Name", user_pihmgis_root_folder+"/4DataModelLoader","IBC Data File(*.ibc)");
         QString tempString = IbcDataFileName;
-        if ( IbcDataFileName != nullptr)
+        if ( IbcDataFileName.isNull() == false)
         {
-            if( (tempString.toLower()).endsWith(".ibc") == false)
+            if( IbcDataFileName.isEmpty() == false)
             {
-                tempString.append(".ibc");
-                IbcDataFileName = tempString;
-            }
-            Check_IbcData_Output(IbcDataFileName, true);
+                if( (tempString.toLower()).endsWith(".ibc") == false)
+                {
+                    tempString.append(".ibc");
+                    IbcDataFileName = tempString;
+                }
+                Check_IbcData_Output(IbcDataFileName, true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: IbcDataFile::on_pushButtonIbcDataFile_clicked() is returning w/o checking";

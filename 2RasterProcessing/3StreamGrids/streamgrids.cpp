@@ -33,7 +33,7 @@ StreamGrids::StreamGrids(QWidget *parent, QString filename) :
 
         // ** Start: Fill Form If Module Has Been Run Previously
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project );
         }
@@ -139,7 +139,7 @@ bool StreamGrids::Check_Threshold_Input(QString Threshold)
             }
         }
 
-        if(!badcharfound)
+        if( badcharfound == false)
         {
             ui->lineEditThreshold->setText(Threshold);
             result = true;
@@ -380,22 +380,22 @@ void StreamGrids::on_pushButtonFlowAccGrids_clicked()
         Clear_Log();
 
         QString FlowAccFileName = QFileDialog::getOpenFileName(this, "Choose Flow Acc File", user_pihmgis_root_folder +tr("/1RasterProcessing"), "DEM Grid File(*.asc *.ASC)");
-        if ( FlowAccFileName != nullptr)
+        if ( FlowAccFileName.isNull() == false)
         {
-            Check_FlowAccGrids_Input(FlowAccFileName);
+            if( FlowAccFileName.isEmpty() == false)
+            {
+                Check_FlowAccGrids_Input(FlowAccFileName);
 
-            //Suggested file name
-            QString threshold = ui->lineEditThreshold->text();
-            QString StreamGrids = filename_open_project+"/1RasterProcessing/Stream" + threshold + ".asc";
+                //Suggested file name
+                QString threshold = ui->lineEditThreshold->text();
+                QString StreamGrids = filename_open_project+"/1RasterProcessing/Stream" + threshold + ".asc";
 
-            Check_StreamGrids_Output(StreamGrids, true);
+                Check_StreamGrids_Output(StreamGrids, true);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
-        else
-        {
-            Log_Message("on_pushButtonFlowAccGrids_clicked: Invalid FlowAccFileName");
-        }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: on_pushButtonFlowAccGrids_clicked is returning w/o checking";
@@ -416,27 +416,26 @@ void StreamGrids::on_pushButtonStreamGrids_clicked()
         Clear_Log();
 
         QString StreamGridsFileName = QFileDialog::getSaveFileName(this, "Choose Stream Grid", user_pihmgis_root_folder + "/1RasterProcessing","Stream Grid File(*.asc)");
-        if ( StreamGridsFileName != nullptr)
+        if ( StreamGridsFileName.isNull() == false)
         {
-
-            QString FlowAccFileName = ui->lineEditFlowAccGrids->text();
-            Check_FlowAccGrids_Input(FlowAccFileName);
-
-            QString tempString = StreamGridsFileName;
-            if( ! (tempString.toLower()).endsWith(".asc") )
+            if( StreamGridsFileName.isEmpty() == false)
             {
-                tempString.append(".asc");
-                StreamGridsFileName = tempString;
+                QString FlowAccFileName = ui->lineEditFlowAccGrids->text();
+                Check_FlowAccGrids_Input(FlowAccFileName);
+
+                QString tempString = StreamGridsFileName;
+                if( (tempString.toLower()).endsWith(".asc") == false)
+                {
+                    tempString.append(".asc");
+                    StreamGridsFileName = tempString;
+                }
+
+                Check_StreamGrids_Output(StreamGridsFileName, true);
+
+                pushButtonSetFocus();
             }
-
-            Check_StreamGrids_Output(StreamGridsFileName, true);
-
-            pushButtonSetFocus();
         }
-        else
-        {
-            Log_Message("on_pushButtonStreamGrids_clicked: Invalid StreamGridsFileName");
-        }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: on_pushButtonStreamGrids_clicked is returning w/o checking";
@@ -463,7 +462,7 @@ void StreamGrids::on_pushButtonSuggestMe_clicked()
         }
 
         QFile FlowAccFile(FlowAccFileName);
-        if ( ! FlowAccFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( FlowAccFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + FlowAccFileName);
             return;
@@ -546,14 +545,14 @@ void StreamGrids::on_pushButtonRun_clicked()
         QString Threshold = ui->lineEditThreshold->text();
 
         bool flowacc_check = Check_FlowAccGrids_Input(FlowAccGrids);
-        if(!flowacc_check)
+        if( flowacc_check == false)
         {
             Log_Error_Message("Flow Acc Grid Input File Missing");
             return;
         }
 
         bool threshold_check = Check_Threshold_Input(Threshold);
-        if(!threshold_check)
+        if( threshold_check == false)
         {
             Log_Error_Message("Check Threshold Input (is it a number?) ");
             return;
@@ -571,13 +570,13 @@ void StreamGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(FlowAccGrids, "ReadOnly") )
+        if ( CheckFileAccess(FlowAccGrids, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + FlowAccGrids);
             return;
         }
 
-        if ( ! CheckFileAccess(StreamGrids, "WriteOnly") )
+        if ( CheckFileAccess(StreamGrids, "WriteOnly") == false)
         {
             Log_Error_Message("No Write Access to ... " + StreamGrids );
             return;
@@ -600,7 +599,7 @@ void StreamGrids::on_pushButtonRun_clicked()
         // Check output filenames
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         streamgrids_check = Check_StreamGrids_Output(StreamGrids, true);
-        if(!streamgrids_check)
+        if( streamgrids_check == false)
         {
             return;
         }
@@ -608,7 +607,7 @@ void StreamGrids::on_pushButtonRun_clicked()
         qint64 size = file_Size(StreamGrids);
         if( size < 1)
         {
-            Log_Error_Message("StreamGrids failed, invalid file size: " + size);
+            Log_Error_Message("StreamGrids failed, invalid file size: " + QString::number(size) );
             return;
         }
 

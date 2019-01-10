@@ -296,11 +296,15 @@ void RiverTemporal::on_pushButtonOutputDataFolder_clicked()
 
         QString OutputDataFolder = QFileDialog::getExistingDirectory(this, "PIHM Input Data Folder", user_pihmgis_root_folder+"/5PIHMSimulation", 0);
 
-        if( OutputDataFolder != nullptr )
+        if ( OutputDataFolder.isNull() == false)
         {
-            Check_OutputFolder_Location(OutputDataFolder);
-            pushButtonSetFocus();
+            if( OutputDataFolder.isEmpty() == false)
+            {
+                Check_OutputFolder_Location(OutputDataFolder);
+                pushButtonSetFocus();
+            }
         }
+
 
     } catch (...) {
         qDebug() << "Error: RiverTemporal::on_pushButtonOutputDataFolder_clicked() is returning w/o checking";
@@ -621,6 +625,7 @@ Time_Values RiverTemporal::Get_Time_Steps(QString filename, int num_elements, bo
     result.time_step2 = -1;
 
     try {
+
         QFile TempFile;
         QTextStream TempFileTextStream;
         int TIMESTEP1, TIMESTEP2;
@@ -678,11 +683,11 @@ void RiverTemporal::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check Inputs from GUI
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QString project_folder = ui->lineEditOutputDataFolder->text();
-        QString project_name = ui->lineEditDataKey->text();
+        QString project_folder       = ui->lineEditOutputDataFolder->text();
+        QString project_name         = ui->lineEditDataKey->text();
         QString output_base_filename = project_folder + "/" + project_name;
-        QString river_filename = output_base_filename + ".riv";
-        QString mesh_filename = output_base_filename + ".mesh";
+        QString river_filename       = output_base_filename + ".riv";
+        QString mesh_filename        = output_base_filename + ".mesh";
 
         bool checked = Check_OutputFolder_Location(project_folder);
         if(checked == false)
@@ -797,7 +802,7 @@ void RiverTemporal::on_pushButtonRun_clicked()
 
         int time_step1 = time_steps.time_step1;
         int time_step2 = time_steps.time_step2;
-        int time_step = time_step2 - time_step1;
+        int time_step  = time_step2 - time_step1;
         if( time_step <= 0 )
         {
             Log_Error_Message("Problem with time_step " + QString::number(time_step)  );

@@ -74,7 +74,7 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
     try {
 
         QFile EleFile(EleFileName);
-        if ( ! EleFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( EleFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[RiverFromTIN] Error[34] opening Element file.");
             return 34;
@@ -83,7 +83,7 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         QTextStream EleFileTextStream(&EleFile);
 
         QFile NodeFile(NodeFileName);
-        if ( ! NodeFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( NodeFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[RiverFromTIN] Error[39] opening Node file.");
             EleFile.close();
@@ -93,7 +93,7 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         QTextStream NodeFileTextStream(&NodeFile);
 
         QFile NeighFile(NeighFileName);
-        if ( ! NeighFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( NeighFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[RiverFromTIN] Error[44] opening Neigh file.");
             EleFile.close();
@@ -638,7 +638,7 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                         error_found = true;
                     }
 
-                    if(!error_found)
+                    if(error_found== false)
                     {
                         numPt = j;
 
@@ -660,7 +660,7 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
                             //                            }
                         }
 
-                        if(!error_found)
+                        if(error_found == false)
                         {
                             oldDist = distPt(node[numPt], pt2);
 
@@ -2129,7 +2129,7 @@ int Riv_File( QString RiverDbfFileName, QString RivDataFileName )
         }
 
         QFile RivDataFile(RivDataFileName);
-        if ( ! RivDataFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        if ( RivDataFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[Riv_File] Error[-1012]: Unable to open riv data file " + RivDataFileName);
             DBFClose(RiverDbfHandle);

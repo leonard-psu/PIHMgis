@@ -32,7 +32,7 @@ LinkGrids::LinkGrids(QWidget *parent, QString filename) :
         bool found_file = false;
 
         QFile ProjectFile(filename_open_project);
-        if ( ! ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             Log_Error_Message("Unable to Open File: " + filename_open_project);
         }
@@ -95,7 +95,7 @@ bool LinkGrids::Load_Project_Settings()
             LinkGrids = user_pihmgis_root_folder + "/1RasterProcessing/Link" + temp + ".asc";
 
             bool StreamGrids_check = Check_StreamGrids_Input(StreamGrids);
-            if(!StreamGrids_check)
+            if( StreamGrids_check == false)
             {
                 Log_Error_Message("StreamGrids input does not exist. ");
             }
@@ -107,7 +107,7 @@ bool LinkGrids::Load_Project_Settings()
             QString FlowDirGrids = ModuleStringList.at(2);
 
             bool FlowDir_check = Check_FlowDirGrids_Input(FlowDirGrids);
-            if(!FlowDir_check)
+            if( FlowDir_check == false)
             {
                 Log_Error_Message("FlowDir input does not exist. ");
             }
@@ -121,13 +121,13 @@ bool LinkGrids::Load_Project_Settings()
             LinkGrids = ModuleStringList.at(3);
 
             bool StreamGrids_check = Check_StreamGrids_Input(StreamGrids);
-            if(!StreamGrids_check)
+            if( StreamGrids_check == false)
             {
                 Log_Error_Message("StreamGrids input does not exist.");
             }
 
             bool FlowDir_check = Check_FlowDirGrids_Input(FlowDirGrids);
-            if(!FlowDir_check)
+            if( FlowDir_check == false)
             {
                 Log_Error_Message("FlowDir input does not exist. ");
             }
@@ -369,16 +369,16 @@ void LinkGrids::on_pushButtonStreamGrids_clicked()
         Clear_Log();
 
         QString StreamGridFileName = QFileDialog::getOpenFileName(this, "Choose Stream Grid File", user_pihmgis_root_folder+tr("/1RasterProcessing"), "Stream Grid File(*.asc *.ASC)");
-        if ( StreamGridFileName != nullptr)
+        if ( StreamGridFileName.isNull() == false)
         {
-            bool StreamGrids_check = Check_StreamGrids_Input(StreamGridFileName);
+            if( StreamGridFileName.isEmpty() == false)
+            {
+                bool StreamGrids_check = Check_StreamGrids_Input(StreamGridFileName);
 
-            pushButtonSetFocus();
+                pushButtonSetFocus();
+            }
         }
-        else
-        {
-            Log_Message("on_pushButtonStreamGrids_clicked: Invalid FlowAccFileName");
-        }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: LinkGrids::on_pushButtonStreamGrids_clicked() is returning w/o checking";
@@ -398,16 +398,15 @@ void LinkGrids::on_pushButtonFlowDirGrids_clicked()
         Clear_Log();
 
         QString FlowDirGridFileName = QFileDialog::getOpenFileName(this, "Choose Flow Dir Grid File", user_pihmgis_root_folder+tr("/1RasterProcessing"), "Flow Dir Grid File(*.asc *.ASC)");
-        if ( FlowDirGridFileName != nullptr)
+        if ( FlowDirGridFileName.isNull() == false)
         {
-            bool check = Check_FlowDirGrids_Input(FlowDirGridFileName);
-
-            pushButtonSetFocus();
+            if( FlowDirGridFileName.isEmpty() == false)
+            {
+                bool check = Check_FlowDirGrids_Input(FlowDirGridFileName);
+                pushButtonSetFocus();
+            }
         }
-        else
-        {
-            Log_Message("on_pushButtonFlowDirGrids_clicked: Invalid FlowAccFileName");
-        }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: LinkGrids::on_pushButtonFlowDirGrids_clicked() is returning w/o checking";
@@ -427,19 +426,23 @@ void LinkGrids::on_pushButtonLinkGrids_clicked()
         Clear_Log();
 
         QString LinkGridsFileName = QFileDialog::getSaveFileName(this, "Choose Link Grid", user_pihmgis_root_folder + "/1RasterProcessing","Link Grid File(*.asc)");
-        if ( LinkGridsFileName != nullptr)
+        if ( LinkGridsFileName.isNull() == false)
         {
-            QString tempString = LinkGridsFileName;
-            if( ! (tempString.toLower()).endsWith(".asc") )
+            if( LinkGridsFileName.isEmpty() == false)
             {
-                tempString.append(".asc");
-                LinkGridsFileName = tempString;
+                QString tempString = LinkGridsFileName;
+                if( (tempString.toLower()).endsWith(".asc") == false)
+                {
+                    tempString.append(".asc");
+                    LinkGridsFileName = tempString;
+                }
+
+                bool LinkGrids_check = Check_LinkGrids_Output(LinkGridsFileName,true);
+
+                pushButtonSetFocus();
             }
-
-            bool LinkGrids_check = Check_LinkGrids_Output(LinkGridsFileName,true);
-
-            pushButtonSetFocus();
         }
+        //else do nothing
 
     } catch (...) {
         qDebug() << "Error: LinkGrids::on_pushButtonLinkGrids_clicked() is returning w/o checking";
@@ -470,14 +473,14 @@ void LinkGrids::on_pushButtonRun_clicked()
         QString LinkGridsFileName = ui->lineEditLinkGrids->text();
 
         bool StreamGrids_check = Check_StreamGrids_Input(StreamGridsFileName);
-        if(!StreamGrids_check)
+        if( StreamGrids_check == false)
         {
             Log_Error_Message("StreamGrids Input File Missing ");
             return;
         }
 
         bool FlowDirGrids_check = Check_FlowDirGrids_Input(FlowDirGridsFileName);
-        if(!FlowDirGrids_check)
+        if( FlowDirGrids_check == false)
         {
             Log_Error_Message("FlowDirGrids Input File Missing ");
             return;
@@ -496,19 +499,19 @@ void LinkGrids::on_pushButtonRun_clicked()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check file access
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if ( ! CheckFileAccess(StreamGridsFileName, "ReadOnly") )
+        if ( CheckFileAccess(StreamGridsFileName, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + StreamGridsFileName );
             return;
         }
 
-        if ( ! CheckFileAccess(FlowDirGridsFileName, "ReadOnly") )
+        if ( CheckFileAccess(FlowDirGridsFileName, "ReadOnly") == false)
         {
             Log_Error_Message("No Read Access to ... " + FlowDirGridsFileName);
             return;
         }
 
-        if ( ! CheckFileAccess(LinkGridsFileName, "WriteOnly") )
+        if ( CheckFileAccess(LinkGridsFileName, "WriteOnly") == false)
         {
             Log_Error_Message("Unable to Write Access ... " + LinkGridsFileName );
             return;
@@ -534,7 +537,7 @@ void LinkGrids::on_pushButtonRun_clicked()
         // Check output filenames
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         LinkGrids_check = Check_LinkGrids_Output(LinkGridsFileName,true);
-        if(!LinkGrids_check)
+        if( LinkGrids_check == false)
         {
             return;
         }
@@ -542,7 +545,7 @@ void LinkGrids::on_pushButtonRun_clicked()
         qint64 size = file_Size(LinkGridsFileName);
         if( size < 1)
         {
-            Log_Error_Message("StreamGrids failed, invalid file size: " + size );
+            Log_Error_Message("StreamGrids failed, invalid file size: " + QString::number(size) );
             return;
         }
 
