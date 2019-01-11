@@ -16,14 +16,12 @@ Will need to compile code. See How to Compile Linux PIHMgis below. These steps w
 2. sundials 2.7.0 solver. This code will need modification to use higher versions of sundials.
 3. triangle by Jonathan Richard Shewchuk, see note below.
 
-### Note this code has been developed and tested on windows environment only.
-
 ### General Steps to compile code using Qt Creator 
-1. Open Qt Project file/folder with this github code repository
-2. Clean All. Make sure no moc files etc automatically created by Qt exist in folders.
-3. Run qmake. Fix any error issues found.
-4. Build. Fix any error issues found.
-5. Run.
+1. Open Qt Project file/folder (with)*.pro) from this github code repository
+2. Clean All. Make sure no moc files etc automatically created by Qt exist in folders (This will save you time and headaches!).
+3. Run qmake. Fix any error issues found (Qt specific).
+4. Build. Fix any error issues found. Such as specifying include directories and library paths (Unique to your system).
+5. Run. (If build worked, but run fails, this means PIHMgis can't find dependencies such as gdal).
 
 ### Problems you will encounter, as they are dependent on your compute environment
 You will need to modify the (1) include paths (2) depenency paths (3) LIBs locations for this project. These are in the PIHMgis.pro project file. It is recommended to update these via the Qt Creator interface.
@@ -70,14 +68,14 @@ Jonathan Richard Shewchuk
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ### How to Compile Linux PIHMgis.
 
-Build and install QT5.12 or higher. You will need to use QTCreator.
-Build and install GDAL from https://github.com/OSGeo/gdal
-Build and install Sundials-2.7.0 from https://computation.llnl.gov/projects/sundials/download/sundials-2.7.0.tar.gz
-Build and install Triangle from https://www.cs.cmu.edu/~quake/triangle.html
-Download PIHMgis from github.
-Open/Import PIHMgis.pro using QTCreator.
-Clean all.
-Add Library and Include Linux paths for gdal (libgdal_i.a), sundials (libsundials_nvecserial.a, libsundials_cvodes.a), to the PIHMgis.pro using QTCreator "Add Library".
+1. Build and install QT5.12 or higher. You will need to use QTCreator.
+2. Build and install GDAL from https://github.com/OSGeo/gdal
+3. Build and install Sundials-2.7.0 from https://computation.llnl.gov/projects/sundials/download/sundials-2.7.0.tar.gz
+4. Build and install Triangle from https://www.cs.cmu.edu/~quake/triangle.html
+5. Download PIHMgis from github.
+6. Open/Import PIHMgis.pro using QTCreator.
+7. Clean all.
+8. Add Library and Include Linux paths for gdal (libgdal_i.a), sundials (libsundials_nvecserial.a, libsundials_cvodes.a), to the PIHMgis.pro using QTCreator "Add Library".
 
-### Issues found when compile Linux PIHMgis
-QT Creator may complain about multiple definitions. Comment out the duplicate .cpp and .h files in PIHMgis.pro.
+### Known Issues found when compile Linux PIHMgis
+1. QT Creator may complain about multiple definitions. Comment out the duplicate .cpp and .h files in PIHMgis.pro.
