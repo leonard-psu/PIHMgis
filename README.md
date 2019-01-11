@@ -77,5 +77,10 @@ Jonathan Richard Shewchuk
 7. Clean all.
 8. Add Library and Include Linux paths for gdal (libgdal_i.a), sundials (libsundials_nvecserial.a, libsundials_cvodes.a), to the PIHMgis.pro using QTCreator "Add Library".
 
-### Known Issues found when compile Linux PIHMgis
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+### Known Issues with using PIHMgis on Windows 10 environment
+1. If you are missing dlls such as ucrtlbased dll, install windows-10-sdk from Microsoft (Do not download from other sites, likely contain viruses etc). https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+### Known Issues found when compiling Linux PIHMgis
 1. QT Creator may complain about multiple definitions. Comment out the duplicate .cpp and .h files in PIHMgis.pro.
