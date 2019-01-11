@@ -17,7 +17,7 @@ Will need to compile code. See How to Compile Linux PIHMgis below. These steps w
 3. triangle by Jonathan Richard Shewchuk, see note below.
 
 ### General Steps to compile code using Qt Creator 
-1. Open Qt Project file/folder (with)*.pro) from this github code repository
+1. Open PIHMgis.pro within Qt Project folder from this github code repository
 2. Clean All. Make sure no moc files etc automatically created by Qt exist in folders (This will save you time and headaches!).
 3. Run qmake. Fix any error issues found (Qt specific).
 4. Build. Fix any error issues found. Such as specifying include directories and library paths (Unique to your system).
@@ -66,7 +66,7 @@ Copyright 1993, 1995, 1997, 1998, 2002, 2005
 Jonathan Richard Shewchuk
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-### How to Compile Linux PIHMgis.
+### How to Compile PIHMgis in both Windows and Linux environments.
 
 1. Build and install QT5.12 or higher. You will need to use QTCreator.
 2. Build and install GDAL from https://github.com/OSGeo/gdal
@@ -75,7 +75,7 @@ Jonathan Richard Shewchuk
 5. Download PIHMgis from github.
 6. Open/Import PIHMgis.pro using QTCreator.
 7. Clean all.
-8. Add Library and Include Linux paths for gdal (libgdal_i.a), sundials (libsundials_nvecserial.a, libsundials_cvodes.a), to the PIHMgis.pro using QTCreator "Add Library".
+8. Add Library and Include Windows or Linux paths for gdal (libgdal_i.a or dll), sundials (libsundials_nvecserial.a or dll, libsundials_cvodes.a or dll), to the PIHMgis.pro using QTCreator "Add Library".
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ### Known Issues with using PIHMgis on Windows 10 environment
