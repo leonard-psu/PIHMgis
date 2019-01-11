@@ -890,7 +890,10 @@ void DelaunayTriangulation::on_pushButtonFIND_clicked()
 
         Clear_Log();
 
-        QString fileName = QFileDialog::getOpenFileName(this, "Triangle (.exe) ", user_pihmgis_root_folder + tr("/Software"), "Triangle File(*.exe *.exe)");
+        QString fileName = QFileDialog::getOpenFileName(this,
+                                                        "Triangle.exe or Triangle ",
+                                                        user_pihmgis_root_folder + tr("/Software"),
+                                                        "All files (*.*) ;; Triangle File(*.exe)");
         if ( fileName.isNull() == false)
         {
             if( fileName.isEmpty() == false)
@@ -973,7 +976,10 @@ void DelaunayTriangulation::on_pushButtonFIND_clicked(bool checked)
 
         Clear_Log();
 
-        QString fileName = QFileDialog::getOpenFileName(this, "Triangle (.exe) ", user_pihmgis_root_folder + tr("/Software"), "Triangle File(*.exe *.exe)");
+        QString fileName = QFileDialog::getOpenFileName(this,
+                                                        "Triangle.exe or Triangle ",
+                                                        user_pihmgis_root_folder + tr("/Software"),
+                                                        "All files (*.*) ;; Triangle File(*.exe)");
         if ( fileName.isNull() == false)
         {
             if( fileName.isEmpty() == false)

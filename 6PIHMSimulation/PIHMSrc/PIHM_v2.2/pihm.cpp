@@ -58,6 +58,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <cstring>
 
 #include <QMutex>
 

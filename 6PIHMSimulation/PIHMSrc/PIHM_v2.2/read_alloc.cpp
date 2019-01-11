@@ -30,6 +30,7 @@
 #include <string>
 #include <iostream>
 #include <QMutex>
+#include <cstring>
 
 #include "pihm.h"  
 

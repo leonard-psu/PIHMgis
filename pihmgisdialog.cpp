@@ -2020,15 +2020,16 @@ void PIHMgisDialog::PickWorkspace()
         Clear_Log();
 
         QString ProjectHome = QFileDialog::getExistingDirectory(this, "Specify Workspace/Home Folder", user_pihmgis_root_folder, 0);
-        if ( ProjectHome.isNull() == false)
-        {
-            return;
-        }
-        if( ProjectHome.isEmpty() == false)
+
+        if ( ProjectHome.isNull() == true)
         {
             return;
         }
 
+        if( ProjectHome.isEmpty() == true)
+        {
+            return;
+        }
         if(ProjectHome.length() > 0 )
         {
             int folder_count = check_pihmgis_project_exists(ProjectHome);

@@ -258,7 +258,7 @@ int setdf(float mval)
             {
                 error_found = true;
             }
-            else if (isnan(bottom))
+            else if (std::isnan(bottom))
             {
                 error_found = true;
             }
