@@ -505,11 +505,11 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         ProjectIOStringList.clear();
 
         bool removed = QFile::remove(CatchmentFileNameInVector);
-        if(removed == false)
-        {
-            Log_Error_Message("Failed to remove " + CatchmentFileNameInVector);
-            return;
-        }
+//        if(removed == false)
+//        {
+//            Log_Error_Message("Failed to remove " + CatchmentFileNameInVector);
+//            return;
+//        }
         bool copied = QFile::copy(CatchmentFileNameInRaster,CatchmentFileNameInVector);
         if(copied == false)
         {
@@ -520,11 +520,11 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         CatchmentFileNameInRaster.replace(".shp",".shx");
         CatchmentFileNameInVector.replace(".shp",".shx");
         removed = QFile::remove(CatchmentFileNameInVector);
-        if(removed == false)
-        {
-            Log_Error_Message("Failed to remove " + CatchmentFileNameInVector);
-            return;
-        }
+//        if(removed == false)
+//        {
+//            Log_Error_Message("Failed to remove " + CatchmentFileNameInVector);
+//            return;
+//        }
         copied = QFile::copy(CatchmentFileNameInRaster,CatchmentFileNameInVector);
         if(copied == false)
         {
@@ -535,11 +535,11 @@ void CatchmentPolygon::on_pushButtonRun_clicked()
         CatchmentFileNameInRaster.replace(".shx",".dbf");
         CatchmentFileNameInVector.replace(".shx",".dbf");
         removed = QFile::remove(CatchmentFileNameInVector);
-        if(removed == false)
-        {
-            Log_Error_Message("Failed to remove " + CatchmentFileNameInVector);
-            return;
-        }
+//        if(removed == false)
+//        {
+//            Log_Error_Message("Failed to remove " + CatchmentFileNameInVector);
+//            return;
+//        }
         copied = QFile::copy(CatchmentFileNameInRaster,CatchmentFileNameInVector);
         if(copied == false)
         {

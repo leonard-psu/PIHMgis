@@ -574,11 +574,11 @@ void StreamPolyline::on_pushButtonRun_clicked()
         // Shapefile renaming
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         bool removed = QFile::remove(StreamFileNameInVector);
-        if(removed == false)
-        {
-            Log_Error_Message("Failed to remove " + StreamFileNameInVector);
-            return;
-        }
+//        if(removed == false)
+//        {
+//            Log_Error_Message("Failed to remove " + StreamFileNameInVector);
+//            return;
+//        }
         bool copied = QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
         if(copied == false)
         {
@@ -589,11 +589,11 @@ void StreamPolyline::on_pushButtonRun_clicked()
         StreamFileNameInRaster.replace(".shp",".shx");
         StreamFileNameInVector.replace(".shp",".shx");
         removed = QFile::remove(StreamFileNameInVector);
-        if(removed == false)
-        {
-            Log_Error_Message("Failed to remove " + StreamFileNameInVector);
-            return;
-        }
+//        if(removed == false)
+//        {
+//            Log_Error_Message("Failed to remove " + StreamFileNameInVector);
+//            return;
+//        }
         copied = QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
         if(copied == false)
         {
@@ -604,11 +604,11 @@ void StreamPolyline::on_pushButtonRun_clicked()
         StreamFileNameInRaster.replace(".shx",".dbf");
         StreamFileNameInVector.replace(".shx",".dbf");
         removed = QFile::remove(StreamFileNameInVector);
-        if(removed == false)
-        {
-            Log_Error_Message("Failed to remove " + StreamFileNameInVector);
-            return;
-        }
+//        if(removed == false)
+//        {
+//            Log_Error_Message("Failed to remove " + StreamFileNameInVector);
+//            return;
+//        }
         copied = QFile::copy(StreamFileNameInRaster,StreamFileNameInVector);
         if(copied == false)
         {

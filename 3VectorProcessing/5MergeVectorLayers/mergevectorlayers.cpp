@@ -572,11 +572,11 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         ProjectIOStringList.clear();
 
         bool removed = QFile::remove(MergeFileNameInDomainDecomposition);
-        if(removed == false)
-        {
-            Log_Error_Message("Failed to remove file " + MergeFileNameInDomainDecomposition);
-            return;
-        }
+//        if(removed == false)
+//        {
+//            Log_Error_Message("Failed to remove file " + MergeFileNameInDomainDecomposition);
+//            return;
+//        }
         bool copied = QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
         if(copied == false)
         {
@@ -588,11 +588,11 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         MergeFileNameInDomainDecomposition.replace(".shp",".shx");
 
         removed = QFile::remove(MergeFileNameInDomainDecomposition);
-        if(removed == false)
-        {
-            Log_Error_Message("Failed to remove file " + MergeFileNameInDomainDecomposition);
-            return;
-        }
+//        if(removed == false)
+//        {
+//            Log_Error_Message("Failed to remove file " + MergeFileNameInDomainDecomposition);
+//            return;
+//        }
         copied = QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
         if(copied == false)
         {
@@ -604,11 +604,11 @@ void MergeVectorLayers::on_pushButtonRun_clicked()
         MergeFileNameInDomainDecomposition.replace(".shx",".dbf");
 
         removed = QFile::remove(MergeFileNameInDomainDecomposition);
-        if(removed == false)
-        {
-            Log_Error_Message("Failed to remove file " + MergeFileNameInDomainDecomposition);
-            return;
-        }
+//        if(removed == false)
+//        {
+//            Log_Error_Message("Failed to remove file " + MergeFileNameInDomainDecomposition);
+//            return;
+//        }
         copied = QFile::copy(MergeFileNameInVector,MergeFileNameInDomainDecomposition);
         if(copied == false)
         {
