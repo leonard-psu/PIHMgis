@@ -82,16 +82,7 @@ int stream_links(QString qrivFile, QString qfdrFile, QString qsegFile, QString q
         int mIJ[2];
         int num = 1;
 
-        if(dir == nullptr)
-        {
-            main_window->Log_Message("[stream_links] Error[-1008] dir is null ");
-            return -1008;
-        }
-        if(elev == nullptr)
-        {
-            main_window->Log_Message("[stream_links] Error[-1009] elev is null ");
-            return -1009;
-        }
+
 
         fpNode_Seg = fopen(nodeFile, "w");
 
@@ -125,6 +116,17 @@ int stream_links(QString qrivFile, QString qfdrFile, QString qsegFile, QString q
             main_window->Log_Message("[stream_links] Error[-1013] Failed to open file " + qrivFile);
             fclose(fpNode_Seg);
             return -1013;
+        }
+
+        if(dir == nullptr)
+        {
+            main_window->Log_Message("[stream_links] Error[-1008] dir is null ");
+            return -1008;
+        }
+        if(elev == nullptr)
+        {
+            main_window->Log_Message("[stream_links] Error[-1009] elev is null ");
+            return -1009;
         }
 
         bool error_found = false;
