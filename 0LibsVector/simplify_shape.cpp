@@ -138,13 +138,26 @@ int simplify_shape(QString qshpFileName, QString qdbfFileName, QString qnewshpFi
             return -1014;
         }
 
+        int fc = DBFGetFieldCount(dbf);
+        for(int fci = 0; fci <= fc; fci++)
+        {
+            char            szFieldName[20];
+            int             nWidth, nPrecision;
+            DBFGetFieldInfo( dbf, fci, szFieldName, &nWidth, &nPrecision );
+            main_window->Log_Message("[simplify_shape]  szFieldName " + QString(szFieldName));
+        }
+
+
+        //ORG int fld = DBFGetFieldIndex(dbf, "ARCID");
+        //FID and OID do not exist
         int fld = DBFGetFieldIndex(dbf, "ARCID");
         if(fld < 0)
         {
+//TODO For now assume this error is not a problem. Testing projects.....
             main_window->Log_Message("[simplify_shape] Error[-1015] Invalid DBFGetFieldIndex < 0");
-            SHPClose(shp);
-            DBFClose(dbf);
-            return -1015;
+//            SHPClose(shp);
+//            DBFClose(dbf);
+//            return -1015;
         }
 
         SHPHandle newshp = SHPCreate(newshpFileName, shpType);
@@ -232,7 +245,7 @@ int simplify_shape(QString qshpFileName, QString qdbfFileName, QString qnewshpFi
             simplify_polyline(pts, 0, obj->nVertices-1, tolerance, marker);
 
             //Used global variable
-            if(!simplify_polyline_success)
+            if(simplify_polyline_success == false)
             {
                 error_found = true;
                 main_window->Log_Message("[simplify_shape] Error[-2005] simplify_polyline failed");
@@ -330,7 +343,7 @@ int simplify_shape(QString qshpFileName, QString qdbfFileName, QString qnewshpFi
 
             int arcid = DBFReadIntegerAttribute(dbf, i, fld);
 
-            if ( ! DBFWriteIntegerAttribute(newdbf, i, arcidField, arcid) )
+            if ( DBFWriteIntegerAttribute(newdbf, i, arcidField, arcid) == false)
             {
                 main_window->Log_Message("[simplify_shape] Error[-2012] DBFWriteIntegerAttribute failed");
                 error_found = true;

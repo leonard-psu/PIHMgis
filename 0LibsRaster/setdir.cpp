@@ -9,6 +9,7 @@
 #include <QDebug>
 #include "lsm.h"
 #include "globals.h"
+#include <cmath>
 
 // This include declares all necessary global variables
 int incfall(int n, float *elev1, short *s1,int **spos, int iter, int *sloc);

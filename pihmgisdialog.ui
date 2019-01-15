@@ -10130,7 +10130,7 @@
     </rect>
    </property>
    <property name="toolTip">
-    <string>Clear Log</string>
+    <string>Save Log</string>
    </property>
    <property name="text">
     <string/>

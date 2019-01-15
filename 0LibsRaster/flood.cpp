@@ -11,7 +11,7 @@
 #include "lsm.h"
 #include "gridio.h"
 #include "globals.h"
-
+#include <cmath>
 
 // User interface to PIHMgis v3.5
 extern PIHMgisDialog *main_window;

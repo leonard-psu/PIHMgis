@@ -95,7 +95,8 @@ FORMS += \
     7VisualAnalytics/2MeshTemporal/meshtemporal.ui \
     7VisualAnalytics/3RiverSpatial/riverspatial.ui \
     7VisualAnalytics/4RiverTemporal/rivertemporal.ui \
-    7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.ui
+    7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.ui \
+    pihmgisdialog.ui
 
 DISTFILES += \
     6PIHMSimulation/PIHMSrc/PIHM_v2.2/projectName.txt
