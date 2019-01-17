@@ -294,7 +294,7 @@ bool ReadTopology::Check_PSLG_Output(QString file, bool color_and_message_if_exi
         {
             if(color_and_message_if_exists)
             {
-                Log_Error_Message("Tinshape output already exists: " + file + " You may need to delete these files.");
+                Log_Error_Message("PLSG output already exists: " + file + " You may need to delete these files.");
             }
 
             ui->lineEditPSLG->setStyleSheet("color: red;");

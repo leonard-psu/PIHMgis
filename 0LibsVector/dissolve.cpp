@@ -842,7 +842,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         double *Y;
         double *Z;
 
-        int count_factor = 50;
+        int count_factor = 3;
         X = (double *)malloc(count*count_factor*sizeof(double));
         if ( X == nullptr )
         {
@@ -910,7 +910,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         int finished=1;
 
         error_found = false;
-        dissolve_epsilon = 0.1;
+        dissolve_epsilon = 0.01;
 
         while(finished == 1)
         {
@@ -920,6 +920,18 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
             {
                 if (i != currentline)
                 {
+
+                    bool test1 = false;
+                    bool test2 = false;
+                    if ( fabs(ptx - newlines[i].x1) )
+                        test1 = true;
+
+                    if ( fabs(pty - newlines[i].y1) )
+                        test2 = true;
+
+                    if( test1 && test2)
+                        main_window->Log_Message( QString::number( i ) + " " + QString::number(ptx ) + " " + QString::number(pty ) );
+
                     if(fabs(ptx - newlines[i].x1) < dissolve_epsilon && fabs(pty - newlines[i].y1) < dissolve_epsilon)
                     {
                         if( numPoints < 0 )
@@ -954,9 +966,19 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
                             break;
                         }
 
+                        if(i==0)
+                        {
+                            finished=0;
+                            numPoints--;
+                        }
+                        else
+                        {
+                            finished=1;
+                        }
+
                         break;
                     }
-                    else if(fabs(ptx-newlines[i].x2) < dissolve_epsilon && fabs(pty-newlines[i].y2) < dissolve_epsilon)
+                    else if(fabs(ptx - newlines[i].x2) < dissolve_epsilon && fabs(pty - newlines[i].y2) < dissolve_epsilon)
                     {
                         if( numPoints < 0 )
                         {
@@ -989,7 +1011,9 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
                             numPoints--;
                         }
                         else
+                        {
                             finished=1;
+                        }
 
                         break;
                     }
