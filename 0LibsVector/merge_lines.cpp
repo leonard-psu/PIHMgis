@@ -116,6 +116,8 @@ int merge_lines(QStringList shpFileNames, QStringList dbfFileNames, QString qnew
 
         bool error_found = false;
         bool record_error_found = false;
+        bool split_error_found = false;
+
 
         for(int i = 0; i < fileCount; i++)
         {
@@ -180,8 +182,9 @@ int merge_lines(QStringList shpFileNames, QStringList dbfFileNames, QString qnew
 
                                     if ( obj->nVertices > 2 )
                                     {
-                                        main_window->Log_Message("[merge_lines] Error[-2007] SHPReadObject nVertices > 2. File: " + QString(shpFileNames[i]));
+                                        main_window->Log_Message("[merge_lines] Error[-2007] SHPReadObject nVertices > 2. You need to split file: " + QString(shpFileNames[i]));
                                         record_error_found = true;
+                                        split_error_found = true;
                                     }
 
                                     if(record_error_found == false)
@@ -218,16 +221,22 @@ int merge_lines(QStringList shpFileNames, QStringList dbfFileNames, QString qnew
             DBFClose(newdbf);
         }
 
+        if(split_error_found)
+        {
+            main_window->Log_Message("[merge_lines] Error[-9000] User needs to split input file(s). Check log file.");
+            return -9000;
+        }
+
         if(record_error_found)
         {
-            main_window->Log_Message("[merge_lines] Error[-3000] Record error(s). User needs to check with GIS");
-            return -9000;
+            main_window->Log_Message("[merge_lines] Error[-9001] Record error(s). User needs to check with GIS");
+            return -9001;
         }
 
         if(error_found)
         {
-            main_window->Log_Message("[merge_lines] Error[-3001] Found error(s). User needs to check with GIS");
-            return -9001;
+            main_window->Log_Message("[merge_lines] Error[-9002] Found error(s). User needs to check with GIS");
+            return -9002;
         }
 
         return 0;

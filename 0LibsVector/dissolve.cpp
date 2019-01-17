@@ -281,8 +281,12 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
             return -1016;
         }
 
+        //if(print_many_messages)
+        //{
+        main_window->Log_Message("[dissolve] recordCount = " + QString::number(recordCount));
+        //}
+
         SHPObject **obj = new SHPObject*[recordCount];
-        recordCount = DBFGetRecordCount(dbf);
         if ( obj == nullptr )
         {
             main_window->Log_Message("[dissolve] Error[-2000] SHPObject is null. ");
@@ -304,7 +308,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         lines = (Lines **)malloc(recordCount * sizeof(Lines *));
         if ( lines == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[-2001] lines is null" );
+            main_window->Log_Message("[dissolve] Error[-2001] lines is null" );
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
@@ -315,7 +319,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         lineFlag = (int **)malloc(recordCount * sizeof(int *));
         if ( lineFlag == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[-2002] lineFlag is null" );
+            main_window->Log_Message("[dissolve] Error[-2002] lineFlag is null" );
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
@@ -327,7 +331,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         dfXMax = (double *)malloc(recordCount * sizeof(double));
         if ( dfXMax == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[-2003] dfXMax is null" );
+            main_window->Log_Message("[dissolve] Error[-2003] dfXMax is null" );
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
@@ -341,7 +345,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         dfXMin = (double *)malloc(recordCount * sizeof(double));
         if ( dfXMin == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[-2004] dfXMin is null" );
+            main_window->Log_Message("[dissolve] Error[-2004] dfXMin is null" );
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
@@ -356,7 +360,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         dfYMax = (double *)malloc(recordCount * sizeof(double));
         if ( dfYMax == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[-2005] dfYMax is null" );
+            main_window->Log_Message("[dissolve] Error[-2005] dfYMax is null" );
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
@@ -372,7 +376,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         dfYMin = (double *)malloc(recordCount * sizeof(double));
         if ( dfYMin == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[-2006] dfYMin is null" );
+            main_window->Log_Message("[dissolve] Error[-2006] dfYMin is null" );
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
@@ -389,7 +393,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         numLines = (int *)malloc(recordCount * sizeof(int));
         if ( numLines == nullptr)
         {
-            main_window->Log_Message("[catchment_shape] Error[-2007] numLines is null" );
+            main_window->Log_Message("[dissolve] Error[-2007] numLines is null" );
             SHPClose(shp);
             DBFClose(dbf);
             SHPClose(newshp);
@@ -414,14 +418,17 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         for(int i=0; i < recordCount; i++)
         {
+            main_window->Log_Message("[dissolve] Read = " + QString::number(i));
+
             vertices = 0;
             obj[i] = SHPReadObject(shp, i);
             if( obj[i] == nullptr)
             {
+                main_window->Log_Message("[dissolve] read polygon, SHPread failed");
                 error_found = true;
             }
 
-            if(!error_found)
+            if(error_found == false)
             {
                 dfXMax[i] = obj[i]->dfXMax;
                 dfXMin[i] = obj[i]->dfXMin;
@@ -438,7 +445,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
                     line_error_found = true;
                 }
 
-                if(!line_error_found)
+                if(line_error_found == false)
                 {
                     lineFlag[i] = (int *)malloc(vertices * 20 * sizeof(int));  //Where does 20 come from?
 
@@ -447,7 +454,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
                         lineFlag_error_found = true;
                     }
 
-                    if(!line_error_found)
+                    if(lineFlag_error_found == false)
                     {
                         for(int j=0; j < vertices-1; j++)
                         {
@@ -713,6 +720,8 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
             return -4001;
         }
 
+        main_window->Log_Message("[dissolve] totalLines = " + QString::number(totalLines));
+
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         //2 Delete common lines
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -736,6 +745,8 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
             }
         }
 
+        main_window->Log_Message("[dissolve] totalLines3 = " + QString::number(totalLines3));
+
         int tempCount;
         for(int i = 0; i < recordCount; i++)
         {
@@ -747,6 +758,8 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
             }
             //cout<<".poly= "<<i<<" lines= "<<tempCount<<"\n";
         }
+
+        main_window->Log_Message("[dissolve] tempCount = " + QString::number(tempCount));
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         //3 Store polygon's lines in one place
@@ -776,7 +789,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         {
             for(int j = 0; j < numLines[i]; j++)
             {
-                if(lineFlag[i][j]!=0)
+                if(lineFlag[i][j] != 0)
                 {
                     newlines[count].x1=lines[i][j].x1;
                     newlines[count].y1=lines[i][j].y1;
@@ -786,6 +799,8 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
                 }
             }
         }
+
+        main_window->Log_Message("[dissolve] count = " + QString::number(count));
 
         if ( count <= 0 )
         {
@@ -827,7 +842,8 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         double *Y;
         double *Z;
 
-        X = (double *)malloc(count*3*sizeof(double));
+        int count_factor = 50;
+        X = (double *)malloc(count*count_factor*sizeof(double));
         if ( X == nullptr )
         {
             main_window->Log_Message("[dissolve] Error[-4005] X is null ");
@@ -844,7 +860,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
             free(numLines);
             return -4005;
         }
-        Y = (double *)malloc(count*3*sizeof(double));
+        Y = (double *)malloc(count*count_factor*sizeof(double));
         if ( Y == nullptr )
         {
             main_window->Log_Message("[dissolve] Error[-4006] Y is null ");
@@ -861,7 +877,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
             free(numLines);
             return -4006;
         }
-        Z = (double *)malloc(count*3*sizeof(double));
+        Z = (double *)malloc(count*count_factor*sizeof(double));
         if ( Z == nullptr )
         {
             main_window->Log_Message("[dissolve] Error[-4007] Z is null ");
@@ -893,6 +909,9 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
         double pty = Y[1];
         int finished=1;
 
+        error_found = false;
+        dissolve_epsilon = 0.1;
+
         while(finished == 1)
         {
             finished=0;
@@ -903,13 +922,67 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
                 {
                     if(fabs(ptx - newlines[i].x1) < dissolve_epsilon && fabs(pty - newlines[i].y1) < dissolve_epsilon)
                     {
-                        X[numPoints] = newlines[i].x2;
-                        Y[numPoints] = newlines[i].y2;
-                        ptx = newlines[i].x2;
-                        pty = newlines[i].y2;
-                        Z[numPoints] = 0.0;
-                        numPoints++;
-                        currentline = i;
+                        if( numPoints < 0 )
+                        {
+                            main_window->Log_Message("[dissolve] [ERROR -6001] Invalid numPoints = " + QString::number(numPoints));
+                            finished=0;
+                            error_found = true;
+                            break;
+                        }
+                        else if( numPoints < count*count_factor)
+                        {
+                            X[numPoints] = newlines[i].x2;
+                            Y[numPoints] = newlines[i].y2;
+                            ptx = newlines[i].x2;
+                            pty = newlines[i].y2;
+                            Z[numPoints] = 0.0;
+                            numPoints++;
+                            currentline = i;
+                            if(i==0)
+                            {
+                                finished=0;
+                                numPoints--;
+                            }
+                            else
+                                finished=1;
+                        }
+                        else
+                        {
+                            main_window->Log_Message("[dissolve] [ERROR -6002] Invalid numPoints = " + QString::number(numPoints) + " > " + QString::number(count*count_factor));
+                            finished=0;
+                            error_found = true;
+                            break;
+                        }
+
+                        break;
+                    }
+                    else if(fabs(ptx-newlines[i].x2) < dissolve_epsilon && fabs(pty-newlines[i].y2) < dissolve_epsilon)
+                    {
+                        if( numPoints < 0 )
+                        {
+                            main_window->Log_Message("[dissolve] [ERROR -6003] Invalid numPoints = " + QString::number(numPoints));
+                            finished=0;
+                            error_found = true;
+                            break;
+                        }
+                        else if( numPoints < count*count_factor)
+                        {
+                            X[numPoints] = newlines[i].x1;
+                            Y[numPoints] = newlines[i].y1;
+                            ptx = newlines[i].x1;
+                            pty = newlines[i].y1;
+                            Z[numPoints] = 0.0;
+                            numPoints++;
+                            currentline = i;
+                        }
+                        else
+                        {
+                            main_window->Log_Message("[dissolve] [ERROR -6004] Invalid numPoints = " + QString::number(numPoints) + " > " + QString::number(count*count_factor));
+                            finished=0;
+                            error_found = true;
+                            break;
+                        }
+
                         if(i==0)
                         {
                             finished=0;
@@ -920,27 +993,11 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
 
                         break;
                     }
-                    else if(fabs(ptx-newlines[i].x2) < dissolve_epsilon && fabs(pty-newlines[i].y2) < dissolve_epsilon)
-                    {
-                        X[numPoints] = newlines[i].x1;
-                        Y[numPoints] = newlines[i].y1;
-                        ptx = newlines[i].x1;
-                        pty = newlines[i].y1;
-                        Z[numPoints] = 0.0;
-                        numPoints++;
-                        currentline = i;
-                        if(i==0)
-                        {
-                            finished=0;
-                            numPoints--;
-                        }
-                        else
-                            finished=1;
-                        break;
-                    }
                 }
             }
         }
+
+        main_window->Log_Message("[dissolve] numPoints = " + QString::number(numPoints));
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         SHPObject *newobj = SHPCreateSimpleObject(SHPT_POLYGON, numPoints, X, Y, Z);
@@ -978,7 +1035,7 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
             return -5001;
         }
 
-        if ( ! DBFWriteIntegerAttribute(newdbf, 0,   PolyID,  1) )
+        if ( DBFWriteIntegerAttribute(newdbf, 0,   PolyID,  1) == false)
         {
             main_window->Log_Message("[dissolve] Error[-5002] DBFWriteIntegerAttribute failed ");
             SHPClose(shp);
@@ -1070,6 +1127,11 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
             obj = nullptr;
         }
 
+        if(error_found)
+        {
+            return -6000;
+        }
+
     }
     catch (...)
     {
@@ -1079,3 +1141,4 @@ int dissolve(QString qshpFileName, QString qdbfFileName, QString qnewshpFileName
 
     return 0;
 }
+

@@ -64,6 +64,7 @@
 QString user_pihmgis_root_folder = "Please pick a workspace folder.";   //QDir::homePath(); //Default for now, need to customize based on OS
 QString user_pihmgis_project_folder = "/.PIHMgis";                      //Default for now, need to customize
 QString user_pihmgis_project_name = "/OpenProject.txt";                 //Note use of forward characters
+QString automatic_log_file_name = "/autolog.txt";
 
 extern double dissolve_epsilon;
 
@@ -2195,6 +2196,16 @@ void PIHMgisDialog::Log_Error_Message(QString message)
         LogsString.append(tr("<span style=\"color:#FF0000\">Error: ") + message + " </span>" +tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        QString filename_auto_log = user_pihmgis_root_folder + user_pihmgis_project_folder + automatic_log_file_name;
+        QFile writefile(filename_auto_log);
+        if( writefile.open(QIODevice::WriteOnly | QIODevice::Append) )
+        {
+            QTextStream out(&writefile);
+            out << message << "\n";
+        }
+        writefile.close();
+
     } catch (...) {
         qDebug() << "Error: Log_Error_Message is returning w/o checking";
     }
@@ -2209,6 +2220,17 @@ void PIHMgisDialog::Log_Message(QString message)
         LogsString.append(tr("<span style=\"color:#000000\"> ") + message + " </span>"+tr("<br>"));
         ui->textBrowserLogs->setHtml(LogsString);
         ui->textBrowserLogs->repaint();
+
+        QString filename_auto_log = user_pihmgis_root_folder + user_pihmgis_project_folder + automatic_log_file_name;
+        QFile writefile(filename_auto_log);
+        if( writefile.open(QIODevice::WriteOnly | QIODevice::Append) )
+        {
+            QTextStream out(&writefile);
+            out << message << "\n";
+        }
+        writefile.close();
+
+
     } catch (...) {
         qDebug() << "Error: Log_Message is returning w/o checking";
     }

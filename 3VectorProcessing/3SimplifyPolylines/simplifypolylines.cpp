@@ -141,7 +141,7 @@ bool SimplifyPolylines::Load_Project_Settings()
             {
                 ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
-                QString file1 = ModuleStringList.at(i);
+                QString file1 = ModuleStringList.at(i+1);
                 OutPolylineFileName = ModuleStringList.at(i+1);
                 OutPolylineFileName.replace(QString(".shp"),QString("_sln")+QString::number(2*DEMResolution)+QString(".shp"));
 
