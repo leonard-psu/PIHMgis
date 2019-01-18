@@ -515,12 +515,6 @@ void DissolvePolygons::on_pushButtonRun_clicked()
             return;
         }
 
-        bool dissolve_method_two = true;
-        if( ui->radioButton_dissolve_method1->isChecked())
-        {
-            dissolve_method_two = false;
-        }
-
         bool failure_found = false;
 
         for (int i = 0; i < ui->tableWidget->rowCount(); i++)
@@ -592,100 +586,79 @@ void DissolvePolygons::on_pushButtonRun_clicked()
             //qDebug() << InpShpFileName << " # " << InpDbfFileName;
             //qDebug() << OutShpFileName << " # " << OutDbfFileName;
 
-            if(dissolve_method_two == false)
+            // DISSOLVE METHOD 2 : START
+            int my_argc = 5;
+            char **my_argv;
+            my_argv = (char ** ) malloc(my_argc*sizeof(char *));
+            for ( int j=0; j<my_argc; j++ )
             {
-                // DISSOLVE METHOD 1 : START
-                int ErrorDis = dissolve(InpShpFileName, InpDbfFileName, OutShpFileName, OutDbfFileName);
-                // DISSOLVE METHOD 1 : FINISH
+                my_argv[j] = (char *) malloc(100*sizeof(char));
+            }
 
-                if ( ErrorDis != 0 )
-                {
-                    Log_Error_Message("Dissolve Polygons Processing Failed ... ");
-                    Log_Error_Message("RETURN CODE: ... " + QString::number(ErrorDis));
-                    return;
-                }
-                else
-                {
-                    Log_Message("Dissolving Method 1... " + InpShpFileName);
-                    ProjectIOStringList << InpShpFileName << OutShpFileName;
-                }
+            sprintf(my_argv[0],"%s",qPrintable("dummy") );
+            sprintf(my_argv[1],"%s",qPrintable("-a") );
+            sprintf(my_argv[2],"%s",qPrintable("Watershed") );
+            sprintf(my_argv[3],"%s",qPrintable(InpShpFileName) );
+            sprintf(my_argv[4],"%s",qPrintable(user_pihmgis_root_folder+user_pihmgis_project_folder + "") );
+
+            //qDebug() << "my_argv";
+            //qDebug() <<  my_argv[0] << my_argv[1] << my_argv[2] << my_argv[3] << my_argv[4];
+
+            //Not checking removed status as files may not exist
+            bool removed = QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shp" );
+            removed = QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shx" );
+            removed = QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".dbf" );
+
+            int ErrorDis = dissolve_ogr(my_argc, my_argv);
+
+            //Not checking removed status as files may not exist
+            removed = QFile::remove( OutShpFileName );
+            removed = QFile::remove( OutShxFileName );
+            removed = QFile::remove( OutDbfFileName );
+
+            bool copied = QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shp", OutShpFileName );
+            if(copied == false)
+            {
+                Log_Error_Message("Failed to copy " + OutShpFileName );
+                return;
+            }
+            copied = QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shx", OutShxFileName );
+            if(copied == false)
+            {
+                Log_Error_Message("Failed to copy " + OutShxFileName );
+                return;
+            }
+            copied = QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".dbf", OutDbfFileName );
+            if(copied == false)
+            {
+                Log_Error_Message("Failed to copy " + OutDbfFileName );
+                return;
+            }
+
+            // DISSOLVE METHOD 2 : FINISH
+            if( ErrorDis == 5000)
+            {
+                Log_Message("Warning: Potential Feature/Geometry errors were discovered. ... " + InpShpFileName);
+                Log_Message("Warning: It is recommened to check the shapefiles with GIS tools.... ");
+            }
+            else if ( ErrorDis == 1 || ErrorDis == 3 || ErrorDis == 8 )
+            {
+                Log_Message("Warning: Skipping Non-Polygon Layer ... " + InpShpFileName);
+            }
+            else if ( ErrorDis != 0 )
+            {
+                Log_Error_Message("Dissolve Polygons Processing Failed ... ");
+                Log_Error_Message("RETURN CODE: ... " + QString::number(ErrorDis));
+                return;
             }
             else
             {
-                // DISSOLVE METHOD 2 : START
-                int my_argc = 5;
-                char **my_argv;
-                my_argv = (char ** ) malloc(my_argc*sizeof(char *));
-                for ( int j=0; j<my_argc; j++ )
-                {
-                    my_argv[j] = (char *) malloc(100*sizeof(char));
-                }
+                Log_Message("Dissolving Method 2... " + InpShpFileName);
 
-                sprintf(my_argv[0],"%s",qPrintable("dummy") );
-                sprintf(my_argv[1],"%s",qPrintable("-a") );
-                sprintf(my_argv[2],"%s",qPrintable("Watershed") );
-                sprintf(my_argv[3],"%s",qPrintable(InpShpFileName) );
-                sprintf(my_argv[4],"%s",qPrintable(user_pihmgis_root_folder+user_pihmgis_project_folder + "") );
-
-                //qDebug() << "my_argv";
-                //qDebug() <<  my_argv[0] << my_argv[1] << my_argv[2] << my_argv[3] << my_argv[4];
-
-                //Not checking removed status as files may not exist
-                bool removed = QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shp" );
-                removed = QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shx" );
-                removed = QFile::remove( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".dbf" );
-
-                int ErrorDis = dissolve_ogr(my_argc, my_argv);
-
-                //Not checking removed status as files may not exist
-                removed = QFile::remove( OutShpFileName );
-                removed = QFile::remove( OutShxFileName );
-                removed = QFile::remove( OutDbfFileName );
-
-                bool copied = QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shp", OutShpFileName );
-                if(copied == false)
-                {
-                    Log_Error_Message("Failed to copy " + OutShpFileName );
-                    return;
-                }
-                copied = QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".shx", OutShxFileName );
-                if(copied == false)
-                {
-                    Log_Error_Message("Failed to copy " + OutShxFileName );
-                    return;
-                }
-                copied = QFile::copy( user_pihmgis_root_folder+user_pihmgis_project_folder + "/" + dissolve_name + ".dbf", OutDbfFileName );
-                if(copied == false)
-                {
-                    Log_Error_Message("Failed to copy " + OutDbfFileName );
-                    return;
-                }
-
-                // DISSOLVE METHOD 2 : FINISH
-                if( ErrorDis == 5000)
-                {
-                    Log_Message("Warning: Potential Feature/Geometry errors were discovered. ... " + InpShpFileName);
-                    Log_Message("Warning: It is recommened to check the shapefiles with GIS tools.... ");
-                }
-                else if ( ErrorDis == 1 || ErrorDis == 3 || ErrorDis == 8 )
-                {
-                    Log_Message("Warning: Skipping Non-Polygon Layer ... " + InpShpFileName);
-                }
-                else if ( ErrorDis != 0 )
-                {
-                    Log_Error_Message("Dissolve Polygons Processing Failed ... ");
-                    Log_Error_Message("RETURN CODE: ... " + QString::number(ErrorDis));
-                    return;
-                }
-                else
-                {
-                    Log_Message("Dissolving Method 2... " + InpShpFileName);
-
-                    ProjectIOStringList << InpShpFileName << OutShpFileName;
-                }
+                ProjectIOStringList << InpShpFileName << OutShpFileName;
             }
-        }
 
+        }
 
         if ( ProjectIOStringList.length() > 2)
             WriteModuleLine(filename_open_project, ProjectIOStringList);

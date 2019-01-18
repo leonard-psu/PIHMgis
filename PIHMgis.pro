@@ -122,7 +122,6 @@ HEADERS += \
     0LibsRaster/stream_links.h \
     0LibsRaster/stream_shape.h \
     0LibsShape/shapefil.h \
-    0LibsVector/dissolve.h \
     0LibsVector/dissolve_ogr.h \
     0LibsVector/merge_lines.h \
     0LibsVector/polygon_polylines.h \
@@ -237,7 +236,6 @@ SOURCES += \
     0LibsRaster/stream_definition.cpp \
     0LibsRaster/stream_links.cpp \
     0LibsRaster/stream_shape.cpp \
-    0LibsVector/dissolve.cpp \
     0LibsVector/dissolve_ogr.cpp \
     0LibsVector/merge_lines.cpp \
     0LibsVector/polygon_polylines.cpp \

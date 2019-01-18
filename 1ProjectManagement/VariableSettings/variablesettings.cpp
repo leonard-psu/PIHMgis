@@ -5,7 +5,8 @@
 
 #include "QDebug"
 
-extern double dissolve_epsilon;
+//extern double dissolve_epsilon;
+double dissolve_epsilon;
 
 
 VariableSettings::VariableSettings(QWidget *parent) :

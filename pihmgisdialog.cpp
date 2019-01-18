@@ -241,15 +241,16 @@ void PIHMgisDialog::Setup_Menu()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Settings Menu
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        QMenu *settings;
-        settings = menuBar()->addMenu("&Settings");
-        mnu_settings = new QAction("Variables", this);
-        mnu_settings->setIcon(QIcon("Icons/icons8-services-96.png"));
-        mnu_settings->setStatusTip(tr("Global variables (Suggested for debugging)"));
-        mnu_settings->setToolTip(tr("Global variables (Suggested for debugging)"));
-        connect(mnu_settings, &QAction::triggered, this, &PIHMgisDialog::menu_global_variables);
+        /// Keep for future settings
+//        QMenu *settings;
+//        settings = menuBar()->addMenu("&Settings");
+//        mnu_settings = new QAction("Variables", this);
+//        mnu_settings->setIcon(QIcon("Icons/icons8-services-96.png"));
+//        mnu_settings->setStatusTip(tr("Global variables (Suggested for debugging)"));
+//        mnu_settings->setToolTip(tr("Global variables (Suggested for debugging)"));
+//        connect(mnu_settings, &QAction::triggered, this, &PIHMgisDialog::menu_global_variables);
 
-        settings->addAction(mnu_settings);
+//        settings->addAction(mnu_settings);
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Help Menu
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
