@@ -8,7 +8,6 @@
 #include "ui_dissolvepolygons.h"
 
 #include "0LibsIO/IOProjectFile.h"
-#include "0LibsVector/dissolve.h"
 #include "0LibsVector/dissolve_ogr.h"
 #include "1ProjectManagement/VariableSettings/variablesettings.h"
 

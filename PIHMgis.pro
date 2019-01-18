@@ -292,7 +292,6 @@ SOURCES += \
     7VisualAnalytics/QCustomPlotMainWindow/qcustomplotmainwindow.cpp \
     main.cpp \
     pihmgisdialog.cpp \
-    qrc_Icons.cpp \
     0LibsShape/dbfopen.c \
     0LibsShape/shpopen.c
 

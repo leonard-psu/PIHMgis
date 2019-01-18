@@ -87,3 +87,5 @@ Jonathan Richard Shewchuk
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ### Known Issues found when compiling Linux PIHMgis
 1. QT Creator may complain about multiple definitions. Comment out the duplicate .cpp and .h files in PIHMgis.pro.
+2. If you see this message "./PIHMgis: error while loading shared libraries: libsundials_nvecserial.so.2: cannot open shared object file: No such file or directory" Do the following at the command prompt: export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+
