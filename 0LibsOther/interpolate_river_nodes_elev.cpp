@@ -52,7 +52,7 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
     try {
 
         QFile EleFile(EleFileName);
-        if ( ! EleFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( EleFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1000] opening Element file.");
             return -1000;
@@ -61,7 +61,7 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
         QTextStream EleFileTextStream(&EleFile);
 
         QFile NodeFile(NodeFileName);
-        if ( ! NodeFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( NodeFile.open(QIODevice::ReadOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1001] opening Node file. ");
             EleFile.close();
@@ -71,7 +71,7 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
         QTextStream NodeFileTextStream(&NodeFile);
 
         QFile NeighFile(NeighFileName);
-        if ( ! NeighFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( NeighFile.open(QIODevice::ReadOnly | QIODevice::Text) == false )
         {
             main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1002] opening Neigh file.");
             EleFile.close();
@@ -82,7 +82,7 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
         QTextStream NeighFileTextStream(&NeighFile);
 
         QFile OldMeshFile(OldMeshFileName);
-        if ( ! OldMeshFile.open(QIODevice::ReadOnly | QIODevice::Text) )
+        if ( OldMeshFile.open(QIODevice::ReadOnly | QIODevice::Text) == false )
         {
             main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1003] opening OldMesh file.");
             EleFile.close();
@@ -94,7 +94,7 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
         QTextStream OldMeshFileTextStream(&OldMeshFile);
 
         QFile NewMeshFile(NewMeshFileName);
-        if ( ! NewMeshFile.open(QIODevice::WriteOnly | QIODevice::Text) )
+        if ( NewMeshFile.open(QIODevice::WriteOnly | QIODevice::Text) == false)
         {
             main_window->Log_Message("[interpolate_river_nodes_elev] Error[-1004] opening NewMesh file.");
             EleFile.close();
@@ -354,11 +354,6 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
@@ -385,11 +380,6 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
@@ -433,11 +423,6 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
@@ -481,19 +466,10 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
 
-            for(int i = 0; i < NumNeigh; i++)
-            {
-                delete[] neighbour[i];
-            }
             delete[] neighbour;
             neighbour = nullptr;
 
@@ -535,19 +511,10 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
 
-            for(int i = 0; i < NumNeigh; i++)
-            {
-                delete[] neighbour[i];
-            }
             delete[] neighbour;
             neighbour = nullptr;
 
@@ -572,19 +539,10 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
 
-            for(int i = 0; i < NumNeigh; i++)
-            {
-                delete[] neighbour[i];
-            }
             delete[] neighbour;
             neighbour = nullptr;
 
@@ -628,19 +586,10 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
 
-            for(int i = 0; i < NumNeigh; i++)
-            {
-                delete[] neighbour[i];
-            }
             delete[] neighbour;
             neighbour = nullptr;
 
@@ -668,19 +617,10 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
 
-            for(int i = 0; i < NumNeigh; i++)
-            {
-                delete[] neighbour[i];
-            }
             delete[] neighbour;
             neighbour = nullptr;
 
@@ -708,26 +648,13 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
 
-            for(int i = 0; i < NumNeigh; i++)
-            {
-                delete[] neighbour[i];
-            }
             delete[] neighbour;
             neighbour = nullptr;
 
-            for(int i = 0; i < NumNode; i++)
-            {
-                delete[] nodeInEle[i];
-            }
             delete[] nodeInEle;
             nodeInEle = nullptr;
 
@@ -762,26 +689,13 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
 
-            for(int i = 0; i < NumNeigh; i++)
-            {
-                delete[] neighbour[i];
-            }
             delete[] neighbour;
             neighbour = nullptr;
 
-            for(int i = 0; i < RIV_NumNode; i++)
-            {
-                delete[] RIV_para[i];
-            }
             delete[] RIV_para;
             RIV_para = nullptr;
 
@@ -818,30 +732,18 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
 
-            for(int i = 0; i < NumNeigh; i++)
-            {
-                delete[] neighbour[i];
-            }
             delete[] neighbour;
             neighbour = nullptr;
 
-            for(int i = 0; i < RIV_NumNode; i++)
-            {
-                delete[] RIV_para[i];
-            }
             delete[] RIV_para;
             RIV_para = nullptr;
 
             delete[] nodeInEle;
+            nodeInEle = nullptr;
 
             return -1029;
         }
@@ -864,37 +766,21 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
 
-            for(int i = 0; i < NumNeigh; i++)
-            {
-                delete[] neighbour[i];
-            }
             delete[] neighbour;
             neighbour = nullptr;
 
-            for(int i = 0; i < RIV_NumNode; i++)
-            {
-                delete[] RIV_para[i];
-            }
             delete[] RIV_para;
             RIV_para = nullptr;
 
-            for(int i = 0; i < NumNode; i++)
-            {
-                delete[] nodeInEle[i];
-            }
             delete[] nodeInEle;
             nodeInEle = nullptr;
 
             delete[] nodeInEleCount;
+            nodeInEleCount = nullptr;
 
             return -1030;
         }
@@ -925,37 +811,21 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
 
-            for(int i = 0; i < NumNeigh; i++)
-            {
-                delete[] neighbour[i];
-            }
             delete[] neighbour;
             neighbour = nullptr;
 
-            for(int i = 0; i < RIV_NumNode; i++)
-            {
-                delete[] RIV_para[i];
-            }
             delete[] RIV_para;
             RIV_para = nullptr;
 
-            for(int i = 0; i < NumNode; i++)
-            {
-                delete[] nodeInEle[i];
-            }
             delete[] nodeInEle;
             nodeInEle = nullptr;
 
             delete[] nodeInEleCount;
+            nodeInEleCount = nullptr;
 
             return -1031;
         }
@@ -990,44 +860,25 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
             delete [] node;
             node = nullptr;
 
-            //Free each sub-array
-            for(int i = 0; i < NumEle; i++)
-            {
-                delete[] element[i];
-            }
             //Free the array of pointers
             delete[] element;
             element = nullptr;
 
-            for(int i = 0; i < NumNeigh; i++)
-            {
-                delete[] neighbour[i];
-            }
             delete[] neighbour;
             neighbour = nullptr;
 
-            for(int i = 0; i < RIV_NumNode; i++)
-            {
-                delete[] RIV_para[i];
-            }
             delete[] RIV_para;
             RIV_para = nullptr;
 
-            for(int i = 0; i < NumNode; i++)
-            {
-                delete[] nodeInEle[i];
-            }
             delete[] nodeInEle;
             nodeInEle = nullptr;
 
-            for(int i = 0; i < NumNode; i++)
-            {
-                delete[] neighNode[i];
-            }
             delete[] neighNode;
             neighNode = nullptr;
 
             delete[] nodeInEleCount;
+            nodeInEleCount = nullptr;
+
             return -1032;
         }
 
@@ -1247,47 +1098,27 @@ int interpolate_river_nodes_elev(QString shpFileName, QString dbfFileName, QStri
         delete[] node;
         node = nullptr;
 
-        //Free each sub-array
-        for(int i = 0; i < NumEle; i++)
-        {
-            delete[] element[i];
-        }
         //Free the array of pointers
         delete[] element;
         element = nullptr;
 
-        for(int i = 0; i < NumNeigh; i++)
-        {
-            delete[] neighbour[i];
-        }
         delete[] neighbour;
         neighbour = nullptr;
 
-        for(int i = 0; i < RIV_NumNode; i++)
-        {
-            delete[] RIV_para[i];
-        }
         delete[] RIV_para;
         RIV_para = nullptr;
 
-        for(int i = 0; i < NumNode; i++)
-        {
-            delete[] nodeInEle[i];
-        }
         delete[] nodeInEle;
         nodeInEle = nullptr;
 
         delete[] nodeInEleCount;
+        nodeInEleCount = nullptr;
 
-
-        for(int i = 0; i < NumNode; i++)
-        {
-            delete[] neighNode[i];
-        }
         delete[] neighNode;
         neighNode = nullptr;
 
         delete[] neighNodeCount;
+        neighNodeCount = nullptr;
 
     } catch (...) {
         qDebug() << "Error: interpolate_river_nodes_elev [PROBLEM HERE, need to investigate further]";

@@ -368,10 +368,6 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
             NeighFile.close();
 
             delete [] node;
-            for(int i=1; i <= NumEle; i++)
-            {
-                delete [] element[i];
-            }
             delete [] element;
 
             return 66;
@@ -392,10 +388,6 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
             NodeFile.close();
             NeighFile.close();
             delete [] node;
-            for(int i=1; i <= NumEle; i++)
-            {
-                delete [] element[i];
-            }
             delete [] element;
 
             return 67;
@@ -436,16 +428,7 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
             NeighFile.close();
 
             delete [] node;
-            for(int i=1; i <= NumEle; i++)
-            {
-                delete [] element[i];
-            }
             delete [] element;
-
-            for(int i=1; i <= NumNeigh; i++)
-            {
-                delete [] neighbour[i];
-            }
             delete [] neighbour;
 
             return 68;
@@ -462,16 +445,7 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
             NodeFile.close();
             NeighFile.close();
             delete [] node;
-            for(int i=1; i <= NumEle; i++)
-            {
-                delete [] element[i];
-            }
             delete [] element;
-
-            for(int i=1; i <= NumNeigh; i++)
-            {
-                delete [] neighbour[i];
-            }
             delete [] neighbour;
 
             return 69;
@@ -512,22 +486,8 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
             NeighFile.close();
 
             delete [] node;
-            for(int i=1; i <= NumEle; i++)
-            {
-                delete [] element[i];
-            }
             delete [] element;
-
-            for(int i=1; i <= NumNeigh; i++)
-            {
-                delete [] neighbour[i];
-            }
             delete [] neighbour;
-
-            for(int i=1; i<=NumNode; i++)
-            {
-                delete [] nodeInEle[i];
-            }
             delete [] nodeInEle;
             delete [] nodeInEleCount;
 
@@ -547,22 +507,8 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
             NeighFile.close();
 
             delete [] node;
-            for(int i=1; i <= NumEle; i++)
-            {
-                delete [] element[i];
-            }
             delete [] element;
-
-            for(int i=1; i <= NumNeigh; i++)
-            {
-                delete [] neighbour[i];
-            }
             delete [] neighbour;
-
-            for(int i=1; i<=NumNode; i++)
-            {
-                delete [] nodeInEle[i];
-            }
             delete [] nodeInEle;
             delete [] nodeInEleCount;
 
@@ -755,33 +701,12 @@ int RiverFromTIN(QString RiverShpFileName, QString RiverDbfFileName, QString Ele
         ///////////////////////////////////////////////////////////////
 
         delete [] node;
-
-        for(int i=1; i <= NumEle; i++)
-        {
-            delete [] element[i];
-        }
         delete [] element;
-
-        for(int i=1; i <= NumNeigh; i++)
-        {
-            delete [] neighbour[i];
-        }
         delete [] neighbour;
-
-        for(int i=1; i<=NumNode; i++)
-        {
-            delete [] nodeInEle[i];
-        }
         delete [] nodeInEle;
         delete [] nodeInEleCount;
-
-        for(int i=1; i<=NumNode; i++)
-        {
-            delete [] neighNode[i];
-        }
         delete [] neighNode;
         delete [] neighNodeCount;
-
 
         ///////////////////////////////////////////////////////////////
         if(error_found)

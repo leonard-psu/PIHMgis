@@ -8,8 +8,9 @@ Download latest executable PIHMGis v3.5 in the zip file called Ubuntu_PIHMgis.zi
 Will need to compile code. See How to Compile Linux PIHMgis below. These steps were used to build with Ubuntu, and should apply to other Linux environments.
 
 ### Windows PIHMgis v3.5 compiled and developed using Windows Qt Creator
-1. [Latest] Qt 5.12.0 (MSVC 2015, 32 bit) Based on Qt 5.12.0 (MSVC 2015, 32 bit) Built on Dec 3 2018 13:08:01 From revision d51ddbb8f0 Copyright 2008-2018 The Qt Company Ltd. All rights reserved.
-2. [Worked with] Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015) on "windows" 
+1. [Latest] Based on Qt 5.12.0 (MSVC 2015, 32 bit) Built on Jan 15 2019 22:17:12 From revision e8df914ef2
+2. [Worked with] Qt 5.12.0 (MSVC 2015, 32 bit) Based on Qt 5.12.0 (MSVC 2015, 32 bit) Built on Dec 3 2018 13:08:01 From revision d51ddbb8f0 Copyright 2008-2018 The Qt Company Ltd. All rights reserved.
+3. [Worked with] Qt 5.11.2 (i386-little_endian-ilp32 shared (dynamic) release build; by MSVC 2015) on "windows"
 
 ### Ubuntu PIHMgis v3.5 compiled using Linux Qt Creator
 1. [Latest] Based on Qt 5.12.0 (GCC 5.3.1 20160406 (Red Hat 5.3.1-6), 64 bit) Built on Dec 3 2018 15:07:43
