@@ -28,6 +28,7 @@ MeshDataFile::MeshDataFile(QWidget *parent, QString filename) :
 
         filename_open_project = filename;
         bool found_file = false;
+        ui->doubleSpinBoxSubSurface->setValue(5.0);//Default value
 
         QFile ProjectFile(filename_open_project);
         if ( ProjectFile.open(QIODevice::ReadOnly | QIODevice::Text) == false )
@@ -787,9 +788,9 @@ void MeshDataFile::on_pushButtonRun_clicked()
             return;
         }
 
-        if(checkBoxSubsurfaceThickness == 1)
+        if(checkBoxSubsurfaceThickness == true)
         {
-            //Do nothing
+            input_Subsurface_value = QString::number(ui->doubleSpinBoxSubSurface->value());
         }
         else
         {
@@ -799,6 +800,9 @@ void MeshDataFile::on_pushButtonRun_clicked()
                 Log_Error_Message("Surface Elevation Raster (*.adf *.asc) Input File Missing ");
                 return;
             }
+
+            //To keep any user defined values
+            input_Subsurface_value = QString::number(ui->doubleSpinBoxSubSurface->value());
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -839,7 +843,7 @@ void MeshDataFile::on_pushButtonRun_clicked()
             return;
         }
 
-        if(checkBoxSubsurfaceThickness == 0)
+        if(checkBoxSubsurfaceThickness == false)
         {
             if ( CheckFileAccess(input_SurfaceElevation_filename, "ReadOnly") == false)
             {
@@ -933,7 +937,37 @@ void MeshDataFile::on_pushButtonRun_clicked()
         // Update Project file
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         QStringList ProjectIOStringList;
-        ProjectIOStringList << "MeshDataFile" << input_Element_filename << input_Node_filename << input_Neighbour_filename << input_River_filename << input_SurfaceElevation_filename << QString::number(ui->checkBoxSubsurfaceThickness->isChecked()) << ui->lineEditSubsurfaceThickness->text() << output_filename << ProjectID << MshRiverFileNameShp;
+
+        if(checkBoxSubsurfaceThickness == false)
+        {
+            ProjectIOStringList << "MeshDataFile" <<
+                                   input_Element_filename <<
+                                   input_Node_filename <<
+                                   input_Neighbour_filename <<
+                                   input_River_filename <<
+                                   input_SurfaceElevation_filename <<
+                                   QString::number(ui->checkBoxSubsurfaceThickness->isChecked()) <<
+                                   ui->lineEditSubsurfaceThickness->text() <<
+                                   output_filename <<
+                                   ProjectID <<
+                                   MshRiverFileNameShp;
+        }
+        else
+        {
+            ProjectIOStringList << "MeshDataFile" <<
+                                   input_Element_filename <<
+                                   input_Node_filename <<
+                                   input_Neighbour_filename <<
+                                   input_River_filename <<
+                                   input_SurfaceElevation_filename <<
+                                   QString::number(ui->checkBoxSubsurfaceThickness->isChecked()) <<
+                                   input_Subsurface_value <<
+                                   output_filename <<
+                                   ProjectID <<
+                                   MshRiverFileNameShp;
+        }
+
+
         WriteModuleLine(filename_open_project, ProjectIOStringList);
         ProjectIOStringList.clear();
 

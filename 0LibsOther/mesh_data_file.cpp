@@ -23,7 +23,13 @@ extern PIHMgisDialog *main_window;
 // (2) No extent checking
 // (3) No checking of values. Are they reasonable?
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString EleFileName, QString NodeFileName, QString NeighFileName, QString MeshDataFileName, bool CheckBoxSubSurface)
+int mesh_data_file(QString SurfaceFilename,
+                   QString SubsurfaceFileName,
+                   QString EleFileName,
+                   QString NodeFileName,
+                   QString NeighFileName,
+                   QString MeshDataFileName,
+                   bool CheckBoxSubSurface)
 {
     if(print_debug_messages)
         qDebug() << "INFO: Start mesh_data_file";
@@ -167,7 +173,8 @@ int mesh_data_file(QString SurfaceFilename, QString SubsurfaceFileName, QString 
             }
             else
             {
-                Zmin = Zmax-(SubsurfaceFileName).toDouble();
+                //Not a filename, actual user given value
+                Zmin = Zmax - (SubsurfaceFileName).toDouble();
             }
 
             MeshDataFileTextStream.setRealNumberNotation(QTextStream::FixedNotation);

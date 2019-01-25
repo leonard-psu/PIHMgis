@@ -1007,6 +1007,7 @@ int InitDataFile::init_data_file(QString Interception, QString Snow, QString Sur
 
                 if ( NodeDepths[i] < 0 )
                 {
+                    Log_Error_Message("At Node " + QString::number(i + 1) + " Surface-> " + QString::number(SurfaceElevation) + " - " + "Bed-> " + QString::number(BedElevation) + " = " + QString::number(NodeDepths[i]));
                     error_found = true;
                 }
             }

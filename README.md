@@ -1,3 +1,7 @@
+### User Guide
+Download PIHMgis v1.0 user guide called pihmgis_users_guide_v1.pdf
+PIHMgis v3.5 will be available soon.
+
 ### Windows Users
 Download latest executable PIHMGis v3.5 in the zip file called Windows_PIHM_GIS.zip
 

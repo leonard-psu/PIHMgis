@@ -1139,7 +1139,7 @@ int AddToFromNode( QString RiverShpFileName, QString RiverDbfFileName )
                     if(j < 0)
                     {
                         main_window->Log_Message("[AddToFromNode] Error Invalid J index value at " + QString::number(i) );
-                        error_found = true;
+                        //error_found = true;
                     }
                     else if ( ptCount  < 0 || ptCount >= (recordCount*2) )
                     {

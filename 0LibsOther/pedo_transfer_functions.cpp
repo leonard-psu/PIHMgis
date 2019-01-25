@@ -199,10 +199,7 @@ int Soil_PedoTransferFunction( QString TextureFileName, QString DataFileName )
         //Clean up
         for(int i = 0; i < NumClasses; i++)
         {
-            for(int i=0; i < NumClasses; i++)
-            {
-                free(HydraulicParameter[i]);
-            }
+            free(HydraulicParameter[i]);
         }
         free(HydraulicParameter);
 
@@ -415,10 +412,8 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
         //Clean up
         for(int i=0; i<NumClasses; i++)
         {
-            for(int i=0; i<NumClasses; i++)
-            {
-                free(HydraulicParameter[i]);
-            }
+            free(HydraulicParameter[i]);
+
         }
         free(HydraulicParameter);
 
