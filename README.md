@@ -1,7 +1,7 @@
 ### User Guide
-PIHMgis v3.5 user guide (pdf) is available in Documentation folder.
-PIHMgis v1.0 user guide (pdf) is available in Documentation folder.
-PIHM_Input_File_Format_v2 file input guide (pdf) is available in Documentation folder.
+1. PIHMgis v3.5 user guide (pdf) is available in Documentation folder.
+2. PIHMgis v1.0 user guide (pdf) is available in Documentation folder.
+3. PIHM_Input_File_Format_v2 file input guide (pdf) is available in Documentation folder.
 
 ### Windows Users
 Download latest executable PIHMGis v3.5 in the zip file called Windows_PIHM_GIS.zip kept in Built_Versions folder.
