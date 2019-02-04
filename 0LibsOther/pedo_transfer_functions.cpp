@@ -427,7 +427,7 @@ int Geol_PedoTransferFunction ( QString TextureFileName, QString DataFileName )
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Important function to Assign Geology PedoTransfer Function
+// Important function to Assign Landcover transfer Function
 // This function has not been tested rigously.
 // Known issues include the following:
 // No error checking

@@ -1,12 +1,13 @@
 ### User Guide
-Download PIHMgis v1.0 user guide called pihmgis_users_guide_v1.pdf
-PIHMgis v3.5 will be available soon.
+PIHMgis v3.5 user guide (pdf) is available in Documentation folder.
+PIHMgis v1.0 user guide (pdf) is available in Documentation folder.
+PIHM_Input_File_Format_v2 file input guide (pdf) is available in Documentation folder.
 
 ### Windows Users
-Download latest executable PIHMGis v3.5 in the zip file called Windows_PIHM_GIS.zip
+Download latest executable PIHMGis v3.5 in the zip file called Windows_PIHM_GIS.zip kept in Built_Versions folder.
 
 ### Ubuntu 18.04 Users
-Download latest executable PIHMGis v3.5 in the zip file called Ubuntu_PIHMgis.zip
+Download latest executable PIHMGis v3.5 in the zip file called Ubuntu_PIHMgis.zip kept in Built_Versions folder.
 
 ### Other Linux Users
 Will need to compile code. See How to Compile Linux PIHMgis below. These steps were used to build with Ubuntu, and should apply to other Linux environments.
