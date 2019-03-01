@@ -75,7 +75,7 @@ Copyright 1993, 1995, 1997, 1998, 2002, 2005
 Jonathan Richard Shewchuk
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-### How to Compile PIHMgis in both Windows and Linux environments.
+### General Steps to compile PIHMgis.
 
 1. Build and install QT5.12 or higher. You will need to use QTCreator.
 2. Build and install GDAL from https://github.com/OSGeo/gdal
@@ -84,7 +84,7 @@ Jonathan Richard Shewchuk
 5. Download PIHMgis from github.
 6. Open/Import PIHMgis.pro using QTCreator.
 7. Clean all.
-8. Add Library and Include Windows or Linux paths for gdal (libgdal_i.a or dll), sundials (libsundials_nvecserial.a or dll, libsundials_cvodes.a or dll), to the PIHMgis.pro using QTCreator "Add Library".
+8. Add Library (right click on PIHMgis project folder in QTCreator) and Include paths for gdal (libgdal_i.a or dll), sundials (libsundials_nvecserial.a or dll, libsundials_cvodes.a or dll), to the PIHMgis.pro using QTCreator "Add Library".
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ### Known Issues with using PIHMgis on Windows 10 environment
