@@ -9,6 +9,9 @@ Download latest executable PIHMGis v3.5 in the zip file called Windows_PIHM_GIS.
 ### Ubuntu 18.04 Users
 Download latest executable PIHMGis v3.5 in the zip file called Ubuntu_PIHMgis.zip kept in Built_Versions folder.
 
+### Mac Mojave Users
+Hang Wen (post-doc from Civil and Environmental Enginnering at Penn State) documented compiling PIHMgis v3.5 and dependencies. The Notes_Compile_PIHMgisonMac.pdf is available in Documentation folder.
+
 ### Other Linux Users
 Will need to compile code. See How to Compile Linux PIHMgis below. These steps were used to build with Ubuntu, and should apply to other Linux environments.
 
